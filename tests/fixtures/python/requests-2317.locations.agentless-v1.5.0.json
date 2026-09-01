@@ -1,0 +1,216 @@
+{
+  "capture": {
+    "dataset": "princeton-nlp/SWE-bench_Lite",
+    "dataset_revision": "6ec7bb89b9342f664a54a6e0a6ea6501d3437cc2",
+    "instance_id": "psf__requests-2317",
+    "repo": "psf/requests",
+    "base_commit": "091991be0da19de9108dbe5e3752917fea3d7fdc",
+    "problem_statement": "method = builtin_str(method) problem\nIn requests/sessions.py is a command:\n\nmethod = builtin_str(method)\nConverts method from\nb\u2019GET\u2019\nto\n\"b'GET\u2019\"\n\nWhich is the literal string, no longer a binary string.  When requests tries to use the method \"b'GET\u2019\u201d, it gets a 404 Not Found response.\n\nI am using python3.4 and python-neutronclient (2.3.9) with requests (2.4.3).  neutronclient is broken because it uses this \"args = utils.safe_encode_list(args)\" command which converts all the values to binary string, including method.\n\nI'm not sure if this is a bug with neutronclient or a bug with requests, but I'm starting here.  Seems if requests handled the method value being a binary string, we wouldn't have any problem.\n\nAlso, I tried in python2.6 and this bug doesn't exist there. Some difference between 2.6 and 3.4 makes this not work right.\n\n",
+    "published_agentless_revision": "b150f28465a77a81a7f4776384957a4271f5bd69",
+    "selected_file": "requests/sessions.py",
+    "selected_file_sha256": "4bf7a4d1ff9a056ee572dba143198f745eeb7f6b73f5b950a9c1f240f788488c"
+  },
+  "file_names": [
+    "requests/sessions.py",
+    "requests/models.py"
+  ],
+  "parsed_outputs": {
+    "complete": {
+      "raw": "Candidate locations:\n```\nrequests/sessions.py\nfunction: Session.request\nline: 405\nrequests/models.py\nclass: PreparedRequest\n```\n",
+      "blocks": [
+        "requests/sessions.py\nfunction: Session.request\nline: 405\nrequests/models.py\nclass: PreparedRequest"
+      ],
+      "locations": {
+        "requests/sessions.py": [
+          "function: Session.request\nline: 405"
+        ],
+        "requests/models.py": [
+          "class: PreparedRequest"
+        ]
+      },
+      "locations_keep_old_order": {
+        "requests/sessions.py": [
+          "function: Session.request\nline: 405"
+        ],
+        "requests/models.py": [
+          "class: PreparedRequest"
+        ]
+      }
+    },
+    "incomplete": {
+      "raw": "Locations:\n```\nrequests/sessions.py\nfunction: Session.prepare_request",
+      "blocks": [
+        "requests/sessions.py\nfunction: Session.prepare_request"
+      ],
+      "locations": {
+        "requests/sessions.py": [
+          "function: Session.prepare_request"
+        ],
+        "requests/models.py": [
+          ""
+        ]
+      },
+      "locations_keep_old_order": {
+        "requests/sessions.py": [
+          "function: Session.prepare_request"
+        ],
+        "requests/models.py": [
+          ""
+        ]
+      }
+    },
+    "labelled_and_indented": {
+      "raw": "```python\nrequests/sessions.py\n function: Session.request\nline: 405\n```",
+      "blocks": [
+        "python\nrequests/sessions.py\n function: Session.request\nline: 405\n```"
+      ],
+      "locations": {
+        "requests/sessions.py": [
+          "line: 405"
+        ],
+        "requests/models.py": [
+          ""
+        ]
+      },
+      "locations_keep_old_order": {
+        "requests/sessions.py": [
+          "line: 405"
+        ],
+        "requests/models.py": [
+          ""
+        ]
+      }
+    },
+    "unknown_file": {
+      "raw": "```\nmissing.py\nfunction: nope\n```",
+      "blocks": [
+        "missing.py\nfunction: nope"
+      ],
+      "locations": {
+        "requests/sessions.py": [
+          ""
+        ],
+        "requests/models.py": [
+          ""
+        ]
+      },
+      "locations_keep_old_order": {
+        "requests/sessions.py": [
+          ""
+        ],
+        "requests/models.py": [
+          ""
+        ]
+      }
+    },
+    "reversed_files": {
+      "raw": "```\nrequests/models.py\nclass: PreparedRequest\nrequests/sessions.py\nfunction: Session.request\n```",
+      "blocks": [
+        "requests/models.py\nclass: PreparedRequest\nrequests/sessions.py\nfunction: Session.request"
+      ],
+      "locations": {
+        "requests/models.py": [
+          "class: PreparedRequest"
+        ],
+        "requests/sessions.py": [
+          "function: Session.request"
+        ]
+      },
+      "locations_keep_old_order": {
+        "requests/sessions.py": [
+          "function: Session.request"
+        ],
+        "requests/models.py": [
+          "class: PreparedRequest"
+        ]
+      }
+    }
+  },
+  "resolved_locations": {
+    "qualified_and_line": {
+      "locations": [
+        "function: Session.request\nline: 405"
+      ],
+      "line_intervals": [
+        [
+          378,
+          459
+        ],
+        [
+          405,
+          405
+        ]
+      ],
+      "context_intervals": [
+        [
+          368,
+          469
+        ]
+      ]
+    },
+    "class_scoped": {
+      "locations": [
+        "class: Session\nfunction: prepare_request"
+      ],
+      "line_intervals": [
+        [
+          260,
+          665
+        ],
+        [
+          338,
+          376
+        ]
+      ],
+      "context_intervals": [
+        [
+          250,
+          671
+        ]
+      ]
+    },
+    "unique_unqualified": {
+      "locations": [
+        "function: prepare_request"
+      ],
+      "line_intervals": [
+        [
+          338,
+          376
+        ]
+      ],
+      "context_intervals": [
+        [
+          328,
+          386
+        ]
+      ]
+    },
+    "mixed_invalid": {
+      "locations": [
+        "function: Missing.nope\nline: not-a-number\nline: 405"
+      ],
+      "line_intervals": [
+        [
+          405,
+          405
+        ]
+      ],
+      "context_intervals": [
+        [
+          395,
+          415
+        ]
+      ]
+    }
+  },
+  "selected_context": "### requests/sessions.py\n...\n            data=request.data,\n            json=request.json,\n            headers=merge_setting(request.headers, self.headers, dict_class=CaseInsensitiveDict),\n            params=merge_setting(request.params, self.params),\n            auth=merge_setting(auth, self.auth),\n            cookies=merged_cookies,\n            hooks=merge_hooks(request.hooks, self.hooks),\n        )\n        return p\n\n    def request(self, method, url,\n        params=None,\n        data=None,\n        headers=None,\n        cookies=None,\n        files=None,\n        auth=None,\n        timeout=None,\n        allow_redirects=True,\n        proxies=None,\n        hooks=None,\n        stream=None,\n        verify=None,\n        cert=None,\n        json=None):\n        \"\"\"Constructs a :class:`Request <Request>`, prepares it and sends it.\n        Returns :class:`Response <Response>` object.\n\n        :param method: method for the new :class:`Request` object.\n        :param url: URL for the new :class:`Request` object.\n        :param params: (optional) Dictionary or bytes to be sent in the query\n            string for the :class:`Request`.\n        :param data: (optional) Dictionary or bytes to send in the body of the\n            :class:`Request`.\n        :param json: (optional) json to send in the body of the\n            :class:`Request`.\n        :param headers: (optional) Dictionary of HTTP Headers to send with the\n            :class:`Request`.\n        :param cookies: (optional) Dict or CookieJar object to send with the\n            :class:`Request`.\n        :param files: (optional) Dictionary of ``'filename': file-like-objects``\n            for multipart encoding upload.\n        :param auth: (optional) Auth tuple or callable to enable\n            Basic/Digest/Custom HTTP Auth.\n        :param timeout: (optional) How long to wait for the server to send\n            data before giving up, as a float, or a (`connect timeout, read\n            timeout <user/advanced.html#timeouts>`_) tuple.\n        :type timeout: float or tuple\n        :param allow_redirects: (optional) Set to True by default.\n        :type allow_redirects: bool\n        :param proxies: (optional) Dictionary mapping protocol to the URL of\n            the proxy.\n        :param stream: (optional) whether to immediately download the response\n            content. Defaults to ``False``.\n        :param verify: (optional) if ``True``, the SSL cert will be verified.\n            A CA_BUNDLE path can also be provided.\n        :param cert: (optional) if String, path to ssl client cert file (.pem).\n            If Tuple, ('cert', 'key') pair.\n        \"\"\"\n\n        method = builtin_str(method)\n\n        # Create the Request.\n        req = Request(\n            method = method.upper(),\n            url = url,\n            headers = headers,\n            files = files,\n            data = data or {},\n            json = json,\n            params = params or {},\n            auth = auth,\n            cookies = cookies,\n            hooks = hooks,\n        )\n        prep = self.prepare_request(req)\n\n        proxies = proxies or {}\n\n        settings = self.merge_environment_settings(\n            prep.url, proxies, stream, verify, cert\n        )\n\n        # Send the request.\n        send_kwargs = {\n            'timeout': timeout,\n            'allow_redirects': allow_redirects,\n        }\n        send_kwargs.update(settings)\n        resp = self.send(prep, **send_kwargs)\n\n        return resp\n\n    def get(self, url, **kwargs):\n        \"\"\"Sends a GET request. Returns :class:`Response` object.\n\n        :param url: URL for the new :class:`Request` object.\n        :param \\*\\*kwargs: Optional arguments that ``request`` takes.\n        \"\"\"\n\n        kwargs.setdefault('allow_redirects', True)\n        return self.request('GET', url, **kwargs)\n...\n\n\n",
+  "selected_intervals": {
+    "requests/sessions.py": [
+      [
+        368,
+        469
+      ]
+    ]
+  }
+}

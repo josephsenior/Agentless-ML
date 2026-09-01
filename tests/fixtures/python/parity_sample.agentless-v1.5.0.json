@@ -1,0 +1,128 @@
+{
+  "upstream_revision": "b150f28465a77a81a7f4776384957a4271f5bd69",
+  "source_sha256": "ea0a262f7d223015b3a8a4e82fd0ee7d62f5672b489cf9baf254994d8e2e4539",
+  "projection": {
+    "classes": [
+      {
+        "name": "Worker",
+        "start_line": 29,
+        "end_line": 42,
+        "text": [
+          "class Worker:",
+          "    \"\"\"Class documentation is removed from the skeleton.\"\"\"",
+          "",
+          "    def __init__(self, value: int):",
+          "        self.value = value",
+          "",
+          "    async def async_run(self) -> int:",
+          "        return self.value",
+          "",
+          "    def run(self) -> int:",
+          "        def nested() -> int:",
+          "            return self.value",
+          "",
+          "        return nested()"
+        ],
+        "methods": [
+          {
+            "name": "__init__",
+            "start_line": 32,
+            "end_line": 33,
+            "text": [
+              "    def __init__(self, value: int):",
+              "        self.value = value"
+            ]
+          },
+          {
+            "name": "run",
+            "start_line": 38,
+            "end_line": 42,
+            "text": [
+              "    def run(self) -> int:",
+              "        def nested() -> int:",
+              "            return self.value",
+              "",
+              "        return nested()"
+            ]
+          }
+        ]
+      }
+    ],
+    "functions": [
+      {
+        "name": "decorated",
+        "start_line": 18,
+        "end_line": 22,
+        "text": [
+          "def decorated(flag: bool = True) -> int:",
+          "    \"\"\"A top-level synchronous function.\"\"\"",
+          "    if flag:",
+          "        return LIMIT",
+          "    return 0"
+        ]
+      },
+      {
+        "name": "nested",
+        "start_line": 39,
+        "end_line": 40,
+        "text": [
+          "        def nested() -> int:",
+          "            return self.value"
+        ]
+      }
+    ],
+    "text": [
+      "\"\"\"Module documentation intentionally omitted by the skeleton.\"\"\"",
+      "",
+      "from __future__ import annotations",
+      "",
+      "LIMIT = 3",
+      "VALUES = {",
+      "    \"one\": 1,",
+      "    \"two\": 2,",
+      "    \"three\": 3,",
+      "    \"four\": 4,",
+      "    \"five\": 5,",
+      "    \"six\": 6,",
+      "    \"seven\": 7,",
+      "    \"eight\": 8,",
+      "}",
+      "",
+      "",
+      "def decorated(flag: bool = True) -> int:",
+      "    \"\"\"A top-level synchronous function.\"\"\"",
+      "    if flag:",
+      "        return LIMIT",
+      "    return 0",
+      "",
+      "",
+      "async def fetch(name: str) -> str:",
+      "    return name",
+      "",
+      "",
+      "class Worker:",
+      "    \"\"\"Class documentation is removed from the skeleton.\"\"\"",
+      "",
+      "    def __init__(self, value: int):",
+      "        self.value = value",
+      "",
+      "    async def async_run(self) -> int:",
+      "        return self.value",
+      "",
+      "    def run(self) -> int:",
+      "        def nested() -> int:",
+      "            return self.value",
+      "",
+      "        return nested()",
+      "",
+      "",
+      "def run() -> str:",
+      "    return \"top-level name collision\""
+    ]
+  },
+  "skeletons": {
+    "default": "\nLIMIT = 3\nVALUES = {\n    \"one\": 1,\n    \"two\": 2,\n    \"three\": 3,\n    \"four\": 4,\n    \"five\": 5,\n    \"six\": 6,\n    \"seven\": 7,\n    \"eight\": 8,\n}\n\n\ndef decorated(flag: bool = True) -> int:\n...\n\n\nasync def fetch(name: str) -> str:\n...\n\n\nclass Worker:\n\n    def __init__(self, value: int):\n...\n\n    async def async_run(self) -> int:\n...\n\n    def run(self) -> int:\n...\n\n\ndef run() -> str:\n...\n",
+    "indented": "\nLIMIT = 3\nVALUES = {\n    \"one\": 1,\n    \"two\": 2,\n    \"three\": 3,\n    \"four\": 4,\n    \"five\": 5,\n    \"six\": 6,\n    \"seven\": 7,\n    \"eight\": 8,\n}\n\n\ndef decorated(flag: bool = True) -> int:\n    ...\n\n\nasync def fetch(name: str) -> str:\n    ...\n\n\nclass Worker:\n\n    def __init__(self, value: int):\n        ...\n\n    async def async_run(self) -> int:\n        ...\n\n    def run(self) -> int:\n        ...\n\n\ndef run() -> str:\n    ...\n",
+    "compressed": "\nLIMIT = 3\nVALUES = {\n    \"one\": 1,\n...\n    \"eight\": 8,\n}\n\n\ndef decorated(flag: bool = True) -> int:\n...\n\n\nasync def fetch(name: str) -> str:\n...\n\n\nclass Worker:\n\n    def __init__(self, value: int):\n...\n\n    async def async_run(self) -> int:\n...\n\n    def run(self) -> int:\n...\n\n\ndef run() -> str:\n...\n"
+  }
+}
