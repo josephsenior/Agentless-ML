@@ -3,6 +3,7 @@
 from agentless_ml.schemas.prediction import (
     FinalPrediction,
     PatchCandidate,
+    ValidationKind,
     ValidationResult,
     ValidationStatus,
 )
@@ -18,6 +19,7 @@ __all__ = [
     "RunRecord",
     "SymbolNode",
     "TaskSpec",
+    "ValidationKind",
     "ValidationResult",
     "ValidationStatus",
 ]

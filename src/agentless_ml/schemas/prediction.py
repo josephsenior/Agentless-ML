@@ -15,6 +15,11 @@ class ValidationStatus(StrEnum):
     HARNESS_ERROR = "harness_error"
 
 
+class ValidationKind(StrEnum):
+    REGRESSION = "regression"
+    REPRODUCTION = "reproduction"
+
+
 @dataclass(frozen=True, slots=True)
 class ValidationResult:
     status: ValidationStatus
@@ -23,6 +28,7 @@ class ValidationResult:
     exit_code: int | None = None
     stdout_digest: str | None = None
     stderr_digest: str | None = None
+    kind: ValidationKind = ValidationKind.REGRESSION
 
     def __post_init__(self) -> None:
         if self.duration_seconds < 0:
@@ -39,12 +45,16 @@ class PatchCandidate:
     localization_rank: int
     sample_index: int
     validation: tuple[ValidationResult, ...] = ()
+    raw_response: str = ""
+    normalized_diff: str = ""
 
     def __post_init__(self) -> None:
         if not self.candidate_id.strip() or not self.diff.strip():
             raise ValueError("candidate_id and diff must not be empty")
         if self.localization_rank < 0 or self.sample_index < 0:
             raise ValueError("candidate ranks must not be negative")
+        if not self.normalized_diff:
+            object.__setattr__(self, "normalized_diff", self.diff.strip())
 
 
 @dataclass(frozen=True, slots=True)

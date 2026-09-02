@@ -57,16 +57,18 @@ accepting them.
 This is deliberately narrower than claiming identical end-to-end behavior. The
 model is not called by these tests, and no gold patch is used.
 
-## What remains
+## Repair and selection boundary
 
-The next parity boundary begins with the repair prompt and ends with candidate
-selection:
+The next parity boundary now covers:
 
-- repair-prompt assembly;
-- generated edit parsing and application;
-- canonical Git patch construction;
+- byte-compatible Python repair-prompt assembly for the published diff-format
+  condition;
+- generated SEARCH/REPLACE parsing and atomic in-memory application;
+- deterministic multi-file Git patch construction;
 - patch normalization and voting;
-- deterministic reranking.
+- regression/reproduction filtering and deterministic reranking.
 
-Only after that boundary is covered will we start the first complete Python
-benchmark slice.
+The exact retained behavior and intentional multi-file and safety changes are
+listed in [Repair and selection](repair-selection.md). Model execution, public
+test runners, and benchmark verification remain outside the parity claim. The
+next implementation step is the first complete Python benchmark slice.
