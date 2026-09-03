@@ -27,7 +27,7 @@ fixed controller stages.
 Agentless-ML also rejects unsafe paths, empty searches, missing files, ambiguous
 matches, no-op edits, patch errors, and infrastructure-failed candidates. An
 infrastructure failure is never converted into a failed test result. Candidate
-workspace isolation remains the responsibility of the later workspace runner.
+workspace isolation is provided separately by the [local workspace layer](workspaces.md).
 
 Patch normalization removes line-ending and non-semantic Git metadata variance.
 It deliberately retains hunk offsets and source context so edits at different
@@ -37,7 +37,7 @@ locations cannot collapse into the same voting key.
 
 - syntax and language-specific static checks;
 - public regression and reproduction-test execution;
-- clean workspace creation and real `git apply` checks;
+- clean workspace creation and real `git apply` checks (now implemented separately);
 - model sampling and usage records;
 - official benchmark verification.
 

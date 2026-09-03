@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 import hashlib
+from collections.abc import Mapping
 from difflib import unified_diff
-from typing import Mapping
 
 from agentless_ml.schemas import PatchCandidate
 
@@ -15,7 +15,9 @@ def build_unified_diff(
 ) -> str:
     """Build one deterministic Git-style patch for all changed visible files."""
     if set(original_sources) != set(updated_sources):
-        raise ValueError("file creation and deletion are not supported at this boundary")
+        raise ValueError(
+            "file creation and deletion are not supported at this boundary"
+        )
     chunks: list[str] = []
     for path in sorted(original_sources):
         old = original_sources[path]
@@ -24,17 +26,21 @@ def build_unified_diff(
             continue
         body = list(
             unified_diff(
-                old.splitlines(),
-                new.splitlines(),
+                old.splitlines(keepends=True),
+                new.splitlines(keepends=True),
                 fromfile=f"a/{path}",
                 tofile=f"b/{path}",
-                lineterm="",
+                lineterm="\n",
             )
         )
-        chunks.append(f"diff --git a/{path} b/{path}\n" + "\n".join(body))
+        rendered = "".join(
+            line if line.endswith("\n") else line + "\n\\ No newline at end of file\n"
+            for line in body
+        )
+        chunks.append(f"diff --git a/{path} b/{path}\n" + rendered)
     if not chunks:
         raise ValueError("cannot build an empty patch")
-    return "\n".join(chunks).rstrip() + "\n"
+    return "".join(chunks)
 
 
 def normalize_patch(patch: str) -> str:
@@ -63,7 +69,8 @@ def build_patch_candidate(
     sample_index: int,
 ) -> PatchCandidate:
     """Create a candidate whose digest and voting key are derived, not trusted."""
-    canonical = diff.replace("\r\n", "\n").replace("\r", "\n").rstrip() + "\n"
+    # Source CRLFs and trailing spaces are part of a patch's payload, not framing.
+    canonical = diff if diff.endswith("\n") else diff + "\n"
     return PatchCandidate(
         candidate_id=candidate_id,
         diff=canonical,

@@ -39,21 +39,49 @@ def test_build_multifile_git_patch_is_sorted_and_stable() -> None:
     assert patch.endswith("\n")
 
 
-def test_constructed_patch_passes_git_apply_check(tmp_path: Path) -> None:
-    original = {"pkg/a.py": "value = 1\n"}
-    updated = {"pkg/a.py": "value = 2\n"}
+@pytest.mark.parametrize(
+    "old,new",
+    [
+        ("value = 1\n", "value = 2\n"),
+        ("value = 1", "value = 2"),
+        ("value = 1", "value = 1\n"),
+        ("value = 1\n", "value = 1"),
+        ("value = 1\n", "value = 2  \n"),
+        ("value = 1\r\n", "value = 2\r\n"),
+    ],
+)
+def test_constructed_patch_passes_git_apply_check(
+    tmp_path: Path, old: str, new: str
+) -> None:
+    original = {"pkg/a.py": old}
+    updated = {"pkg/a.py": new}
     target = tmp_path / "pkg" / "a.py"
     target.parent.mkdir()
     target.write_text(original["pkg/a.py"], encoding="utf-8", newline="")
     completed = subprocess.run(
-        ["git", "apply", "--check", "-"],
+        ["git", "-c", "core.autocrlf=false", "apply", "--check", "-"],
         cwd=tmp_path,
-        input=build_unified_diff(original, updated),
+        input=build_unified_diff(original, updated).encode(),
         capture_output=True,
-        text=True,
         check=False,
     )
     assert completed.returncode == 0, completed.stderr
+    candidate = build_patch_candidate(
+        candidate_id="exact-bytes",
+        raw_response="fixture",
+        diff=build_unified_diff(original, updated),
+        localization_rank=0,
+        sample_index=0,
+    )
+    applied = subprocess.run(
+        ["git", "-c", "core.autocrlf=false", "apply", "--whitespace=nowarn", "-"],
+        cwd=tmp_path,
+        input=candidate.diff.encode(),
+        capture_output=True,
+        check=False,
+    )
+    assert applied.returncode == 0, applied.stderr
+    assert target.read_bytes() == new.encode()
 
 
 def test_normalization_ignores_git_metadata_but_preserves_hunk_offsets() -> None:
