@@ -36,7 +36,8 @@ locations cannot collapse into the same voting key.
 ## Still outside this boundary
 
 - syntax and language-specific static checks;
-- public regression and reproduction-test execution;
+- public regression and reproduction-test execution (now provided separately by
+  the [Docker runner](public-validation.md));
 - clean workspace creation and real `git apply` checks (now implemented separately);
 - model sampling and usage records;
 - official benchmark verification.

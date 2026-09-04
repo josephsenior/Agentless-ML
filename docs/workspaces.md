@@ -7,8 +7,9 @@ Each clone has its own objects and index, with no hardlinks or borrowed objects.
 
 This is **repository-state isolation, not a security sandbox**. Do not run model
 patches or repository test commands on the host through this backend. Container
-execution, resource limits, and hidden-verifier isolation are separate future
-work. A clone contains repository history; the caller must supply a trusted,
+execution and resource limits are now provided by the separate
+[public validation runner](public-validation.md). Hidden-verifier isolation remains
+future work. A clone contains repository history; the caller must supply a trusted,
 agent-visible repository with no verifier material in that history.
 
 ## Lifecycle
@@ -48,7 +49,7 @@ provider = LocalGitWorkspaceProvider(
 with provider.create() as workspace:
     result = workspace.apply_candidate(candidate)
     if result.status is PatchApplicationStatus.APPLIED:
-        # Archive provenance/result here. Public tests are not executed yet.
+        # Archive provenance/result here, or use the public validation runner.
         print(workspace.provenance.base_commit, result.changed_paths)
 ```
 
