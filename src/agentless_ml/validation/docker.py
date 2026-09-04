@@ -103,6 +103,7 @@ class DockerTestRunner:
         if metadata.get("Os") != "linux" or metadata["Config"].get("Volumes"):
             raise ValueError("a Linux image without declared volumes is required")
         self.image_id = metadata["Id"]
+        self.image_reference = image
         self.artifact_root = Path(artifact_root).resolve()
         self.memory_mb, self.cpus = memory_mb, cpus
         self.pids_limit, self.tmpfs_mb = pids_limit, tmpfs_mb
@@ -120,14 +121,25 @@ class DockerTestRunner:
             raise DockerError(result.stderr.decode("utf-8", errors="replace")[:2000])
         return result
 
-    def run(self, source: Path, command: PublicTestCommand) -> TestExecution:
+    def run(
+        self,
+        source: Path,
+        command: PublicTestCommand,
+        *,
+        artifact_root: Path | None = None,
+    ) -> TestExecution:
         source = Path(source).resolve(strict=True)
         if not source.is_dir():
             raise ValueError("source must be a directory")
-        if self.artifact_root == source or source in self.artifact_root.parents:
+        active_artifact_root = (
+            self.artifact_root
+            if artifact_root is None
+            else Path(artifact_root).resolve()
+        )
+        if active_artifact_root == source or source in active_artifact_root.parents:
             raise ValueError("artifacts must be outside the source checkout")
         name = "agentless-ml-" + uuid.uuid4().hex
-        artifacts = self.artifact_root / name
+        artifacts = active_artifact_root / name
         artifacts.mkdir(parents=True)
         start = time.monotonic()
         status = ValidationStatus.HARNESS_ERROR

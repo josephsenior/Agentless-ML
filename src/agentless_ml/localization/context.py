@@ -146,7 +146,9 @@ def render_symbol_localization_prompt(
             prefix_lines=prefix_lines,
             suffix_lines=suffix_lines,
         )
-        blocks.append(FILE_BLOCK_TEMPLATE.format(file_name=file_name, file_content=skeleton))
+        blocks.append(
+            FILE_BLOCK_TEMPLATE.format(file_name=file_name, file_content=skeleton)
+        )
     return SYMBOL_LOCALIZATION_TEMPLATE.format(
         problem_statement=problem_statement,
         file_contents="".join(blocks),

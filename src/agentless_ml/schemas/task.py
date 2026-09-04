@@ -6,13 +6,15 @@ Adapters must reject suspicious metadata keys before constructing a task.
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import dataclass, field
 from enum import StrEnum
 from types import MappingProxyType
-from typing import Any, Mapping
+from typing import Any
 
 
 class Benchmark(StrEnum):
+    CONTROLLED_FIXTURE = "controlled-fixture"
     DEEPSWE = "deepswe"
     SWE_BENCH_PRO = "swe-bench-pro"
 
@@ -39,7 +41,9 @@ def _freeze_visible_value(value: Any, location: str = "visible_metadata") -> Any
                 raise TypeError(f"metadata key at {location} must be a string")
             key = str(raw_key).casefold()
             if key in _FORBIDDEN_METADATA_KEYS:
-                raise ValueError(f"forbidden agent-visible metadata key: {location}.{raw_key}")
+                raise ValueError(
+                    f"forbidden agent-visible metadata key: {location}.{raw_key}"
+                )
             frozen[raw_key] = _freeze_visible_value(child, f"{location}.{raw_key}")
         return MappingProxyType(frozen)
     elif isinstance(value, (list, tuple)):

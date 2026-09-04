@@ -5,9 +5,10 @@ from __future__ import annotations
 import re
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
+from pathlib import PurePosixPath
 
 import libcst as cst
-import libcst.matchers as matchers
+from libcst import matchers
 
 from agentless_ml.schemas import FileNode, SymbolNode
 
@@ -18,6 +19,47 @@ def extract_code_blocks(text: str) -> list[str]:
     if not matches and "```" in text:
         return [text.split("```", 1)[-1].strip()]
     return matches
+
+
+def parse_file_locations(
+    response: str,
+    repository_paths: Sequence[str],
+    *,
+    repository_name: str | None = None,
+    maximum_files: int = 5,
+) -> tuple[str, ...]:
+    """Return ordered, known Python paths from a file-localization response.
+
+    Published prompts display a repository-root component. Responses may retain
+    or omit it, so an explicitly supplied repository name is stripped once.
+    Unknown, unsafe, duplicate, non-Python, and over-budget paths are rejected.
+    """
+    if maximum_files <= 0:
+        raise ValueError("maximum_files must be positive")
+    known = frozenset(PurePosixPath(path).as_posix() for path in repository_paths)
+    selected: list[str] = []
+    blocks = extract_code_blocks(response)
+    candidates = blocks if blocks else [response]
+    for block in candidates:
+        for raw_line in block.splitlines():
+            raw = raw_line.strip().strip("`'\"").replace("\\", "/")
+            if not raw or raw.startswith(("#", "- ")):
+                continue
+            path = PurePosixPath(raw)
+            if path.is_absolute() or ".." in path.parts:
+                continue
+            normalized = path.as_posix()
+            if repository_name and normalized.startswith(repository_name + "/"):
+                normalized = normalized[len(repository_name) + 1 :]
+            if (
+                normalized in known
+                and normalized.endswith(".py")
+                and normalized not in selected
+            ):
+                selected.append(normalized)
+                if len(selected) == maximum_files:
+                    return tuple(selected)
+    return tuple(selected)
 
 
 def parse_locations_for_files(
@@ -147,7 +189,9 @@ def resolve_locations(
                 name = location[len("class: ") :].strip()
                 relevant = [symbol for symbol in classes if symbol.name == name]
                 if relevant:
-                    line_locations.append((relevant[0].start_line, relevant[0].end_line))
+                    line_locations.append(
+                        (relevant[0].start_line, relevant[0].end_line)
+                    )
                     current_class_name = name
                 else:
                     unrecognized.append(name)
@@ -190,7 +234,9 @@ def resolve_locations(
                             if symbol.name == current_class_name
                         )
                         methods = [
-                            child for child in relevant_class.children if child.name == name
+                            child
+                            for child in relevant_class.children
+                            if child.name == name
                         ]
                         if methods:
                             line_locations.append(
@@ -280,7 +326,9 @@ def _line_wrap_content(
     previous_scopes: list[dict[str, int | str]] = []
     line_format = "{line}"
     if not no_line_number:
-        line_format = "{line_number}|{line}" if not add_space else "{line_number}| {line} "
+        line_format = (
+            "{line_number}|{line}" if not add_space else "{line_number}| {line} "
+        )
 
     max_line = len(lines)
     for min_line, max_line in active_intervals:

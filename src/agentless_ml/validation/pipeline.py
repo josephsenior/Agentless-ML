@@ -17,6 +17,8 @@ def validate_candidate(
     provider: WorkspaceProvider,
     runner: DockerTestRunner,
     commands: Sequence[PublicTestCommand],
+    *,
+    artifact_root: Path | None = None,
 ) -> PatchCandidate:
     """Replace prior evidence; every command gets a fresh container.
 
@@ -39,7 +41,9 @@ def validate_candidate(
                 )
             else:
                 for command in commands:
-                    execution = runner.run(workspace.path, command)
+                    execution = runner.run(
+                        workspace.path, command, artifact_root=artifact_root
+                    )
                     evidence.append(execution.result)
                     Path(execution.artifact_directory, "candidate.json").write_text(
                         json.dumps(
