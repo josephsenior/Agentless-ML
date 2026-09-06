@@ -1,0 +1,1 @@
+Include the failed command and error type in process startup messages.

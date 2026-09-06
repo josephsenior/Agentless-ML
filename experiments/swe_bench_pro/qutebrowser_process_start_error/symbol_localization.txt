@@ -1,0 +1,4 @@
+```
+qutebrowser/misc/guiprocess.py
+function: GUIProcess._on_error
+```

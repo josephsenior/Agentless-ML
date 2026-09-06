@@ -1,0 +1,1 @@
+Use the modern Qt error signal when constructing an error reply.

@@ -1,0 +1,32 @@
+Give each process error a specific phrase and include the command.
+
+```python
+### qutebrowser/misc/guiprocess.py
+<<<<<<< SEARCH
+    @pyqtSlot(QProcess.ProcessError)
+    def _on_error(self, error):
+        """Show a message if there was an error while spawning."""
+        if error == QProcess.Crashed and not utils.is_windows:
+            # Already handled via ExitStatus in _on_finished
+            return
+        msg = self._proc.errorString()
+        message.error("Error while spawning {}: {}".format(self._what, msg))
+=======
+    @pyqtSlot(QProcess.ProcessError)
+    def _on_error(self, error):
+        """Show a message if there was an error while spawning."""
+        if error == QProcess.Crashed and not utils.is_windows:
+            # Already handled via ExitStatus in _on_finished
+            return
+        descriptions = {
+            QProcess.FailedToStart: 'failed to start',
+            QProcess.Crashed: 'crashed',
+            QProcess.Timedout: 'timed out',
+            QProcess.WriteError: 'write error',
+            QProcess.ReadError: 'read error',
+        }
+        detail = self._proc.errorString()
+        message.error("{} '{}' {}: {}".format(
+            self._what.capitalize(), self.cmd, descriptions[error], detail))
+>>>>>>> REPLACE
+```

@@ -24,6 +24,7 @@ Repository = "https://github.com/josephsenior/Agentless-ML"
 Issues = "https://github.com/josephsenior/Agentless-ML/issues"
 
 [project.optional-dependencies]
+benchmarks = ["pyarrow>=15"]
 dev = ["pytest>=8,<9"]
 
 [tool.setuptools.packages.find]

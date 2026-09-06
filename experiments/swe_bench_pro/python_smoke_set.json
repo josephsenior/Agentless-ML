@@ -1,0 +1,20 @@
+{
+  "dataset_revision": "7ab5114912baf22bb098818e604c02fe7ad2c11f",
+  "parquet_sha256": "c8cd7115496ad4e9a8b21d088cef576a65bf821bb542b24336f13f714cef13f8",
+  "row_count": 731,
+  "harness_revision": "ca10a60a5fcae51e6948ffe1485d4153d421e6c5",
+  "experiments": {
+    "qutebrowser_qtlog": {
+      "instance_id": "instance_qutebrowser__qutebrowser-f91ace96223cac8161c16dd061907e138fe85111-v059c6fdc75567943479b23ebca7c07b5e9a7f34c",
+      "container_digest": "sha256:bca2bc90cbe20acca25e9b5e2e96aa751a231a5b6f8f5bc7b7ea3a7b7d449758"
+    },
+    "qutebrowser_network_error": {
+      "instance_id": "instance_qutebrowser__qutebrowser-0833b5f6f140d04200ec91605f88704dd18e2970-v059c6fdc75567943479b23ebca7c07b5e9a7f34c",
+      "container_digest": "sha256:1607129d3ab3b54033dd9d6fdc9c05c6fad3d36dbdd89f36082f331acfcca35a"
+    },
+    "qutebrowser_process_start_error": {
+      "instance_id": "instance_qutebrowser__qutebrowser-0b621cb0ce2b54d3f93d8d41d8ff4257888a87e5-v2ef375ac784985212b1805e1d0431dc8f1b3c171",
+      "container_digest": "sha256:132ceff703ef4ada8d7ca2563b8ebf1bbffe0af6416119d5219374c0dc93e23f"
+    }
+  }
+}

@@ -1,0 +1,11 @@
+Remove the obsolete error emission and keep the completion signal.
+
+```python
+### qutebrowser/browser/webkit/network/networkreply.py
+<<<<<<< SEARCH
+        QTimer.singleShot(0, lambda: self.error.emit(error))
+        QTimer.singleShot(0, lambda: self.finished.emit())
+=======
+        QTimer.singleShot(0, lambda: self.finished.emit())
+>>>>>>> REPLACE
+```

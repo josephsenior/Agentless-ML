@@ -1,0 +1,4 @@
+```
+qutebrowser/browser/webkit/network/networkreply.py
+class: ErrorNetworkReply
+```

@@ -1,0 +1,25 @@
+[
+  {
+    "argv": [
+      "python",
+      "-m",
+      "compileall",
+      "-q",
+      "qutebrowser/misc/guiprocess.py"
+    ],
+    "kind": "regression",
+    "timeout_seconds": 60
+  },
+  {
+    "argv": [
+      "env",
+      "QT_QPA_PLATFORM=offscreen",
+      "QTWEBENGINE_DISABLE_SANDBOX=1",
+      "python",
+      "-c",
+      "from types import SimpleNamespace; from PyQt5.QtCore import QCoreApplication, QProcess; from qutebrowser.misc import guiprocess; app = QCoreApplication.instance() or QCoreApplication([]); process = guiprocess.GUIProcess('process'); process.cmd = 'missing'; process._proc = SimpleNamespace(errorString=lambda: 'No such file or directory'); messages = []; guiprocess.message.error = messages.append; guiprocess.utils.is_windows = False; process._on_error(QProcess.FailedToStart); expected = \"Process 'missing' failed to start: No such file or directory (Hint: Make sure 'missing' exists and is executable)\"; assert messages == [expected], messages"
+    ],
+    "kind": "reproduction",
+    "timeout_seconds": 60
+  }
+]

@@ -49,7 +49,14 @@ def parse_file_locations(
             if path.is_absolute() or ".." in path.parts:
                 continue
             normalized = path.as_posix()
-            if repository_name and normalized.startswith(repository_name + "/"):
+            # Prefer an exact tracked path. A repository can have a top-level
+            # package with the same name (for example qutebrowser/qutebrowser),
+            # so stripping the display-only root prefix first is ambiguous.
+            if (
+                repository_name
+                and normalized not in known
+                and normalized.startswith(repository_name + "/")
+            ):
                 normalized = normalized[len(repository_name) + 1 :]
             if (
                 normalized in known

@@ -144,6 +144,14 @@ def test_file_location_parser_validates_and_limits_paths():
     ) == ("a.py", "b.py")
 
 
+def test_file_location_prefers_exact_path_when_package_matches_repository():
+    assert parse_file_locations(
+        "```\nqutebrowser/utils/qtlog.py\n```",
+        ("qutebrowser/utils/qtlog.py",),
+        repository_name="qutebrowser",
+    ) == ("qutebrowser/utils/qtlog.py",)
+
+
 def test_recorded_workflow_exports_prediction_and_run(tmp_path, source):
     repository, _ = source
     result = controller(tmp_path, source, FakeRunner()).run(responses())

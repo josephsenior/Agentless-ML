@@ -1,0 +1,8 @@
+```
+qutebrowser/utils/qtlog.py
+function: qt_message_handler
+
+qutebrowser/utils/log.py
+function: hide_qt_warning
+class: QtWarningFilter
+```

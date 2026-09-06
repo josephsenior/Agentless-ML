@@ -1,0 +1,25 @@
+[
+  {
+    "argv": [
+      "python",
+      "-m",
+      "compileall",
+      "-q",
+      "qutebrowser/browser/webkit/network/networkreply.py"
+    ],
+    "kind": "regression",
+    "timeout_seconds": 60
+  },
+  {
+    "argv": [
+      "env",
+      "QT_QPA_PLATFORM=offscreen",
+      "QTWEBENGINE_DISABLE_SANDBOX=1",
+      "python",
+      "-c",
+      "from qutebrowser.qt.core import QCoreApplication, QUrl; from qutebrowser.qt.network import QNetworkReply, QNetworkRequest; from qutebrowser.browser.webkit.network import networkreply; app = QCoreApplication.instance() or QCoreApplication([]); error = QNetworkReply.NetworkError.UnknownNetworkError; reply = networkreply.ErrorNetworkReply(QNetworkRequest(QUrl('http://example.test')), 'boom', error); seen = []; reply.errorOccurred.connect(seen.append); app.processEvents(); assert seen == [error], seen"
+    ],
+    "kind": "reproduction",
+    "timeout_seconds": 60
+  }
+]

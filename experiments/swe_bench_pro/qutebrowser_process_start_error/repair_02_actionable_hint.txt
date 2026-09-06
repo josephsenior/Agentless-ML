@@ -1,0 +1,37 @@
+Give each error a specific message and add the requested executable hint.
+
+```python
+### qutebrowser/misc/guiprocess.py
+<<<<<<< SEARCH
+    @pyqtSlot(QProcess.ProcessError)
+    def _on_error(self, error):
+        """Show a message if there was an error while spawning."""
+        if error == QProcess.Crashed and not utils.is_windows:
+            # Already handled via ExitStatus in _on_finished
+            return
+        msg = self._proc.errorString()
+        message.error("Error while spawning {}: {}".format(self._what, msg))
+=======
+    @pyqtSlot(QProcess.ProcessError)
+    def _on_error(self, error):
+        """Show a message if there was an error while spawning."""
+        if error == QProcess.Crashed and not utils.is_windows:
+            # Already handled via ExitStatus in _on_finished
+            return
+        descriptions = {
+            QProcess.FailedToStart: 'failed to start',
+            QProcess.Crashed: 'crashed',
+            QProcess.Timedout: 'timed out',
+            QProcess.WriteError: 'write error',
+            QProcess.ReadError: 'read error',
+        }
+        detail = self._proc.errorString()
+        msg = "{} '{}' {}: {}".format(
+            self._what.capitalize(), self.cmd, descriptions[error], detail)
+        if (error == QProcess.FailedToStart and not utils.is_windows and
+                detail in {'No such file or directory', 'Permission denied'}):
+            msg += " (Hint: Make sure '{}' exists and is executable)".format(
+                self.cmd)
+        message.error(msg)
+>>>>>>> REPLACE
+```

@@ -1,0 +1,10 @@
+Emit the replacement Qt signal with the original error code.
+
+```python
+### qutebrowser/browser/webkit/network/networkreply.py
+<<<<<<< SEARCH
+        QTimer.singleShot(0, lambda: self.error.emit(error))
+=======
+        QTimer.singleShot(0, lambda: self.errorOccurred.emit(error))
+>>>>>>> REPLACE
+```

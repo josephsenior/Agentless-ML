@@ -1,0 +1,20 @@
+[
+  {
+    "argv": [
+      "env",
+      "QT_QPA_PLATFORM=offscreen",
+      "DISPLAY=:99",
+      "PYTEST_QT_API=pyqt5",
+      "QUTE_QT_WRAPPER=PyQt5",
+      "QTWEBENGINE_DISABLE_SANDBOX=1",
+      "python",
+      "-m",
+      "pytest",
+      "--override-ini=addopts=",
+      "-q",
+      "tests/unit/utils/test_log.py::TestHideQtWarning"
+    ],
+    "kind": "regression",
+    "timeout_seconds": 300
+  }
+]

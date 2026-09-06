@@ -1,0 +1,4 @@
+```
+qutebrowser/utils/qtlog.py
+qutebrowser/utils/log.py
+```
