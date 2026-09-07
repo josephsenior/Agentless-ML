@@ -71,4 +71,6 @@ The next parity boundary now covers:
 The exact retained behavior and intentional multi-file and safety changes are
 listed in [Repair and selection](repair-selection.md). Model execution, public
 test runners, and benchmark verification remain outside the parity claim. The
-next implementation step is the first complete Python benchmark slice.
+recorded controller has since exercised three SWE-bench Pro Python tasks. Those
+smoke runs do not extend the upstream parity claim. See the
+[replication map](replication-map.md) for differences and unfinished behavior.

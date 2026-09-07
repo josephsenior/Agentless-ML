@@ -4,6 +4,13 @@ The controller can apply a prepared patch, run a fixed schedule of public test
 commands in Docker, and pass results to deterministic selection. No model API
 is called. A running Linux Docker engine is required only for live execution.
 
+Published Agentless already executes regression and reproduction tests through
+Docker/SWE-bench infrastructure. This runner implements that execution role for
+development; it adds no new algorithmic stage. Test schedules are supplied by the
+caller, so this module does not implement Agentless's automated regression-test
+selection or reproduction-test generation. See the
+[replication map](replication-map.md) for the reuse trade-off and remaining gaps.
+
 ## Try the demonstration
 
 From the repository root in PowerShell:
