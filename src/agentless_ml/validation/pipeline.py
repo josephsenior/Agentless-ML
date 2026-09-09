@@ -2,6 +2,7 @@
 
 import json
 from collections.abc import Sequence
+from contextlib import nullcontext
 from dataclasses import asdict, replace
 from pathlib import Path
 
@@ -10,6 +11,7 @@ from agentless_ml.workspace import PatchApplicationStatus, WorkspaceError
 from agentless_ml.workspace.base import WorkspaceProvider
 
 from .docker import DockerTestRunner, PublicTestCommand
+from .reproduction import ReproductionSpec, reproduction_file
 
 
 def validate_candidate(
@@ -19,6 +21,7 @@ def validate_candidate(
     commands: Sequence[PublicTestCommand],
     *,
     artifact_root: Path | None = None,
+    reproduction: tuple[ReproductionSpec, str] | None = None,
 ) -> PatchCandidate:
     """Replace prior evidence; every command gets a fresh container.
 
@@ -41,9 +44,16 @@ def validate_candidate(
                 )
             else:
                 for command in commands:
-                    execution = runner.run(
-                        workspace.path, command, artifact_root=artifact_root
+                    overlay = (
+                        reproduction_file(workspace.path, *reproduction)
+                        if reproduction is not None
+                        and command == reproduction[0].command
+                        else nullcontext()
                     )
+                    with overlay:
+                        execution = runner.run(
+                            workspace.path, command, artifact_root=artifact_root
+                        )
                     evidence.append(execution.result)
                     Path(execution.artifact_directory, "candidate.json").write_text(
                         json.dumps(

@@ -1,5 +1,8 @@
 # Recorded fixed workflow
 
+An optional [recorded reproduction test](reproduction-tests.md) is checked on
+the original revision and then installed only for candidate reproduction commands.
+
 Optional [regression selection](regression-selection.md) runs a trusted inventory
 on the unpatched revision and consumes a recorded exclusion response. Its frozen
 schedule is shared across all candidate groups; older fixed schedules still work.

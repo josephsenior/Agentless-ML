@@ -8,8 +8,9 @@ Published Agentless already executes regression and reproduction tests through
 Docker/SWE-bench infrastructure. This runner implements that execution role for
 development; it adds no new algorithmic stage. Test schedules are supplied by the
 caller. The controller can now derive regression schedules from a trusted inventory
-and [recorded exclusions](regression-selection.md); automatic test discovery and
-reproduction-test generation remain unfinished. See the
+and [recorded exclusions](regression-selection.md), and can use one
+[recorded generated reproduction test](reproduction-tests.md). Automatic discovery
+and live generation remain unfinished. See the
 [replication map](replication-map.md) for the reuse trade-off and remaining gaps.
 
 ## Try the demonstration

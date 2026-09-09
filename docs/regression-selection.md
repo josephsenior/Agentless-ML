@@ -66,5 +66,6 @@ failures, unknown exclusions, infrastructure failures and empty schedules. These
 tests use a controlled runner; they do not establish live Docker or benchmark
 coverage for this new stage. There are no model calls.
 
-Next is reproduction-test generation and its checks. Full benchmark test
+[Recorded reproduction generation and checks](reproduction-tests.md) are now
+available for one test source per run. Full benchmark test
 discovery, official scoring and live sampling remain separate integration work.

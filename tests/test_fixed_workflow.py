@@ -405,6 +405,113 @@ def test_inventory_requires_recorded_selection(tmp_path, source):
     assert not runner.calls
 
 
+class ReproductionRunner:
+    image_reference = "python:fixture"
+    image_id = "sha256:fixture"
+
+    def __init__(self, baseline_status=ValidationStatus.FAIL):
+        self.baseline_status = baseline_status
+        self.calls = []
+
+    def run(self, source, command, *, artifact_root=None):
+        from agentless_ml.schemas import ValidationKind
+
+        generated = Path(source) / "reproduce.py"
+        content = (Path(source) / "calculator.py").read_text()
+        baseline = "reproduction-baseline" in str(artifact_root)
+        if command.kind == ValidationKind.REPRODUCTION:
+            assert (
+                generated.read_text()
+                == "from calculator import add\nassert add(2, 3) == 5\n"
+            )
+            status = (
+                self.baseline_status
+                if baseline
+                else (
+                    ValidationStatus.PASS
+                    if "a + b" in content
+                    else ValidationStatus.FAIL
+                )
+            )
+        else:
+            assert not generated.exists()
+            status = ValidationStatus.PASS
+        self.calls.append((baseline, command.kind))
+        destination = Path(artifact_root) / str(len(self.calls))
+        destination.mkdir(parents=True)
+        return ExecutionRecord(
+            ValidationResult(
+                status=status,
+                command=command.argv,
+                duration_seconds=0,
+                kind=command.kind,
+                exit_code=0 if status == ValidationStatus.PASS else 1,
+            ),
+            self.image_id,
+            "fixture",
+            str(destination),
+        )
+
+
+def reproduction_controller(tmp_path, source, runner):
+    from agentless_ml.schemas import ValidationKind
+    from agentless_ml.validation import ReproductionSpec
+
+    repository, commit = source
+    return FixedWorkflowController(
+        task=task(commit),
+        source_repository=repository,
+        workspace_root=tmp_path / "workspaces",
+        artifact_root=tmp_path / "runs",
+        runner=runner,
+        public_commands=(PublicTestCommand(("regression",)),),
+        reproduction_spec=ReproductionSpec(
+            "reproduce.py",
+            PublicTestCommand(
+                ("python", "reproduce.py"), kind=ValidationKind.REPRODUCTION
+            ),
+        ),
+        implementation_revision="fixture",
+        harness_revision="fixture",
+        model_name="recorded",
+    )
+
+
+def reproduction_responses():
+    return replace(
+        responses(),
+        reproduction_test="```python\nfrom calculator import add\nassert add(2, 3) == 5\n```",
+    )
+
+
+def test_recorded_reproduction_baseline_and_candidate_selection(tmp_path, source):
+    runner = ReproductionRunner()
+    result = reproduction_controller(tmp_path, source, runner).run(
+        reproduction_responses()
+    )
+    assert result.prediction.selected_candidate_id == "repair-2"
+    assert "reproduce.py" not in result.prediction.model_patch
+    assert len(runner.calls) == 5
+    assert result.run.model_calls == 0
+    assert not (source[0] / "reproduce.py").exists()
+    assert not list((tmp_path / "workspaces").iterdir())
+    directory = Path(result.artifact_directory)
+    assert (directory / "reproduction-source.json").exists()
+    assert (directory / "reproduction-baseline.json").exists()
+
+
+@pytest.mark.parametrize(
+    "status",
+    [ValidationStatus.PASS, ValidationStatus.HARNESS_ERROR, ValidationStatus.TIMEOUT],
+)
+def test_nonreproducing_or_broken_test_stops_run(tmp_path, source, status):
+    runner = ReproductionRunner(status)
+    with pytest.raises(WorkflowError, match="must fail"):
+        reproduction_controller(tmp_path, source, runner).run(reproduction_responses())
+    assert len(runner.calls) == 1
+    assert not list((tmp_path / "workspaces").iterdir())
+
+
 def test_invalid_edit_stage_does_not_fall_back(tmp_path, source):
     bundle = replace(
         responses(), edit_localization="```\ncalculator.py\nline: 999\n```"

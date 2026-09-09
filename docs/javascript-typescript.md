@@ -109,7 +109,7 @@ evaluation. The native runner lives only in the test module.
 
 [Rust](rust-adapter.md) now also has recorded coverage. [Regression selection](regression-selection.md)
 supports a trusted inventory and recorded exclusions. Automatic test discovery,
-reproduction-test generation, model sampling and full benchmark integration remain separate
+live reproduction-test generation, model sampling and full benchmark integration remain separate
 unfinished work in the [replication map](replication-map.md).
 
 Parser references: [JavaScript grammar](https://github.com/tree-sitter/tree-sitter-javascript)

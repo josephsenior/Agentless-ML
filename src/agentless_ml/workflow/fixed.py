@@ -56,6 +56,12 @@ from agentless_ml.validation.regression import (
     parse_regression_exclusions,
     render_regression_selection_prompt,
 )
+from agentless_ml.validation.reproduction import (
+    ReproductionSpec,
+    parse_reproduction_source,
+    render_reproduction_prompt,
+    reproduction_file,
+)
 from agentless_ml.workspace import LocalGitWorkspaceProvider
 
 
@@ -84,6 +90,7 @@ class RecordedStageResponses:
     edit_localization: str | None = None
     edit_samples: tuple[RecordedEditSample, ...] = ()
     regression_exclusions: str | None = None
+    reproduction_test: str | None = None
 
     def __post_init__(self):
         if not self.file_localization.strip() or not self.symbol_localization.strip():
@@ -160,9 +167,10 @@ class FixedWorkflowController:
         harness_revision: str,
         model_name: str,
         regression_tests: tuple[RegressionTest, ...] = (),
+        reproduction_spec: ReproductionSpec | None = None,
     ):
         self.adapter = get_language_adapter(task.language)
-        if not public_commands and not regression_tests:
+        if not public_commands and not regression_tests and reproduction_spec is None:
             raise ValueError("public test schedule must not be empty")
         if len({test.test_id for test in regression_tests}) != len(regression_tests):
             raise ValueError("regression test IDs must be unique")
@@ -202,6 +210,11 @@ class FixedWorkflowController:
         self.runner = runner
         self.public_commands = public_commands
         self.regression_tests = regression_tests
+        self.reproduction_spec = reproduction_spec
+        if reproduction_spec is not None and any(
+            command.kind == ValidationKind.REPRODUCTION for command in public_commands
+        ):
+            raise ValueError("do not mix generated and fixed reproduction commands")
         self.implementation_revision = implementation_revision
         self.harness_revision = harness_revision
         self.model_name = model_name
@@ -221,6 +234,58 @@ class FixedWorkflowController:
                     "regression inventory and recorded exclusions must be supplied together"
                 )
             public_commands = self.public_commands
+            reproduction = None
+            if (self.reproduction_spec is not None) != (
+                responses.reproduction_test is not None
+            ):
+                raise WorkflowError(
+                    "reproduction specification and recorded source must be supplied together"
+                )
+            if self.reproduction_spec is not None:
+                spec = self.reproduction_spec
+                prompt = render_reproduction_prompt(
+                    self.task.problem_statement, self.task.language, spec
+                )
+                (directory / "reproduction-generation.txt").write_text(
+                    prompt, encoding="utf-8"
+                )
+                try:
+                    source = parse_reproduction_source(
+                        responses.reproduction_test, self.task.language
+                    )
+                    _write_json(
+                        directory / "reproduction-source.json",
+                        {
+                            "spec": asdict(spec),
+                            "source": source,
+                            "source_sha256": hashlib.sha256(
+                                source.encode("utf-8")
+                            ).hexdigest(),
+                        },
+                    )
+                    with self.provider.create() as workspace:
+                        with reproduction_file(workspace.path, spec, source):
+                            execution = self.runner.run(
+                                workspace.path,
+                                spec.command,
+                                artifact_root=directory / "reproduction-baseline",
+                            )
+                        _write_json(
+                            directory / "reproduction-baseline.json",
+                            {
+                                "result": asdict(execution.result),
+                                "workspace": asdict(workspace.provenance),
+                                "artifact_directory": execution.artifact_directory,
+                            },
+                        )
+                except ValueError as exc:
+                    raise WorkflowError(str(exc)) from exc
+                if execution.result.status != ValidationStatus.FAIL:
+                    raise WorkflowError(
+                        "generated reproduction must fail on the original revision without infrastructure errors"
+                    )
+                reproduction = (spec, source)
+                public_commands += (spec.command,)
             if self.regression_tests:
                 baseline = []
                 passing_ids = []
@@ -273,7 +338,7 @@ class FixedWorkflowController:
                     if test.test_id in passing_ids and test.test_id not in excluded
                 )
                 public_commands = (
-                    tuple(test.command for test in selected) + self.public_commands
+                    tuple(test.command for test in selected) + public_commands
                 )
                 _write_json(
                     directory / "regression-selection.json",
@@ -574,6 +639,7 @@ class FixedWorkflowController:
                     self.runner,
                     public_commands,
                     artifact_root=directory / "executions" / candidate_id,
+                    reproduction=reproduction,
                 )
                 candidates.append(candidate)
                 attempts.append(
