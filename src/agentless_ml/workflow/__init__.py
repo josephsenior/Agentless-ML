@@ -3,6 +3,7 @@
 from .fixed import (
     CandidateAttempt,
     FixedWorkflowController,
+    RecordedEditSample,
     RecordedStageResponses,
     WorkflowError,
     WorkflowResult,
@@ -11,6 +12,7 @@ from .fixed import (
 __all__ = [
     "CandidateAttempt",
     "FixedWorkflowController",
+    "RecordedEditSample",
     "RecordedStageResponses",
     "WorkflowError",
     "WorkflowResult",

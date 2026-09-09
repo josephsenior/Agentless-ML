@@ -99,6 +99,14 @@ class PythonAdapter:
     """Build normalized Python structures and legacy-compatible skeletons."""
 
     language: str = "python"
+    extension: str = ".py"
+    extensions: tuple[str, ...] = (".py",)
+
+    def is_source_path(self, path: str) -> bool:
+        return path.endswith(self.extension)
+
+    def is_test_path(self, path: str) -> bool:
+        return any(part.startswith("test") for part in path.replace("\\", "/").split("/"))
 
     def parse_file(self, path: str, source: str) -> FileNode:
         tree = _parse_python(source, filename=path)
@@ -151,6 +159,7 @@ class PythonAdapter:
         self,
         source: str,
         *,
+        path: str | None = None,
         keep_constant: bool = True,
         keep_indent: bool = False,
         compress_assign: bool = False,

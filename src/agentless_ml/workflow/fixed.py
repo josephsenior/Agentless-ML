@@ -1,4 +1,4 @@
-"""One fixed localization, repair, public-validation, and selection trajectory."""
+"""Fixed recorded localization, repair, validation and selection across languages."""
 
 from __future__ import annotations
 
@@ -14,15 +14,19 @@ from enum import Enum
 from pathlib import Path
 from typing import Any
 
-from agentless_ml.adapters.languages import PythonAdapter
+from agentless_ml.adapters.languages import get_language_adapter
 from agentless_ml.localization import (
     construct_selected_context,
     extract_code_blocks,
     parse_file_locations,
     parse_locations_for_files,
     render_file_localization_prompt,
-    render_legacy_project_tree,
     render_symbol_localization_prompt,
+)
+from agentless_ml.localization.context import render_project_tree
+from agentless_ml.localization.edit import (
+    parse_edit_locations,
+    render_edit_localization_prompt,
 )
 from agentless_ml.repair import (
     EditApplicationError,
@@ -48,19 +52,41 @@ class WorkflowError(RuntimeError):
 
 
 @dataclass(frozen=True, slots=True)
+class RecordedEditSample:
+    edit_localization: str
+    repairs: tuple[str, ...]
+
+    def __post_init__(self):
+        if not self.edit_localization.strip():
+            raise ValueError("edit localization response must not be empty")
+        if not self.repairs or any(not response.strip() for response in self.repairs):
+            raise ValueError("each edit sample needs nonempty repair responses")
+
+
+@dataclass(frozen=True, slots=True)
 class RecordedStageResponses:
     file_localization: str
     symbol_localization: str
-    repairs: tuple[str, ...]
+    repairs: tuple[str, ...] = ()
     source: str = "recorded"
+    edit_localization: str | None = None
+    edit_samples: tuple[RecordedEditSample, ...] = ()
 
     def __post_init__(self):
         if not self.file_localization.strip() or not self.symbol_localization.strip():
             raise ValueError("localization responses must not be empty")
-        if not self.repairs or any(not response.strip() for response in self.repairs):
+        if self.edit_samples and (self.repairs or self.edit_localization is not None):
+            raise ValueError(
+                "edit_samples cannot be mixed with legacy repair/edit fields"
+            )
+        if not self.edit_samples and (
+            not self.repairs or any(not response.strip() for response in self.repairs)
+        ):
             raise ValueError("at least one nonempty repair response is required")
         if not self.source.strip():
             raise ValueError("response source must not be empty")
+        if self.edit_localization is not None and not self.edit_localization.strip():
+            raise ValueError("edit localization response must not be empty")
 
 
 @dataclass(frozen=True, slots=True)
@@ -70,6 +96,7 @@ class CandidateAttempt:
     status: str
     message: str = ""
     candidate: PatchCandidate | None = None
+    localization_rank: int = 0
 
 
 @dataclass(frozen=True, slots=True)
@@ -120,8 +147,7 @@ class FixedWorkflowController:
         harness_revision: str,
         model_name: str,
     ):
-        if task.language.casefold() != "python":
-            raise ValueError("the first complete workflow supports Python only")
+        self.adapter = get_language_adapter(task.language)
         if not public_commands:
             raise ValueError("public test schedule must not be empty")
         if any(
@@ -164,6 +190,7 @@ class FixedWorkflowController:
         directory = self.artifact_root / run_id
         directory.mkdir(parents=True)
         try:
+            _write_json(directory / "responses.json", asdict(responses))
             _write_json(
                 directory / "task.json",
                 {
@@ -188,6 +215,11 @@ class FixedWorkflowController:
                     "harness_revision": self.harness_revision,
                     "model_name": self.model_name,
                     "model_calls": 0,
+                    "localization_mode": "edit-samples"
+                    if responses.edit_samples
+                    else "edit-lines"
+                    if responses.edit_localization is not None or responses.edit_samples
+                    else "symbols-only",
                     "resolved_container_digest": self.runner.image_id,
                     "public_commands": [
                         asdict(command) for command in self.public_commands
@@ -196,39 +228,53 @@ class FixedWorkflowController:
             )
             with self.provider.create() as visible_workspace:
                 repository_name = Path(self.provider.source_repository).name
-                python_paths = tuple(
-                    sorted(path for path in self.provider.paths if path.endswith(".py"))
+                source_paths = tuple(
+                    sorted(
+                        path
+                        for path in self.provider.paths
+                        if self.adapter.is_source_path(path)
+                    )
                 )
-                if not python_paths:
-                    raise WorkflowError("pinned repository has no tracked Python files")
-                project_tree = render_legacy_project_tree(
-                    tuple(f"{repository_name}/{path}" for path in python_paths)
+                if not source_paths:
+                    raise WorkflowError(
+                        "pinned repository has no supported source files"
+                    )
+                project_tree = render_project_tree(
+                    tuple(f"{repository_name}/{path}" for path in source_paths),
+                    adapter=self.adapter,
                 )
                 file_prompt = render_file_localization_prompt(
-                    self.task.problem_statement, project_tree
+                    self.task.problem_statement,
+                    project_tree,
+                    extension=self.adapter.extension,
                 )
                 selected_files = parse_file_locations(
                     responses.file_localization,
-                    python_paths,
+                    source_paths,
                     repository_name=repository_name,
+                    extension=self.adapter.extensions,
                 )
                 if not selected_files:
                     raise WorkflowError(
-                        "file localization selected no known Python files"
+                        "file localization selected no known source files"
                     )
                 sources = {
                     path: (visible_workspace.path / path).read_text(encoding="utf-8")
                     for path in selected_files
                 }
                 nodes = {
-                    path: PythonAdapter().parse_file(path, source)
+                    path: self.adapter.parse_file(path, source)
                     for path, source in sources.items()
                 }
                 symbol_prompt = render_symbol_localization_prompt(
-                    self.task.problem_statement, sources
+                    self.task.problem_statement,
+                    sources,
+                    adapter=self.adapter,
                 )
                 locations = parse_locations_for_files(
-                    extract_code_blocks(responses.symbol_localization), selected_files
+                    extract_code_blocks(responses.symbol_localization),
+                    selected_files,
+                    extension=self.adapter.extensions,
                 )
                 selected_context, intervals = construct_selected_context(
                     locations, nodes, sources
@@ -241,21 +287,146 @@ class FixedWorkflowController:
                     raise WorkflowError(
                         "symbol localization produced no valid repair context"
                     )
+                edit_prompt = None
+                repair_plan = []
+                if responses.edit_samples:
+                    numbered_context, _ = construct_selected_context(
+                        locations, nodes, sources, no_line_number=False
+                    )
+                    edit_prompt = render_edit_localization_prompt(
+                        self.task.problem_statement, numbered_context
+                    )
+                    visible_intervals = {
+                        path: [
+                            (start, min(nodes[path].line_count, end))
+                            for start, end in spans
+                        ]
+                        for path, spans in intervals.items()
+                    }
+                    _write_json(
+                        directory / "symbol-context.json",
+                        {
+                            "locations": locations,
+                            "intervals": visible_intervals,
+                            "context": numbered_context,
+                            "edit_prompt": edit_prompt,
+                        },
+                    )
+                    for rank, sample in enumerate(responses.edit_samples):
+                        sample_directory = directory / "localizations" / str(rank)
+                        sample_directory.mkdir(parents=True)
+                        try:
+                            sample_locations = parse_edit_locations(
+                                sample.edit_localization, visible_intervals
+                            )
+                        except ValueError as exc:
+                            raise WorkflowError(f"edit sample {rank}: {exc}") from exc
+                        context, sample_intervals = construct_selected_context(
+                            sample_locations, nodes, sources
+                        )
+                        sample_intervals = {
+                            path: [
+                                (max(1, start), min(nodes[path].line_count, end))
+                                for start, end in spans
+                            ]
+                            for path, spans in sample_intervals.items()
+                        }
+                        _write_json(
+                            sample_directory / "selected-context.json",
+                            {
+                                "localization_rank": rank,
+                                "locations": sample_locations,
+                                "intervals": sample_intervals,
+                                "context": context,
+                            },
+                        )
+                        (sample_directory / "repair.txt").write_text(
+                            build_repair_prompt(
+                                self.task.problem_statement,
+                                context,
+                                language=self.adapter.language,
+                            )
+                            + "\n",
+                            encoding="utf-8",
+                        )
+                        repair_plan.extend(
+                            (rank, index, response, sample_intervals)
+                            for index, response in enumerate(sample.repairs)
+                        )
+                if responses.edit_localization is not None:
+                    numbered_context, _ = construct_selected_context(
+                        locations, nodes, sources, no_line_number=False
+                    )
+                    edit_prompt = render_edit_localization_prompt(
+                        self.task.problem_statement, numbered_context
+                    )
+                    # Retain the coarse evidence even when the fine response fails.
+                    _write_json(
+                        directory / "symbol-context.json",
+                        {
+                            "locations": locations,
+                            "intervals": intervals,
+                            "context": numbered_context,
+                            "edit_prompt": edit_prompt,
+                            "edit_response": responses.edit_localization,
+                        },
+                    )
+                    try:
+                        locations = parse_edit_locations(
+                            responses.edit_localization,
+                            {
+                                path: [
+                                    (start, min(nodes[path].line_count, end))
+                                    for start, end in spans
+                                ]
+                                for path, spans in intervals.items()
+                            },
+                        )
+                    except ValueError as exc:
+                        raise WorkflowError(str(exc)) from exc
+                    selected_context, intervals = construct_selected_context(
+                        locations, nodes, sources
+                    )
+                    intervals = {
+                        path: [
+                            (max(1, start), min(nodes[path].line_count, end))
+                            for start, end in spans
+                        ]
+                        for path, spans in intervals.items()
+                    }
                 repair_prompt = build_repair_prompt(
-                    self.task.problem_statement, selected_context
+                    self.task.problem_statement,
+                    selected_context,
+                    language=self.adapter.language,
                 )
+                if not responses.edit_samples:
+                    repair_plan = [
+                        (0, index, response, intervals)
+                        for index, response in enumerate(responses.repairs)
+                    ]
 
             prompts = directory / "prompts"
             prompts.mkdir()
+            if edit_prompt is not None:
+                (prompts / "edit-localization.txt").write_text(
+                    edit_prompt + "\n", encoding="utf-8"
+                )
             for name, content in (
                 ("file-localization.txt", file_prompt),
                 ("symbol-localization.txt", symbol_prompt),
                 ("repair.txt", repair_prompt),
             ):
+                if responses.edit_samples and name == "repair.txt":
+                    continue
                 (prompts / name).write_text(content + "\n", encoding="utf-8")
             _write_json(directory / "responses.json", asdict(responses))
             _write_json(
-                directory / "selected-context.json",
+                directory
+                / (
+                    "coarse-context.json"
+                    if responses.edit_samples
+                    else "selected-context.json"
+                ),
                 {
                     "files": selected_files,
                     "locations": locations,
@@ -266,12 +437,16 @@ class FixedWorkflowController:
 
             attempts: list[CandidateAttempt] = []
             candidates: list[PatchCandidate] = []
-            for index, response in enumerate(responses.repairs):
-                candidate_id = f"repair-{index}"
+            for rank, index, response, candidate_intervals in repair_plan:
+                candidate_id = (
+                    f"loc-{rank}-repair-{index}"
+                    if responses.edit_samples
+                    else f"repair-{index}"
+                )
                 try:
                     edits = parse_search_replace_edits(response)
                     applied = apply_search_replace_edits(
-                        sources, edits, allowed_intervals=intervals
+                        sources, edits, allowed_intervals=candidate_intervals
                     )
                     candidate = build_patch_candidate(
                         candidate_id=candidate_id,
@@ -279,7 +454,7 @@ class FixedWorkflowController:
                         diff=build_unified_diff(
                             applied.original_sources, applied.updated_sources
                         ),
-                        localization_rank=0,
+                        localization_rank=rank,
                         sample_index=index,
                     )
                 except (
@@ -290,7 +465,11 @@ class FixedWorkflowController:
                 ) as exc:
                     attempts.append(
                         CandidateAttempt(
-                            candidate_id, index, "repair_error", str(exc)[:2000]
+                            candidate_id,
+                            index,
+                            "repair_error",
+                            str(exc)[:2000],
+                            localization_rank=rank,
                         )
                     )
                     continue
@@ -304,7 +483,11 @@ class FixedWorkflowController:
                 candidates.append(candidate)
                 attempts.append(
                     CandidateAttempt(
-                        candidate_id, index, "validated", candidate=candidate
+                        candidate_id,
+                        index,
+                        "validated",
+                        candidate=candidate,
+                        localization_rank=rank,
                     )
                 )
             if not candidates:

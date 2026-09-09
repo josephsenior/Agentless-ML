@@ -1,6 +1,6 @@
 # ADR 0002: Generalize parsing through language adapters
 
-- **Status:** Provisional; Python implemented, additional languages pending
+- **Status:** Provisional; all five initial languages have recorded workflow coverage
 - **Date:** 2026-09-07
 
 ## Context
@@ -16,10 +16,18 @@ Put each language's parsing code in an adapter and keep the stage order and
 candidate-selection rules shared. Change the common representation when a new
 language needs something it cannot express yet.
 
-The controller still uses Python directly. Next we will implement Go, then
-JavaScript/TypeScript and Rust, testing each with recorded responses. We will
-adjust the shared representation as we go. Python alone is not enough to tell us
-whether it works for the other languages.
+The controller selects Python, Go, JavaScript, TypeScript or Rust through a shared contract.
+Go receiver methods remain separate symbols with qualified names, because their
+source spans need not fall inside the receiver type. The existing symbol structure
+can express this without adding fields. See [Go support](../go-adapter.md).
+
+JavaScript/TypeScript added multiple accepted extensions and a file path for
+skeleton parsing, so mixed repositories and TSX use the correct grammar. Bound
+arrow functions and class/object members fit the existing symbol records. See
+[JavaScript/TypeScript support](../javascript-typescript.md) for the naming rules
+and limitations. [Rust](../rust-adapter.md) adds lexically nested trait and impl
+declarations with source-spelled qualified names. These five adapters exercise
+the contract, but controlled examples do not prove coverage of real repositories.
 
 ## Alternatives
 

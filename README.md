@@ -12,7 +12,8 @@ DeepSWE, SWE-bench Pro, and a capability-matched adaptive system.
 
 > [!IMPORTANT]
 > This repository is an early research prototype. Three recorded Python tasks now
-> exercises the full pipeline, but live-model runs, multilingual adapters, and
+> exercise the recorded Python pipeline. Controlled Go, JavaScript, TypeScript and Rust workflows also work, but
+> live-model runs, remaining framework behavior, and
 > complete benchmark integrations are not finished. It should not yet be used
 > to report benchmark results.
 
@@ -59,6 +60,10 @@ The current implementation includes:
 - immutable task, repository, patch, validation, prediction, and run schemas;
 - checks that reject answer-like or verifier-only task metadata;
 - a normalized Python file and symbol representation;
+- a Go adapter connected to the recorded controller, including receiver methods,
+  types, constants, variables, and a controlled two-file repair test;
+- JavaScript and TypeScript adapters, including JSX/TSX and mixed JS/TS source,
+  with controlled two-file repair tests through the same controller;
 - Agentless-compatible Python skeleton rendering;
 - filtered project-tree and localization-prompt construction;
 - parsing and validation of returned file, class, function, variable, and line
@@ -110,7 +115,9 @@ python -m pip install -e '.[dev]'
 python -m pytest
 ```
 
-The runtime package has one current dependency, LibCST. Fixture-capture tools
+The runtime uses LibCST for Python and Tree-sitter grammars for Go, JavaScript,
+TypeScript, TSX and Rust.
+Fixture-capture tools
 also require the separately pinned Agentless checkout; ordinary unit tests do
 not.
 
@@ -137,6 +144,17 @@ recaptured with scripts in `tools/`; they are not hand-written expected outputs.
 Gold patches and hidden verifier tests are not included in agent-visible task
 records or used for candidate generation or selection.
 
+[Go support](docs/go-adapter.md) explains the first non-Python adapter, its tests,
+and the choices that differ from Python. The optional compiler check runs only
+the small authored Go fixture; ordinary tests do not require a Go installation.
+
+[JavaScript and TypeScript support](docs/javascript-typescript.md) covers the
+supported declarations, parser selection, mixed repositories and optional Node
+checks. Ordinary framework tests do not require Node or a TypeScript compiler.
+
+[Rust support](docs/rust-adapter.md) covers traits, impl blocks, modules and the
+optional compiler check. Ordinary framework tests do not require Rust installed.
+
 ## SWE-bench Pro Python smoke set
 
 The first benchmark integration uses three pinned SWE-bench Pro qutebrowser
@@ -159,6 +177,11 @@ official benchmark verifier remains a separate, post-selection evaluation step.
 
 ## Roadmap
 
+The [recorded edit-line stage](docs/edit-localization.md) now connects symbol
+localization to finer repair context. It is optional for replaying older fixtures;
+grouped localization/repair samples are also supported. Automated test
+selection/generation remains work to complete.
+
 The local workspace layer is documented in [Candidate workspaces](docs/workspaces.md).
 It isolates repository changes; [public validation](docs/public-validation.md)
 now runs fixed commands in disposable Docker containers. The two-patch demo
@@ -170,8 +193,8 @@ development coverage; live-model trials remain separate. The planned sequence is
 
 1. complete one real pinned Python task end to end — complete;
 2. integrate one target benchmark and run several Python smoke tasks — complete;
-3. add Go, JavaScript/TypeScript, then Rust, refining shared structures as each
-   language exercises the recorded workflow;
+3. add languages while refining shared structures: Go, JavaScript/TypeScript
+   and Rust now have controlled recorded coverage;
 4. complete the remaining framework behavior and stabilize the multilingual
    interfaces after testing the planned languages;
 5. connect a live model and complete both benchmark integrations;

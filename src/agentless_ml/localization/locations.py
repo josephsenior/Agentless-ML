@@ -27,12 +27,13 @@ def parse_file_locations(
     *,
     repository_name: str | None = None,
     maximum_files: int = 5,
+    extension: str | tuple[str, ...] = ".py",
 ) -> tuple[str, ...]:
-    """Return ordered, known Python paths from a file-localization response.
+    """Return ordered, known paths with the requested language extension.
 
     Published prompts display a repository-root component. Responses may retain
     or omit it, so an explicitly supplied repository name is stripped once.
-    Unknown, unsafe, duplicate, non-Python, and over-budget paths are rejected.
+    Unknown, unsafe, duplicate, wrong-extension and over-budget paths are rejected.
     """
     if maximum_files <= 0:
         raise ValueError("maximum_files must be positive")
@@ -60,7 +61,7 @@ def parse_file_locations(
                 normalized = normalized[len(repository_name) + 1 :]
             if (
                 normalized in known
-                and normalized.endswith(".py")
+                and normalized.endswith(extension)
                 and normalized not in selected
             ):
                 selected.append(normalized)
@@ -74,6 +75,7 @@ def parse_locations_for_files(
     file_names: Sequence[str],
     *,
     keep_old_order: bool = False,
+    extension: str | tuple[str, ...] = ".py",
 ) -> dict[str, list[str]]:
     """Associate model-returned location lines with known files."""
     results: dict[str, list[str]] = (
@@ -82,11 +84,23 @@ def parse_locations_for_files(
     current_file_name: str | None = None
     for block in blocks:
         for line in block.splitlines():
-            if line.strip().endswith(".py"):
+            if line.strip().endswith(extension):
                 current_file_name = line.strip()
             elif line.strip() and any(
                 line.startswith(prefix)
-                for prefix in ("line:", "function:", "class:", "variable:")
+                for prefix in (
+                    "line:",
+                    "function:",
+                    "class:",
+                    "variable:",
+                    "method:",
+                    "type:",
+                    "constant:",
+                    "field:",
+                    "trait:",
+                    "impl:",
+                    "module:",
+                )
             ):
                 if current_file_name in file_names:
                     results.setdefault(current_file_name, []).append(line)
@@ -181,6 +195,15 @@ def resolve_locations(
     """Resolve Agentless location strings to one-based inclusive line spans."""
     if context_window < 0:
         raise ValueError("context_window must not be negative")
+    if file_node.language != "python":
+        return _resolve_symbols(
+            locations,
+            file_node,
+            context_window=context_window,
+            separate_intervals=separate_intervals,
+            fine_grained_only=fine_grained_only,
+            remove_line_locations=remove_line_locations,
+        )
     groups = [locations] if isinstance(locations, str) else locations
     classes = _classes(file_node)
     functions = _functions(file_node)
@@ -314,6 +337,90 @@ def resolve_locations(
     return ResolvedLocations(
         tuple(line_locations), tuple(context_intervals), tuple(unrecognized)
     )
+
+
+def _resolve_symbols(
+    locations: str | Sequence[str],
+    file_node: FileNode,
+    *,
+    context_window: int,
+    separate_intervals: bool,
+    fine_grained_only: bool,
+    remove_line_locations: bool,
+) -> ResolvedLocations:
+    """Resolve explicit symbol kinds without Python AST or class assumptions."""
+
+    def flatten(symbols):
+        for symbol in symbols:
+            yield symbol
+            yield from flatten(symbol.children)
+
+    symbols = tuple(flatten(file_node.symbols))
+    groups = [locations] if isinstance(locations, str) else locations
+    allowed = {
+        "function": {"function", "method"},
+        "method": {"method"},
+        "type": {"type", "struct", "interface", "enum", "trait"},
+        "trait": {"trait"},
+        "impl": {"impl"},
+        "module": {"module"},
+        "class": {"class"},
+        "field": {"field"},
+        "variable": {"variable", "constant", "object"},
+        "constant": {"constant"},
+    }
+    spans: list[tuple[int, int]] = []
+    unknown = []
+    for group in groups:
+        for raw in group.splitlines():
+            if not raw.strip():
+                continue
+            kind, separator, name = raw.strip().partition(":")
+            name = name.strip()
+            if kind == "line" and separator:
+                if remove_line_locations:
+                    continue
+                if name.isdecimal() and 1 <= int(name) <= file_node.line_count:
+                    spans.append((int(name), int(name)))
+                else:
+                    unknown.append(raw)
+                continue
+            matches = [
+                s
+                for s in symbols
+                if s.kind in allowed.get(kind, set())
+                and (
+                    s.qualified_name == name
+                    or ("." not in name and "::" not in name and s.name == name)
+                )
+            ]
+            if len(matches) == 1:
+                spans.append((matches[0].start_line, matches[0].end_line))
+            else:
+                unknown.append(raw)
+    spans = list(dict.fromkeys(spans))
+    if fine_grained_only:
+        spans = [
+            s
+            for s in spans
+            if not any(
+                s != other and s[0] <= other[0] and other[1] <= s[1] for other in spans
+            )
+        ]
+    if not spans:
+        return ResolvedLocations((), (), tuple(unknown))
+    contextual = [
+        (
+            max(1, start - context_window),
+            min(file_node.line_count, end + context_window),
+        )
+        for start, end in spans
+    ]
+    if separate_intervals:
+        contextual = _merge_intervals(contextual)
+    else:
+        contextual = [(min(s for s, _ in contextual), max(e for _, e in contextual))]
+    return ResolvedLocations(tuple(spans), tuple(contextual), tuple(unknown))
 
 
 def _line_wrap_content(

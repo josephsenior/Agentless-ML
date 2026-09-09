@@ -1,6 +1,7 @@
 import json
 import os
 import subprocess
+from dataclasses import replace
 from pathlib import Path
 
 import pytest
@@ -14,7 +15,12 @@ from agentless_ml.validation import (
 from agentless_ml.validation import (
     TestExecution as ExecutionRecord,
 )
-from agentless_ml.workflow import FixedWorkflowController, RecordedStageResponses
+from agentless_ml.workflow import (
+    FixedWorkflowController,
+    RecordedEditSample,
+    RecordedStageResponses,
+)
+from agentless_ml.workflow.fixed import WorkflowError
 
 ORIGINAL = "def add(a, b):\n    return a - b\n"
 TEST_SOURCE = (
@@ -142,6 +148,156 @@ def test_file_location_parser_validates_and_limits_paths():
         repository_name="repo",
         maximum_files=2,
     ) == ("a.py", "b.py")
+
+
+def test_recorded_edit_stage(tmp_path, source):
+    bundle = replace(responses(), edit_localization="```\ncalculator.py\nline: 2\n```")
+    result = controller(tmp_path, source, FakeRunner()).run(bundle)
+    directory = Path(result.artifact_directory)
+    assert result.prediction.selected_candidate_id == "repair-2"
+    assert result.run.model_calls == 0
+    assert (
+        "2|    return a - b"
+        in (directory / "prompts/edit-localization.txt").read_text()
+    )
+    assert json.loads((directory / "selected-context.json").read_text())[
+        "locations"
+    ] == {"calculator.py": ["line: 2"]}
+    assert (
+        json.loads((directory / "controller.json").read_text())["localization_mode"]
+        == "edit-lines"
+    )
+    assert (directory / "symbol-context.json").exists()
+
+
+def test_multiple_edit_samples_share_selection(tmp_path, source):
+    recorded = responses()
+    bundle = replace(
+        recorded,
+        repairs=(),
+        edit_samples=(
+            RecordedEditSample(
+                "```\ncalculator.py\nline: 1\n```", recorded.repairs[:2]
+            ),
+            RecordedEditSample(
+                "```\ncalculator.py\nline: 2\n```",
+                (recorded.repairs[2], recorded.repairs[2]),
+            ),
+        ),
+    )
+    result = controller(tmp_path, source, FakeRunner()).run(bundle)
+    assert result.prediction.selected_candidate_id == "loc-1-repair-0"
+    assert [
+        (a.localization_rank, a.sample_index, a.status) for a in result.attempts
+    ] == [
+        (0, 0, "repair_error"),
+        (0, 1, "validated"),
+        (1, 0, "validated"),
+        (1, 1, "validated"),
+    ]
+    assert result.attempts[2].candidate.localization_rank == 1
+    directory = Path(result.artifact_directory)
+    assert json.loads((directory / "selection.json").read_text())["vote_count"] == 2
+    assert (
+        json.loads((directory / "controller.json").read_text())["localization_mode"]
+        == "edit-samples"
+    )
+    assert (directory / "localizations/0/repair.txt").exists()
+    assert (directory / "localizations/1/selected-context.json").exists()
+    assert not (directory / "prompts/repair.txt").exists()
+    assert result.run.model_calls == 0
+    assert (source[0] / "calculator.py").read_text() == ORIGINAL
+    assert not list((tmp_path / "workspaces").iterdir())
+
+
+def test_edit_samples_do_not_share_allowed_lines(tmp_path, source):
+    repository, _ = source
+    long_source = "def add(a, b):\n" + "    # padding\n" * 40 + "    return a - b\n"
+    (repository / "calculator.py").write_bytes(long_source.encode())
+    git(repository, "add", ".")
+    git(repository, "commit", "-m", "separated line contexts")
+    recorded = responses()
+    bundle = replace(
+        recorded,
+        repairs=(),
+        edit_samples=(
+            RecordedEditSample(
+                "```\ncalculator.py\nline: 2\n```", (recorded.repairs[2],)
+            ),
+            RecordedEditSample(
+                "```\ncalculator.py\nline: 42\n```", (recorded.repairs[2],)
+            ),
+        ),
+    )
+    result = controller(
+        tmp_path, (repository, git(repository, "rev-parse", "HEAD")), FakeRunner()
+    ).run(bundle)
+    assert [a.status for a in result.attempts] == ["repair_error", "validated"]
+    assert result.prediction.selected_candidate_id == "loc-1-repair-0"
+
+
+def test_invalid_sample_stops_before_validation(tmp_path, source):
+    recorded = responses()
+    bundle = replace(
+        recorded,
+        repairs=(),
+        edit_samples=(
+            RecordedEditSample(
+                "```\ncalculator.py\nline: 2\n```", (recorded.repairs[2],)
+            ),
+            RecordedEditSample(
+                "```\ncalculator.py\nline: 999\n```", (recorded.repairs[2],)
+            ),
+        ),
+    )
+    with pytest.raises(WorkflowError, match="edit sample 1"):
+        controller(tmp_path, source, FakeRunner()).run(bundle)
+    directory = next((tmp_path / "runs").iterdir())
+    assert (directory / "responses.json").exists()
+    assert not (directory / "executions").exists()
+
+
+def test_edit_sample_input_contract():
+    sample = RecordedEditSample("recorded location", ("repair",))
+    with pytest.raises(ValueError, match="mixed"):
+        replace(responses(), edit_samples=(sample,))
+    with pytest.raises(ValueError, match="mixed"):
+        replace(
+            responses(), repairs=(), edit_localization="line", edit_samples=(sample,)
+        )
+    with pytest.raises(ValueError, match="nonempty"):
+        RecordedEditSample("line", ())
+
+
+def test_identical_repairs_vote_across_groups(tmp_path, source):
+    good_repair = responses().repairs[2]
+    bundle = replace(
+        responses(),
+        repairs=(),
+        edit_samples=(
+            RecordedEditSample("```\ncalculator.py\nline: 1\n```", (good_repair,)),
+            RecordedEditSample("```\ncalculator.py\nline: 2\n```", (good_repair,)),
+        ),
+    )
+    result = controller(tmp_path, source, FakeRunner()).run(bundle)
+    assert result.prediction.selected_candidate_id == "loc-0-repair-0"
+    selection = json.loads(
+        (Path(result.artifact_directory) / "selection.json").read_text()
+    )
+    assert selection["vote_count"] == 2
+    assert selection["considered_candidate_ids"] == ["loc-0-repair-0", "loc-1-repair-0"]
+
+
+def test_invalid_edit_stage_does_not_fall_back(tmp_path, source):
+    bundle = replace(
+        responses(), edit_localization="```\ncalculator.py\nline: 999\n```"
+    )
+    with pytest.raises(WorkflowError, match="not shown"):
+        controller(tmp_path, source, FakeRunner()).run(bundle)
+    directory = next((tmp_path / "runs").iterdir())
+    assert (directory / "symbol-context.json").exists()
+    assert (directory / "failure.json").exists()
+    assert not (directory / "executions").exists()
 
 
 def test_file_location_prefers_exact_path_when_package_matches_repository():

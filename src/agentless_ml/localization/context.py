@@ -4,8 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
 
-from agentless_ml.adapters.languages import PythonAdapter
-
+from agentless_ml.adapters.languages import LanguageAdapter, PythonAdapter
 
 FILE_LOCALIZATION_TEMPLATE = """
 Please look through the following GitHub problem description and Repository structure and provide a list of files that one would need to edit to fix the problem.
@@ -87,9 +86,17 @@ def _insert_path(tree: dict[str, object], parts: tuple[str, ...]) -> None:
 
 
 def render_legacy_project_tree(ordered_file_paths: Sequence[str]) -> str:
-    """Render the filtered Python tree shown by published Agentless.
+    return render_project_tree(ordered_file_paths, adapter=PythonAdapter())
 
-    Input order is explicit because the published implementation inherits
+
+def render_project_tree(
+    ordered_file_paths: Sequence[str],
+    *,
+    adapter: LanguageAdapter,
+) -> str:
+    """Render a source tree using the adapter's file and test filters.
+
+    Input order is explicit because the published Python implementation inherits
     ``os.walk``/dictionary insertion order. Paths must include the repository
     root component, for example ``requests/requests/sessions.py``.
     """
@@ -100,9 +107,9 @@ def render_legacy_project_tree(ordered_file_paths: Sequence[str]) -> str:
             raise ValueError("file path must include a repository root and file")
         if any(part == ".." for part in parts):
             raise ValueError("file path must not contain parent traversal")
-        if not parts[-1].endswith(".py"):
+        if not adapter.is_source_path("/".join(parts[1:])):
             continue
-        if any(part.startswith("test") for part in parts):
+        if adapter.is_test_path("/".join(parts)):
             continue
         _insert_path(tree, parts)
 
@@ -119,8 +126,15 @@ def render_legacy_project_tree(ordered_file_paths: Sequence[str]) -> str:
     return render(tree)
 
 
-def render_file_localization_prompt(problem_statement: str, project_tree: str) -> str:
-    return FILE_LOCALIZATION_TEMPLATE.format(
+def render_file_localization_prompt(
+    problem_statement: str,
+    project_tree: str,
+    *,
+    extension: str = ".py",
+) -> str:
+    template = FILE_LOCALIZATION_TEMPLATE.replace("file1.py", "file1" + extension)
+    template = template.replace("file2.py", "file2" + extension)
+    return template.format(
         problem_statement=problem_statement,
         structure=project_tree.strip(),
     ).strip()
@@ -130,7 +144,7 @@ def render_symbol_localization_prompt(
     problem_statement: str,
     ordered_files: Mapping[str, str],
     *,
-    adapter: PythonAdapter | None = None,
+    adapter: LanguageAdapter | None = None,
     compress_assign: bool = False,
     total_lines: int = 30,
     prefix_lines: int = 10,
@@ -141,15 +155,115 @@ def render_symbol_localization_prompt(
     for file_name, source in ordered_files.items():
         skeleton = parser.render_skeleton(
             source,
+            path=file_name,
             compress_assign=compress_assign,
             total_lines=total_lines,
             prefix_lines=prefix_lines,
             suffix_lines=suffix_lines,
         )
-        blocks.append(
-            FILE_BLOCK_TEMPLATE.format(file_name=file_name, file_content=skeleton)
+        label = parser.language
+        if parser.language in {"javascript", "typescript"}:
+            label = (
+                "javascript"
+                if file_name.endswith((".js", ".mjs", ".cjs"))
+                else "typescript"
+            )
+            if file_name.endswith((".jsx", ".tsx")):
+                label = file_name.rsplit(".", 1)[1]
+        template = FILE_BLOCK_TEMPLATE.replace("```python", "```" + label)
+        blocks.append(template.format(file_name=file_name, file_content=skeleton))
+    template = SYMBOL_LOCALIZATION_TEMPLATE
+    if parser.language == "go":
+        template = GO_SYMBOL_LOCALIZATION_TEMPLATE
+    elif parser.language == "rust":
+        template = RUST_SYMBOL_LOCALIZATION_TEMPLATE
+    elif parser.language in {"javascript", "typescript"}:
+        template = JS_SYMBOL_LOCALIZATION_TEMPLATE.replace(
+            "file.js", "file" + parser.extension
         )
-    return SYMBOL_LOCALIZATION_TEMPLATE.format(
+    return template.format(
         problem_statement=problem_statement,
         file_contents="".join(blocks),
     )
+
+
+RUST_SYMBOL_LOCALIZATION_TEMPLATE = """
+Identify Rust declarations that need inspection or editing from the issue and skeletons.
+Use source-spelled names with :: separators. Inherent methods use Counter::add;
+trait implementations use <Counter as Reset>::reset. Include generic arguments
+as written in the impl type. Inline modules add their name as a prefix.
+A struct does not include its separate impl blocks. Ambiguous names need qualification
+or an exact line location. Macro-generated declarations are not expanded.
+
+### GitHub Problem Description ###
+{problem_statement}
+
+### Skeleton of Relevant Files ###
+{file_contents}
+
+Return locations in an unlabelled fenced block with repository-relative paths:
+```
+src/lib.rs
+function: add
+method: Counter::add
+type: Counter
+trait: Reset
+impl: <Counter as Reset>
+module: helpers
+constant: LIMIT
+```
+Use line: N for an exact source line.
+"""
+
+
+GO_SYMBOL_LOCALIZATION_TEMPLATE = """
+Please look through the GitHub Problem Description and the Skeleton of Relevant Files.
+Identify the functions, methods, types, package variables or constants that need inspection or editing.
+Use receiver-qualified names for methods, such as Counter.Add. A type declaration
+does not include its separately declared methods; list those methods explicitly.
+
+### GitHub Problem Description ###
+{problem_statement}
+
+### Skeleton of Relevant Files ###
+{file_contents}
+
+Return just the locations in an unlabelled fenced block, using repository-relative paths:
+```
+path/file.go
+function: Add
+method: Counter.Add
+type: Counter
+variable: DefaultLimit
+constant: MaxSize
+```
+You may also use line: N for an exact source line.
+"""
+
+
+JS_SYMBOL_LOCALIZATION_TEMPLATE = """
+Please look through the GitHub Problem Description and the Skeleton of Relevant Files.
+Identify functions, bound arrow functions, classes, methods, fields, variables or
+types that need inspection or editing. Use owner-qualified names for methods and
+fields. A class includes its declared members; list either the class or the members
+you need. Use default for an anonymous default export and the declared name for a
+named default export. Static CommonJS assignments use names such as exports.add.
+
+### GitHub Problem Description ###
+{problem_statement}
+
+### Skeleton of Relevant Files ###
+{file_contents}
+
+Return just the locations in an unlabelled fenced block with repository-relative paths:
+```
+path/file.js
+function: add
+class: Counter
+method: Counter.add
+field: Counter.value
+variable: settings
+type: Options
+```
+Use line: N for an exact source line, including ambiguous or unnamed constructs.
+"""

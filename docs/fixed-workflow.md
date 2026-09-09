@@ -5,6 +5,19 @@ file localization, symbol localization, focused repair context, multiple repair
 samples, isolated patch application, public Docker tests, deterministic selection,
 and prediction/run export.
 
+The same controller now supports Go, JavaScript, TypeScript and Rust through language
+adapters. The [Go note](go-adapter.md) and
+[JavaScript/TypeScript note](javascript-typescript.md), plus the
+[Rust note](rust-adapter.md), describe the controlled
+workflow tests and source representations. The Python-specific details below continue
+to describe the original recorded Python path.
+
+The optional [edit-line stage](edit-localization.md) refines symbol context before
+repair. Older bundles retain their explicitly recorded symbols-only mode.
+Grouped runs pair each recorded edit sample with its repair responses, then
+validate and select across all candidates in a fixed order. The edit-line note
+documents the format, artifacts and strict failure policy.
+
 The input is `RecordedStageResponses`. It contains one file-localization response,
 one symbol-localization response, and an ordered collection of repair responses.
 The controller renders and saves the prompts that would have produced them, but
