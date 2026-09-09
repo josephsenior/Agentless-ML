@@ -179,8 +179,10 @@ official benchmark verifier remains a separate, post-selection evaluation step.
 
 The [recorded edit-line stage](docs/edit-localization.md) now connects symbol
 localization to finer repair context. It is optional for replaying older fixtures;
-grouped localization/repair samples are also supported. Automated test
-selection/generation remains work to complete.
+grouped localization/repair samples are also supported.
+[Recorded regression selection](docs/regression-selection.md) now checks a trusted
+inventory on the baseline revision and freezes a schedule from recorded exclusions.
+Automatic test discovery and reproduction-test generation remain unfinished.
 
 The local workspace layer is documented in [Candidate workspaces](docs/workspaces.md).
 It isolates repository changes; [public validation](docs/public-validation.md)

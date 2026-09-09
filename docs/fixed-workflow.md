@@ -1,5 +1,9 @@
 # Recorded fixed workflow
 
+Optional [regression selection](regression-selection.md) runs a trusted inventory
+on the unpatched revision and consumes a recorded exclusion response. Its frozen
+schedule is shared across all candidate groups; older fixed schedules still work.
+
 `FixedWorkflowController` connects the first complete Python path: pinned source,
 file localization, symbol localization, focused repair context, multiple repair
 samples, isolated patch application, public Docker tests, deterministic selection,

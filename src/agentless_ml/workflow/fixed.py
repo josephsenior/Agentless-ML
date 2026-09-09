@@ -38,11 +38,23 @@ from agentless_ml.repair import (
     parse_search_replace_edits,
     select_candidate,
 )
-from agentless_ml.schemas import FinalPrediction, PatchCandidate, RunRecord, TaskSpec
+from agentless_ml.schemas import (
+    FinalPrediction,
+    PatchCandidate,
+    RunRecord,
+    TaskSpec,
+    ValidationKind,
+    ValidationStatus,
+)
 from agentless_ml.validation import (
     DockerTestRunner,
     PublicTestCommand,
+    RegressionTest,
     validate_candidate,
+)
+from agentless_ml.validation.regression import (
+    parse_regression_exclusions,
+    render_regression_selection_prompt,
 )
 from agentless_ml.workspace import LocalGitWorkspaceProvider
 
@@ -71,6 +83,7 @@ class RecordedStageResponses:
     source: str = "recorded"
     edit_localization: str | None = None
     edit_samples: tuple[RecordedEditSample, ...] = ()
+    regression_exclusions: str | None = None
 
     def __post_init__(self):
         if not self.file_localization.strip() or not self.symbol_localization.strip():
@@ -146,10 +159,19 @@ class FixedWorkflowController:
         implementation_revision: str,
         harness_revision: str,
         model_name: str,
+        regression_tests: tuple[RegressionTest, ...] = (),
     ):
         self.adapter = get_language_adapter(task.language)
-        if not public_commands:
+        if not public_commands and not regression_tests:
             raise ValueError("public test schedule must not be empty")
+        if len({test.test_id for test in regression_tests}) != len(regression_tests):
+            raise ValueError("regression test IDs must be unique")
+        if regression_tests and any(
+            command.kind == ValidationKind.REGRESSION for command in public_commands
+        ):
+            raise ValueError(
+                "use the regression inventory instead of mixing fixed regression commands"
+            )
         if any(
             not value.strip()
             for value in (implementation_revision, harness_revision, model_name)
@@ -179,6 +201,7 @@ class FixedWorkflowController:
             raise ValueError("source, workspace, and artifact roots must be separate")
         self.runner = runner
         self.public_commands = public_commands
+        self.regression_tests = regression_tests
         self.implementation_revision = implementation_revision
         self.harness_revision = harness_revision
         self.model_name = model_name
@@ -191,6 +214,80 @@ class FixedWorkflowController:
         directory.mkdir(parents=True)
         try:
             _write_json(directory / "responses.json", asdict(responses))
+            if bool(self.regression_tests) != (
+                responses.regression_exclusions is not None
+            ):
+                raise WorkflowError(
+                    "regression inventory and recorded exclusions must be supplied together"
+                )
+            public_commands = self.public_commands
+            if self.regression_tests:
+                baseline = []
+                passing_ids = []
+                # Every check starts from the same unpatched revision, without
+                # filesystem state left by another baseline check.
+                for index, test in enumerate(self.regression_tests):
+                    with self.provider.create() as workspace:
+                        execution = self.runner.run(
+                            workspace.path,
+                            test.command,
+                            artifact_root=directory
+                            / "regression-baseline"
+                            / str(index),
+                        )
+                        baseline.append(
+                            {
+                                "test_id": test.test_id,
+                                "command": asdict(test.command),
+                                "result": asdict(execution.result),
+                                "artifact_directory": execution.artifact_directory,
+                                "workspace": asdict(workspace.provenance),
+                            }
+                        )
+                    if execution.result.status == ValidationStatus.PASS:
+                        passing_ids.append(test.test_id)
+                _write_json(directory / "regression-baseline.json", baseline)
+                if any(
+                    item["result"]["status"]
+                    not in {ValidationStatus.PASS, ValidationStatus.FAIL}
+                    for item in baseline
+                ):
+                    raise WorkflowError(
+                        "regression baseline has an infrastructure failure"
+                    )
+                prompt = render_regression_selection_prompt(
+                    self.task.problem_statement, tuple(passing_ids)
+                )
+                (directory / "regression-selection.txt").write_text(
+                    prompt + "\n", encoding="utf-8"
+                )
+                try:
+                    excluded = parse_regression_exclusions(
+                        responses.regression_exclusions, tuple(passing_ids)
+                    )
+                except ValueError as exc:
+                    raise WorkflowError(str(exc)) from exc
+                selected = tuple(
+                    test
+                    for test in self.regression_tests
+                    if test.test_id in passing_ids and test.test_id not in excluded
+                )
+                public_commands = (
+                    tuple(test.command for test in selected) + self.public_commands
+                )
+                _write_json(
+                    directory / "regression-selection.json",
+                    {
+                        "passing_ids": passing_ids,
+                        "excluded_ids": excluded,
+                        "selected_ids": [test.test_id for test in selected],
+                        "response": responses.regression_exclusions,
+                    },
+                )
+                if not public_commands:
+                    raise WorkflowError(
+                        "regression selection left no public validation commands"
+                    )
             _write_json(
                 directory / "task.json",
                 {
@@ -221,9 +318,7 @@ class FixedWorkflowController:
                     if responses.edit_localization is not None or responses.edit_samples
                     else "symbols-only",
                     "resolved_container_digest": self.runner.image_id,
-                    "public_commands": [
-                        asdict(command) for command in self.public_commands
-                    ],
+                    "public_commands": [asdict(command) for command in public_commands],
                 },
             )
             with self.provider.create() as visible_workspace:
@@ -477,7 +572,7 @@ class FixedWorkflowController:
                     candidate,
                     self.provider,
                     self.runner,
-                    self.public_commands,
+                    public_commands,
                     artifact_root=directory / "executions" / candidate_id,
                 )
                 candidates.append(candidate)

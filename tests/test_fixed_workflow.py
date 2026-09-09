@@ -288,6 +288,123 @@ def test_identical_repairs_vote_across_groups(tmp_path, source):
     assert selection["considered_candidate_ids"] == ["loc-0-repair-0", "loc-1-repair-0"]
 
 
+class RegressionRunner:
+    image_reference = "python:fixture"
+    image_id = "sha256:fixture"
+
+    def __init__(self, broken=False):
+        self.calls = []
+        self.broken = broken
+
+    def run(self, source, command, *, artifact_root=None):
+        content = (Path(source) / "calculator.py").read_text()
+        self.calls.append((content, command.argv[0]))
+        baseline = "regression-baseline" in str(artifact_root)
+        if baseline:
+            assert content == ORIGINAL
+            status = (
+                ValidationStatus.FAIL
+                if command.argv[0] == "already-failing"
+                else ValidationStatus.PASS
+            )
+            if self.broken:
+                status = ValidationStatus.HARNESS_ERROR
+        else:
+            assert command.argv[0] == "keep"
+            status = (
+                ValidationStatus.PASS if "a + b" in content else ValidationStatus.FAIL
+            )
+        destination = Path(artifact_root) / "execution"
+        destination.mkdir(parents=True)
+        return ExecutionRecord(
+            ValidationResult(
+                status=status,
+                command=command.argv,
+                duration_seconds=0,
+                kind=command.kind,
+                exit_code=0 if status == ValidationStatus.PASS else 1,
+            ),
+            self.image_id,
+            "fixture",
+            str(destination),
+        )
+
+
+def regression_controller(tmp_path, source, runner):
+    from agentless_ml.validation import RegressionTest
+
+    repository, commit = source
+    return FixedWorkflowController(
+        task=task(commit),
+        source_repository=repository,
+        workspace_root=tmp_path / "workspaces",
+        artifact_root=tmp_path / "runs",
+        runner=runner,
+        public_commands=(),
+        regression_tests=tuple(
+            RegressionTest(name, PublicTestCommand((name,)))
+            for name in ("keep", "exclude", "already-failing")
+        ),
+        implementation_revision="fixture",
+        harness_revision="fixture",
+        model_name="recorded",
+    )
+
+
+def test_regression_baseline_and_frozen_schedule(tmp_path, source):
+    runner = RegressionRunner()
+    result = regression_controller(tmp_path, source, runner).run(
+        replace(responses(), regression_exclusions="exclude")
+    )
+    assert result.prediction.selected_candidate_id == "repair-2"
+    assert [name for _, name in runner.calls] == [
+        "keep",
+        "exclude",
+        "already-failing",
+        "keep",
+        "keep",
+    ]
+    directory = Path(result.artifact_directory)
+    selection = json.loads((directory / "regression-selection.json").read_text())
+    assert selection["passing_ids"] == ["keep", "exclude"]
+    assert selection["excluded_ids"] == ["exclude"]
+    assert selection["selected_ids"] == ["keep"]
+    assert json.loads((directory / "controller.json").read_text())["public_commands"][
+        0
+    ]["argv"] == ["keep"]
+    assert result.run.model_calls == 0
+    assert not list((tmp_path / "workspaces").iterdir())
+
+
+@pytest.mark.parametrize(
+    "exclusions,broken,match",
+    [
+        ("already-failing", False, "nonpassing"),
+        ("keep\nexclude", False, "no public"),
+        ("", True, "infrastructure"),
+    ],
+)
+def test_regression_selection_failures_stop_candidates(
+    tmp_path, source, exclusions, broken, match
+):
+    runner = RegressionRunner(broken)
+    with pytest.raises(WorkflowError, match=match):
+        regression_controller(tmp_path, source, runner).run(
+            replace(responses(), regression_exclusions=exclusions)
+        )
+    assert len(runner.calls) == 3
+    directory = next((tmp_path / "runs").iterdir())
+    assert (directory / "regression-baseline.json").exists()
+    assert (directory / "failure.json").exists()
+
+
+def test_inventory_requires_recorded_selection(tmp_path, source):
+    runner = RegressionRunner()
+    with pytest.raises(WorkflowError, match="together"):
+        regression_controller(tmp_path, source, runner).run(responses())
+    assert not runner.calls
+
+
 def test_invalid_edit_stage_does_not_fall_back(tmp_path, source):
     bundle = replace(
         responses(), edit_localization="```\ncalculator.py\nline: 999\n```"

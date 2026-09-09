@@ -107,8 +107,9 @@ The TypeScript check uses Node's `--experimental-strip-types`; it executes the
 fixture after erasing supported types. It is not a `tsc` type-check or a benchmark
 evaluation. The native runner lives only in the test module.
 
-[Rust](rust-adapter.md) now also has recorded coverage. Automated test selection, reproduction-test
-generation, model sampling and full benchmark integration remain separate
+[Rust](rust-adapter.md) now also has recorded coverage. [Regression selection](regression-selection.md)
+supports a trusted inventory and recorded exclusions. Automatic test discovery,
+reproduction-test generation, model sampling and full benchmark integration remain separate
 unfinished work in the [replication map](replication-map.md).
 
 Parser references: [JavaScript grammar](https://github.com/tree-sitter/tree-sitter-javascript)
