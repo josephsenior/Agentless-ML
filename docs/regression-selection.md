@@ -67,5 +67,5 @@ tests use a controlled runner; they do not establish live Docker or benchmark
 coverage for this new stage. There are no model calls.
 
 [Recorded reproduction generation and checks](reproduction-tests.md) are now
-available for one test source per run. Full benchmark test
+available, including selection among several recorded samples. Full benchmark test
 discovery, official scoring and live sampling remain separate integration work.

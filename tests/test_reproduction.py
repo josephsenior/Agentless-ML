@@ -5,6 +5,7 @@ from agentless_ml.validation import PublicTestCommand, ReproductionSpec
 from agentless_ml.validation.reproduction import (
     parse_reproduction_source,
     reproduction_file,
+    select_reproduction_source,
 )
 
 
@@ -12,6 +13,14 @@ def spec(path="reproduce.py"):
     return ReproductionSpec(
         path, PublicTestCommand(("python", path), kind=ValidationKind.REPRODUCTION)
     )
+
+
+def test_reproduction_votes_are_exact_and_ties_keep_first_sample():
+    assert select_reproduction_source({0: "first", 2: "second", 3: "second"}) == (2, 2)
+    assert select_reproduction_source({5: "later", 2: "earlier"}) == (2, 1)
+    assert select_reproduction_source({0: "x\n", 1: "x \n"}) == (0, 1)
+    with pytest.raises(ValueError, match="no reproduction"):
+        select_reproduction_source({})
 
 
 @pytest.mark.parametrize(

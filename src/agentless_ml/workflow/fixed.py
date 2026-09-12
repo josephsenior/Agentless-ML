@@ -61,6 +61,7 @@ from agentless_ml.validation.reproduction import (
     parse_reproduction_source,
     render_reproduction_prompt,
     reproduction_file,
+    select_reproduction_source,
 )
 from agentless_ml.workspace import LocalGitWorkspaceProvider
 
@@ -91,10 +92,13 @@ class RecordedStageResponses:
     edit_samples: tuple[RecordedEditSample, ...] = ()
     regression_exclusions: str | None = None
     reproduction_test: str | None = None
+    reproduction_samples: tuple[str, ...] = ()
 
     def __post_init__(self):
         if not self.file_localization.strip() or not self.symbol_localization.strip():
             raise ValueError("localization responses must not be empty")
+        if self.reproduction_samples and self.reproduction_test is not None:
+            raise ValueError("do not mix reproduction_samples with reproduction_test")
         if self.edit_samples and (self.repairs or self.edit_localization is not None):
             raise ValueError(
                 "edit_samples cannot be mixed with legacy repair/edit fields"
@@ -219,6 +223,88 @@ class FixedWorkflowController:
         self.harness_revision = harness_revision
         self.model_name = model_name
 
+    def _prepare_reproduction_samples(
+        self, samples: tuple[str, ...], directory: Path
+    ) -> str:
+        spec = self.reproduction_spec
+        prompt = render_reproduction_prompt(
+            self.task.problem_statement, self.task.language, spec
+        )
+        (directory / "reproduction-generation.txt").write_text(prompt, encoding="utf-8")
+        verified = {}
+        attempts = []
+        for index, response in enumerate(samples):
+            sample_directory = directory / "reproduction-samples" / str(index)
+            sample_directory.mkdir(parents=True)
+            try:
+                source = parse_reproduction_source(response, self.task.language)
+            except ValueError as exc:
+                attempts.append(
+                    {
+                        "sample_index": index,
+                        "status": "parse_error",
+                        "message": str(exc),
+                    }
+                )
+                _write_json(directory / "reproduction-attempts.json", attempts)
+                continue
+            _write_json(
+                sample_directory / "source.json",
+                {
+                    "source": source,
+                    "source_sha256": hashlib.sha256(source.encode("utf-8")).hexdigest(),
+                    "spec": asdict(spec),
+                },
+            )
+            with self.provider.create() as workspace:
+                with reproduction_file(workspace.path, spec, source):
+                    execution = self.runner.run(
+                        workspace.path,
+                        spec.command,
+                        artifact_root=sample_directory / "reproduction-baseline",
+                    )
+                _write_json(
+                    sample_directory / "baseline.json",
+                    {
+                        "result": asdict(execution.result),
+                        "workspace": asdict(workspace.provenance),
+                        "artifact_directory": execution.artifact_directory,
+                    },
+                )
+            status = execution.result.status
+            attempts.append({"sample_index": index, "status": status.value})
+            _write_json(directory / "reproduction-attempts.json", attempts)
+            if status == ValidationStatus.FAIL:
+                verified[index] = source
+            elif status != ValidationStatus.PASS:
+                raise WorkflowError(
+                    f"reproduction sample {index} has an infrastructure failure"
+                )
+        try:
+            selected_index, votes = select_reproduction_source(verified)
+        except ValueError as exc:
+            raise WorkflowError(str(exc)) from exc
+        source = verified[selected_index]
+        _write_json(
+            directory / "reproduction-selection.json",
+            {
+                "selected_sample_index": selected_index,
+                "vote_count": votes,
+                "eligible_sample_indices": list(verified),
+                "voting_key": "exact-source-v1",
+                "source_sha256": hashlib.sha256(source.encode("utf-8")).hexdigest(),
+            },
+        )
+        _write_json(
+            directory / "reproduction-source.json",
+            {
+                "spec": asdict(spec),
+                "source": source,
+                "source_sha256": hashlib.sha256(source.encode("utf-8")).hexdigest(),
+            },
+        )
+        return source
+
     def run(self, responses: RecordedStageResponses) -> WorkflowResult:
         started_at = datetime.now(UTC)
         started = time.monotonic()
@@ -237,11 +323,18 @@ class FixedWorkflowController:
             reproduction = None
             if (self.reproduction_spec is not None) != (
                 responses.reproduction_test is not None
+                or bool(responses.reproduction_samples)
             ):
                 raise WorkflowError(
                     "reproduction specification and recorded source must be supplied together"
                 )
-            if self.reproduction_spec is not None:
+            if self.reproduction_spec is not None and responses.reproduction_samples:
+                source = self._prepare_reproduction_samples(
+                    responses.reproduction_samples, directory
+                )
+                reproduction = (self.reproduction_spec, source)
+                public_commands += (self.reproduction_spec.command,)
+            elif self.reproduction_spec is not None:
                 spec = self.reproduction_spec
                 prompt = render_reproduction_prompt(
                     self.task.problem_statement, self.task.language, spec

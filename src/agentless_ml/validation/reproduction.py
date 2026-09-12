@@ -1,6 +1,7 @@
 """Recorded test source installed only for its trusted reproduction command."""
 
 import re
+from collections import Counter
 from contextlib import contextmanager
 from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
@@ -8,6 +9,15 @@ from pathlib import Path, PurePosixPath
 from agentless_ml.schemas import ValidationKind
 
 from .docker import PublicTestCommand
+
+
+def select_reproduction_source(verified: dict[int, str]) -> tuple[int, int]:
+    """Exact-source votes among baseline-eligible samples; ties keep first input."""
+    if not verified:
+        raise ValueError("no reproduction sample failed on the original revision")
+    votes = Counter(verified.values())
+    selected = max(sorted(verified), key=lambda index: (votes[verified[index]], -index))
+    return selected, votes[verified[selected]]
 
 
 @dataclass(frozen=True, slots=True)

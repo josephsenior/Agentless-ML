@@ -182,10 +182,10 @@ localization to finer repair context. It is optional for replaying older fixture
 grouped localization/repair samples are also supported.
 [Recorded regression selection](docs/regression-selection.md) now checks a trusted
 inventory on the baseline revision and freezes a schedule from recorded exclusions.
-[Recorded reproduction tests](docs/reproduction-tests.md) now add one generated
-test source, require baseline failure and use it unchanged during candidate checks.
-Automatic test discovery, live generation and broader reproduction-test sampling
-remain unfinished.
+[Recorded reproduction tests](docs/reproduction-tests.md) now support multiple
+recorded sources, baseline eligibility checks and exact-source voting to choose
+one unchanged test for candidate checks. Automatic test discovery, live generation
+and upstream normalization/marker-protocol parity remain unfinished.
 
 The local workspace layer is documented in [Candidate workspaces](docs/workspaces.md).
 It isolates repository changes; [public validation](docs/public-validation.md)

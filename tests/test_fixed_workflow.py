@@ -500,6 +500,92 @@ def test_recorded_reproduction_baseline_and_candidate_selection(tmp_path, source
     assert (directory / "reproduction-baseline.json").exists()
 
 
+class MultiReproductionRunner(ReproductionRunner):
+    def run(self, source, command, *, artifact_root=None):
+        if "reproduction-baseline" not in str(artifact_root):
+            return super().run(source, command, artifact_root=artifact_root)
+        assert (Path(source) / "calculator.py").read_text() == ORIGINAL
+        generated = (Path(source) / "reproduce.py").read_text()
+        status = (
+            ValidationStatus.PASS
+            if "already passes" in generated
+            else ValidationStatus.HARNESS_ERROR
+            if "broken setup" in generated
+            else ValidationStatus.FAIL
+        )
+        self.calls.append((True, command.kind))
+        destination = Path(artifact_root) / "execution"
+        destination.mkdir(parents=True)
+        return ExecutionRecord(
+            ValidationResult(
+                status=status,
+                command=command.argv,
+                duration_seconds=0,
+                kind=command.kind,
+                exit_code=0 if status == ValidationStatus.PASS else 1,
+            ),
+            self.image_id,
+            "fixture",
+            str(destination),
+        )
+
+
+def test_multiple_reproduction_samples_select_before_repairs(tmp_path, source):
+    good = reproduction_responses().reproduction_test
+    samples = (
+        "malformed",
+        "```python\n# already passes\n```",
+        "```python\nassert False\n```",
+        good,
+        good,
+    )
+    bundle = replace(responses(), reproduction_samples=samples)
+    runner = MultiReproductionRunner()
+    result = reproduction_controller(tmp_path, source, runner).run(bundle)
+    assert result.prediction.selected_candidate_id == "repair-2"
+    directory = Path(result.artifact_directory)
+    selection = json.loads((directory / "reproduction-selection.json").read_text())
+    assert selection["selected_sample_index"] == 3
+    assert selection["vote_count"] == 2
+    assert selection["eligible_sample_indices"] == [2, 3, 4]
+    attempts = json.loads((directory / "reproduction-attempts.json").read_text())
+    assert attempts[0]["status"] == "parse_error"
+    assert (
+        len(runner.calls) == 8
+    )  # Four baselines, two fixed commands per valid repair.
+    assert "reproduce.py" not in result.prediction.model_patch
+    assert result.run.model_calls == 0
+    assert not list((tmp_path / "workspaces").iterdir())
+
+
+@pytest.mark.parametrize(
+    "sample,match",
+    [
+        ("malformed", "no reproduction"),
+        ("```python\n# already passes\n```", "no reproduction"),
+        ("```python\n# broken setup\n```", "infrastructure"),
+    ],
+)
+def test_reproduction_sampling_failure_retains_evidence(
+    tmp_path, source, sample, match
+):
+    runner = MultiReproductionRunner()
+    with pytest.raises(WorkflowError, match=match):
+        reproduction_controller(tmp_path, source, runner).run(
+            replace(responses(), reproduction_samples=(sample,))
+        )
+    directory = next((tmp_path / "runs").iterdir())
+    assert (directory / "reproduction-attempts.json").exists()
+    assert not (directory / "executions").exists()
+    workspace_root = tmp_path / "workspaces"
+    assert not workspace_root.exists() or not list(workspace_root.iterdir())
+
+
+def test_cannot_mix_reproduction_input_formats():
+    with pytest.raises(ValueError, match="mix"):
+        replace(reproduction_responses(), reproduction_samples=("source",))
+
+
 @pytest.mark.parametrize(
     "status",
     [ValidationStatus.PASS, ValidationStatus.HARNESS_ERROR, ValidationStatus.TIMEOUT],
