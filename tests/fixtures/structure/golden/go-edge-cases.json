@@ -1,0 +1,231 @@
+{
+  "id": "go-edge-cases",
+  "language": "go",
+  "path": "edge/edge_cases.go",
+  "source_sha256": "46787faedeaa122e9ab69ee56000fe49c8982f9b6f94263c50e98ceda5fb71f7",
+  "parse": {
+    "path": "edge/edge_cases.go",
+    "language": "go",
+    "line_count": 78,
+    "symbols": [
+      {
+        "kind": "variable",
+        "name": "a",
+        "qualified_name": "a",
+        "signature": "a, b   = 1, 2",
+        "start_line": 10,
+        "end_line": 10,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "b",
+        "qualified_name": "b",
+        "signature": "a, b   = 1, 2",
+        "start_line": 10,
+        "end_line": 10,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "c",
+        "qualified_name": "c",
+        "signature": "c      int",
+        "start_line": 11,
+        "end_line": 11,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "single",
+        "qualified_name": "single",
+        "signature": "single, _ = 3, 4",
+        "start_line": 14,
+        "end_line": 14,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "Zero",
+        "qualified_name": "Zero",
+        "signature": "Zero = iota",
+        "start_line": 18,
+        "end_line": 18,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "One",
+        "qualified_name": "One",
+        "signature": "One",
+        "start_line": 19,
+        "end_line": 19,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "Three",
+        "qualified_name": "Three",
+        "signature": "Three",
+        "start_line": 21,
+        "end_line": 21,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "Solo",
+        "qualified_name": "Solo",
+        "signature": "Solo = \"x\"",
+        "start_line": 24,
+        "end_line": 24,
+        "children": []
+      },
+      {
+        "kind": "struct",
+        "name": "Point",
+        "qualified_name": "Point",
+        "signature": "Point struct {\n\t\tX, Y int\n\t}",
+        "start_line": 27,
+        "end_line": 29,
+        "children": []
+      },
+      {
+        "kind": "interface",
+        "name": "Shape",
+        "qualified_name": "Shape",
+        "signature": "Shape interface {\n\t\tfmt.Stringer\n\t\tArea() float64\n\t\tScale(f float64) Shape\n\t}",
+        "start_line": 30,
+        "end_line": 34,
+        "children": [
+          {
+            "kind": "method",
+            "name": "Area",
+            "qualified_name": "Shape.Area",
+            "signature": "Area() float64",
+            "start_line": 32,
+            "end_line": 32,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "Scale",
+            "qualified_name": "Shape.Scale",
+            "signature": "Scale(f float64) Shape",
+            "start_line": 33,
+            "end_line": 33,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "interface",
+        "name": "Number",
+        "qualified_name": "Number",
+        "signature": "Number interface {\n\t\t~int | ~float64\n\t}",
+        "start_line": 35,
+        "end_line": 37,
+        "children": []
+      },
+      {
+        "kind": "type",
+        "name": "Celsius",
+        "qualified_name": "Celsius",
+        "signature": "Celsius = float64",
+        "start_line": 38,
+        "end_line": 38,
+        "children": []
+      },
+      {
+        "kind": "struct",
+        "name": "List",
+        "qualified_name": "List",
+        "signature": "List[T any] struct {\n\thead *node[T]\n}",
+        "start_line": 41,
+        "end_line": 43,
+        "children": []
+      },
+      {
+        "kind": "struct",
+        "name": "node",
+        "qualified_name": "node",
+        "signature": "node[T any] struct {\n\tv    T\n\tnext *node[T]\n}",
+        "start_line": 45,
+        "end_line": 48,
+        "children": []
+      },
+      {
+        "kind": "method",
+        "name": "Push",
+        "qualified_name": "List.Push",
+        "signature": "func (l *List[T]) Push(v T)",
+        "start_line": 50,
+        "end_line": 50,
+        "children": []
+      },
+      {
+        "kind": "method",
+        "name": "Len",
+        "qualified_name": "List.Len",
+        "signature": "func (l List[T]) Len() int",
+        "start_line": 52,
+        "end_line": 58,
+        "children": []
+      },
+      {
+        "kind": "method",
+        "name": "Origin",
+        "qualified_name": "Point.Origin",
+        "signature": "func (Point) Origin() Point",
+        "start_line": 60,
+        "end_line": 60,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "Map",
+        "qualified_name": "Map",
+        "signature": "func Map[T, U any](xs []T, f func(T) U) []U",
+        "start_line": 62,
+        "end_line": 68,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "handler",
+        "qualified_name": "handler",
+        "signature": "handler = func(s string) string {\n\treturn \"{\" + s + \"}\"\n}",
+        "start_line": 70,
+        "end_line": 72,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "external",
+        "qualified_name": "external",
+        "signature": "func external(x int) int",
+        "start_line": 74,
+        "end_line": 74,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "init",
+        "qualified_name": "init",
+        "signature": "func init()",
+        "start_line": 76,
+        "end_line": 76,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "init",
+        "qualified_name": "init",
+        "signature": "func init()",
+        "start_line": 78,
+        "end_line": 78,
+        "children": []
+      }
+    ]
+  },
+  "skeleton": "package edge\n\nimport (\n\t\"fmt\"\n)\n\n// Grouped var declarations wrap specs in a var_spec_list; single ones do not.\nvar (\n\t_      = fmt.Sprintf\n\ta, b   = 1, 2\n\tc      int\n)\n\nvar single, _ = 3, 4\n\n// Grouped const declarations hold const_spec children directly.\nconst (\n\tZero = iota\n\tOne\n\t_\n\tThree\n)\n\nconst Solo = \"x\"\n\ntype (\n\tPoint struct {\n\t\tX, Y int\n\t}\n\tShape interface {\n\t\tfmt.Stringer\n\t\tArea() float64\n\t\tScale(f float64) Shape\n\t}\n\tNumber interface {\n\t\t~int | ~float64\n\t}\n\tCelsius = float64\n)\n\ntype List[T any] struct {\n\thead *node[T]\n}\n\ntype node[T any] struct {\n\tv    T\n\tnext *node[T]\n}\n\nfunc (l *List[T]) Push(v T) { ... }\n\nfunc (l List[T]) Len() int { ... }\n\nfunc (Point) Origin() Point { ... }\n\nfunc Map[T, U any](xs []T, f func(T) U) []U { ... }\n\nvar handler = func(s string) string {\n\treturn \"{\" + s + \"}\"\n}\n\nfunc external(x int) int\n\nfunc init() { ... }\n\nfunc init() { ... }\n"
+}

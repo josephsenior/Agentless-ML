@@ -1,0 +1,391 @@
+{
+  "id": "rust-serde-impossible",
+  "language": "rust",
+  "path": "serde/src/ser/impossible.rs",
+  "source_sha256": "5c325da8e0370ab22abe1e15d8af1dc7a1707b127508f61e720cd7f0caa80593",
+  "parse": {
+    "path": "serde/src/ser/impossible.rs",
+    "language": "rust",
+    "line_count": 216,
+    "symbols": [
+      {
+        "kind": "struct",
+        "name": "Impossible",
+        "qualified_name": "Impossible",
+        "signature": "pub struct Impossible<Ok, Error>",
+        "start_line": 60,
+        "end_line": 64,
+        "children": [
+          {
+            "kind": "field",
+            "name": "void",
+            "qualified_name": "Impossible::void",
+            "signature": "void: Void",
+            "start_line": 61,
+            "end_line": 61,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "ok",
+            "qualified_name": "Impossible::ok",
+            "signature": "ok: PhantomData<Ok>",
+            "start_line": 62,
+            "end_line": 62,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "error",
+            "qualified_name": "Impossible::error",
+            "signature": "error: PhantomData<Error>",
+            "start_line": 63,
+            "end_line": 63,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "enum",
+        "name": "Void",
+        "qualified_name": "Void",
+        "signature": "enum Void",
+        "start_line": 66,
+        "end_line": 66,
+        "children": []
+      },
+      {
+        "kind": "impl",
+        "name": "<Impossible<Ok, Error> as SerializeSeq>",
+        "qualified_name": "<Impossible<Ok, Error> as SerializeSeq>",
+        "signature": "impl<Ok, Error> SerializeSeq for Impossible<Ok, Error>\nwhere\n    Error: ser::Error,",
+        "start_line": 68,
+        "end_line": 86,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Ok",
+            "qualified_name": "<Impossible<Ok, Error> as SerializeSeq>::Ok",
+            "signature": "type Ok = Ok;",
+            "start_line": 72,
+            "end_line": 72,
+            "children": []
+          },
+          {
+            "kind": "type",
+            "name": "Error",
+            "qualified_name": "<Impossible<Ok, Error> as SerializeSeq>::Error",
+            "signature": "type Error = Error;",
+            "start_line": 73,
+            "end_line": 73,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "serialize_element",
+            "qualified_name": "<Impossible<Ok, Error> as SerializeSeq>::serialize_element",
+            "signature": "fn serialize_element<T>(&mut self, value: &T) -> Result<(), Error>\n    where\n        T: ?Sized + Serialize,",
+            "start_line": 75,
+            "end_line": 81,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "end",
+            "qualified_name": "<Impossible<Ok, Error> as SerializeSeq>::end",
+            "signature": "fn end(self) -> Result<Ok, Error>",
+            "start_line": 83,
+            "end_line": 85,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<Impossible<Ok, Error> as SerializeTuple>",
+        "qualified_name": "<Impossible<Ok, Error> as SerializeTuple>",
+        "signature": "impl<Ok, Error> SerializeTuple for Impossible<Ok, Error>\nwhere\n    Error: ser::Error,",
+        "start_line": 88,
+        "end_line": 106,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Ok",
+            "qualified_name": "<Impossible<Ok, Error> as SerializeTuple>::Ok",
+            "signature": "type Ok = Ok;",
+            "start_line": 92,
+            "end_line": 92,
+            "children": []
+          },
+          {
+            "kind": "type",
+            "name": "Error",
+            "qualified_name": "<Impossible<Ok, Error> as SerializeTuple>::Error",
+            "signature": "type Error = Error;",
+            "start_line": 93,
+            "end_line": 93,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "serialize_element",
+            "qualified_name": "<Impossible<Ok, Error> as SerializeTuple>::serialize_element",
+            "signature": "fn serialize_element<T>(&mut self, value: &T) -> Result<(), Error>\n    where\n        T: ?Sized + Serialize,",
+            "start_line": 95,
+            "end_line": 101,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "end",
+            "qualified_name": "<Impossible<Ok, Error> as SerializeTuple>::end",
+            "signature": "fn end(self) -> Result<Ok, Error>",
+            "start_line": 103,
+            "end_line": 105,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<Impossible<Ok, Error> as SerializeTupleStruct>",
+        "qualified_name": "<Impossible<Ok, Error> as SerializeTupleStruct>",
+        "signature": "impl<Ok, Error> SerializeTupleStruct for Impossible<Ok, Error>\nwhere\n    Error: ser::Error,",
+        "start_line": 108,
+        "end_line": 126,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Ok",
+            "qualified_name": "<Impossible<Ok, Error> as SerializeTupleStruct>::Ok",
+            "signature": "type Ok = Ok;",
+            "start_line": 112,
+            "end_line": 112,
+            "children": []
+          },
+          {
+            "kind": "type",
+            "name": "Error",
+            "qualified_name": "<Impossible<Ok, Error> as SerializeTupleStruct>::Error",
+            "signature": "type Error = Error;",
+            "start_line": 113,
+            "end_line": 113,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "serialize_field",
+            "qualified_name": "<Impossible<Ok, Error> as SerializeTupleStruct>::serialize_field",
+            "signature": "fn serialize_field<T>(&mut self, value: &T) -> Result<(), Error>\n    where\n        T: ?Sized + Serialize,",
+            "start_line": 115,
+            "end_line": 121,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "end",
+            "qualified_name": "<Impossible<Ok, Error> as SerializeTupleStruct>::end",
+            "signature": "fn end(self) -> Result<Ok, Error>",
+            "start_line": 123,
+            "end_line": 125,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<Impossible<Ok, Error> as SerializeTupleVariant>",
+        "qualified_name": "<Impossible<Ok, Error> as SerializeTupleVariant>",
+        "signature": "impl<Ok, Error> SerializeTupleVariant for Impossible<Ok, Error>\nwhere\n    Error: ser::Error,",
+        "start_line": 128,
+        "end_line": 146,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Ok",
+            "qualified_name": "<Impossible<Ok, Error> as SerializeTupleVariant>::Ok",
+            "signature": "type Ok = Ok;",
+            "start_line": 132,
+            "end_line": 132,
+            "children": []
+          },
+          {
+            "kind": "type",
+            "name": "Error",
+            "qualified_name": "<Impossible<Ok, Error> as SerializeTupleVariant>::Error",
+            "signature": "type Error = Error;",
+            "start_line": 133,
+            "end_line": 133,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "serialize_field",
+            "qualified_name": "<Impossible<Ok, Error> as SerializeTupleVariant>::serialize_field",
+            "signature": "fn serialize_field<T>(&mut self, value: &T) -> Result<(), Error>\n    where\n        T: ?Sized + Serialize,",
+            "start_line": 135,
+            "end_line": 141,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "end",
+            "qualified_name": "<Impossible<Ok, Error> as SerializeTupleVariant>::end",
+            "signature": "fn end(self) -> Result<Ok, Error>",
+            "start_line": 143,
+            "end_line": 145,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<Impossible<Ok, Error> as SerializeMap>",
+        "qualified_name": "<Impossible<Ok, Error> as SerializeMap>",
+        "signature": "impl<Ok, Error> SerializeMap for Impossible<Ok, Error>\nwhere\n    Error: ser::Error,",
+        "start_line": 148,
+        "end_line": 174,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Ok",
+            "qualified_name": "<Impossible<Ok, Error> as SerializeMap>::Ok",
+            "signature": "type Ok = Ok;",
+            "start_line": 152,
+            "end_line": 152,
+            "children": []
+          },
+          {
+            "kind": "type",
+            "name": "Error",
+            "qualified_name": "<Impossible<Ok, Error> as SerializeMap>::Error",
+            "signature": "type Error = Error;",
+            "start_line": 153,
+            "end_line": 153,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "serialize_key",
+            "qualified_name": "<Impossible<Ok, Error> as SerializeMap>::serialize_key",
+            "signature": "fn serialize_key<T>(&mut self, key: &T) -> Result<(), Error>\n    where\n        T: ?Sized + Serialize,",
+            "start_line": 155,
+            "end_line": 161,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "serialize_value",
+            "qualified_name": "<Impossible<Ok, Error> as SerializeMap>::serialize_value",
+            "signature": "fn serialize_value<T>(&mut self, value: &T) -> Result<(), Error>\n    where\n        T: ?Sized + Serialize,",
+            "start_line": 163,
+            "end_line": 169,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "end",
+            "qualified_name": "<Impossible<Ok, Error> as SerializeMap>::end",
+            "signature": "fn end(self) -> Result<Ok, Error>",
+            "start_line": 171,
+            "end_line": 173,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<Impossible<Ok, Error> as SerializeStruct>",
+        "qualified_name": "<Impossible<Ok, Error> as SerializeStruct>",
+        "signature": "impl<Ok, Error> SerializeStruct for Impossible<Ok, Error>\nwhere\n    Error: ser::Error,",
+        "start_line": 176,
+        "end_line": 195,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Ok",
+            "qualified_name": "<Impossible<Ok, Error> as SerializeStruct>::Ok",
+            "signature": "type Ok = Ok;",
+            "start_line": 180,
+            "end_line": 180,
+            "children": []
+          },
+          {
+            "kind": "type",
+            "name": "Error",
+            "qualified_name": "<Impossible<Ok, Error> as SerializeStruct>::Error",
+            "signature": "type Error = Error;",
+            "start_line": 181,
+            "end_line": 181,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "serialize_field",
+            "qualified_name": "<Impossible<Ok, Error> as SerializeStruct>::serialize_field",
+            "signature": "fn serialize_field<T>(&mut self, key: &'static str, value: &T) -> Result<(), Error>\n    where\n        T: ?Sized + Serialize,",
+            "start_line": 183,
+            "end_line": 190,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "end",
+            "qualified_name": "<Impossible<Ok, Error> as SerializeStruct>::end",
+            "signature": "fn end(self) -> Result<Ok, Error>",
+            "start_line": 192,
+            "end_line": 194,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<Impossible<Ok, Error> as SerializeStructVariant>",
+        "qualified_name": "<Impossible<Ok, Error> as SerializeStructVariant>",
+        "signature": "impl<Ok, Error> SerializeStructVariant for Impossible<Ok, Error>\nwhere\n    Error: ser::Error,",
+        "start_line": 197,
+        "end_line": 216,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Ok",
+            "qualified_name": "<Impossible<Ok, Error> as SerializeStructVariant>::Ok",
+            "signature": "type Ok = Ok;",
+            "start_line": 201,
+            "end_line": 201,
+            "children": []
+          },
+          {
+            "kind": "type",
+            "name": "Error",
+            "qualified_name": "<Impossible<Ok, Error> as SerializeStructVariant>::Error",
+            "signature": "type Error = Error;",
+            "start_line": 202,
+            "end_line": 202,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "serialize_field",
+            "qualified_name": "<Impossible<Ok, Error> as SerializeStructVariant>::serialize_field",
+            "signature": "fn serialize_field<T>(&mut self, key: &'static str, value: &T) -> Result<(), Error>\n    where\n        T: ?Sized + Serialize,",
+            "start_line": 204,
+            "end_line": 211,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "end",
+            "qualified_name": "<Impossible<Ok, Error> as SerializeStructVariant>::end",
+            "signature": "fn end(self) -> Result<Ok, Error>",
+            "start_line": 213,
+            "end_line": 215,
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  "skeleton": "//! This module contains `Impossible` serializer and its implementations.\n\nuse crate::lib::*;\n\nuse crate::ser::{\n    self, Serialize, SerializeMap, SerializeSeq, SerializeStruct, SerializeStructVariant,\n    SerializeTuple, SerializeTupleStruct, SerializeTupleVariant,\n};\n\n/// Helper type for implementing a `Serializer` that does not support\n/// serializing one of the compound types.\n///\n/// This type cannot be instantiated, but implements every one of the traits\n/// corresponding to the [`Serializer`] compound types: [`SerializeSeq`],\n/// [`SerializeTuple`], [`SerializeTupleStruct`], [`SerializeTupleVariant`],\n/// [`SerializeMap`], [`SerializeStruct`], and [`SerializeStructVariant`].\n///\n/// ```edition2021\n/// # use serde::ser::{Serializer, Impossible};\n/// # use serde::__private::doc::Error;\n/// #\n/// # struct MySerializer;\n/// #\n/// impl Serializer for MySerializer {\n///     type Ok = ();\n///     type Error = Error;\n///\n///     type SerializeSeq = Impossible<(), Error>;\n///     /* other associated types */\n///\n///     /// This data format does not support serializing sequences.\n///     fn serialize_seq(self,\n///                      len: Option<usize>)\n///                      -> Result<Self::SerializeSeq, Error> {\n///         // Given Impossible cannot be instantiated, the only\n///         // thing we can do here is to return an error.\n/// #         stringify! {\n///         Err(...)\n/// #         };\n/// #         unimplemented!()\n///     }\n///\n///     /* other Serializer methods */\n/// #     serde::__serialize_unimplemented! {\n/// #         bool i8 i16 i32 i64 u8 u16 u32 u64 f32 f64 char str bytes none some\n/// #         unit unit_struct unit_variant newtype_struct newtype_variant\n/// #         tuple tuple_struct tuple_variant map struct struct_variant\n/// #     }\n/// }\n/// ```\n///\n/// [`Serializer`]: trait.Serializer.html\n/// [`SerializeSeq`]: trait.SerializeSeq.html\n/// [`SerializeTuple`]: trait.SerializeTuple.html\n/// [`SerializeTupleStruct`]: trait.SerializeTupleStruct.html\n/// [`SerializeTupleVariant`]: trait.SerializeTupleVariant.html\n/// [`SerializeMap`]: trait.SerializeMap.html\n/// [`SerializeStruct`]: trait.SerializeStruct.html\n/// [`SerializeStructVariant`]: trait.SerializeStructVariant.html\npub struct Impossible<Ok, Error> {\n    void: Void,\n    ok: PhantomData<Ok>,\n    error: PhantomData<Error>,\n}\n\nenum Void {}\n\nimpl<Ok, Error> SerializeSeq for Impossible<Ok, Error>\nwhere\n    Error: ser::Error,\n{\n    type Ok = Ok;\n    type Error = Error;\n\n    fn serialize_element<T>(&mut self, value: &T) -> Result<(), Error>\n    where\n        T: ?Sized + Serialize,\n    { ... }\n\n    fn end(self) -> Result<Ok, Error> { ... }\n}\n\nimpl<Ok, Error> SerializeTuple for Impossible<Ok, Error>\nwhere\n    Error: ser::Error,\n{\n    type Ok = Ok;\n    type Error = Error;\n\n    fn serialize_element<T>(&mut self, value: &T) -> Result<(), Error>\n    where\n        T: ?Sized + Serialize,\n    { ... }\n\n    fn end(self) -> Result<Ok, Error> { ... }\n}\n\nimpl<Ok, Error> SerializeTupleStruct for Impossible<Ok, Error>\nwhere\n    Error: ser::Error,\n{\n    type Ok = Ok;\n    type Error = Error;\n\n    fn serialize_field<T>(&mut self, value: &T) -> Result<(), Error>\n    where\n        T: ?Sized + Serialize,\n    { ... }\n\n    fn end(self) -> Result<Ok, Error> { ... }\n}\n\nimpl<Ok, Error> SerializeTupleVariant for Impossible<Ok, Error>\nwhere\n    Error: ser::Error,\n{\n    type Ok = Ok;\n    type Error = Error;\n\n    fn serialize_field<T>(&mut self, value: &T) -> Result<(), Error>\n    where\n        T: ?Sized + Serialize,\n    { ... }\n\n    fn end(self) -> Result<Ok, Error> { ... }\n}\n\nimpl<Ok, Error> SerializeMap for Impossible<Ok, Error>\nwhere\n    Error: ser::Error,\n{\n    type Ok = Ok;\n    type Error = Error;\n\n    fn serialize_key<T>(&mut self, key: &T) -> Result<(), Error>\n    where\n        T: ?Sized + Serialize,\n    { ... }\n\n    fn serialize_value<T>(&mut self, value: &T) -> Result<(), Error>\n    where\n        T: ?Sized + Serialize,\n    { ... }\n\n    fn end(self) -> Result<Ok, Error> { ... }\n}\n\nimpl<Ok, Error> SerializeStruct for Impossible<Ok, Error>\nwhere\n    Error: ser::Error,\n{\n    type Ok = Ok;\n    type Error = Error;\n\n    fn serialize_field<T>(&mut self, key: &'static str, value: &T) -> Result<(), Error>\n    where\n        T: ?Sized + Serialize,\n    { ... }\n\n    fn end(self) -> Result<Ok, Error> { ... }\n}\n\nimpl<Ok, Error> SerializeStructVariant for Impossible<Ok, Error>\nwhere\n    Error: ser::Error,\n{\n    type Ok = Ok;\n    type Error = Error;\n\n    fn serialize_field<T>(&mut self, key: &'static str, value: &T) -> Result<(), Error>\n    where\n        T: ?Sized + Serialize,\n    { ... }\n\n    fn end(self) -> Result<Ok, Error> { ... }\n}\n"
+}

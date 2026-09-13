@@ -1,0 +1,605 @@
+{
+  "id": "ts-vue-ref",
+  "language": "typescript",
+  "path": "packages/reactivity/src/ref.ts",
+  "source_sha256": "0b2f2d200f496fea1444184864a4a0cf314612d853efb37b7f7c4d4cb14737f3",
+  "parse": {
+    "path": "packages/reactivity/src/ref.ts",
+    "language": "typescript",
+    "line_count": 514,
+    "symbols": [
+      {
+        "kind": "constant",
+        "name": "RefSymbol",
+        "qualified_name": "RefSymbol",
+        "signature": "RefSymbol: unique symbol",
+        "start_line": 23,
+        "end_line": 23,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "RawSymbol",
+        "qualified_name": "RawSymbol",
+        "signature": "RawSymbol: unique symbol",
+        "start_line": 24,
+        "end_line": 24,
+        "children": []
+      },
+      {
+        "kind": "interface",
+        "name": "Ref",
+        "qualified_name": "Ref",
+        "signature": "export interface Ref<T = any, S = T>",
+        "start_line": 26,
+        "end_line": 35,
+        "children": [
+          {
+            "kind": "method",
+            "name": "value",
+            "qualified_name": "Ref.value",
+            "signature": "get value(): T",
+            "start_line": 27,
+            "end_line": 27,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "value",
+            "qualified_name": "Ref.value",
+            "signature": "set value(_: S)",
+            "start_line": 28,
+            "end_line": 28,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "name": "isRef",
+        "qualified_name": "isRef",
+        "signature": "export function isRef<T>(r: Ref<T> | unknown): r is Ref<T>",
+        "start_line": 43,
+        "end_line": 43,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "isRef",
+        "qualified_name": "isRef",
+        "signature": "export function isRef(r: any): r is Ref",
+        "start_line": 44,
+        "end_line": 46,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "ref",
+        "qualified_name": "ref",
+        "signature": "export function ref<T>(\n  value: T,\n): [T] extends [Ref] ? IfAny<T, Ref<T>, T> : Ref<UnwrapRef<T>, UnwrapRef<T> | T>",
+        "start_line": 55,
+        "end_line": 57,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "ref",
+        "qualified_name": "ref",
+        "signature": "export function ref<T = any>(): Ref<T | undefined>",
+        "start_line": 58,
+        "end_line": 58,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "ref",
+        "qualified_name": "ref",
+        "signature": "export function ref(value?: unknown)",
+        "start_line": 59,
+        "end_line": 61,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "ShallowRefMarker",
+        "qualified_name": "ShallowRefMarker",
+        "signature": "ShallowRefMarker: unique symbol",
+        "start_line": 63,
+        "end_line": 63,
+        "children": []
+      },
+      {
+        "kind": "type",
+        "name": "ShallowRef",
+        "qualified_name": "ShallowRef",
+        "signature": "export type ShallowRef<T = any> = Ref<T> & { [ShallowRefMarker]?: true }",
+        "start_line": 65,
+        "end_line": 65,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "shallowRef",
+        "qualified_name": "shallowRef",
+        "signature": "export function shallowRef<T>(\n  value: T,\n): Ref extends T\n  ? T extends Ref\n    ? IfAny<T, ShallowRef<T>, T>\n    : ShallowRef<T>\n  : ShallowRef<T>",
+        "start_line": 84,
+        "end_line": 90,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "shallowRef",
+        "qualified_name": "shallowRef",
+        "signature": "export function shallowRef<T = any>(): ShallowRef<T | undefined>",
+        "start_line": 91,
+        "end_line": 91,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "shallowRef",
+        "qualified_name": "shallowRef",
+        "signature": "export function shallowRef(value?: unknown)",
+        "start_line": 92,
+        "end_line": 94,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "createRef",
+        "qualified_name": "createRef",
+        "signature": "function createRef(rawValue: unknown, shallow: boolean)",
+        "start_line": 96,
+        "end_line": 101,
+        "children": []
+      },
+      {
+        "kind": "class",
+        "name": "RefImpl",
+        "qualified_name": "RefImpl",
+        "signature": "class RefImpl<T = any>",
+        "start_line": 106,
+        "end_line": 157,
+        "children": [
+          {
+            "kind": "field",
+            "name": "_value",
+            "qualified_name": "RefImpl._value",
+            "signature": "_value: T",
+            "start_line": 107,
+            "end_line": 107,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "_rawValue",
+            "qualified_name": "RefImpl._rawValue",
+            "signature": "private _rawValue: T",
+            "start_line": 108,
+            "end_line": 108,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "dep",
+            "qualified_name": "RefImpl.dep",
+            "signature": "dep: Dep = new Dep()",
+            "start_line": 110,
+            "end_line": 110,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "constructor",
+            "qualified_name": "RefImpl.constructor",
+            "signature": "constructor(value: T, isShallow: boolean)",
+            "start_line": 115,
+            "end_line": 119,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "value",
+            "qualified_name": "RefImpl.value",
+            "signature": "get value()",
+            "start_line": 121,
+            "end_line": 132,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "value",
+            "qualified_name": "RefImpl.value",
+            "signature": "set value(newValue)",
+            "start_line": 134,
+            "end_line": 156,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "name": "triggerRef",
+        "qualified_name": "triggerRef",
+        "signature": "export function triggerRef(ref: Ref): void",
+        "start_line": 184,
+        "end_line": 195,
+        "children": []
+      },
+      {
+        "kind": "type",
+        "name": "MaybeRef",
+        "qualified_name": "MaybeRef",
+        "signature": "export type MaybeRef<T = any> =\n  | T\n  | Ref<T>\n  | ShallowRef<T>\n  | WritableComputedRef<T>",
+        "start_line": 197,
+        "end_line": 201,
+        "children": []
+      },
+      {
+        "kind": "type",
+        "name": "MaybeRefOrGetter",
+        "qualified_name": "MaybeRefOrGetter",
+        "signature": "export type MaybeRefOrGetter<T = any> = MaybeRef<T> | ComputedRef<T> | (() => T)",
+        "start_line": 203,
+        "end_line": 203,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "unref",
+        "qualified_name": "unref",
+        "signature": "export function unref<T>(ref: MaybeRef<T> | ComputedRef<T>): T",
+        "start_line": 221,
+        "end_line": 223,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "toValue",
+        "qualified_name": "toValue",
+        "signature": "export function toValue<T>(source: MaybeRefOrGetter<T>): T",
+        "start_line": 241,
+        "end_line": 243,
+        "children": []
+      },
+      {
+        "kind": "object",
+        "name": "shallowUnwrapHandlers",
+        "qualified_name": "shallowUnwrapHandlers",
+        "signature": "shallowUnwrapHandlers: ProxyHandler<any> = {\n  get: (target, key, receiver) => unref(Reflect.get(target, key, receiver)),\n  set: (target, key, value, receiver) => {\n    const oldValue = target[key]\n    if (isRef(oldValue) && !isRef(value)) {\n      oldValue.value = value\n      return true\n    } else {\n      return Reflect.set(target, key, value, receiver)\n    }\n  },\n}",
+        "start_line": 245,
+        "end_line": 256,
+        "children": [
+          {
+            "kind": "method",
+            "name": "get",
+            "qualified_name": "shallowUnwrapHandlers.get",
+            "signature": "get: (target, key, receiver) =>",
+            "start_line": 246,
+            "end_line": 246,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "set",
+            "qualified_name": "shallowUnwrapHandlers.set",
+            "signature": "set: (target, key, value, receiver) =>",
+            "start_line": 247,
+            "end_line": 255,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "name": "proxyRefs",
+        "qualified_name": "proxyRefs",
+        "signature": "export function proxyRefs<T extends object>(\n  objectWithRefs: T,\n): ShallowUnwrapRef<T>",
+        "start_line": 266,
+        "end_line": 272,
+        "children": []
+      },
+      {
+        "kind": "type",
+        "name": "CustomRefFactory",
+        "qualified_name": "CustomRefFactory",
+        "signature": "export type CustomRefFactory<T> = (\n  track: () => void,\n  trigger: () => void,\n) => {\n  get: () => T\n  set: (value: T) => void\n}",
+        "start_line": 274,
+        "end_line": 280,
+        "children": []
+      },
+      {
+        "kind": "class",
+        "name": "CustomRefImpl",
+        "qualified_name": "CustomRefImpl",
+        "signature": "class CustomRefImpl<T>",
+        "start_line": 282,
+        "end_line": 306,
+        "children": [
+          {
+            "kind": "field",
+            "name": "dep",
+            "qualified_name": "CustomRefImpl.dep",
+            "signature": "public dep: Dep",
+            "start_line": 283,
+            "end_line": 283,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "_get",
+            "qualified_name": "CustomRefImpl._get",
+            "signature": "private readonly _get: ReturnType<CustomRefFactory<T>>['get']",
+            "start_line": 285,
+            "end_line": 285,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "_set",
+            "qualified_name": "CustomRefImpl._set",
+            "signature": "private readonly _set: ReturnType<CustomRefFactory<T>>['set']",
+            "start_line": 286,
+            "end_line": 286,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "_value",
+            "qualified_name": "CustomRefImpl._value",
+            "signature": "public _value: T = undefined!",
+            "start_line": 290,
+            "end_line": 290,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "constructor",
+            "qualified_name": "CustomRefImpl.constructor",
+            "signature": "constructor(factory: CustomRefFactory<T>)",
+            "start_line": 292,
+            "end_line": 297,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "value",
+            "qualified_name": "CustomRefImpl.value",
+            "signature": "get value()",
+            "start_line": 299,
+            "end_line": 301,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "value",
+            "qualified_name": "CustomRefImpl.value",
+            "signature": "set value(newVal)",
+            "start_line": 303,
+            "end_line": 305,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "name": "customRef",
+        "qualified_name": "customRef",
+        "signature": "export function customRef<T>(factory: CustomRefFactory<T>): Ref<T>",
+        "start_line": 315,
+        "end_line": 317,
+        "children": []
+      },
+      {
+        "kind": "type",
+        "name": "ToRefs",
+        "qualified_name": "ToRefs",
+        "signature": "export type ToRefs<T = any> = {\n  [K in keyof T]: ToRef<T[K]>\n}",
+        "start_line": 319,
+        "end_line": 321,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "toRefs",
+        "qualified_name": "toRefs",
+        "signature": "export function toRefs<T extends object>(object: T): ToRefs<T>",
+        "start_line": 331,
+        "end_line": 340,
+        "children": []
+      },
+      {
+        "kind": "class",
+        "name": "ObjectRefImpl",
+        "qualified_name": "ObjectRefImpl",
+        "signature": "class ObjectRefImpl<T extends object, K extends keyof T>",
+        "start_line": 342,
+        "end_line": 364,
+        "children": [
+          {
+            "kind": "field",
+            "name": "_value",
+            "qualified_name": "ObjectRefImpl._value",
+            "signature": "public _value: T[K] = undefined!",
+            "start_line": 344,
+            "end_line": 344,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "constructor",
+            "qualified_name": "ObjectRefImpl.constructor",
+            "signature": "constructor(\n    private readonly _object: T,\n    private readonly _key: K,\n    private readonly _defaultValue?: T[K],\n  )",
+            "start_line": 346,
+            "end_line": 350,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "value",
+            "qualified_name": "ObjectRefImpl.value",
+            "signature": "get value()",
+            "start_line": 352,
+            "end_line": 355,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "value",
+            "qualified_name": "ObjectRefImpl.value",
+            "signature": "set value(newVal)",
+            "start_line": 357,
+            "end_line": 359,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "dep",
+            "qualified_name": "ObjectRefImpl.dep",
+            "signature": "get dep(): Dep | undefined",
+            "start_line": 361,
+            "end_line": 363,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "class",
+        "name": "GetterRefImpl",
+        "qualified_name": "GetterRefImpl",
+        "signature": "class GetterRefImpl<T>",
+        "start_line": 366,
+        "end_line": 375,
+        "children": [
+          {
+            "kind": "field",
+            "name": "_value",
+            "qualified_name": "GetterRefImpl._value",
+            "signature": "public _value: T = undefined!",
+            "start_line": 369,
+            "end_line": 369,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "constructor",
+            "qualified_name": "GetterRefImpl.constructor",
+            "signature": "constructor(private readonly _getter: () => T)",
+            "start_line": 371,
+            "end_line": 371,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "value",
+            "qualified_name": "GetterRefImpl.value",
+            "signature": "get value()",
+            "start_line": 372,
+            "end_line": 374,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "type",
+        "name": "ToRef",
+        "qualified_name": "ToRef",
+        "signature": "export type ToRef<T> = IfAny<T, Ref<T>, [T] extends [Ref] ? T : Ref<T>>",
+        "start_line": 377,
+        "end_line": 377,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "toRef",
+        "qualified_name": "toRef",
+        "signature": "export function toRef<T>(\n  value: T,\n): T extends () => infer R\n  ? Readonly<Ref<R>>\n  : T extends Ref\n    ? T\n    : Ref<UnwrapRef<T>>",
+        "start_line": 422,
+        "end_line": 428,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "toRef",
+        "qualified_name": "toRef",
+        "signature": "export function toRef<T extends object, K extends keyof T>(\n  object: T,\n  key: K,\n): ToRef<T[K]>",
+        "start_line": 429,
+        "end_line": 432,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "toRef",
+        "qualified_name": "toRef",
+        "signature": "export function toRef<T extends object, K extends keyof T>(\n  object: T,\n  key: K,\n  defaultValue: T[K],\n): ToRef<Exclude<T[K], undefined>>",
+        "start_line": 433,
+        "end_line": 437,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "toRef",
+        "qualified_name": "toRef",
+        "signature": "export function toRef(\n  source: Record<string, any> | MaybeRef,\n  key?: string,\n  defaultValue?: unknown,\n): Ref",
+        "start_line": 438,
+        "end_line": 452,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "propertyToRef",
+        "qualified_name": "propertyToRef",
+        "signature": "function propertyToRef(\n  source: Record<string, any>,\n  key: string,\n  defaultValue?: unknown,\n)",
+        "start_line": 454,
+        "end_line": 463,
+        "children": []
+      },
+      {
+        "kind": "interface",
+        "name": "RefUnwrapBailTypes",
+        "qualified_name": "RefUnwrapBailTypes",
+        "signature": "export interface RefUnwrapBailTypes",
+        "start_line": 478,
+        "end_line": 478,
+        "children": []
+      },
+      {
+        "kind": "type",
+        "name": "ShallowUnwrapRef",
+        "qualified_name": "ShallowUnwrapRef",
+        "signature": "export type ShallowUnwrapRef<T> = {\n  [K in keyof T]: DistributeRef<T[K]>\n}",
+        "start_line": 480,
+        "end_line": 482,
+        "children": []
+      },
+      {
+        "kind": "type",
+        "name": "DistributeRef",
+        "qualified_name": "DistributeRef",
+        "signature": "type DistributeRef<T> = T extends Ref<infer V> ? V : T",
+        "start_line": 484,
+        "end_line": 484,
+        "children": []
+      },
+      {
+        "kind": "type",
+        "name": "UnwrapRef",
+        "qualified_name": "UnwrapRef",
+        "signature": "export type UnwrapRef<T> =\n  T extends ShallowRef<infer V>\n    ? V\n    : T extends Ref<infer V>\n      ? UnwrapRefSimple<V>\n      : UnwrapRefSimple<T>",
+        "start_line": 486,
+        "end_line": 491,
+        "children": []
+      },
+      {
+        "kind": "type",
+        "name": "UnwrapRefSimple",
+        "qualified_name": "UnwrapRefSimple",
+        "signature": "export type UnwrapRefSimple<T> = T extends\n  | Builtin\n  | Ref\n  | RefUnwrapBailTypes[keyof RefUnwrapBailTypes]\n  | { [RawSymbol]?: true }\n  ? T\n  : T extends Map<infer K, infer V>\n    ? Map<K, UnwrapRefSimple<V>> & UnwrapRef<Omit<T, keyof Map<any, any>>>\n    : T extends WeakMap<infer K, infer V>\n      ? WeakMap<K, UnwrapRefSimple<V>> &\n          UnwrapRef<Omit<T, keyof WeakMap<any, any>>>\n      : T extends Set<infer V>\n        ? Set<UnwrapRefSimple<V>> & UnwrapRef<Omit<T, keyof Set<any>>>\n        : T extends WeakSet<infer V>\n          ? WeakSet<UnwrapRefSimple<V>> & UnwrapRef<Omit<T, keyof WeakSet<any>>>\n          : T extends ReadonlyArray<any>\n            ? { [K in keyof T]: UnwrapRefSimple<T[K]> }\n            : T extends object & { [ShallowReactiveMarker]?: never }\n              ? {\n                  [P in keyof T]: P extends symbol ? T[P] : UnwrapRef<T[P]>\n                }\n              : T",
+        "start_line": 493,
+        "end_line": 514,
+        "children": []
+      }
+    ]
+  },
+  "skeleton": "import {\n  type IfAny,\n  hasChanged,\n  isArray,\n  isFunction,\n  isObject,\n} from '@vue/shared'\nimport { Dep, getDepFromReactive } from './dep'\nimport {\n  type Builtin,\n  type ShallowReactiveMarker,\n  isProxy,\n  isReactive,\n  isReadonly,\n  isShallow,\n  toRaw,\n  toReactive,\n} from './reactive'\nimport type { ComputedRef, WritableComputedRef } from './computed'\nimport { ReactiveFlags, TrackOpTypes, TriggerOpTypes } from './constants'\nimport { warn } from './warning'\n\ndeclare const RefSymbol: unique symbol\nexport declare const RawSymbol: unique symbol\n\nexport interface Ref<T = any, S = T> {\n  get value(): T\n  set value(_: S)\n  /**\n   * Type differentiator only.\n   * We need this to be in public d.ts but don't want it to show up in IDE\n   * autocomplete, so we use a private Symbol instead.\n   */\n  [RefSymbol]: true\n}\n\n/**\n * Checks if a value is a ref object.\n *\n * @param r - The value to inspect.\n * @see {@link https://vuejs.org/api/reactivity-utilities.html#isref}\n */\nexport function isRef<T>(r: Ref<T> | unknown): r is Ref<T>\nexport function isRef(r: any): r is Ref { ... }\n\n/**\n * Takes an inner value and returns a reactive and mutable ref object, which\n * has a single property `.value` that points to the inner value.\n *\n * @param value - The object to wrap in the ref.\n * @see {@link https://vuejs.org/api/reactivity-core.html#ref}\n */\nexport function ref<T>(\n  value: T,\n): [T] extends [Ref] ? IfAny<T, Ref<T>, T> : Ref<UnwrapRef<T>, UnwrapRef<T> | T>\nexport function ref<T = any>(): Ref<T | undefined>\nexport function ref(value?: unknown) { ... }\n\ndeclare const ShallowRefMarker: unique symbol\n\nexport type ShallowRef<T = any> = Ref<T> & { [ShallowRefMarker]?: true }\n\n/**\n * Shallow version of {@link ref()}.\n *\n * @example\n * ```js\n * const state = shallowRef({ count: 1 })\n *\n * // does NOT trigger change\n * state.value.count = 2\n *\n * // does trigger change\n * state.value = { count: 2 }\n * ```\n *\n * @param value - The \"inner value\" for the shallow ref.\n * @see {@link https://vuejs.org/api/reactivity-advanced.html#shallowref}\n */\nexport function shallowRef<T>(\n  value: T,\n): Ref extends T\n  ? T extends Ref\n    ? IfAny<T, ShallowRef<T>, T>\n    : ShallowRef<T>\n  : ShallowRef<T>\nexport function shallowRef<T = any>(): ShallowRef<T | undefined>\nexport function shallowRef(value?: unknown) { ... }\n\nfunction createRef(rawValue: unknown, shallow: boolean) { ... }\n\n/**\n * @internal\n */\nclass RefImpl<T = any> {\n  _value: T\n  private _rawValue: T\n\n  dep: Dep = new Dep()\n\n  public readonly [ReactiveFlags.IS_REF] = true\n  public readonly [ReactiveFlags.IS_SHALLOW]: boolean = false\n\n  constructor(value: T, isShallow: boolean) { ... }\n\n  get value() { ... }\n\n  set value(newValue) { ... }\n}\n\n/**\n * Force trigger effects that depends on a shallow ref. This is typically used\n * after making deep mutations to the inner value of a shallow ref.\n *\n * @example\n * ```js\n * const shallow = shallowRef({\n *   greet: 'Hello, world'\n * })\n *\n * // Logs \"Hello, world\" once for the first run-through\n * watchEffect(() => {\n *   console.log(shallow.value.greet)\n * })\n *\n * // This won't trigger the effect because the ref is shallow\n * shallow.value.greet = 'Hello, universe'\n *\n * // Logs \"Hello, universe\"\n * triggerRef(shallow)\n * ```\n *\n * @param ref - The ref whose tied effects shall be executed.\n * @see {@link https://vuejs.org/api/reactivity-advanced.html#triggerref}\n */\nexport function triggerRef(ref: Ref): void { ... }\n\nexport type MaybeRef<T = any> =\n  | T\n  | Ref<T>\n  | ShallowRef<T>\n  | WritableComputedRef<T>\n\nexport type MaybeRefOrGetter<T = any> = MaybeRef<T> | ComputedRef<T> | (() => T)\n\n/**\n * Returns the inner value if the argument is a ref, otherwise return the\n * argument itself. This is a sugar function for\n * `val = isRef(val) ? val.value : val`.\n *\n * @example\n * ```js\n * function useFoo(x: number | Ref<number>) {\n *   const unwrapped = unref(x)\n *   // unwrapped is guaranteed to be number now\n * }\n * ```\n *\n * @param ref - Ref or plain value to be converted into the plain value.\n * @see {@link https://vuejs.org/api/reactivity-utilities.html#unref}\n */\nexport function unref<T>(ref: MaybeRef<T> | ComputedRef<T>): T { ... }\n\n/**\n * Normalizes values / refs / getters to values.\n * This is similar to {@link unref()}, except that it also normalizes getters.\n * If the argument is a getter, it will be invoked and its return value will\n * be returned.\n *\n * @example\n * ```js\n * toValue(1) // 1\n * toValue(ref(1)) // 1\n * toValue(() => 1) // 1\n * ```\n *\n * @param source - A getter, an existing ref, or a non-function value.\n * @see {@link https://vuejs.org/api/reactivity-utilities.html#tovalue}\n */\nexport function toValue<T>(source: MaybeRefOrGetter<T>): T { ... }\n\nconst shallowUnwrapHandlers: ProxyHandler<any> = {\n  get: (target, key, receiver) => ...,\n  set: (target, key, value, receiver) => { ... },\n}\n\n/**\n * Returns a proxy for the given object that shallowly unwraps properties that\n * are refs. If the object already is reactive, it's returned as-is. If not, a\n * new reactive proxy is created.\n *\n * @param objectWithRefs - Either an already-reactive object or a simple object\n * that contains refs.\n */\nexport function proxyRefs<T extends object>(\n  objectWithRefs: T,\n): ShallowUnwrapRef<T> { ... }\n\nexport type CustomRefFactory<T> = (\n  track: () => void,\n  trigger: () => void,\n) => {\n  get: () => T\n  set: (value: T) => void\n}\n\nclass CustomRefImpl<T> {\n  public dep: Dep\n\n  private readonly _get: ReturnType<CustomRefFactory<T>>['get']\n  private readonly _set: ReturnType<CustomRefFactory<T>>['set']\n\n  public readonly [ReactiveFlags.IS_REF] = true\n\n  public _value: T = undefined!\n\n  constructor(factory: CustomRefFactory<T>) { ... }\n\n  get value() { ... }\n\n  set value(newVal) { ... }\n}\n\n/**\n * Creates a customized ref with explicit control over its dependency tracking\n * and updates triggering.\n *\n * @param factory - The function that receives the `track` and `trigger` callbacks.\n * @see {@link https://vuejs.org/api/reactivity-advanced.html#customref}\n */\nexport function customRef<T>(factory: CustomRefFactory<T>): Ref<T> { ... }\n\nexport type ToRefs<T = any> = {\n  [K in keyof T]: ToRef<T[K]>\n}\n\n/**\n * Converts a reactive object to a plain object where each property of the\n * resulting object is a ref pointing to the corresponding property of the\n * original object. Each individual ref is created using {@link toRef()}.\n *\n * @param object - Reactive object to be made into an object of linked refs.\n * @see {@link https://vuejs.org/api/reactivity-utilities.html#torefs}\n */\nexport function toRefs<T extends object>(object: T): ToRefs<T> { ... }\n\nclass ObjectRefImpl<T extends object, K extends keyof T> {\n  public readonly [ReactiveFlags.IS_REF] = true\n  public _value: T[K] = undefined!\n\n  constructor(\n    private readonly _object: T,\n    private readonly _key: K,\n    private readonly _defaultValue?: T[K],\n  ) { ... }\n\n  get value() { ... }\n\n  set value(newVal) { ... }\n\n  get dep(): Dep | undefined { ... }\n}\n\nclass GetterRefImpl<T> {\n  public readonly [ReactiveFlags.IS_REF] = true\n  public readonly [ReactiveFlags.IS_READONLY] = true\n  public _value: T = undefined!\n\n  constructor(private readonly _getter: () => T) { ... }\n  get value() { ... }\n}\n\nexport type ToRef<T> = IfAny<T, Ref<T>, [T] extends [Ref] ? T : Ref<T>>\n\n/**\n * Used to normalize values / refs / getters into refs.\n *\n * @example\n * ```js\n * // returns existing refs as-is\n * toRef(existingRef)\n *\n * // creates a ref that calls the getter on .value access\n * toRef(() => props.foo)\n *\n * // creates normal refs from non-function values\n * // equivalent to ref(1)\n * toRef(1)\n * ```\n *\n * Can also be used to create a ref for a property on a source reactive object.\n * The created ref is synced with its source property: mutating the source\n * property will update the ref, and vice-versa.\n *\n * @example\n * ```js\n * const state = reactive({\n *   foo: 1,\n *   bar: 2\n * })\n *\n * const fooRef = toRef(state, 'foo')\n *\n * // mutating the ref updates the original\n * fooRef.value++\n * console.log(state.foo) // 2\n *\n * // mutating the original also updates the ref\n * state.foo++\n * console.log(fooRef.value) // 3\n * ```\n *\n * @param source - A getter, an existing ref, a non-function value, or a\n *                 reactive object to create a property ref from.\n * @param [key] - (optional) Name of the property in the reactive object.\n * @see {@link https://vuejs.org/api/reactivity-utilities.html#toref}\n */\nexport function toRef<T>(\n  value: T,\n): T extends () => infer R\n  ? Readonly<Ref<R>>\n  : T extends Ref\n    ? T\n    : Ref<UnwrapRef<T>>\nexport function toRef<T extends object, K extends keyof T>(\n  object: T,\n  key: K,\n): ToRef<T[K]>\nexport function toRef<T extends object, K extends keyof T>(\n  object: T,\n  key: K,\n  defaultValue: T[K],\n): ToRef<Exclude<T[K], undefined>>\nexport function toRef(\n  source: Record<string, any> | MaybeRef,\n  key?: string,\n  defaultValue?: unknown,\n): Ref { ... }\n\nfunction propertyToRef(\n  source: Record<string, any>,\n  key: string,\n  defaultValue?: unknown,\n) { ... }\n\n/**\n * This is a special exported interface for other packages to declare\n * additional types that should bail out for ref unwrapping. For example\n * \\@vue/runtime-dom can declare it like so in its d.ts:\n *\n * ``` ts\n * declare module '@vue/reactivity' {\n *   export interface RefUnwrapBailTypes {\n *     runtimeDOMBailTypes: Node | Window\n *   }\n * }\n * ```\n */\nexport interface RefUnwrapBailTypes {}\n\nexport type ShallowUnwrapRef<T> = {\n  [K in keyof T]: DistributeRef<T[K]>\n}\n\ntype DistributeRef<T> = T extends Ref<infer V> ? V : T\n\nexport type UnwrapRef<T> =\n  T extends ShallowRef<infer V>\n    ? V\n    : T extends Ref<infer V>\n      ? UnwrapRefSimple<V>\n      : UnwrapRefSimple<T>\n\nexport type UnwrapRefSimple<T> = T extends\n  | Builtin\n  | Ref\n  | RefUnwrapBailTypes[keyof RefUnwrapBailTypes]\n  | { [RawSymbol]?: true }\n  ? T\n  : T extends Map<infer K, infer V>\n    ? Map<K, UnwrapRefSimple<V>> & UnwrapRef<Omit<T, keyof Map<any, any>>>\n    : T extends WeakMap<infer K, infer V>\n      ? WeakMap<K, UnwrapRefSimple<V>> &\n          UnwrapRef<Omit<T, keyof WeakMap<any, any>>>\n      : T extends Set<infer V>\n        ? Set<UnwrapRefSimple<V>> & UnwrapRef<Omit<T, keyof Set<any>>>\n        : T extends WeakSet<infer V>\n          ? WeakSet<UnwrapRefSimple<V>> & UnwrapRef<Omit<T, keyof WeakSet<any>>>\n          : T extends ReadonlyArray<any>\n            ? { [K in keyof T]: UnwrapRefSimple<T[K]> }\n            : T extends object & { [ShallowReactiveMarker]?: never }\n              ? {\n                  [P in keyof T]: P extends symbol ? T[P] : UnwrapRef<T[P]>\n                }\n              : T\n"
+}

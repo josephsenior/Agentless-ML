@@ -2,11 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from agentless_ml.adapters.languages import (
-    JavaScriptAdapter,
-    TypeScriptAdapter,
-    get_language_adapter,
-)
+from agentless_ml.adapters.languages import get_language_adapter
 from agentless_ml.localization.context import (
     render_project_tree,
     render_symbol_localization_prompt,
@@ -25,7 +21,7 @@ SOURCE = (Path(__file__).parent / "fixtures/javascript/structure.ts").read_text(
 
 
 def test_typescript_declarations_and_lexical_children():
-    node = TypeScriptAdapter().parse_file("structure.ts", SOURCE)
+    node = get_language_adapter("typescript").parse_file("structure.ts", SOURCE)
     symbols = {s.name: s for s in node.symbols}
     assert list(symbols) == [
         "Reader",
@@ -61,7 +57,7 @@ def test_typescript_declarations_and_lexical_children():
 
 @pytest.mark.parametrize(
     "adapter,path",
-    [(JavaScriptAdapter(), "example.js"), (TypeScriptAdapter(), "example.ts")],
+    [(get_language_adapter("javascript"), "example.js"), (get_language_adapter("typescript"), "example.ts")],
 )
 def test_exports_bound_functions_and_class_expressions(adapter, path):
     source = (
@@ -89,7 +85,7 @@ def test_exports_bound_functions_and_class_expressions(adapter, path):
 
 
 def test_typescript_and_tsx_use_different_grammars():
-    adapter = TypeScriptAdapter()
+    adapter = get_language_adapter("typescript")
     source = "export const Component = (p: {label: string}) => <div>{p.label}</div>;"
     node = adapter.parse_file("component.tsx", source)
     assert node.symbols[0].name == "Component"
@@ -101,7 +97,7 @@ def test_typescript_and_tsx_use_different_grammars():
     with pytest.raises(ValueError, match="syntax"):
         adapter.parse_file("cast.tsx", "const x = <number>value;")
     assert (
-        JavaScriptAdapter()
+        get_language_adapter("javascript")
         .parse_file("component.jsx", "const View = () => <div/>;")
         .symbols
     )
@@ -109,18 +105,18 @@ def test_typescript_and_tsx_use_different_grammars():
 
 def test_skeleton_hides_bodies_and_keeps_declarations_and_unicode():
     source = 'const café = "} 😀";\n' + SOURCE
-    skeleton = TypeScriptAdapter().render_skeleton(source)
+    skeleton = get_language_adapter("typescript").render_skeleton(source)
     assert "café" in skeleton and "😀" in skeleton
     assert "import type" in skeleton and "export interface Reader" in skeleton
     assert "return this.value" not in skeleton and "a + b" not in skeleton
     assert "add = (amount: number): number => ..." in skeleton
     assert "declare function external" in skeleton
-    crlf = TypeScriptAdapter().render_skeleton(source.replace("\n", "\r\n"))
+    crlf = get_language_adapter("typescript").render_skeleton(source.replace("\n", "\r\n"))
     assert crlf.replace("\r\n", "\n") == skeleton
 
 
 def test_locations_resolve_types_fields_methods_and_ambiguity():
-    adapter = TypeScriptAdapter()
+    adapter = get_language_adapter("typescript")
     node = adapter.parse_file("structure.ts", SOURCE)
     locations = "method: Counter.add\nfield: Counter.value\ntype: ID"
     result = resolve_locations(locations, node, SOURCE, context_window=0)
@@ -161,7 +157,7 @@ def test_mixed_repository_paths_and_prompts():
     assert all(
         p not in tree for p in ("node_modules", "main.test", "tests", "dist", "python")
     )
-    assert not JavaScriptAdapter().is_source_path("main.ts")
+    assert not get_language_adapter("javascript").is_source_path("main.ts")
     chosen = parse_file_locations(
         "main.ts\nhelper.js\n../view.tsx",
         ("main.ts", "helper.js"),
@@ -197,8 +193,8 @@ def test_mixed_repository_paths_and_prompts():
 )
 def test_syntax_errors_fail_explicitly(source):
     for adapter, path in (
-        (JavaScriptAdapter(), "bad.js"),
-        (TypeScriptAdapter(), "bad.ts"),
+        (get_language_adapter("javascript"), "bad.js"),
+        (get_language_adapter("typescript"), "bad.ts"),
     ):
         with pytest.raises(ValueError, match="syntax"):
             adapter.parse_file(path, source)
@@ -210,7 +206,7 @@ def test_ambient_abstract_and_anonymous_default_declarations():
         "export default class { value = 1; }\n"
         "declare const api: string;\nconst\nlimit = 1;\n"
     )
-    node = TypeScriptAdapter().parse_file("declarations.ts", source)
+    node = get_language_adapter("typescript").parse_file("declarations.ts", source)
     assert [(s.name, s.kind) for s in node.symbols] == [
         ("Base", "class"),
         ("default", "class"),
@@ -226,7 +222,7 @@ def test_ambient_abstract_and_anonymous_default_declarations():
 
 def test_unsupported_constructs_are_visible_without_invented_symbols():
     source = "const {x, y: alias} = value;\nconst api = { [key]() { return 1; } };"
-    adapter = JavaScriptAdapter()
+    adapter = get_language_adapter("javascript")
     node = adapter.parse_file("a.js", source)
     assert [s.name for s in node.symbols] == ["api"]
     assert not node.symbols[0].children

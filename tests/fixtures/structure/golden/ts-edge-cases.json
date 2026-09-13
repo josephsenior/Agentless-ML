@@ -1,0 +1,307 @@
+{
+  "id": "ts-edge-cases",
+  "language": "typescript",
+  "path": "src/edge_cases.ts",
+  "source_sha256": "a6525bbb6a1ca8ef76fed0550a7763dd50ebecddd21f55cc65e4ac4380b49809",
+  "parse": {
+    "path": "src/edge_cases.ts",
+    "language": "typescript",
+    "line_count": 58,
+    "symbols": [
+      {
+        "kind": "interface",
+        "name": "Props",
+        "qualified_name": "Props",
+        "signature": "export interface Props<T> extends Foo",
+        "start_line": 3,
+        "end_line": 10,
+        "children": [
+          {
+            "kind": "field",
+            "name": "id",
+            "qualified_name": "Props.id",
+            "signature": "readonly id: string",
+            "start_line": 4,
+            "end_line": 4,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "optional",
+            "qualified_name": "Props.optional",
+            "signature": "optional?: number",
+            "start_line": 5,
+            "end_line": 5,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "method",
+            "qualified_name": "Props.method",
+            "signature": "method(x: T): void",
+            "start_line": 6,
+            "end_line": 6,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "type",
+        "name": "Union",
+        "qualified_name": "Union",
+        "signature": "export type Union = 'a' | 'b';",
+        "start_line": 12,
+        "end_line": 12,
+        "children": []
+      },
+      {
+        "kind": "type",
+        "name": "Mapped",
+        "qualified_name": "Mapped",
+        "signature": "type Mapped<T> = { [K in keyof T]: T[K] };",
+        "start_line": 13,
+        "end_line": 13,
+        "children": []
+      },
+      {
+        "kind": "enum",
+        "name": "Color",
+        "qualified_name": "Color",
+        "signature": "export enum Color",
+        "start_line": 15,
+        "end_line": 15,
+        "children": []
+      },
+      {
+        "kind": "enum",
+        "name": "Flags",
+        "qualified_name": "Flags",
+        "signature": "const enum Flags",
+        "start_line": 16,
+        "end_line": 16,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "VERSION",
+        "qualified_name": "VERSION",
+        "signature": "VERSION: string",
+        "start_line": 24,
+        "end_line": 24,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "declared",
+        "qualified_name": "declared",
+        "signature": "declare function declared(x: number): string;",
+        "start_line": 25,
+        "end_line": 25,
+        "children": []
+      },
+      {
+        "kind": "class",
+        "name": "DeclaredClass",
+        "qualified_name": "DeclaredClass",
+        "signature": "declare class DeclaredClass",
+        "start_line": 26,
+        "end_line": 26,
+        "children": [
+          {
+            "kind": "method",
+            "name": "method",
+            "qualified_name": "DeclaredClass.method",
+            "signature": "method(): void",
+            "start_line": 26,
+            "end_line": 26,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "name": "overload",
+        "qualified_name": "overload",
+        "signature": "export function overload(x: string): string;",
+        "start_line": 32,
+        "end_line": 32,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "overload",
+        "qualified_name": "overload",
+        "signature": "export function overload(x: number): number;",
+        "start_line": 33,
+        "end_line": 33,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "overload",
+        "qualified_name": "overload",
+        "signature": "export function overload(x: any)",
+        "start_line": 34,
+        "end_line": 34,
+        "children": []
+      },
+      {
+        "kind": "class",
+        "name": "Shape",
+        "qualified_name": "Shape",
+        "signature": "export abstract class Shape<T = number>",
+        "start_line": 36,
+        "end_line": 45,
+        "children": [
+          {
+            "kind": "method",
+            "name": "area",
+            "qualified_name": "Shape.area",
+            "signature": "abstract area(): T",
+            "start_line": 37,
+            "end_line": 37,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "name",
+            "qualified_name": "Shape.name",
+            "signature": "protected abstract name: string",
+            "start_line": 38,
+            "end_line": 38,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "instances",
+            "qualified_name": "Shape.instances",
+            "signature": "private static instances = 0",
+            "start_line": 39,
+            "end_line": 39,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "id",
+            "qualified_name": "Shape.id",
+            "signature": "public readonly id: string = ''",
+            "start_line": 40,
+            "end_line": 40,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "brand",
+            "qualified_name": "Shape.brand",
+            "signature": "declare brand: 'shape'",
+            "start_line": 41,
+            "end_line": 41,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "constructor",
+            "qualified_name": "Shape.constructor",
+            "signature": "constructor(private readonly size: number)",
+            "start_line": 42,
+            "end_line": 42,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "handler",
+            "qualified_name": "Shape.handler",
+            "signature": "handler = (event: Event): void =>",
+            "start_line": 43,
+            "end_line": 43,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "perimeter",
+            "qualified_name": "Shape.perimeter",
+            "signature": "get perimeter(): number",
+            "start_line": 44,
+            "end_line": 44,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "object",
+        "name": "typed",
+        "qualified_name": "typed",
+        "signature": "typed: Record<string, () => void> = {\n  run: () => {},\n  stop() {},\n}",
+        "start_line": 47,
+        "end_line": 50,
+        "children": [
+          {
+            "kind": "method",
+            "name": "run",
+            "qualified_name": "typed.run",
+            "signature": "run: () =>",
+            "start_line": 48,
+            "end_line": 48,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "stop",
+            "qualified_name": "typed.stop",
+            "signature": "stop()",
+            "start_line": 49,
+            "end_line": 49,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "object",
+        "name": "default",
+        "qualified_name": "default",
+        "signature": "export default {\n  name: 'component',\n  setup() { return {}; },\n}",
+        "start_line": 52,
+        "end_line": 55,
+        "children": [
+          {
+            "kind": "field",
+            "name": "name",
+            "qualified_name": "default.name",
+            "signature": "name: 'component'",
+            "start_line": 53,
+            "end_line": 53,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "setup",
+            "qualified_name": "default.setup",
+            "signature": "setup()",
+            "start_line": 54,
+            "end_line": 54,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "variable",
+        "name": "cast",
+        "qualified_name": "cast",
+        "signature": "cast = <number>(VERSION as unknown)",
+        "start_line": 57,
+        "end_line": 57,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "satisfiesCheck",
+        "qualified_name": "satisfiesCheck",
+        "signature": "satisfiesCheck = { a: 1 } satisfies Record<string, number>",
+        "start_line": 58,
+        "end_line": 58,
+        "children": []
+      }
+    ]
+  },
+  "skeleton": "import type { Foo } from './foo';\n\nexport interface Props<T> extends Foo {\n  readonly id: string;\n  optional?: number;\n  method(x: T): void;\n  (call: string): number;\n  new (ctor: string): Props<T>;\n  [index: string]: unknown;\n}\n\nexport type Union = 'a' | 'b';\ntype Mapped<T> = { [K in keyof T]: T[K] };\n\nexport enum Color { Red, Green = 'green' }\nconst enum Flags { A = 1 << 0 }\n\ndeclare module 'external' {\n  export function ext(): void;\n}\ndeclare global {\n  interface Window { app: unknown }\n}\ndeclare const VERSION: string;\ndeclare function declared(x: number): string;\nexport declare class DeclaredClass { method(): void; }\n\nnamespace Legacy {\n  export const inside = 1;\n}\n\nexport function overload(x: string): string;\nexport function overload(x: number): number;\nexport function overload(x: any) { ... }\n\nexport abstract class Shape<T = number> {\n  abstract area(): T;\n  protected abstract name: string;\n  private static instances = 0;\n  public readonly id: string = '';\n  declare brand: 'shape';\n  constructor(private readonly size: number) { ... }\n  handler = (event: Event): void => { ... };\n  get perimeter(): number { ... }\n}\n\nexport const typed: Record<string, () => void> = {\n  run: () => { ... },\n  stop() { ... },\n};\n\nexport default {\n  name: 'component',\n  setup() { ... },\n};\n\nlet cast = <number>(VERSION as unknown);\nconst satisfiesCheck = { a: 1 } satisfies Record<string, number>;\n"
+}

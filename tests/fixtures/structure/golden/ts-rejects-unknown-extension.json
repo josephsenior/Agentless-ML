@@ -1,0 +1,18 @@
+{
+  "id": "ts-rejects-unknown-extension",
+  "language": "typescript",
+  "path": "main.py",
+  "source_sha256": "9e26bf369911c45c243c684147b23fc9e1dcfcf257d299a1c632016a6fcd33f4",
+  "parse": {
+    "error": {
+      "type": "ValueError",
+      "message": "unsupported file for typescript: main.py"
+    }
+  },
+  "skeleton": {
+    "error": {
+      "type": "ValueError",
+      "message": "unsupported file for typescript: main.py"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "id": "js-syntax-error",
+  "language": "javascript",
+  "path": "bad.js",
+  "source_sha256": "810fbea41c2b27ec5847e2342f9641a378f68c59385149ab6f8fa4c7974dca91",
+  "parse": {
+    "error": {
+      "type": "ValueError",
+      "message": "JavaScript/TypeScript source contains a syntax error or missing token in bad.js"
+    }
+  },
+  "skeleton": {
+    "error": {
+      "type": "ValueError",
+      "message": "JavaScript/TypeScript source contains a syntax error or missing token in bad.js"
+    }
+  }
+}

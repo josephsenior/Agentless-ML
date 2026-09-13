@@ -1,0 +1,239 @@
+{
+  "id": "js-express-utils",
+  "language": "javascript",
+  "path": "lib/utils.js",
+  "source_sha256": "9035c6d946ece511e749043cc823e32d3efe6727b8a9d52aac89649e99584f09",
+  "parse": {
+    "path": "lib/utils.js",
+    "language": "javascript",
+    "line_count": 303,
+    "symbols": [
+      {
+        "kind": "variable",
+        "name": "Buffer",
+        "qualified_name": "Buffer",
+        "signature": "Buffer = require('safe-buffer').Buffer",
+        "start_line": 15,
+        "end_line": 15,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "contentDisposition",
+        "qualified_name": "contentDisposition",
+        "signature": "contentDisposition = require('content-disposition')",
+        "start_line": 16,
+        "end_line": 16,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "contentType",
+        "qualified_name": "contentType",
+        "signature": "contentType = require('content-type')",
+        "start_line": 17,
+        "end_line": 17,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "deprecate",
+        "qualified_name": "deprecate",
+        "signature": "deprecate = require('depd')('express')",
+        "start_line": 18,
+        "end_line": 18,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "flatten",
+        "qualified_name": "flatten",
+        "signature": "flatten = require('array-flatten')",
+        "start_line": 19,
+        "end_line": 19,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "mime",
+        "qualified_name": "mime",
+        "signature": "mime = require('send').mime",
+        "start_line": 20,
+        "end_line": 20,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "etag",
+        "qualified_name": "etag",
+        "signature": "etag = require('etag')",
+        "start_line": 21,
+        "end_line": 21,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "proxyaddr",
+        "qualified_name": "proxyaddr",
+        "signature": "proxyaddr = require('proxy-addr')",
+        "start_line": 22,
+        "end_line": 22,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "qs",
+        "qualified_name": "qs",
+        "signature": "qs = require('qs')",
+        "start_line": 23,
+        "end_line": 23,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "querystring",
+        "qualified_name": "querystring",
+        "signature": "querystring = require('querystring')",
+        "start_line": 24,
+        "end_line": 24,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "exports.etag",
+        "qualified_name": "exports.etag",
+        "signature": "exports.etag = createETagGenerator({ weak: false })",
+        "start_line": 35,
+        "end_line": 35,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "exports.wetag",
+        "qualified_name": "exports.wetag",
+        "signature": "exports.wetag = createETagGenerator({ weak: true })",
+        "start_line": 46,
+        "end_line": 46,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "exports.isAbsolute",
+        "qualified_name": "exports.isAbsolute",
+        "signature": "exports.isAbsolute = function(path)",
+        "start_line": 56,
+        "end_line": 60,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "exports.flatten",
+        "qualified_name": "exports.flatten",
+        "signature": "exports.flatten = deprecate.function(flatten,\n  'utils.flatten: use array-flatten npm module instead')",
+        "start_line": 70,
+        "end_line": 71,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "exports.normalizeType",
+        "qualified_name": "exports.normalizeType",
+        "signature": "exports.normalizeType = function(type)",
+        "start_line": 81,
+        "end_line": 85,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "exports.normalizeTypes",
+        "qualified_name": "exports.normalizeTypes",
+        "signature": "exports.normalizeTypes = function(types)",
+        "start_line": 95,
+        "end_line": 103,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "exports.contentDisposition",
+        "qualified_name": "exports.contentDisposition",
+        "signature": "exports.contentDisposition = deprecate.function(contentDisposition,\n  'utils.contentDisposition: use content-disposition npm module instead')",
+        "start_line": 114,
+        "end_line": 115,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "acceptParams",
+        "qualified_name": "acceptParams",
+        "signature": "function acceptParams (str)",
+        "start_line": 126,
+        "end_line": 140,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "exports.compileETag",
+        "qualified_name": "exports.compileETag",
+        "signature": "exports.compileETag = function(val)",
+        "start_line": 150,
+        "end_line": 172,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "exports.compileQueryParser",
+        "qualified_name": "exports.compileQueryParser",
+        "signature": "exports.compileQueryParser = function compileQueryParser(val)",
+        "start_line": 182,
+        "end_line": 205,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "exports.compileTrust",
+        "qualified_name": "exports.compileTrust",
+        "signature": "exports.compileTrust = function(val)",
+        "start_line": 215,
+        "end_line": 235,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "exports.setCharset",
+        "qualified_name": "exports.setCharset",
+        "signature": "exports.setCharset = function setCharset(type, charset)",
+        "start_line": 246,
+        "end_line": 259,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "createETagGenerator",
+        "qualified_name": "createETagGenerator",
+        "signature": "function createETagGenerator (options)",
+        "start_line": 270,
+        "end_line": 278,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "parseExtendedQueryString",
+        "qualified_name": "parseExtendedQueryString",
+        "signature": "function parseExtendedQueryString(str)",
+        "start_line": 288,
+        "end_line": 292,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "newObject",
+        "qualified_name": "newObject",
+        "signature": "function newObject()",
+        "start_line": 301,
+        "end_line": 303,
+        "children": []
+      }
+    ]
+  },
+  "skeleton": "/*!\n * express\n * Copyright(c) 2009-2013 TJ Holowaychuk\n * Copyright(c) 2014-2015 Douglas Christopher Wilson\n * MIT Licensed\n */\n\n'use strict';\n\n/**\n * Module dependencies.\n * @api private\n */\n\nvar Buffer = require('safe-buffer').Buffer\nvar contentDisposition = require('content-disposition');\nvar contentType = require('content-type');\nvar deprecate = require('depd')('express');\nvar flatten = require('array-flatten');\nvar mime = require('send').mime;\nvar etag = require('etag');\nvar proxyaddr = require('proxy-addr');\nvar qs = require('qs');\nvar querystring = require('querystring');\n\n/**\n * Return strong ETag for `body`.\n *\n * @param {String|Buffer} body\n * @param {String} [encoding]\n * @return {String}\n * @api private\n */\n\nexports.etag = createETagGenerator({ weak: false })\n\n/**\n * Return weak ETag for `body`.\n *\n * @param {String|Buffer} body\n * @param {String} [encoding]\n * @return {String}\n * @api private\n */\n\nexports.wetag = createETagGenerator({ weak: true })\n\n/**\n * Check if `path` looks absolute.\n *\n * @param {String} path\n * @return {Boolean}\n * @api private\n */\n\nexports.isAbsolute = function(path){ ... };\n\n/**\n * Flatten the given `arr`.\n *\n * @param {Array} arr\n * @return {Array}\n * @api private\n */\n\nexports.flatten = deprecate.function(flatten,\n  'utils.flatten: use array-flatten npm module instead');\n\n/**\n * Normalize the given `type`, for example \"html\" becomes \"text/html\".\n *\n * @param {String} type\n * @return {Object}\n * @api private\n */\n\nexports.normalizeType = function(type){ ... };\n\n/**\n * Normalize `types`, for example \"html\" becomes \"text/html\".\n *\n * @param {Array} types\n * @return {Array}\n * @api private\n */\n\nexports.normalizeTypes = function(types){ ... };\n\n/**\n * Generate Content-Disposition header appropriate for the filename.\n * non-ascii filenames are urlencoded and a filename* parameter is added\n *\n * @param {String} filename\n * @return {String}\n * @api private\n */\n\nexports.contentDisposition = deprecate.function(contentDisposition,\n  'utils.contentDisposition: use content-disposition npm module instead');\n\n/**\n * Parse accept params `str` returning an\n * object with `.value`, `.quality` and `.params`.\n *\n * @param {String} str\n * @return {Object}\n * @api private\n */\n\nfunction acceptParams (str) { ... }\n\n/**\n * Compile \"etag\" value to function.\n *\n * @param  {Boolean|String|Function} val\n * @return {Function}\n * @api private\n */\n\nexports.compileETag = function(val) { ... }\n\n/**\n * Compile \"query parser\" value to function.\n *\n * @param  {String|Function} val\n * @return {Function}\n * @api private\n */\n\nexports.compileQueryParser = function compileQueryParser(val) { ... }\n\n/**\n * Compile \"proxy trust\" value to function.\n *\n * @param  {Boolean|String|Number|Array|Function} val\n * @return {Function}\n * @api private\n */\n\nexports.compileTrust = function(val) { ... }\n\n/**\n * Set the charset in a given Content-Type string.\n *\n * @param {String} type\n * @param {String} charset\n * @return {String}\n * @api private\n */\n\nexports.setCharset = function setCharset(type, charset) { ... };\n\n/**\n * Create an ETag generator function, generating ETags with\n * the given options.\n *\n * @param {object} options\n * @return {function}\n * @private\n */\n\nfunction createETagGenerator (options) { ... }\n\n/**\n * Parse an extended query string with qs.\n *\n * @param {String} str\n * @return {Object}\n * @private\n */\n\nfunction parseExtendedQueryString(str) { ... }\n\n/**\n * Return new empty object.\n *\n * @return {Object}\n * @api private\n */\n\nfunction newObject() { ... }\n"
+}

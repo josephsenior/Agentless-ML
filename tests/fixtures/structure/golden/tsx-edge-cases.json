@@ -1,0 +1,69 @@
+{
+  "id": "tsx-edge-cases",
+  "language": "typescript",
+  "path": "src/edge_cases.tsx",
+  "source_sha256": "114ee93e313e1d25e08c0fa40d782c5da337378201bfc9b9db8e5204e69b1393",
+  "parse": {
+    "path": "src/edge_cases.tsx",
+    "language": "typescript",
+    "line_count": 25,
+    "symbols": [
+      {
+        "kind": "interface",
+        "name": "ButtonProps",
+        "qualified_name": "ButtonProps",
+        "signature": "export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>",
+        "start_line": 3,
+        "end_line": 5,
+        "children": [
+          {
+            "kind": "field",
+            "name": "variant",
+            "qualified_name": "ButtonProps.variant",
+            "signature": "variant?: 'primary' | 'ghost'",
+            "start_line": 4,
+            "end_line": 4,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "constant",
+        "name": "Button",
+        "qualified_name": "Button",
+        "signature": "Button = React.forwardRef<HTMLButtonElement, ButtonProps>(\n  ({ variant = 'primary', ...props }, ref) => <button ref={ref} data-variant={variant} {...props} />,\n)",
+        "start_line": 7,
+        "end_line": 9,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "List",
+        "qualified_name": "List",
+        "signature": "export function List<T>({ items }: { items: T[] })",
+        "start_line": 12,
+        "end_line": 14,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "Generic",
+        "qualified_name": "Generic",
+        "signature": "Generic = <T,>(props: { value: T }) =>",
+        "start_line": 16,
+        "end_line": 16,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "App",
+        "qualified_name": "App",
+        "signature": "export default function App()",
+        "start_line": 18,
+        "end_line": 25,
+        "children": []
+      }
+    ]
+  },
+  "skeleton": "import * as React from 'react';\n\nexport interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {\n  variant?: 'primary' | 'ghost';\n}\n\nexport const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(\n  ({ variant = 'primary', ...props }, ref) => ...,\n);\nButton.displayName = 'Button';\n\nexport function List<T>({ items }: { items: T[] }) { ... }\n\nconst Generic = <T,>(props: { value: T }) => ...;\n\nexport default function App() { ... }\n"
+}

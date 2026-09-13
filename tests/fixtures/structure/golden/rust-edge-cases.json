@@ -1,0 +1,310 @@
+{
+  "id": "rust-edge-cases",
+  "language": "rust",
+  "path": "src/edge_cases.rs",
+  "source_sha256": "b0b9f6f381f15b91258d861d6a8e5b75351cdac553eae175bb1b505cc3ee64b6",
+  "parse": {
+    "path": "src/edge_cases.rs",
+    "language": "rust",
+    "line_count": 90,
+    "symbols": [
+      {
+        "kind": "struct",
+        "name": "Point",
+        "qualified_name": "Point",
+        "signature": "#[derive(Debug, Clone)]\n// A plain comment between attributes.\n#[repr(C)]\npub struct Point",
+        "start_line": 8,
+        "end_line": 15,
+        "children": [
+          {
+            "kind": "field",
+            "name": "x",
+            "qualified_name": "Point::x",
+            "signature": "#[doc = \"x coordinate\"]\n    pub x: i32",
+            "start_line": 12,
+            "end_line": 13,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "y",
+            "qualified_name": "Point::y",
+            "signature": "pub y: i32",
+            "start_line": 14,
+            "end_line": 14,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "struct",
+        "name": "Tuple",
+        "qualified_name": "Tuple",
+        "signature": "pub struct Tuple",
+        "start_line": 17,
+        "end_line": 17,
+        "children": []
+      },
+      {
+        "kind": "enum",
+        "name": "Shape",
+        "qualified_name": "Shape",
+        "signature": "#[derive(Debug)]\npub enum Shape",
+        "start_line": 23,
+        "end_line": 29,
+        "children": [
+          {
+            "kind": "variant",
+            "name": "Circle",
+            "qualified_name": "Shape::Circle",
+            "signature": "Circle",
+            "start_line": 25,
+            "end_line": 25,
+            "children": []
+          },
+          {
+            "kind": "variant",
+            "name": "Square",
+            "qualified_name": "Shape::Square",
+            "signature": "#[allow(unused)]\n    Square",
+            "start_line": 26,
+            "end_line": 27,
+            "children": []
+          },
+          {
+            "kind": "variant",
+            "name": "Empty",
+            "qualified_name": "Shape::Empty",
+            "signature": "Empty",
+            "start_line": 28,
+            "end_line": 28,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "type",
+        "name": "Bits",
+        "qualified_name": "Bits",
+        "signature": "pub union Bits",
+        "start_line": 31,
+        "end_line": 34,
+        "children": [
+          {
+            "kind": "field",
+            "name": "int",
+            "qualified_name": "Bits::int",
+            "signature": "int: u32",
+            "start_line": 32,
+            "end_line": 32,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "float",
+            "qualified_name": "Bits::float",
+            "signature": "float: f32",
+            "start_line": 33,
+            "end_line": 33,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "trait",
+        "name": "Area",
+        "qualified_name": "Area",
+        "signature": "pub trait Area",
+        "start_line": 36,
+        "end_line": 43,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Output",
+            "qualified_name": "Area::Output",
+            "signature": "type Output;",
+            "start_line": 37,
+            "end_line": 37,
+            "children": []
+          },
+          {
+            "kind": "constant",
+            "name": "SIDES",
+            "qualified_name": "Area::SIDES",
+            "signature": "const SIDES: usize;",
+            "start_line": 38,
+            "end_line": 38,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "area",
+            "qualified_name": "Area::area",
+            "signature": "fn area(&self) -> f64;",
+            "start_line": 39,
+            "end_line": 39,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "describe",
+            "qualified_name": "Area::describe",
+            "signature": "fn describe(&self) -> String",
+            "start_line": 40,
+            "end_line": 42,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<Shape as Area>",
+        "qualified_name": "<Shape as Area>",
+        "signature": "impl Area for Shape",
+        "start_line": 45,
+        "end_line": 56,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Output",
+            "qualified_name": "<Shape as Area>::Output",
+            "signature": "type Output = f64;",
+            "start_line": 46,
+            "end_line": 46,
+            "children": []
+          },
+          {
+            "kind": "constant",
+            "name": "SIDES",
+            "qualified_name": "<Shape as Area>::SIDES",
+            "signature": "const SIDES: usize = 0;",
+            "start_line": 47,
+            "end_line": 47,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "area",
+            "qualified_name": "<Shape as Area>::area",
+            "signature": "#[inline]\n    fn area(&self) -> f64",
+            "start_line": 48,
+            "end_line": 55,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<Wrapper<T> as fmt::Display>",
+        "qualified_name": "<Wrapper<T> as fmt::Display>",
+        "signature": "impl<T: fmt::Debug> fmt::Display for Wrapper<T>",
+        "start_line": 58,
+        "end_line": 62,
+        "children": [
+          {
+            "kind": "method",
+            "name": "fmt",
+            "qualified_name": "<Wrapper<T> as fmt::Display>::fmt",
+            "signature": "fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result",
+            "start_line": 59,
+            "end_line": 61,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "struct",
+        "name": "Wrapper",
+        "qualified_name": "Wrapper",
+        "signature": "pub struct Wrapper<T>",
+        "start_line": 64,
+        "end_line": 64,
+        "children": []
+      },
+      {
+        "kind": "module",
+        "name": "nested",
+        "qualified_name": "nested",
+        "signature": "pub mod nested",
+        "start_line": 66,
+        "end_line": 75,
+        "children": [
+          {
+            "kind": "module",
+            "name": "inner",
+            "qualified_name": "nested::inner",
+            "signature": "pub mod inner",
+            "start_line": 67,
+            "end_line": 70,
+            "children": [
+              {
+                "kind": "function",
+                "name": "deep",
+                "qualified_name": "nested::inner::deep",
+                "signature": "pub fn deep() -> u8",
+                "start_line": 68,
+                "end_line": 68,
+                "children": []
+              },
+              {
+                "kind": "variable",
+                "name": "COUNTER",
+                "qualified_name": "nested::inner::COUNTER",
+                "signature": "pub static COUNTER: u8 = 0;",
+                "start_line": 69,
+                "end_line": 69,
+                "children": []
+              }
+            ]
+          },
+          {
+            "kind": "type",
+            "name": "Alias",
+            "qualified_name": "nested::Alias",
+            "signature": "pub type Alias = u32;",
+            "start_line": 71,
+            "end_line": 71,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "name": "square",
+        "qualified_name": "square",
+        "signature": "const fn square(x: u32) -> u32",
+        "start_line": 81,
+        "end_line": 81,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "danger",
+        "qualified_name": "danger",
+        "signature": "unsafe fn danger()",
+        "start_line": 83,
+        "end_line": 83,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "fetch",
+        "qualified_name": "fetch",
+        "signature": "async fn fetch() -> u8",
+        "start_line": 85,
+        "end_line": 85,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "outer",
+        "qualified_name": "outer",
+        "signature": "fn outer()",
+        "start_line": 87,
+        "end_line": 90,
+        "children": []
+      }
+    ]
+  },
+  "skeleton": "#![allow(dead_code)]\n\n//! Crate-level documentation.\n\nuse std::fmt;\n\n/// An outer doc comment is a line_comment and must not reset attributes.\n#[derive(Debug, Clone)]\n// A plain comment between attributes.\n#[repr(C)]\npub struct Point {\n    #[doc = \"x coordinate\"]\n    pub x: i32,\n    pub y: i32,\n}\n\npub struct Tuple(i32, i32);\n\n// An attribute followed by a non-symbol resets the pending attribute run.\n#[cfg(test)]\nuse std::collections::HashMap;\n\n#[derive(Debug)]\npub enum Shape {\n    Circle { radius: f64 },\n    #[allow(unused)]\n    Square(f64),\n    Empty,\n}\n\npub union Bits {\n    int: u32,\n    float: f32,\n}\n\npub trait Area {\n    type Output;\n    const SIDES: usize;\n    fn area(&self) -> f64;\n    fn describe(&self) -> String { ... }\n}\n\nimpl Area for Shape {\n    type Output = f64;\n    const SIDES: usize = 0;\n    #[inline]\n    fn area(&self) -> f64 { ... }\n}\n\nimpl<T: fmt::Debug> fmt::Display for Wrapper<T> {\n    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result { ... }\n}\n\npub struct Wrapper<T>(T);\n\npub mod nested {\n    pub mod inner {\n        pub fn deep() -> u8 { ... }\n        pub static COUNTER: u8 = 0;\n    }\n    pub type Alias = u32;\n    macro_rules! noop {\n        () => {};\n    }\n}\n\nextern \"C\" {\n    fn abs(x: i32) -> i32;\n}\n\nconst fn square(x: u32) -> u32 { ... }\n\nunsafe fn danger() { ... }\n\nasync fn fetch() -> u8 { ... }\n\nfn outer() { ... }\n"
+}

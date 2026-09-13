@@ -1,0 +1,18 @@
+{
+  "id": "rust-syntax-error",
+  "language": "rust",
+  "path": "lib.rs",
+  "source_sha256": "cdfb6929e7c395b73c03414e1e440cdd98a1dad4b6d9da55d069594ab6048847",
+  "parse": {
+    "error": {
+      "type": "ValueError",
+      "message": "Rust source contains a syntax error or missing token in lib.rs"
+    }
+  },
+  "skeleton": {
+    "error": {
+      "type": "ValueError",
+      "message": "Rust source contains a syntax error or missing token in lib.rs"
+    }
+  }
+}

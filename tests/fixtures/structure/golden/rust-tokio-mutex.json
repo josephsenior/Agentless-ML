@@ -1,0 +1,1186 @@
+{
+  "id": "rust-tokio-mutex",
+  "language": "rust",
+  "path": "tokio/src/sync/mutex.rs",
+  "source_sha256": "ec8b6ac54e1f788b2dc0e1d073366595723f004782fcf5043372f6cba16f8b7e",
+  "parse": {
+    "path": "tokio/src/sync/mutex.rs",
+    "language": "rust",
+    "line_count": 1395,
+    "symbols": [
+      {
+        "kind": "struct",
+        "name": "Mutex",
+        "qualified_name": "Mutex",
+        "signature": "pub struct Mutex<T: ?Sized>",
+        "start_line": 133,
+        "end_line": 138,
+        "children": [
+          {
+            "kind": "field",
+            "name": "resource_span",
+            "qualified_name": "Mutex::resource_span",
+            "signature": "#[cfg(all(tokio_unstable, feature = \"tracing\"))]\n    resource_span: tracing::Span",
+            "start_line": 134,
+            "end_line": 135,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "s",
+            "qualified_name": "Mutex::s",
+            "signature": "s: semaphore::Semaphore",
+            "start_line": 136,
+            "end_line": 136,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "c",
+            "qualified_name": "Mutex::c",
+            "signature": "c: UnsafeCell<T>",
+            "start_line": 137,
+            "end_line": 137,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "struct",
+        "name": "MutexGuard",
+        "qualified_name": "MutexGuard",
+        "signature": "#[clippy::has_significant_drop]\n#[must_use = \"if unused the Mutex will immediately unlock\"]\npub struct MutexGuard<'a, T: ?Sized>",
+        "start_line": 149,
+        "end_line": 157,
+        "children": [
+          {
+            "kind": "field",
+            "name": "resource_span",
+            "qualified_name": "MutexGuard::resource_span",
+            "signature": "#[cfg(all(tokio_unstable, feature = \"tracing\"))]\n    resource_span: tracing::Span",
+            "start_line": 154,
+            "end_line": 155,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "lock",
+            "qualified_name": "MutexGuard::lock",
+            "signature": "lock: &'a Mutex<T>",
+            "start_line": 156,
+            "end_line": 156,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "struct",
+        "name": "OwnedMutexGuard",
+        "qualified_name": "OwnedMutexGuard",
+        "signature": "#[clippy::has_significant_drop]\npub struct OwnedMutexGuard<T: ?Sized>",
+        "start_line": 174,
+        "end_line": 181,
+        "children": [
+          {
+            "kind": "field",
+            "name": "resource_span",
+            "qualified_name": "OwnedMutexGuard::resource_span",
+            "signature": "#[cfg(all(tokio_unstable, feature = \"tracing\"))]\n    resource_span: tracing::Span",
+            "start_line": 178,
+            "end_line": 179,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "lock",
+            "qualified_name": "OwnedMutexGuard::lock",
+            "signature": "lock: Arc<Mutex<T>>",
+            "start_line": 180,
+            "end_line": 180,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "struct",
+        "name": "MappedMutexGuard",
+        "qualified_name": "MappedMutexGuard",
+        "signature": "#[clippy::has_significant_drop]\n#[must_use = \"if unused the Mutex will immediately unlock\"]\npub struct MappedMutexGuard<'a, T: ?Sized>",
+        "start_line": 188,
+        "end_line": 199,
+        "children": [
+          {
+            "kind": "field",
+            "name": "resource_span",
+            "qualified_name": "MappedMutexGuard::resource_span",
+            "signature": "#[cfg(all(tokio_unstable, feature = \"tracing\"))]\n    resource_span: tracing::Span",
+            "start_line": 193,
+            "end_line": 194,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "s",
+            "qualified_name": "MappedMutexGuard::s",
+            "signature": "s: &'a semaphore::Semaphore",
+            "start_line": 195,
+            "end_line": 195,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "data",
+            "qualified_name": "MappedMutexGuard::data",
+            "signature": "data: *mut T",
+            "start_line": 196,
+            "end_line": 196,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "marker",
+            "qualified_name": "MappedMutexGuard::marker",
+            "signature": "marker: PhantomData<&'a mut T>",
+            "start_line": 198,
+            "end_line": 198,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "struct",
+        "name": "OwnedMappedMutexGuard",
+        "qualified_name": "OwnedMappedMutexGuard",
+        "signature": "#[clippy::has_significant_drop]\n#[must_use = \"if unused the Mutex will immediately unlock\"]\npub struct OwnedMappedMutexGuard<T: ?Sized, U: ?Sized = T>",
+        "start_line": 207,
+        "end_line": 216,
+        "children": [
+          {
+            "kind": "field",
+            "name": "resource_span",
+            "qualified_name": "OwnedMappedMutexGuard::resource_span",
+            "signature": "#[cfg(all(tokio_unstable, feature = \"tracing\"))]\n    resource_span: tracing::Span",
+            "start_line": 212,
+            "end_line": 213,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "data",
+            "qualified_name": "OwnedMappedMutexGuard::data",
+            "signature": "data: *mut U",
+            "start_line": 214,
+            "end_line": 214,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "lock",
+            "qualified_name": "OwnedMappedMutexGuard::lock",
+            "signature": "lock: Arc<Mutex<T>>",
+            "start_line": 215,
+            "end_line": 215,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "struct",
+        "name": "MutexGuardInner",
+        "qualified_name": "MutexGuardInner",
+        "signature": "#[allow(dead_code)] // Unused fields are still used in Drop.\nstruct MutexGuardInner<'a, T: ?Sized>",
+        "start_line": 220,
+        "end_line": 225,
+        "children": [
+          {
+            "kind": "field",
+            "name": "resource_span",
+            "qualified_name": "MutexGuardInner::resource_span",
+            "signature": "#[cfg(all(tokio_unstable, feature = \"tracing\"))]\n    resource_span: tracing::Span",
+            "start_line": 222,
+            "end_line": 223,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "lock",
+            "qualified_name": "MutexGuardInner::lock",
+            "signature": "lock: &'a Mutex<T>",
+            "start_line": 224,
+            "end_line": 224,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "struct",
+        "name": "OwnedMutexGuardInner",
+        "qualified_name": "OwnedMutexGuardInner",
+        "signature": "struct OwnedMutexGuardInner<T: ?Sized>",
+        "start_line": 229,
+        "end_line": 233,
+        "children": [
+          {
+            "kind": "field",
+            "name": "resource_span",
+            "qualified_name": "OwnedMutexGuardInner::resource_span",
+            "signature": "#[cfg(all(tokio_unstable, feature = \"tracing\"))]\n    resource_span: tracing::Span",
+            "start_line": 230,
+            "end_line": 231,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "lock",
+            "qualified_name": "OwnedMutexGuardInner::lock",
+            "signature": "lock: Arc<Mutex<T>>",
+            "start_line": 232,
+            "end_line": 232,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "struct",
+        "name": "MappedMutexGuardInner",
+        "qualified_name": "MappedMutexGuardInner",
+        "signature": "#[allow(dead_code)] // Unused fields are still used in Drop.\nstruct MappedMutexGuardInner<'a, T: ?Sized>",
+        "start_line": 237,
+        "end_line": 243,
+        "children": [
+          {
+            "kind": "field",
+            "name": "resource_span",
+            "qualified_name": "MappedMutexGuardInner::resource_span",
+            "signature": "#[cfg(all(tokio_unstable, feature = \"tracing\"))]\n    resource_span: tracing::Span",
+            "start_line": 239,
+            "end_line": 240,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "s",
+            "qualified_name": "MappedMutexGuardInner::s",
+            "signature": "s: &'a semaphore::Semaphore",
+            "start_line": 241,
+            "end_line": 241,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "data",
+            "qualified_name": "MappedMutexGuardInner::data",
+            "signature": "data: *mut T",
+            "start_line": 242,
+            "end_line": 242,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "struct",
+        "name": "OwnedMappedMutexGuardInner",
+        "qualified_name": "OwnedMappedMutexGuardInner",
+        "signature": "#[allow(dead_code)] // Unused fields are still used in Drop.\nstruct OwnedMappedMutexGuardInner<T: ?Sized, U: ?Sized>",
+        "start_line": 247,
+        "end_line": 253,
+        "children": [
+          {
+            "kind": "field",
+            "name": "resource_span",
+            "qualified_name": "OwnedMappedMutexGuardInner::resource_span",
+            "signature": "#[cfg(all(tokio_unstable, feature = \"tracing\"))]\n    resource_span: tracing::Span",
+            "start_line": 249,
+            "end_line": 250,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "data",
+            "qualified_name": "OwnedMappedMutexGuardInner::data",
+            "signature": "data: *mut U",
+            "start_line": 251,
+            "end_line": 251,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "lock",
+            "qualified_name": "OwnedMappedMutexGuardInner::lock",
+            "signature": "lock: Arc<Mutex<T>>",
+            "start_line": 252,
+            "end_line": 252,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<Mutex<T> as Send>",
+        "qualified_name": "<Mutex<T> as Send>",
+        "signature": "unsafe impl<T> Send for Mutex<T> where T: ?Sized + Send",
+        "start_line": 258,
+        "end_line": 258,
+        "children": []
+      },
+      {
+        "kind": "impl",
+        "name": "<Mutex<T> as Sync>",
+        "qualified_name": "<Mutex<T> as Sync>",
+        "signature": "unsafe impl<T> Sync for Mutex<T> where T: ?Sized + Send",
+        "start_line": 259,
+        "end_line": 259,
+        "children": []
+      },
+      {
+        "kind": "impl",
+        "name": "<MutexGuard<'_, T> as Sync>",
+        "qualified_name": "<MutexGuard<'_, T> as Sync>",
+        "signature": "unsafe impl<T> Sync for MutexGuard<'_, T> where T: ?Sized + Send + Sync",
+        "start_line": 260,
+        "end_line": 260,
+        "children": []
+      },
+      {
+        "kind": "impl",
+        "name": "<OwnedMutexGuard<T> as Sync>",
+        "qualified_name": "<OwnedMutexGuard<T> as Sync>",
+        "signature": "unsafe impl<T> Sync for OwnedMutexGuard<T> where T: ?Sized + Send + Sync",
+        "start_line": 261,
+        "end_line": 261,
+        "children": []
+      },
+      {
+        "kind": "impl",
+        "name": "<MappedMutexGuard<'a, T> as Sync>",
+        "qualified_name": "<MappedMutexGuard<'a, T> as Sync>",
+        "signature": "unsafe impl<'a, T> Sync for MappedMutexGuard<'a, T> where T: ?Sized + Sync + 'a",
+        "start_line": 262,
+        "end_line": 262,
+        "children": []
+      },
+      {
+        "kind": "impl",
+        "name": "<MappedMutexGuard<'a, T> as Send>",
+        "qualified_name": "<MappedMutexGuard<'a, T> as Send>",
+        "signature": "unsafe impl<'a, T> Send for MappedMutexGuard<'a, T> where T: ?Sized + Send + 'a",
+        "start_line": 263,
+        "end_line": 263,
+        "children": []
+      },
+      {
+        "kind": "impl",
+        "name": "<OwnedMappedMutexGuard<T, U> as Sync>",
+        "qualified_name": "<OwnedMappedMutexGuard<T, U> as Sync>",
+        "signature": "unsafe impl<T, U> Sync for OwnedMappedMutexGuard<T, U>\nwhere\n    T: ?Sized + Send + Sync,\n    U: ?Sized + Send + Sync,",
+        "start_line": 265,
+        "end_line": 270,
+        "children": []
+      },
+      {
+        "kind": "impl",
+        "name": "<OwnedMappedMutexGuard<T, U> as Send>",
+        "qualified_name": "<OwnedMappedMutexGuard<T, U> as Send>",
+        "signature": "unsafe impl<T, U> Send for OwnedMappedMutexGuard<T, U>\nwhere\n    T: ?Sized + Send,\n    U: ?Sized + Send,",
+        "start_line": 271,
+        "end_line": 276,
+        "children": []
+      },
+      {
+        "kind": "struct",
+        "name": "TryLockError",
+        "qualified_name": "TryLockError",
+        "signature": "#[derive(Debug)]\npub struct TryLockError",
+        "start_line": 292,
+        "end_line": 293,
+        "children": []
+      },
+      {
+        "kind": "impl",
+        "name": "<TryLockError as fmt::Display>",
+        "qualified_name": "<TryLockError as fmt::Display>",
+        "signature": "impl fmt::Display for TryLockError",
+        "start_line": 295,
+        "end_line": 299,
+        "children": [
+          {
+            "kind": "method",
+            "name": "fmt",
+            "qualified_name": "<TryLockError as fmt::Display>::fmt",
+            "signature": "fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result",
+            "start_line": 296,
+            "end_line": 298,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<TryLockError as Error>",
+        "qualified_name": "<TryLockError as Error>",
+        "signature": "impl Error for TryLockError",
+        "start_line": 301,
+        "end_line": 301,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "bounds",
+        "qualified_name": "bounds",
+        "signature": "#[test]\n#[cfg(not(loom))]\nfn bounds()",
+        "start_line": 303,
+        "end_line": 325,
+        "children": []
+      },
+      {
+        "kind": "impl",
+        "name": "Mutex<T>",
+        "qualified_name": "Mutex<T>",
+        "signature": "impl<T: ?Sized> Mutex<T>",
+        "start_line": 327,
+        "end_line": 792,
+        "children": [
+          {
+            "kind": "method",
+            "name": "new",
+            "qualified_name": "Mutex<T>::new",
+            "signature": "#[track_caller]\n    pub fn new(t: T) -> Self\n    where\n        T: Sized,",
+            "start_line": 337,
+            "end_line": 375,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "const_new",
+            "qualified_name": "Mutex<T>::const_new",
+            "signature": "#[cfg(not(all(loom, test)))]\n    pub const fn const_new(t: T) -> Self\n    where\n        T: Sized,",
+            "start_line": 394,
+            "end_line": 405,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "lock",
+            "qualified_name": "Mutex<T>::lock",
+            "signature": "pub async fn lock(&self) -> MutexGuard<'_, T>",
+            "start_line": 434,
+            "end_line": 466,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "blocking_lock",
+            "qualified_name": "Mutex<T>::blocking_lock",
+            "signature": "#[track_caller]\n    #[cfg(feature = \"sync\")]\n    #[cfg_attr(docsrs, doc(alias = \"lock_blocking\"))]\n    pub fn blocking_lock(&self) -> MutexGuard<'_, T>",
+            "start_line": 515,
+            "end_line": 520,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "blocking_lock_owned",
+            "qualified_name": "Mutex<T>::blocking_lock_owned",
+            "signature": "#[track_caller]\n    #[cfg(feature = \"sync\")]\n    pub fn blocking_lock_owned(self: Arc<Self>) -> OwnedMutexGuard<T>",
+            "start_line": 572,
+            "end_line": 576,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "lock_owned",
+            "qualified_name": "Mutex<T>::lock_owned",
+            "signature": "pub async fn lock_owned(self: Arc<Self>) -> OwnedMutexGuard<T>",
+            "start_line": 614,
+            "end_line": 649,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "acquire",
+            "qualified_name": "Mutex<T>::acquire",
+            "signature": "async fn acquire(&self)",
+            "start_line": 651,
+            "end_line": 659,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "try_lock",
+            "qualified_name": "Mutex<T>::try_lock",
+            "signature": "pub fn try_lock(&self) -> Result<MutexGuard<'_, T>, TryLockError>",
+            "start_line": 678,
+            "end_line": 699,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "get_mut",
+            "qualified_name": "Mutex<T>::get_mut",
+            "signature": "pub fn get_mut(&mut self) -> &mut T",
+            "start_line": 718,
+            "end_line": 723,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "try_lock_owned",
+            "qualified_name": "Mutex<T>::try_lock_owned",
+            "signature": "pub fn try_lock_owned(self: Arc<Self>) -> Result<OwnedMutexGuard<T>, TryLockError>",
+            "start_line": 749,
+            "end_line": 770,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "into_inner",
+            "qualified_name": "Mutex<T>::into_inner",
+            "signature": "pub fn into_inner(self) -> T\n    where\n        T: Sized,",
+            "start_line": 786,
+            "end_line": 791,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<Mutex<T> as From<T>>",
+        "qualified_name": "<Mutex<T> as From<T>>",
+        "signature": "impl<T> From<T> for Mutex<T>",
+        "start_line": 794,
+        "end_line": 798,
+        "children": [
+          {
+            "kind": "method",
+            "name": "from",
+            "qualified_name": "<Mutex<T> as From<T>>::from",
+            "signature": "fn from(s: T) -> Self",
+            "start_line": 795,
+            "end_line": 797,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<Mutex<T> as Default>",
+        "qualified_name": "<Mutex<T> as Default>",
+        "signature": "impl<T> Default for Mutex<T>\nwhere\n    T: Default,",
+        "start_line": 800,
+        "end_line": 807,
+        "children": [
+          {
+            "kind": "method",
+            "name": "default",
+            "qualified_name": "<Mutex<T> as Default>::default",
+            "signature": "fn default() -> Self",
+            "start_line": 804,
+            "end_line": 806,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<Mutex<T> as std::fmt::Debug>",
+        "qualified_name": "<Mutex<T> as std::fmt::Debug>",
+        "signature": "impl<T: ?Sized> std::fmt::Debug for Mutex<T>\nwhere\n    T: std::fmt::Debug,",
+        "start_line": 809,
+        "end_line": 821,
+        "children": [
+          {
+            "kind": "method",
+            "name": "fmt",
+            "qualified_name": "<Mutex<T> as std::fmt::Debug>::fmt",
+            "signature": "fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result",
+            "start_line": 813,
+            "end_line": 820,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "MutexGuard<'a, T>",
+        "qualified_name": "MutexGuard<'a, T>",
+        "signature": "impl<'a, T: ?Sized> MutexGuard<'a, T>",
+        "start_line": 825,
+        "end_line": 961,
+        "children": [
+          {
+            "kind": "method",
+            "name": "skip_drop",
+            "qualified_name": "MutexGuard<'a, T>::skip_drop",
+            "signature": "fn skip_drop(self) -> MutexGuardInner<'a, T>",
+            "start_line": 826,
+            "end_line": 835,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "map",
+            "qualified_name": "MutexGuard<'a, T>::map",
+            "signature": "#[inline]\n    pub fn map<U, F>(mut this: Self, f: F) -> MappedMutexGuard<'a, U>\n    where\n        U: ?Sized,\n        F: FnOnce(&mut T) -> &mut U,",
+            "start_line": 867,
+            "end_line": 882,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "try_map",
+            "qualified_name": "MutexGuard<'a, T>::try_map",
+            "signature": "#[inline]\n    pub fn try_map<U, F>(mut this: Self, f: F) -> Result<MappedMutexGuard<'a, U>, Self>\n    where\n        U: ?Sized,\n        F: FnOnce(&mut T) -> Option<&mut U>,",
+            "start_line": 916,
+            "end_line": 934,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "mutex",
+            "qualified_name": "MutexGuard<'a, T>::mutex",
+            "signature": "#[inline]\n    pub fn mutex(this: &Self) -> &'a Mutex<T>",
+            "start_line": 957,
+            "end_line": 960,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<MutexGuard<'_, T> as Drop>",
+        "qualified_name": "<MutexGuard<'_, T> as Drop>",
+        "signature": "impl<T: ?Sized> Drop for MutexGuard<'_, T>",
+        "start_line": 963,
+        "end_line": 975,
+        "children": [
+          {
+            "kind": "method",
+            "name": "drop",
+            "qualified_name": "<MutexGuard<'_, T> as Drop>::drop",
+            "signature": "fn drop(&mut self)",
+            "start_line": 964,
+            "end_line": 974,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<MutexGuard<'_, T> as Deref>",
+        "qualified_name": "<MutexGuard<'_, T> as Deref>",
+        "signature": "impl<T: ?Sized> Deref for MutexGuard<'_, T>",
+        "start_line": 977,
+        "end_line": 982,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Target",
+            "qualified_name": "<MutexGuard<'_, T> as Deref>::Target",
+            "signature": "type Target = T;",
+            "start_line": 978,
+            "end_line": 978,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "deref",
+            "qualified_name": "<MutexGuard<'_, T> as Deref>::deref",
+            "signature": "fn deref(&self) -> &Self::Target",
+            "start_line": 979,
+            "end_line": 981,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<MutexGuard<'_, T> as DerefMut>",
+        "qualified_name": "<MutexGuard<'_, T> as DerefMut>",
+        "signature": "impl<T: ?Sized> DerefMut for MutexGuard<'_, T>",
+        "start_line": 984,
+        "end_line": 988,
+        "children": [
+          {
+            "kind": "method",
+            "name": "deref_mut",
+            "qualified_name": "<MutexGuard<'_, T> as DerefMut>::deref_mut",
+            "signature": "fn deref_mut(&mut self) -> &mut Self::Target",
+            "start_line": 985,
+            "end_line": 987,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<MutexGuard<'_, T> as fmt::Debug>",
+        "qualified_name": "<MutexGuard<'_, T> as fmt::Debug>",
+        "signature": "impl<T: ?Sized + fmt::Debug> fmt::Debug for MutexGuard<'_, T>",
+        "start_line": 990,
+        "end_line": 994,
+        "children": [
+          {
+            "kind": "method",
+            "name": "fmt",
+            "qualified_name": "<MutexGuard<'_, T> as fmt::Debug>::fmt",
+            "signature": "fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result",
+            "start_line": 991,
+            "end_line": 993,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<MutexGuard<'_, T> as fmt::Display>",
+        "qualified_name": "<MutexGuard<'_, T> as fmt::Display>",
+        "signature": "impl<T: ?Sized + fmt::Display> fmt::Display for MutexGuard<'_, T>",
+        "start_line": 996,
+        "end_line": 1000,
+        "children": [
+          {
+            "kind": "method",
+            "name": "fmt",
+            "qualified_name": "<MutexGuard<'_, T> as fmt::Display>::fmt",
+            "signature": "fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result",
+            "start_line": 997,
+            "end_line": 999,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "OwnedMutexGuard<T>",
+        "qualified_name": "OwnedMutexGuard<T>",
+        "signature": "impl<T: ?Sized> OwnedMutexGuard<T>",
+        "start_line": 1004,
+        "end_line": 1143,
+        "children": [
+          {
+            "kind": "method",
+            "name": "skip_drop",
+            "qualified_name": "OwnedMutexGuard<T>::skip_drop",
+            "signature": "fn skip_drop(self) -> OwnedMutexGuardInner<T>",
+            "start_line": 1005,
+            "end_line": 1016,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "map",
+            "qualified_name": "OwnedMutexGuard<T>::map",
+            "signature": "#[inline]\n    pub fn map<U, F>(mut this: Self, f: F) -> OwnedMappedMutexGuard<T, U>\n    where\n        U: ?Sized,\n        F: FnOnce(&mut T) -> &mut U,",
+            "start_line": 1049,
+            "end_line": 1063,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "try_map",
+            "qualified_name": "OwnedMutexGuard<T>::try_map",
+            "signature": "#[inline]\n    pub fn try_map<U, F>(mut this: Self, f: F) -> Result<OwnedMappedMutexGuard<T, U>, Self>\n    where\n        U: ?Sized,\n        F: FnOnce(&mut T) -> Option<&mut U>,",
+            "start_line": 1098,
+            "end_line": 1115,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "mutex",
+            "qualified_name": "OwnedMutexGuard<T>::mutex",
+            "signature": "#[inline]\n    pub fn mutex(this: &Self) -> &Arc<Mutex<T>>",
+            "start_line": 1139,
+            "end_line": 1142,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<OwnedMutexGuard<T> as Drop>",
+        "qualified_name": "<OwnedMutexGuard<T> as Drop>",
+        "signature": "impl<T: ?Sized> Drop for OwnedMutexGuard<T>",
+        "start_line": 1145,
+        "end_line": 1157,
+        "children": [
+          {
+            "kind": "method",
+            "name": "drop",
+            "qualified_name": "<OwnedMutexGuard<T> as Drop>::drop",
+            "signature": "fn drop(&mut self)",
+            "start_line": 1146,
+            "end_line": 1156,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<OwnedMutexGuard<T> as Deref>",
+        "qualified_name": "<OwnedMutexGuard<T> as Deref>",
+        "signature": "impl<T: ?Sized> Deref for OwnedMutexGuard<T>",
+        "start_line": 1159,
+        "end_line": 1164,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Target",
+            "qualified_name": "<OwnedMutexGuard<T> as Deref>::Target",
+            "signature": "type Target = T;",
+            "start_line": 1160,
+            "end_line": 1160,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "deref",
+            "qualified_name": "<OwnedMutexGuard<T> as Deref>::deref",
+            "signature": "fn deref(&self) -> &Self::Target",
+            "start_line": 1161,
+            "end_line": 1163,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<OwnedMutexGuard<T> as DerefMut>",
+        "qualified_name": "<OwnedMutexGuard<T> as DerefMut>",
+        "signature": "impl<T: ?Sized> DerefMut for OwnedMutexGuard<T>",
+        "start_line": 1166,
+        "end_line": 1170,
+        "children": [
+          {
+            "kind": "method",
+            "name": "deref_mut",
+            "qualified_name": "<OwnedMutexGuard<T> as DerefMut>::deref_mut",
+            "signature": "fn deref_mut(&mut self) -> &mut Self::Target",
+            "start_line": 1167,
+            "end_line": 1169,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<OwnedMutexGuard<T> as fmt::Debug>",
+        "qualified_name": "<OwnedMutexGuard<T> as fmt::Debug>",
+        "signature": "impl<T: ?Sized + fmt::Debug> fmt::Debug for OwnedMutexGuard<T>",
+        "start_line": 1172,
+        "end_line": 1176,
+        "children": [
+          {
+            "kind": "method",
+            "name": "fmt",
+            "qualified_name": "<OwnedMutexGuard<T> as fmt::Debug>::fmt",
+            "signature": "fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result",
+            "start_line": 1173,
+            "end_line": 1175,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<OwnedMutexGuard<T> as fmt::Display>",
+        "qualified_name": "<OwnedMutexGuard<T> as fmt::Display>",
+        "signature": "impl<T: ?Sized + fmt::Display> fmt::Display for OwnedMutexGuard<T>",
+        "start_line": 1178,
+        "end_line": 1182,
+        "children": [
+          {
+            "kind": "method",
+            "name": "fmt",
+            "qualified_name": "<OwnedMutexGuard<T> as fmt::Display>::fmt",
+            "signature": "fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result",
+            "start_line": 1179,
+            "end_line": 1181,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "MappedMutexGuard<'a, T>",
+        "qualified_name": "MappedMutexGuard<'a, T>",
+        "signature": "impl<'a, T: ?Sized> MappedMutexGuard<'a, T>",
+        "start_line": 1186,
+        "end_line": 1248,
+        "children": [
+          {
+            "kind": "method",
+            "name": "skip_drop",
+            "qualified_name": "MappedMutexGuard<'a, T>::skip_drop",
+            "signature": "fn skip_drop(self) -> MappedMutexGuardInner<'a, T>",
+            "start_line": 1187,
+            "end_line": 1195,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "map",
+            "qualified_name": "MappedMutexGuard<'a, T>::map",
+            "signature": "#[inline]\n    pub fn map<U, F>(mut this: Self, f: F) -> MappedMutexGuard<'a, U>\n    where\n        F: FnOnce(&mut T) -> &mut U,",
+            "start_line": 1205,
+            "end_line": 1219,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "try_map",
+            "qualified_name": "MappedMutexGuard<'a, T>::try_map",
+            "signature": "#[inline]\n    pub fn try_map<U, F>(mut this: Self, f: F) -> Result<MappedMutexGuard<'a, U>, Self>\n    where\n        F: FnOnce(&mut T) -> Option<&mut U>,",
+            "start_line": 1230,
+            "end_line": 1247,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<MappedMutexGuard<'a, T> as Drop>",
+        "qualified_name": "<MappedMutexGuard<'a, T> as Drop>",
+        "signature": "impl<'a, T: ?Sized> Drop for MappedMutexGuard<'a, T>",
+        "start_line": 1250,
+        "end_line": 1262,
+        "children": [
+          {
+            "kind": "method",
+            "name": "drop",
+            "qualified_name": "<MappedMutexGuard<'a, T> as Drop>::drop",
+            "signature": "fn drop(&mut self)",
+            "start_line": 1251,
+            "end_line": 1261,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<MappedMutexGuard<'a, T> as Deref>",
+        "qualified_name": "<MappedMutexGuard<'a, T> as Deref>",
+        "signature": "impl<'a, T: ?Sized> Deref for MappedMutexGuard<'a, T>",
+        "start_line": 1264,
+        "end_line": 1269,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Target",
+            "qualified_name": "<MappedMutexGuard<'a, T> as Deref>::Target",
+            "signature": "type Target = T;",
+            "start_line": 1265,
+            "end_line": 1265,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "deref",
+            "qualified_name": "<MappedMutexGuard<'a, T> as Deref>::deref",
+            "signature": "fn deref(&self) -> &Self::Target",
+            "start_line": 1266,
+            "end_line": 1268,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<MappedMutexGuard<'a, T> as DerefMut>",
+        "qualified_name": "<MappedMutexGuard<'a, T> as DerefMut>",
+        "signature": "impl<'a, T: ?Sized> DerefMut for MappedMutexGuard<'a, T>",
+        "start_line": 1271,
+        "end_line": 1275,
+        "children": [
+          {
+            "kind": "method",
+            "name": "deref_mut",
+            "qualified_name": "<MappedMutexGuard<'a, T> as DerefMut>::deref_mut",
+            "signature": "fn deref_mut(&mut self) -> &mut Self::Target",
+            "start_line": 1272,
+            "end_line": 1274,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<MappedMutexGuard<'a, T> as fmt::Debug>",
+        "qualified_name": "<MappedMutexGuard<'a, T> as fmt::Debug>",
+        "signature": "impl<'a, T: ?Sized + fmt::Debug> fmt::Debug for MappedMutexGuard<'a, T>",
+        "start_line": 1277,
+        "end_line": 1281,
+        "children": [
+          {
+            "kind": "method",
+            "name": "fmt",
+            "qualified_name": "<MappedMutexGuard<'a, T> as fmt::Debug>::fmt",
+            "signature": "fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result",
+            "start_line": 1278,
+            "end_line": 1280,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<MappedMutexGuard<'a, T> as fmt::Display>",
+        "qualified_name": "<MappedMutexGuard<'a, T> as fmt::Display>",
+        "signature": "impl<'a, T: ?Sized + fmt::Display> fmt::Display for MappedMutexGuard<'a, T>",
+        "start_line": 1283,
+        "end_line": 1287,
+        "children": [
+          {
+            "kind": "method",
+            "name": "fmt",
+            "qualified_name": "<MappedMutexGuard<'a, T> as fmt::Display>::fmt",
+            "signature": "fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result",
+            "start_line": 1284,
+            "end_line": 1286,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "OwnedMappedMutexGuard<T, U>",
+        "qualified_name": "OwnedMappedMutexGuard<T, U>",
+        "signature": "impl<T: ?Sized, U: ?Sized> OwnedMappedMutexGuard<T, U>",
+        "start_line": 1291,
+        "end_line": 1356,
+        "children": [
+          {
+            "kind": "method",
+            "name": "skip_drop",
+            "qualified_name": "OwnedMappedMutexGuard<T, U>::skip_drop",
+            "signature": "fn skip_drop(self) -> OwnedMappedMutexGuardInner<T, U>",
+            "start_line": 1292,
+            "end_line": 1304,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "map",
+            "qualified_name": "OwnedMappedMutexGuard<T, U>::map",
+            "signature": "#[inline]\n    pub fn map<S, F>(mut this: Self, f: F) -> OwnedMappedMutexGuard<T, S>\n    where\n        F: FnOnce(&mut U) -> &mut S,",
+            "start_line": 1314,
+            "end_line": 1327,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "try_map",
+            "qualified_name": "OwnedMappedMutexGuard<T, U>::try_map",
+            "signature": "#[inline]\n    pub fn try_map<S, F>(mut this: Self, f: F) -> Result<OwnedMappedMutexGuard<T, S>, Self>\n    where\n        F: FnOnce(&mut U) -> Option<&mut S>,",
+            "start_line": 1339,
+            "end_line": 1355,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<OwnedMappedMutexGuard<T, U> as Drop>",
+        "qualified_name": "<OwnedMappedMutexGuard<T, U> as Drop>",
+        "signature": "impl<T: ?Sized, U: ?Sized> Drop for OwnedMappedMutexGuard<T, U>",
+        "start_line": 1358,
+        "end_line": 1370,
+        "children": [
+          {
+            "kind": "method",
+            "name": "drop",
+            "qualified_name": "<OwnedMappedMutexGuard<T, U> as Drop>::drop",
+            "signature": "fn drop(&mut self)",
+            "start_line": 1359,
+            "end_line": 1369,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<OwnedMappedMutexGuard<T, U> as Deref>",
+        "qualified_name": "<OwnedMappedMutexGuard<T, U> as Deref>",
+        "signature": "impl<T: ?Sized, U: ?Sized> Deref for OwnedMappedMutexGuard<T, U>",
+        "start_line": 1372,
+        "end_line": 1377,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Target",
+            "qualified_name": "<OwnedMappedMutexGuard<T, U> as Deref>::Target",
+            "signature": "type Target = U;",
+            "start_line": 1373,
+            "end_line": 1373,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "deref",
+            "qualified_name": "<OwnedMappedMutexGuard<T, U> as Deref>::deref",
+            "signature": "fn deref(&self) -> &Self::Target",
+            "start_line": 1374,
+            "end_line": 1376,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<OwnedMappedMutexGuard<T, U> as DerefMut>",
+        "qualified_name": "<OwnedMappedMutexGuard<T, U> as DerefMut>",
+        "signature": "impl<T: ?Sized, U: ?Sized> DerefMut for OwnedMappedMutexGuard<T, U>",
+        "start_line": 1379,
+        "end_line": 1383,
+        "children": [
+          {
+            "kind": "method",
+            "name": "deref_mut",
+            "qualified_name": "<OwnedMappedMutexGuard<T, U> as DerefMut>::deref_mut",
+            "signature": "fn deref_mut(&mut self) -> &mut Self::Target",
+            "start_line": 1380,
+            "end_line": 1382,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<OwnedMappedMutexGuard<T, U> as fmt::Debug>",
+        "qualified_name": "<OwnedMappedMutexGuard<T, U> as fmt::Debug>",
+        "signature": "impl<T: ?Sized, U: ?Sized + fmt::Debug> fmt::Debug for OwnedMappedMutexGuard<T, U>",
+        "start_line": 1385,
+        "end_line": 1389,
+        "children": [
+          {
+            "kind": "method",
+            "name": "fmt",
+            "qualified_name": "<OwnedMappedMutexGuard<T, U> as fmt::Debug>::fmt",
+            "signature": "fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result",
+            "start_line": 1386,
+            "end_line": 1388,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<OwnedMappedMutexGuard<T, U> as fmt::Display>",
+        "qualified_name": "<OwnedMappedMutexGuard<T, U> as fmt::Display>",
+        "signature": "impl<T: ?Sized, U: ?Sized + fmt::Display> fmt::Display for OwnedMappedMutexGuard<T, U>",
+        "start_line": 1391,
+        "end_line": 1395,
+        "children": [
+          {
+            "kind": "method",
+            "name": "fmt",
+            "qualified_name": "<OwnedMappedMutexGuard<T, U> as fmt::Display>::fmt",
+            "signature": "fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result",
+            "start_line": 1392,
+            "end_line": 1394,
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  "skeleton": "#![cfg_attr(not(feature = \"sync\"), allow(unreachable_pub, dead_code))]\n\nuse crate::sync::batch_semaphore as semaphore;\n#[cfg(all(tokio_unstable, feature = \"tracing\"))]\nuse crate::util::trace;\n\nuse std::cell::UnsafeCell;\nuse std::error::Error;\nuse std::marker::PhantomData;\nuse std::ops::{Deref, DerefMut};\nuse std::sync::Arc;\nuse std::{fmt, mem, ptr};\n\n/// An asynchronous `Mutex`-like type.\n///\n/// This type acts similarly to [`std::sync::Mutex`], with two major\n/// differences: [`lock`] is an async method so does not block, and the lock\n/// guard is designed to be held across `.await` points.\n///\n/// Tokio's Mutex operates on a guaranteed FIFO basis.\n/// This means that the order in which tasks call the [`lock`] method is\n/// the exact order in which they will acquire the lock.\n///\n/// # Which kind of mutex should you use?\n///\n/// Contrary to popular belief, it is ok and often preferred to use the ordinary\n/// [`Mutex`][std] from the standard library in asynchronous code.\n///\n/// The feature that the async mutex offers over the blocking mutex is the\n/// ability to keep it locked across an `.await` point. This makes the async\n/// mutex more expensive than the blocking mutex, so the blocking mutex should\n/// be preferred in the cases where it can be used. The primary use case for the\n/// async mutex is to provide shared mutable access to IO resources such as a\n/// database connection. If the value behind the mutex is just data, it's\n/// usually appropriate to use a blocking mutex such as the one in the standard\n/// library or [`parking_lot`].\n///\n/// Note that, although the compiler will not prevent the std `Mutex` from holding\n/// its guard across `.await` points in situations where the task is not movable\n/// between threads, this virtually never leads to correct concurrent code in\n/// practice as it can easily lead to deadlocks.\n///\n/// A common pattern is to wrap the `Arc<Mutex<...>>` in a struct that provides\n/// non-async methods for performing operations on the data within, and only\n/// lock the mutex inside these methods. The [mini-redis] example provides an\n/// illustration of this pattern.\n///\n/// Additionally, when you _do_ want shared access to an IO resource, it is\n/// often better to spawn a task to manage the IO resource, and to use message\n/// passing to communicate with that task.\n///\n/// [std]: std::sync::Mutex\n/// [`parking_lot`]: https://docs.rs/parking_lot\n/// [mini-redis]: https://github.com/tokio-rs/mini-redis/blob/master/src/db.rs\n///\n/// # Examples:\n///\n/// ```rust,no_run\n/// use tokio::sync::Mutex;\n/// use std::sync::Arc;\n///\n/// #[tokio::main]\n/// async fn main() {\n///     let data1 = Arc::new(Mutex::new(0));\n///     let data2 = Arc::clone(&data1);\n///\n///     tokio::spawn(async move {\n///         let mut lock = data2.lock().await;\n///         *lock += 1;\n///     });\n///\n///     let mut lock = data1.lock().await;\n///     *lock += 1;\n/// }\n/// ```\n///\n///\n/// ```rust,no_run\n/// use tokio::sync::Mutex;\n/// use std::sync::Arc;\n///\n/// #[tokio::main]\n/// async fn main() {\n///     let count = Arc::new(Mutex::new(0));\n///\n///     for i in 0..5 {\n///         let my_count = Arc::clone(&count);\n///         tokio::spawn(async move {\n///             for j in 0..10 {\n///                 let mut lock = my_count.lock().await;\n///                 *lock += 1;\n///                 println!(\"{} {} {}\", i, j, lock);\n///             }\n///         });\n///     }\n///\n///     loop {\n///         if *count.lock().await >= 50 {\n///             break;\n///         }\n///     }\n///     println!(\"Count hit 50.\");\n/// }\n/// ```\n/// There are a few things of note here to pay attention to in this example.\n/// 1. The mutex is wrapped in an [`Arc`] to allow it to be shared across\n///    threads.\n/// 2. Each spawned task obtains a lock and releases it on every iteration.\n/// 3. Mutation of the data protected by the Mutex is done by de-referencing\n///    the obtained lock as seen on lines 13 and 20.\n///\n/// Tokio's Mutex works in a simple FIFO (first in, first out) style where all\n/// calls to [`lock`] complete in the order they were performed. In that way the\n/// Mutex is \"fair\" and predictable in how it distributes the locks to inner\n/// data. Locks are released and reacquired after every iteration, so basically,\n/// each thread goes to the back of the line after it increments the value once.\n/// Note that there's some unpredictability to the timing between when the\n/// threads are started, but once they are going they alternate predictably.\n/// Finally, since there is only a single valid lock at any given time, there is\n/// no possibility of a race condition when mutating the inner value.\n///\n/// Note that in contrast to [`std::sync::Mutex`], this implementation does not\n/// poison the mutex when a thread holding the [`MutexGuard`] panics. In such a\n/// case, the mutex will be unlocked. If the panic is caught, this might leave\n/// the data protected by the mutex in an inconsistent state.\n///\n/// [`Mutex`]: struct@Mutex\n/// [`MutexGuard`]: struct@MutexGuard\n/// [`Arc`]: struct@std::sync::Arc\n/// [`std::sync::Mutex`]: struct@std::sync::Mutex\n/// [`Send`]: trait@std::marker::Send\n/// [`lock`]: method@Mutex::lock\npub struct Mutex<T: ?Sized> {\n    #[cfg(all(tokio_unstable, feature = \"tracing\"))]\n    resource_span: tracing::Span,\n    s: semaphore::Semaphore,\n    c: UnsafeCell<T>,\n}\n\n/// A handle to a held `Mutex`. The guard can be held across any `.await` point\n/// as it is [`Send`].\n///\n/// As long as you have this guard, you have exclusive access to the underlying\n/// `T`. The guard internally borrows the `Mutex`, so the mutex will not be\n/// dropped while a guard exists.\n///\n/// The lock is automatically released whenever the guard is dropped, at which\n/// point `lock` will succeed yet again.\n#[clippy::has_significant_drop]\n#[must_use = \"if unused the Mutex will immediately unlock\"]\npub struct MutexGuard<'a, T: ?Sized> {\n    // When changing the fields in this struct, make sure to update the\n    // `skip_drop` method.\n    #[cfg(all(tokio_unstable, feature = \"tracing\"))]\n    resource_span: tracing::Span,\n    lock: &'a Mutex<T>,\n}\n\n/// An owned handle to a held `Mutex`.\n///\n/// This guard is only available from a `Mutex` that is wrapped in an [`Arc`]. It\n/// is identical to `MutexGuard`, except that rather than borrowing the `Mutex`,\n/// it clones the `Arc`, incrementing the reference count. This means that\n/// unlike `MutexGuard`, it will have the `'static` lifetime.\n///\n/// As long as you have this guard, you have exclusive access to the underlying\n/// `T`. The guard internally keeps a reference-counted pointer to the original\n/// `Mutex`, so even if the lock goes away, the guard remains valid.\n///\n/// The lock is automatically released whenever the guard is dropped, at which\n/// point `lock` will succeed yet again.\n///\n/// [`Arc`]: std::sync::Arc\n#[clippy::has_significant_drop]\npub struct OwnedMutexGuard<T: ?Sized> {\n    // When changing the fields in this struct, make sure to update the\n    // `skip_drop` method.\n    #[cfg(all(tokio_unstable, feature = \"tracing\"))]\n    resource_span: tracing::Span,\n    lock: Arc<Mutex<T>>,\n}\n\n/// A handle to a held `Mutex` that has had a function applied to it via [`MutexGuard::map`].\n///\n/// This can be used to hold a subfield of the protected data.\n///\n/// [`MutexGuard::map`]: method@MutexGuard::map\n#[clippy::has_significant_drop]\n#[must_use = \"if unused the Mutex will immediately unlock\"]\npub struct MappedMutexGuard<'a, T: ?Sized> {\n    // When changing the fields in this struct, make sure to update the\n    // `skip_drop` method.\n    #[cfg(all(tokio_unstable, feature = \"tracing\"))]\n    resource_span: tracing::Span,\n    s: &'a semaphore::Semaphore,\n    data: *mut T,\n    // Needed to tell the borrow checker that we are holding a `&mut T`\n    marker: PhantomData<&'a mut T>,\n}\n\n/// A owned handle to a held `Mutex` that has had a function applied to it via\n/// [`OwnedMutexGuard::map`].\n///\n/// This can be used to hold a subfield of the protected data.\n///\n/// [`OwnedMutexGuard::map`]: method@OwnedMutexGuard::map\n#[clippy::has_significant_drop]\n#[must_use = \"if unused the Mutex will immediately unlock\"]\npub struct OwnedMappedMutexGuard<T: ?Sized, U: ?Sized = T> {\n    // When changing the fields in this struct, make sure to update the\n    // `skip_drop` method.\n    #[cfg(all(tokio_unstable, feature = \"tracing\"))]\n    resource_span: tracing::Span,\n    data: *mut U,\n    lock: Arc<Mutex<T>>,\n}\n\n/// A helper type used when taking apart a `MutexGuard` without running its\n/// Drop implementation.\n#[allow(dead_code)] // Unused fields are still used in Drop.\nstruct MutexGuardInner<'a, T: ?Sized> {\n    #[cfg(all(tokio_unstable, feature = \"tracing\"))]\n    resource_span: tracing::Span,\n    lock: &'a Mutex<T>,\n}\n\n/// A helper type used when taking apart a `OwnedMutexGuard` without running\n/// its Drop implementation.\nstruct OwnedMutexGuardInner<T: ?Sized> {\n    #[cfg(all(tokio_unstable, feature = \"tracing\"))]\n    resource_span: tracing::Span,\n    lock: Arc<Mutex<T>>,\n}\n\n/// A helper type used when taking apart a `MappedMutexGuard` without running\n/// its Drop implementation.\n#[allow(dead_code)] // Unused fields are still used in Drop.\nstruct MappedMutexGuardInner<'a, T: ?Sized> {\n    #[cfg(all(tokio_unstable, feature = \"tracing\"))]\n    resource_span: tracing::Span,\n    s: &'a semaphore::Semaphore,\n    data: *mut T,\n}\n\n/// A helper type used when taking apart a `OwnedMappedMutexGuard` without running\n/// its Drop implementation.\n#[allow(dead_code)] // Unused fields are still used in Drop.\nstruct OwnedMappedMutexGuardInner<T: ?Sized, U: ?Sized> {\n    #[cfg(all(tokio_unstable, feature = \"tracing\"))]\n    resource_span: tracing::Span,\n    data: *mut U,\n    lock: Arc<Mutex<T>>,\n}\n\n// As long as T: Send, it's fine to send and share Mutex<T> between threads.\n// If T was not Send, sending and sharing a Mutex<T> would be bad, since you can\n// access T through Mutex<T>.\nunsafe impl<T> Send for Mutex<T> where T: ?Sized + Send {}\nunsafe impl<T> Sync for Mutex<T> where T: ?Sized + Send {}\nunsafe impl<T> Sync for MutexGuard<'_, T> where T: ?Sized + Send + Sync {}\nunsafe impl<T> Sync for OwnedMutexGuard<T> where T: ?Sized + Send + Sync {}\nunsafe impl<'a, T> Sync for MappedMutexGuard<'a, T> where T: ?Sized + Sync + 'a {}\nunsafe impl<'a, T> Send for MappedMutexGuard<'a, T> where T: ?Sized + Send + 'a {}\n\nunsafe impl<T, U> Sync for OwnedMappedMutexGuard<T, U>\nwhere\n    T: ?Sized + Send + Sync,\n    U: ?Sized + Send + Sync,\n{\n}\nunsafe impl<T, U> Send for OwnedMappedMutexGuard<T, U>\nwhere\n    T: ?Sized + Send,\n    U: ?Sized + Send,\n{\n}\n\n/// Error returned from the [`Mutex::try_lock`], [`RwLock::try_read`] and\n/// [`RwLock::try_write`] functions.\n///\n/// `Mutex::try_lock` operation will only fail if the mutex is already locked.\n///\n/// `RwLock::try_read` operation will only fail if the lock is currently held\n/// by an exclusive writer.\n///\n/// `RwLock::try_write` operation will only fail if the lock is currently held\n/// by any reader or by an exclusive writer.\n///\n/// [`Mutex::try_lock`]: Mutex::try_lock\n/// [`RwLock::try_read`]: fn@super::RwLock::try_read\n/// [`RwLock::try_write`]: fn@super::RwLock::try_write\n#[derive(Debug)]\npub struct TryLockError(pub(super) ());\n\nimpl fmt::Display for TryLockError {\n    fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result { ... }\n}\n\nimpl Error for TryLockError {}\n\n#[test]\n#[cfg(not(loom))]\nfn bounds() { ... }\n\nimpl<T: ?Sized> Mutex<T> {\n    /// Creates a new lock in an unlocked state ready for use.\n    ///\n    /// # Examples\n    ///\n    /// ```\n    /// use tokio::sync::Mutex;\n    ///\n    /// let lock = Mutex::new(5);\n    /// ```\n    #[track_caller]\n    pub fn new(t: T) -> Self\n    where\n        T: Sized,\n    { ... }\n\n    /// Creates a new lock in an unlocked state ready for use.\n    ///\n    /// When using the `tracing` [unstable feature], a `Mutex` created with\n    /// `const_new` will not be instrumented. As such, it will not be visible\n    /// in [`tokio-console`]. Instead, [`Mutex::new`] should be used to create\n    /// an instrumented object if that is needed.\n    ///\n    /// # Examples\n    ///\n    /// ```\n    /// use tokio::sync::Mutex;\n    ///\n    /// static LOCK: Mutex<i32> = Mutex::const_new(5);\n    /// ```\n    ///\n    /// [`tokio-console`]: https://github.com/tokio-rs/console\n    /// [unstable feature]: crate#unstable-features\n    #[cfg(not(all(loom, test)))]\n    pub const fn const_new(t: T) -> Self\n    where\n        T: Sized,\n    { ... }\n\n    /// Locks this mutex, causing the current task to yield until the lock has\n    /// been acquired.  When the lock has been acquired, function returns a\n    /// [`MutexGuard`].\n    ///\n    /// If the mutex is available to be acquired immediately, then this call\n    /// will typically not yield to the runtime. However, this is not guaranteed\n    /// under all circumstances.\n    ///\n    /// # Cancel safety\n    ///\n    /// This method uses a queue to fairly distribute locks in the order they\n    /// were requested. Cancelling a call to `lock` makes you lose your place in\n    /// the queue.\n    ///\n    /// # Examples\n    ///\n    /// ```\n    /// use tokio::sync::Mutex;\n    ///\n    /// #[tokio::main]\n    /// async fn main() {\n    ///     let mutex = Mutex::new(1);\n    ///\n    ///     let mut n = mutex.lock().await;\n    ///     *n = 2;\n    /// }\n    /// ```\n    pub async fn lock(&self) -> MutexGuard<'_, T> { ... }\n\n    /// Blockingly locks this `Mutex`. When the lock has been acquired, function returns a\n    /// [`MutexGuard`].\n    ///\n    /// This method is intended for use cases where you\n    /// need to use this mutex in asynchronous code as well as in synchronous code.\n    ///\n    /// # Panics\n    ///\n    /// This function panics if called within an asynchronous execution context.\n    ///\n    ///   - If you find yourself in an asynchronous execution context and needing\n    ///     to call some (synchronous) function which performs one of these\n    ///     `blocking_` operations, then consider wrapping that call inside\n    ///     [`spawn_blocking()`][crate::runtime::Handle::spawn_blocking]\n    ///     (or [`block_in_place()`][crate::task::block_in_place]).\n    ///\n    /// # Examples\n    ///\n    /// ```\n    /// use std::sync::Arc;\n    /// use tokio::sync::Mutex;\n    ///\n    /// #[tokio::main]\n    /// async fn main() {\n    ///     let mutex =  Arc::new(Mutex::new(1));\n    ///     let lock = mutex.lock().await;\n    ///\n    ///     let mutex1 = Arc::clone(&mutex);\n    ///     let blocking_task = tokio::task::spawn_blocking(move || {\n    ///         // This shall block until the `lock` is released.\n    ///         let mut n = mutex1.blocking_lock();\n    ///         *n = 2;\n    ///     });\n    ///\n    ///     assert_eq!(*lock, 1);\n    ///     // Release the lock.\n    ///     drop(lock);\n    ///\n    ///     // Await the completion of the blocking task.\n    ///     blocking_task.await.unwrap();\n    ///\n    ///     // Assert uncontended.\n    ///     let n = mutex.try_lock().unwrap();\n    ///     assert_eq!(*n, 2);\n    /// }\n    ///\n    /// ```\n    #[track_caller]\n    #[cfg(feature = \"sync\")]\n    #[cfg_attr(docsrs, doc(alias = \"lock_blocking\"))]\n    pub fn blocking_lock(&self) -> MutexGuard<'_, T> { ... }\n\n    /// Blockingly locks this `Mutex`. When the lock has been acquired, function returns an\n    /// [`OwnedMutexGuard`].\n    ///\n    /// This method is identical to [`Mutex::blocking_lock`], except that the returned\n    /// guard references the `Mutex` with an [`Arc`] rather than by borrowing\n    /// it. Therefore, the `Mutex` must be wrapped in an `Arc` to call this\n    /// method, and the guard will live for the `'static` lifetime, as it keeps\n    /// the `Mutex` alive by holding an `Arc`.\n    ///\n    /// # Panics\n    ///\n    /// This function panics if called within an asynchronous execution context.\n    ///\n    ///   - If you find yourself in an asynchronous execution context and needing\n    ///     to call some (synchronous) function which performs one of these\n    ///     `blocking_` operations, then consider wrapping that call inside\n    ///     [`spawn_blocking()`][crate::runtime::Handle::spawn_blocking]\n    ///     (or [`block_in_place()`][crate::task::block_in_place]).\n    ///\n    /// # Examples\n    ///\n    /// ```\n    /// use std::sync::Arc;\n    /// use tokio::sync::Mutex;\n    ///\n    /// #[tokio::main]\n    /// async fn main() {\n    ///     let mutex =  Arc::new(Mutex::new(1));\n    ///     let lock = mutex.lock().await;\n    ///\n    ///     let mutex1 = Arc::clone(&mutex);\n    ///     let blocking_task = tokio::task::spawn_blocking(move || {\n    ///         // This shall block until the `lock` is released.\n    ///         let mut n = mutex1.blocking_lock_owned();\n    ///         *n = 2;\n    ///     });\n    ///\n    ///     assert_eq!(*lock, 1);\n    ///     // Release the lock.\n    ///     drop(lock);\n    ///\n    ///     // Await the completion of the blocking task.\n    ///     blocking_task.await.unwrap();\n    ///\n    ///     // Assert uncontended.\n    ///     let n = mutex.try_lock().unwrap();\n    ///     assert_eq!(*n, 2);\n    /// }\n    ///\n    /// ```\n    #[track_caller]\n    #[cfg(feature = \"sync\")]\n    pub fn blocking_lock_owned(self: Arc<Self>) -> OwnedMutexGuard<T> { ... }\n\n    /// Locks this mutex, causing the current task to yield until the lock has\n    /// been acquired. When the lock has been acquired, this returns an\n    /// [`OwnedMutexGuard`].\n    ///\n    /// If the mutex is available to be acquired immediately, then this call\n    /// will typically not yield to the runtime. However, this is not guaranteed\n    /// under all circumstances.\n    ///\n    /// This method is identical to [`Mutex::lock`], except that the returned\n    /// guard references the `Mutex` with an [`Arc`] rather than by borrowing\n    /// it. Therefore, the `Mutex` must be wrapped in an `Arc` to call this\n    /// method, and the guard will live for the `'static` lifetime, as it keeps\n    /// the `Mutex` alive by holding an `Arc`.\n    ///\n    /// # Cancel safety\n    ///\n    /// This method uses a queue to fairly distribute locks in the order they\n    /// were requested. Cancelling a call to `lock_owned` makes you lose your\n    /// place in the queue.\n    ///\n    /// # Examples\n    ///\n    /// ```\n    /// use tokio::sync::Mutex;\n    /// use std::sync::Arc;\n    ///\n    /// #[tokio::main]\n    /// async fn main() {\n    ///     let mutex = Arc::new(Mutex::new(1));\n    ///\n    ///     let mut n = mutex.clone().lock_owned().await;\n    ///     *n = 2;\n    /// }\n    /// ```\n    ///\n    /// [`Arc`]: std::sync::Arc\n    pub async fn lock_owned(self: Arc<Self>) -> OwnedMutexGuard<T> { ... }\n\n    async fn acquire(&self) { ... }\n\n    /// Attempts to acquire the lock, and returns [`TryLockError`] if the\n    /// lock is currently held somewhere else.\n    ///\n    /// [`TryLockError`]: TryLockError\n    /// # Examples\n    ///\n    /// ```\n    /// use tokio::sync::Mutex;\n    /// # async fn dox() -> Result<(), tokio::sync::TryLockError> {\n    ///\n    /// let mutex = Mutex::new(1);\n    ///\n    /// let n = mutex.try_lock()?;\n    /// assert_eq!(*n, 1);\n    /// # Ok(())\n    /// # }\n    /// ```\n    pub fn try_lock(&self) -> Result<MutexGuard<'_, T>, TryLockError> { ... }\n\n    /// Returns a mutable reference to the underlying data.\n    ///\n    /// Since this call borrows the `Mutex` mutably, no actual locking needs to\n    /// take place -- the mutable borrow statically guarantees no locks exist.\n    ///\n    /// # Examples\n    ///\n    /// ```\n    /// use tokio::sync::Mutex;\n    ///\n    /// fn main() {\n    ///     let mut mutex = Mutex::new(1);\n    ///\n    ///     let n = mutex.get_mut();\n    ///     *n = 2;\n    /// }\n    /// ```\n    pub fn get_mut(&mut self) -> &mut T { ... }\n\n    /// Attempts to acquire the lock, and returns [`TryLockError`] if the lock\n    /// is currently held somewhere else.\n    ///\n    /// This method is identical to [`Mutex::try_lock`], except that the\n    /// returned  guard references the `Mutex` with an [`Arc`] rather than by\n    /// borrowing it. Therefore, the `Mutex` must be wrapped in an `Arc` to call\n    /// this method, and the guard will live for the `'static` lifetime, as it\n    /// keeps the `Mutex` alive by holding an `Arc`.\n    ///\n    /// [`TryLockError`]: TryLockError\n    /// [`Arc`]: std::sync::Arc\n    /// # Examples\n    ///\n    /// ```\n    /// use tokio::sync::Mutex;\n    /// use std::sync::Arc;\n    /// # async fn dox() -> Result<(), tokio::sync::TryLockError> {\n    ///\n    /// let mutex = Arc::new(Mutex::new(1));\n    ///\n    /// let n = mutex.clone().try_lock_owned()?;\n    /// assert_eq!(*n, 1);\n    /// # Ok(())\n    /// # }\n    pub fn try_lock_owned(self: Arc<Self>) -> Result<OwnedMutexGuard<T>, TryLockError> { ... }\n\n    /// Consumes the mutex, returning the underlying data.\n    /// # Examples\n    ///\n    /// ```\n    /// use tokio::sync::Mutex;\n    ///\n    /// #[tokio::main]\n    /// async fn main() {\n    ///     let mutex = Mutex::new(1);\n    ///\n    ///     let n = mutex.into_inner();\n    ///     assert_eq!(n, 1);\n    /// }\n    /// ```\n    pub fn into_inner(self) -> T\n    where\n        T: Sized,\n    { ... }\n}\n\nimpl<T> From<T> for Mutex<T> {\n    fn from(s: T) -> Self { ... }\n}\n\nimpl<T> Default for Mutex<T>\nwhere\n    T: Default,\n{\n    fn default() -> Self { ... }\n}\n\nimpl<T: ?Sized> std::fmt::Debug for Mutex<T>\nwhere\n    T: std::fmt::Debug,\n{\n    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result { ... }\n}\n\n// === impl MutexGuard ===\n\nimpl<'a, T: ?Sized> MutexGuard<'a, T> {\n    fn skip_drop(self) -> MutexGuardInner<'a, T> { ... }\n\n    /// Makes a new [`MappedMutexGuard`] for a component of the locked data.\n    ///\n    /// This operation cannot fail as the [`MutexGuard`] passed in already locked the mutex.\n    ///\n    /// This is an associated function that needs to be used as `MutexGuard::map(...)`. A method\n    /// would interfere with methods of the same name on the contents of the locked data.\n    ///\n    /// # Examples\n    ///\n    /// ```\n    /// use tokio::sync::{Mutex, MutexGuard};\n    ///\n    /// #[derive(Debug, Clone, Copy, PartialEq, Eq)]\n    /// struct Foo(u32);\n    ///\n    /// # #[tokio::main]\n    /// # async fn main() {\n    /// let foo = Mutex::new(Foo(1));\n    ///\n    /// {\n    ///     let mut mapped = MutexGuard::map(foo.lock().await, |f| &mut f.0);\n    ///     *mapped = 2;\n    /// }\n    ///\n    /// assert_eq!(Foo(2), *foo.lock().await);\n    /// # }\n    /// ```\n    ///\n    /// [`MutexGuard`]: struct@MutexGuard\n    /// [`MappedMutexGuard`]: struct@MappedMutexGuard\n    #[inline]\n    pub fn map<U, F>(mut this: Self, f: F) -> MappedMutexGuard<'a, U>\n    where\n        U: ?Sized,\n        F: FnOnce(&mut T) -> &mut U,\n    { ... }\n\n    /// Attempts to make a new [`MappedMutexGuard`] for a component of the locked data. The\n    /// original guard is returned if the closure returns `None`.\n    ///\n    /// This operation cannot fail as the [`MutexGuard`] passed in already locked the mutex.\n    ///\n    /// This is an associated function that needs to be used as `MutexGuard::try_map(...)`. A\n    /// method would interfere with methods of the same name on the contents of the locked data.\n    ///\n    /// # Examples\n    ///\n    /// ```\n    /// use tokio::sync::{Mutex, MutexGuard};\n    ///\n    /// #[derive(Debug, Clone, Copy, PartialEq, Eq)]\n    /// struct Foo(u32);\n    ///\n    /// # #[tokio::main]\n    /// # async fn main() {\n    /// let foo = Mutex::new(Foo(1));\n    ///\n    /// {\n    ///     let mut mapped = MutexGuard::try_map(foo.lock().await, |f| Some(&mut f.0))\n    ///         .expect(\"should not fail\");\n    ///     *mapped = 2;\n    /// }\n    ///\n    /// assert_eq!(Foo(2), *foo.lock().await);\n    /// # }\n    /// ```\n    ///\n    /// [`MutexGuard`]: struct@MutexGuard\n    /// [`MappedMutexGuard`]: struct@MappedMutexGuard\n    #[inline]\n    pub fn try_map<U, F>(mut this: Self, f: F) -> Result<MappedMutexGuard<'a, U>, Self>\n    where\n        U: ?Sized,\n        F: FnOnce(&mut T) -> Option<&mut U>,\n    { ... }\n\n    /// Returns a reference to the original `Mutex`.\n    ///\n    /// ```\n    /// use tokio::sync::{Mutex, MutexGuard};\n    ///\n    /// async fn unlock_and_relock<'l>(guard: MutexGuard<'l, u32>) -> MutexGuard<'l, u32> {\n    ///     println!(\"1. contains: {:?}\", *guard);\n    ///     let mutex = MutexGuard::mutex(&guard);\n    ///     drop(guard);\n    ///     let guard = mutex.lock().await;\n    ///     println!(\"2. contains: {:?}\", *guard);\n    ///     guard\n    /// }\n    /// #\n    /// # #[tokio::main]\n    /// # async fn main() {\n    /// #     let mutex = Mutex::new(0u32);\n    /// #     let guard = mutex.lock().await;\n    /// #     let _guard = unlock_and_relock(guard).await;\n    /// # }\n    /// ```\n    #[inline]\n    pub fn mutex(this: &Self) -> &'a Mutex<T> { ... }\n}\n\nimpl<T: ?Sized> Drop for MutexGuard<'_, T> {\n    fn drop(&mut self) { ... }\n}\n\nimpl<T: ?Sized> Deref for MutexGuard<'_, T> {\n    type Target = T;\n    fn deref(&self) -> &Self::Target { ... }\n}\n\nimpl<T: ?Sized> DerefMut for MutexGuard<'_, T> {\n    fn deref_mut(&mut self) -> &mut Self::Target { ... }\n}\n\nimpl<T: ?Sized + fmt::Debug> fmt::Debug for MutexGuard<'_, T> {\n    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result { ... }\n}\n\nimpl<T: ?Sized + fmt::Display> fmt::Display for MutexGuard<'_, T> {\n    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result { ... }\n}\n\n// === impl OwnedMutexGuard ===\n\nimpl<T: ?Sized> OwnedMutexGuard<T> {\n    fn skip_drop(self) -> OwnedMutexGuardInner<T> { ... }\n\n    /// Makes a new [`OwnedMappedMutexGuard`] for a component of the locked data.\n    ///\n    /// This operation cannot fail as the [`OwnedMutexGuard`] passed in already locked the mutex.\n    ///\n    /// This is an associated function that needs to be used as `OwnedMutexGuard::map(...)`. A method\n    /// would interfere with methods of the same name on the contents of the locked data.\n    ///\n    /// # Examples\n    ///\n    /// ```\n    /// use tokio::sync::{Mutex, OwnedMutexGuard};\n    /// use std::sync::Arc;\n    ///\n    /// #[derive(Debug, Clone, Copy, PartialEq, Eq)]\n    /// struct Foo(u32);\n    ///\n    /// # #[tokio::main]\n    /// # async fn main() {\n    /// let foo = Arc::new(Mutex::new(Foo(1)));\n    ///\n    /// {\n    ///     let mut mapped = OwnedMutexGuard::map(foo.clone().lock_owned().await, |f| &mut f.0);\n    ///     *mapped = 2;\n    /// }\n    ///\n    /// assert_eq!(Foo(2), *foo.lock().await);\n    /// # }\n    /// ```\n    ///\n    /// [`OwnedMutexGuard`]: struct@OwnedMutexGuard\n    /// [`OwnedMappedMutexGuard`]: struct@OwnedMappedMutexGuard\n    #[inline]\n    pub fn map<U, F>(mut this: Self, f: F) -> OwnedMappedMutexGuard<T, U>\n    where\n        U: ?Sized,\n        F: FnOnce(&mut T) -> &mut U,\n    { ... }\n\n    /// Attempts to make a new [`OwnedMappedMutexGuard`] for a component of the locked data. The\n    /// original guard is returned if the closure returns `None`.\n    ///\n    /// This operation cannot fail as the [`OwnedMutexGuard`] passed in already locked the mutex.\n    ///\n    /// This is an associated function that needs to be used as `OwnedMutexGuard::try_map(...)`. A\n    /// method would interfere with methods of the same name on the contents of the locked data.\n    ///\n    /// # Examples\n    ///\n    /// ```\n    /// use tokio::sync::{Mutex, OwnedMutexGuard};\n    /// use std::sync::Arc;\n    ///\n    /// #[derive(Debug, Clone, Copy, PartialEq, Eq)]\n    /// struct Foo(u32);\n    ///\n    /// # #[tokio::main]\n    /// # async fn main() {\n    /// let foo = Arc::new(Mutex::new(Foo(1)));\n    ///\n    /// {\n    ///     let mut mapped = OwnedMutexGuard::try_map(foo.clone().lock_owned().await, |f| Some(&mut f.0))\n    ///         .expect(\"should not fail\");\n    ///     *mapped = 2;\n    /// }\n    ///\n    /// assert_eq!(Foo(2), *foo.lock().await);\n    /// # }\n    /// ```\n    ///\n    /// [`OwnedMutexGuard`]: struct@OwnedMutexGuard\n    /// [`OwnedMappedMutexGuard`]: struct@OwnedMappedMutexGuard\n    #[inline]\n    pub fn try_map<U, F>(mut this: Self, f: F) -> Result<OwnedMappedMutexGuard<T, U>, Self>\n    where\n        U: ?Sized,\n        F: FnOnce(&mut T) -> Option<&mut U>,\n    { ... }\n\n    /// Returns a reference to the original `Arc<Mutex>`.\n    ///\n    /// ```\n    /// use std::sync::Arc;\n    /// use tokio::sync::{Mutex, OwnedMutexGuard};\n    ///\n    /// async fn unlock_and_relock(guard: OwnedMutexGuard<u32>) -> OwnedMutexGuard<u32> {\n    ///     println!(\"1. contains: {:?}\", *guard);\n    ///     let mutex: Arc<Mutex<u32>> = OwnedMutexGuard::mutex(&guard).clone();\n    ///     drop(guard);\n    ///     let guard = mutex.lock_owned().await;\n    ///     println!(\"2. contains: {:?}\", *guard);\n    ///     guard\n    /// }\n    /// #\n    /// # #[tokio::main]\n    /// # async fn main() {\n    /// #     let mutex = Arc::new(Mutex::new(0u32));\n    /// #     let guard = mutex.lock_owned().await;\n    /// #     unlock_and_relock(guard).await;\n    /// # }\n    /// ```\n    #[inline]\n    pub fn mutex(this: &Self) -> &Arc<Mutex<T>> { ... }\n}\n\nimpl<T: ?Sized> Drop for OwnedMutexGuard<T> {\n    fn drop(&mut self) { ... }\n}\n\nimpl<T: ?Sized> Deref for OwnedMutexGuard<T> {\n    type Target = T;\n    fn deref(&self) -> &Self::Target { ... }\n}\n\nimpl<T: ?Sized> DerefMut for OwnedMutexGuard<T> {\n    fn deref_mut(&mut self) -> &mut Self::Target { ... }\n}\n\nimpl<T: ?Sized + fmt::Debug> fmt::Debug for OwnedMutexGuard<T> {\n    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result { ... }\n}\n\nimpl<T: ?Sized + fmt::Display> fmt::Display for OwnedMutexGuard<T> {\n    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result { ... }\n}\n\n// === impl MappedMutexGuard ===\n\nimpl<'a, T: ?Sized> MappedMutexGuard<'a, T> {\n    fn skip_drop(self) -> MappedMutexGuardInner<'a, T> { ... }\n\n    /// Makes a new [`MappedMutexGuard`] for a component of the locked data.\n    ///\n    /// This operation cannot fail as the [`MappedMutexGuard`] passed in already locked the mutex.\n    ///\n    /// This is an associated function that needs to be used as `MappedMutexGuard::map(...)`. A\n    /// method would interfere with methods of the same name on the contents of the locked data.\n    ///\n    /// [`MappedMutexGuard`]: struct@MappedMutexGuard\n    #[inline]\n    pub fn map<U, F>(mut this: Self, f: F) -> MappedMutexGuard<'a, U>\n    where\n        F: FnOnce(&mut T) -> &mut U,\n    { ... }\n\n    /// Attempts to make a new [`MappedMutexGuard`] for a component of the locked data. The\n    /// original guard is returned if the closure returns `None`.\n    ///\n    /// This operation cannot fail as the [`MappedMutexGuard`] passed in already locked the mutex.\n    ///\n    /// This is an associated function that needs to be used as `MappedMutexGuard::try_map(...)`. A\n    /// method would interfere with methods of the same name on the contents of the locked data.\n    ///\n    /// [`MappedMutexGuard`]: struct@MappedMutexGuard\n    #[inline]\n    pub fn try_map<U, F>(mut this: Self, f: F) -> Result<MappedMutexGuard<'a, U>, Self>\n    where\n        F: FnOnce(&mut T) -> Option<&mut U>,\n    { ... }\n}\n\nimpl<'a, T: ?Sized> Drop for MappedMutexGuard<'a, T> {\n    fn drop(&mut self) { ... }\n}\n\nimpl<'a, T: ?Sized> Deref for MappedMutexGuard<'a, T> {\n    type Target = T;\n    fn deref(&self) -> &Self::Target { ... }\n}\n\nimpl<'a, T: ?Sized> DerefMut for MappedMutexGuard<'a, T> {\n    fn deref_mut(&mut self) -> &mut Self::Target { ... }\n}\n\nimpl<'a, T: ?Sized + fmt::Debug> fmt::Debug for MappedMutexGuard<'a, T> {\n    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result { ... }\n}\n\nimpl<'a, T: ?Sized + fmt::Display> fmt::Display for MappedMutexGuard<'a, T> {\n    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result { ... }\n}\n\n// === impl OwnedMappedMutexGuard ===\n\nimpl<T: ?Sized, U: ?Sized> OwnedMappedMutexGuard<T, U> {\n    fn skip_drop(self) -> OwnedMappedMutexGuardInner<T, U> { ... }\n\n    /// Makes a new [`OwnedMappedMutexGuard`] for a component of the locked data.\n    ///\n    /// This operation cannot fail as the [`OwnedMappedMutexGuard`] passed in already locked the mutex.\n    ///\n    /// This is an associated function that needs to be used as `OwnedMappedMutexGuard::map(...)`. A method\n    /// would interfere with methods of the same name on the contents of the locked data.\n    ///\n    /// [`OwnedMappedMutexGuard`]: struct@OwnedMappedMutexGuard\n    #[inline]\n    pub fn map<S, F>(mut this: Self, f: F) -> OwnedMappedMutexGuard<T, S>\n    where\n        F: FnOnce(&mut U) -> &mut S,\n    { ... }\n\n    /// Attempts to make a new [`OwnedMappedMutexGuard`] for a component of the locked data. The\n    /// original guard is returned if the closure returns `None`.\n    ///\n    /// This operation cannot fail as the [`OwnedMutexGuard`] passed in already locked the mutex.\n    ///\n    /// This is an associated function that needs to be used as `OwnedMutexGuard::try_map(...)`. A\n    /// method would interfere with methods of the same name on the contents of the locked data.\n    ///\n    /// [`OwnedMutexGuard`]: struct@OwnedMutexGuard\n    /// [`OwnedMappedMutexGuard`]: struct@OwnedMappedMutexGuard\n    #[inline]\n    pub fn try_map<S, F>(mut this: Self, f: F) -> Result<OwnedMappedMutexGuard<T, S>, Self>\n    where\n        F: FnOnce(&mut U) -> Option<&mut S>,\n    { ... }\n}\n\nimpl<T: ?Sized, U: ?Sized> Drop for OwnedMappedMutexGuard<T, U> {\n    fn drop(&mut self) { ... }\n}\n\nimpl<T: ?Sized, U: ?Sized> Deref for OwnedMappedMutexGuard<T, U> {\n    type Target = U;\n    fn deref(&self) -> &Self::Target { ... }\n}\n\nimpl<T: ?Sized, U: ?Sized> DerefMut for OwnedMappedMutexGuard<T, U> {\n    fn deref_mut(&mut self) -> &mut Self::Target { ... }\n}\n\nimpl<T: ?Sized, U: ?Sized + fmt::Debug> fmt::Debug for OwnedMappedMutexGuard<T, U> {\n    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result { ... }\n}\n\nimpl<T: ?Sized, U: ?Sized + fmt::Display> fmt::Display for OwnedMappedMutexGuard<T, U> {\n    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result { ... }\n}\n"
+}

@@ -1,0 +1,56 @@
+{
+  "description": "Regression corpus for tree-sitter repository representations. Real files are vendored at pinned commits under sources/<owner>__<repo>/; authored files exercise constructs found by reading the adapters. Goldens under golden/ are produced by tools/capture_structure_fixtures.py.",
+  "files": [
+    {"id": "go-io", "language": "go", "path": "src/io/io.go", "origin": {"repository": "golang/go", "commit": "6885bad7dd86880be6929c02085e5c7a67ff2887", "tag": "go1.23.0", "path": "src/io/io.go", "license": "BSD-3-Clause"}},
+    {"id": "go-sync-mutex", "language": "go", "path": "src/sync/mutex.go", "origin": {"repository": "golang/go", "commit": "6885bad7dd86880be6929c02085e5c7a67ff2887", "tag": "go1.23.0", "path": "src/sync/mutex.go", "license": "BSD-3-Clause"}},
+    {"id": "go-http-status", "language": "go", "path": "src/net/http/status.go", "origin": {"repository": "golang/go", "commit": "6885bad7dd86880be6929c02085e5c7a67ff2887", "tag": "go1.23.0", "path": "src/net/http/status.go", "license": "BSD-3-Clause"}},
+    {"id": "go-slices-iter", "language": "go", "path": "src/slices/iter.go", "origin": {"repository": "golang/go", "commit": "6885bad7dd86880be6929c02085e5c7a67ff2887", "tag": "go1.23.0", "path": "src/slices/iter.go", "license": "BSD-3-Clause"}},
+    {"id": "go-container-list", "language": "go", "path": "src/container/list/list.go", "origin": {"repository": "golang/go", "commit": "6885bad7dd86880be6929c02085e5c7a67ff2887", "tag": "go1.23.0", "path": "src/container/list/list.go", "license": "BSD-3-Clause"}},
+    {"id": "go-edge-cases", "language": "go", "path": "edge/edge_cases.go", "source": "sources/authored/edge_cases.go"},
+    {"id": "go-unit-fixture", "language": "go", "path": "sample.go", "source": "../go/structure.go"},
+    {"id": "go-missing-package", "language": "go", "path": "bad.go", "inline": "func F() {}\n"},
+    {"id": "go-syntax-error", "language": "go", "path": "bad.go", "inline": "package p\nfunc F( {\n"},
+
+    {"id": "rust-serde-impossible", "language": "rust", "path": "serde/src/ser/impossible.rs", "origin": {"repository": "serde-rs/serde", "commit": "89c4b02bf32ceae5b17d89f93a452ccc195ca038", "tag": "v1.0.210", "path": "serde/src/ser/impossible.rs", "license": "MIT OR Apache-2.0"}},
+    {"id": "rust-serde-de-value", "language": "rust", "path": "serde/src/de/value.rs", "origin": {"repository": "serde-rs/serde", "commit": "89c4b02bf32ceae5b17d89f93a452ccc195ca038", "tag": "v1.0.210", "path": "serde/src/de/value.rs", "license": "MIT OR Apache-2.0"}},
+    {"id": "rust-tokio-mutex", "language": "rust", "path": "tokio/src/sync/mutex.rs", "origin": {"repository": "tokio-rs/tokio", "commit": "ea6d652a102dee3f22b490db70545b7f66a23fb7", "tag": "tokio-1.40.0", "path": "tokio/src/sync/mutex.rs", "license": "MIT"}},
+    {"id": "rust-edge-cases", "language": "rust", "path": "src/edge_cases.rs", "source": "sources/authored/edge_cases.rs"},
+    {"id": "rust-syntax-error", "language": "rust", "path": "lib.rs", "inline": "fn broken( {\n"},
+
+    {"id": "js-express-router", "language": "javascript", "path": "lib/router/index.js", "origin": {"repository": "expressjs/express", "commit": "7e562c6d8daddff4604f8efaaf9db2cf98c6dcff", "tag": "4.21.0", "path": "lib/router/index.js", "license": "MIT"}},
+    {"id": "js-express-utils", "language": "javascript", "path": "lib/utils.js", "origin": {"repository": "expressjs/express", "commit": "7e562c6d8daddff4604f8efaaf9db2cf98c6dcff", "tag": "4.21.0", "path": "lib/utils.js", "license": "MIT"}},
+    {"id": "js-express-application", "language": "javascript", "path": "lib/application.js", "origin": {"repository": "expressjs/express", "commit": "7e562c6d8daddff4604f8efaaf9db2cf98c6dcff", "tag": "4.21.0", "path": "lib/application.js", "license": "MIT"}},
+    {"id": "js-edge-cases-cjs", "language": "javascript", "path": "lib/edge_cases.cjs", "source": "sources/authored/edge_cases.cjs"},
+    {"id": "js-edge-cases-mjs", "language": "javascript", "path": "lib/edge_cases.mjs", "source": "sources/authored/edge_cases.mjs"},
+    {"id": "js-syntax-error", "language": "javascript", "path": "bad.js", "inline": "class A { run() {\n"},
+    {"id": "js-rejects-typescript-path", "language": "javascript", "path": "main.ts", "inline": "const x = 1;\n"},
+
+    {"id": "ts-vue-ref", "language": "typescript", "path": "packages/reactivity/src/ref.ts", "origin": {"repository": "vuejs/core", "commit": "6402b984087dd48f1a11f444a225d4ac6b2b7b9e", "tag": "v3.5.0", "path": "packages/reactivity/src/ref.ts", "license": "MIT"}},
+    {"id": "ts-vue-effect", "language": "typescript", "path": "packages/reactivity/src/effect.ts", "origin": {"repository": "vuejs/core", "commit": "6402b984087dd48f1a11f444a225d4ac6b2b7b9e", "tag": "v3.5.0", "path": "packages/reactivity/src/effect.ts", "license": "MIT"}},
+    {"id": "ts-vue-shared-general", "language": "typescript", "path": "packages/shared/src/general.ts", "origin": {"repository": "vuejs/core", "commit": "6402b984087dd48f1a11f444a225d4ac6b2b7b9e", "tag": "v3.5.0", "path": "packages/shared/src/general.ts", "license": "MIT"}},
+    {"id": "ts-vue-scripts-utils-js", "language": "typescript", "path": "scripts/utils.js", "origin": {"repository": "vuejs/core", "commit": "6402b984087dd48f1a11f444a225d4ac6b2b7b9e", "tag": "v3.5.0", "path": "scripts/utils.js", "license": "MIT"}},
+    {"id": "tsx-shadcn-button", "language": "typescript", "path": "components/ui/button.tsx", "origin": {"repository": "shadcn-ui/ui", "commit": "a2abc4ad958c06260600a2b977dfe320e1388ab8", "tag": "shadcn@2.1.0", "path": "apps/www/registry/default/ui/button.tsx", "license": "MIT"}},
+    {"id": "tsx-shadcn-form", "language": "typescript", "path": "components/ui/form.tsx", "origin": {"repository": "shadcn-ui/ui", "commit": "a2abc4ad958c06260600a2b977dfe320e1388ab8", "tag": "shadcn@2.1.0", "path": "apps/www/registry/default/ui/form.tsx", "license": "MIT"}},
+    {"id": "ts-edge-cases", "language": "typescript", "path": "src/edge_cases.ts", "source": "sources/authored/edge_cases.ts"},
+    {"id": "tsx-edge-cases", "language": "typescript", "path": "src/edge_cases.tsx", "source": "sources/authored/edge_cases.tsx"},
+    {"id": "ts-cjs-through-typescript", "language": "typescript", "path": "lib/edge_cases.cjs", "source": "sources/authored/edge_cases.cjs"},
+    {"id": "ts-unit-fixture", "language": "typescript", "path": "structure.ts", "source": "../javascript/structure.ts"},
+    {"id": "tsx-rejects-angle-cast", "language": "typescript", "path": "cast.tsx", "inline": "const x = <number>value;\n"},
+    {"id": "ts-rejects-unknown-extension", "language": "typescript", "path": "main.py", "inline": "x = 1\n"}
+  ],
+  "path_policy": {
+    "languages": ["go", "rust", "javascript", "typescript"],
+    "paths": [
+      "main.go", "pkg/server.go", "pkg/server_test.go", "vendor/x/y.go", "testdata/a.go",
+      "internal/_gen.go", ".hidden/a.go", "a/.b/c.go", "cmd/tool/main.go", "a.go.bak",
+      "src/lib.rs", "tests/integration.rs", "benches/bench.rs", "target/debug/x.rs",
+      "vendor/crate/lib.rs", "examples/tests_helper.rs", "src/tests/mod.rs", "src/_private.rs",
+      "index.js", "lib/app.mjs", "lib/app.cjs", "src/view.jsx", "src/main.ts", "src/view.tsx",
+      "src/types.d.ts", "src/app.mts", "src/app.cts", "node_modules/x/index.js",
+      "dist/bundle.js", "build/out.js", "coverage/lcov.js", "__tests__/a.js",
+      "src/__mocks__/fs.js", "src/a.test.ts", "src/a.spec.tsx", "test/helper.js",
+      "tests/e2e.ts", "src/testing/util.ts", "src/latest.js", "src/.eslintrc.js",
+      "src/_private.js", "README.md", "setup.py", "a.rs.orig"
+    ]
+  }
+}

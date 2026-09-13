@@ -1,6 +1,6 @@
 import pytest
 
-from agentless_ml.adapters.languages import RustAdapter, get_language_adapter
+from agentless_ml.adapters.languages import get_language_adapter
 from agentless_ml.localization.context import render_symbol_localization_prompt
 from agentless_ml.localization.locations import (
     parse_locations_for_files,
@@ -25,7 +25,7 @@ mod helpers {
 
 
 def test_rust_structure_and_lexical_spans():
-    node = RustAdapter().parse_file("lib.rs", SOURCE)
+    node = get_language_adapter("rust").parse_file("lib.rs", SOURCE)
     assert [s.qualified_name for s in node.symbols] == [
         "Counter",
         "Reset",
@@ -41,7 +41,7 @@ def test_rust_structure_and_lexical_spans():
 
 
 def test_rust_qualified_localization_and_ambiguity():
-    node = RustAdapter().parse_file("lib.rs", SOURCE)
+    node = get_language_adapter("rust").parse_file("lib.rs", SOURCE)
     locations = parse_locations_for_files(
         ["lib.rs\nmethod: <Counter as Reset>::reset\nconstant: helpers::LABEL"],
         ["lib.rs"],
@@ -72,24 +72,24 @@ def test_rust_skeleton_and_prompts():
 
 def test_rust_generics_macros_and_empty_source():
     source = "impl<T> Box<T> { fn get(&self) -> &T { &self.0 } }\nmake_items!();"
-    node = RustAdapter().parse_file("lib.rs", source)
+    node = get_language_adapter("rust").parse_file("lib.rs", source)
     assert node.symbols[0].children[0].qualified_name == "Box<T>::get"
-    assert "make_items!();" in RustAdapter().render_skeleton(source)
-    assert RustAdapter().parse_file("lib.rs", "").symbols == ()
+    assert "make_items!();" in get_language_adapter("rust").render_skeleton(source)
+    assert get_language_adapter("rust").parse_file("lib.rs", "").symbols == ()
     with pytest.raises(ValueError, match="syntax"):
-        RustAdapter().parse_file("lib.rs", "fn broken( {")
+        get_language_adapter("rust").parse_file("lib.rs", "fn broken( {")
     with pytest.raises(ValueError, match="compression"):
-        RustAdapter().render_skeleton(SOURCE, compress_assign=True)
+        get_language_adapter("rust").render_skeleton(SOURCE, compress_assign=True)
 
 
 @pytest.mark.parametrize(
     "path", ["target/debug/generated.rs", "vendor/lib.rs", ".git/a.rs", "lib.py"]
 )
 def test_rust_excludes_non_source_paths(path):
-    assert not RustAdapter().is_source_path(path)
+    assert not get_language_adapter("rust").is_source_path(path)
 
 
 def test_rust_path_policy():
-    assert RustAdapter().is_source_path("src/lib.rs")
-    assert RustAdapter().is_test_path("tests/integration.rs")
-    assert not RustAdapter().is_test_path("src/lib.rs")
+    assert get_language_adapter("rust").is_source_path("src/lib.rs")
+    assert get_language_adapter("rust").is_test_path("tests/integration.rs")
+    assert not get_language_adapter("rust").is_test_path("src/lib.rs")

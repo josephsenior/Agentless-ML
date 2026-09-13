@@ -1,0 +1,410 @@
+{
+  "id": "ts-vue-shared-general",
+  "language": "typescript",
+  "path": "packages/shared/src/general.ts",
+  "source_sha256": "f04a9420469da86d5c0c15a08aa5668356bd77718ac614baa84859c9ad8d5ed1",
+  "parse": {
+    "path": "packages/shared/src/general.ts",
+    "language": "typescript",
+    "line_count": 210,
+    "symbols": [
+      {
+        "kind": "constant",
+        "name": "EMPTY_OBJ",
+        "qualified_name": "EMPTY_OBJ",
+        "signature": "EMPTY_OBJ: { readonly [key: string]: any } = __DEV__\n  ? Object.freeze({})\n  : {}",
+        "start_line": 3,
+        "end_line": 5,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "EMPTY_ARR",
+        "qualified_name": "EMPTY_ARR",
+        "signature": "EMPTY_ARR: readonly never[] = __DEV__ ? Object.freeze([]) : []",
+        "start_line": 6,
+        "end_line": 6,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "NOOP",
+        "qualified_name": "NOOP",
+        "signature": "NOOP = (): void =>",
+        "start_line": 8,
+        "end_line": 8,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "NO",
+        "qualified_name": "NO",
+        "signature": "NO = () =>",
+        "start_line": 13,
+        "end_line": 13,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "isOn",
+        "qualified_name": "isOn",
+        "signature": "isOn = (key: string): boolean =>",
+        "start_line": 15,
+        "end_line": 19,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "isModelListener",
+        "qualified_name": "isModelListener",
+        "signature": "isModelListener = (key: string): key is `onUpdate:${string}` =>",
+        "start_line": 21,
+        "end_line": 22,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "extend",
+        "qualified_name": "extend",
+        "signature": "extend: typeof Object.assign = Object.assign",
+        "start_line": 24,
+        "end_line": 24,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "remove",
+        "qualified_name": "remove",
+        "signature": "remove = <T>(arr: T[], el: T): void =>",
+        "start_line": 26,
+        "end_line": 31,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "hasOwnProperty",
+        "qualified_name": "hasOwnProperty",
+        "signature": "hasOwnProperty = Object.prototype.hasOwnProperty",
+        "start_line": 33,
+        "end_line": 33,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "hasOwn",
+        "qualified_name": "hasOwn",
+        "signature": "hasOwn = (\n  val: object,\n  key: string | symbol,\n): key is keyof typeof val =>",
+        "start_line": 34,
+        "end_line": 37,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "isArray",
+        "qualified_name": "isArray",
+        "signature": "isArray: typeof Array.isArray = Array.isArray",
+        "start_line": 39,
+        "end_line": 39,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "isMap",
+        "qualified_name": "isMap",
+        "signature": "isMap = (val: unknown): val is Map<any, any> =>",
+        "start_line": 40,
+        "end_line": 41,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "isSet",
+        "qualified_name": "isSet",
+        "signature": "isSet = (val: unknown): val is Set<any> =>",
+        "start_line": 42,
+        "end_line": 43,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "isDate",
+        "qualified_name": "isDate",
+        "signature": "isDate = (val: unknown): val is Date =>",
+        "start_line": 45,
+        "end_line": 46,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "isRegExp",
+        "qualified_name": "isRegExp",
+        "signature": "isRegExp = (val: unknown): val is RegExp =>",
+        "start_line": 47,
+        "end_line": 48,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "isFunction",
+        "qualified_name": "isFunction",
+        "signature": "isFunction = (val: unknown): val is Function =>",
+        "start_line": 49,
+        "end_line": 50,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "isString",
+        "qualified_name": "isString",
+        "signature": "isString = (val: unknown): val is string =>",
+        "start_line": 51,
+        "end_line": 51,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "isSymbol",
+        "qualified_name": "isSymbol",
+        "signature": "isSymbol = (val: unknown): val is symbol =>",
+        "start_line": 52,
+        "end_line": 52,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "isObject",
+        "qualified_name": "isObject",
+        "signature": "isObject = (val: unknown): val is Record<any, any> =>",
+        "start_line": 53,
+        "end_line": 54,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "isPromise",
+        "qualified_name": "isPromise",
+        "signature": "isPromise = <T = any>(val: unknown): val is Promise<T> =>",
+        "start_line": 56,
+        "end_line": 62,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "objectToString",
+        "qualified_name": "objectToString",
+        "signature": "objectToString: typeof Object.prototype.toString =\n  Object.prototype.toString",
+        "start_line": 64,
+        "end_line": 65,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "toTypeString",
+        "qualified_name": "toTypeString",
+        "signature": "toTypeString = (value: unknown): string =>",
+        "start_line": 66,
+        "end_line": 67,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "toRawType",
+        "qualified_name": "toRawType",
+        "signature": "toRawType = (value: unknown): string =>",
+        "start_line": 69,
+        "end_line": 72,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "isPlainObject",
+        "qualified_name": "isPlainObject",
+        "signature": "isPlainObject = (val: unknown): val is object =>",
+        "start_line": 74,
+        "end_line": 75,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "isIntegerKey",
+        "qualified_name": "isIntegerKey",
+        "signature": "isIntegerKey = (key: unknown): boolean =>",
+        "start_line": 77,
+        "end_line": 81,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "isReservedProp",
+        "qualified_name": "isReservedProp",
+        "signature": "isReservedProp: (key: string) => boolean = /*#__PURE__*/ makeMap(\n  // the leading comma is intentional so empty string \"\" is also included\n  ',key,ref,ref_for,ref_key,' +\n    'onVnodeBeforeMount,onVnodeMounted,' +\n    'onVnodeBeforeUpdate,onVnodeUpdated,' +\n    'onVnodeBeforeUnmount,onVnodeUnmounted',\n)",
+        "start_line": 83,
+        "end_line": 89,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "isBuiltInDirective",
+        "qualified_name": "isBuiltInDirective",
+        "signature": "isBuiltInDirective: (key: string) => boolean =\n  /*#__PURE__*/ makeMap(\n    'bind,cloak,else-if,else,for,html,if,model,on,once,pre,show,slot,text,memo',\n  )",
+        "start_line": 91,
+        "end_line": 94,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "cacheStringFunction",
+        "qualified_name": "cacheStringFunction",
+        "signature": "cacheStringFunction = <T extends (str: string) => string>(fn: T): T =>",
+        "start_line": 96,
+        "end_line": 102,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "camelizeRE",
+        "qualified_name": "camelizeRE",
+        "signature": "camelizeRE = /-(\\w)/g",
+        "start_line": 104,
+        "end_line": 104,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "camelize",
+        "qualified_name": "camelize",
+        "signature": "camelize: (str: string) => string = cacheStringFunction(\n  (str: string): string => {\n    return str.replace(camelizeRE, (_, c) => (c ? c.toUpperCase() : ''))\n  },\n)",
+        "start_line": 108,
+        "end_line": 112,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "hyphenateRE",
+        "qualified_name": "hyphenateRE",
+        "signature": "hyphenateRE = /\\B([A-Z])/g",
+        "start_line": 114,
+        "end_line": 114,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "hyphenate",
+        "qualified_name": "hyphenate",
+        "signature": "hyphenate: (str: string) => string = cacheStringFunction(\n  (str: string) => str.replace(hyphenateRE, '-$1').toLowerCase(),\n)",
+        "start_line": 118,
+        "end_line": 120,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "capitalize",
+        "qualified_name": "capitalize",
+        "signature": "capitalize: <T extends string>(str: T) => Capitalize<T> =\n  cacheStringFunction(<T extends string>(str: T) => {\n    return (str.charAt(0).toUpperCase() + str.slice(1)) as Capitalize<T>\n  })",
+        "start_line": 125,
+        "end_line": 128,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "toHandlerKey",
+        "qualified_name": "toHandlerKey",
+        "signature": "toHandlerKey: <T extends string>(\n  str: T,\n) => T extends '' ? '' : `on${Capitalize<T>}` = cacheStringFunction(\n  <T extends string>(str: T) => {\n    const s = str ? `on${capitalize(str)}` : ``\n    return s as T extends '' ? '' : `on${Capitalize<T>}`\n  },\n)",
+        "start_line": 133,
+        "end_line": 140,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "hasChanged",
+        "qualified_name": "hasChanged",
+        "signature": "hasChanged = (value: any, oldValue: any): boolean =>",
+        "start_line": 143,
+        "end_line": 144,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "invokeArrayFns",
+        "qualified_name": "invokeArrayFns",
+        "signature": "invokeArrayFns = (fns: Function[], ...arg: any[]): void =>",
+        "start_line": 146,
+        "end_line": 150,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "def",
+        "qualified_name": "def",
+        "signature": "def = (\n  obj: object,\n  key: string | symbol,\n  value: any,\n  writable = false,\n): void =>",
+        "start_line": 152,
+        "end_line": 164,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "looseToNumber",
+        "qualified_name": "looseToNumber",
+        "signature": "looseToNumber = (val: any): any =>",
+        "start_line": 170,
+        "end_line": 173,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "toNumber",
+        "qualified_name": "toNumber",
+        "signature": "toNumber = (val: any): any =>",
+        "start_line": 179,
+        "end_line": 182,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "global",
+        "qualified_name": "global",
+        "signature": "global: {}",
+        "start_line": 185,
+        "end_line": 185,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "_globalThis",
+        "qualified_name": "_globalThis",
+        "signature": "_globalThis: any",
+        "start_line": 187,
+        "end_line": 187,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "getGlobalThis",
+        "qualified_name": "getGlobalThis",
+        "signature": "getGlobalThis = (): any =>",
+        "start_line": 188,
+        "end_line": 202,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "identRE",
+        "qualified_name": "identRE",
+        "signature": "identRE = /^[_$a-zA-Z\\xA0-\\uFFFF][_$a-zA-Z0-9\\xA0-\\uFFFF]*$/",
+        "start_line": 204,
+        "end_line": 204,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "genPropsAccessExp",
+        "qualified_name": "genPropsAccessExp",
+        "signature": "export function genPropsAccessExp(name: string): string",
+        "start_line": 206,
+        "end_line": 210,
+        "children": []
+      }
+    ]
+  },
+  "skeleton": "import { makeMap } from './makeMap'\n\nexport const EMPTY_OBJ: { readonly [key: string]: any } = __DEV__\n  ? Object.freeze({})\n  : {}\nexport const EMPTY_ARR: readonly never[] = __DEV__ ? Object.freeze([]) : []\n\nexport const NOOP = (): void => { ... }\n\n/**\n * Always return false.\n */\nexport const NO = () => ...\n\nexport const isOn = (key: string): boolean =>\n  ...\n\nexport const isModelListener = (key: string): key is `onUpdate:${string}` =>\n  ...\n\nexport const extend: typeof Object.assign = Object.assign\n\nexport const remove = <T>(arr: T[], el: T): void => { ... }\n\nconst hasOwnProperty = Object.prototype.hasOwnProperty\nexport const hasOwn = (\n  val: object,\n  key: string | symbol,\n): key is keyof typeof val => ...\n\nexport const isArray: typeof Array.isArray = Array.isArray\nexport const isMap = (val: unknown): val is Map<any, any> =>\n  ...\nexport const isSet = (val: unknown): val is Set<any> =>\n  ...\n\nexport const isDate = (val: unknown): val is Date =>\n  ...\nexport const isRegExp = (val: unknown): val is RegExp =>\n  ...\nexport const isFunction = (val: unknown): val is Function =>\n  ...\nexport const isString = (val: unknown): val is string => ...\nexport const isSymbol = (val: unknown): val is symbol => ...\nexport const isObject = (val: unknown): val is Record<any, any> =>\n  ...\n\nexport const isPromise = <T = any>(val: unknown): val is Promise<T> => { ... }\n\nexport const objectToString: typeof Object.prototype.toString =\n  Object.prototype.toString\nexport const toTypeString = (value: unknown): string =>\n  ...\n\nexport const toRawType = (value: unknown): string => { ... }\n\nexport const isPlainObject = (val: unknown): val is object =>\n  ...\n\nexport const isIntegerKey = (key: unknown): boolean =>\n  ...\n\nexport const isReservedProp: (key: string) => boolean = /*#__PURE__*/ makeMap(\n  // the leading comma is intentional so empty string \"\" is also included\n  ',key,ref,ref_for,ref_key,' +\n    'onVnodeBeforeMount,onVnodeMounted,' +\n    'onVnodeBeforeUpdate,onVnodeUpdated,' +\n    'onVnodeBeforeUnmount,onVnodeUnmounted',\n)\n\nexport const isBuiltInDirective: (key: string) => boolean =\n  /*#__PURE__*/ makeMap(\n    'bind,cloak,else-if,else,for,html,if,model,on,once,pre,show,slot,text,memo',\n  )\n\nconst cacheStringFunction = <T extends (str: string) => string>(fn: T): T => { ... }\n\nconst camelizeRE = /-(\\w)/g\n/**\n * @private\n */\nexport const camelize: (str: string) => string = cacheStringFunction(\n  (str: string): string => { ... },\n)\n\nconst hyphenateRE = /\\B([A-Z])/g\n/**\n * @private\n */\nexport const hyphenate: (str: string) => string = cacheStringFunction(\n  (str: string) => ...,\n)\n\n/**\n * @private\n */\nexport const capitalize: <T extends string>(str: T) => Capitalize<T> =\n  cacheStringFunction(<T extends string>(str: T) => { ... })\n\n/**\n * @private\n */\nexport const toHandlerKey: <T extends string>(\n  str: T,\n) => T extends '' ? '' : `on${Capitalize<T>}` = cacheStringFunction(\n  <T extends string>(str: T) => { ... },\n)\n\n// compare whether a value has changed, accounting for NaN.\nexport const hasChanged = (value: any, oldValue: any): boolean =>\n  ...\n\nexport const invokeArrayFns = (fns: Function[], ...arg: any[]): void => { ... }\n\nexport const def = (\n  obj: object,\n  key: string | symbol,\n  value: any,\n  writable = false,\n): void => { ... }\n\n/**\n * \"123-foo\" will be parsed to 123\n * This is used for the .number modifier in v-model\n */\nexport const looseToNumber = (val: any): any => { ... }\n\n/**\n * Only concerns number-like strings\n * \"123-foo\" will be returned as-is\n */\nexport const toNumber = (val: any): any => { ... }\n\n// for typeof global checks without @types/node\ndeclare var global: {}\n\nlet _globalThis: any\nexport const getGlobalThis = (): any => { ... }\n\nconst identRE = /^[_$a-zA-Z\\xA0-\\uFFFF][_$a-zA-Z0-9\\xA0-\\uFFFF]*$/\n\nexport function genPropsAccessExp(name: string): string { ... }\n"
+}

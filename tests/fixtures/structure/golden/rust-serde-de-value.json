@@ -1,0 +1,2795 @@
+{
+  "id": "rust-serde-de-value",
+  "language": "rust",
+  "path": "serde/src/de/value.rs",
+  "source_sha256": "0c485908b1f755e4750af0aefa2132460dadbcf30919c15c06ca795a92d96430",
+  "parse": {
+    "path": "serde/src/de/value.rs",
+    "language": "rust",
+    "line_count": 1720,
+    "symbols": [
+      {
+        "kind": "struct",
+        "name": "Error",
+        "qualified_name": "Error",
+        "signature": "#[derive(Clone, PartialEq)]\npub struct Error",
+        "start_line": 50,
+        "end_line": 53,
+        "children": [
+          {
+            "kind": "field",
+            "name": "err",
+            "qualified_name": "Error::err",
+            "signature": "err: ErrorImpl",
+            "start_line": 52,
+            "end_line": 52,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "type",
+        "name": "ErrorImpl",
+        "qualified_name": "ErrorImpl",
+        "signature": "#[cfg(any(feature = \"std\", feature = \"alloc\"))]\ntype ErrorImpl = Box<str>;",
+        "start_line": 55,
+        "end_line": 56,
+        "children": []
+      },
+      {
+        "kind": "type",
+        "name": "ErrorImpl",
+        "qualified_name": "ErrorImpl",
+        "signature": "#[cfg(not(any(feature = \"std\", feature = \"alloc\")))]\ntype ErrorImpl = ();",
+        "start_line": 57,
+        "end_line": 58,
+        "children": []
+      },
+      {
+        "kind": "impl",
+        "name": "<Error as de::Error>",
+        "qualified_name": "<Error as de::Error>",
+        "signature": "impl de::Error for Error",
+        "start_line": 60,
+        "end_line": 81,
+        "children": [
+          {
+            "kind": "method",
+            "name": "custom",
+            "qualified_name": "<Error as de::Error>::custom",
+            "signature": "#[cfg(any(feature = \"std\", feature = \"alloc\"))]\n    #[cold]\n    fn custom<T>(msg: T) -> Self\n    where\n        T: Display,",
+            "start_line": 61,
+            "end_line": 70,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "custom",
+            "qualified_name": "<Error as de::Error>::custom",
+            "signature": "#[cfg(not(any(feature = \"std\", feature = \"alloc\")))]\n    #[cold]\n    fn custom<T>(msg: T) -> Self\n    where\n        T: Display,",
+            "start_line": 72,
+            "end_line": 80,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<Error as ser::Error>",
+        "qualified_name": "<Error as ser::Error>",
+        "signature": "impl ser::Error for Error",
+        "start_line": 83,
+        "end_line": 91,
+        "children": [
+          {
+            "kind": "method",
+            "name": "custom",
+            "qualified_name": "<Error as ser::Error>::custom",
+            "signature": "#[cold]\n    fn custom<T>(msg: T) -> Self\n    where\n        T: Display,",
+            "start_line": 84,
+            "end_line": 90,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<Error as Display>",
+        "qualified_name": "<Error as Display>",
+        "signature": "impl Display for Error",
+        "start_line": 93,
+        "end_line": 103,
+        "children": [
+          {
+            "kind": "method",
+            "name": "fmt",
+            "qualified_name": "<Error as Display>::fmt",
+            "signature": "#[cfg(any(feature = \"std\", feature = \"alloc\"))]\n    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result",
+            "start_line": 94,
+            "end_line": 97,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "fmt",
+            "qualified_name": "<Error as Display>::fmt",
+            "signature": "#[cfg(not(any(feature = \"std\", feature = \"alloc\")))]\n    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result",
+            "start_line": 99,
+            "end_line": 102,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<Error as Debug>",
+        "qualified_name": "<Error as Debug>",
+        "signature": "impl Debug for Error",
+        "start_line": 105,
+        "end_line": 112,
+        "children": [
+          {
+            "kind": "method",
+            "name": "fmt",
+            "qualified_name": "<Error as Debug>::fmt",
+            "signature": "fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result",
+            "start_line": 106,
+            "end_line": 111,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<Error as error::Error>",
+        "qualified_name": "<Error as error::Error>",
+        "signature": "#[cfg(feature = \"std\")]\n#[cfg_attr(docsrs, doc(cfg(feature = \"std\")))]\nimpl error::Error for Error",
+        "start_line": 114,
+        "end_line": 120,
+        "children": [
+          {
+            "kind": "method",
+            "name": "description",
+            "qualified_name": "<Error as error::Error>::description",
+            "signature": "fn description(&self) -> &str",
+            "start_line": 117,
+            "end_line": 119,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<() as IntoDeserializer<'de, E>>",
+        "qualified_name": "<() as IntoDeserializer<'de, E>>",
+        "signature": "impl<'de, E> IntoDeserializer<'de, E> for ()\nwhere\n    E: de::Error,",
+        "start_line": 124,
+        "end_line": 133,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Deserializer",
+            "qualified_name": "<() as IntoDeserializer<'de, E>>::Deserializer",
+            "signature": "type Deserializer = UnitDeserializer<E>;",
+            "start_line": 128,
+            "end_line": 128,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "into_deserializer",
+            "qualified_name": "<() as IntoDeserializer<'de, E>>::into_deserializer",
+            "signature": "fn into_deserializer(self) -> UnitDeserializer<E>",
+            "start_line": 130,
+            "end_line": 132,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "struct",
+        "name": "UnitDeserializer",
+        "qualified_name": "UnitDeserializer",
+        "signature": "pub struct UnitDeserializer<E>",
+        "start_line": 136,
+        "end_line": 138,
+        "children": [
+          {
+            "kind": "field",
+            "name": "marker",
+            "qualified_name": "UnitDeserializer::marker",
+            "signature": "marker: PhantomData<E>",
+            "start_line": 137,
+            "end_line": 137,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "UnitDeserializer<E>",
+        "qualified_name": "UnitDeserializer<E>",
+        "signature": "impl<E> UnitDeserializer<E>",
+        "start_line": 142,
+        "end_line": 149,
+        "children": [
+          {
+            "kind": "method",
+            "name": "new",
+            "qualified_name": "UnitDeserializer<E>::new",
+            "signature": "#[allow(missing_docs)]\n    pub fn new() -> Self",
+            "start_line": 143,
+            "end_line": 148,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<UnitDeserializer<E> as de::Deserializer<'de>>",
+        "qualified_name": "<UnitDeserializer<E> as de::Deserializer<'de>>",
+        "signature": "impl<'de, E> de::Deserializer<'de> for UnitDeserializer<E>\nwhere\n    E: de::Error,",
+        "start_line": 151,
+        "end_line": 176,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Error",
+            "qualified_name": "<UnitDeserializer<E> as de::Deserializer<'de>>::Error",
+            "signature": "type Error = E;",
+            "start_line": 155,
+            "end_line": 155,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "deserialize_any",
+            "qualified_name": "<UnitDeserializer<E> as de::Deserializer<'de>>::deserialize_any",
+            "signature": "fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,",
+            "start_line": 163,
+            "end_line": 168,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "deserialize_option",
+            "qualified_name": "<UnitDeserializer<E> as de::Deserializer<'de>>::deserialize_option",
+            "signature": "fn deserialize_option<V>(self, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,",
+            "start_line": 170,
+            "end_line": 175,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<UnitDeserializer<E> as Debug>",
+        "qualified_name": "<UnitDeserializer<E> as Debug>",
+        "signature": "impl<E> Debug for UnitDeserializer<E>",
+        "start_line": 178,
+        "end_line": 182,
+        "children": [
+          {
+            "kind": "method",
+            "name": "fmt",
+            "qualified_name": "<UnitDeserializer<E> as Debug>::fmt",
+            "signature": "fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result",
+            "start_line": 179,
+            "end_line": 181,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "struct",
+        "name": "NeverDeserializer",
+        "qualified_name": "NeverDeserializer",
+        "signature": "#[cfg(feature = \"unstable\")]\n#[cfg_attr(docsrs, doc(cfg(feature = \"unstable\")))]\npub struct NeverDeserializer<E>",
+        "start_line": 187,
+        "end_line": 192,
+        "children": [
+          {
+            "kind": "field",
+            "name": "never",
+            "qualified_name": "NeverDeserializer::never",
+            "signature": "never: !",
+            "start_line": 190,
+            "end_line": 190,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "marker",
+            "qualified_name": "NeverDeserializer::marker",
+            "signature": "marker: PhantomData<E>",
+            "start_line": 191,
+            "end_line": 191,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<! as IntoDeserializer<'de, E>>",
+        "qualified_name": "<! as IntoDeserializer<'de, E>>",
+        "signature": "#[cfg(feature = \"unstable\")]\n#[cfg_attr(docsrs, doc(cfg(feature = \"unstable\")))]\nimpl<'de, E> IntoDeserializer<'de, E> for !\nwhere\n    E: de::Error,",
+        "start_line": 194,
+        "end_line": 205,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Deserializer",
+            "qualified_name": "<! as IntoDeserializer<'de, E>>::Deserializer",
+            "signature": "type Deserializer = NeverDeserializer<E>;",
+            "start_line": 200,
+            "end_line": 200,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "into_deserializer",
+            "qualified_name": "<! as IntoDeserializer<'de, E>>::into_deserializer",
+            "signature": "fn into_deserializer(self) -> Self::Deserializer",
+            "start_line": 202,
+            "end_line": 204,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<NeverDeserializer<E> as de::Deserializer<'de>>",
+        "qualified_name": "<NeverDeserializer<E> as de::Deserializer<'de>>",
+        "signature": "#[cfg(feature = \"unstable\")]\nimpl<'de, E> de::Deserializer<'de> for NeverDeserializer<E>\nwhere\n    E: de::Error,",
+        "start_line": 207,
+        "end_line": 226,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Error",
+            "qualified_name": "<NeverDeserializer<E> as de::Deserializer<'de>>::Error",
+            "signature": "type Error = E;",
+            "start_line": 212,
+            "end_line": 212,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "deserialize_any",
+            "qualified_name": "<NeverDeserializer<E> as de::Deserializer<'de>>::deserialize_any",
+            "signature": "fn deserialize_any<V>(self, _visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,",
+            "start_line": 214,
+            "end_line": 219,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "struct",
+        "name": "U32Deserializer",
+        "qualified_name": "U32Deserializer",
+        "signature": "pub struct U32Deserializer<E>",
+        "start_line": 310,
+        "end_line": 313,
+        "children": [
+          {
+            "kind": "field",
+            "name": "value",
+            "qualified_name": "U32Deserializer::value",
+            "signature": "value: u32",
+            "start_line": 311,
+            "end_line": 311,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "marker",
+            "qualified_name": "U32Deserializer::marker",
+            "signature": "marker: PhantomData<E>",
+            "start_line": 312,
+            "end_line": 312,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<u32 as IntoDeserializer<'de, E>>",
+        "qualified_name": "<u32 as IntoDeserializer<'de, E>>",
+        "signature": "impl<'de, E> IntoDeserializer<'de, E> for u32\nwhere\n    E: de::Error,",
+        "start_line": 317,
+        "end_line": 326,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Deserializer",
+            "qualified_name": "<u32 as IntoDeserializer<'de, E>>::Deserializer",
+            "signature": "type Deserializer = U32Deserializer<E>;",
+            "start_line": 321,
+            "end_line": 321,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "into_deserializer",
+            "qualified_name": "<u32 as IntoDeserializer<'de, E>>::into_deserializer",
+            "signature": "fn into_deserializer(self) -> U32Deserializer<E>",
+            "start_line": 323,
+            "end_line": 325,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "U32Deserializer<E>",
+        "qualified_name": "U32Deserializer<E>",
+        "signature": "impl<E> U32Deserializer<E>",
+        "start_line": 328,
+        "end_line": 336,
+        "children": [
+          {
+            "kind": "method",
+            "name": "new",
+            "qualified_name": "U32Deserializer<E>::new",
+            "signature": "#[allow(missing_docs)]\n    pub fn new(value: u32) -> Self",
+            "start_line": 329,
+            "end_line": 335,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<U32Deserializer<E> as de::Deserializer<'de>>",
+        "qualified_name": "<U32Deserializer<E> as de::Deserializer<'de>>",
+        "signature": "impl<'de, E> de::Deserializer<'de> for U32Deserializer<E>\nwhere\n    E: de::Error,",
+        "start_line": 338,
+        "end_line": 370,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Error",
+            "qualified_name": "<U32Deserializer<E> as de::Deserializer<'de>>::Error",
+            "signature": "type Error = E;",
+            "start_line": 342,
+            "end_line": 342,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "deserialize_any",
+            "qualified_name": "<U32Deserializer<E> as de::Deserializer<'de>>::deserialize_any",
+            "signature": "fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,",
+            "start_line": 350,
+            "end_line": 355,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "deserialize_enum",
+            "qualified_name": "<U32Deserializer<E> as de::Deserializer<'de>>::deserialize_enum",
+            "signature": "fn deserialize_enum<V>(\n        self,\n        name: &str,\n        variants: &'static [&'static str],\n        visitor: V,\n    ) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,",
+            "start_line": 357,
+            "end_line": 369,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<U32Deserializer<E> as de::EnumAccess<'de>>",
+        "qualified_name": "<U32Deserializer<E> as de::EnumAccess<'de>>",
+        "signature": "impl<'de, E> de::EnumAccess<'de> for U32Deserializer<E>\nwhere\n    E: de::Error,",
+        "start_line": 372,
+        "end_line": 385,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Error",
+            "qualified_name": "<U32Deserializer<E> as de::EnumAccess<'de>>::Error",
+            "signature": "type Error = E;",
+            "start_line": 376,
+            "end_line": 376,
+            "children": []
+          },
+          {
+            "kind": "type",
+            "name": "Variant",
+            "qualified_name": "<U32Deserializer<E> as de::EnumAccess<'de>>::Variant",
+            "signature": "type Variant = private::UnitOnly<E>;",
+            "start_line": 377,
+            "end_line": 377,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "variant_seed",
+            "qualified_name": "<U32Deserializer<E> as de::EnumAccess<'de>>::variant_seed",
+            "signature": "fn variant_seed<T>(self, seed: T) -> Result<(T::Value, Self::Variant), Self::Error>\n    where\n        T: de::DeserializeSeed<'de>,",
+            "start_line": 379,
+            "end_line": 384,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<U32Deserializer<E> as Debug>",
+        "qualified_name": "<U32Deserializer<E> as Debug>",
+        "signature": "impl<E> Debug for U32Deserializer<E>",
+        "start_line": 387,
+        "end_line": 394,
+        "children": [
+          {
+            "kind": "method",
+            "name": "fmt",
+            "qualified_name": "<U32Deserializer<E> as Debug>::fmt",
+            "signature": "fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result",
+            "start_line": 388,
+            "end_line": 393,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "struct",
+        "name": "StrDeserializer",
+        "qualified_name": "StrDeserializer",
+        "signature": "pub struct StrDeserializer<'a, E>",
+        "start_line": 399,
+        "end_line": 402,
+        "children": [
+          {
+            "kind": "field",
+            "name": "value",
+            "qualified_name": "StrDeserializer::value",
+            "signature": "value: &'a str",
+            "start_line": 400,
+            "end_line": 400,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "marker",
+            "qualified_name": "StrDeserializer::marker",
+            "signature": "marker: PhantomData<E>",
+            "start_line": 401,
+            "end_line": 401,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<&'a str as IntoDeserializer<'de, E>>",
+        "qualified_name": "<&'a str as IntoDeserializer<'de, E>>",
+        "signature": "impl<'de, 'a, E> IntoDeserializer<'de, E> for &'a str\nwhere\n    E: de::Error,",
+        "start_line": 406,
+        "end_line": 415,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Deserializer",
+            "qualified_name": "<&'a str as IntoDeserializer<'de, E>>::Deserializer",
+            "signature": "type Deserializer = StrDeserializer<'a, E>;",
+            "start_line": 410,
+            "end_line": 410,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "into_deserializer",
+            "qualified_name": "<&'a str as IntoDeserializer<'de, E>>::into_deserializer",
+            "signature": "fn into_deserializer(self) -> StrDeserializer<'a, E>",
+            "start_line": 412,
+            "end_line": 414,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "StrDeserializer<'a, E>",
+        "qualified_name": "StrDeserializer<'a, E>",
+        "signature": "impl<'a, E> StrDeserializer<'a, E>",
+        "start_line": 417,
+        "end_line": 425,
+        "children": [
+          {
+            "kind": "method",
+            "name": "new",
+            "qualified_name": "StrDeserializer<'a, E>::new",
+            "signature": "#[allow(missing_docs)]\n    pub fn new(value: &'a str) -> Self",
+            "start_line": 418,
+            "end_line": 424,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<StrDeserializer<'a, E> as de::Deserializer<'de>>",
+        "qualified_name": "<StrDeserializer<'a, E> as de::Deserializer<'de>>",
+        "signature": "impl<'de, 'a, E> de::Deserializer<'de> for StrDeserializer<'a, E>\nwhere\n    E: de::Error,",
+        "start_line": 427,
+        "end_line": 459,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Error",
+            "qualified_name": "<StrDeserializer<'a, E> as de::Deserializer<'de>>::Error",
+            "signature": "type Error = E;",
+            "start_line": 431,
+            "end_line": 431,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "deserialize_any",
+            "qualified_name": "<StrDeserializer<'a, E> as de::Deserializer<'de>>::deserialize_any",
+            "signature": "fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,",
+            "start_line": 433,
+            "end_line": 438,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "deserialize_enum",
+            "qualified_name": "<StrDeserializer<'a, E> as de::Deserializer<'de>>::deserialize_enum",
+            "signature": "fn deserialize_enum<V>(\n        self,\n        name: &str,\n        variants: &'static [&'static str],\n        visitor: V,\n    ) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,",
+            "start_line": 440,
+            "end_line": 452,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<StrDeserializer<'a, E> as de::EnumAccess<'de>>",
+        "qualified_name": "<StrDeserializer<'a, E> as de::EnumAccess<'de>>",
+        "signature": "impl<'de, 'a, E> de::EnumAccess<'de> for StrDeserializer<'a, E>\nwhere\n    E: de::Error,",
+        "start_line": 461,
+        "end_line": 474,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Error",
+            "qualified_name": "<StrDeserializer<'a, E> as de::EnumAccess<'de>>::Error",
+            "signature": "type Error = E;",
+            "start_line": 465,
+            "end_line": 465,
+            "children": []
+          },
+          {
+            "kind": "type",
+            "name": "Variant",
+            "qualified_name": "<StrDeserializer<'a, E> as de::EnumAccess<'de>>::Variant",
+            "signature": "type Variant = private::UnitOnly<E>;",
+            "start_line": 466,
+            "end_line": 466,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "variant_seed",
+            "qualified_name": "<StrDeserializer<'a, E> as de::EnumAccess<'de>>::variant_seed",
+            "signature": "fn variant_seed<T>(self, seed: T) -> Result<(T::Value, Self::Variant), Self::Error>\n    where\n        T: de::DeserializeSeed<'de>,",
+            "start_line": 468,
+            "end_line": 473,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<StrDeserializer<'a, E> as Debug>",
+        "qualified_name": "<StrDeserializer<'a, E> as Debug>",
+        "signature": "impl<'a, E> Debug for StrDeserializer<'a, E>",
+        "start_line": 476,
+        "end_line": 483,
+        "children": [
+          {
+            "kind": "method",
+            "name": "fmt",
+            "qualified_name": "<StrDeserializer<'a, E> as Debug>::fmt",
+            "signature": "fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result",
+            "start_line": 477,
+            "end_line": 482,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "struct",
+        "name": "BorrowedStrDeserializer",
+        "qualified_name": "BorrowedStrDeserializer",
+        "signature": "pub struct BorrowedStrDeserializer<'de, E>",
+        "start_line": 489,
+        "end_line": 492,
+        "children": [
+          {
+            "kind": "field",
+            "name": "value",
+            "qualified_name": "BorrowedStrDeserializer::value",
+            "signature": "value: &'de str",
+            "start_line": 490,
+            "end_line": 490,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "marker",
+            "qualified_name": "BorrowedStrDeserializer::marker",
+            "signature": "marker: PhantomData<E>",
+            "start_line": 491,
+            "end_line": 491,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "BorrowedStrDeserializer<'de, E>",
+        "qualified_name": "BorrowedStrDeserializer<'de, E>",
+        "signature": "impl<'de, E> BorrowedStrDeserializer<'de, E>",
+        "start_line": 496,
+        "end_line": 504,
+        "children": [
+          {
+            "kind": "method",
+            "name": "new",
+            "qualified_name": "BorrowedStrDeserializer<'de, E>::new",
+            "signature": "pub fn new(value: &'de str) -> BorrowedStrDeserializer<'de, E>",
+            "start_line": 498,
+            "end_line": 503,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<BorrowedStrDeserializer<'de, E> as de::Deserializer<'de>>",
+        "qualified_name": "<BorrowedStrDeserializer<'de, E> as de::Deserializer<'de>>",
+        "signature": "impl<'de, E> de::Deserializer<'de> for BorrowedStrDeserializer<'de, E>\nwhere\n    E: de::Error,",
+        "start_line": 506,
+        "end_line": 538,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Error",
+            "qualified_name": "<BorrowedStrDeserializer<'de, E> as de::Deserializer<'de>>::Error",
+            "signature": "type Error = E;",
+            "start_line": 510,
+            "end_line": 510,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "deserialize_any",
+            "qualified_name": "<BorrowedStrDeserializer<'de, E> as de::Deserializer<'de>>::deserialize_any",
+            "signature": "fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,",
+            "start_line": 512,
+            "end_line": 517,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "deserialize_enum",
+            "qualified_name": "<BorrowedStrDeserializer<'de, E> as de::Deserializer<'de>>::deserialize_enum",
+            "signature": "fn deserialize_enum<V>(\n        self,\n        name: &str,\n        variants: &'static [&'static str],\n        visitor: V,\n    ) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,",
+            "start_line": 519,
+            "end_line": 531,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<BorrowedStrDeserializer<'de, E> as de::EnumAccess<'de>>",
+        "qualified_name": "<BorrowedStrDeserializer<'de, E> as de::EnumAccess<'de>>",
+        "signature": "impl<'de, E> de::EnumAccess<'de> for BorrowedStrDeserializer<'de, E>\nwhere\n    E: de::Error,",
+        "start_line": 540,
+        "end_line": 553,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Error",
+            "qualified_name": "<BorrowedStrDeserializer<'de, E> as de::EnumAccess<'de>>::Error",
+            "signature": "type Error = E;",
+            "start_line": 544,
+            "end_line": 544,
+            "children": []
+          },
+          {
+            "kind": "type",
+            "name": "Variant",
+            "qualified_name": "<BorrowedStrDeserializer<'de, E> as de::EnumAccess<'de>>::Variant",
+            "signature": "type Variant = private::UnitOnly<E>;",
+            "start_line": 545,
+            "end_line": 545,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "variant_seed",
+            "qualified_name": "<BorrowedStrDeserializer<'de, E> as de::EnumAccess<'de>>::variant_seed",
+            "signature": "fn variant_seed<T>(self, seed: T) -> Result<(T::Value, Self::Variant), Self::Error>\n    where\n        T: de::DeserializeSeed<'de>,",
+            "start_line": 547,
+            "end_line": 552,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<BorrowedStrDeserializer<'de, E> as Debug>",
+        "qualified_name": "<BorrowedStrDeserializer<'de, E> as Debug>",
+        "signature": "impl<'de, E> Debug for BorrowedStrDeserializer<'de, E>",
+        "start_line": 555,
+        "end_line": 562,
+        "children": [
+          {
+            "kind": "method",
+            "name": "fmt",
+            "qualified_name": "<BorrowedStrDeserializer<'de, E> as Debug>::fmt",
+            "signature": "fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result",
+            "start_line": 556,
+            "end_line": 561,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "struct",
+        "name": "StringDeserializer",
+        "qualified_name": "StringDeserializer",
+        "signature": "#[cfg(any(feature = \"std\", feature = \"alloc\"))]\n#[cfg_attr(docsrs, doc(cfg(any(feature = \"std\", feature = \"alloc\"))))]\npub struct StringDeserializer<E>",
+        "start_line": 567,
+        "end_line": 572,
+        "children": [
+          {
+            "kind": "field",
+            "name": "value",
+            "qualified_name": "StringDeserializer::value",
+            "signature": "value: String",
+            "start_line": 570,
+            "end_line": 570,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "marker",
+            "qualified_name": "StringDeserializer::marker",
+            "signature": "marker: PhantomData<E>",
+            "start_line": 571,
+            "end_line": 571,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<StringDeserializer<E> as Clone>",
+        "qualified_name": "<StringDeserializer<E> as Clone>",
+        "signature": "#[cfg(any(feature = \"std\", feature = \"alloc\"))]\nimpl<E> Clone for StringDeserializer<E>",
+        "start_line": 574,
+        "end_line": 582,
+        "children": [
+          {
+            "kind": "method",
+            "name": "clone",
+            "qualified_name": "<StringDeserializer<E> as Clone>::clone",
+            "signature": "fn clone(&self) -> Self",
+            "start_line": 576,
+            "end_line": 581,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<String as IntoDeserializer<'de, E>>",
+        "qualified_name": "<String as IntoDeserializer<'de, E>>",
+        "signature": "#[cfg(any(feature = \"std\", feature = \"alloc\"))]\n#[cfg_attr(docsrs, doc(cfg(any(feature = \"std\", feature = \"alloc\"))))]\nimpl<'de, E> IntoDeserializer<'de, E> for String\nwhere\n    E: de::Error,",
+        "start_line": 584,
+        "end_line": 595,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Deserializer",
+            "qualified_name": "<String as IntoDeserializer<'de, E>>::Deserializer",
+            "signature": "type Deserializer = StringDeserializer<E>;",
+            "start_line": 590,
+            "end_line": 590,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "into_deserializer",
+            "qualified_name": "<String as IntoDeserializer<'de, E>>::into_deserializer",
+            "signature": "fn into_deserializer(self) -> StringDeserializer<E>",
+            "start_line": 592,
+            "end_line": 594,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "StringDeserializer<E>",
+        "qualified_name": "StringDeserializer<E>",
+        "signature": "#[cfg(any(feature = \"std\", feature = \"alloc\"))]\nimpl<E> StringDeserializer<E>",
+        "start_line": 597,
+        "end_line": 606,
+        "children": [
+          {
+            "kind": "method",
+            "name": "new",
+            "qualified_name": "StringDeserializer<E>::new",
+            "signature": "#[allow(missing_docs)]\n    pub fn new(value: String) -> Self",
+            "start_line": 599,
+            "end_line": 605,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<StringDeserializer<E> as de::Deserializer<'de>>",
+        "qualified_name": "<StringDeserializer<E> as de::Deserializer<'de>>",
+        "signature": "#[cfg(any(feature = \"std\", feature = \"alloc\"))]\nimpl<'de, E> de::Deserializer<'de> for StringDeserializer<E>\nwhere\n    E: de::Error,",
+        "start_line": 608,
+        "end_line": 641,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Error",
+            "qualified_name": "<StringDeserializer<E> as de::Deserializer<'de>>::Error",
+            "signature": "type Error = E;",
+            "start_line": 613,
+            "end_line": 613,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "deserialize_any",
+            "qualified_name": "<StringDeserializer<E> as de::Deserializer<'de>>::deserialize_any",
+            "signature": "fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,",
+            "start_line": 615,
+            "end_line": 620,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "deserialize_enum",
+            "qualified_name": "<StringDeserializer<E> as de::Deserializer<'de>>::deserialize_enum",
+            "signature": "fn deserialize_enum<V>(\n        self,\n        name: &str,\n        variants: &'static [&'static str],\n        visitor: V,\n    ) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,",
+            "start_line": 622,
+            "end_line": 634,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<StringDeserializer<E> as de::EnumAccess<'de>>",
+        "qualified_name": "<StringDeserializer<E> as de::EnumAccess<'de>>",
+        "signature": "#[cfg(any(feature = \"std\", feature = \"alloc\"))]\nimpl<'de, E> de::EnumAccess<'de> for StringDeserializer<E>\nwhere\n    E: de::Error,",
+        "start_line": 643,
+        "end_line": 657,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Error",
+            "qualified_name": "<StringDeserializer<E> as de::EnumAccess<'de>>::Error",
+            "signature": "type Error = E;",
+            "start_line": 648,
+            "end_line": 648,
+            "children": []
+          },
+          {
+            "kind": "type",
+            "name": "Variant",
+            "qualified_name": "<StringDeserializer<E> as de::EnumAccess<'de>>::Variant",
+            "signature": "type Variant = private::UnitOnly<E>;",
+            "start_line": 649,
+            "end_line": 649,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "variant_seed",
+            "qualified_name": "<StringDeserializer<E> as de::EnumAccess<'de>>::variant_seed",
+            "signature": "fn variant_seed<T>(self, seed: T) -> Result<(T::Value, Self::Variant), Self::Error>\n    where\n        T: de::DeserializeSeed<'de>,",
+            "start_line": 651,
+            "end_line": 656,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<StringDeserializer<E> as Debug>",
+        "qualified_name": "<StringDeserializer<E> as Debug>",
+        "signature": "#[cfg(any(feature = \"std\", feature = \"alloc\"))]\nimpl<E> Debug for StringDeserializer<E>",
+        "start_line": 659,
+        "end_line": 667,
+        "children": [
+          {
+            "kind": "method",
+            "name": "fmt",
+            "qualified_name": "<StringDeserializer<E> as Debug>::fmt",
+            "signature": "fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result",
+            "start_line": 661,
+            "end_line": 666,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "struct",
+        "name": "CowStrDeserializer",
+        "qualified_name": "CowStrDeserializer",
+        "signature": "#[cfg(any(feature = \"std\", feature = \"alloc\"))]\n#[cfg_attr(docsrs, doc(cfg(any(feature = \"std\", feature = \"alloc\"))))]\npub struct CowStrDeserializer<'a, E>",
+        "start_line": 672,
+        "end_line": 677,
+        "children": [
+          {
+            "kind": "field",
+            "name": "value",
+            "qualified_name": "CowStrDeserializer::value",
+            "signature": "value: Cow<'a, str>",
+            "start_line": 675,
+            "end_line": 675,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "marker",
+            "qualified_name": "CowStrDeserializer::marker",
+            "signature": "marker: PhantomData<E>",
+            "start_line": 676,
+            "end_line": 676,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<CowStrDeserializer<'a, E> as Clone>",
+        "qualified_name": "<CowStrDeserializer<'a, E> as Clone>",
+        "signature": "#[cfg(any(feature = \"std\", feature = \"alloc\"))]\nimpl<'a, E> Clone for CowStrDeserializer<'a, E>",
+        "start_line": 679,
+        "end_line": 687,
+        "children": [
+          {
+            "kind": "method",
+            "name": "clone",
+            "qualified_name": "<CowStrDeserializer<'a, E> as Clone>::clone",
+            "signature": "fn clone(&self) -> Self",
+            "start_line": 681,
+            "end_line": 686,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<Cow<'a, str> as IntoDeserializer<'de, E>>",
+        "qualified_name": "<Cow<'a, str> as IntoDeserializer<'de, E>>",
+        "signature": "#[cfg(any(feature = \"std\", feature = \"alloc\"))]\n#[cfg_attr(docsrs, doc(cfg(any(feature = \"std\", feature = \"alloc\"))))]\nimpl<'de, 'a, E> IntoDeserializer<'de, E> for Cow<'a, str>\nwhere\n    E: de::Error,",
+        "start_line": 689,
+        "end_line": 700,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Deserializer",
+            "qualified_name": "<Cow<'a, str> as IntoDeserializer<'de, E>>::Deserializer",
+            "signature": "type Deserializer = CowStrDeserializer<'a, E>;",
+            "start_line": 695,
+            "end_line": 695,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "into_deserializer",
+            "qualified_name": "<Cow<'a, str> as IntoDeserializer<'de, E>>::into_deserializer",
+            "signature": "fn into_deserializer(self) -> CowStrDeserializer<'a, E>",
+            "start_line": 697,
+            "end_line": 699,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "CowStrDeserializer<'a, E>",
+        "qualified_name": "CowStrDeserializer<'a, E>",
+        "signature": "#[cfg(any(feature = \"std\", feature = \"alloc\"))]\nimpl<'a, E> CowStrDeserializer<'a, E>",
+        "start_line": 702,
+        "end_line": 711,
+        "children": [
+          {
+            "kind": "method",
+            "name": "new",
+            "qualified_name": "CowStrDeserializer<'a, E>::new",
+            "signature": "#[allow(missing_docs)]\n    pub fn new(value: Cow<'a, str>) -> Self",
+            "start_line": 704,
+            "end_line": 710,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<CowStrDeserializer<'a, E> as de::Deserializer<'de>>",
+        "qualified_name": "<CowStrDeserializer<'a, E> as de::Deserializer<'de>>",
+        "signature": "#[cfg(any(feature = \"std\", feature = \"alloc\"))]\nimpl<'de, 'a, E> de::Deserializer<'de> for CowStrDeserializer<'a, E>\nwhere\n    E: de::Error,",
+        "start_line": 713,
+        "end_line": 749,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Error",
+            "qualified_name": "<CowStrDeserializer<'a, E> as de::Deserializer<'de>>::Error",
+            "signature": "type Error = E;",
+            "start_line": 718,
+            "end_line": 718,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "deserialize_any",
+            "qualified_name": "<CowStrDeserializer<'a, E> as de::Deserializer<'de>>::deserialize_any",
+            "signature": "fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,",
+            "start_line": 720,
+            "end_line": 728,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "deserialize_enum",
+            "qualified_name": "<CowStrDeserializer<'a, E> as de::Deserializer<'de>>::deserialize_enum",
+            "signature": "fn deserialize_enum<V>(\n        self,\n        name: &str,\n        variants: &'static [&'static str],\n        visitor: V,\n    ) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,",
+            "start_line": 730,
+            "end_line": 742,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<CowStrDeserializer<'a, E> as de::EnumAccess<'de>>",
+        "qualified_name": "<CowStrDeserializer<'a, E> as de::EnumAccess<'de>>",
+        "signature": "#[cfg(any(feature = \"std\", feature = \"alloc\"))]\nimpl<'de, 'a, E> de::EnumAccess<'de> for CowStrDeserializer<'a, E>\nwhere\n    E: de::Error,",
+        "start_line": 751,
+        "end_line": 765,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Error",
+            "qualified_name": "<CowStrDeserializer<'a, E> as de::EnumAccess<'de>>::Error",
+            "signature": "type Error = E;",
+            "start_line": 756,
+            "end_line": 756,
+            "children": []
+          },
+          {
+            "kind": "type",
+            "name": "Variant",
+            "qualified_name": "<CowStrDeserializer<'a, E> as de::EnumAccess<'de>>::Variant",
+            "signature": "type Variant = private::UnitOnly<E>;",
+            "start_line": 757,
+            "end_line": 757,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "variant_seed",
+            "qualified_name": "<CowStrDeserializer<'a, E> as de::EnumAccess<'de>>::variant_seed",
+            "signature": "fn variant_seed<T>(self, seed: T) -> Result<(T::Value, Self::Variant), Self::Error>\n    where\n        T: de::DeserializeSeed<'de>,",
+            "start_line": 759,
+            "end_line": 764,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<CowStrDeserializer<'a, E> as Debug>",
+        "qualified_name": "<CowStrDeserializer<'a, E> as Debug>",
+        "signature": "#[cfg(any(feature = \"std\", feature = \"alloc\"))]\nimpl<'a, E> Debug for CowStrDeserializer<'a, E>",
+        "start_line": 767,
+        "end_line": 775,
+        "children": [
+          {
+            "kind": "method",
+            "name": "fmt",
+            "qualified_name": "<CowStrDeserializer<'a, E> as Debug>::fmt",
+            "signature": "fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result",
+            "start_line": 769,
+            "end_line": 774,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "struct",
+        "name": "BytesDeserializer",
+        "qualified_name": "BytesDeserializer",
+        "signature": "pub struct BytesDeserializer<'a, E>",
+        "start_line": 780,
+        "end_line": 783,
+        "children": [
+          {
+            "kind": "field",
+            "name": "value",
+            "qualified_name": "BytesDeserializer::value",
+            "signature": "value: &'a [u8]",
+            "start_line": 781,
+            "end_line": 781,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "marker",
+            "qualified_name": "BytesDeserializer::marker",
+            "signature": "marker: PhantomData<E>",
+            "start_line": 782,
+            "end_line": 782,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "BytesDeserializer<'a, E>",
+        "qualified_name": "BytesDeserializer<'a, E>",
+        "signature": "impl<'a, E> BytesDeserializer<'a, E>",
+        "start_line": 785,
+        "end_line": 793,
+        "children": [
+          {
+            "kind": "method",
+            "name": "new",
+            "qualified_name": "BytesDeserializer<'a, E>::new",
+            "signature": "pub fn new(value: &'a [u8]) -> Self",
+            "start_line": 787,
+            "end_line": 792,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<&'a [u8] as IntoDeserializer<'de, E>>",
+        "qualified_name": "<&'a [u8] as IntoDeserializer<'de, E>>",
+        "signature": "impl<'de, 'a, E> IntoDeserializer<'de, E> for &'a [u8]\nwhere\n    E: de::Error,",
+        "start_line": 797,
+        "end_line": 806,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Deserializer",
+            "qualified_name": "<&'a [u8] as IntoDeserializer<'de, E>>::Deserializer",
+            "signature": "type Deserializer = BytesDeserializer<'a, E>;",
+            "start_line": 801,
+            "end_line": 801,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "into_deserializer",
+            "qualified_name": "<&'a [u8] as IntoDeserializer<'de, E>>::into_deserializer",
+            "signature": "fn into_deserializer(self) -> BytesDeserializer<'a, E>",
+            "start_line": 803,
+            "end_line": 805,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<BytesDeserializer<'a, E> as Deserializer<'de>>",
+        "qualified_name": "<BytesDeserializer<'a, E> as Deserializer<'de>>",
+        "signature": "impl<'de, 'a, E> Deserializer<'de> for BytesDeserializer<'a, E>\nwhere\n    E: de::Error,",
+        "start_line": 808,
+        "end_line": 826,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Error",
+            "qualified_name": "<BytesDeserializer<'a, E> as Deserializer<'de>>::Error",
+            "signature": "type Error = E;",
+            "start_line": 812,
+            "end_line": 812,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "deserialize_any",
+            "qualified_name": "<BytesDeserializer<'a, E> as Deserializer<'de>>::deserialize_any",
+            "signature": "fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: Visitor<'de>,",
+            "start_line": 814,
+            "end_line": 819,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<BytesDeserializer<'a, E> as Debug>",
+        "qualified_name": "<BytesDeserializer<'a, E> as Debug>",
+        "signature": "impl<'a, E> Debug for BytesDeserializer<'a, E>",
+        "start_line": 828,
+        "end_line": 835,
+        "children": [
+          {
+            "kind": "method",
+            "name": "fmt",
+            "qualified_name": "<BytesDeserializer<'a, E> as Debug>::fmt",
+            "signature": "fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result",
+            "start_line": 829,
+            "end_line": 834,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "struct",
+        "name": "BorrowedBytesDeserializer",
+        "qualified_name": "BorrowedBytesDeserializer",
+        "signature": "pub struct BorrowedBytesDeserializer<'de, E>",
+        "start_line": 839,
+        "end_line": 842,
+        "children": [
+          {
+            "kind": "field",
+            "name": "value",
+            "qualified_name": "BorrowedBytesDeserializer::value",
+            "signature": "value: &'de [u8]",
+            "start_line": 840,
+            "end_line": 840,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "marker",
+            "qualified_name": "BorrowedBytesDeserializer::marker",
+            "signature": "marker: PhantomData<E>",
+            "start_line": 841,
+            "end_line": 841,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "BorrowedBytesDeserializer<'de, E>",
+        "qualified_name": "BorrowedBytesDeserializer<'de, E>",
+        "signature": "impl<'de, E> BorrowedBytesDeserializer<'de, E>",
+        "start_line": 844,
+        "end_line": 852,
+        "children": [
+          {
+            "kind": "method",
+            "name": "new",
+            "qualified_name": "BorrowedBytesDeserializer<'de, E>::new",
+            "signature": "pub fn new(value: &'de [u8]) -> Self",
+            "start_line": 846,
+            "end_line": 851,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<BorrowedBytesDeserializer<'de, E> as Deserializer<'de>>",
+        "qualified_name": "<BorrowedBytesDeserializer<'de, E> as Deserializer<'de>>",
+        "signature": "impl<'de, E> Deserializer<'de> for BorrowedBytesDeserializer<'de, E>\nwhere\n    E: de::Error,",
+        "start_line": 856,
+        "end_line": 874,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Error",
+            "qualified_name": "<BorrowedBytesDeserializer<'de, E> as Deserializer<'de>>::Error",
+            "signature": "type Error = E;",
+            "start_line": 860,
+            "end_line": 860,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "deserialize_any",
+            "qualified_name": "<BorrowedBytesDeserializer<'de, E> as Deserializer<'de>>::deserialize_any",
+            "signature": "fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: Visitor<'de>,",
+            "start_line": 862,
+            "end_line": 867,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<BorrowedBytesDeserializer<'de, E> as Debug>",
+        "qualified_name": "<BorrowedBytesDeserializer<'de, E> as Debug>",
+        "signature": "impl<'de, E> Debug for BorrowedBytesDeserializer<'de, E>",
+        "start_line": 876,
+        "end_line": 883,
+        "children": [
+          {
+            "kind": "method",
+            "name": "fmt",
+            "qualified_name": "<BorrowedBytesDeserializer<'de, E> as Debug>::fmt",
+            "signature": "fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result",
+            "start_line": 877,
+            "end_line": 882,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "struct",
+        "name": "SeqDeserializer",
+        "qualified_name": "SeqDeserializer",
+        "signature": "#[derive(Clone)]\npub struct SeqDeserializer<I, E>",
+        "start_line": 888,
+        "end_line": 893,
+        "children": [
+          {
+            "kind": "field",
+            "name": "iter",
+            "qualified_name": "SeqDeserializer::iter",
+            "signature": "iter: iter::Fuse<I>",
+            "start_line": 890,
+            "end_line": 890,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "count",
+            "qualified_name": "SeqDeserializer::count",
+            "signature": "count: usize",
+            "start_line": 891,
+            "end_line": 891,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "marker",
+            "qualified_name": "SeqDeserializer::marker",
+            "signature": "marker: PhantomData<E>",
+            "start_line": 892,
+            "end_line": 892,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "SeqDeserializer<I, E>",
+        "qualified_name": "SeqDeserializer<I, E>",
+        "signature": "impl<I, E> SeqDeserializer<I, E>\nwhere\n    I: Iterator,",
+        "start_line": 895,
+        "end_line": 907,
+        "children": [
+          {
+            "kind": "method",
+            "name": "new",
+            "qualified_name": "SeqDeserializer<I, E>::new",
+            "signature": "pub fn new(iter: I) -> Self",
+            "start_line": 900,
+            "end_line": 906,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "SeqDeserializer<I, E>",
+        "qualified_name": "SeqDeserializer<I, E>",
+        "signature": "impl<I, E> SeqDeserializer<I, E>\nwhere\n    I: Iterator,\n    E: de::Error,",
+        "start_line": 909,
+        "end_line": 929,
+        "children": [
+          {
+            "kind": "method",
+            "name": "end",
+            "qualified_name": "SeqDeserializer<I, E>::end",
+            "signature": "pub fn end(self) -> Result<(), E>",
+            "start_line": 916,
+            "end_line": 928,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<SeqDeserializer<I, E> as de::Deserializer<'de>>",
+        "qualified_name": "<SeqDeserializer<I, E> as de::Deserializer<'de>>",
+        "signature": "impl<'de, I, T, E> de::Deserializer<'de> for SeqDeserializer<I, E>\nwhere\n    I: Iterator<Item = T>,\n    T: IntoDeserializer<'de, E>,\n    E: de::Error,",
+        "start_line": 931,
+        "end_line": 953,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Error",
+            "qualified_name": "<SeqDeserializer<I, E> as de::Deserializer<'de>>::Error",
+            "signature": "type Error = E;",
+            "start_line": 937,
+            "end_line": 937,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "deserialize_any",
+            "qualified_name": "<SeqDeserializer<I, E> as de::Deserializer<'de>>::deserialize_any",
+            "signature": "fn deserialize_any<V>(mut self, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,",
+            "start_line": 939,
+            "end_line": 946,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<SeqDeserializer<I, E> as de::SeqAccess<'de>>",
+        "qualified_name": "<SeqDeserializer<I, E> as de::SeqAccess<'de>>",
+        "signature": "impl<'de, I, T, E> de::SeqAccess<'de> for SeqDeserializer<I, E>\nwhere\n    I: Iterator<Item = T>,\n    T: IntoDeserializer<'de, E>,\n    E: de::Error,",
+        "start_line": 955,
+        "end_line": 979,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Error",
+            "qualified_name": "<SeqDeserializer<I, E> as de::SeqAccess<'de>>::Error",
+            "signature": "type Error = E;",
+            "start_line": 961,
+            "end_line": 961,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "next_element_seed",
+            "qualified_name": "<SeqDeserializer<I, E> as de::SeqAccess<'de>>::next_element_seed",
+            "signature": "fn next_element_seed<V>(&mut self, seed: V) -> Result<Option<V::Value>, Self::Error>\n    where\n        V: de::DeserializeSeed<'de>,",
+            "start_line": 963,
+            "end_line": 974,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "size_hint",
+            "qualified_name": "<SeqDeserializer<I, E> as de::SeqAccess<'de>>::size_hint",
+            "signature": "fn size_hint(&self) -> Option<usize>",
+            "start_line": 976,
+            "end_line": 978,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "struct",
+        "name": "ExpectedInSeq",
+        "qualified_name": "ExpectedInSeq",
+        "signature": "struct ExpectedInSeq",
+        "start_line": 981,
+        "end_line": 981,
+        "children": []
+      },
+      {
+        "kind": "impl",
+        "name": "<ExpectedInSeq as Expected>",
+        "qualified_name": "<ExpectedInSeq as Expected>",
+        "signature": "impl Expected for ExpectedInSeq",
+        "start_line": 983,
+        "end_line": 991,
+        "children": [
+          {
+            "kind": "method",
+            "name": "fmt",
+            "qualified_name": "<ExpectedInSeq as Expected>::fmt",
+            "signature": "fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result",
+            "start_line": 984,
+            "end_line": 990,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<SeqDeserializer<I, E> as Debug>",
+        "qualified_name": "<SeqDeserializer<I, E> as Debug>",
+        "signature": "impl<I, E> Debug for SeqDeserializer<I, E>\nwhere\n    I: Debug,",
+        "start_line": 993,
+        "end_line": 1004,
+        "children": [
+          {
+            "kind": "method",
+            "name": "fmt",
+            "qualified_name": "<SeqDeserializer<I, E> as Debug>::fmt",
+            "signature": "fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result",
+            "start_line": 997,
+            "end_line": 1003,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<Vec<T> as IntoDeserializer<'de, E>>",
+        "qualified_name": "<Vec<T> as IntoDeserializer<'de, E>>",
+        "signature": "#[cfg(any(feature = \"std\", feature = \"alloc\"))]\n#[cfg_attr(docsrs, doc(cfg(any(feature = \"std\", feature = \"alloc\"))))]\nimpl<'de, T, E> IntoDeserializer<'de, E> for Vec<T>\nwhere\n    T: IntoDeserializer<'de, E>,\n    E: de::Error,",
+        "start_line": 1008,
+        "end_line": 1020,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Deserializer",
+            "qualified_name": "<Vec<T> as IntoDeserializer<'de, E>>::Deserializer",
+            "signature": "type Deserializer = SeqDeserializer<<Self as IntoIterator>::IntoIter, E>;",
+            "start_line": 1015,
+            "end_line": 1015,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "into_deserializer",
+            "qualified_name": "<Vec<T> as IntoDeserializer<'de, E>>::into_deserializer",
+            "signature": "fn into_deserializer(self) -> Self::Deserializer",
+            "start_line": 1017,
+            "end_line": 1019,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<BTreeSet<T> as IntoDeserializer<'de, E>>",
+        "qualified_name": "<BTreeSet<T> as IntoDeserializer<'de, E>>",
+        "signature": "#[cfg(any(feature = \"std\", feature = \"alloc\"))]\n#[cfg_attr(docsrs, doc(cfg(any(feature = \"std\", feature = \"alloc\"))))]\nimpl<'de, T, E> IntoDeserializer<'de, E> for BTreeSet<T>\nwhere\n    T: IntoDeserializer<'de, E> + Eq + Ord,\n    E: de::Error,",
+        "start_line": 1022,
+        "end_line": 1034,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Deserializer",
+            "qualified_name": "<BTreeSet<T> as IntoDeserializer<'de, E>>::Deserializer",
+            "signature": "type Deserializer = SeqDeserializer<<Self as IntoIterator>::IntoIter, E>;",
+            "start_line": 1029,
+            "end_line": 1029,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "into_deserializer",
+            "qualified_name": "<BTreeSet<T> as IntoDeserializer<'de, E>>::into_deserializer",
+            "signature": "fn into_deserializer(self) -> Self::Deserializer",
+            "start_line": 1031,
+            "end_line": 1033,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<HashSet<T, S> as IntoDeserializer<'de, E>>",
+        "qualified_name": "<HashSet<T, S> as IntoDeserializer<'de, E>>",
+        "signature": "#[cfg(feature = \"std\")]\n#[cfg_attr(docsrs, doc(cfg(feature = \"std\")))]\nimpl<'de, T, S, E> IntoDeserializer<'de, E> for HashSet<T, S>\nwhere\n    T: IntoDeserializer<'de, E> + Eq + Hash,\n    S: BuildHasher,\n    E: de::Error,",
+        "start_line": 1036,
+        "end_line": 1049,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Deserializer",
+            "qualified_name": "<HashSet<T, S> as IntoDeserializer<'de, E>>::Deserializer",
+            "signature": "type Deserializer = SeqDeserializer<<Self as IntoIterator>::IntoIter, E>;",
+            "start_line": 1044,
+            "end_line": 1044,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "into_deserializer",
+            "qualified_name": "<HashSet<T, S> as IntoDeserializer<'de, E>>::into_deserializer",
+            "signature": "fn into_deserializer(self) -> Self::Deserializer",
+            "start_line": 1046,
+            "end_line": 1048,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "struct",
+        "name": "SeqAccessDeserializer",
+        "qualified_name": "SeqAccessDeserializer",
+        "signature": "#[derive(Clone, Debug)]\npub struct SeqAccessDeserializer<A>",
+        "start_line": 1054,
+        "end_line": 1057,
+        "children": [
+          {
+            "kind": "field",
+            "name": "seq",
+            "qualified_name": "SeqAccessDeserializer::seq",
+            "signature": "seq: A",
+            "start_line": 1056,
+            "end_line": 1056,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "SeqAccessDeserializer<A>",
+        "qualified_name": "SeqAccessDeserializer<A>",
+        "signature": "impl<A> SeqAccessDeserializer<A>",
+        "start_line": 1059,
+        "end_line": 1064,
+        "children": [
+          {
+            "kind": "method",
+            "name": "new",
+            "qualified_name": "SeqAccessDeserializer<A>::new",
+            "signature": "pub fn new(seq: A) -> Self",
+            "start_line": 1061,
+            "end_line": 1063,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<SeqAccessDeserializer<A> as de::Deserializer<'de>>",
+        "qualified_name": "<SeqAccessDeserializer<A> as de::Deserializer<'de>>",
+        "signature": "impl<'de, A> de::Deserializer<'de> for SeqAccessDeserializer<A>\nwhere\n    A: de::SeqAccess<'de>,",
+        "start_line": 1066,
+        "end_line": 1084,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Error",
+            "qualified_name": "<SeqAccessDeserializer<A> as de::Deserializer<'de>>::Error",
+            "signature": "type Error = A::Error;",
+            "start_line": 1070,
+            "end_line": 1070,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "deserialize_any",
+            "qualified_name": "<SeqAccessDeserializer<A> as de::Deserializer<'de>>::deserialize_any",
+            "signature": "fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,",
+            "start_line": 1072,
+            "end_line": 1077,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "struct",
+        "name": "MapDeserializer",
+        "qualified_name": "MapDeserializer",
+        "signature": "pub struct MapDeserializer<'de, I, E>\nwhere\n    I: Iterator,\n    I::Item: private::Pair,",
+        "start_line": 1089,
+        "end_line": 1099,
+        "children": [
+          {
+            "kind": "field",
+            "name": "iter",
+            "qualified_name": "MapDeserializer::iter",
+            "signature": "iter: iter::Fuse<I>",
+            "start_line": 1094,
+            "end_line": 1094,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "value",
+            "qualified_name": "MapDeserializer::value",
+            "signature": "value: Option<Second<I::Item>>",
+            "start_line": 1095,
+            "end_line": 1095,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "count",
+            "qualified_name": "MapDeserializer::count",
+            "signature": "count: usize",
+            "start_line": 1096,
+            "end_line": 1096,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "lifetime",
+            "qualified_name": "MapDeserializer::lifetime",
+            "signature": "lifetime: PhantomData<&'de ()>",
+            "start_line": 1097,
+            "end_line": 1097,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "error",
+            "qualified_name": "MapDeserializer::error",
+            "signature": "error: PhantomData<E>",
+            "start_line": 1098,
+            "end_line": 1098,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "MapDeserializer<'de, I, E>",
+        "qualified_name": "MapDeserializer<'de, I, E>",
+        "signature": "impl<'de, I, E> MapDeserializer<'de, I, E>\nwhere\n    I: Iterator,\n    I::Item: private::Pair,",
+        "start_line": 1101,
+        "end_line": 1116,
+        "children": [
+          {
+            "kind": "method",
+            "name": "new",
+            "qualified_name": "MapDeserializer<'de, I, E>::new",
+            "signature": "pub fn new(iter: I) -> Self",
+            "start_line": 1107,
+            "end_line": 1115,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "MapDeserializer<'de, I, E>",
+        "qualified_name": "MapDeserializer<'de, I, E>",
+        "signature": "impl<'de, I, E> MapDeserializer<'de, I, E>\nwhere\n    I: Iterator,\n    I::Item: private::Pair,\n    E: de::Error,",
+        "start_line": 1118,
+        "end_line": 1139,
+        "children": [
+          {
+            "kind": "method",
+            "name": "end",
+            "qualified_name": "MapDeserializer<'de, I, E>::end",
+            "signature": "pub fn end(self) -> Result<(), E>",
+            "start_line": 1126,
+            "end_line": 1138,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "MapDeserializer<'de, I, E>",
+        "qualified_name": "MapDeserializer<'de, I, E>",
+        "signature": "impl<'de, I, E> MapDeserializer<'de, I, E>\nwhere\n    I: Iterator,\n    I::Item: private::Pair,",
+        "start_line": 1141,
+        "end_line": 1155,
+        "children": [
+          {
+            "kind": "method",
+            "name": "next_pair",
+            "qualified_name": "MapDeserializer<'de, I, E>::next_pair",
+            "signature": "fn next_pair(&mut self) -> Option<(First<I::Item>, Second<I::Item>)>",
+            "start_line": 1146,
+            "end_line": 1154,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<MapDeserializer<'de, I, E> as de::Deserializer<'de>>",
+        "qualified_name": "<MapDeserializer<'de, I, E> as de::Deserializer<'de>>",
+        "signature": "impl<'de, I, E> de::Deserializer<'de> for MapDeserializer<'de, I, E>\nwhere\n    I: Iterator,\n    I::Item: private::Pair,\n    First<I::Item>: IntoDeserializer<'de, E>,\n    Second<I::Item>: IntoDeserializer<'de, E>,\n    E: de::Error,",
+        "start_line": 1157,
+        "end_line": 1198,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Error",
+            "qualified_name": "<MapDeserializer<'de, I, E> as de::Deserializer<'de>>::Error",
+            "signature": "type Error = E;",
+            "start_line": 1165,
+            "end_line": 1165,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "deserialize_any",
+            "qualified_name": "<MapDeserializer<'de, I, E> as de::Deserializer<'de>>::deserialize_any",
+            "signature": "fn deserialize_any<V>(mut self, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,",
+            "start_line": 1167,
+            "end_line": 1174,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "deserialize_seq",
+            "qualified_name": "<MapDeserializer<'de, I, E> as de::Deserializer<'de>>::deserialize_seq",
+            "signature": "fn deserialize_seq<V>(mut self, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,",
+            "start_line": 1176,
+            "end_line": 1183,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "deserialize_tuple",
+            "qualified_name": "<MapDeserializer<'de, I, E> as de::Deserializer<'de>>::deserialize_tuple",
+            "signature": "fn deserialize_tuple<V>(self, len: usize, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,",
+            "start_line": 1185,
+            "end_line": 1191,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<MapDeserializer<'de, I, E> as de::MapAccess<'de>>",
+        "qualified_name": "<MapDeserializer<'de, I, E> as de::MapAccess<'de>>",
+        "signature": "impl<'de, I, E> de::MapAccess<'de> for MapDeserializer<'de, I, E>\nwhere\n    I: Iterator,\n    I::Item: private::Pair,\n    First<I::Item>: IntoDeserializer<'de, E>,\n    Second<I::Item>: IntoDeserializer<'de, E>,\n    E: de::Error,",
+        "start_line": 1200,
+        "end_line": 1256,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Error",
+            "qualified_name": "<MapDeserializer<'de, I, E> as de::MapAccess<'de>>::Error",
+            "signature": "type Error = E;",
+            "start_line": 1208,
+            "end_line": 1208,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "next_key_seed",
+            "qualified_name": "<MapDeserializer<'de, I, E> as de::MapAccess<'de>>::next_key_seed",
+            "signature": "fn next_key_seed<T>(&mut self, seed: T) -> Result<Option<T::Value>, Self::Error>\n    where\n        T: de::DeserializeSeed<'de>,",
+            "start_line": 1210,
+            "end_line": 1221,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "next_value_seed",
+            "qualified_name": "<MapDeserializer<'de, I, E> as de::MapAccess<'de>>::next_value_seed",
+            "signature": "fn next_value_seed<T>(&mut self, seed: T) -> Result<T::Value, Self::Error>\n    where\n        T: de::DeserializeSeed<'de>,",
+            "start_line": 1223,
+            "end_line": 1232,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "next_entry_seed",
+            "qualified_name": "<MapDeserializer<'de, I, E> as de::MapAccess<'de>>::next_entry_seed",
+            "signature": "fn next_entry_seed<TK, TV>(\n        &mut self,\n        kseed: TK,\n        vseed: TV,\n    ) -> Result<Option<(TK::Value, TV::Value)>, Self::Error>\n    where\n        TK: de::DeserializeSeed<'de>,\n        TV: de::DeserializeSeed<'de>,",
+            "start_line": 1234,
+            "end_line": 1251,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "size_hint",
+            "qualified_name": "<MapDeserializer<'de, I, E> as de::MapAccess<'de>>::size_hint",
+            "signature": "fn size_hint(&self) -> Option<usize>",
+            "start_line": 1253,
+            "end_line": 1255,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<MapDeserializer<'de, I, E> as de::SeqAccess<'de>>",
+        "qualified_name": "<MapDeserializer<'de, I, E> as de::SeqAccess<'de>>",
+        "signature": "impl<'de, I, E> de::SeqAccess<'de> for MapDeserializer<'de, I, E>\nwhere\n    I: Iterator,\n    I::Item: private::Pair,\n    First<I::Item>: IntoDeserializer<'de, E>,\n    Second<I::Item>: IntoDeserializer<'de, E>,\n    E: de::Error,",
+        "start_line": 1258,
+        "end_line": 1284,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Error",
+            "qualified_name": "<MapDeserializer<'de, I, E> as de::SeqAccess<'de>>::Error",
+            "signature": "type Error = E;",
+            "start_line": 1266,
+            "end_line": 1266,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "next_element_seed",
+            "qualified_name": "<MapDeserializer<'de, I, E> as de::SeqAccess<'de>>::next_element_seed",
+            "signature": "fn next_element_seed<T>(&mut self, seed: T) -> Result<Option<T::Value>, Self::Error>\n    where\n        T: de::DeserializeSeed<'de>,",
+            "start_line": 1268,
+            "end_line": 1279,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "size_hint",
+            "qualified_name": "<MapDeserializer<'de, I, E> as de::SeqAccess<'de>>::size_hint",
+            "signature": "fn size_hint(&self) -> Option<usize>",
+            "start_line": 1281,
+            "end_line": 1283,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<MapDeserializer<'de, I, E> as Clone>",
+        "qualified_name": "<MapDeserializer<'de, I, E> as Clone>",
+        "signature": "impl<'de, I, E> Clone for MapDeserializer<'de, I, E>\nwhere\n    I: Iterator + Clone,\n    I::Item: private::Pair,\n    Second<I::Item>: Clone,",
+        "start_line": 1287,
+        "end_line": 1302,
+        "children": [
+          {
+            "kind": "method",
+            "name": "clone",
+            "qualified_name": "<MapDeserializer<'de, I, E> as Clone>::clone",
+            "signature": "fn clone(&self) -> Self",
+            "start_line": 1293,
+            "end_line": 1301,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<MapDeserializer<'de, I, E> as Debug>",
+        "qualified_name": "<MapDeserializer<'de, I, E> as Debug>",
+        "signature": "impl<'de, I, E> Debug for MapDeserializer<'de, I, E>\nwhere\n    I: Iterator + Debug,\n    I::Item: private::Pair,\n    Second<I::Item>: Debug,",
+        "start_line": 1304,
+        "end_line": 1318,
+        "children": [
+          {
+            "kind": "method",
+            "name": "fmt",
+            "qualified_name": "<MapDeserializer<'de, I, E> as Debug>::fmt",
+            "signature": "fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result",
+            "start_line": 1310,
+            "end_line": 1317,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "struct",
+        "name": "PairDeserializer",
+        "qualified_name": "PairDeserializer",
+        "signature": "struct PairDeserializer<A, B, E>",
+        "start_line": 1322,
+        "end_line": 1322,
+        "children": []
+      },
+      {
+        "kind": "impl",
+        "name": "<PairDeserializer<A, B, E> as de::Deserializer<'de>>",
+        "qualified_name": "<PairDeserializer<A, B, E> as de::Deserializer<'de>>",
+        "signature": "impl<'de, A, B, E> de::Deserializer<'de> for PairDeserializer<A, B, E>\nwhere\n    A: IntoDeserializer<'de, E>,\n    B: IntoDeserializer<'de, E>,\n    E: de::Error,",
+        "start_line": 1324,
+        "end_line": 1373,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Error",
+            "qualified_name": "<PairDeserializer<A, B, E> as de::Deserializer<'de>>::Error",
+            "signature": "type Error = E;",
+            "start_line": 1330,
+            "end_line": 1330,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "deserialize_any",
+            "qualified_name": "<PairDeserializer<A, B, E> as de::Deserializer<'de>>::deserialize_any",
+            "signature": "fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,",
+            "start_line": 1338,
+            "end_line": 1343,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "deserialize_seq",
+            "qualified_name": "<PairDeserializer<A, B, E> as de::Deserializer<'de>>::deserialize_seq",
+            "signature": "fn deserialize_seq<V>(self, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,",
+            "start_line": 1345,
+            "end_line": 1359,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "deserialize_tuple",
+            "qualified_name": "<PairDeserializer<A, B, E> as de::Deserializer<'de>>::deserialize_tuple",
+            "signature": "fn deserialize_tuple<V>(self, len: usize, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,",
+            "start_line": 1361,
+            "end_line": 1372,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "struct",
+        "name": "PairVisitor",
+        "qualified_name": "PairVisitor",
+        "signature": "struct PairVisitor<A, B, E>",
+        "start_line": 1375,
+        "end_line": 1375,
+        "children": []
+      },
+      {
+        "kind": "impl",
+        "name": "<PairVisitor<A, B, E> as de::SeqAccess<'de>>",
+        "qualified_name": "<PairVisitor<A, B, E> as de::SeqAccess<'de>>",
+        "signature": "impl<'de, A, B, E> de::SeqAccess<'de> for PairVisitor<A, B, E>\nwhere\n    A: IntoDeserializer<'de, E>,\n    B: IntoDeserializer<'de, E>,\n    E: de::Error,",
+        "start_line": 1377,
+        "end_line": 1407,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Error",
+            "qualified_name": "<PairVisitor<A, B, E> as de::SeqAccess<'de>>::Error",
+            "signature": "type Error = E;",
+            "start_line": 1383,
+            "end_line": 1383,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "next_element_seed",
+            "qualified_name": "<PairVisitor<A, B, E> as de::SeqAccess<'de>>::next_element_seed",
+            "signature": "fn next_element_seed<T>(&mut self, seed: T) -> Result<Option<T::Value>, Self::Error>\n    where\n        T: de::DeserializeSeed<'de>,",
+            "start_line": 1385,
+            "end_line": 1396,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "size_hint",
+            "qualified_name": "<PairVisitor<A, B, E> as de::SeqAccess<'de>>::size_hint",
+            "signature": "fn size_hint(&self) -> Option<usize>",
+            "start_line": 1398,
+            "end_line": 1406,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "struct",
+        "name": "ExpectedInMap",
+        "qualified_name": "ExpectedInMap",
+        "signature": "struct ExpectedInMap",
+        "start_line": 1409,
+        "end_line": 1409,
+        "children": []
+      },
+      {
+        "kind": "impl",
+        "name": "<ExpectedInMap as Expected>",
+        "qualified_name": "<ExpectedInMap as Expected>",
+        "signature": "impl Expected for ExpectedInMap",
+        "start_line": 1411,
+        "end_line": 1419,
+        "children": [
+          {
+            "kind": "method",
+            "name": "fmt",
+            "qualified_name": "<ExpectedInMap as Expected>::fmt",
+            "signature": "fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result",
+            "start_line": 1412,
+            "end_line": 1418,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<BTreeMap<K, V> as IntoDeserializer<'de, E>>",
+        "qualified_name": "<BTreeMap<K, V> as IntoDeserializer<'de, E>>",
+        "signature": "#[cfg(any(feature = \"std\", feature = \"alloc\"))]\n#[cfg_attr(docsrs, doc(cfg(any(feature = \"std\", feature = \"alloc\"))))]\nimpl<'de, K, V, E> IntoDeserializer<'de, E> for BTreeMap<K, V>\nwhere\n    K: IntoDeserializer<'de, E> + Eq + Ord,\n    V: IntoDeserializer<'de, E>,\n    E: de::Error,",
+        "start_line": 1423,
+        "end_line": 1436,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Deserializer",
+            "qualified_name": "<BTreeMap<K, V> as IntoDeserializer<'de, E>>::Deserializer",
+            "signature": "type Deserializer = MapDeserializer<'de, <Self as IntoIterator>::IntoIter, E>;",
+            "start_line": 1431,
+            "end_line": 1431,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "into_deserializer",
+            "qualified_name": "<BTreeMap<K, V> as IntoDeserializer<'de, E>>::into_deserializer",
+            "signature": "fn into_deserializer(self) -> Self::Deserializer",
+            "start_line": 1433,
+            "end_line": 1435,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<HashMap<K, V, S> as IntoDeserializer<'de, E>>",
+        "qualified_name": "<HashMap<K, V, S> as IntoDeserializer<'de, E>>",
+        "signature": "#[cfg(feature = \"std\")]\n#[cfg_attr(docsrs, doc(cfg(feature = \"std\")))]\nimpl<'de, K, V, S, E> IntoDeserializer<'de, E> for HashMap<K, V, S>\nwhere\n    K: IntoDeserializer<'de, E> + Eq + Hash,\n    V: IntoDeserializer<'de, E>,\n    S: BuildHasher,\n    E: de::Error,",
+        "start_line": 1438,
+        "end_line": 1452,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Deserializer",
+            "qualified_name": "<HashMap<K, V, S> as IntoDeserializer<'de, E>>::Deserializer",
+            "signature": "type Deserializer = MapDeserializer<'de, <Self as IntoIterator>::IntoIter, E>;",
+            "start_line": 1447,
+            "end_line": 1447,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "into_deserializer",
+            "qualified_name": "<HashMap<K, V, S> as IntoDeserializer<'de, E>>::into_deserializer",
+            "signature": "fn into_deserializer(self) -> Self::Deserializer",
+            "start_line": 1449,
+            "end_line": 1451,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "struct",
+        "name": "MapAccessDeserializer",
+        "qualified_name": "MapAccessDeserializer",
+        "signature": "#[derive(Clone, Debug)]\npub struct MapAccessDeserializer<A>",
+        "start_line": 1457,
+        "end_line": 1460,
+        "children": [
+          {
+            "kind": "field",
+            "name": "map",
+            "qualified_name": "MapAccessDeserializer::map",
+            "signature": "map: A",
+            "start_line": 1459,
+            "end_line": 1459,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "MapAccessDeserializer<A>",
+        "qualified_name": "MapAccessDeserializer<A>",
+        "signature": "impl<A> MapAccessDeserializer<A>",
+        "start_line": 1462,
+        "end_line": 1467,
+        "children": [
+          {
+            "kind": "method",
+            "name": "new",
+            "qualified_name": "MapAccessDeserializer<A>::new",
+            "signature": "pub fn new(map: A) -> Self",
+            "start_line": 1464,
+            "end_line": 1466,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<MapAccessDeserializer<A> as de::Deserializer<'de>>",
+        "qualified_name": "<MapAccessDeserializer<A> as de::Deserializer<'de>>",
+        "signature": "impl<'de, A> de::Deserializer<'de> for MapAccessDeserializer<A>\nwhere\n    A: de::MapAccess<'de>,",
+        "start_line": 1469,
+        "end_line": 1499,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Error",
+            "qualified_name": "<MapAccessDeserializer<A> as de::Deserializer<'de>>::Error",
+            "signature": "type Error = A::Error;",
+            "start_line": 1473,
+            "end_line": 1473,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "deserialize_any",
+            "qualified_name": "<MapAccessDeserializer<A> as de::Deserializer<'de>>::deserialize_any",
+            "signature": "fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,",
+            "start_line": 1475,
+            "end_line": 1480,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "deserialize_enum",
+            "qualified_name": "<MapAccessDeserializer<A> as de::Deserializer<'de>>::deserialize_enum",
+            "signature": "fn deserialize_enum<V>(\n        self,\n        _name: &str,\n        _variants: &'static [&'static str],\n        visitor: V,\n    ) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,",
+            "start_line": 1482,
+            "end_line": 1492,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<MapAccessDeserializer<A> as de::EnumAccess<'de>>",
+        "qualified_name": "<MapAccessDeserializer<A> as de::EnumAccess<'de>>",
+        "signature": "impl<'de, A> de::EnumAccess<'de> for MapAccessDeserializer<A>\nwhere\n    A: de::MapAccess<'de>,",
+        "start_line": 1501,
+        "end_line": 1517,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Error",
+            "qualified_name": "<MapAccessDeserializer<A> as de::EnumAccess<'de>>::Error",
+            "signature": "type Error = A::Error;",
+            "start_line": 1505,
+            "end_line": 1505,
+            "children": []
+          },
+          {
+            "kind": "type",
+            "name": "Variant",
+            "qualified_name": "<MapAccessDeserializer<A> as de::EnumAccess<'de>>::Variant",
+            "signature": "type Variant = private::MapAsEnum<A>;",
+            "start_line": 1506,
+            "end_line": 1506,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "variant_seed",
+            "qualified_name": "<MapAccessDeserializer<A> as de::EnumAccess<'de>>::variant_seed",
+            "signature": "fn variant_seed<T>(mut self, seed: T) -> Result<(T::Value, Self::Variant), Self::Error>\n    where\n        T: de::DeserializeSeed<'de>,",
+            "start_line": 1508,
+            "end_line": 1516,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "struct",
+        "name": "EnumAccessDeserializer",
+        "qualified_name": "EnumAccessDeserializer",
+        "signature": "#[derive(Clone, Debug)]\npub struct EnumAccessDeserializer<A>",
+        "start_line": 1522,
+        "end_line": 1525,
+        "children": [
+          {
+            "kind": "field",
+            "name": "access",
+            "qualified_name": "EnumAccessDeserializer::access",
+            "signature": "access: A",
+            "start_line": 1524,
+            "end_line": 1524,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "EnumAccessDeserializer<A>",
+        "qualified_name": "EnumAccessDeserializer<A>",
+        "signature": "impl<A> EnumAccessDeserializer<A>",
+        "start_line": 1527,
+        "end_line": 1532,
+        "children": [
+          {
+            "kind": "method",
+            "name": "new",
+            "qualified_name": "EnumAccessDeserializer<A>::new",
+            "signature": "pub fn new(access: A) -> Self",
+            "start_line": 1529,
+            "end_line": 1531,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "impl",
+        "name": "<EnumAccessDeserializer<A> as de::Deserializer<'de>>",
+        "qualified_name": "<EnumAccessDeserializer<A> as de::Deserializer<'de>>",
+        "signature": "impl<'de, A> de::Deserializer<'de> for EnumAccessDeserializer<A>\nwhere\n    A: de::EnumAccess<'de>,",
+        "start_line": 1534,
+        "end_line": 1552,
+        "children": [
+          {
+            "kind": "type",
+            "name": "Error",
+            "qualified_name": "<EnumAccessDeserializer<A> as de::Deserializer<'de>>::Error",
+            "signature": "type Error = A::Error;",
+            "start_line": 1538,
+            "end_line": 1538,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "deserialize_any",
+            "qualified_name": "<EnumAccessDeserializer<A> as de::Deserializer<'de>>::deserialize_any",
+            "signature": "fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,",
+            "start_line": 1540,
+            "end_line": 1545,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "module",
+        "name": "private",
+        "qualified_name": "private",
+        "signature": "mod private",
+        "start_line": 1556,
+        "end_line": 1720,
+        "children": [
+          {
+            "kind": "struct",
+            "name": "UnitOnly",
+            "qualified_name": "private::UnitOnly",
+            "signature": "pub struct UnitOnly<E>",
+            "start_line": 1563,
+            "end_line": 1565,
+            "children": [
+              {
+                "kind": "field",
+                "name": "marker",
+                "qualified_name": "private::UnitOnly::marker",
+                "signature": "marker: PhantomData<E>",
+                "start_line": 1564,
+                "end_line": 1564,
+                "children": []
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "name": "unit_only",
+            "qualified_name": "private::unit_only",
+            "signature": "pub fn unit_only<T, E>(t: T) -> (T, UnitOnly<E>)",
+            "start_line": 1567,
+            "end_line": 1574,
+            "children": []
+          },
+          {
+            "kind": "impl",
+            "name": "<UnitOnly<E> as de::VariantAccess<'de>>",
+            "qualified_name": "private::<UnitOnly<E> as de::VariantAccess<'de>>",
+            "signature": "impl<'de, E> de::VariantAccess<'de> for UnitOnly<E>\n    where\n        E: de::Error,",
+            "start_line": 1576,
+            "end_line": 1619,
+            "children": [
+              {
+                "kind": "type",
+                "name": "Error",
+                "qualified_name": "private::<UnitOnly<E> as de::VariantAccess<'de>>::Error",
+                "signature": "type Error = E;",
+                "start_line": 1580,
+                "end_line": 1580,
+                "children": []
+              },
+              {
+                "kind": "method",
+                "name": "unit_variant",
+                "qualified_name": "private::<UnitOnly<E> as de::VariantAccess<'de>>::unit_variant",
+                "signature": "fn unit_variant(self) -> Result<(), Self::Error>",
+                "start_line": 1582,
+                "end_line": 1584,
+                "children": []
+              },
+              {
+                "kind": "method",
+                "name": "newtype_variant_seed",
+                "qualified_name": "private::<UnitOnly<E> as de::VariantAccess<'de>>::newtype_variant_seed",
+                "signature": "fn newtype_variant_seed<T>(self, _seed: T) -> Result<T::Value, Self::Error>\n        where\n            T: de::DeserializeSeed<'de>,",
+                "start_line": 1586,
+                "end_line": 1594,
+                "children": []
+              },
+              {
+                "kind": "method",
+                "name": "tuple_variant",
+                "qualified_name": "private::<UnitOnly<E> as de::VariantAccess<'de>>::tuple_variant",
+                "signature": "fn tuple_variant<V>(self, _len: usize, _visitor: V) -> Result<V::Value, Self::Error>\n        where\n            V: de::Visitor<'de>,",
+                "start_line": 1596,
+                "end_line": 1604,
+                "children": []
+              },
+              {
+                "kind": "method",
+                "name": "struct_variant",
+                "qualified_name": "private::<UnitOnly<E> as de::VariantAccess<'de>>::struct_variant",
+                "signature": "fn struct_variant<V>(\n            self,\n            _fields: &'static [&'static str],\n            _visitor: V,\n        ) -> Result<V::Value, Self::Error>\n        where\n            V: de::Visitor<'de>,",
+                "start_line": 1606,
+                "end_line": 1618,
+                "children": []
+              }
+            ]
+          },
+          {
+            "kind": "struct",
+            "name": "MapAsEnum",
+            "qualified_name": "private::MapAsEnum",
+            "signature": "pub struct MapAsEnum<A>",
+            "start_line": 1621,
+            "end_line": 1623,
+            "children": [
+              {
+                "kind": "field",
+                "name": "map",
+                "qualified_name": "private::MapAsEnum::map",
+                "signature": "map: A",
+                "start_line": 1622,
+                "end_line": 1622,
+                "children": []
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "name": "map_as_enum",
+            "qualified_name": "private::map_as_enum",
+            "signature": "pub fn map_as_enum<A>(map: A) -> MapAsEnum<A>",
+            "start_line": 1625,
+            "end_line": 1627,
+            "children": []
+          },
+          {
+            "kind": "impl",
+            "name": "<MapAsEnum<A> as VariantAccess<'de>>",
+            "qualified_name": "private::<MapAsEnum<A> as VariantAccess<'de>>",
+            "signature": "impl<'de, A> VariantAccess<'de> for MapAsEnum<A>\n    where\n        A: MapAccess<'de>,",
+            "start_line": 1629,
+            "end_line": 1663,
+            "children": [
+              {
+                "kind": "type",
+                "name": "Error",
+                "qualified_name": "private::<MapAsEnum<A> as VariantAccess<'de>>::Error",
+                "signature": "type Error = A::Error;",
+                "start_line": 1633,
+                "end_line": 1633,
+                "children": []
+              },
+              {
+                "kind": "method",
+                "name": "unit_variant",
+                "qualified_name": "private::<MapAsEnum<A> as VariantAccess<'de>>::unit_variant",
+                "signature": "fn unit_variant(mut self) -> Result<(), Self::Error>",
+                "start_line": 1635,
+                "end_line": 1637,
+                "children": []
+              },
+              {
+                "kind": "method",
+                "name": "newtype_variant_seed",
+                "qualified_name": "private::<MapAsEnum<A> as VariantAccess<'de>>::newtype_variant_seed",
+                "signature": "fn newtype_variant_seed<T>(mut self, seed: T) -> Result<T::Value, Self::Error>\n        where\n            T: DeserializeSeed<'de>,",
+                "start_line": 1639,
+                "end_line": 1644,
+                "children": []
+              },
+              {
+                "kind": "method",
+                "name": "tuple_variant",
+                "qualified_name": "private::<MapAsEnum<A> as VariantAccess<'de>>::tuple_variant",
+                "signature": "fn tuple_variant<V>(mut self, len: usize, visitor: V) -> Result<V::Value, Self::Error>\n        where\n            V: Visitor<'de>,",
+                "start_line": 1646,
+                "end_line": 1651,
+                "children": []
+              },
+              {
+                "kind": "method",
+                "name": "struct_variant",
+                "qualified_name": "private::<MapAsEnum<A> as VariantAccess<'de>>::struct_variant",
+                "signature": "fn struct_variant<V>(\n            mut self,\n            _fields: &'static [&'static str],\n            visitor: V,\n        ) -> Result<V::Value, Self::Error>\n        where\n            V: Visitor<'de>,",
+                "start_line": 1653,
+                "end_line": 1662,
+                "children": []
+              }
+            ]
+          },
+          {
+            "kind": "struct",
+            "name": "SeedTupleVariant",
+            "qualified_name": "private::SeedTupleVariant",
+            "signature": "struct SeedTupleVariant<V>",
+            "start_line": 1665,
+            "end_line": 1668,
+            "children": [
+              {
+                "kind": "field",
+                "name": "len",
+                "qualified_name": "private::SeedTupleVariant::len",
+                "signature": "len: usize",
+                "start_line": 1666,
+                "end_line": 1666,
+                "children": []
+              },
+              {
+                "kind": "field",
+                "name": "visitor",
+                "qualified_name": "private::SeedTupleVariant::visitor",
+                "signature": "visitor: V",
+                "start_line": 1667,
+                "end_line": 1667,
+                "children": []
+              }
+            ]
+          },
+          {
+            "kind": "impl",
+            "name": "<SeedTupleVariant<V> as DeserializeSeed<'de>>",
+            "qualified_name": "private::<SeedTupleVariant<V> as DeserializeSeed<'de>>",
+            "signature": "impl<'de, V> DeserializeSeed<'de> for SeedTupleVariant<V>\n    where\n        V: Visitor<'de>,",
+            "start_line": 1670,
+            "end_line": 1682,
+            "children": [
+              {
+                "kind": "type",
+                "name": "Value",
+                "qualified_name": "private::<SeedTupleVariant<V> as DeserializeSeed<'de>>::Value",
+                "signature": "type Value = V::Value;",
+                "start_line": 1674,
+                "end_line": 1674,
+                "children": []
+              },
+              {
+                "kind": "method",
+                "name": "deserialize",
+                "qualified_name": "private::<SeedTupleVariant<V> as DeserializeSeed<'de>>::deserialize",
+                "signature": "fn deserialize<D>(self, deserializer: D) -> Result<Self::Value, D::Error>\n        where\n            D: Deserializer<'de>,",
+                "start_line": 1676,
+                "end_line": 1681,
+                "children": []
+              }
+            ]
+          },
+          {
+            "kind": "struct",
+            "name": "SeedStructVariant",
+            "qualified_name": "private::SeedStructVariant",
+            "signature": "struct SeedStructVariant<V>",
+            "start_line": 1684,
+            "end_line": 1686,
+            "children": [
+              {
+                "kind": "field",
+                "name": "visitor",
+                "qualified_name": "private::SeedStructVariant::visitor",
+                "signature": "visitor: V",
+                "start_line": 1685,
+                "end_line": 1685,
+                "children": []
+              }
+            ]
+          },
+          {
+            "kind": "impl",
+            "name": "<SeedStructVariant<V> as DeserializeSeed<'de>>",
+            "qualified_name": "private::<SeedStructVariant<V> as DeserializeSeed<'de>>",
+            "signature": "impl<'de, V> DeserializeSeed<'de> for SeedStructVariant<V>\n    where\n        V: Visitor<'de>,",
+            "start_line": 1688,
+            "end_line": 1700,
+            "children": [
+              {
+                "kind": "type",
+                "name": "Value",
+                "qualified_name": "private::<SeedStructVariant<V> as DeserializeSeed<'de>>::Value",
+                "signature": "type Value = V::Value;",
+                "start_line": 1692,
+                "end_line": 1692,
+                "children": []
+              },
+              {
+                "kind": "method",
+                "name": "deserialize",
+                "qualified_name": "private::<SeedStructVariant<V> as DeserializeSeed<'de>>::deserialize",
+                "signature": "fn deserialize<D>(self, deserializer: D) -> Result<Self::Value, D::Error>\n        where\n            D: Deserializer<'de>,",
+                "start_line": 1694,
+                "end_line": 1699,
+                "children": []
+              }
+            ]
+          },
+          {
+            "kind": "trait",
+            "name": "Pair",
+            "qualified_name": "private::Pair",
+            "signature": "pub trait Pair",
+            "start_line": 1704,
+            "end_line": 1708,
+            "children": [
+              {
+                "kind": "type",
+                "name": "First",
+                "qualified_name": "private::Pair::First",
+                "signature": "type First;",
+                "start_line": 1705,
+                "end_line": 1705,
+                "children": []
+              },
+              {
+                "kind": "type",
+                "name": "Second",
+                "qualified_name": "private::Pair::Second",
+                "signature": "type Second;",
+                "start_line": 1706,
+                "end_line": 1706,
+                "children": []
+              },
+              {
+                "kind": "method",
+                "name": "split",
+                "qualified_name": "private::Pair::split",
+                "signature": "fn split(self) -> (Self::First, Self::Second);",
+                "start_line": 1707,
+                "end_line": 1707,
+                "children": []
+              }
+            ]
+          },
+          {
+            "kind": "impl",
+            "name": "<(A, B) as Pair>",
+            "qualified_name": "private::<(A, B) as Pair>",
+            "signature": "impl<A, B> Pair for (A, B)",
+            "start_line": 1710,
+            "end_line": 1716,
+            "children": [
+              {
+                "kind": "type",
+                "name": "First",
+                "qualified_name": "private::<(A, B) as Pair>::First",
+                "signature": "type First = A;",
+                "start_line": 1711,
+                "end_line": 1711,
+                "children": []
+              },
+              {
+                "kind": "type",
+                "name": "Second",
+                "qualified_name": "private::<(A, B) as Pair>::Second",
+                "signature": "type Second = B;",
+                "start_line": 1712,
+                "end_line": 1712,
+                "children": []
+              },
+              {
+                "kind": "method",
+                "name": "split",
+                "qualified_name": "private::<(A, B) as Pair>::split",
+                "signature": "fn split(self) -> (A, B)",
+                "start_line": 1713,
+                "end_line": 1715,
+                "children": []
+              }
+            ]
+          },
+          {
+            "kind": "type",
+            "name": "First",
+            "qualified_name": "private::First",
+            "signature": "pub type First<T> = <T as Pair>::First;",
+            "start_line": 1718,
+            "end_line": 1718,
+            "children": []
+          },
+          {
+            "kind": "type",
+            "name": "Second",
+            "qualified_name": "private::Second",
+            "signature": "pub type Second<T> = <T as Pair>::Second;",
+            "start_line": 1719,
+            "end_line": 1719,
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  "skeleton": "//! Building blocks for deserializing basic values using the `IntoDeserializer`\n//! trait.\n//!\n//! ```edition2021\n//! use serde::de::{value, Deserialize, IntoDeserializer};\n//! use serde_derive::Deserialize;\n//! use std::str::FromStr;\n//!\n//! #[derive(Deserialize)]\n//! enum Setting {\n//!     On,\n//!     Off,\n//! }\n//!\n//! impl FromStr for Setting {\n//!     type Err = value::Error;\n//!\n//!     fn from_str(s: &str) -> Result<Self, Self::Err> {\n//!         Self::deserialize(s.into_deserializer())\n//!     }\n//! }\n//! ```\n\nuse crate::lib::*;\n\nuse self::private::{First, Second};\nuse crate::de::{self, size_hint, Deserializer, Expected, IntoDeserializer, SeqAccess, Visitor};\nuse crate::ser;\n\n////////////////////////////////////////////////////////////////////////////////\n\n// For structs that contain a PhantomData. We do not want the trait\n// bound `E: Clone` inferred by derive(Clone).\nmacro_rules! impl_copy_clone {\n    ($ty:ident $(<$lifetime:tt>)*) => {\n        impl<$($lifetime,)* E> Copy for $ty<$($lifetime,)* E> {}\n\n        impl<$($lifetime,)* E> Clone for $ty<$($lifetime,)* E> {\n            fn clone(&self) -> Self {\n                *self\n            }\n        }\n    };\n}\n\n////////////////////////////////////////////////////////////////////////////////\n\n/// A minimal representation of all possible errors that can occur using the\n/// `IntoDeserializer` trait.\n#[derive(Clone, PartialEq)]\npub struct Error {\n    err: ErrorImpl,\n}\n\n#[cfg(any(feature = \"std\", feature = \"alloc\"))]\ntype ErrorImpl = Box<str>;\n#[cfg(not(any(feature = \"std\", feature = \"alloc\")))]\ntype ErrorImpl = ();\n\nimpl de::Error for Error {\n    #[cfg(any(feature = \"std\", feature = \"alloc\"))]\n    #[cold]\n    fn custom<T>(msg: T) -> Self\n    where\n        T: Display,\n    { ... }\n\n    #[cfg(not(any(feature = \"std\", feature = \"alloc\")))]\n    #[cold]\n    fn custom<T>(msg: T) -> Self\n    where\n        T: Display,\n    { ... }\n}\n\nimpl ser::Error for Error {\n    #[cold]\n    fn custom<T>(msg: T) -> Self\n    where\n        T: Display,\n    { ... }\n}\n\nimpl Display for Error {\n    #[cfg(any(feature = \"std\", feature = \"alloc\"))]\n    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result { ... }\n\n    #[cfg(not(any(feature = \"std\", feature = \"alloc\")))]\n    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result { ... }\n}\n\nimpl Debug for Error {\n    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result { ... }\n}\n\n#[cfg(feature = \"std\")]\n#[cfg_attr(docsrs, doc(cfg(feature = \"std\")))]\nimpl error::Error for Error {\n    fn description(&self) -> &str { ... }\n}\n\n////////////////////////////////////////////////////////////////////////////////\n\nimpl<'de, E> IntoDeserializer<'de, E> for ()\nwhere\n    E: de::Error,\n{\n    type Deserializer = UnitDeserializer<E>;\n\n    fn into_deserializer(self) -> UnitDeserializer<E> { ... }\n}\n\n/// A deserializer holding a `()`.\npub struct UnitDeserializer<E> {\n    marker: PhantomData<E>,\n}\n\nimpl_copy_clone!(UnitDeserializer);\n\nimpl<E> UnitDeserializer<E> {\n    #[allow(missing_docs)]\n    pub fn new() -> Self { ... }\n}\n\nimpl<'de, E> de::Deserializer<'de> for UnitDeserializer<E>\nwhere\n    E: de::Error,\n{\n    type Error = E;\n\n    forward_to_deserialize_any! {\n        bool i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 f32 f64 char str string\n        bytes byte_buf unit unit_struct newtype_struct seq tuple tuple_struct\n        map struct enum identifier ignored_any\n    }\n\n    fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,\n    { ... }\n\n    fn deserialize_option<V>(self, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,\n    { ... }\n}\n\nimpl<E> Debug for UnitDeserializer<E> {\n    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result { ... }\n}\n\n////////////////////////////////////////////////////////////////////////////////\n\n/// A deserializer that cannot be instantiated.\n#[cfg(feature = \"unstable\")]\n#[cfg_attr(docsrs, doc(cfg(feature = \"unstable\")))]\npub struct NeverDeserializer<E> {\n    never: !,\n    marker: PhantomData<E>,\n}\n\n#[cfg(feature = \"unstable\")]\n#[cfg_attr(docsrs, doc(cfg(feature = \"unstable\")))]\nimpl<'de, E> IntoDeserializer<'de, E> for !\nwhere\n    E: de::Error,\n{\n    type Deserializer = NeverDeserializer<E>;\n\n    fn into_deserializer(self) -> Self::Deserializer { ... }\n}\n\n#[cfg(feature = \"unstable\")]\nimpl<'de, E> de::Deserializer<'de> for NeverDeserializer<E>\nwhere\n    E: de::Error,\n{\n    type Error = E;\n\n    fn deserialize_any<V>(self, _visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,\n    { ... }\n\n    forward_to_deserialize_any! {\n        bool i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 f32 f64 char str string\n        bytes byte_buf option unit unit_struct newtype_struct seq tuple\n        tuple_struct map struct enum identifier ignored_any\n    }\n}\n\n////////////////////////////////////////////////////////////////////////////////\n\nmacro_rules! primitive_deserializer {\n    ($ty:ty, $doc:tt, $name:ident, $method:ident $($cast:tt)*) => {\n        #[doc = \"A deserializer holding\"]\n        #[doc = $doc]\n        pub struct $name<E> {\n            value: $ty,\n            marker: PhantomData<E>\n        }\n\n        impl_copy_clone!($name);\n\n        impl<'de, E> IntoDeserializer<'de, E> for $ty\n        where\n            E: de::Error,\n        {\n            type Deserializer = $name<E>;\n\n            fn into_deserializer(self) -> $name<E> {\n                $name::new(self)\n            }\n        }\n\n        impl<E> $name<E> {\n            #[allow(missing_docs)]\n            pub fn new(value: $ty) -> Self {\n                $name {\n                    value,\n                    marker: PhantomData,\n                }\n            }\n        }\n\n        impl<'de, E> de::Deserializer<'de> for $name<E>\n        where\n            E: de::Error,\n        {\n            type Error = E;\n\n            forward_to_deserialize_any! {\n                bool i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 f32 f64 char str\n                string bytes byte_buf option unit unit_struct newtype_struct seq\n                tuple tuple_struct map struct enum identifier ignored_any\n            }\n\n            fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>\n            where\n                V: de::Visitor<'de>,\n            {\n                visitor.$method(self.value $($cast)*)\n            }\n        }\n\n        impl<E> Debug for $name<E> {\n            fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {\n                formatter\n                    .debug_struct(stringify!($name))\n                    .field(\"value\", &self.value)\n                    .finish()\n            }\n        }\n    }\n}\n\nprimitive_deserializer!(bool, \"a `bool`.\", BoolDeserializer, visit_bool);\nprimitive_deserializer!(i8, \"an `i8`.\", I8Deserializer, visit_i8);\nprimitive_deserializer!(i16, \"an `i16`.\", I16Deserializer, visit_i16);\nprimitive_deserializer!(i32, \"an `i32`.\", I32Deserializer, visit_i32);\nprimitive_deserializer!(i64, \"an `i64`.\", I64Deserializer, visit_i64);\nprimitive_deserializer!(i128, \"an `i128`.\", I128Deserializer, visit_i128);\nprimitive_deserializer!(isize, \"an `isize`.\", IsizeDeserializer, visit_i64 as i64);\nprimitive_deserializer!(u8, \"a `u8`.\", U8Deserializer, visit_u8);\nprimitive_deserializer!(u16, \"a `u16`.\", U16Deserializer, visit_u16);\nprimitive_deserializer!(u64, \"a `u64`.\", U64Deserializer, visit_u64);\nprimitive_deserializer!(u128, \"a `u128`.\", U128Deserializer, visit_u128);\nprimitive_deserializer!(usize, \"a `usize`.\", UsizeDeserializer, visit_u64 as u64);\nprimitive_deserializer!(f32, \"an `f32`.\", F32Deserializer, visit_f32);\nprimitive_deserializer!(f64, \"an `f64`.\", F64Deserializer, visit_f64);\nprimitive_deserializer!(char, \"a `char`.\", CharDeserializer, visit_char);\n\n/// A deserializer holding a `u32`.\npub struct U32Deserializer<E> {\n    value: u32,\n    marker: PhantomData<E>,\n}\n\nimpl_copy_clone!(U32Deserializer);\n\nimpl<'de, E> IntoDeserializer<'de, E> for u32\nwhere\n    E: de::Error,\n{\n    type Deserializer = U32Deserializer<E>;\n\n    fn into_deserializer(self) -> U32Deserializer<E> { ... }\n}\n\nimpl<E> U32Deserializer<E> {\n    #[allow(missing_docs)]\n    pub fn new(value: u32) -> Self { ... }\n}\n\nimpl<'de, E> de::Deserializer<'de> for U32Deserializer<E>\nwhere\n    E: de::Error,\n{\n    type Error = E;\n\n    forward_to_deserialize_any! {\n        bool i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 f32 f64 char str string\n        bytes byte_buf option unit unit_struct newtype_struct seq tuple\n        tuple_struct map struct identifier ignored_any\n    }\n\n    fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,\n    { ... }\n\n    fn deserialize_enum<V>(\n        self,\n        name: &str,\n        variants: &'static [&'static str],\n        visitor: V,\n    ) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,\n    { ... }\n}\n\nimpl<'de, E> de::EnumAccess<'de> for U32Deserializer<E>\nwhere\n    E: de::Error,\n{\n    type Error = E;\n    type Variant = private::UnitOnly<E>;\n\n    fn variant_seed<T>(self, seed: T) -> Result<(T::Value, Self::Variant), Self::Error>\n    where\n        T: de::DeserializeSeed<'de>,\n    { ... }\n}\n\nimpl<E> Debug for U32Deserializer<E> {\n    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result { ... }\n}\n\n////////////////////////////////////////////////////////////////////////////////\n\n/// A deserializer holding a `&str`.\npub struct StrDeserializer<'a, E> {\n    value: &'a str,\n    marker: PhantomData<E>,\n}\n\nimpl_copy_clone!(StrDeserializer<'de>);\n\nimpl<'de, 'a, E> IntoDeserializer<'de, E> for &'a str\nwhere\n    E: de::Error,\n{\n    type Deserializer = StrDeserializer<'a, E>;\n\n    fn into_deserializer(self) -> StrDeserializer<'a, E> { ... }\n}\n\nimpl<'a, E> StrDeserializer<'a, E> {\n    #[allow(missing_docs)]\n    pub fn new(value: &'a str) -> Self { ... }\n}\n\nimpl<'de, 'a, E> de::Deserializer<'de> for StrDeserializer<'a, E>\nwhere\n    E: de::Error,\n{\n    type Error = E;\n\n    fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,\n    { ... }\n\n    fn deserialize_enum<V>(\n        self,\n        name: &str,\n        variants: &'static [&'static str],\n        visitor: V,\n    ) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,\n    { ... }\n\n    forward_to_deserialize_any! {\n        bool i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 f32 f64 char str string\n        bytes byte_buf option unit unit_struct newtype_struct seq tuple\n        tuple_struct map struct identifier ignored_any\n    }\n}\n\nimpl<'de, 'a, E> de::EnumAccess<'de> for StrDeserializer<'a, E>\nwhere\n    E: de::Error,\n{\n    type Error = E;\n    type Variant = private::UnitOnly<E>;\n\n    fn variant_seed<T>(self, seed: T) -> Result<(T::Value, Self::Variant), Self::Error>\n    where\n        T: de::DeserializeSeed<'de>,\n    { ... }\n}\n\nimpl<'a, E> Debug for StrDeserializer<'a, E> {\n    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result { ... }\n}\n\n////////////////////////////////////////////////////////////////////////////////\n\n/// A deserializer holding a `&str` with a lifetime tied to another\n/// deserializer.\npub struct BorrowedStrDeserializer<'de, E> {\n    value: &'de str,\n    marker: PhantomData<E>,\n}\n\nimpl_copy_clone!(BorrowedStrDeserializer<'de>);\n\nimpl<'de, E> BorrowedStrDeserializer<'de, E> {\n    /// Create a new borrowed deserializer from the given string.\n    pub fn new(value: &'de str) -> BorrowedStrDeserializer<'de, E> { ... }\n}\n\nimpl<'de, E> de::Deserializer<'de> for BorrowedStrDeserializer<'de, E>\nwhere\n    E: de::Error,\n{\n    type Error = E;\n\n    fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,\n    { ... }\n\n    fn deserialize_enum<V>(\n        self,\n        name: &str,\n        variants: &'static [&'static str],\n        visitor: V,\n    ) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,\n    { ... }\n\n    forward_to_deserialize_any! {\n        bool i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 f32 f64 char str string\n        bytes byte_buf option unit unit_struct newtype_struct seq tuple\n        tuple_struct map struct identifier ignored_any\n    }\n}\n\nimpl<'de, E> de::EnumAccess<'de> for BorrowedStrDeserializer<'de, E>\nwhere\n    E: de::Error,\n{\n    type Error = E;\n    type Variant = private::UnitOnly<E>;\n\n    fn variant_seed<T>(self, seed: T) -> Result<(T::Value, Self::Variant), Self::Error>\n    where\n        T: de::DeserializeSeed<'de>,\n    { ... }\n}\n\nimpl<'de, E> Debug for BorrowedStrDeserializer<'de, E> {\n    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result { ... }\n}\n\n////////////////////////////////////////////////////////////////////////////////\n\n/// A deserializer holding a `String`.\n#[cfg(any(feature = \"std\", feature = \"alloc\"))]\n#[cfg_attr(docsrs, doc(cfg(any(feature = \"std\", feature = \"alloc\"))))]\npub struct StringDeserializer<E> {\n    value: String,\n    marker: PhantomData<E>,\n}\n\n#[cfg(any(feature = \"std\", feature = \"alloc\"))]\nimpl<E> Clone for StringDeserializer<E> {\n    fn clone(&self) -> Self { ... }\n}\n\n#[cfg(any(feature = \"std\", feature = \"alloc\"))]\n#[cfg_attr(docsrs, doc(cfg(any(feature = \"std\", feature = \"alloc\"))))]\nimpl<'de, E> IntoDeserializer<'de, E> for String\nwhere\n    E: de::Error,\n{\n    type Deserializer = StringDeserializer<E>;\n\n    fn into_deserializer(self) -> StringDeserializer<E> { ... }\n}\n\n#[cfg(any(feature = \"std\", feature = \"alloc\"))]\nimpl<E> StringDeserializer<E> {\n    #[allow(missing_docs)]\n    pub fn new(value: String) -> Self { ... }\n}\n\n#[cfg(any(feature = \"std\", feature = \"alloc\"))]\nimpl<'de, E> de::Deserializer<'de> for StringDeserializer<E>\nwhere\n    E: de::Error,\n{\n    type Error = E;\n\n    fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,\n    { ... }\n\n    fn deserialize_enum<V>(\n        self,\n        name: &str,\n        variants: &'static [&'static str],\n        visitor: V,\n    ) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,\n    { ... }\n\n    forward_to_deserialize_any! {\n        bool i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 f32 f64 char str string\n        bytes byte_buf option unit unit_struct newtype_struct seq tuple\n        tuple_struct map struct identifier ignored_any\n    }\n}\n\n#[cfg(any(feature = \"std\", feature = \"alloc\"))]\nimpl<'de, E> de::EnumAccess<'de> for StringDeserializer<E>\nwhere\n    E: de::Error,\n{\n    type Error = E;\n    type Variant = private::UnitOnly<E>;\n\n    fn variant_seed<T>(self, seed: T) -> Result<(T::Value, Self::Variant), Self::Error>\n    where\n        T: de::DeserializeSeed<'de>,\n    { ... }\n}\n\n#[cfg(any(feature = \"std\", feature = \"alloc\"))]\nimpl<E> Debug for StringDeserializer<E> {\n    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result { ... }\n}\n\n////////////////////////////////////////////////////////////////////////////////\n\n/// A deserializer holding a `Cow<str>`.\n#[cfg(any(feature = \"std\", feature = \"alloc\"))]\n#[cfg_attr(docsrs, doc(cfg(any(feature = \"std\", feature = \"alloc\"))))]\npub struct CowStrDeserializer<'a, E> {\n    value: Cow<'a, str>,\n    marker: PhantomData<E>,\n}\n\n#[cfg(any(feature = \"std\", feature = \"alloc\"))]\nimpl<'a, E> Clone for CowStrDeserializer<'a, E> {\n    fn clone(&self) -> Self { ... }\n}\n\n#[cfg(any(feature = \"std\", feature = \"alloc\"))]\n#[cfg_attr(docsrs, doc(cfg(any(feature = \"std\", feature = \"alloc\"))))]\nimpl<'de, 'a, E> IntoDeserializer<'de, E> for Cow<'a, str>\nwhere\n    E: de::Error,\n{\n    type Deserializer = CowStrDeserializer<'a, E>;\n\n    fn into_deserializer(self) -> CowStrDeserializer<'a, E> { ... }\n}\n\n#[cfg(any(feature = \"std\", feature = \"alloc\"))]\nimpl<'a, E> CowStrDeserializer<'a, E> {\n    #[allow(missing_docs)]\n    pub fn new(value: Cow<'a, str>) -> Self { ... }\n}\n\n#[cfg(any(feature = \"std\", feature = \"alloc\"))]\nimpl<'de, 'a, E> de::Deserializer<'de> for CowStrDeserializer<'a, E>\nwhere\n    E: de::Error,\n{\n    type Error = E;\n\n    fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,\n    { ... }\n\n    fn deserialize_enum<V>(\n        self,\n        name: &str,\n        variants: &'static [&'static str],\n        visitor: V,\n    ) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,\n    { ... }\n\n    forward_to_deserialize_any! {\n        bool i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 f32 f64 char str string\n        bytes byte_buf option unit unit_struct newtype_struct seq tuple\n        tuple_struct map struct identifier ignored_any\n    }\n}\n\n#[cfg(any(feature = \"std\", feature = \"alloc\"))]\nimpl<'de, 'a, E> de::EnumAccess<'de> for CowStrDeserializer<'a, E>\nwhere\n    E: de::Error,\n{\n    type Error = E;\n    type Variant = private::UnitOnly<E>;\n\n    fn variant_seed<T>(self, seed: T) -> Result<(T::Value, Self::Variant), Self::Error>\n    where\n        T: de::DeserializeSeed<'de>,\n    { ... }\n}\n\n#[cfg(any(feature = \"std\", feature = \"alloc\"))]\nimpl<'a, E> Debug for CowStrDeserializer<'a, E> {\n    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result { ... }\n}\n\n////////////////////////////////////////////////////////////////////////////////\n\n/// A deserializer holding a `&[u8]`. Always calls [`Visitor::visit_bytes`].\npub struct BytesDeserializer<'a, E> {\n    value: &'a [u8],\n    marker: PhantomData<E>,\n}\n\nimpl<'a, E> BytesDeserializer<'a, E> {\n    /// Create a new deserializer from the given bytes.\n    pub fn new(value: &'a [u8]) -> Self { ... }\n}\n\nimpl_copy_clone!(BytesDeserializer<'a>);\n\nimpl<'de, 'a, E> IntoDeserializer<'de, E> for &'a [u8]\nwhere\n    E: de::Error,\n{\n    type Deserializer = BytesDeserializer<'a, E>;\n\n    fn into_deserializer(self) -> BytesDeserializer<'a, E> { ... }\n}\n\nimpl<'de, 'a, E> Deserializer<'de> for BytesDeserializer<'a, E>\nwhere\n    E: de::Error,\n{\n    type Error = E;\n\n    fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: Visitor<'de>,\n    { ... }\n\n    forward_to_deserialize_any! {\n        bool i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 f32 f64 char str string\n        bytes byte_buf option unit unit_struct newtype_struct seq tuple\n        tuple_struct map struct enum identifier ignored_any\n    }\n}\n\nimpl<'a, E> Debug for BytesDeserializer<'a, E> {\n    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result { ... }\n}\n\n/// A deserializer holding a `&[u8]` with a lifetime tied to another\n/// deserializer. Always calls [`Visitor::visit_borrowed_bytes`].\npub struct BorrowedBytesDeserializer<'de, E> {\n    value: &'de [u8],\n    marker: PhantomData<E>,\n}\n\nimpl<'de, E> BorrowedBytesDeserializer<'de, E> {\n    /// Create a new borrowed deserializer from the given borrowed bytes.\n    pub fn new(value: &'de [u8]) -> Self { ... }\n}\n\nimpl_copy_clone!(BorrowedBytesDeserializer<'de>);\n\nimpl<'de, E> Deserializer<'de> for BorrowedBytesDeserializer<'de, E>\nwhere\n    E: de::Error,\n{\n    type Error = E;\n\n    fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: Visitor<'de>,\n    { ... }\n\n    forward_to_deserialize_any! {\n        bool i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 f32 f64 char str string\n        bytes byte_buf option unit unit_struct newtype_struct seq tuple\n        tuple_struct map struct enum identifier ignored_any\n    }\n}\n\nimpl<'de, E> Debug for BorrowedBytesDeserializer<'de, E> {\n    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result { ... }\n}\n\n////////////////////////////////////////////////////////////////////////////////\n\n/// A deserializer that iterates over a sequence.\n#[derive(Clone)]\npub struct SeqDeserializer<I, E> {\n    iter: iter::Fuse<I>,\n    count: usize,\n    marker: PhantomData<E>,\n}\n\nimpl<I, E> SeqDeserializer<I, E>\nwhere\n    I: Iterator,\n{\n    /// Construct a new `SeqDeserializer<I, E>`.\n    pub fn new(iter: I) -> Self { ... }\n}\n\nimpl<I, E> SeqDeserializer<I, E>\nwhere\n    I: Iterator,\n    E: de::Error,\n{\n    /// Check for remaining elements after passing a `SeqDeserializer` to\n    /// `Visitor::visit_seq`.\n    pub fn end(self) -> Result<(), E> { ... }\n}\n\nimpl<'de, I, T, E> de::Deserializer<'de> for SeqDeserializer<I, E>\nwhere\n    I: Iterator<Item = T>,\n    T: IntoDeserializer<'de, E>,\n    E: de::Error,\n{\n    type Error = E;\n\n    fn deserialize_any<V>(mut self, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,\n    { ... }\n\n    forward_to_deserialize_any! {\n        bool i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 f32 f64 char str string\n        bytes byte_buf option unit unit_struct newtype_struct seq tuple\n        tuple_struct map struct enum identifier ignored_any\n    }\n}\n\nimpl<'de, I, T, E> de::SeqAccess<'de> for SeqDeserializer<I, E>\nwhere\n    I: Iterator<Item = T>,\n    T: IntoDeserializer<'de, E>,\n    E: de::Error,\n{\n    type Error = E;\n\n    fn next_element_seed<V>(&mut self, seed: V) -> Result<Option<V::Value>, Self::Error>\n    where\n        V: de::DeserializeSeed<'de>,\n    { ... }\n\n    fn size_hint(&self) -> Option<usize> { ... }\n}\n\nstruct ExpectedInSeq(usize);\n\nimpl Expected for ExpectedInSeq {\n    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result { ... }\n}\n\nimpl<I, E> Debug for SeqDeserializer<I, E>\nwhere\n    I: Debug,\n{\n    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result { ... }\n}\n\n////////////////////////////////////////////////////////////////////////////////\n\n#[cfg(any(feature = \"std\", feature = \"alloc\"))]\n#[cfg_attr(docsrs, doc(cfg(any(feature = \"std\", feature = \"alloc\"))))]\nimpl<'de, T, E> IntoDeserializer<'de, E> for Vec<T>\nwhere\n    T: IntoDeserializer<'de, E>,\n    E: de::Error,\n{\n    type Deserializer = SeqDeserializer<<Self as IntoIterator>::IntoIter, E>;\n\n    fn into_deserializer(self) -> Self::Deserializer { ... }\n}\n\n#[cfg(any(feature = \"std\", feature = \"alloc\"))]\n#[cfg_attr(docsrs, doc(cfg(any(feature = \"std\", feature = \"alloc\"))))]\nimpl<'de, T, E> IntoDeserializer<'de, E> for BTreeSet<T>\nwhere\n    T: IntoDeserializer<'de, E> + Eq + Ord,\n    E: de::Error,\n{\n    type Deserializer = SeqDeserializer<<Self as IntoIterator>::IntoIter, E>;\n\n    fn into_deserializer(self) -> Self::Deserializer { ... }\n}\n\n#[cfg(feature = \"std\")]\n#[cfg_attr(docsrs, doc(cfg(feature = \"std\")))]\nimpl<'de, T, S, E> IntoDeserializer<'de, E> for HashSet<T, S>\nwhere\n    T: IntoDeserializer<'de, E> + Eq + Hash,\n    S: BuildHasher,\n    E: de::Error,\n{\n    type Deserializer = SeqDeserializer<<Self as IntoIterator>::IntoIter, E>;\n\n    fn into_deserializer(self) -> Self::Deserializer { ... }\n}\n\n////////////////////////////////////////////////////////////////////////////////\n\n/// A deserializer holding a `SeqAccess`.\n#[derive(Clone, Debug)]\npub struct SeqAccessDeserializer<A> {\n    seq: A,\n}\n\nimpl<A> SeqAccessDeserializer<A> {\n    /// Construct a new `SeqAccessDeserializer<A>`.\n    pub fn new(seq: A) -> Self { ... }\n}\n\nimpl<'de, A> de::Deserializer<'de> for SeqAccessDeserializer<A>\nwhere\n    A: de::SeqAccess<'de>,\n{\n    type Error = A::Error;\n\n    fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,\n    { ... }\n\n    forward_to_deserialize_any! {\n        bool i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 f32 f64 char str string\n        bytes byte_buf option unit unit_struct newtype_struct seq tuple\n        tuple_struct map struct enum identifier ignored_any\n    }\n}\n\n////////////////////////////////////////////////////////////////////////////////\n\n/// A deserializer that iterates over a map.\npub struct MapDeserializer<'de, I, E>\nwhere\n    I: Iterator,\n    I::Item: private::Pair,\n{\n    iter: iter::Fuse<I>,\n    value: Option<Second<I::Item>>,\n    count: usize,\n    lifetime: PhantomData<&'de ()>,\n    error: PhantomData<E>,\n}\n\nimpl<'de, I, E> MapDeserializer<'de, I, E>\nwhere\n    I: Iterator,\n    I::Item: private::Pair,\n{\n    /// Construct a new `MapDeserializer<I, E>`.\n    pub fn new(iter: I) -> Self { ... }\n}\n\nimpl<'de, I, E> MapDeserializer<'de, I, E>\nwhere\n    I: Iterator,\n    I::Item: private::Pair,\n    E: de::Error,\n{\n    /// Check for remaining elements after passing a `MapDeserializer` to\n    /// `Visitor::visit_map`.\n    pub fn end(self) -> Result<(), E> { ... }\n}\n\nimpl<'de, I, E> MapDeserializer<'de, I, E>\nwhere\n    I: Iterator,\n    I::Item: private::Pair,\n{\n    fn next_pair(&mut self) -> Option<(First<I::Item>, Second<I::Item>)> { ... }\n}\n\nimpl<'de, I, E> de::Deserializer<'de> for MapDeserializer<'de, I, E>\nwhere\n    I: Iterator,\n    I::Item: private::Pair,\n    First<I::Item>: IntoDeserializer<'de, E>,\n    Second<I::Item>: IntoDeserializer<'de, E>,\n    E: de::Error,\n{\n    type Error = E;\n\n    fn deserialize_any<V>(mut self, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,\n    { ... }\n\n    fn deserialize_seq<V>(mut self, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,\n    { ... }\n\n    fn deserialize_tuple<V>(self, len: usize, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,\n    { ... }\n\n    forward_to_deserialize_any! {\n        bool i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 f32 f64 char str string\n        bytes byte_buf option unit unit_struct newtype_struct tuple_struct map\n        struct enum identifier ignored_any\n    }\n}\n\nimpl<'de, I, E> de::MapAccess<'de> for MapDeserializer<'de, I, E>\nwhere\n    I: Iterator,\n    I::Item: private::Pair,\n    First<I::Item>: IntoDeserializer<'de, E>,\n    Second<I::Item>: IntoDeserializer<'de, E>,\n    E: de::Error,\n{\n    type Error = E;\n\n    fn next_key_seed<T>(&mut self, seed: T) -> Result<Option<T::Value>, Self::Error>\n    where\n        T: de::DeserializeSeed<'de>,\n    { ... }\n\n    fn next_value_seed<T>(&mut self, seed: T) -> Result<T::Value, Self::Error>\n    where\n        T: de::DeserializeSeed<'de>,\n    { ... }\n\n    fn next_entry_seed<TK, TV>(\n        &mut self,\n        kseed: TK,\n        vseed: TV,\n    ) -> Result<Option<(TK::Value, TV::Value)>, Self::Error>\n    where\n        TK: de::DeserializeSeed<'de>,\n        TV: de::DeserializeSeed<'de>,\n    { ... }\n\n    fn size_hint(&self) -> Option<usize> { ... }\n}\n\nimpl<'de, I, E> de::SeqAccess<'de> for MapDeserializer<'de, I, E>\nwhere\n    I: Iterator,\n    I::Item: private::Pair,\n    First<I::Item>: IntoDeserializer<'de, E>,\n    Second<I::Item>: IntoDeserializer<'de, E>,\n    E: de::Error,\n{\n    type Error = E;\n\n    fn next_element_seed<T>(&mut self, seed: T) -> Result<Option<T::Value>, Self::Error>\n    where\n        T: de::DeserializeSeed<'de>,\n    { ... }\n\n    fn size_hint(&self) -> Option<usize> { ... }\n}\n\n// Cannot #[derive(Clone)] because of the bound `Second<I::Item>: Clone`.\nimpl<'de, I, E> Clone for MapDeserializer<'de, I, E>\nwhere\n    I: Iterator + Clone,\n    I::Item: private::Pair,\n    Second<I::Item>: Clone,\n{\n    fn clone(&self) -> Self { ... }\n}\n\nimpl<'de, I, E> Debug for MapDeserializer<'de, I, E>\nwhere\n    I: Iterator + Debug,\n    I::Item: private::Pair,\n    Second<I::Item>: Debug,\n{\n    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result { ... }\n}\n\n// Used in the `impl SeqAccess for MapDeserializer` to visit the map as a\n// sequence of pairs.\nstruct PairDeserializer<A, B, E>(A, B, PhantomData<E>);\n\nimpl<'de, A, B, E> de::Deserializer<'de> for PairDeserializer<A, B, E>\nwhere\n    A: IntoDeserializer<'de, E>,\n    B: IntoDeserializer<'de, E>,\n    E: de::Error,\n{\n    type Error = E;\n\n    forward_to_deserialize_any! {\n        bool i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 f32 f64 char str string\n        bytes byte_buf option unit unit_struct newtype_struct tuple_struct map\n        struct enum identifier ignored_any\n    }\n\n    fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,\n    { ... }\n\n    fn deserialize_seq<V>(self, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,\n    { ... }\n\n    fn deserialize_tuple<V>(self, len: usize, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,\n    { ... }\n}\n\nstruct PairVisitor<A, B, E>(Option<A>, Option<B>, PhantomData<E>);\n\nimpl<'de, A, B, E> de::SeqAccess<'de> for PairVisitor<A, B, E>\nwhere\n    A: IntoDeserializer<'de, E>,\n    B: IntoDeserializer<'de, E>,\n    E: de::Error,\n{\n    type Error = E;\n\n    fn next_element_seed<T>(&mut self, seed: T) -> Result<Option<T::Value>, Self::Error>\n    where\n        T: de::DeserializeSeed<'de>,\n    { ... }\n\n    fn size_hint(&self) -> Option<usize> { ... }\n}\n\nstruct ExpectedInMap(usize);\n\nimpl Expected for ExpectedInMap {\n    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result { ... }\n}\n\n////////////////////////////////////////////////////////////////////////////////\n\n#[cfg(any(feature = \"std\", feature = \"alloc\"))]\n#[cfg_attr(docsrs, doc(cfg(any(feature = \"std\", feature = \"alloc\"))))]\nimpl<'de, K, V, E> IntoDeserializer<'de, E> for BTreeMap<K, V>\nwhere\n    K: IntoDeserializer<'de, E> + Eq + Ord,\n    V: IntoDeserializer<'de, E>,\n    E: de::Error,\n{\n    type Deserializer = MapDeserializer<'de, <Self as IntoIterator>::IntoIter, E>;\n\n    fn into_deserializer(self) -> Self::Deserializer { ... }\n}\n\n#[cfg(feature = \"std\")]\n#[cfg_attr(docsrs, doc(cfg(feature = \"std\")))]\nimpl<'de, K, V, S, E> IntoDeserializer<'de, E> for HashMap<K, V, S>\nwhere\n    K: IntoDeserializer<'de, E> + Eq + Hash,\n    V: IntoDeserializer<'de, E>,\n    S: BuildHasher,\n    E: de::Error,\n{\n    type Deserializer = MapDeserializer<'de, <Self as IntoIterator>::IntoIter, E>;\n\n    fn into_deserializer(self) -> Self::Deserializer { ... }\n}\n\n////////////////////////////////////////////////////////////////////////////////\n\n/// A deserializer holding a `MapAccess`.\n#[derive(Clone, Debug)]\npub struct MapAccessDeserializer<A> {\n    map: A,\n}\n\nimpl<A> MapAccessDeserializer<A> {\n    /// Construct a new `MapAccessDeserializer<A>`.\n    pub fn new(map: A) -> Self { ... }\n}\n\nimpl<'de, A> de::Deserializer<'de> for MapAccessDeserializer<A>\nwhere\n    A: de::MapAccess<'de>,\n{\n    type Error = A::Error;\n\n    fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,\n    { ... }\n\n    fn deserialize_enum<V>(\n        self,\n        _name: &str,\n        _variants: &'static [&'static str],\n        visitor: V,\n    ) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,\n    { ... }\n\n    forward_to_deserialize_any! {\n        bool i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 f32 f64 char str string\n        bytes byte_buf option unit unit_struct newtype_struct seq tuple\n        tuple_struct map struct identifier ignored_any\n    }\n}\n\nimpl<'de, A> de::EnumAccess<'de> for MapAccessDeserializer<A>\nwhere\n    A: de::MapAccess<'de>,\n{\n    type Error = A::Error;\n    type Variant = private::MapAsEnum<A>;\n\n    fn variant_seed<T>(mut self, seed: T) -> Result<(T::Value, Self::Variant), Self::Error>\n    where\n        T: de::DeserializeSeed<'de>,\n    { ... }\n}\n\n////////////////////////////////////////////////////////////////////////////////\n\n/// A deserializer holding an `EnumAccess`.\n#[derive(Clone, Debug)]\npub struct EnumAccessDeserializer<A> {\n    access: A,\n}\n\nimpl<A> EnumAccessDeserializer<A> {\n    /// Construct a new `EnumAccessDeserializer<A>`.\n    pub fn new(access: A) -> Self { ... }\n}\n\nimpl<'de, A> de::Deserializer<'de> for EnumAccessDeserializer<A>\nwhere\n    A: de::EnumAccess<'de>,\n{\n    type Error = A::Error;\n\n    fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>\n    where\n        V: de::Visitor<'de>,\n    { ... }\n\n    forward_to_deserialize_any! {\n        bool i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 f32 f64 char str string\n        bytes byte_buf option unit unit_struct newtype_struct seq tuple\n        tuple_struct map struct enum identifier ignored_any\n    }\n}\n\n////////////////////////////////////////////////////////////////////////////////\n\nmod private {\n    use crate::lib::*;\n\n    use crate::de::{\n        self, DeserializeSeed, Deserializer, MapAccess, Unexpected, VariantAccess, Visitor,\n    };\n\n    pub struct UnitOnly<E> {\n        marker: PhantomData<E>,\n    }\n\n    pub fn unit_only<T, E>(t: T) -> (T, UnitOnly<E>) { ... }\n\n    impl<'de, E> de::VariantAccess<'de> for UnitOnly<E>\n    where\n        E: de::Error,\n    {\n        type Error = E;\n\n        fn unit_variant(self) -> Result<(), Self::Error> { ... }\n\n        fn newtype_variant_seed<T>(self, _seed: T) -> Result<T::Value, Self::Error>\n        where\n            T: de::DeserializeSeed<'de>,\n        { ... }\n\n        fn tuple_variant<V>(self, _len: usize, _visitor: V) -> Result<V::Value, Self::Error>\n        where\n            V: de::Visitor<'de>,\n        { ... }\n\n        fn struct_variant<V>(\n            self,\n            _fields: &'static [&'static str],\n            _visitor: V,\n        ) -> Result<V::Value, Self::Error>\n        where\n            V: de::Visitor<'de>,\n        { ... }\n    }\n\n    pub struct MapAsEnum<A> {\n        map: A,\n    }\n\n    pub fn map_as_enum<A>(map: A) -> MapAsEnum<A> { ... }\n\n    impl<'de, A> VariantAccess<'de> for MapAsEnum<A>\n    where\n        A: MapAccess<'de>,\n    {\n        type Error = A::Error;\n\n        fn unit_variant(mut self) -> Result<(), Self::Error> { ... }\n\n        fn newtype_variant_seed<T>(mut self, seed: T) -> Result<T::Value, Self::Error>\n        where\n            T: DeserializeSeed<'de>,\n        { ... }\n\n        fn tuple_variant<V>(mut self, len: usize, visitor: V) -> Result<V::Value, Self::Error>\n        where\n            V: Visitor<'de>,\n        { ... }\n\n        fn struct_variant<V>(\n            mut self,\n            _fields: &'static [&'static str],\n            visitor: V,\n        ) -> Result<V::Value, Self::Error>\n        where\n            V: Visitor<'de>,\n        { ... }\n    }\n\n    struct SeedTupleVariant<V> {\n        len: usize,\n        visitor: V,\n    }\n\n    impl<'de, V> DeserializeSeed<'de> for SeedTupleVariant<V>\n    where\n        V: Visitor<'de>,\n    {\n        type Value = V::Value;\n\n        fn deserialize<D>(self, deserializer: D) -> Result<Self::Value, D::Error>\n        where\n            D: Deserializer<'de>,\n        { ... }\n    }\n\n    struct SeedStructVariant<V> {\n        visitor: V,\n    }\n\n    impl<'de, V> DeserializeSeed<'de> for SeedStructVariant<V>\n    where\n        V: Visitor<'de>,\n    {\n        type Value = V::Value;\n\n        fn deserialize<D>(self, deserializer: D) -> Result<Self::Value, D::Error>\n        where\n            D: Deserializer<'de>,\n        { ... }\n    }\n\n    /// Avoid having to restate the generic types on `MapDeserializer`. The\n    /// `Iterator::Item` contains enough information to figure out K and V.\n    pub trait Pair {\n        type First;\n        type Second;\n        fn split(self) -> (Self::First, Self::Second);\n    }\n\n    impl<A, B> Pair for (A, B) {\n        type First = A;\n        type Second = B;\n        fn split(self) -> (A, B) { ... }\n    }\n\n    pub type First<T> = <T as Pair>::First;\n    pub type Second<T> = <T as Pair>::Second;\n}\n"
+}

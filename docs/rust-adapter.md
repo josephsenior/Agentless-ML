@@ -48,7 +48,12 @@ fails explicitly. The shared repair layer still edits existing files only.
 
 ## Evidence
 
-[Adapter tests](../tests/test_rust_adapter.py) cover names, attributes, spans,
+Rust is a `LanguageSpec` in `adapters/languages/rust.py` for the shared
+[structure engine](adr/0003-language-engine.md); only impl naming is Rust-specific
+code. The [structure corpus](../tests/test_structure_corpus.py) pins the full
+representation of serde and tokio sources at fixed tags plus an authored
+edge-case file covering attribute runs, comments between attributes, unions and
+trait items. [Adapter tests](../tests/test_rust_adapter.py) cover names, attributes, spans,
 ambiguous methods, module prefixes, generics, Unicode, skeletons and path filters.
 [Workflow tests](../tests/test_rust_workflow.py) exercise two files through recorded
 localization, repair parsing, isolated workspaces, validation, selection and export.

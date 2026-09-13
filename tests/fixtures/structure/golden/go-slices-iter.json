@@ -1,0 +1,95 @@
+{
+  "id": "go-slices-iter",
+  "language": "go",
+  "path": "src/slices/iter.go",
+  "source_sha256": "bac33a7be07413af41e4784e3935345342d4d771033480fb95e70636968595d4",
+  "parse": {
+    "path": "src/slices/iter.go",
+    "language": "go",
+    "line_count": 109,
+    "symbols": [
+      {
+        "kind": "function",
+        "name": "All",
+        "qualified_name": "All",
+        "signature": "func All[Slice ~[]E, E any](s Slice) iter.Seq2[int, E]",
+        "start_line": 14,
+        "end_line": 22,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "Backward",
+        "qualified_name": "Backward",
+        "signature": "func Backward[Slice ~[]E, E any](s Slice) iter.Seq2[int, E]",
+        "start_line": 26,
+        "end_line": 34,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "Values",
+        "qualified_name": "Values",
+        "signature": "func Values[Slice ~[]E, E any](s Slice) iter.Seq[E]",
+        "start_line": 37,
+        "end_line": 45,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "AppendSeq",
+        "qualified_name": "AppendSeq",
+        "signature": "func AppendSeq[Slice ~[]E, E any](s Slice, seq iter.Seq[E]) Slice",
+        "start_line": 49,
+        "end_line": 54,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "Collect",
+        "qualified_name": "Collect",
+        "signature": "func Collect[E any](seq iter.Seq[E]) []E",
+        "start_line": 57,
+        "end_line": 59,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "Sorted",
+        "qualified_name": "Sorted",
+        "signature": "func Sorted[E cmp.Ordered](seq iter.Seq[E]) []E",
+        "start_line": 63,
+        "end_line": 67,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "SortedFunc",
+        "qualified_name": "SortedFunc",
+        "signature": "func SortedFunc[E any](seq iter.Seq[E], cmp func(E, E) int) []E",
+        "start_line": 71,
+        "end_line": 75,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "SortedStableFunc",
+        "qualified_name": "SortedStableFunc",
+        "signature": "func SortedStableFunc[E any](seq iter.Seq[E], cmp func(E, E) int) []E",
+        "start_line": 81,
+        "end_line": 85,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "Chunk",
+        "qualified_name": "Chunk",
+        "signature": "func Chunk[Slice ~[]E, E any](s Slice, n int) iter.Seq[Slice]",
+        "start_line": 92,
+        "end_line": 109,
+        "children": []
+      }
+    ]
+  },
+  "skeleton": "// Copyright 2024 The Go Authors. All rights reserved.\n// Use of this source code is governed by a BSD-style\n// license that can be found in the LICENSE file.\n\npackage slices\n\nimport (\n\t\"cmp\"\n\t\"iter\"\n)\n\n// All returns an iterator over index-value pairs in the slice\n// in the usual order.\nfunc All[Slice ~[]E, E any](s Slice) iter.Seq2[int, E] { ... }\n\n// Backward returns an iterator over index-value pairs in the slice,\n// traversing it backward with descending indices.\nfunc Backward[Slice ~[]E, E any](s Slice) iter.Seq2[int, E] { ... }\n\n// Values returns an iterator that yields the slice elements in order.\nfunc Values[Slice ~[]E, E any](s Slice) iter.Seq[E] { ... }\n\n// AppendSeq appends the values from seq to the slice and\n// returns the extended slice.\nfunc AppendSeq[Slice ~[]E, E any](s Slice, seq iter.Seq[E]) Slice { ... }\n\n// Collect collects values from seq into a new slice and returns it.\nfunc Collect[E any](seq iter.Seq[E]) []E { ... }\n\n// Sorted collects values from seq into a new slice, sorts the slice,\n// and returns it.\nfunc Sorted[E cmp.Ordered](seq iter.Seq[E]) []E { ... }\n\n// SortedFunc collects values from seq into a new slice, sorts the slice\n// using the comparison function, and returns it.\nfunc SortedFunc[E any](seq iter.Seq[E], cmp func(E, E) int) []E { ... }\n\n// SortedStableFunc collects values from seq into a new slice.\n// It then sorts the slice while keeping the original order of equal elements,\n// using the comparison function to compare elements.\n// It returns the new slice.\nfunc SortedStableFunc[E any](seq iter.Seq[E], cmp func(E, E) int) []E { ... }\n\n// Chunk returns an iterator over consecutive sub-slices of up to n elements of s.\n// All but the last sub-slice will have size n.\n// All sub-slices are clipped to have no capacity beyond the length.\n// If s is empty, the sequence is empty: there is no empty slice in the sequence.\n// Chunk panics if n is less than 1.\nfunc Chunk[Slice ~[]E, E any](s Slice, n int) iter.Seq[Slice] { ... }\n"
+}

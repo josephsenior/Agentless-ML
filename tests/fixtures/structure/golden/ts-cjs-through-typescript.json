@@ -1,0 +1,324 @@
+{
+  "id": "ts-cjs-through-typescript",
+  "language": "typescript",
+  "path": "lib/edge_cases.cjs",
+  "source_sha256": "a06a230567802ff0c169e2863eb777bb34a9a645786e8576bbf85581a9aff8d5",
+  "parse": {
+    "path": "lib/edge_cases.cjs",
+    "language": "javascript",
+    "line_count": 47,
+    "symbols": [
+      {
+        "kind": "constant",
+        "name": "path",
+        "qualified_name": "path",
+        "signature": "path = require('path')",
+        "start_line": 3,
+        "end_line": 3,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "legacy",
+        "qualified_name": "legacy",
+        "signature": "legacy = 1",
+        "start_line": 4,
+        "end_line": 4,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "other",
+        "qualified_name": "other",
+        "signature": "other = function ()",
+        "start_line": 4,
+        "end_line": 4,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "counter",
+        "qualified_name": "counter",
+        "signature": "counter = 0",
+        "start_line": 5,
+        "end_line": 5,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "gen",
+        "qualified_name": "gen",
+        "signature": "function* gen()",
+        "start_line": 7,
+        "end_line": 7,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "load",
+        "qualified_name": "load",
+        "signature": "async function load(url)",
+        "start_line": 8,
+        "end_line": 8,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "arrow",
+        "qualified_name": "arrow",
+        "signature": "arrow = async (x) =>",
+        "start_line": 10,
+        "end_line": 10,
+        "children": []
+      },
+      {
+        "kind": "object",
+        "name": "objectLiteral",
+        "qualified_name": "objectLiteral",
+        "signature": "objectLiteral = {\n  name: 'x',\n  'quoted-key': 1,\n  42: 'answer',\n  method() { return 1; },\n  arrowProp: () => 2,\n  nested: { deep: true },\n  [computed]: 3,\n  shorthand,\n  get getter() { return 1; },\n  set setter(v) {},\n  async asyncMethod() {},\n  *generatorMethod() {},\n}",
+        "start_line": 11,
+        "end_line": 24,
+        "children": [
+          {
+            "kind": "field",
+            "name": "name",
+            "qualified_name": "objectLiteral.name",
+            "signature": "name: 'x'",
+            "start_line": 12,
+            "end_line": 12,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "quoted-key",
+            "qualified_name": "objectLiteral.quoted-key",
+            "signature": "'quoted-key': 1",
+            "start_line": 13,
+            "end_line": 13,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "42",
+            "qualified_name": "objectLiteral.42",
+            "signature": "42: 'answer'",
+            "start_line": 14,
+            "end_line": 14,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "method",
+            "qualified_name": "objectLiteral.method",
+            "signature": "method()",
+            "start_line": 15,
+            "end_line": 15,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "arrowProp",
+            "qualified_name": "objectLiteral.arrowProp",
+            "signature": "arrowProp: () =>",
+            "start_line": 16,
+            "end_line": 16,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "nested",
+            "qualified_name": "objectLiteral.nested",
+            "signature": "nested: { deep: true }",
+            "start_line": 17,
+            "end_line": 17,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "getter",
+            "qualified_name": "objectLiteral.getter",
+            "signature": "get getter()",
+            "start_line": 20,
+            "end_line": 20,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "setter",
+            "qualified_name": "objectLiteral.setter",
+            "signature": "set setter(v)",
+            "start_line": 21,
+            "end_line": 21,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "asyncMethod",
+            "qualified_name": "objectLiteral.asyncMethod",
+            "signature": "async asyncMethod()",
+            "start_line": 22,
+            "end_line": 22,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "generatorMethod",
+            "qualified_name": "objectLiteral.generatorMethod",
+            "signature": "*generatorMethod()",
+            "start_line": 23,
+            "end_line": 23,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "class",
+        "name": "Base",
+        "qualified_name": "Base",
+        "signature": "class Base",
+        "start_line": 26,
+        "end_line": 34,
+        "children": [
+          {
+            "kind": "field",
+            "name": "count",
+            "qualified_name": "Base.count",
+            "signature": "static count = 0",
+            "start_line": 27,
+            "end_line": 27,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "#secret",
+            "qualified_name": "Base.#secret",
+            "signature": "#secret = 1",
+            "start_line": 28,
+            "end_line": 28,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "field",
+            "qualified_name": "Base.field",
+            "signature": "field = () =>",
+            "start_line": 29,
+            "end_line": 29,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "constructor",
+            "qualified_name": "Base.constructor",
+            "signature": "constructor(a)",
+            "start_line": 30,
+            "end_line": 30,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "create",
+            "qualified_name": "Base.create",
+            "signature": "static create()",
+            "start_line": 31,
+            "end_line": 31,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "value",
+            "qualified_name": "Base.value",
+            "signature": "get value()",
+            "start_line": 32,
+            "end_line": 32,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "#privateMethod",
+            "qualified_name": "Base.#privateMethod",
+            "signature": "#privateMethod()",
+            "start_line": 33,
+            "end_line": 33,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "class",
+        "name": "Derived",
+        "qualified_name": "Derived",
+        "signature": "class Derived extends Base",
+        "start_line": 36,
+        "end_line": 38,
+        "children": [
+          {
+            "kind": "method",
+            "name": "run",
+            "qualified_name": "Derived.run",
+            "signature": "run()",
+            "start_line": 37,
+            "end_line": 37,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "variable",
+        "name": "module.exports",
+        "qualified_name": "module.exports",
+        "signature": "module.exports = Derived",
+        "start_line": 40,
+        "end_line": 40,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "module.exports.helper",
+        "qualified_name": "module.exports.helper",
+        "signature": "module.exports.helper = function helper()",
+        "start_line": 41,
+        "end_line": 41,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "exports.value",
+        "qualified_name": "exports.value",
+        "signature": "exports.value = 42",
+        "start_line": 42,
+        "end_line": 42,
+        "children": []
+      },
+      {
+        "kind": "object",
+        "name": "exports.config",
+        "qualified_name": "exports.config",
+        "signature": "exports.config = { enabled: true, toggle() {} }",
+        "start_line": 43,
+        "end_line": 43,
+        "children": [
+          {
+            "kind": "field",
+            "name": "enabled",
+            "qualified_name": "exports.config.enabled",
+            "signature": "enabled: true",
+            "start_line": 43,
+            "end_line": 43,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "toggle",
+            "qualified_name": "exports.config.toggle",
+            "signature": "toggle()",
+            "start_line": 43,
+            "end_line": 43,
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  "skeleton": "'use strict';\n\nconst path = require('path');\nvar legacy = 1, other = function () { ... };\nlet counter = 0;\n\nfunction* gen() { ... }\nasync function load(url) { ... }\n\nconst arrow = async (x) => ...;\nconst objectLiteral = {\n  name: 'x',\n  'quoted-key': 1,\n  42: 'answer',\n  method() { ... },\n  arrowProp: () => ...,\n  nested: { deep: true },\n  [computed]: 3,\n  shorthand,\n  get getter() { ... },\n  set setter(v) { ... },\n  async asyncMethod() { ... },\n  *generatorMethod() { ... },\n};\n\nclass Base {\n  static count = 0;\n  #secret = 1;\n  field = () => ...;\n  constructor(a) { ... }\n  static create() { ... }\n  get value() { ... }\n  #privateMethod() { ... }\n}\n\nclass Derived extends Base {\n  run() { ... }\n}\n\nmodule.exports = Derived;\nmodule.exports.helper = function helper() { ... };\nexports.value = 42;\nexports.config = { enabled: true, toggle() { ... } };\nBase.prototype.extra = function () { ... };\n\n(function iife() { ... })();\nif (counter) { function hoisted() { ... } }\n"
+}

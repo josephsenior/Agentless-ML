@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from agentless_ml.adapters.languages import GoAdapter, get_language_adapter
+from agentless_ml.adapters.languages import get_language_adapter
 from agentless_ml.localization.context import (
     render_file_localization_prompt,
     render_project_tree,
@@ -22,7 +22,7 @@ SOURCE = (Path(__file__).parent / "fixtures/go/structure.go").read_text(
 
 
 def test_go_declarations_and_source_spans():
-    node = GoAdapter().parse_file("sample.go", SOURCE)
+    node = get_language_adapter("go").parse_file("sample.go", SOURCE)
     by_name = {s.qualified_name: s for s in node.symbols}
     assert list(by_name) == [
         "Counter",
@@ -48,7 +48,7 @@ def test_go_declarations_and_source_spans():
 
 
 def test_go_skeleton_uses_syntax_spans_and_preserves_unicode():
-    skeleton = GoAdapter().render_skeleton(SOURCE)
+    skeleton = get_language_adapter("go").render_skeleton(SOURCE)
     assert "c.Value += v" not in skeleton
     assert "format := func()" not in skeleton
     assert "café" in skeleton
@@ -56,7 +56,7 @@ def test_go_skeleton_uses_syntax_spans_and_preserves_unicode():
     assert "Read(p []byte) (int, error)" in skeleton
     assert 'import "fmt"' in skeleton
     assert (
-        GoAdapter().render_skeleton(SOURCE.replace("\n", "\r\n")).count("{ ... }") == 2
+        get_language_adapter("go").render_skeleton(SOURCE.replace("\n", "\r\n")).count("{ ... }") == 2
     )
 
 
@@ -65,7 +65,7 @@ def test_go_skeleton_uses_syntax_spans_and_preserves_unicode():
 )
 def test_invalid_go_fails_explicitly(source):
     with pytest.raises(ValueError, match="Go source"):
-        GoAdapter().parse_file("bad.go", source)
+        get_language_adapter("go").parse_file("bad.go", source)
 
 
 def test_grouped_types_value_receiver_and_bodyless_declaration():
@@ -74,21 +74,21 @@ def test_grouped_types_value_receiver_and_bodyless_declaration():
         "func (id ID) Value() int { return int(id) }\n"
         "func external()\n"
     )
-    node = GoAdapter().parse_file("id.go", source)
+    node = get_language_adapter("go").parse_file("id.go", source)
     assert [s.qualified_name for s in node.symbols] == [
         "ID",
         "Alias",
         "ID.Value",
         "external",
     ]
-    skeleton = GoAdapter().render_skeleton(source)
+    skeleton = get_language_adapter("go").render_skeleton(source)
     assert "func external()" in skeleton and "return int(id)" not in skeleton
     with pytest.raises(ValueError, match="compression"):
-        GoAdapter().render_skeleton(source, compress_assign=True)
+        get_language_adapter("go").render_skeleton(source, compress_assign=True)
 
 
 def test_go_localization_and_context():
-    node = GoAdapter().parse_file("sample.go", SOURCE)
+    node = get_language_adapter("go").parse_file("sample.go", SOURCE)
     locations = parse_locations_for_files(
         ["sample.go\nmethod: Counter.Add\nconstant: One"],
         ["sample.go"],
@@ -110,7 +110,7 @@ def test_go_localization_and_context():
 
 def test_receiver_in_other_file_and_ambiguous_bare_method():
     source = "package p\nfunc (a A) Run() {}\nfunc (b *B) Run() {}\n"
-    node = GoAdapter().parse_file("methods.go", source)
+    node = get_language_adapter("go").parse_file("methods.go", source)
     assert resolve_locations("method: A.Run", node, source).line_intervals == ((2, 2),)
     assert not resolve_locations("method: Run", node, source).is_valid
     assert not resolve_locations("line: 0\nline: 999\nline:", node, source).is_valid

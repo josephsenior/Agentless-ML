@@ -1,0 +1,87 @@
+{
+  "id": "js-edge-cases-mjs",
+  "language": "javascript",
+  "path": "lib/edge_cases.mjs",
+  "source_sha256": "47cfb20b71efcc84e109ec6bd1ec82f786bb220f6f14fa4a511f808af1f9fa20",
+  "parse": {
+    "path": "lib/edge_cases.mjs",
+    "language": "javascript",
+    "line_count": 11,
+    "symbols": [
+      {
+        "kind": "constant",
+        "name": "a",
+        "qualified_name": "a",
+        "signature": "a = 1",
+        "start_line": 3,
+        "end_line": 3,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "b",
+        "qualified_name": "b",
+        "signature": "b = () =>",
+        "start_line": 3,
+        "end_line": 3,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "mutable",
+        "qualified_name": "mutable",
+        "signature": "mutable",
+        "start_line": 4,
+        "end_line": 4,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "named",
+        "qualified_name": "named",
+        "signature": "export function named()",
+        "start_line": 5,
+        "end_line": 5,
+        "children": []
+      },
+      {
+        "kind": "class",
+        "name": "Klass",
+        "qualified_name": "Klass",
+        "signature": "export class Klass",
+        "start_line": 6,
+        "end_line": 6,
+        "children": [
+          {
+            "kind": "method",
+            "name": "m",
+            "qualified_name": "Klass.m",
+            "signature": "m()",
+            "start_line": 6,
+            "end_line": 6,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "name": "default",
+        "qualified_name": "default",
+        "signature": "export default async function ()",
+        "start_line": 7,
+        "end_line": 7,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "local",
+        "qualified_name": "local",
+        "signature": "local = 1",
+        "start_line": 10,
+        "end_line": 10,
+        "children": []
+      }
+    ]
+  },
+  "skeleton": "import fs from 'node:fs';\n\nexport const a = 1, b = () => ...;\nexport let mutable;\nexport function named() { ... }\nexport class Klass { m() { ... } }\nexport default async function () { ... }\nexport { a as alias };\nexport * from './other.js';\nconst local = 1;\nexport { local };\n"
+}

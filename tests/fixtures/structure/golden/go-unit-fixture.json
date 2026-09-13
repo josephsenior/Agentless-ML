@@ -1,0 +1,114 @@
+{
+  "id": "go-unit-fixture",
+  "language": "go",
+  "path": "sample.go",
+  "source_sha256": "d8a4f27876f16fbc856f47350e7bc6bda84f79042c0c0ca1937b9ce23caa250e",
+  "parse": {
+    "path": "sample.go",
+    "language": "go",
+    "line_count": 34,
+    "symbols": [
+      {
+        "kind": "struct",
+        "name": "Counter",
+        "qualified_name": "Counter",
+        "signature": "Counter[T ~int] struct {\n    Value T\n}",
+        "start_line": 5,
+        "end_line": 7,
+        "children": []
+      },
+      {
+        "kind": "interface",
+        "name": "Reader",
+        "qualified_name": "Reader",
+        "signature": "Reader interface {\n    Read(p []byte) (int, error)\n}",
+        "start_line": 9,
+        "end_line": 11,
+        "children": [
+          {
+            "kind": "method",
+            "name": "Read",
+            "qualified_name": "Reader.Read",
+            "signature": "Read(p []byte) (int, error)",
+            "start_line": 10,
+            "end_line": 10,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "type",
+        "name": "Alias",
+        "qualified_name": "Alias",
+        "signature": "Alias = int",
+        "start_line": 13,
+        "end_line": 13,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "First",
+        "qualified_name": "First",
+        "signature": "First, Second = 1, 2",
+        "start_line": 16,
+        "end_line": 16,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "Second",
+        "qualified_name": "Second",
+        "signature": "First, Second = 1, 2",
+        "start_line": 16,
+        "end_line": 16,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "Message",
+        "qualified_name": "Message",
+        "signature": "Message = \"braces: { } and unicode: café\"",
+        "start_line": 17,
+        "end_line": 17,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "Zero",
+        "qualified_name": "Zero",
+        "signature": "Zero = iota",
+        "start_line": 21,
+        "end_line": 21,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "One",
+        "qualified_name": "One",
+        "signature": "One",
+        "start_line": 22,
+        "end_line": 22,
+        "children": []
+      },
+      {
+        "kind": "method",
+        "name": "Add",
+        "qualified_name": "Counter.Add",
+        "signature": "func (c *Counter[T]) Add(v T) T",
+        "start_line": 25,
+        "end_line": 29,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "Format",
+        "qualified_name": "Format",
+        "signature": "func Format(v int) string",
+        "start_line": 31,
+        "end_line": 34,
+        "children": []
+      }
+    ]
+  },
+  "skeleton": "package sample\n\nimport \"fmt\"\n\ntype Counter[T ~int] struct {\n    Value T\n}\n\ntype Reader interface {\n    Read(p []byte) (int, error)\n}\n\ntype Alias = int\n\nvar (\n    First, Second = 1, 2\n    Message = \"braces: { } and unicode: café\"\n)\n\nconst (\n    Zero = iota\n    One\n)\n\nfunc (c *Counter[T]) Add(v T) T { ... }\n\nfunc Format(v int) string { ... }\n"
+}

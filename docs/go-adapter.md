@@ -7,8 +7,11 @@ as Python. There are no model calls in this milestone.
 
 ## What the adapter represents
 
-`GoAdapter` uses Tree-sitter to read source without compiling or running the
-repository. The parser and Go grammar versions are locked in `uv.lock`.
+Go has no adapter implementation of its own: `adapters/languages/go.py` describes
+it as a `LanguageSpec` for the shared [structure engine](adr/0003-language-engine.md),
+which uses Tree-sitter to read source without compiling or running the repository.
+The only Go-specific code is the receiver lookup that names methods. The parser and
+Go grammar versions are locked in `uv.lock`.
 
 | Go declaration | Representation | Example location |
 |---|---|---|
@@ -56,6 +59,9 @@ are not evaluated. This is a source view, not a reconstruction of a Go build.
 
 ## What was checked
 
+- The [structure corpus](../tests/test_structure_corpus.py) pins the full
+  representation of five Go standard-library files (go1.23.0) and an authored
+  edge-case file, including grouped `var`/`const` blocks and blank identifiers.
 - [Adapter tests](../tests/test_go_adapter.py) cover declaration kinds, generic
   pointer receivers, interfaces, aliases, grouped declarations, source spans,
   Unicode/CRLF skeletons, syntax failures, ambiguous methods, paths and prompts.

@@ -1,0 +1,642 @@
+{
+  "id": "ts-vue-effect",
+  "language": "typescript",
+  "path": "packages/reactivity/src/effect.ts",
+  "source_sha256": "399b31d6f5be7162f78507bc927ef9a34ad8e7b64c7dd6d566dd72c16c45724a",
+  "parse": {
+    "path": "packages/reactivity/src/effect.ts",
+    "language": "typescript",
+    "line_count": 541,
+    "symbols": [
+      {
+        "kind": "type",
+        "name": "EffectScheduler",
+        "qualified_name": "EffectScheduler",
+        "signature": "export type EffectScheduler = (...args: any[]) => any",
+        "start_line": 8,
+        "end_line": 8,
+        "children": []
+      },
+      {
+        "kind": "type",
+        "name": "DebuggerEvent",
+        "qualified_name": "DebuggerEvent",
+        "signature": "export type DebuggerEvent = {\n  effect: Subscriber\n} & DebuggerEventExtraInfo",
+        "start_line": 10,
+        "end_line": 12,
+        "children": []
+      },
+      {
+        "kind": "type",
+        "name": "DebuggerEventExtraInfo",
+        "qualified_name": "DebuggerEventExtraInfo",
+        "signature": "export type DebuggerEventExtraInfo = {\n  target: object\n  type: TrackOpTypes | TriggerOpTypes\n  key: any\n  newValue?: any\n  oldValue?: any\n  oldTarget?: Map<any, any> | Set<any>\n}",
+        "start_line": 14,
+        "end_line": 21,
+        "children": []
+      },
+      {
+        "kind": "interface",
+        "name": "DebuggerOptions",
+        "qualified_name": "DebuggerOptions",
+        "signature": "export interface DebuggerOptions",
+        "start_line": 23,
+        "end_line": 26,
+        "children": [
+          {
+            "kind": "field",
+            "name": "onTrack",
+            "qualified_name": "DebuggerOptions.onTrack",
+            "signature": "onTrack?: (event: DebuggerEvent) => void",
+            "start_line": 24,
+            "end_line": 24,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "onTrigger",
+            "qualified_name": "DebuggerOptions.onTrigger",
+            "signature": "onTrigger?: (event: DebuggerEvent) => void",
+            "start_line": 25,
+            "end_line": 25,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "interface",
+        "name": "ReactiveEffectOptions",
+        "qualified_name": "ReactiveEffectOptions",
+        "signature": "export interface ReactiveEffectOptions extends DebuggerOptions",
+        "start_line": 28,
+        "end_line": 32,
+        "children": [
+          {
+            "kind": "field",
+            "name": "scheduler",
+            "qualified_name": "ReactiveEffectOptions.scheduler",
+            "signature": "scheduler?: EffectScheduler",
+            "start_line": 29,
+            "end_line": 29,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "allowRecurse",
+            "qualified_name": "ReactiveEffectOptions.allowRecurse",
+            "signature": "allowRecurse?: boolean",
+            "start_line": 30,
+            "end_line": 30,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "onStop",
+            "qualified_name": "ReactiveEffectOptions.onStop",
+            "signature": "onStop?: () => void",
+            "start_line": 31,
+            "end_line": 31,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "interface",
+        "name": "ReactiveEffectRunner",
+        "qualified_name": "ReactiveEffectRunner",
+        "signature": "export interface ReactiveEffectRunner<T = any>",
+        "start_line": 34,
+        "end_line": 37,
+        "children": [
+          {
+            "kind": "field",
+            "name": "effect",
+            "qualified_name": "ReactiveEffectRunner.effect",
+            "signature": "effect: ReactiveEffect",
+            "start_line": 36,
+            "end_line": 36,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "variable",
+        "name": "activeSub",
+        "qualified_name": "activeSub",
+        "signature": "activeSub: Subscriber | undefined",
+        "start_line": 39,
+        "end_line": 39,
+        "children": []
+      },
+      {
+        "kind": "enum",
+        "name": "EffectFlags",
+        "qualified_name": "EffectFlags",
+        "signature": "export enum EffectFlags",
+        "start_line": 41,
+        "end_line": 49,
+        "children": []
+      },
+      {
+        "kind": "interface",
+        "name": "Subscriber",
+        "qualified_name": "Subscriber",
+        "signature": "export interface Subscriber extends DebuggerOptions",
+        "start_line": 54,
+        "end_line": 73,
+        "children": [
+          {
+            "kind": "field",
+            "name": "deps",
+            "qualified_name": "Subscriber.deps",
+            "signature": "deps?: Link",
+            "start_line": 59,
+            "end_line": 59,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "depsTail",
+            "qualified_name": "Subscriber.depsTail",
+            "signature": "depsTail?: Link",
+            "start_line": 64,
+            "end_line": 64,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "flags",
+            "qualified_name": "Subscriber.flags",
+            "signature": "flags: EffectFlags",
+            "start_line": 68,
+            "end_line": 68,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "notify",
+            "qualified_name": "Subscriber.notify",
+            "signature": "notify(): void",
+            "start_line": 72,
+            "end_line": 72,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "interface",
+        "name": "Link",
+        "qualified_name": "Link",
+        "signature": "export interface Link",
+        "start_line": 86,
+        "end_line": 108,
+        "children": [
+          {
+            "kind": "field",
+            "name": "dep",
+            "qualified_name": "Link.dep",
+            "signature": "dep: Dep",
+            "start_line": 87,
+            "end_line": 87,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "sub",
+            "qualified_name": "Link.sub",
+            "signature": "sub: Subscriber",
+            "start_line": 88,
+            "end_line": 88,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "version",
+            "qualified_name": "Link.version",
+            "signature": "version: number",
+            "start_line": 96,
+            "end_line": 96,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "nextDep",
+            "qualified_name": "Link.nextDep",
+            "signature": "nextDep?: Link",
+            "start_line": 101,
+            "end_line": 101,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "prevDep",
+            "qualified_name": "Link.prevDep",
+            "signature": "prevDep?: Link",
+            "start_line": 102,
+            "end_line": 102,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "nextSub",
+            "qualified_name": "Link.nextSub",
+            "signature": "nextSub?: Link",
+            "start_line": 104,
+            "end_line": 104,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "prevSub",
+            "qualified_name": "Link.prevSub",
+            "signature": "prevSub?: Link",
+            "start_line": 105,
+            "end_line": 105,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "prevActiveLink",
+            "qualified_name": "Link.prevActiveLink",
+            "signature": "prevActiveLink?: Link",
+            "start_line": 107,
+            "end_line": 107,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "constant",
+        "name": "pausedQueueEffects",
+        "qualified_name": "pausedQueueEffects",
+        "signature": "pausedQueueEffects = new WeakSet<ReactiveEffect>()",
+        "start_line": 110,
+        "end_line": 110,
+        "children": []
+      },
+      {
+        "kind": "class",
+        "name": "ReactiveEffect",
+        "qualified_name": "ReactiveEffect",
+        "signature": "export class ReactiveEffect<T = any>\n  implements Subscriber, ReactiveEffectOptions",
+        "start_line": 112,
+        "end_line": 244,
+        "children": [
+          {
+            "kind": "field",
+            "name": "deps",
+            "qualified_name": "ReactiveEffect.deps",
+            "signature": "deps?: Link = undefined",
+            "start_line": 118,
+            "end_line": 118,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "depsTail",
+            "qualified_name": "ReactiveEffect.depsTail",
+            "signature": "depsTail?: Link = undefined",
+            "start_line": 122,
+            "end_line": 122,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "flags",
+            "qualified_name": "ReactiveEffect.flags",
+            "signature": "flags: EffectFlags = EffectFlags.ACTIVE | EffectFlags.TRACKING",
+            "start_line": 126,
+            "end_line": 126,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "nextEffect",
+            "qualified_name": "ReactiveEffect.nextEffect",
+            "signature": "nextEffect?: ReactiveEffect = undefined",
+            "start_line": 130,
+            "end_line": 130,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "cleanup",
+            "qualified_name": "ReactiveEffect.cleanup",
+            "signature": "cleanup?: () => void = undefined",
+            "start_line": 134,
+            "end_line": 134,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "scheduler",
+            "qualified_name": "ReactiveEffect.scheduler",
+            "signature": "scheduler?: EffectScheduler = undefined",
+            "start_line": 136,
+            "end_line": 136,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "onStop",
+            "qualified_name": "ReactiveEffect.onStop",
+            "signature": "onStop?: () => void",
+            "start_line": 137,
+            "end_line": 137,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "onTrack",
+            "qualified_name": "ReactiveEffect.onTrack",
+            "signature": "onTrack?: (event: DebuggerEvent) => void",
+            "start_line": 138,
+            "end_line": 138,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "onTrigger",
+            "qualified_name": "ReactiveEffect.onTrigger",
+            "signature": "onTrigger?: (event: DebuggerEvent) => void",
+            "start_line": 139,
+            "end_line": 139,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "constructor",
+            "qualified_name": "ReactiveEffect.constructor",
+            "signature": "constructor(public fn: () => T)",
+            "start_line": 141,
+            "end_line": 145,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "pause",
+            "qualified_name": "ReactiveEffect.pause",
+            "signature": "pause(): void",
+            "start_line": 147,
+            "end_line": 149,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "resume",
+            "qualified_name": "ReactiveEffect.resume",
+            "signature": "resume(): void",
+            "start_line": 151,
+            "end_line": 159,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "notify",
+            "qualified_name": "ReactiveEffect.notify",
+            "signature": "notify(): void",
+            "start_line": 164,
+            "end_line": 176,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "run",
+            "qualified_name": "ReactiveEffect.run",
+            "signature": "run(): T",
+            "start_line": 178,
+            "end_line": 208,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "stop",
+            "qualified_name": "ReactiveEffect.stop",
+            "signature": "stop(): void",
+            "start_line": 210,
+            "end_line": 220,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "trigger",
+            "qualified_name": "ReactiveEffect.trigger",
+            "signature": "trigger(): void",
+            "start_line": 222,
+            "end_line": 230,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "runIfDirty",
+            "qualified_name": "ReactiveEffect.runIfDirty",
+            "signature": "runIfDirty(): void",
+            "start_line": 235,
+            "end_line": 239,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "dirty",
+            "qualified_name": "ReactiveEffect.dirty",
+            "signature": "get dirty(): boolean",
+            "start_line": 241,
+            "end_line": 243,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "variable",
+        "name": "batchDepth",
+        "qualified_name": "batchDepth",
+        "signature": "batchDepth = 0",
+        "start_line": 246,
+        "end_line": 246,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "batchedEffect",
+        "qualified_name": "batchedEffect",
+        "signature": "batchedEffect: ReactiveEffect | undefined",
+        "start_line": 247,
+        "end_line": 247,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "startBatch",
+        "qualified_name": "startBatch",
+        "signature": "export function startBatch(): void",
+        "start_line": 252,
+        "end_line": 254,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "endBatch",
+        "qualified_name": "endBatch",
+        "signature": "export function endBatch(): void",
+        "start_line": 260,
+        "end_line": 285,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "prepareDeps",
+        "qualified_name": "prepareDeps",
+        "signature": "function prepareDeps(sub: Subscriber)",
+        "start_line": 287,
+        "end_line": 297,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "cleanupDeps",
+        "qualified_name": "cleanupDeps",
+        "signature": "function cleanupDeps(sub: Subscriber)",
+        "start_line": 299,
+        "end_line": 323,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "isDirty",
+        "qualified_name": "isDirty",
+        "signature": "function isDirty(sub: Subscriber): boolean",
+        "start_line": 325,
+        "end_line": 341,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "refreshComputed",
+        "qualified_name": "refreshComputed",
+        "signature": "export function refreshComputed(computed: ComputedRefImpl): false | undefined",
+        "start_line": 347,
+        "end_line": 398,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "removeSub",
+        "qualified_name": "removeSub",
+        "signature": "function removeSub(link: Link)",
+        "start_line": 400,
+        "end_line": 424,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "removeDep",
+        "qualified_name": "removeDep",
+        "signature": "function removeDep(link: Link)",
+        "start_line": 426,
+        "end_line": 436,
+        "children": []
+      },
+      {
+        "kind": "interface",
+        "name": "ReactiveEffectRunner",
+        "qualified_name": "ReactiveEffectRunner",
+        "signature": "export interface ReactiveEffectRunner<T = any>",
+        "start_line": 438,
+        "end_line": 441,
+        "children": [
+          {
+            "kind": "field",
+            "name": "effect",
+            "qualified_name": "ReactiveEffectRunner.effect",
+            "signature": "effect: ReactiveEffect",
+            "start_line": 440,
+            "end_line": 440,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "name": "effect",
+        "qualified_name": "effect",
+        "signature": "export function effect<T = any>(\n  fn: () => T,\n  options?: ReactiveEffectOptions,\n): ReactiveEffectRunner<T>",
+        "start_line": 443,
+        "end_line": 464,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "stop",
+        "qualified_name": "stop",
+        "signature": "export function stop(runner: ReactiveEffectRunner): void",
+        "start_line": 471,
+        "end_line": 473,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "shouldTrack",
+        "qualified_name": "shouldTrack",
+        "signature": "shouldTrack = true",
+        "start_line": 478,
+        "end_line": 478,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "trackStack",
+        "qualified_name": "trackStack",
+        "signature": "trackStack: boolean[] = []",
+        "start_line": 479,
+        "end_line": 479,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "pauseTracking",
+        "qualified_name": "pauseTracking",
+        "signature": "export function pauseTracking(): void",
+        "start_line": 484,
+        "end_line": 487,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "enableTracking",
+        "qualified_name": "enableTracking",
+        "signature": "export function enableTracking(): void",
+        "start_line": 492,
+        "end_line": 495,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "resetTracking",
+        "qualified_name": "resetTracking",
+        "signature": "export function resetTracking(): void",
+        "start_line": 500,
+        "end_line": 503,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "onEffectCleanup",
+        "qualified_name": "onEffectCleanup",
+        "signature": "export function onEffectCleanup(fn: () => void, failSilently = false): void",
+        "start_line": 517,
+        "end_line": 526,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "cleanupEffect",
+        "qualified_name": "cleanupEffect",
+        "signature": "function cleanupEffect(e: ReactiveEffect)",
+        "start_line": 528,
+        "end_line": 541,
+        "children": []
+      }
+    ]
+  },
+  "skeleton": "import { extend, hasChanged } from '@vue/shared'\nimport type { ComputedRefImpl } from './computed'\nimport type { TrackOpTypes, TriggerOpTypes } from './constants'\nimport { type Dep, globalVersion } from './dep'\nimport { activeEffectScope } from './effectScope'\nimport { warn } from './warning'\n\nexport type EffectScheduler = (...args: any[]) => any\n\nexport type DebuggerEvent = {\n  effect: Subscriber\n} & DebuggerEventExtraInfo\n\nexport type DebuggerEventExtraInfo = {\n  target: object\n  type: TrackOpTypes | TriggerOpTypes\n  key: any\n  newValue?: any\n  oldValue?: any\n  oldTarget?: Map<any, any> | Set<any>\n}\n\nexport interface DebuggerOptions {\n  onTrack?: (event: DebuggerEvent) => void\n  onTrigger?: (event: DebuggerEvent) => void\n}\n\nexport interface ReactiveEffectOptions extends DebuggerOptions {\n  scheduler?: EffectScheduler\n  allowRecurse?: boolean\n  onStop?: () => void\n}\n\nexport interface ReactiveEffectRunner<T = any> {\n  (): T\n  effect: ReactiveEffect\n}\n\nexport let activeSub: Subscriber | undefined\n\nexport enum EffectFlags {\n  ACTIVE = 1 << 0,\n  RUNNING = 1 << 1,\n  TRACKING = 1 << 2,\n  NOTIFIED = 1 << 3,\n  DIRTY = 1 << 4,\n  ALLOW_RECURSE = 1 << 5,\n  PAUSED = 1 << 6,\n}\n\n/**\n * Subscriber is a type that tracks (or subscribes to) a list of deps.\n */\nexport interface Subscriber extends DebuggerOptions {\n  /**\n   * Head of the doubly linked list representing the deps\n   * @internal\n   */\n  deps?: Link\n  /**\n   * Tail of the same list\n   * @internal\n   */\n  depsTail?: Link\n  /**\n   * @internal\n   */\n  flags: EffectFlags\n  /**\n   * @internal\n   */\n  notify(): void\n}\n\n/**\n * Represents a link between a source (Dep) and a subscriber (Effect or Computed).\n * Deps and subs have a many-to-many relationship - each link between a\n * dep and a sub is represented by a Link instance.\n *\n * A Link is also a node in two doubly-linked lists - one for the associated\n * sub to track all its deps, and one for the associated dep to track all its\n * subs.\n *\n * @internal\n */\nexport interface Link {\n  dep: Dep\n  sub: Subscriber\n\n  /**\n   * - Before each effect run, all previous dep links' version are reset to -1\n   * - During the run, a link's version is synced with the source dep on access\n   * - After the run, links with version -1 (that were never used) are cleaned\n   *   up\n   */\n  version: number\n\n  /**\n   * Pointers for doubly-linked lists\n   */\n  nextDep?: Link\n  prevDep?: Link\n\n  nextSub?: Link\n  prevSub?: Link\n\n  prevActiveLink?: Link\n}\n\nconst pausedQueueEffects = new WeakSet<ReactiveEffect>()\n\nexport class ReactiveEffect<T = any>\n  implements Subscriber, ReactiveEffectOptions\n{\n  /**\n   * @internal\n   */\n  deps?: Link = undefined\n  /**\n   * @internal\n   */\n  depsTail?: Link = undefined\n  /**\n   * @internal\n   */\n  flags: EffectFlags = EffectFlags.ACTIVE | EffectFlags.TRACKING\n  /**\n   * @internal\n   */\n  nextEffect?: ReactiveEffect = undefined\n  /**\n   * @internal\n   */\n  cleanup?: () => void = undefined\n\n  scheduler?: EffectScheduler = undefined\n  onStop?: () => void\n  onTrack?: (event: DebuggerEvent) => void\n  onTrigger?: (event: DebuggerEvent) => void\n\n  constructor(public fn: () => T) { ... }\n\n  pause(): void { ... }\n\n  resume(): void { ... }\n\n  /**\n   * @internal\n   */\n  notify(): void { ... }\n\n  run(): T { ... }\n\n  stop(): void { ... }\n\n  trigger(): void { ... }\n\n  /**\n   * @internal\n   */\n  runIfDirty(): void { ... }\n\n  get dirty(): boolean { ... }\n}\n\nlet batchDepth = 0\nlet batchedEffect: ReactiveEffect | undefined\n\n/**\n * @internal\n */\nexport function startBatch(): void { ... }\n\n/**\n * Run batched effects when all batches have ended\n * @internal\n */\nexport function endBatch(): void { ... }\n\nfunction prepareDeps(sub: Subscriber) { ... }\n\nfunction cleanupDeps(sub: Subscriber) { ... }\n\nfunction isDirty(sub: Subscriber): boolean { ... }\n\n/**\n * Returning false indicates the refresh failed\n * @internal\n */\nexport function refreshComputed(computed: ComputedRefImpl): false | undefined { ... }\n\nfunction removeSub(link: Link) { ... }\n\nfunction removeDep(link: Link) { ... }\n\nexport interface ReactiveEffectRunner<T = any> {\n  (): T\n  effect: ReactiveEffect\n}\n\nexport function effect<T = any>(\n  fn: () => T,\n  options?: ReactiveEffectOptions,\n): ReactiveEffectRunner<T> { ... }\n\n/**\n * Stops the effect associated with the given runner.\n *\n * @param runner - Association with the effect to stop tracking.\n */\nexport function stop(runner: ReactiveEffectRunner): void { ... }\n\n/**\n * @internal\n */\nexport let shouldTrack = true\nconst trackStack: boolean[] = []\n\n/**\n * Temporarily pauses tracking.\n */\nexport function pauseTracking(): void { ... }\n\n/**\n * Re-enables effect tracking (if it was paused).\n */\nexport function enableTracking(): void { ... }\n\n/**\n * Resets the previous global effect tracking state.\n */\nexport function resetTracking(): void { ... }\n\n/**\n * Registers a cleanup function for the current active effect.\n * The cleanup function is called right before the next effect run, or when the\n * effect is stopped.\n *\n * Throws a warning if there is no current active effect. The warning can be\n * suppressed by passing `true` to the second argument.\n *\n * @param fn - the cleanup function to be registered\n * @param failSilently - if `true`, will not throw warning when called without\n * an active effect.\n */\nexport function onEffectCleanup(fn: () => void, failSilently = false): void { ... }\n\nfunction cleanupEffect(e: ReactiveEffect) { ... }\n"
+}

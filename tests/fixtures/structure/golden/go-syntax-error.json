@@ -1,0 +1,18 @@
+{
+  "id": "go-syntax-error",
+  "language": "go",
+  "path": "bad.go",
+  "source_sha256": "6fa26782d4a6379e874895b7d9a3f52e1adafb7f6ebfef086c40d06228f540b0",
+  "parse": {
+    "error": {
+      "type": "ValueError",
+      "message": "Go source contains a syntax error or missing token in bad.go"
+    }
+  },
+  "skeleton": {
+    "error": {
+      "type": "ValueError",
+      "message": "Go source contains a syntax error or missing token in bad.go"
+    }
+  }
+}

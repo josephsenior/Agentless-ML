@@ -1,0 +1,50 @@
+{
+  "id": "ts-vue-scripts-utils-js",
+  "language": "typescript",
+  "path": "scripts/utils.js",
+  "source_sha256": "3c65bcc9a67edf9282f80f54369109ca21cebfbba682ace741c07aad01cfb431",
+  "parse": {
+    "path": "scripts/utils.js",
+    "language": "javascript",
+    "line_count": 114,
+    "symbols": [
+      {
+        "kind": "constant",
+        "name": "require",
+        "qualified_name": "require",
+        "signature": "require = createRequire(import.meta.url)",
+        "start_line": 7,
+        "end_line": 7,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "targets",
+        "qualified_name": "targets",
+        "signature": "targets = fs\n  .readdirSync('packages')\n  .filter(f => {\n    if (\n      !fs.statSync(`packages/${f}`).isDirectory() ||\n      !fs.existsSync(`packages/${f}/package.json`)\n    ) {\n      return false\n    }\n    const pkg = require(`../packages/${f}/package.json`)\n    if (pkg.private && !pkg.buildOptions) {\n      return false\n    }\n    return true\n  })\n  .concat('template-explorer')",
+        "start_line": 9,
+        "end_line": 24,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "fuzzyMatchTarget",
+        "qualified_name": "fuzzyMatchTarget",
+        "signature": "export function fuzzyMatchTarget(partialTargets, includeAllMatching)",
+        "start_line": 31,
+        "end_line": 57,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "exec",
+        "qualified_name": "exec",
+        "signature": "export async function exec(command, args, options)",
+        "start_line": 64,
+        "end_line": 114,
+        "children": []
+      }
+    ]
+  },
+  "skeleton": "// @ts-check\nimport fs from 'node:fs'\nimport pico from 'picocolors'\nimport { createRequire } from 'node:module'\nimport { spawn } from 'node:child_process'\n\nconst require = createRequire(import.meta.url)\n\nexport const targets = fs\n  .readdirSync('packages')\n  .filter(f => { ... })\n  .concat('template-explorer')\n\n/**\n *\n * @param {ReadonlyArray<string>} partialTargets\n * @param {boolean | undefined} includeAllMatching\n */\nexport function fuzzyMatchTarget(partialTargets, includeAllMatching) { ... }\n\n/**\n * @param {string} command\n * @param {ReadonlyArray<string>} args\n * @param {object} [options]\n */\nexport async function exec(command, args, options) { ... }\n"
+}

@@ -6,10 +6,14 @@ The controller still receives saved responses and a supplied test schedule.
 
 ## Files and parser choice
 
-`JavaScriptAdapter` accepts `.js`, `.jsx`, `.mjs` and `.cjs`. `TypeScriptAdapter`
-accepts `.ts`, `.tsx`, `.mts` and `.cts`, plus JavaScript files for mixed repositories.
-Declaration files such as `.d.ts` are included. Each file chooses its own grammar:
-JavaScript (including JSX), TypeScript, or TSX.
+Both languages are `LanguageSpec` descriptions in `adapters/languages/javascript.py`,
+read by the shared [structure engine](adr/0003-language-engine.md). The only
+language-specific code names default exports, CommonJS exports and `const` bindings.
+
+The `javascript` language accepts `.js`, `.jsx`, `.mjs` and `.cjs`. The `typescript`
+language accepts `.ts`, `.tsx`, `.mts` and `.cts`, plus JavaScript files for mixed
+repositories. Declaration files such as `.d.ts` are included. Each file chooses its
+own grammar: JavaScript (including JSX), TypeScript, or TSX.
 
 This required two small changes to the adapter contract: an `extensions` tuple
 for accepted files, and a `path` argument when rendering skeletons. The existing

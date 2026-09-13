@@ -1,0 +1,212 @@
+{
+  "id": "js-express-router",
+  "language": "javascript",
+  "path": "lib/router/index.js",
+  "source_sha256": "19c5ca9b025396612dbe464d07fbe7104ff9170c4d6a1c7e5507df4dbbf4d5cb",
+  "parse": {
+    "path": "lib/router/index.js",
+    "language": "javascript",
+    "line_count": 673,
+    "symbols": [
+      {
+        "kind": "variable",
+        "name": "Route",
+        "qualified_name": "Route",
+        "signature": "Route = require('./route')",
+        "start_line": 16,
+        "end_line": 16,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "Layer",
+        "qualified_name": "Layer",
+        "signature": "Layer = require('./layer')",
+        "start_line": 17,
+        "end_line": 17,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "methods",
+        "qualified_name": "methods",
+        "signature": "methods = require('methods')",
+        "start_line": 18,
+        "end_line": 18,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "mixin",
+        "qualified_name": "mixin",
+        "signature": "mixin = require('utils-merge')",
+        "start_line": 19,
+        "end_line": 19,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "debug",
+        "qualified_name": "debug",
+        "signature": "debug = require('debug')('express:router')",
+        "start_line": 20,
+        "end_line": 20,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "deprecate",
+        "qualified_name": "deprecate",
+        "signature": "deprecate = require('depd')('express')",
+        "start_line": 21,
+        "end_line": 21,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "flatten",
+        "qualified_name": "flatten",
+        "signature": "flatten = require('array-flatten')",
+        "start_line": 22,
+        "end_line": 22,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "parseUrl",
+        "qualified_name": "parseUrl",
+        "signature": "parseUrl = require('parseurl')",
+        "start_line": 23,
+        "end_line": 23,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "setPrototypeOf",
+        "qualified_name": "setPrototypeOf",
+        "signature": "setPrototypeOf = require('setprototypeof')",
+        "start_line": 24,
+        "end_line": 24,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "objectRegExp",
+        "qualified_name": "objectRegExp",
+        "signature": "objectRegExp = /^\\[object (\\S+)\\]$/",
+        "start_line": 31,
+        "end_line": 31,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "slice",
+        "qualified_name": "slice",
+        "signature": "slice = Array.prototype.slice",
+        "start_line": 32,
+        "end_line": 32,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "toString",
+        "qualified_name": "toString",
+        "signature": "toString = Object.prototype.toString",
+        "start_line": 33,
+        "end_line": 33,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "proto",
+        "qualified_name": "proto",
+        "signature": "proto = module.exports = function(options) {\n  var opts = options || {};\n\n  function router(req, res, next) {\n    router.handle(req, res, next);\n  }\n\n  // mixin Router class functions\n  setPrototypeOf(router, proto)\n\n  router.params = {};\n  router._params = [];\n  router.caseSensitive = opts.caseSensitive;\n  router.mergeParams = opts.mergeParams;\n  router.strict = opts.strict;\n  router.stack = [];\n\n  return router;\n}",
+        "start_line": 43,
+        "end_line": 61,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "appendMethods",
+        "qualified_name": "appendMethods",
+        "signature": "function appendMethods(list, addition)",
+        "start_line": 527,
+        "end_line": 534,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "getPathname",
+        "qualified_name": "getPathname",
+        "signature": "function getPathname(req)",
+        "start_line": 537,
+        "end_line": 543,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "getProtohost",
+        "qualified_name": "getProtohost",
+        "signature": "function getProtohost(url)",
+        "start_line": 546,
+        "end_line": 560,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "gettype",
+        "qualified_name": "gettype",
+        "signature": "function gettype(obj)",
+        "start_line": 563,
+        "end_line": 573,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "matchLayer",
+        "qualified_name": "matchLayer",
+        "signature": "function matchLayer(layer, path)",
+        "start_line": 583,
+        "end_line": 589,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "mergeParams",
+        "qualified_name": "mergeParams",
+        "signature": "function mergeParams(params, parent)",
+        "start_line": 592,
+        "end_line": 628,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "restore",
+        "qualified_name": "restore",
+        "signature": "function restore(fn, obj)",
+        "start_line": 631,
+        "end_line": 648,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "sendOptionsResponse",
+        "qualified_name": "sendOptionsResponse",
+        "signature": "function sendOptionsResponse(res, options, next)",
+        "start_line": 651,
+        "end_line": 659,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "wrap",
+        "qualified_name": "wrap",
+        "signature": "function wrap(old, fn)",
+        "start_line": 662,
+        "end_line": 673,
+        "children": []
+      }
+    ]
+  },
+  "skeleton": "/*!\n * express\n * Copyright(c) 2009-2013 TJ Holowaychuk\n * Copyright(c) 2013 Roman Shtylman\n * Copyright(c) 2014-2015 Douglas Christopher Wilson\n * MIT Licensed\n */\n\n'use strict';\n\n/**\n * Module dependencies.\n * @private\n */\n\nvar Route = require('./route');\nvar Layer = require('./layer');\nvar methods = require('methods');\nvar mixin = require('utils-merge');\nvar debug = require('debug')('express:router');\nvar deprecate = require('depd')('express');\nvar flatten = require('array-flatten');\nvar parseUrl = require('parseurl');\nvar setPrototypeOf = require('setprototypeof')\n\n/**\n * Module variables.\n * @private\n */\n\nvar objectRegExp = /^\\[object (\\S+)\\]$/;\nvar slice = Array.prototype.slice;\nvar toString = Object.prototype.toString;\n\n/**\n * Initialize a new `Router` with the given `options`.\n *\n * @param {Object} [options]\n * @return {Router} which is a callable function\n * @public\n */\n\nvar proto = module.exports = function(options) { ... };\n\n/**\n * Map the given param placeholder `name`(s) to the given callback.\n *\n * Parameter mapping is used to provide pre-conditions to routes\n * which use normalized placeholders. For example a _:user_id_ parameter\n * could automatically load a user's information from the database without\n * any additional code,\n *\n * The callback uses the same signature as middleware, the only difference\n * being that the value of the placeholder is passed, in this case the _id_\n * of the user. Once the `next()` function is invoked, just like middleware\n * it will continue on to execute the route, or subsequent parameter functions.\n *\n * Just like in middleware, you must either respond to the request or call next\n * to avoid stalling the request.\n *\n *  app.param('user_id', function(req, res, next, id){\n *    User.find(id, function(err, user){\n *      if (err) {\n *        return next(err);\n *      } else if (!user) {\n *        return next(new Error('failed to load user'));\n *      }\n *      req.user = user;\n *      next();\n *    });\n *  });\n *\n * @param {String} name\n * @param {Function} fn\n * @return {app} for chaining\n * @public\n */\n\nproto.param = function param(name, fn) { ... };\n\n/**\n * Dispatch a req, res into the router.\n * @private\n */\n\nproto.handle = function handle(req, res, out) { ... };\n\n/**\n * Process any parameters for the layer.\n * @private\n */\n\nproto.process_params = function process_params(layer, called, req, res, done) { ... };\n\n/**\n * Use the given middleware function, with optional path, defaulting to \"/\".\n *\n * Use (like `.all`) will run for any http METHOD, but it will not add\n * handlers for those methods so OPTIONS requests will not consider `.use`\n * functions even if they could respond.\n *\n * The other difference is that _route_ path is stripped and not visible\n * to the handler function. The main effect of this feature is that mounted\n * handlers can operate without any code changes regardless of the \"prefix\"\n * pathname.\n *\n * @public\n */\n\nproto.use = function use(fn) { ... };\n\n/**\n * Create a new Route for the given path.\n *\n * Each route contains a separate middleware stack and VERB handlers.\n *\n * See the Route api documentation for details on adding handlers\n * and middleware to routes.\n *\n * @param {String} path\n * @return {Route}\n * @public\n */\n\nproto.route = function route(path) { ... };\n\n// create Router#VERB functions\nmethods.concat('all').forEach(function(method){ ... });\n\n// append methods to a list of methods\nfunction appendMethods(list, addition) { ... }\n\n// get pathname of request\nfunction getPathname(req) { ... }\n\n// Get get protocol + host for a URL\nfunction getProtohost(url) { ... }\n\n// get type for error message\nfunction gettype(obj) { ... }\n\n/**\n * Match path to a layer.\n *\n * @param {Layer} layer\n * @param {string} path\n * @private\n */\n\nfunction matchLayer(layer, path) { ... }\n\n// merge params with parent params\nfunction mergeParams(params, parent) { ... }\n\n// restore obj props after function\nfunction restore(fn, obj) { ... }\n\n// send an OPTIONS response\nfunction sendOptionsResponse(res, options, next) { ... }\n\n// wrap a function\nfunction wrap(old, fn) { ... }\n"
+}

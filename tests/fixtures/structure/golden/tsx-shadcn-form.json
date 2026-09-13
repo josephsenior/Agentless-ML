@@ -1,0 +1,122 @@
+{
+  "id": "tsx-shadcn-form",
+  "language": "typescript",
+  "path": "components/ui/form.tsx",
+  "source_sha256": "4ca6f39d977a4ad4c891156c8ecef267329ac334b28665a74b1954feebea98f7",
+  "parse": {
+    "path": "components/ui/form.tsx",
+    "language": "typescript",
+    "line_count": 178,
+    "symbols": [
+      {
+        "kind": "constant",
+        "name": "Form",
+        "qualified_name": "Form",
+        "signature": "Form = FormProvider",
+        "start_line": 18,
+        "end_line": 18,
+        "children": []
+      },
+      {
+        "kind": "type",
+        "name": "FormFieldContextValue",
+        "qualified_name": "FormFieldContextValue",
+        "signature": "type FormFieldContextValue<\n  TFieldValues extends FieldValues = FieldValues,\n  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>\n> = {\n  name: TName\n}",
+        "start_line": 20,
+        "end_line": 25,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "FormFieldContext",
+        "qualified_name": "FormFieldContext",
+        "signature": "FormFieldContext = React.createContext<FormFieldContextValue>(\n  {} as FormFieldContextValue\n)",
+        "start_line": 27,
+        "end_line": 29,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "FormField",
+        "qualified_name": "FormField",
+        "signature": "FormField = <\n  TFieldValues extends FieldValues = FieldValues,\n  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>\n>({\n  ...props\n}: ControllerProps<TFieldValues, TName>) =>",
+        "start_line": 31,
+        "end_line": 42,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "useFormField",
+        "qualified_name": "useFormField",
+        "signature": "useFormField = () =>",
+        "start_line": 44,
+        "end_line": 65,
+        "children": []
+      },
+      {
+        "kind": "type",
+        "name": "FormItemContextValue",
+        "qualified_name": "FormItemContextValue",
+        "signature": "type FormItemContextValue = {\n  id: string\n}",
+        "start_line": 67,
+        "end_line": 69,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "FormItemContext",
+        "qualified_name": "FormItemContext",
+        "signature": "FormItemContext = React.createContext<FormItemContextValue>(\n  {} as FormItemContextValue\n)",
+        "start_line": 71,
+        "end_line": 73,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "FormItem",
+        "qualified_name": "FormItem",
+        "signature": "FormItem = React.forwardRef<\n  HTMLDivElement,\n  React.HTMLAttributes<HTMLDivElement>\n>(({ className, ...props }, ref) => {\n  const id = React.useId()\n\n  return (\n    <FormItemContext.Provider value={{ id }}>\n      <div ref={ref} className={cn(\"space-y-2\", className)} {...props} />\n    </FormItemContext.Provider>\n  )\n})",
+        "start_line": 75,
+        "end_line": 86,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "FormLabel",
+        "qualified_name": "FormLabel",
+        "signature": "FormLabel = React.forwardRef<\n  React.ElementRef<typeof LabelPrimitive.Root>,\n  React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>\n>(({ className, ...props }, ref) => {\n  const { error, formItemId } = useFormField()\n\n  return (\n    <Label\n      ref={ref}\n      className={cn(error && \"text-destructive\", className)}\n      htmlFor={formItemId}\n      {...props}\n    />\n  )\n})",
+        "start_line": 89,
+        "end_line": 103,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "FormControl",
+        "qualified_name": "FormControl",
+        "signature": "FormControl = React.forwardRef<\n  React.ElementRef<typeof Slot>,\n  React.ComponentPropsWithoutRef<typeof Slot>\n>(({ ...props }, ref) => {\n  const { error, formItemId, formDescriptionId, formMessageId } = useFormField()\n\n  return (\n    <Slot\n      ref={ref}\n      id={formItemId}\n      aria-describedby={\n        !error\n          ? `${formDescriptionId}`\n          : `${formDescriptionId} ${formMessageId}`\n      }\n      aria-invalid={!!error}\n      {...props}\n    />\n  )\n})",
+        "start_line": 106,
+        "end_line": 125,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "FormDescription",
+        "qualified_name": "FormDescription",
+        "signature": "FormDescription = React.forwardRef<\n  HTMLParagraphElement,\n  React.HTMLAttributes<HTMLParagraphElement>\n>(({ className, ...props }, ref) => {\n  const { formDescriptionId } = useFormField()\n\n  return (\n    <p\n      ref={ref}\n      id={formDescriptionId}\n      className={cn(\"text-sm text-muted-foreground\", className)}\n      {...props}\n    />\n  )\n})",
+        "start_line": 128,
+        "end_line": 142,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "FormMessage",
+        "qualified_name": "FormMessage",
+        "signature": "FormMessage = React.forwardRef<\n  HTMLParagraphElement,\n  React.HTMLAttributes<HTMLParagraphElement>\n>(({ className, children, ...props }, ref) => {\n  const { error, formMessageId } = useFormField()\n  const body = error ? String(error?.message) : children\n\n  if (!body) {\n    return null\n  }\n\n  return (\n    <p\n      ref={ref}\n      id={formMessageId}\n      className={cn(\"text-sm font-medium text-destructive\", className)}\n      {...props}\n    >\n      {body}\n    </p>\n  )\n})",
+        "start_line": 145,
+        "end_line": 166,
+        "children": []
+      }
+    ]
+  },
+  "skeleton": "\"use client\"\n\nimport * as React from \"react\"\nimport * as LabelPrimitive from \"@radix-ui/react-label\"\nimport { Slot } from \"@radix-ui/react-slot\"\nimport {\n  Controller,\n  ControllerProps,\n  FieldPath,\n  FieldValues,\n  FormProvider,\n  useFormContext,\n} from \"react-hook-form\"\n\nimport { cn } from \"@/lib/utils\"\nimport { Label } from \"@/registry/default/ui/label\"\n\nconst Form = FormProvider\n\ntype FormFieldContextValue<\n  TFieldValues extends FieldValues = FieldValues,\n  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>\n> = {\n  name: TName\n}\n\nconst FormFieldContext = React.createContext<FormFieldContextValue>(\n  {} as FormFieldContextValue\n)\n\nconst FormField = <\n  TFieldValues extends FieldValues = FieldValues,\n  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>\n>({\n  ...props\n}: ControllerProps<TFieldValues, TName>) => { ... }\n\nconst useFormField = () => { ... }\n\ntype FormItemContextValue = {\n  id: string\n}\n\nconst FormItemContext = React.createContext<FormItemContextValue>(\n  {} as FormItemContextValue\n)\n\nconst FormItem = React.forwardRef<\n  HTMLDivElement,\n  React.HTMLAttributes<HTMLDivElement>\n>(({ className, ...props }, ref) => { ... })\nFormItem.displayName = \"FormItem\"\n\nconst FormLabel = React.forwardRef<\n  React.ElementRef<typeof LabelPrimitive.Root>,\n  React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>\n>(({ className, ...props }, ref) => { ... })\nFormLabel.displayName = \"FormLabel\"\n\nconst FormControl = React.forwardRef<\n  React.ElementRef<typeof Slot>,\n  React.ComponentPropsWithoutRef<typeof Slot>\n>(({ ...props }, ref) => { ... })\nFormControl.displayName = \"FormControl\"\n\nconst FormDescription = React.forwardRef<\n  HTMLParagraphElement,\n  React.HTMLAttributes<HTMLParagraphElement>\n>(({ className, ...props }, ref) => { ... })\nFormDescription.displayName = \"FormDescription\"\n\nconst FormMessage = React.forwardRef<\n  HTMLParagraphElement,\n  React.HTMLAttributes<HTMLParagraphElement>\n>(({ className, children, ...props }, ref) => { ... })\nFormMessage.displayName = \"FormMessage\"\n\nexport {\n  useFormField,\n  Form,\n  FormItem,\n  FormLabel,\n  FormControl,\n  FormDescription,\n  FormMessage,\n  FormField,\n}\n"
+}

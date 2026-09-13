@@ -1,0 +1,793 @@
+{
+  "id": "go-io",
+  "language": "go",
+  "path": "src/io/io.go",
+  "source_sha256": "f1039eba161e42d9d76a3c8954cc2e2ab841ea26c6a5d762c8d6a0815e2e548b",
+  "parse": {
+    "path": "src/io/io.go",
+    "language": "go",
+    "line_count": 726,
+    "symbols": [
+      {
+        "kind": "constant",
+        "name": "SeekStart",
+        "qualified_name": "SeekStart",
+        "signature": "SeekStart   = 0",
+        "start_line": 22,
+        "end_line": 22,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "SeekCurrent",
+        "qualified_name": "SeekCurrent",
+        "signature": "SeekCurrent = 1",
+        "start_line": 23,
+        "end_line": 23,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "SeekEnd",
+        "qualified_name": "SeekEnd",
+        "signature": "SeekEnd     = 2",
+        "start_line": 24,
+        "end_line": 24,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "ErrShortWrite",
+        "qualified_name": "ErrShortWrite",
+        "signature": "ErrShortWrite = errors.New(\"short write\")",
+        "start_line": 29,
+        "end_line": 29,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "errInvalidWrite",
+        "qualified_name": "errInvalidWrite",
+        "signature": "errInvalidWrite = errors.New(\"invalid write result\")",
+        "start_line": 32,
+        "end_line": 32,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "ErrShortBuffer",
+        "qualified_name": "ErrShortBuffer",
+        "signature": "ErrShortBuffer = errors.New(\"short buffer\")",
+        "start_line": 35,
+        "end_line": 35,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "EOF",
+        "qualified_name": "EOF",
+        "signature": "EOF = errors.New(\"EOF\")",
+        "start_line": 44,
+        "end_line": 44,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "ErrUnexpectedEOF",
+        "qualified_name": "ErrUnexpectedEOF",
+        "signature": "ErrUnexpectedEOF = errors.New(\"unexpected EOF\")",
+        "start_line": 48,
+        "end_line": 48,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "ErrNoProgress",
+        "qualified_name": "ErrNoProgress",
+        "signature": "ErrNoProgress = errors.New(\"multiple Read calls return no data or error\")",
+        "start_line": 53,
+        "end_line": 53,
+        "children": []
+      },
+      {
+        "kind": "interface",
+        "name": "Reader",
+        "qualified_name": "Reader",
+        "signature": "Reader interface {\n\tRead(p []byte) (n int, err error)\n}",
+        "start_line": 86,
+        "end_line": 88,
+        "children": [
+          {
+            "kind": "method",
+            "name": "Read",
+            "qualified_name": "Reader.Read",
+            "signature": "Read(p []byte) (n int, err error)",
+            "start_line": 87,
+            "end_line": 87,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "interface",
+        "name": "Writer",
+        "qualified_name": "Writer",
+        "signature": "Writer interface {\n\tWrite(p []byte) (n int, err error)\n}",
+        "start_line": 99,
+        "end_line": 101,
+        "children": [
+          {
+            "kind": "method",
+            "name": "Write",
+            "qualified_name": "Writer.Write",
+            "signature": "Write(p []byte) (n int, err error)",
+            "start_line": 100,
+            "end_line": 100,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "interface",
+        "name": "Closer",
+        "qualified_name": "Closer",
+        "signature": "Closer interface {\n\tClose() error\n}",
+        "start_line": 107,
+        "end_line": 109,
+        "children": [
+          {
+            "kind": "method",
+            "name": "Close",
+            "qualified_name": "Closer.Close",
+            "signature": "Close() error",
+            "start_line": 108,
+            "end_line": 108,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "interface",
+        "name": "Seeker",
+        "qualified_name": "Seeker",
+        "signature": "Seeker interface {\n\tSeek(offset int64, whence int) (int64, error)\n}",
+        "start_line": 126,
+        "end_line": 128,
+        "children": [
+          {
+            "kind": "method",
+            "name": "Seek",
+            "qualified_name": "Seeker.Seek",
+            "signature": "Seek(offset int64, whence int) (int64, error)",
+            "start_line": 127,
+            "end_line": 127,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "interface",
+        "name": "ReadWriter",
+        "qualified_name": "ReadWriter",
+        "signature": "ReadWriter interface {\n\tReader\n\tWriter\n}",
+        "start_line": 131,
+        "end_line": 134,
+        "children": []
+      },
+      {
+        "kind": "interface",
+        "name": "ReadCloser",
+        "qualified_name": "ReadCloser",
+        "signature": "ReadCloser interface {\n\tReader\n\tCloser\n}",
+        "start_line": 137,
+        "end_line": 140,
+        "children": []
+      },
+      {
+        "kind": "interface",
+        "name": "WriteCloser",
+        "qualified_name": "WriteCloser",
+        "signature": "WriteCloser interface {\n\tWriter\n\tCloser\n}",
+        "start_line": 143,
+        "end_line": 146,
+        "children": []
+      },
+      {
+        "kind": "interface",
+        "name": "ReadWriteCloser",
+        "qualified_name": "ReadWriteCloser",
+        "signature": "ReadWriteCloser interface {\n\tReader\n\tWriter\n\tCloser\n}",
+        "start_line": 149,
+        "end_line": 153,
+        "children": []
+      },
+      {
+        "kind": "interface",
+        "name": "ReadSeeker",
+        "qualified_name": "ReadSeeker",
+        "signature": "ReadSeeker interface {\n\tReader\n\tSeeker\n}",
+        "start_line": 156,
+        "end_line": 159,
+        "children": []
+      },
+      {
+        "kind": "interface",
+        "name": "ReadSeekCloser",
+        "qualified_name": "ReadSeekCloser",
+        "signature": "ReadSeekCloser interface {\n\tReader\n\tSeeker\n\tCloser\n}",
+        "start_line": 163,
+        "end_line": 167,
+        "children": []
+      },
+      {
+        "kind": "interface",
+        "name": "WriteSeeker",
+        "qualified_name": "WriteSeeker",
+        "signature": "WriteSeeker interface {\n\tWriter\n\tSeeker\n}",
+        "start_line": 170,
+        "end_line": 173,
+        "children": []
+      },
+      {
+        "kind": "interface",
+        "name": "ReadWriteSeeker",
+        "qualified_name": "ReadWriteSeeker",
+        "signature": "ReadWriteSeeker interface {\n\tReader\n\tWriter\n\tSeeker\n}",
+        "start_line": 176,
+        "end_line": 180,
+        "children": []
+      },
+      {
+        "kind": "interface",
+        "name": "ReaderFrom",
+        "qualified_name": "ReaderFrom",
+        "signature": "ReaderFrom interface {\n\tReadFrom(r Reader) (n int64, err error)\n}",
+        "start_line": 189,
+        "end_line": 191,
+        "children": [
+          {
+            "kind": "method",
+            "name": "ReadFrom",
+            "qualified_name": "ReaderFrom.ReadFrom",
+            "signature": "ReadFrom(r Reader) (n int64, err error)",
+            "start_line": 190,
+            "end_line": 190,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "interface",
+        "name": "WriterTo",
+        "qualified_name": "WriterTo",
+        "signature": "WriterTo interface {\n\tWriteTo(w Writer) (n int64, err error)\n}",
+        "start_line": 200,
+        "end_line": 202,
+        "children": [
+          {
+            "kind": "method",
+            "name": "WriteTo",
+            "qualified_name": "WriterTo.WriteTo",
+            "signature": "WriteTo(w Writer) (n int64, err error)",
+            "start_line": 201,
+            "end_line": 201,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "interface",
+        "name": "ReaderAt",
+        "qualified_name": "ReaderAt",
+        "signature": "ReaderAt interface {\n\tReadAt(p []byte, off int64) (n int, err error)\n}",
+        "start_line": 230,
+        "end_line": 232,
+        "children": [
+          {
+            "kind": "method",
+            "name": "ReadAt",
+            "qualified_name": "ReaderAt.ReadAt",
+            "signature": "ReadAt(p []byte, off int64) (n int, err error)",
+            "start_line": 231,
+            "end_line": 231,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "interface",
+        "name": "WriterAt",
+        "qualified_name": "WriterAt",
+        "signature": "WriterAt interface {\n\tWriteAt(p []byte, off int64) (n int, err error)\n}",
+        "start_line": 249,
+        "end_line": 251,
+        "children": [
+          {
+            "kind": "method",
+            "name": "WriteAt",
+            "qualified_name": "WriterAt.WriteAt",
+            "signature": "WriteAt(p []byte, off int64) (n int, err error)",
+            "start_line": 250,
+            "end_line": 250,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "interface",
+        "name": "ByteReader",
+        "qualified_name": "ByteReader",
+        "signature": "ByteReader interface {\n\tReadByte() (byte, error)\n}",
+        "start_line": 262,
+        "end_line": 264,
+        "children": [
+          {
+            "kind": "method",
+            "name": "ReadByte",
+            "qualified_name": "ByteReader.ReadByte",
+            "signature": "ReadByte() (byte, error)",
+            "start_line": 263,
+            "end_line": 263,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "interface",
+        "name": "ByteScanner",
+        "qualified_name": "ByteScanner",
+        "signature": "ByteScanner interface {\n\tByteReader\n\tUnreadByte() error\n}",
+        "start_line": 274,
+        "end_line": 277,
+        "children": [
+          {
+            "kind": "method",
+            "name": "UnreadByte",
+            "qualified_name": "ByteScanner.UnreadByte",
+            "signature": "UnreadByte() error",
+            "start_line": 276,
+            "end_line": 276,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "interface",
+        "name": "ByteWriter",
+        "qualified_name": "ByteWriter",
+        "signature": "ByteWriter interface {\n\tWriteByte(c byte) error\n}",
+        "start_line": 280,
+        "end_line": 282,
+        "children": [
+          {
+            "kind": "method",
+            "name": "WriteByte",
+            "qualified_name": "ByteWriter.WriteByte",
+            "signature": "WriteByte(c byte) error",
+            "start_line": 281,
+            "end_line": 281,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "interface",
+        "name": "RuneReader",
+        "qualified_name": "RuneReader",
+        "signature": "RuneReader interface {\n\tReadRune() (r rune, size int, err error)\n}",
+        "start_line": 289,
+        "end_line": 291,
+        "children": [
+          {
+            "kind": "method",
+            "name": "ReadRune",
+            "qualified_name": "RuneReader.ReadRune",
+            "signature": "ReadRune() (r rune, size int, err error)",
+            "start_line": 290,
+            "end_line": 290,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "interface",
+        "name": "RuneScanner",
+        "qualified_name": "RuneScanner",
+        "signature": "RuneScanner interface {\n\tRuneReader\n\tUnreadRune() error\n}",
+        "start_line": 301,
+        "end_line": 304,
+        "children": [
+          {
+            "kind": "method",
+            "name": "UnreadRune",
+            "qualified_name": "RuneScanner.UnreadRune",
+            "signature": "UnreadRune() error",
+            "start_line": 303,
+            "end_line": 303,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "interface",
+        "name": "StringWriter",
+        "qualified_name": "StringWriter",
+        "signature": "StringWriter interface {\n\tWriteString(s string) (n int, err error)\n}",
+        "start_line": 307,
+        "end_line": 309,
+        "children": [
+          {
+            "kind": "method",
+            "name": "WriteString",
+            "qualified_name": "StringWriter.WriteString",
+            "signature": "WriteString(s string) (n int, err error)",
+            "start_line": 308,
+            "end_line": 308,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "name": "WriteString",
+        "qualified_name": "WriteString",
+        "signature": "func WriteString(w Writer, s string) (n int, err error)",
+        "start_line": 314,
+        "end_line": 319,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "ReadAtLeast",
+        "qualified_name": "ReadAtLeast",
+        "signature": "func ReadAtLeast(r Reader, buf []byte, min int) (n int, err error)",
+        "start_line": 329,
+        "end_line": 344,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "ReadFull",
+        "qualified_name": "ReadFull",
+        "signature": "func ReadFull(r Reader, buf []byte) (n int, err error)",
+        "start_line": 353,
+        "end_line": 355,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "CopyN",
+        "qualified_name": "CopyN",
+        "signature": "func CopyN(dst Writer, src Reader, n int64) (written int64, err error)",
+        "start_line": 363,
+        "end_line": 373,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "Copy",
+        "qualified_name": "Copy",
+        "signature": "func Copy(dst Writer, src Reader) (written int64, err error)",
+        "start_line": 387,
+        "end_line": 389,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "CopyBuffer",
+        "qualified_name": "CopyBuffer",
+        "signature": "func CopyBuffer(dst Writer, src Reader, buf []byte) (written int64, err error)",
+        "start_line": 398,
+        "end_line": 403,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "copyBuffer",
+        "qualified_name": "copyBuffer",
+        "signature": "func copyBuffer(dst Writer, src Reader, buf []byte) (written int64, err error)",
+        "start_line": 407,
+        "end_line": 456,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "LimitReader",
+        "qualified_name": "LimitReader",
+        "signature": "func LimitReader(r Reader, n int64) Reader",
+        "start_line": 461,
+        "end_line": 461,
+        "children": []
+      },
+      {
+        "kind": "struct",
+        "name": "LimitedReader",
+        "qualified_name": "LimitedReader",
+        "signature": "LimitedReader struct {\n\tR Reader // underlying reader\n\tN int64  // max bytes remaining\n}",
+        "start_line": 467,
+        "end_line": 470,
+        "children": []
+      },
+      {
+        "kind": "method",
+        "name": "Read",
+        "qualified_name": "LimitedReader.Read",
+        "signature": "func (l *LimitedReader) Read(p []byte) (n int, err error)",
+        "start_line": 472,
+        "end_line": 482,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "NewSectionReader",
+        "qualified_name": "NewSectionReader",
+        "signature": "func NewSectionReader(r ReaderAt, off int64, n int64) *SectionReader",
+        "start_line": 486,
+        "end_line": 497,
+        "children": []
+      },
+      {
+        "kind": "struct",
+        "name": "SectionReader",
+        "qualified_name": "SectionReader",
+        "signature": "SectionReader struct {\n\tr     ReaderAt // constant after creation\n\tbase  int64    // constant after creation\n\toff   int64\n\tlimit int64 // constant after creation\n\tn     int64 // constant after creation\n}",
+        "start_line": 501,
+        "end_line": 507,
+        "children": []
+      },
+      {
+        "kind": "method",
+        "name": "Read",
+        "qualified_name": "SectionReader.Read",
+        "signature": "func (s *SectionReader) Read(p []byte) (n int, err error)",
+        "start_line": 509,
+        "end_line": 519,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "errWhence",
+        "qualified_name": "errWhence",
+        "signature": "errWhence = errors.New(\"Seek: invalid whence\")",
+        "start_line": 521,
+        "end_line": 521,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "errOffset",
+        "qualified_name": "errOffset",
+        "signature": "errOffset = errors.New(\"Seek: invalid offset\")",
+        "start_line": 522,
+        "end_line": 522,
+        "children": []
+      },
+      {
+        "kind": "method",
+        "name": "Seek",
+        "qualified_name": "SectionReader.Seek",
+        "signature": "func (s *SectionReader) Seek(offset int64, whence int) (int64, error)",
+        "start_line": 524,
+        "end_line": 540,
+        "children": []
+      },
+      {
+        "kind": "method",
+        "name": "ReadAt",
+        "qualified_name": "SectionReader.ReadAt",
+        "signature": "func (s *SectionReader) ReadAt(p []byte, off int64) (n int, err error)",
+        "start_line": 542,
+        "end_line": 556,
+        "children": []
+      },
+      {
+        "kind": "method",
+        "name": "Size",
+        "qualified_name": "SectionReader.Size",
+        "signature": "func (s *SectionReader) Size() int64",
+        "start_line": 559,
+        "end_line": 559,
+        "children": []
+      },
+      {
+        "kind": "method",
+        "name": "Outer",
+        "qualified_name": "SectionReader.Outer",
+        "signature": "func (s *SectionReader) Outer() (r ReaderAt, off int64, n int64)",
+        "start_line": 565,
+        "end_line": 567,
+        "children": []
+      },
+      {
+        "kind": "struct",
+        "name": "OffsetWriter",
+        "qualified_name": "OffsetWriter",
+        "signature": "OffsetWriter struct {\n\tw    WriterAt\n\tbase int64 // the original offset\n\toff  int64 // the current offset\n}",
+        "start_line": 570,
+        "end_line": 574,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "NewOffsetWriter",
+        "qualified_name": "NewOffsetWriter",
+        "signature": "func NewOffsetWriter(w WriterAt, off int64) *OffsetWriter",
+        "start_line": 578,
+        "end_line": 580,
+        "children": []
+      },
+      {
+        "kind": "method",
+        "name": "Write",
+        "qualified_name": "OffsetWriter.Write",
+        "signature": "func (o *OffsetWriter) Write(p []byte) (n int, err error)",
+        "start_line": 582,
+        "end_line": 586,
+        "children": []
+      },
+      {
+        "kind": "method",
+        "name": "WriteAt",
+        "qualified_name": "OffsetWriter.WriteAt",
+        "signature": "func (o *OffsetWriter) WriteAt(p []byte, off int64) (n int, err error)",
+        "start_line": 588,
+        "end_line": 595,
+        "children": []
+      },
+      {
+        "kind": "method",
+        "name": "Seek",
+        "qualified_name": "OffsetWriter.Seek",
+        "signature": "func (o *OffsetWriter) Seek(offset int64, whence int) (int64, error)",
+        "start_line": 597,
+        "end_line": 611,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "TeeReader",
+        "qualified_name": "TeeReader",
+        "signature": "func TeeReader(r Reader, w Writer) Reader",
+        "start_line": 618,
+        "end_line": 620,
+        "children": []
+      },
+      {
+        "kind": "struct",
+        "name": "teeReader",
+        "qualified_name": "teeReader",
+        "signature": "teeReader struct {\n\tr Reader\n\tw Writer\n}",
+        "start_line": 622,
+        "end_line": 625,
+        "children": []
+      },
+      {
+        "kind": "method",
+        "name": "Read",
+        "qualified_name": "teeReader.Read",
+        "signature": "func (t *teeReader) Read(p []byte) (n int, err error)",
+        "start_line": 627,
+        "end_line": 635,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "Discard",
+        "qualified_name": "Discard",
+        "signature": "Discard Writer = discard{}",
+        "start_line": 639,
+        "end_line": 639,
+        "children": []
+      },
+      {
+        "kind": "struct",
+        "name": "discard",
+        "qualified_name": "discard",
+        "signature": "discard struct{}",
+        "start_line": 641,
+        "end_line": 641,
+        "children": []
+      },
+      {
+        "kind": "method",
+        "name": "Write",
+        "qualified_name": "discard.Write",
+        "signature": "func (discard) Write(p []byte) (int, error)",
+        "start_line": 647,
+        "end_line": 649,
+        "children": []
+      },
+      {
+        "kind": "method",
+        "name": "WriteString",
+        "qualified_name": "discard.WriteString",
+        "signature": "func (discard) WriteString(s string) (int, error)",
+        "start_line": 651,
+        "end_line": 653,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "blackHolePool",
+        "qualified_name": "blackHolePool",
+        "signature": "blackHolePool = sync.Pool{\n\tNew: func() any {\n\t\tb := make([]byte, 8192)\n\t\treturn &b\n\t},\n}",
+        "start_line": 655,
+        "end_line": 660,
+        "children": []
+      },
+      {
+        "kind": "method",
+        "name": "ReadFrom",
+        "qualified_name": "discard.ReadFrom",
+        "signature": "func (discard) ReadFrom(r Reader) (n int64, err error)",
+        "start_line": 662,
+        "end_line": 676,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "NopCloser",
+        "qualified_name": "NopCloser",
+        "signature": "func NopCloser(r Reader) ReadCloser",
+        "start_line": 682,
+        "end_line": 687,
+        "children": []
+      },
+      {
+        "kind": "struct",
+        "name": "nopCloser",
+        "qualified_name": "nopCloser",
+        "signature": "nopCloser struct {\n\tReader\n}",
+        "start_line": 689,
+        "end_line": 691,
+        "children": []
+      },
+      {
+        "kind": "method",
+        "name": "Close",
+        "qualified_name": "nopCloser.Close",
+        "signature": "func (nopCloser) Close() error",
+        "start_line": 693,
+        "end_line": 693,
+        "children": []
+      },
+      {
+        "kind": "struct",
+        "name": "nopCloserWriterTo",
+        "qualified_name": "nopCloserWriterTo",
+        "signature": "nopCloserWriterTo struct {\n\tReader\n}",
+        "start_line": 695,
+        "end_line": 697,
+        "children": []
+      },
+      {
+        "kind": "method",
+        "name": "Close",
+        "qualified_name": "nopCloserWriterTo.Close",
+        "signature": "func (nopCloserWriterTo) Close() error",
+        "start_line": 699,
+        "end_line": 699,
+        "children": []
+      },
+      {
+        "kind": "method",
+        "name": "WriteTo",
+        "qualified_name": "nopCloserWriterTo.WriteTo",
+        "signature": "func (c nopCloserWriterTo) WriteTo(w Writer) (n int64, err error)",
+        "start_line": 701,
+        "end_line": 703,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "ReadAll",
+        "qualified_name": "ReadAll",
+        "signature": "func ReadAll(r Reader) ([]byte, error)",
+        "start_line": 709,
+        "end_line": 726,
+        "children": []
+      }
+    ]
+  },
+  "skeleton": "// Copyright 2009 The Go Authors. All rights reserved.\n// Use of this source code is governed by a BSD-style\n// license that can be found in the LICENSE file.\n\n// Package io provides basic interfaces to I/O primitives.\n// Its primary job is to wrap existing implementations of such primitives,\n// such as those in package os, into shared public interfaces that\n// abstract the functionality, plus some other related primitives.\n//\n// Because these interfaces and primitives wrap lower-level operations with\n// various implementations, unless otherwise informed clients should not\n// assume they are safe for parallel execution.\npackage io\n\nimport (\n\t\"errors\"\n\t\"sync\"\n)\n\n// Seek whence values.\nconst (\n\tSeekStart   = 0 // seek relative to the origin of the file\n\tSeekCurrent = 1 // seek relative to the current offset\n\tSeekEnd     = 2 // seek relative to the end\n)\n\n// ErrShortWrite means that a write accepted fewer bytes than requested\n// but failed to return an explicit error.\nvar ErrShortWrite = errors.New(\"short write\")\n\n// errInvalidWrite means that a write returned an impossible count.\nvar errInvalidWrite = errors.New(\"invalid write result\")\n\n// ErrShortBuffer means that a read required a longer buffer than was provided.\nvar ErrShortBuffer = errors.New(\"short buffer\")\n\n// EOF is the error returned by Read when no more input is available.\n// (Read must return EOF itself, not an error wrapping EOF,\n// because callers will test for EOF using ==.)\n// Functions should return EOF only to signal a graceful end of input.\n// If the EOF occurs unexpectedly in a structured data stream,\n// the appropriate error is either [ErrUnexpectedEOF] or some other error\n// giving more detail.\nvar EOF = errors.New(\"EOF\")\n\n// ErrUnexpectedEOF means that EOF was encountered in the\n// middle of reading a fixed-size block or data structure.\nvar ErrUnexpectedEOF = errors.New(\"unexpected EOF\")\n\n// ErrNoProgress is returned by some clients of a [Reader] when\n// many calls to Read have failed to return any data or error,\n// usually the sign of a broken [Reader] implementation.\nvar ErrNoProgress = errors.New(\"multiple Read calls return no data or error\")\n\n// Reader is the interface that wraps the basic Read method.\n//\n// Read reads up to len(p) bytes into p. It returns the number of bytes\n// read (0 <= n <= len(p)) and any error encountered. Even if Read\n// returns n < len(p), it may use all of p as scratch space during the call.\n// If some data is available but not len(p) bytes, Read conventionally\n// returns what is available instead of waiting for more.\n//\n// When Read encounters an error or end-of-file condition after\n// successfully reading n > 0 bytes, it returns the number of\n// bytes read. It may return the (non-nil) error from the same call\n// or return the error (and n == 0) from a subsequent call.\n// An instance of this general case is that a Reader returning\n// a non-zero number of bytes at the end of the input stream may\n// return either err == EOF or err == nil. The next Read should\n// return 0, EOF.\n//\n// Callers should always process the n > 0 bytes returned before\n// considering the error err. Doing so correctly handles I/O errors\n// that happen after reading some bytes and also both of the\n// allowed EOF behaviors.\n//\n// If len(p) == 0, Read should always return n == 0. It may return a\n// non-nil error if some error condition is known, such as EOF.\n//\n// Implementations of Read are discouraged from returning a\n// zero byte count with a nil error, except when len(p) == 0.\n// Callers should treat a return of 0 and nil as indicating that\n// nothing happened; in particular it does not indicate EOF.\n//\n// Implementations must not retain p.\ntype Reader interface {\n\tRead(p []byte) (n int, err error)\n}\n\n// Writer is the interface that wraps the basic Write method.\n//\n// Write writes len(p) bytes from p to the underlying data stream.\n// It returns the number of bytes written from p (0 <= n <= len(p))\n// and any error encountered that caused the write to stop early.\n// Write must return a non-nil error if it returns n < len(p).\n// Write must not modify the slice data, even temporarily.\n//\n// Implementations must not retain p.\ntype Writer interface {\n\tWrite(p []byte) (n int, err error)\n}\n\n// Closer is the interface that wraps the basic Close method.\n//\n// The behavior of Close after the first call is undefined.\n// Specific implementations may document their own behavior.\ntype Closer interface {\n\tClose() error\n}\n\n// Seeker is the interface that wraps the basic Seek method.\n//\n// Seek sets the offset for the next Read or Write to offset,\n// interpreted according to whence:\n// [SeekStart] means relative to the start of the file,\n// [SeekCurrent] means relative to the current offset, and\n// [SeekEnd] means relative to the end\n// (for example, offset = -2 specifies the penultimate byte of the file).\n// Seek returns the new offset relative to the start of the\n// file or an error, if any.\n//\n// Seeking to an offset before the start of the file is an error.\n// Seeking to any positive offset may be allowed, but if the new offset exceeds\n// the size of the underlying object the behavior of subsequent I/O operations\n// is implementation-dependent.\ntype Seeker interface {\n\tSeek(offset int64, whence int) (int64, error)\n}\n\n// ReadWriter is the interface that groups the basic Read and Write methods.\ntype ReadWriter interface {\n\tReader\n\tWriter\n}\n\n// ReadCloser is the interface that groups the basic Read and Close methods.\ntype ReadCloser interface {\n\tReader\n\tCloser\n}\n\n// WriteCloser is the interface that groups the basic Write and Close methods.\ntype WriteCloser interface {\n\tWriter\n\tCloser\n}\n\n// ReadWriteCloser is the interface that groups the basic Read, Write and Close methods.\ntype ReadWriteCloser interface {\n\tReader\n\tWriter\n\tCloser\n}\n\n// ReadSeeker is the interface that groups the basic Read and Seek methods.\ntype ReadSeeker interface {\n\tReader\n\tSeeker\n}\n\n// ReadSeekCloser is the interface that groups the basic Read, Seek and Close\n// methods.\ntype ReadSeekCloser interface {\n\tReader\n\tSeeker\n\tCloser\n}\n\n// WriteSeeker is the interface that groups the basic Write and Seek methods.\ntype WriteSeeker interface {\n\tWriter\n\tSeeker\n}\n\n// ReadWriteSeeker is the interface that groups the basic Read, Write and Seek methods.\ntype ReadWriteSeeker interface {\n\tReader\n\tWriter\n\tSeeker\n}\n\n// ReaderFrom is the interface that wraps the ReadFrom method.\n//\n// ReadFrom reads data from r until EOF or error.\n// The return value n is the number of bytes read.\n// Any error except EOF encountered during the read is also returned.\n//\n// The [Copy] function uses [ReaderFrom] if available.\ntype ReaderFrom interface {\n\tReadFrom(r Reader) (n int64, err error)\n}\n\n// WriterTo is the interface that wraps the WriteTo method.\n//\n// WriteTo writes data to w until there's no more data to write or\n// when an error occurs. The return value n is the number of bytes\n// written. Any error encountered during the write is also returned.\n//\n// The Copy function uses WriterTo if available.\ntype WriterTo interface {\n\tWriteTo(w Writer) (n int64, err error)\n}\n\n// ReaderAt is the interface that wraps the basic ReadAt method.\n//\n// ReadAt reads len(p) bytes into p starting at offset off in the\n// underlying input source. It returns the number of bytes\n// read (0 <= n <= len(p)) and any error encountered.\n//\n// When ReadAt returns n < len(p), it returns a non-nil error\n// explaining why more bytes were not returned. In this respect,\n// ReadAt is stricter than Read.\n//\n// Even if ReadAt returns n < len(p), it may use all of p as scratch\n// space during the call. If some data is available but not len(p) bytes,\n// ReadAt blocks until either all the data is available or an error occurs.\n// In this respect ReadAt is different from Read.\n//\n// If the n = len(p) bytes returned by ReadAt are at the end of the\n// input source, ReadAt may return either err == EOF or err == nil.\n//\n// If ReadAt is reading from an input source with a seek offset,\n// ReadAt should not affect nor be affected by the underlying\n// seek offset.\n//\n// Clients of ReadAt can execute parallel ReadAt calls on the\n// same input source.\n//\n// Implementations must not retain p.\ntype ReaderAt interface {\n\tReadAt(p []byte, off int64) (n int, err error)\n}\n\n// WriterAt is the interface that wraps the basic WriteAt method.\n//\n// WriteAt writes len(p) bytes from p to the underlying data stream\n// at offset off. It returns the number of bytes written from p (0 <= n <= len(p))\n// and any error encountered that caused the write to stop early.\n// WriteAt must return a non-nil error if it returns n < len(p).\n//\n// If WriteAt is writing to a destination with a seek offset,\n// WriteAt should not affect nor be affected by the underlying\n// seek offset.\n//\n// Clients of WriteAt can execute parallel WriteAt calls on the same\n// destination if the ranges do not overlap.\n//\n// Implementations must not retain p.\ntype WriterAt interface {\n\tWriteAt(p []byte, off int64) (n int, err error)\n}\n\n// ByteReader is the interface that wraps the ReadByte method.\n//\n// ReadByte reads and returns the next byte from the input or\n// any error encountered. If ReadByte returns an error, no input\n// byte was consumed, and the returned byte value is undefined.\n//\n// ReadByte provides an efficient interface for byte-at-time\n// processing. A [Reader] that does not implement  ByteReader\n// can be wrapped using bufio.NewReader to add this method.\ntype ByteReader interface {\n\tReadByte() (byte, error)\n}\n\n// ByteScanner is the interface that adds the UnreadByte method to the\n// basic ReadByte method.\n//\n// UnreadByte causes the next call to ReadByte to return the last byte read.\n// If the last operation was not a successful call to ReadByte, UnreadByte may\n// return an error, unread the last byte read (or the byte prior to the\n// last-unread byte), or (in implementations that support the [Seeker] interface)\n// seek to one byte before the current offset.\ntype ByteScanner interface {\n\tByteReader\n\tUnreadByte() error\n}\n\n// ByteWriter is the interface that wraps the WriteByte method.\ntype ByteWriter interface {\n\tWriteByte(c byte) error\n}\n\n// RuneReader is the interface that wraps the ReadRune method.\n//\n// ReadRune reads a single encoded Unicode character\n// and returns the rune and its size in bytes. If no character is\n// available, err will be set.\ntype RuneReader interface {\n\tReadRune() (r rune, size int, err error)\n}\n\n// RuneScanner is the interface that adds the UnreadRune method to the\n// basic ReadRune method.\n//\n// UnreadRune causes the next call to ReadRune to return the last rune read.\n// If the last operation was not a successful call to ReadRune, UnreadRune may\n// return an error, unread the last rune read (or the rune prior to the\n// last-unread rune), or (in implementations that support the [Seeker] interface)\n// seek to the start of the rune before the current offset.\ntype RuneScanner interface {\n\tRuneReader\n\tUnreadRune() error\n}\n\n// StringWriter is the interface that wraps the WriteString method.\ntype StringWriter interface {\n\tWriteString(s string) (n int, err error)\n}\n\n// WriteString writes the contents of the string s to w, which accepts a slice of bytes.\n// If w implements [StringWriter], [StringWriter.WriteString] is invoked directly.\n// Otherwise, [Writer.Write] is called exactly once.\nfunc WriteString(w Writer, s string) (n int, err error) { ... }\n\n// ReadAtLeast reads from r into buf until it has read at least min bytes.\n// It returns the number of bytes copied and an error if fewer bytes were read.\n// The error is EOF only if no bytes were read.\n// If an EOF happens after reading fewer than min bytes,\n// ReadAtLeast returns [ErrUnexpectedEOF].\n// If min is greater than the length of buf, ReadAtLeast returns [ErrShortBuffer].\n// On return, n >= min if and only if err == nil.\n// If r returns an error having read at least min bytes, the error is dropped.\nfunc ReadAtLeast(r Reader, buf []byte, min int) (n int, err error) { ... }\n\n// ReadFull reads exactly len(buf) bytes from r into buf.\n// It returns the number of bytes copied and an error if fewer bytes were read.\n// The error is EOF only if no bytes were read.\n// If an EOF happens after reading some but not all the bytes,\n// ReadFull returns [ErrUnexpectedEOF].\n// On return, n == len(buf) if and only if err == nil.\n// If r returns an error having read at least len(buf) bytes, the error is dropped.\nfunc ReadFull(r Reader, buf []byte) (n int, err error) { ... }\n\n// CopyN copies n bytes (or until an error) from src to dst.\n// It returns the number of bytes copied and the earliest\n// error encountered while copying.\n// On return, written == n if and only if err == nil.\n//\n// If dst implements [ReaderFrom], the copy is implemented using it.\nfunc CopyN(dst Writer, src Reader, n int64) (written int64, err error) { ... }\n\n// Copy copies from src to dst until either EOF is reached\n// on src or an error occurs. It returns the number of bytes\n// copied and the first error encountered while copying, if any.\n//\n// A successful Copy returns err == nil, not err == EOF.\n// Because Copy is defined to read from src until EOF, it does\n// not treat an EOF from Read as an error to be reported.\n//\n// If src implements [WriterTo],\n// the copy is implemented by calling src.WriteTo(dst).\n// Otherwise, if dst implements [ReaderFrom],\n// the copy is implemented by calling dst.ReadFrom(src).\nfunc Copy(dst Writer, src Reader) (written int64, err error) { ... }\n\n// CopyBuffer is identical to Copy except that it stages through the\n// provided buffer (if one is required) rather than allocating a\n// temporary one. If buf is nil, one is allocated; otherwise if it has\n// zero length, CopyBuffer panics.\n//\n// If either src implements [WriterTo] or dst implements [ReaderFrom],\n// buf will not be used to perform the copy.\nfunc CopyBuffer(dst Writer, src Reader, buf []byte) (written int64, err error) { ... }\n\n// copyBuffer is the actual implementation of Copy and CopyBuffer.\n// if buf is nil, one is allocated.\nfunc copyBuffer(dst Writer, src Reader, buf []byte) (written int64, err error) { ... }\n\n// LimitReader returns a Reader that reads from r\n// but stops with EOF after n bytes.\n// The underlying implementation is a *LimitedReader.\nfunc LimitReader(r Reader, n int64) Reader { ... }\n\n// A LimitedReader reads from R but limits the amount of\n// data returned to just N bytes. Each call to Read\n// updates N to reflect the new amount remaining.\n// Read returns EOF when N <= 0 or when the underlying R returns EOF.\ntype LimitedReader struct {\n\tR Reader // underlying reader\n\tN int64  // max bytes remaining\n}\n\nfunc (l *LimitedReader) Read(p []byte) (n int, err error) { ... }\n\n// NewSectionReader returns a [SectionReader] that reads from r\n// starting at offset off and stops with EOF after n bytes.\nfunc NewSectionReader(r ReaderAt, off int64, n int64) *SectionReader { ... }\n\n// SectionReader implements Read, Seek, and ReadAt on a section\n// of an underlying [ReaderAt].\ntype SectionReader struct {\n\tr     ReaderAt // constant after creation\n\tbase  int64    // constant after creation\n\toff   int64\n\tlimit int64 // constant after creation\n\tn     int64 // constant after creation\n}\n\nfunc (s *SectionReader) Read(p []byte) (n int, err error) { ... }\n\nvar errWhence = errors.New(\"Seek: invalid whence\")\nvar errOffset = errors.New(\"Seek: invalid offset\")\n\nfunc (s *SectionReader) Seek(offset int64, whence int) (int64, error) { ... }\n\nfunc (s *SectionReader) ReadAt(p []byte, off int64) (n int, err error) { ... }\n\n// Size returns the size of the section in bytes.\nfunc (s *SectionReader) Size() int64 { ... }\n\n// Outer returns the underlying [ReaderAt] and offsets for the section.\n//\n// The returned values are the same that were passed to [NewSectionReader]\n// when the [SectionReader] was created.\nfunc (s *SectionReader) Outer() (r ReaderAt, off int64, n int64) { ... }\n\n// An OffsetWriter maps writes at offset base to offset base+off in the underlying writer.\ntype OffsetWriter struct {\n\tw    WriterAt\n\tbase int64 // the original offset\n\toff  int64 // the current offset\n}\n\n// NewOffsetWriter returns an [OffsetWriter] that writes to w\n// starting at offset off.\nfunc NewOffsetWriter(w WriterAt, off int64) *OffsetWriter { ... }\n\nfunc (o *OffsetWriter) Write(p []byte) (n int, err error) { ... }\n\nfunc (o *OffsetWriter) WriteAt(p []byte, off int64) (n int, err error) { ... }\n\nfunc (o *OffsetWriter) Seek(offset int64, whence int) (int64, error) { ... }\n\n// TeeReader returns a [Reader] that writes to w what it reads from r.\n// All reads from r performed through it are matched with\n// corresponding writes to w. There is no internal buffering -\n// the write must complete before the read completes.\n// Any error encountered while writing is reported as a read error.\nfunc TeeReader(r Reader, w Writer) Reader { ... }\n\ntype teeReader struct {\n\tr Reader\n\tw Writer\n}\n\nfunc (t *teeReader) Read(p []byte) (n int, err error) { ... }\n\n// Discard is a [Writer] on which all Write calls succeed\n// without doing anything.\nvar Discard Writer = discard{}\n\ntype discard struct{}\n\n// discard implements ReaderFrom as an optimization so Copy to\n// io.Discard can avoid doing unnecessary work.\nvar _ ReaderFrom = discard{}\n\nfunc (discard) Write(p []byte) (int, error) { ... }\n\nfunc (discard) WriteString(s string) (int, error) { ... }\n\nvar blackHolePool = sync.Pool{\n\tNew: func() any {\n\t\tb := make([]byte, 8192)\n\t\treturn &b\n\t},\n}\n\nfunc (discard) ReadFrom(r Reader) (n int64, err error) { ... }\n\n// NopCloser returns a [ReadCloser] with a no-op Close method wrapping\n// the provided [Reader] r.\n// If r implements [WriterTo], the returned [ReadCloser] will implement [WriterTo]\n// by forwarding calls to r.\nfunc NopCloser(r Reader) ReadCloser { ... }\n\ntype nopCloser struct {\n\tReader\n}\n\nfunc (nopCloser) Close() error { ... }\n\ntype nopCloserWriterTo struct {\n\tReader\n}\n\nfunc (nopCloserWriterTo) Close() error { ... }\n\nfunc (c nopCloserWriterTo) WriteTo(w Writer) (n int64, err error) { ... }\n\n// ReadAll reads from r until an error or EOF and returns the data it read.\n// A successful call returns err == nil, not err == EOF. Because ReadAll is\n// defined to read from src until EOF, it does not treat an EOF from Read\n// as an error to be reported.\nfunc ReadAll(r Reader) ([]byte, error) { ... }\n"
+}

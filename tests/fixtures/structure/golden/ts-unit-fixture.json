@@ -1,0 +1,179 @@
+{
+  "id": "ts-unit-fixture",
+  "language": "typescript",
+  "path": "structure.ts",
+  "source_sha256": "c2b36c3c2216236040ee5476868749dbd51b83de09ffcaf092b8ea4198381b93",
+  "parse": {
+    "path": "structure.ts",
+    "language": "typescript",
+    "line_count": 31,
+    "symbols": [
+      {
+        "kind": "interface",
+        "name": "Reader",
+        "qualified_name": "Reader",
+        "signature": "export interface Reader",
+        "start_line": 3,
+        "end_line": 6,
+        "children": [
+          {
+            "kind": "method",
+            "name": "read",
+            "qualified_name": "Reader.read",
+            "signature": "read(input: string): number",
+            "start_line": 4,
+            "end_line": 4,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "ready",
+            "qualified_name": "Reader.ready",
+            "signature": "ready?: boolean",
+            "start_line": 5,
+            "end_line": 5,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "type",
+        "name": "ID",
+        "qualified_name": "ID",
+        "signature": "export type ID = string | number;",
+        "start_line": 8,
+        "end_line": 8,
+        "children": []
+      },
+      {
+        "kind": "enum",
+        "name": "State",
+        "qualified_name": "State",
+        "signature": "export enum State",
+        "start_line": 9,
+        "end_line": 9,
+        "children": []
+      },
+      {
+        "kind": "class",
+        "name": "Counter",
+        "qualified_name": "Counter",
+        "signature": "export default class Counter<T>",
+        "start_line": 11,
+        "end_line": 17,
+        "children": [
+          {
+            "kind": "field",
+            "name": "value",
+            "qualified_name": "Counter.value",
+            "signature": "private value: number = 0",
+            "start_line": 12,
+            "end_line": 12,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "constructor",
+            "qualified_name": "Counter.constructor",
+            "signature": "constructor(value: number)",
+            "start_line": 13,
+            "end_line": 13,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "add",
+            "qualified_name": "Counter.add",
+            "signature": "add = (amount: number): number =>",
+            "start_line": 14,
+            "end_line": 14,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "create",
+            "qualified_name": "Counter.create",
+            "signature": "static create(): Counter<number>",
+            "start_line": 15,
+            "end_line": 15,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "size",
+            "qualified_name": "Counter.size",
+            "signature": "get size(): number",
+            "start_line": 16,
+            "end_line": 16,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "name": "add",
+        "qualified_name": "add",
+        "signature": "add = (a: number, b: number): number =>",
+        "start_line": 19,
+        "end_line": 19,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "fetchValue",
+        "qualified_name": "fetchValue",
+        "signature": "export async function fetchValue(id: ID): Promise<string>",
+        "start_line": 20,
+        "end_line": 23,
+        "children": []
+      },
+      {
+        "kind": "object",
+        "name": "api",
+        "qualified_name": "api",
+        "signature": "api = {\n    run(input: number) { return input + 1; },\n    stop: () => 0,\n    label: \"ready\"\n}",
+        "start_line": 25,
+        "end_line": 29,
+        "children": [
+          {
+            "kind": "method",
+            "name": "run",
+            "qualified_name": "api.run",
+            "signature": "run(input: number)",
+            "start_line": 26,
+            "end_line": 26,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "stop",
+            "qualified_name": "api.stop",
+            "signature": "stop: () =>",
+            "start_line": 27,
+            "end_line": 27,
+            "children": []
+          },
+          {
+            "kind": "field",
+            "name": "label",
+            "qualified_name": "api.label",
+            "signature": "label: \"ready\"",
+            "start_line": 28,
+            "end_line": 28,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "name": "external",
+        "qualified_name": "external",
+        "signature": "declare function external(input: string): number;",
+        "start_line": 31,
+        "end_line": 31,
+        "children": []
+      }
+    ]
+  },
+  "skeleton": "import type { Input } from \"./input\";\n\nexport interface Reader {\n    read(input: string): number;\n    ready?: boolean;\n}\n\nexport type ID = string | number;\nexport enum State { Idle, Ready }\n\nexport default class Counter<T> {\n    private value: number = 0;\n    constructor(value: number) { ... }\n    add = (amount: number): number => ...;\n    static create(): Counter<number> { ... }\n    get size(): number { ... }\n}\n\nexport const add = (a: number, b: number): number => ...;\nexport async function fetchValue(id: ID): Promise<string> { ... }\n\nconst api = {\n    run(input: number) { ... },\n    stop: () => ...,\n    label: \"ready\"\n};\n\ndeclare function external(input: string): number;\n"
+}

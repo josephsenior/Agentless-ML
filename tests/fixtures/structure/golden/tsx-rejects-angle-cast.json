@@ -1,0 +1,18 @@
+{
+  "id": "tsx-rejects-angle-cast",
+  "language": "typescript",
+  "path": "cast.tsx",
+  "source_sha256": "a91169eb1023b4be087841d60b00516a2156a8299193f951191073303b06271e",
+  "parse": {
+    "error": {
+      "type": "ValueError",
+      "message": "JavaScript/TypeScript source contains a syntax error or missing token in cast.tsx"
+    }
+  },
+  "skeleton": {
+    "error": {
+      "type": "ValueError",
+      "message": "JavaScript/TypeScript source contains a syntax error or missing token in cast.tsx"
+    }
+  }
+}

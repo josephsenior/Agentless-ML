@@ -1,0 +1,212 @@
+{
+  "id": "js-express-application",
+  "language": "javascript",
+  "path": "lib/application.js",
+  "source_sha256": "5901b32f609ba349351bf7406dbdc0c4c57b77ce6f7215ea67ccca5ac2a28e88",
+  "parse": {
+    "path": "lib/application.js",
+    "language": "javascript",
+    "line_count": 661,
+    "symbols": [
+      {
+        "kind": "variable",
+        "name": "finalhandler",
+        "qualified_name": "finalhandler",
+        "signature": "finalhandler = require('finalhandler')",
+        "start_line": 16,
+        "end_line": 16,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "Router",
+        "qualified_name": "Router",
+        "signature": "Router = require('./router')",
+        "start_line": 17,
+        "end_line": 17,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "methods",
+        "qualified_name": "methods",
+        "signature": "methods = require('methods')",
+        "start_line": 18,
+        "end_line": 18,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "middleware",
+        "qualified_name": "middleware",
+        "signature": "middleware = require('./middleware/init')",
+        "start_line": 19,
+        "end_line": 19,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "query",
+        "qualified_name": "query",
+        "signature": "query = require('./middleware/query')",
+        "start_line": 20,
+        "end_line": 20,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "debug",
+        "qualified_name": "debug",
+        "signature": "debug = require('debug')('express:application')",
+        "start_line": 21,
+        "end_line": 21,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "View",
+        "qualified_name": "View",
+        "signature": "View = require('./view')",
+        "start_line": 22,
+        "end_line": 22,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "http",
+        "qualified_name": "http",
+        "signature": "http = require('http')",
+        "start_line": 23,
+        "end_line": 23,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "compileETag",
+        "qualified_name": "compileETag",
+        "signature": "compileETag = require('./utils').compileETag",
+        "start_line": 24,
+        "end_line": 24,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "compileQueryParser",
+        "qualified_name": "compileQueryParser",
+        "signature": "compileQueryParser = require('./utils').compileQueryParser",
+        "start_line": 25,
+        "end_line": 25,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "compileTrust",
+        "qualified_name": "compileTrust",
+        "signature": "compileTrust = require('./utils').compileTrust",
+        "start_line": 26,
+        "end_line": 26,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "deprecate",
+        "qualified_name": "deprecate",
+        "signature": "deprecate = require('depd')('express')",
+        "start_line": 27,
+        "end_line": 27,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "flatten",
+        "qualified_name": "flatten",
+        "signature": "flatten = require('array-flatten')",
+        "start_line": 28,
+        "end_line": 28,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "merge",
+        "qualified_name": "merge",
+        "signature": "merge = require('utils-merge')",
+        "start_line": 29,
+        "end_line": 29,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "resolve",
+        "qualified_name": "resolve",
+        "signature": "resolve = require('path').resolve",
+        "start_line": 30,
+        "end_line": 30,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "setPrototypeOf",
+        "qualified_name": "setPrototypeOf",
+        "signature": "setPrototypeOf = require('setprototypeof')",
+        "start_line": 31,
+        "end_line": 31,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "hasOwnProperty",
+        "qualified_name": "hasOwnProperty",
+        "signature": "hasOwnProperty = Object.prototype.hasOwnProperty",
+        "start_line": 38,
+        "end_line": 38,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "slice",
+        "qualified_name": "slice",
+        "signature": "slice = Array.prototype.slice",
+        "start_line": 39,
+        "end_line": 39,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "app",
+        "qualified_name": "app",
+        "signature": "app = exports = module.exports = {}",
+        "start_line": 45,
+        "end_line": 45,
+        "children": []
+      },
+      {
+        "kind": "variable",
+        "name": "trustProxyDefaultSymbol",
+        "qualified_name": "trustProxyDefaultSymbol",
+        "signature": "trustProxyDefaultSymbol = '@@symbol:trust_proxy_default'",
+        "start_line": 52,
+        "end_line": 52,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "logerror",
+        "qualified_name": "logerror",
+        "signature": "function logerror(err)",
+        "start_line": 645,
+        "end_line": 648,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "tryRender",
+        "qualified_name": "tryRender",
+        "signature": "function tryRender(view, options, callback)",
+        "start_line": 655,
+        "end_line": 661,
+        "children": []
+      }
+    ]
+  },
+  "skeleton": "/*!\n * express\n * Copyright(c) 2009-2013 TJ Holowaychuk\n * Copyright(c) 2013 Roman Shtylman\n * Copyright(c) 2014-2015 Douglas Christopher Wilson\n * MIT Licensed\n */\n\n'use strict';\n\n/**\n * Module dependencies.\n * @private\n */\n\nvar finalhandler = require('finalhandler');\nvar Router = require('./router');\nvar methods = require('methods');\nvar middleware = require('./middleware/init');\nvar query = require('./middleware/query');\nvar debug = require('debug')('express:application');\nvar View = require('./view');\nvar http = require('http');\nvar compileETag = require('./utils').compileETag;\nvar compileQueryParser = require('./utils').compileQueryParser;\nvar compileTrust = require('./utils').compileTrust;\nvar deprecate = require('depd')('express');\nvar flatten = require('array-flatten');\nvar merge = require('utils-merge');\nvar resolve = require('path').resolve;\nvar setPrototypeOf = require('setprototypeof')\n\n/**\n * Module variables.\n * @private\n */\n\nvar hasOwnProperty = Object.prototype.hasOwnProperty\nvar slice = Array.prototype.slice;\n\n/**\n * Application prototype.\n */\n\nvar app = exports = module.exports = {};\n\n/**\n * Variable for trust proxy inheritance back-compat\n * @private\n */\n\nvar trustProxyDefaultSymbol = '@@symbol:trust_proxy_default';\n\n/**\n * Initialize the server.\n *\n *   - setup default configuration\n *   - setup default middleware\n *   - setup route reflection methods\n *\n * @private\n */\n\napp.init = function init() { ... };\n\n/**\n * Initialize application configuration.\n * @private\n */\n\napp.defaultConfiguration = function defaultConfiguration() { ... };\n\n/**\n * lazily adds the base router if it has not yet been added.\n *\n * We cannot add the base router in the defaultConfiguration because\n * it reads app settings which might be set after that has run.\n *\n * @private\n */\napp.lazyrouter = function lazyrouter() { ... };\n\n/**\n * Dispatch a req, res pair into the application. Starts pipeline processing.\n *\n * If no callback is provided, then default error handlers will respond\n * in the event of an error bubbling through the stack.\n *\n * @private\n */\n\napp.handle = function handle(req, res, callback) { ... };\n\n/**\n * Proxy `Router#use()` to add middleware to the app router.\n * See Router#use() documentation for details.\n *\n * If the _fn_ parameter is an express app, then it will be\n * mounted at the _route_ specified.\n *\n * @public\n */\n\napp.use = function use(fn) { ... };\n\n/**\n * Proxy to the app `Router#route()`\n * Returns a new `Route` instance for the _path_.\n *\n * Routes are isolated middleware stacks for specific paths.\n * See the Route api docs for details.\n *\n * @public\n */\n\napp.route = function route(path) { ... };\n\n/**\n * Register the given template engine callback `fn`\n * as `ext`.\n *\n * By default will `require()` the engine based on the\n * file extension. For example if you try to render\n * a \"foo.ejs\" file Express will invoke the following internally:\n *\n *     app.engine('ejs', require('ejs').__express);\n *\n * For engines that do not provide `.__express` out of the box,\n * or if you wish to \"map\" a different extension to the template engine\n * you may use this method. For example mapping the EJS template engine to\n * \".html\" files:\n *\n *     app.engine('html', require('ejs').renderFile);\n *\n * In this case EJS provides a `.renderFile()` method with\n * the same signature that Express expects: `(path, options, callback)`,\n * though note that it aliases this method as `ejs.__express` internally\n * so if you're using \".ejs\" extensions you don't need to do anything.\n *\n * Some template engines do not follow this convention, the\n * [Consolidate.js](https://github.com/tj/consolidate.js)\n * library was created to map all of node's popular template\n * engines to follow this convention, thus allowing them to\n * work seamlessly within Express.\n *\n * @param {String} ext\n * @param {Function} fn\n * @return {app} for chaining\n * @public\n */\n\napp.engine = function engine(ext, fn) { ... };\n\n/**\n * Proxy to `Router#param()` with one added api feature. The _name_ parameter\n * can be an array of names.\n *\n * See the Router#param() docs for more details.\n *\n * @param {String|Array} name\n * @param {Function} fn\n * @return {app} for chaining\n * @public\n */\n\napp.param = function param(name, fn) { ... };\n\n/**\n * Assign `setting` to `val`, or return `setting`'s value.\n *\n *    app.set('foo', 'bar');\n *    app.set('foo');\n *    // => \"bar\"\n *\n * Mounted servers inherit their parent server's settings.\n *\n * @param {String} setting\n * @param {*} [val]\n * @return {Server} for chaining\n * @public\n */\n\napp.set = function set(setting, val) { ... };\n\n/**\n * Return the app's absolute pathname\n * based on the parent(s) that have\n * mounted it.\n *\n * For example if the application was\n * mounted as \"/admin\", which itself\n * was mounted as \"/blog\" then the\n * return value would be \"/blog/admin\".\n *\n * @return {String}\n * @private\n */\n\napp.path = function path() { ... };\n\n/**\n * Check if `setting` is enabled (truthy).\n *\n *    app.enabled('foo')\n *    // => false\n *\n *    app.enable('foo')\n *    app.enabled('foo')\n *    // => true\n *\n * @param {String} setting\n * @return {Boolean}\n * @public\n */\n\napp.enabled = function enabled(setting) { ... };\n\n/**\n * Check if `setting` is disabled.\n *\n *    app.disabled('foo')\n *    // => true\n *\n *    app.enable('foo')\n *    app.disabled('foo')\n *    // => false\n *\n * @param {String} setting\n * @return {Boolean}\n * @public\n */\n\napp.disabled = function disabled(setting) { ... };\n\n/**\n * Enable `setting`.\n *\n * @param {String} setting\n * @return {app} for chaining\n * @public\n */\n\napp.enable = function enable(setting) { ... };\n\n/**\n * Disable `setting`.\n *\n * @param {String} setting\n * @return {app} for chaining\n * @public\n */\n\napp.disable = function disable(setting) { ... };\n\n/**\n * Delegate `.VERB(...)` calls to `router.VERB(...)`.\n */\n\nmethods.forEach(function(method){ ... });\n\n/**\n * Special-cased \"all\" method, applying the given route `path`,\n * middleware, and callback to _every_ HTTP method.\n *\n * @param {String} path\n * @param {Function} ...\n * @return {app} for chaining\n * @public\n */\n\napp.all = function all(path) { ... };\n\n// del -> delete alias\n\napp.del = deprecate.function(app.delete, 'app.del: Use app.delete instead');\n\n/**\n * Render the given view `name` name with `options`\n * and a callback accepting an error and the\n * rendered template string.\n *\n * Example:\n *\n *    app.render('email', { name: 'Tobi' }, function(err, html){\n *      // ...\n *    })\n *\n * @param {String} name\n * @param {Object|Function} options or fn\n * @param {Function} callback\n * @public\n */\n\napp.render = function render(name, options, callback) { ... };\n\n/**\n * Listen for connections.\n *\n * A node `http.Server` is returned, with this\n * application (which is a `Function`) as its\n * callback. If you wish to create both an HTTP\n * and HTTPS server you may do so with the \"http\"\n * and \"https\" modules as shown here:\n *\n *    var http = require('http')\n *      , https = require('https')\n *      , express = require('express')\n *      , app = express();\n *\n *    http.createServer(app).listen(80);\n *    https.createServer({ ... }, app).listen(443);\n *\n * @return {http.Server}\n * @public\n */\n\napp.listen = function listen() { ... };\n\n/**\n * Log error using console.error.\n *\n * @param {Error} err\n * @private\n */\n\nfunction logerror(err) { ... }\n\n/**\n * Try rendering a view.\n * @private\n */\n\nfunction tryRender(view, options, callback) { ... }\n"
+}

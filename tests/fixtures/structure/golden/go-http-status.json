@@ -1,0 +1,581 @@
+{
+  "id": "go-http-status",
+  "language": "go",
+  "path": "src/net/http/status.go",
+  "source_sha256": "7633ca0ca545767f3db3d8960a96ee4ecd68fb39439c88b7c03efcb3d1786297",
+  "parse": {
+    "path": "src/net/http/status.go",
+    "language": "go",
+    "line_count": 210,
+    "symbols": [
+      {
+        "kind": "constant",
+        "name": "StatusContinue",
+        "qualified_name": "StatusContinue",
+        "signature": "StatusContinue           = 100",
+        "start_line": 10,
+        "end_line": 10,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusSwitchingProtocols",
+        "qualified_name": "StatusSwitchingProtocols",
+        "signature": "StatusSwitchingProtocols = 101",
+        "start_line": 11,
+        "end_line": 11,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusProcessing",
+        "qualified_name": "StatusProcessing",
+        "signature": "StatusProcessing         = 102",
+        "start_line": 12,
+        "end_line": 12,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusEarlyHints",
+        "qualified_name": "StatusEarlyHints",
+        "signature": "StatusEarlyHints         = 103",
+        "start_line": 13,
+        "end_line": 13,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusOK",
+        "qualified_name": "StatusOK",
+        "signature": "StatusOK                   = 200",
+        "start_line": 15,
+        "end_line": 15,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusCreated",
+        "qualified_name": "StatusCreated",
+        "signature": "StatusCreated              = 201",
+        "start_line": 16,
+        "end_line": 16,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusAccepted",
+        "qualified_name": "StatusAccepted",
+        "signature": "StatusAccepted             = 202",
+        "start_line": 17,
+        "end_line": 17,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusNonAuthoritativeInfo",
+        "qualified_name": "StatusNonAuthoritativeInfo",
+        "signature": "StatusNonAuthoritativeInfo = 203",
+        "start_line": 18,
+        "end_line": 18,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusNoContent",
+        "qualified_name": "StatusNoContent",
+        "signature": "StatusNoContent            = 204",
+        "start_line": 19,
+        "end_line": 19,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusResetContent",
+        "qualified_name": "StatusResetContent",
+        "signature": "StatusResetContent         = 205",
+        "start_line": 20,
+        "end_line": 20,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusPartialContent",
+        "qualified_name": "StatusPartialContent",
+        "signature": "StatusPartialContent       = 206",
+        "start_line": 21,
+        "end_line": 21,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusMultiStatus",
+        "qualified_name": "StatusMultiStatus",
+        "signature": "StatusMultiStatus          = 207",
+        "start_line": 22,
+        "end_line": 22,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusAlreadyReported",
+        "qualified_name": "StatusAlreadyReported",
+        "signature": "StatusAlreadyReported      = 208",
+        "start_line": 23,
+        "end_line": 23,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusIMUsed",
+        "qualified_name": "StatusIMUsed",
+        "signature": "StatusIMUsed               = 226",
+        "start_line": 24,
+        "end_line": 24,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusMultipleChoices",
+        "qualified_name": "StatusMultipleChoices",
+        "signature": "StatusMultipleChoices   = 300",
+        "start_line": 26,
+        "end_line": 26,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusMovedPermanently",
+        "qualified_name": "StatusMovedPermanently",
+        "signature": "StatusMovedPermanently  = 301",
+        "start_line": 27,
+        "end_line": 27,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusFound",
+        "qualified_name": "StatusFound",
+        "signature": "StatusFound             = 302",
+        "start_line": 28,
+        "end_line": 28,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusSeeOther",
+        "qualified_name": "StatusSeeOther",
+        "signature": "StatusSeeOther          = 303",
+        "start_line": 29,
+        "end_line": 29,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusNotModified",
+        "qualified_name": "StatusNotModified",
+        "signature": "StatusNotModified       = 304",
+        "start_line": 30,
+        "end_line": 30,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusUseProxy",
+        "qualified_name": "StatusUseProxy",
+        "signature": "StatusUseProxy          = 305",
+        "start_line": 31,
+        "end_line": 31,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusTemporaryRedirect",
+        "qualified_name": "StatusTemporaryRedirect",
+        "signature": "StatusTemporaryRedirect = 307",
+        "start_line": 33,
+        "end_line": 33,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusPermanentRedirect",
+        "qualified_name": "StatusPermanentRedirect",
+        "signature": "StatusPermanentRedirect = 308",
+        "start_line": 34,
+        "end_line": 34,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusBadRequest",
+        "qualified_name": "StatusBadRequest",
+        "signature": "StatusBadRequest                   = 400",
+        "start_line": 36,
+        "end_line": 36,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusUnauthorized",
+        "qualified_name": "StatusUnauthorized",
+        "signature": "StatusUnauthorized                 = 401",
+        "start_line": 37,
+        "end_line": 37,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusPaymentRequired",
+        "qualified_name": "StatusPaymentRequired",
+        "signature": "StatusPaymentRequired              = 402",
+        "start_line": 38,
+        "end_line": 38,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusForbidden",
+        "qualified_name": "StatusForbidden",
+        "signature": "StatusForbidden                    = 403",
+        "start_line": 39,
+        "end_line": 39,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusNotFound",
+        "qualified_name": "StatusNotFound",
+        "signature": "StatusNotFound                     = 404",
+        "start_line": 40,
+        "end_line": 40,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusMethodNotAllowed",
+        "qualified_name": "StatusMethodNotAllowed",
+        "signature": "StatusMethodNotAllowed             = 405",
+        "start_line": 41,
+        "end_line": 41,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusNotAcceptable",
+        "qualified_name": "StatusNotAcceptable",
+        "signature": "StatusNotAcceptable                = 406",
+        "start_line": 42,
+        "end_line": 42,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusProxyAuthRequired",
+        "qualified_name": "StatusProxyAuthRequired",
+        "signature": "StatusProxyAuthRequired            = 407",
+        "start_line": 43,
+        "end_line": 43,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusRequestTimeout",
+        "qualified_name": "StatusRequestTimeout",
+        "signature": "StatusRequestTimeout               = 408",
+        "start_line": 44,
+        "end_line": 44,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusConflict",
+        "qualified_name": "StatusConflict",
+        "signature": "StatusConflict                     = 409",
+        "start_line": 45,
+        "end_line": 45,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusGone",
+        "qualified_name": "StatusGone",
+        "signature": "StatusGone                         = 410",
+        "start_line": 46,
+        "end_line": 46,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusLengthRequired",
+        "qualified_name": "StatusLengthRequired",
+        "signature": "StatusLengthRequired               = 411",
+        "start_line": 47,
+        "end_line": 47,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusPreconditionFailed",
+        "qualified_name": "StatusPreconditionFailed",
+        "signature": "StatusPreconditionFailed           = 412",
+        "start_line": 48,
+        "end_line": 48,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusRequestEntityTooLarge",
+        "qualified_name": "StatusRequestEntityTooLarge",
+        "signature": "StatusRequestEntityTooLarge        = 413",
+        "start_line": 49,
+        "end_line": 49,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusRequestURITooLong",
+        "qualified_name": "StatusRequestURITooLong",
+        "signature": "StatusRequestURITooLong            = 414",
+        "start_line": 50,
+        "end_line": 50,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusUnsupportedMediaType",
+        "qualified_name": "StatusUnsupportedMediaType",
+        "signature": "StatusUnsupportedMediaType         = 415",
+        "start_line": 51,
+        "end_line": 51,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusRequestedRangeNotSatisfiable",
+        "qualified_name": "StatusRequestedRangeNotSatisfiable",
+        "signature": "StatusRequestedRangeNotSatisfiable = 416",
+        "start_line": 52,
+        "end_line": 52,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusExpectationFailed",
+        "qualified_name": "StatusExpectationFailed",
+        "signature": "StatusExpectationFailed            = 417",
+        "start_line": 53,
+        "end_line": 53,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusTeapot",
+        "qualified_name": "StatusTeapot",
+        "signature": "StatusTeapot                       = 418",
+        "start_line": 54,
+        "end_line": 54,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusMisdirectedRequest",
+        "qualified_name": "StatusMisdirectedRequest",
+        "signature": "StatusMisdirectedRequest           = 421",
+        "start_line": 55,
+        "end_line": 55,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusUnprocessableEntity",
+        "qualified_name": "StatusUnprocessableEntity",
+        "signature": "StatusUnprocessableEntity          = 422",
+        "start_line": 56,
+        "end_line": 56,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusLocked",
+        "qualified_name": "StatusLocked",
+        "signature": "StatusLocked                       = 423",
+        "start_line": 57,
+        "end_line": 57,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusFailedDependency",
+        "qualified_name": "StatusFailedDependency",
+        "signature": "StatusFailedDependency             = 424",
+        "start_line": 58,
+        "end_line": 58,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusTooEarly",
+        "qualified_name": "StatusTooEarly",
+        "signature": "StatusTooEarly                     = 425",
+        "start_line": 59,
+        "end_line": 59,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusUpgradeRequired",
+        "qualified_name": "StatusUpgradeRequired",
+        "signature": "StatusUpgradeRequired              = 426",
+        "start_line": 60,
+        "end_line": 60,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusPreconditionRequired",
+        "qualified_name": "StatusPreconditionRequired",
+        "signature": "StatusPreconditionRequired         = 428",
+        "start_line": 61,
+        "end_line": 61,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusTooManyRequests",
+        "qualified_name": "StatusTooManyRequests",
+        "signature": "StatusTooManyRequests              = 429",
+        "start_line": 62,
+        "end_line": 62,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusRequestHeaderFieldsTooLarge",
+        "qualified_name": "StatusRequestHeaderFieldsTooLarge",
+        "signature": "StatusRequestHeaderFieldsTooLarge  = 431",
+        "start_line": 63,
+        "end_line": 63,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusUnavailableForLegalReasons",
+        "qualified_name": "StatusUnavailableForLegalReasons",
+        "signature": "StatusUnavailableForLegalReasons   = 451",
+        "start_line": 64,
+        "end_line": 64,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusInternalServerError",
+        "qualified_name": "StatusInternalServerError",
+        "signature": "StatusInternalServerError           = 500",
+        "start_line": 66,
+        "end_line": 66,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusNotImplemented",
+        "qualified_name": "StatusNotImplemented",
+        "signature": "StatusNotImplemented                = 501",
+        "start_line": 67,
+        "end_line": 67,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusBadGateway",
+        "qualified_name": "StatusBadGateway",
+        "signature": "StatusBadGateway                    = 502",
+        "start_line": 68,
+        "end_line": 68,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusServiceUnavailable",
+        "qualified_name": "StatusServiceUnavailable",
+        "signature": "StatusServiceUnavailable            = 503",
+        "start_line": 69,
+        "end_line": 69,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusGatewayTimeout",
+        "qualified_name": "StatusGatewayTimeout",
+        "signature": "StatusGatewayTimeout                = 504",
+        "start_line": 70,
+        "end_line": 70,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusHTTPVersionNotSupported",
+        "qualified_name": "StatusHTTPVersionNotSupported",
+        "signature": "StatusHTTPVersionNotSupported       = 505",
+        "start_line": 71,
+        "end_line": 71,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusVariantAlsoNegotiates",
+        "qualified_name": "StatusVariantAlsoNegotiates",
+        "signature": "StatusVariantAlsoNegotiates         = 506",
+        "start_line": 72,
+        "end_line": 72,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusInsufficientStorage",
+        "qualified_name": "StatusInsufficientStorage",
+        "signature": "StatusInsufficientStorage           = 507",
+        "start_line": 73,
+        "end_line": 73,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusLoopDetected",
+        "qualified_name": "StatusLoopDetected",
+        "signature": "StatusLoopDetected                  = 508",
+        "start_line": 74,
+        "end_line": 74,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusNotExtended",
+        "qualified_name": "StatusNotExtended",
+        "signature": "StatusNotExtended                   = 510",
+        "start_line": 75,
+        "end_line": 75,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "StatusNetworkAuthenticationRequired",
+        "qualified_name": "StatusNetworkAuthenticationRequired",
+        "signature": "StatusNetworkAuthenticationRequired = 511",
+        "start_line": 76,
+        "end_line": 76,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "StatusText",
+        "qualified_name": "StatusText",
+        "signature": "func StatusText(code int) string",
+        "start_line": 81,
+        "end_line": 210,
+        "children": []
+      }
+    ]
+  },
+  "skeleton": "// Copyright 2009 The Go Authors. All rights reserved.\n// Use of this source code is governed by a BSD-style\n// license that can be found in the LICENSE file.\n\npackage http\n\n// HTTP status codes as registered with IANA.\n// See: https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml\nconst (\n\tStatusContinue           = 100 // RFC 9110, 15.2.1\n\tStatusSwitchingProtocols = 101 // RFC 9110, 15.2.2\n\tStatusProcessing         = 102 // RFC 2518, 10.1\n\tStatusEarlyHints         = 103 // RFC 8297\n\n\tStatusOK                   = 200 // RFC 9110, 15.3.1\n\tStatusCreated              = 201 // RFC 9110, 15.3.2\n\tStatusAccepted             = 202 // RFC 9110, 15.3.3\n\tStatusNonAuthoritativeInfo = 203 // RFC 9110, 15.3.4\n\tStatusNoContent            = 204 // RFC 9110, 15.3.5\n\tStatusResetContent         = 205 // RFC 9110, 15.3.6\n\tStatusPartialContent       = 206 // RFC 9110, 15.3.7\n\tStatusMultiStatus          = 207 // RFC 4918, 11.1\n\tStatusAlreadyReported      = 208 // RFC 5842, 7.1\n\tStatusIMUsed               = 226 // RFC 3229, 10.4.1\n\n\tStatusMultipleChoices   = 300 // RFC 9110, 15.4.1\n\tStatusMovedPermanently  = 301 // RFC 9110, 15.4.2\n\tStatusFound             = 302 // RFC 9110, 15.4.3\n\tStatusSeeOther          = 303 // RFC 9110, 15.4.4\n\tStatusNotModified       = 304 // RFC 9110, 15.4.5\n\tStatusUseProxy          = 305 // RFC 9110, 15.4.6\n\t_                       = 306 // RFC 9110, 15.4.7 (Unused)\n\tStatusTemporaryRedirect = 307 // RFC 9110, 15.4.8\n\tStatusPermanentRedirect = 308 // RFC 9110, 15.4.9\n\n\tStatusBadRequest                   = 400 // RFC 9110, 15.5.1\n\tStatusUnauthorized                 = 401 // RFC 9110, 15.5.2\n\tStatusPaymentRequired              = 402 // RFC 9110, 15.5.3\n\tStatusForbidden                    = 403 // RFC 9110, 15.5.4\n\tStatusNotFound                     = 404 // RFC 9110, 15.5.5\n\tStatusMethodNotAllowed             = 405 // RFC 9110, 15.5.6\n\tStatusNotAcceptable                = 406 // RFC 9110, 15.5.7\n\tStatusProxyAuthRequired            = 407 // RFC 9110, 15.5.8\n\tStatusRequestTimeout               = 408 // RFC 9110, 15.5.9\n\tStatusConflict                     = 409 // RFC 9110, 15.5.10\n\tStatusGone                         = 410 // RFC 9110, 15.5.11\n\tStatusLengthRequired               = 411 // RFC 9110, 15.5.12\n\tStatusPreconditionFailed           = 412 // RFC 9110, 15.5.13\n\tStatusRequestEntityTooLarge        = 413 // RFC 9110, 15.5.14\n\tStatusRequestURITooLong            = 414 // RFC 9110, 15.5.15\n\tStatusUnsupportedMediaType         = 415 // RFC 9110, 15.5.16\n\tStatusRequestedRangeNotSatisfiable = 416 // RFC 9110, 15.5.17\n\tStatusExpectationFailed            = 417 // RFC 9110, 15.5.18\n\tStatusTeapot                       = 418 // RFC 9110, 15.5.19 (Unused)\n\tStatusMisdirectedRequest           = 421 // RFC 9110, 15.5.20\n\tStatusUnprocessableEntity          = 422 // RFC 9110, 15.5.21\n\tStatusLocked                       = 423 // RFC 4918, 11.3\n\tStatusFailedDependency             = 424 // RFC 4918, 11.4\n\tStatusTooEarly                     = 425 // RFC 8470, 5.2.\n\tStatusUpgradeRequired              = 426 // RFC 9110, 15.5.22\n\tStatusPreconditionRequired         = 428 // RFC 6585, 3\n\tStatusTooManyRequests              = 429 // RFC 6585, 4\n\tStatusRequestHeaderFieldsTooLarge  = 431 // RFC 6585, 5\n\tStatusUnavailableForLegalReasons   = 451 // RFC 7725, 3\n\n\tStatusInternalServerError           = 500 // RFC 9110, 15.6.1\n\tStatusNotImplemented                = 501 // RFC 9110, 15.6.2\n\tStatusBadGateway                    = 502 // RFC 9110, 15.6.3\n\tStatusServiceUnavailable            = 503 // RFC 9110, 15.6.4\n\tStatusGatewayTimeout                = 504 // RFC 9110, 15.6.5\n\tStatusHTTPVersionNotSupported       = 505 // RFC 9110, 15.6.6\n\tStatusVariantAlsoNegotiates         = 506 // RFC 2295, 8.1\n\tStatusInsufficientStorage           = 507 // RFC 4918, 11.5\n\tStatusLoopDetected                  = 508 // RFC 5842, 7.2\n\tStatusNotExtended                   = 510 // RFC 2774, 7\n\tStatusNetworkAuthenticationRequired = 511 // RFC 6585, 6\n)\n\n// StatusText returns a text for the HTTP status code. It returns the empty\n// string if the code is unknown.\nfunc StatusText(code int) string { ... }\n"
+}

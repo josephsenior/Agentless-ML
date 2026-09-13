@@ -1,0 +1,714 @@
+{
+  "go": {
+    "main.go": [
+      true,
+      false
+    ],
+    "pkg/server.go": [
+      true,
+      false
+    ],
+    "pkg/server_test.go": [
+      true,
+      true
+    ],
+    "vendor/x/y.go": [
+      false,
+      false
+    ],
+    "testdata/a.go": [
+      false,
+      false
+    ],
+    "internal/_gen.go": [
+      false,
+      false
+    ],
+    ".hidden/a.go": [
+      false,
+      false
+    ],
+    "a/.b/c.go": [
+      false,
+      false
+    ],
+    "cmd/tool/main.go": [
+      true,
+      false
+    ],
+    "a.go.bak": [
+      false,
+      false
+    ],
+    "src/lib.rs": [
+      false,
+      false
+    ],
+    "tests/integration.rs": [
+      false,
+      false
+    ],
+    "benches/bench.rs": [
+      false,
+      false
+    ],
+    "target/debug/x.rs": [
+      false,
+      false
+    ],
+    "vendor/crate/lib.rs": [
+      false,
+      false
+    ],
+    "examples/tests_helper.rs": [
+      false,
+      false
+    ],
+    "src/tests/mod.rs": [
+      false,
+      false
+    ],
+    "src/_private.rs": [
+      false,
+      false
+    ],
+    "index.js": [
+      false,
+      false
+    ],
+    "lib/app.mjs": [
+      false,
+      false
+    ],
+    "lib/app.cjs": [
+      false,
+      false
+    ],
+    "src/view.jsx": [
+      false,
+      false
+    ],
+    "src/main.ts": [
+      false,
+      false
+    ],
+    "src/view.tsx": [
+      false,
+      false
+    ],
+    "src/types.d.ts": [
+      false,
+      false
+    ],
+    "src/app.mts": [
+      false,
+      false
+    ],
+    "src/app.cts": [
+      false,
+      false
+    ],
+    "node_modules/x/index.js": [
+      false,
+      false
+    ],
+    "dist/bundle.js": [
+      false,
+      false
+    ],
+    "build/out.js": [
+      false,
+      false
+    ],
+    "coverage/lcov.js": [
+      false,
+      false
+    ],
+    "__tests__/a.js": [
+      false,
+      false
+    ],
+    "src/__mocks__/fs.js": [
+      false,
+      false
+    ],
+    "src/a.test.ts": [
+      false,
+      false
+    ],
+    "src/a.spec.tsx": [
+      false,
+      false
+    ],
+    "test/helper.js": [
+      false,
+      false
+    ],
+    "tests/e2e.ts": [
+      false,
+      false
+    ],
+    "src/testing/util.ts": [
+      false,
+      false
+    ],
+    "src/latest.js": [
+      false,
+      false
+    ],
+    "src/.eslintrc.js": [
+      false,
+      false
+    ],
+    "src/_private.js": [
+      false,
+      false
+    ],
+    "README.md": [
+      false,
+      false
+    ],
+    "setup.py": [
+      false,
+      false
+    ],
+    "a.rs.orig": [
+      false,
+      false
+    ]
+  },
+  "rust": {
+    "main.go": [
+      false,
+      false
+    ],
+    "pkg/server.go": [
+      false,
+      false
+    ],
+    "pkg/server_test.go": [
+      false,
+      false
+    ],
+    "vendor/x/y.go": [
+      false,
+      false
+    ],
+    "testdata/a.go": [
+      false,
+      false
+    ],
+    "internal/_gen.go": [
+      false,
+      false
+    ],
+    ".hidden/a.go": [
+      false,
+      false
+    ],
+    "a/.b/c.go": [
+      false,
+      false
+    ],
+    "cmd/tool/main.go": [
+      false,
+      false
+    ],
+    "a.go.bak": [
+      false,
+      false
+    ],
+    "src/lib.rs": [
+      true,
+      false
+    ],
+    "tests/integration.rs": [
+      true,
+      true
+    ],
+    "benches/bench.rs": [
+      true,
+      true
+    ],
+    "target/debug/x.rs": [
+      false,
+      false
+    ],
+    "vendor/crate/lib.rs": [
+      false,
+      false
+    ],
+    "examples/tests_helper.rs": [
+      true,
+      false
+    ],
+    "src/tests/mod.rs": [
+      true,
+      true
+    ],
+    "src/_private.rs": [
+      true,
+      false
+    ],
+    "index.js": [
+      false,
+      false
+    ],
+    "lib/app.mjs": [
+      false,
+      false
+    ],
+    "lib/app.cjs": [
+      false,
+      false
+    ],
+    "src/view.jsx": [
+      false,
+      false
+    ],
+    "src/main.ts": [
+      false,
+      false
+    ],
+    "src/view.tsx": [
+      false,
+      false
+    ],
+    "src/types.d.ts": [
+      false,
+      false
+    ],
+    "src/app.mts": [
+      false,
+      false
+    ],
+    "src/app.cts": [
+      false,
+      false
+    ],
+    "node_modules/x/index.js": [
+      false,
+      false
+    ],
+    "dist/bundle.js": [
+      false,
+      false
+    ],
+    "build/out.js": [
+      false,
+      false
+    ],
+    "coverage/lcov.js": [
+      false,
+      false
+    ],
+    "__tests__/a.js": [
+      false,
+      false
+    ],
+    "src/__mocks__/fs.js": [
+      false,
+      false
+    ],
+    "src/a.test.ts": [
+      false,
+      false
+    ],
+    "src/a.spec.tsx": [
+      false,
+      false
+    ],
+    "test/helper.js": [
+      false,
+      false
+    ],
+    "tests/e2e.ts": [
+      false,
+      true
+    ],
+    "src/testing/util.ts": [
+      false,
+      false
+    ],
+    "src/latest.js": [
+      false,
+      false
+    ],
+    "src/.eslintrc.js": [
+      false,
+      false
+    ],
+    "src/_private.js": [
+      false,
+      false
+    ],
+    "README.md": [
+      false,
+      false
+    ],
+    "setup.py": [
+      false,
+      false
+    ],
+    "a.rs.orig": [
+      false,
+      false
+    ]
+  },
+  "javascript": {
+    "main.go": [
+      false,
+      false
+    ],
+    "pkg/server.go": [
+      false,
+      false
+    ],
+    "pkg/server_test.go": [
+      false,
+      false
+    ],
+    "vendor/x/y.go": [
+      false,
+      false
+    ],
+    "testdata/a.go": [
+      false,
+      false
+    ],
+    "internal/_gen.go": [
+      false,
+      false
+    ],
+    ".hidden/a.go": [
+      false,
+      false
+    ],
+    "a/.b/c.go": [
+      false,
+      false
+    ],
+    "cmd/tool/main.go": [
+      false,
+      false
+    ],
+    "a.go.bak": [
+      false,
+      false
+    ],
+    "src/lib.rs": [
+      false,
+      false
+    ],
+    "tests/integration.rs": [
+      false,
+      true
+    ],
+    "benches/bench.rs": [
+      false,
+      false
+    ],
+    "target/debug/x.rs": [
+      false,
+      false
+    ],
+    "vendor/crate/lib.rs": [
+      false,
+      false
+    ],
+    "examples/tests_helper.rs": [
+      false,
+      false
+    ],
+    "src/tests/mod.rs": [
+      false,
+      true
+    ],
+    "src/_private.rs": [
+      false,
+      false
+    ],
+    "index.js": [
+      true,
+      false
+    ],
+    "lib/app.mjs": [
+      true,
+      false
+    ],
+    "lib/app.cjs": [
+      true,
+      false
+    ],
+    "src/view.jsx": [
+      true,
+      false
+    ],
+    "src/main.ts": [
+      false,
+      false
+    ],
+    "src/view.tsx": [
+      false,
+      false
+    ],
+    "src/types.d.ts": [
+      false,
+      false
+    ],
+    "src/app.mts": [
+      false,
+      false
+    ],
+    "src/app.cts": [
+      false,
+      false
+    ],
+    "node_modules/x/index.js": [
+      false,
+      false
+    ],
+    "dist/bundle.js": [
+      false,
+      false
+    ],
+    "build/out.js": [
+      false,
+      false
+    ],
+    "coverage/lcov.js": [
+      false,
+      false
+    ],
+    "__tests__/a.js": [
+      true,
+      true
+    ],
+    "src/__mocks__/fs.js": [
+      true,
+      true
+    ],
+    "src/a.test.ts": [
+      false,
+      true
+    ],
+    "src/a.spec.tsx": [
+      false,
+      true
+    ],
+    "test/helper.js": [
+      true,
+      true
+    ],
+    "tests/e2e.ts": [
+      false,
+      true
+    ],
+    "src/testing/util.ts": [
+      false,
+      false
+    ],
+    "src/latest.js": [
+      true,
+      false
+    ],
+    "src/.eslintrc.js": [
+      false,
+      false
+    ],
+    "src/_private.js": [
+      true,
+      false
+    ],
+    "README.md": [
+      false,
+      false
+    ],
+    "setup.py": [
+      false,
+      false
+    ],
+    "a.rs.orig": [
+      false,
+      false
+    ]
+  },
+  "typescript": {
+    "main.go": [
+      false,
+      false
+    ],
+    "pkg/server.go": [
+      false,
+      false
+    ],
+    "pkg/server_test.go": [
+      false,
+      false
+    ],
+    "vendor/x/y.go": [
+      false,
+      false
+    ],
+    "testdata/a.go": [
+      false,
+      false
+    ],
+    "internal/_gen.go": [
+      false,
+      false
+    ],
+    ".hidden/a.go": [
+      false,
+      false
+    ],
+    "a/.b/c.go": [
+      false,
+      false
+    ],
+    "cmd/tool/main.go": [
+      false,
+      false
+    ],
+    "a.go.bak": [
+      false,
+      false
+    ],
+    "src/lib.rs": [
+      false,
+      false
+    ],
+    "tests/integration.rs": [
+      false,
+      true
+    ],
+    "benches/bench.rs": [
+      false,
+      false
+    ],
+    "target/debug/x.rs": [
+      false,
+      false
+    ],
+    "vendor/crate/lib.rs": [
+      false,
+      false
+    ],
+    "examples/tests_helper.rs": [
+      false,
+      false
+    ],
+    "src/tests/mod.rs": [
+      false,
+      true
+    ],
+    "src/_private.rs": [
+      false,
+      false
+    ],
+    "index.js": [
+      true,
+      false
+    ],
+    "lib/app.mjs": [
+      true,
+      false
+    ],
+    "lib/app.cjs": [
+      true,
+      false
+    ],
+    "src/view.jsx": [
+      true,
+      false
+    ],
+    "src/main.ts": [
+      true,
+      false
+    ],
+    "src/view.tsx": [
+      true,
+      false
+    ],
+    "src/types.d.ts": [
+      true,
+      false
+    ],
+    "src/app.mts": [
+      true,
+      false
+    ],
+    "src/app.cts": [
+      true,
+      false
+    ],
+    "node_modules/x/index.js": [
+      false,
+      false
+    ],
+    "dist/bundle.js": [
+      false,
+      false
+    ],
+    "build/out.js": [
+      false,
+      false
+    ],
+    "coverage/lcov.js": [
+      false,
+      false
+    ],
+    "__tests__/a.js": [
+      true,
+      true
+    ],
+    "src/__mocks__/fs.js": [
+      true,
+      true
+    ],
+    "src/a.test.ts": [
+      true,
+      true
+    ],
+    "src/a.spec.tsx": [
+      true,
+      true
+    ],
+    "test/helper.js": [
+      true,
+      true
+    ],
+    "tests/e2e.ts": [
+      true,
+      true
+    ],
+    "src/testing/util.ts": [
+      true,
+      false
+    ],
+    "src/latest.js": [
+      true,
+      false
+    ],
+    "src/.eslintrc.js": [
+      false,
+      false
+    ],
+    "src/_private.js": [
+      true,
+      false
+    ],
+    "README.md": [
+      false,
+      false
+    ],
+    "setup.py": [
+      false,
+      false
+    ],
+    "a.rs.orig": [
+      false,
+      false
+    ]
+  }
+}

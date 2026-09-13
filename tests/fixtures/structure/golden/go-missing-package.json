@@ -1,0 +1,18 @@
+{
+  "id": "go-missing-package",
+  "language": "go",
+  "path": "bad.go",
+  "source_sha256": "41d494b6a7a88a8ad4509dd69ada2f498d08e7908605d58a882e3731107dae98",
+  "parse": {
+    "error": {
+      "type": "ValueError",
+      "message": "Go source must declare a package"
+    }
+  },
+  "skeleton": {
+    "error": {
+      "type": "ValueError",
+      "message": "Go source must declare a package"
+    }
+  }
+}

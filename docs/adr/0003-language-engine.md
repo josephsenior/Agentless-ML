@@ -1,6 +1,7 @@
 # ADR 0003: Collapse language adapters into a generic engine + per-language tables
 
-- **Status:** Provisional — implementation plan, not yet built
+- **Status:** Cut A implemented (2026-09-13) — see "Implementation record" at the end.
+  Cut B (tree-sitter query files) not started.
 - **Date:** 2026-09-12
 - **Refines:** [ADR 0002](0002-language-adapter-boundary.md), which established the
   shared `LanguageAdapter` contract but let each language own a full hand-written
@@ -8,12 +9,10 @@
 
 ## Context
 
-Zhang's 10 Sept feedback: "pls consider minimizing or even completely removing
-language-specific adapters." (Received outside this Gmail account's recorded
-thread with him — the last message in `19f95479e374e41c` is the 10 Aug meeting
-invite. Confirm the exact sentence before quoting it back to him; "minimizing"
-and "removing" are different instructions and the reply below hedges toward
-the weaker one on purpose.)
+Zhang's 10 Sept feedback, verbatim, replying to the 7 Sept update that linked
+ADR 0002: "Thanks for the update, and overall the plan looks great to me. Just a
+minor suggestion: pls consider minimizing or even completely removing
+language-specific adapters."
 
 His objection is not to multi-language support, it's to *how* it's built. Four
 adapter classes that each hand-roll a tree-sitter walk is "multi-language by
@@ -55,6 +54,9 @@ anything?** `"struct_item" → "struct"` — yes, data. Go's receiver-to-name
 resolution — no, something has to walk the tree first — code.
 
 ## Target layout
+
+*This section is the Cut B design. What Cut A actually built is described in
+"Implementation record" at the end.*
 
 **Revised 2026-09-12** — see "Pushing further" below. `hooks.py` is dropped;
 the ~50 "irreducible" lines turn out to reduce to tree-sitter query patterns
@@ -374,3 +376,98 @@ all non-Python languages going forward, not just for this refactor — any
 future grammar upgrade (tree-sitter version bumps) gets checked against them
 too. The generic engine also becomes the natural place to add a fifth
 language later: a table + a handful of hooks, no new adapter class.
+
+## Implementation record (Cut A, 2026-09-13)
+
+### What exists now
+
+Go, Rust, JavaScript and TypeScript no longer have adapter classes. Each is a
+`LanguageSpec` record (`adapters/languages/{go,rust,javascript}.py`) read by one
+engine (`structure/engine.py`, `structure/skeleton.py`) through one generic
+`TreeSitterLanguage` that satisfies the unchanged `LanguageAdapter` protocol.
+`get_language_adapter()` is the only way to obtain a language. Python is
+untouched: it keeps its parity implementation.
+
+The engine vocabulary (`structure/spec.py`) turned out to need these concepts,
+all of them language-neutral: declaration rules by node type (`declares`,
+`declares_each`, `binds`), wrappers searched in place (optionally widening the
+span, as `export` does), container kinds and their member field, leading
+sibling types that extend a symbol's start (Rust attributes — the generic
+primitive the spike called for), ignored node types, required root nodes, a
+name-spelling policy (`Naming`), and path policy (`TestPaths`).
+
+Per-language code that remains, all as small named functions in the same slots
+a table lookup would fill:
+
+| Language | Function | Why it is not a lookup |
+|---|---|---|
+| Go | `_receiver` | walks receiver → parameter → type, unwrapping pointer and generic types |
+| Rust | `_impl_name` | `<T as Trait>` only when a trait field is present |
+| JavaScript/TypeScript | `_binding_kind` | `const` lives on the parent declaration, not the declarator |
+| JavaScript/TypeScript | `_default_export` | name from the exported value, falling back to `default` |
+| JavaScript/TypeScript | `_commonjs_export` | recognizes `module.exports` / `exports.*` assignment targets |
+
+Deviation from the plan above: the per-language tables are Python records, not
+TOML. The five functions have to be referenced from the same description, and a
+Python record does that directly instead of through a registry of string names.
+
+### Size, honestly
+
+The three adapters were 568 lines. The language descriptions are now 282 lines,
+of which about 50 are the functions above; the rest are tables, imports and
+docstrings. The shared engine adds 475 lines, so total parsing code grew. The
+earlier "570 → ~250" estimate counted only the per-language side. What changed
+is the marginal cost: a further tree-sitter language is a description of roughly
+60 lines rather than a new adapter.
+
+### How equivalence was established
+
+1. A regression corpus was captured from the **unmodified** adapters before any
+   engine code existed (`tests/fixtures/structure/`, `tools/capture_structure_fixtures.py`):
+   18 real files vendored at pinned commits (Go standard library go1.23.0, serde
+   v1.0.210, tokio 1.40.0, Express 4.21.0, Vue 3.5.0, shadcn/ui 2.1.0; about
+   9,500 lines and 1,000 symbols), 6 authored edge-case files, 2 existing unit
+   fixtures, 7 rejection cases, and a 44-path policy table per language. Grammar
+   versions are recorded and checked.
+2. `structure/contract.py` states the invariant from the fields localization
+   actually reads (`locations.py`: `kind`, `qualified_name`/`name`, spans,
+   `children`, `line_count`); `signature` is excluded because localization never
+   reads it. `tests/test_structure_corpus.py` checks two tiers: the structural
+   contract, and exact rendering.
+3. Against the new engine, all 239 pre-existing tests passed with the old class
+   names aliased and no test modified; the corpus matched except for the
+   intended error-message change below. The aliases were then removed and the
+   three adapter test files changed only in how they obtain a language.
+4. A mutation check confirmed the corpus is not vacuous. Removing Rust attribute
+   folding, impl-method kinds, Go's `var_spec_list` wrapper, Go interface
+   members, Go blank-identifier skipping, or CommonJS exports each fails the
+   structural contract on 1–4 files. Removing `export` span widening changes
+   only signatures (the keyword is on the same line), so it passes the contract
+   by definition and is caught by the rendering tier — in the authored `.mjs`
+   file only, since no vendored file uses ESM exports.
+5. The suite passes on Python 3.14 locally and 3.11 from `uv.lock`.
+
+### Behavior that deliberately changed
+
+- **Syntax-error messages** are uniform: `<Language> source contains a syntax
+  error or missing token in <path>`. Previously Go and Rust omitted the path and
+  JavaScript/TypeScript used a different sentence. Reviewed re-capture: exactly
+  four goldens changed, two message lines each.
+- **Go and Rust now select their grammar by extension**, like JavaScript and
+  TypeScript already did, so `parse_file("notes.txt", ...)` is rejected where it
+  used to be parsed as Go or Rust. The workflow cannot reach this: files are
+  filtered by `is_source_path` (which already required `.go`/`.rs`) before
+  parsing. Recorded because it is a change to which inputs are accepted.
+- **Skeleton traversal is iterative** for every language. Go previously looked at
+  top-level declarations only; Go function and method declarations cannot nest,
+  so the output is identical (verified on the corpus), and deep expression trees
+  can no longer hit Python's recursion limit.
+
+### Still language-specific, outside this ADR's scope
+
+Zhang's comment will also apply to `localization/context.py`, which chooses
+localization prompt templates and code-fence labels by `if parser.language ==
+...`, and to the per-language repair examples. Those are prompt text rather
+than parsing, but they are the remaining places where the controller path names
+languages, and the natural next candidate for the same treatment (move the
+choice into the language description).

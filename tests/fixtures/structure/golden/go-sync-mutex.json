@@ -1,0 +1,159 @@
+{
+  "id": "go-sync-mutex",
+  "language": "go",
+  "path": "src/sync/mutex.go",
+  "source_sha256": "507443584e79a36244c0c1800fe480632822be195f9f59f99fc3d2aef9c9b4a6",
+  "parse": {
+    "path": "src/sync/mutex.go",
+    "language": "go",
+    "line_count": 261,
+    "symbols": [
+      {
+        "kind": "function",
+        "name": "throw",
+        "qualified_name": "throw",
+        "signature": "func throw(string)",
+        "start_line": 20,
+        "end_line": 20,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "fatal",
+        "qualified_name": "fatal",
+        "signature": "func fatal(string)",
+        "start_line": 21,
+        "end_line": 21,
+        "children": []
+      },
+      {
+        "kind": "struct",
+        "name": "Mutex",
+        "qualified_name": "Mutex",
+        "signature": "Mutex struct {\n\tstate int32\n\tsema  uint32\n}",
+        "start_line": 36,
+        "end_line": 39,
+        "children": []
+      },
+      {
+        "kind": "interface",
+        "name": "Locker",
+        "qualified_name": "Locker",
+        "signature": "Locker interface {\n\tLock()\n\tUnlock()\n}",
+        "start_line": 42,
+        "end_line": 45,
+        "children": [
+          {
+            "kind": "method",
+            "name": "Lock",
+            "qualified_name": "Locker.Lock",
+            "signature": "Lock()",
+            "start_line": 43,
+            "end_line": 43,
+            "children": []
+          },
+          {
+            "kind": "method",
+            "name": "Unlock",
+            "qualified_name": "Locker.Unlock",
+            "signature": "Unlock()",
+            "start_line": 44,
+            "end_line": 44,
+            "children": []
+          }
+        ]
+      },
+      {
+        "kind": "constant",
+        "name": "mutexLocked",
+        "qualified_name": "mutexLocked",
+        "signature": "mutexLocked = 1 << iota",
+        "start_line": 48,
+        "end_line": 48,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "mutexWoken",
+        "qualified_name": "mutexWoken",
+        "signature": "mutexWoken",
+        "start_line": 49,
+        "end_line": 49,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "mutexStarving",
+        "qualified_name": "mutexStarving",
+        "signature": "mutexStarving",
+        "start_line": 50,
+        "end_line": 50,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "mutexWaiterShift",
+        "qualified_name": "mutexWaiterShift",
+        "signature": "mutexWaiterShift = iota",
+        "start_line": 51,
+        "end_line": 51,
+        "children": []
+      },
+      {
+        "kind": "constant",
+        "name": "starvationThresholdNs",
+        "qualified_name": "starvationThresholdNs",
+        "signature": "starvationThresholdNs = 1e6",
+        "start_line": 77,
+        "end_line": 77,
+        "children": []
+      },
+      {
+        "kind": "method",
+        "name": "Lock",
+        "qualified_name": "Mutex.Lock",
+        "signature": "func (m *Mutex) Lock()",
+        "start_line": 83,
+        "end_line": 93,
+        "children": []
+      },
+      {
+        "kind": "method",
+        "name": "TryLock",
+        "qualified_name": "Mutex.TryLock",
+        "signature": "func (m *Mutex) TryLock() bool",
+        "start_line": 100,
+        "end_line": 117,
+        "children": []
+      },
+      {
+        "kind": "method",
+        "name": "lockSlow",
+        "qualified_name": "Mutex.lockSlow",
+        "signature": "func (m *Mutex) lockSlow()",
+        "start_line": 119,
+        "end_line": 206,
+        "children": []
+      },
+      {
+        "kind": "method",
+        "name": "Unlock",
+        "qualified_name": "Mutex.Unlock",
+        "signature": "func (m *Mutex) Unlock()",
+        "start_line": 214,
+        "end_line": 227,
+        "children": []
+      },
+      {
+        "kind": "method",
+        "name": "unlockSlow",
+        "qualified_name": "Mutex.unlockSlow",
+        "signature": "func (m *Mutex) unlockSlow(new int32)",
+        "start_line": 229,
+        "end_line": 261,
+        "children": []
+      }
+    ]
+  },
+  "skeleton": "// Copyright 2009 The Go Authors. All rights reserved.\n// Use of this source code is governed by a BSD-style\n// license that can be found in the LICENSE file.\n\n// Package sync provides basic synchronization primitives such as mutual\n// exclusion locks. Other than the [Once] and [WaitGroup] types, most are intended\n// for use by low-level library routines. Higher-level synchronization is\n// better done via channels and communication.\n//\n// Values containing the types defined in this package should not be copied.\npackage sync\n\nimport (\n\t\"internal/race\"\n\t\"sync/atomic\"\n\t\"unsafe\"\n)\n\n// Provided by runtime via linkname.\nfunc throw(string)\nfunc fatal(string)\n\n// A Mutex is a mutual exclusion lock.\n// The zero value for a Mutex is an unlocked mutex.\n//\n// A Mutex must not be copied after first use.\n//\n// In the terminology of [the Go memory model],\n// the n'th call to [Mutex.Unlock] “synchronizes before” the m'th call to [Mutex.Lock]\n// for any n < m.\n// A successful call to [Mutex.TryLock] is equivalent to a call to Lock.\n// A failed call to TryLock does not establish any “synchronizes before”\n// relation at all.\n//\n// [the Go memory model]: https://go.dev/ref/mem\ntype Mutex struct {\n\tstate int32\n\tsema  uint32\n}\n\n// A Locker represents an object that can be locked and unlocked.\ntype Locker interface {\n\tLock()\n\tUnlock()\n}\n\nconst (\n\tmutexLocked = 1 << iota // mutex is locked\n\tmutexWoken\n\tmutexStarving\n\tmutexWaiterShift = iota\n\n\t// Mutex fairness.\n\t//\n\t// Mutex can be in 2 modes of operations: normal and starvation.\n\t// In normal mode waiters are queued in FIFO order, but a woken up waiter\n\t// does not own the mutex and competes with new arriving goroutines over\n\t// the ownership. New arriving goroutines have an advantage -- they are\n\t// already running on CPU and there can be lots of them, so a woken up\n\t// waiter has good chances of losing. In such case it is queued at front\n\t// of the wait queue. If a waiter fails to acquire the mutex for more than 1ms,\n\t// it switches mutex to the starvation mode.\n\t//\n\t// In starvation mode ownership of the mutex is directly handed off from\n\t// the unlocking goroutine to the waiter at the front of the queue.\n\t// New arriving goroutines don't try to acquire the mutex even if it appears\n\t// to be unlocked, and don't try to spin. Instead they queue themselves at\n\t// the tail of the wait queue.\n\t//\n\t// If a waiter receives ownership of the mutex and sees that either\n\t// (1) it is the last waiter in the queue, or (2) it waited for less than 1 ms,\n\t// it switches mutex back to normal operation mode.\n\t//\n\t// Normal mode has considerably better performance as a goroutine can acquire\n\t// a mutex several times in a row even if there are blocked waiters.\n\t// Starvation mode is important to prevent pathological cases of tail latency.\n\tstarvationThresholdNs = 1e6\n)\n\n// Lock locks m.\n// If the lock is already in use, the calling goroutine\n// blocks until the mutex is available.\nfunc (m *Mutex) Lock() { ... }\n\n// TryLock tries to lock m and reports whether it succeeded.\n//\n// Note that while correct uses of TryLock do exist, they are rare,\n// and use of TryLock is often a sign of a deeper problem\n// in a particular use of mutexes.\nfunc (m *Mutex) TryLock() bool { ... }\n\nfunc (m *Mutex) lockSlow() { ... }\n\n// Unlock unlocks m.\n// It is a run-time error if m is not locked on entry to Unlock.\n//\n// A locked [Mutex] is not associated with a particular goroutine.\n// It is allowed for one goroutine to lock a Mutex and then\n// arrange for another goroutine to unlock it.\nfunc (m *Mutex) Unlock() { ... }\n\nfunc (m *Mutex) unlockSlow(new int32) { ... }\n"
+}
