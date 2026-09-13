@@ -3,6 +3,11 @@
 import tree_sitter_go
 from tree_sitter import Node
 
+from agentless_ml.schemas.prompts import (
+    LanguagePrompts,
+    RepairExample,
+    guided_symbol_localization,
+)
 from agentless_ml.structure.spec import (
     Context,
     Grammar,
@@ -67,4 +72,23 @@ GO = LanguageSpec(
     member_declarations={"method_elem": declares("method")},
     elided_bodies=frozenset({"function_declaration", "method_declaration"}),
     block_bodies=frozenset({"block"}),
+    prompts=LanguagePrompts(
+        symbol_localization=guided_symbol_localization(
+            targets="functions, methods, types, package variables or constants",
+            naming=(
+                "Use receiver-qualified names for methods, such as Counter.Add. A type declaration\n"
+                "does not include its separately declared methods; list those methods explicitly."
+            ),
+            example=(
+                "path/file.go\nfunction: Add\nmethod: Counter.Add\ntype: Counter\n"
+                "variable: DefaultLimit\nconstant: MaxSize"
+            ),
+        ),
+        repair_example=RepairExample(
+            path="mathutil/format.go",
+            search='return "hello"',
+            replace='return "Hello"',
+            indented_line="    fmt.Println(x)",
+        ),
+    ),
 )

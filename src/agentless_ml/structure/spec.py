@@ -20,6 +20,8 @@ from pathlib import PurePosixPath
 
 from tree_sitter import Node
 
+from agentless_ml.schemas.prompts import LanguagePrompts
+
 
 @dataclass(frozen=True, slots=True)
 class Grammar:
@@ -228,6 +230,7 @@ class LanguageSpec:
     declarations: Mapping[str, Rule]
     elided_bodies: frozenset[str]
     block_bodies: frozenset[str]
+    prompts: LanguagePrompts
     wrappers: Mapping[str, Wrapper] = field(default_factory=dict)
     containers: Mapping[str, str | None] = field(default_factory=dict)
     member_declarations: Mapping[str, Rule] | None = None

@@ -12,6 +12,55 @@ import libcst as cst
 import libcst.matchers as matchers
 
 from agentless_ml.schemas import FileNode, SymbolNode
+from agentless_ml.schemas.prompts import LanguagePrompts, RepairExample
+
+# Published Agentless v1.5.0 prompt text, kept byte-identical for parity.
+_AGENTLESS_SYMBOL_LOCALIZATION = """
+Please look through the following GitHub Problem Description and the Skeleton of Relevant Files.
+Identify all locations that need inspection or editing to fix the problem, including directly related areas as well as any potentially related global variables, functions, and classes.
+For each location you provide, either give the name of the class, the name of a method in a class, the name of a function, or the name of a global variable.
+
+### GitHub Problem Description ###
+{problem_statement}
+
+### Skeleton of Relevant Files ###
+{file_contents}
+
+###
+
+Please provide the complete set of locations as either a class name, a function name, or a variable name.
+Note that if you include a class, you do not need to list its specific methods.
+You can include either the entire class or don't include the class name and instead include specific methods in the class.
+### Examples:
+```
+full_path1/file1.py
+function: my_function_1
+class: MyClass1
+function: MyClass2.my_method
+
+full_path2/file2.py
+variable: my_var
+function: MyClass3.my_method
+
+full_path3/file3.py
+function: my_function_2
+function: my_function_3
+function: MyClass4.my_method_1
+class: MyClass5
+```
+
+Return just the locations.
+"""
+
+PYTHON_PROMPTS = LanguagePrompts(
+    symbol_localization=_AGENTLESS_SYMBOL_LOCALIZATION,
+    repair_example=RepairExample(
+        path="mathweb/flask/app.py",
+        search="from flask import Flask",
+        replace="import math\nfrom flask import Flask",
+        indented_line="        print(x)",
+    ),
+)
 
 
 def _source_lines(source: str) -> list[str]:
@@ -101,6 +150,7 @@ class PythonAdapter:
     language: str = "python"
     extension: str = ".py"
     extensions: tuple[str, ...] = (".py",)
+    prompts: LanguagePrompts = PYTHON_PROMPTS
 
     def is_source_path(self, path: str) -> bool:
         return path.endswith(self.extension)

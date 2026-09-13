@@ -5,7 +5,7 @@ with `language="go"` now uses Go file filtering, skeletons and location resoluti
 then the same repair parser, patch application, validation schedule and selector
 as Python. There are no model calls in this milestone.
 
-## What the adapter represents
+## What the Go representation contains
 
 Go has no adapter implementation of its own: `adapters/languages/go.py` describes
 it as a `LanguageSpec` for the shared [structure engine](adr/0003-language-engine.md),
@@ -34,7 +34,7 @@ Every symbol uses one-based, inclusive source lines.
 
 ## Parsing and context choices
 
-Tree-sitter has Python bindings and a Go grammar, which lets this adapter run
+Tree-sitter has Python bindings and a Go grammar, which lets Go support run
 without requiring a Go toolchain. Go's standard parser was another option, but
 would need a helper executable and a separate build/distribution step. We chose
 Tree-sitter for this milestone; it is a syntax parser, not a Go type checker.
@@ -47,9 +47,12 @@ text is preserved. The skeleton is prompt text; it is not compilable source.
 Function literals inside package initializers are currently retained.
 
 Unlike the Python prompt, the Go prompt names types and receiver methods explicitly.
-The repair instructions use a Go example. Python keeps its existing templates and
+It uses the symbol-localization frame shared by all non-Python languages, with Go's
+naming guidance and example locations supplied by the Go description; the repair
+prompt uses a Go example edit. Python keeps the published Agentless templates and
 fixture comparisons. These are model-visible differences, recorded here rather than
-treated as identical prompts.
+treated as identical prompts, and the exact Go prompts are pinned in
+`tests/fixtures/prompts/go/`.
 
 The file tree includes `.go` files, omits `_test.go`, and excludes `vendor`,
 `testdata`, and paths with dot/underscore-prefixed components. Tracked test files
@@ -96,7 +99,8 @@ The existing file-creation/deletion limits still apply to repairs.
 This milestone does not add automated test selection, reproduction-test generation,
 live model sampling or official Go benchmark evaluation. Those gaps remain listed
 in the [replication map](replication-map.md). JavaScript/TypeScript now also has
-controlled recorded coverage, as does [Rust](rust-adapter.md). The adapter contract can still change.
+controlled recorded coverage, as does [Rust](rust-adapter.md). The `LanguageAdapter`
+contract and the structure engine can still change.
 
 Parser references: [Python bindings](https://github.com/tree-sitter/py-tree-sitter)
 and [Go grammar](https://github.com/tree-sitter/tree-sitter-go).

@@ -34,6 +34,9 @@ The following are interfaces rather than defining properties:
 - benchmark records and dataset loaders;
 - preparation of pinned repositories and task containers;
 - language parsers and their grammar-specific nodes;
+- each language's prompt vocabulary: what its declarations are called, how their
+  names are spelled, example locations and edits, and code-fence labels. This is
+  model-visible, so it is pinned by `tests/fixtures/prompts/`;
 - public build and test commands;
 - model-provider clients;
 - logging, accounting, and reproducibility metadata.

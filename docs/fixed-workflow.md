@@ -12,8 +12,10 @@ file localization, symbol localization, focused repair context, multiple repair
 samples, isolated patch application, public Docker tests, deterministic selection,
 and prediction/run export.
 
-The same controller now supports Go, JavaScript, TypeScript and Rust through language
-adapters. The [Go note](go-adapter.md) and
+The same controller now supports Go, JavaScript, TypeScript and Rust. They are
+language descriptions read by one structure engine
+([ADR 0003](adr/0003-language-engine.md)); the controller obtains every language,
+including Python, through `get_language_adapter`. The [Go note](go-adapter.md) and
 [JavaScript/TypeScript note](javascript-typescript.md), plus the
 [Rust note](rust-adapter.md), describe the controlled
 workflow tests and source representations. The Python-specific details below continue

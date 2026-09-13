@@ -4,9 +4,9 @@ Rust now uses the same recorded controller as Python, Go and JavaScript/TypeScri
 This is a language-support checkpoint, not a benchmark result or a claim that the
 whole Agentless implementation is finished.
 
-## What the adapter reads
+## What Rust support reads
 
-The adapter accepts `.rs` files, excluding hidden paths, `target` and `vendor`.
+Rust support accepts `.rs` files, excluding hidden paths, `target` and `vendor`.
 Integration tests and benches are hidden from the project tree. Inline test
 modules remain in their source file: filtering them would require interpreting
 attributes and could remove useful context.
@@ -36,6 +36,11 @@ Use `type: Counter` to select a struct, `impl: Counter` for an inherent impl,
 or `method: Counter::add` for one method. Multiple impl blocks can share a name;
 ambiguous requests are left unresolved rather than picking one arbitrarily.
 Use a method name or `line: N` in that case.
+
+The localization prompt states these naming rules inside the symbol-localization
+frame shared by all non-Python languages; the exact prompts are pinned in
+`tests/fixtures/prompts/rust/`. Enum variants are indexed as `variant` symbols,
+but the location resolver has no `variant:` label, so select them by line.
 
 ## Limits
 

@@ -26,6 +26,7 @@ from pathlib import PurePosixPath
 from tree_sitter import Language, Node, Parser
 
 from agentless_ml.schemas import FileNode, SymbolNode
+from agentless_ml.schemas.prompts import LanguagePrompts
 from agentless_ml.structure.skeleton import hide_bodies
 from agentless_ml.structure.spec import (
     Context,
@@ -170,6 +171,10 @@ class TreeSitterLanguage:
     @property
     def extensions(self) -> tuple[str, ...]:
         return self.spec.extensions
+
+    @property
+    def prompts(self) -> LanguagePrompts:
+        return self.spec.prompts
 
     def is_source_path(self, path: str) -> bool:
         return path.endswith(self.spec.extensions) and not any(

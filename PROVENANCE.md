@@ -18,6 +18,15 @@ regenerates the affected fixtures.
 | `jefzda/sweap-images:qutebrowser.qutebrowser-qutebrowser__qutebrowser-0b621cb0ce2b54d3f93d8d41d8ff4257888a87e5-v2ef375ac784985212b1805e1d0431dc8f1b3c` | `sha256:132ceff703ef4ada8d7ca2563b8ebf1bbffe0af6416119d5219374c0dc93e23f` | Official environment for the process-error smoke task |
 | [princeton-nlp/SWE-bench_Lite](https://huggingface.co/datasets/princeton-nlp/SWE-bench_Lite) | `6ec7bb89b9342f664a54a6e0a6ea6501d3437cc2` | Metadata for the Python parity instance |
 | [psf/requests](https://github.com/psf/requests) | `091991be0da19de9108dbe5e3752917fea3d7fdc` | Repository fixture for `psf__requests-2317` |
+| [golang/go](https://github.com/golang/go) | `6885bad7dd86880be6929c02085e5c7a67ff2887` (go1.23.0) | Five vendored files in the structure regression corpus |
+| [serde-rs/serde](https://github.com/serde-rs/serde) | `89c4b02bf32ceae5b17d89f93a452ccc195ca038` (v1.0.210) | Two vendored files in the structure regression corpus |
+| [tokio-rs/tokio](https://github.com/tokio-rs/tokio) | `ea6d652a102dee3f22b490db70545b7f66a23fb7` (tokio-1.40.0) | One vendored file in the structure regression corpus |
+| [expressjs/express](https://github.com/expressjs/express) | `7e562c6d8daddff4604f8efaaf9db2cf98c6dcff` (4.21.0) | Three vendored files in the structure regression corpus |
+| [vuejs/core](https://github.com/vuejs/core) | `6402b984087dd48f1a11f444a225d4ac6b2b7b9e` (v3.5.0) | Four vendored files in the structure regression corpus |
+| [shadcn-ui/ui](https://github.com/shadcn-ui/ui) | `a2abc4ad958c06260600a2b977dfe320e1388ab8` (shadcn@2.1.0) | Two vendored files in the structure regression corpus |
+
+Tag names are listed for readability; the commit is the pin. Annotated tags
+were resolved to the commit they point to, not the tag object.
 
 ## Golden fixtures
 
@@ -25,6 +34,20 @@ The files under `tests/fixtures/python/` were produced by running the capture
 utilities against the pinned checkouts above. Each source-dependent fixture
 records a SHA-256 digest of its input. The parity tests compare Agentless-ML with
 these captured outputs byte for byte.
+
+`tests/fixtures/structure/` is the regression corpus for the Go, Rust,
+JavaScript and TypeScript representations ([ADR 0003](docs/adr/0003-language-engine.md)).
+Its real-world sources are unmodified files vendored at the commits above;
+`sources/NOTICE.md` lists each file with its license. Goldens were first captured
+from the per-language adapters before they were replaced, and each records its
+source's SHA-256. `golden/_environment.json` records the tree-sitter and grammar
+package versions; a different installed version fails the suite, because a
+grammar upgrade can change which symbols exist. Recapture with
+`tools/capture_structure_fixtures.py`.
+
+`tests/fixtures/prompts/` pins the model-visible prompts every language renders
+for fixed inputs. It uses no upstream sources. Recapture with
+`tools/capture_prompt_fixtures.py`, and only after reviewing the prompt change.
 
 To keep the comparison honest:
 

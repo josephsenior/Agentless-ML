@@ -3,12 +3,14 @@
 from typing import Protocol
 
 from agentless_ml.schemas import FileNode
+from agentless_ml.schemas.prompts import LanguagePrompts
 
 
 class LanguageAdapter(Protocol):
     language: str
     extension: str
     extensions: tuple[str, ...]
+    prompts: LanguagePrompts
 
     def is_source_path(self, path: str) -> bool: ...
 

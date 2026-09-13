@@ -69,17 +69,19 @@ in `uv.lock`. This reuses the parsing approach introduced for Go without requiri
 Node or a TypeScript installation for ordinary framework tests. Babel or the
 TypeScript compiler API would provide other useful analysis, but would require
 a JavaScript runtime and a separate integration. Type checking and module
-resolution are outside this adapter's current role.
+resolution are outside this representation's current role.
 
 Skeletons preserve imports, exports, declarations, comments and type annotations.
 Function/method bodies become `{ ... }`; expression-bodied arrows become `...`.
 Replacements use syntax-tree byte spans, including for Unicode source. Nested
 bodies are not replaced twice. These skeletons are prompt text and need not compile.
-The JavaScript/TypeScript localization prompt explains the supported names, and
-the repair prompt uses a matching language example. Python's existing prompt
-fixtures remain unchanged.
+The JavaScript/TypeScript localization prompt explains the supported names inside
+the symbol-localization frame shared by all non-Python languages, and the repair
+prompt uses a matching language example. Code fences follow each file's extension
+(`javascript`, `jsx`, `typescript`, `tsx`). The exact prompts are pinned in
+`tests/fixtures/prompts/`. Python's published prompt fixtures remain unchanged.
 
-The adapter currently does not assign symbol names to destructured bindings,
+The representation currently does not assign symbol names to destructured bindings,
 computed keys, TypeScript namespace contents, nested local declarations, or
 functions hidden behind wrappers such as a call to `memo`. Those constructs remain
 in the source and can be selected by line. Function bodies may still be abbreviated

@@ -31,4 +31,4 @@ type: Counter
 variable: DefaultLimit
 constant: MaxSize
 ```
-You may also use line: N for an exact source line.
+Use line: N for an exact source line, including ambiguous or unnamed constructs.

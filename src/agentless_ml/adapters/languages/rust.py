@@ -6,6 +6,11 @@ See ``docs/rust-adapter.md``.
 import tree_sitter_rust
 from tree_sitter import Node
 
+from agentless_ml.schemas.prompts import (
+    LanguagePrompts,
+    RepairExample,
+    guided_symbol_localization,
+)
 from agentless_ml.structure.spec import (
     Context,
     Grammar,
@@ -56,4 +61,26 @@ RUST = LanguageSpec(
     separator="::",
     elided_bodies=frozenset({"function_item"}),
     block_bodies=frozenset({"block"}),
+    prompts=LanguagePrompts(
+        symbol_localization=guided_symbol_localization(
+            targets="functions, methods, types, traits, impl blocks, modules or constants",
+            naming=(
+                "Use source-spelled names with :: separators. Inherent methods use Counter::add;\n"
+                "trait implementations use <Counter as Reset>::reset. Include generic arguments\n"
+                "as written in the impl type. Inline modules add their name as a prefix.\n"
+                "A struct does not include its separate impl blocks. Ambiguous names need qualification\n"
+                "or an exact line location. Macro-generated declarations are not expanded."
+            ),
+            example=(
+                "src/lib.rs\nfunction: add\nmethod: Counter::add\ntype: Counter\n"
+                "trait: Reset\nimpl: <Counter as Reset>\nmodule: helpers\nconstant: LIMIT"
+            ),
+        ),
+        repair_example=RepairExample(
+            path="src/lib.rs",
+            search="a - b",
+            replace="a + b",
+            indented_line="    dbg!(x);",
+        ),
+    ),
 )

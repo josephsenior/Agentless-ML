@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
+from pathlib import PurePosixPath
 
 from agentless_ml.adapters.languages import LanguageAdapter, PythonAdapter
 
@@ -26,44 +27,6 @@ For example:
 file1.py
 file2.py
 ```
-"""
-
-
-SYMBOL_LOCALIZATION_TEMPLATE = """
-Please look through the following GitHub Problem Description and the Skeleton of Relevant Files.
-Identify all locations that need inspection or editing to fix the problem, including directly related areas as well as any potentially related global variables, functions, and classes.
-For each location you provide, either give the name of the class, the name of a method in a class, the name of a function, or the name of a global variable.
-
-### GitHub Problem Description ###
-{problem_statement}
-
-### Skeleton of Relevant Files ###
-{file_contents}
-
-###
-
-Please provide the complete set of locations as either a class name, a function name, or a variable name.
-Note that if you include a class, you do not need to list its specific methods.
-You can include either the entire class or don't include the class name and instead include specific methods in the class.
-### Examples:
-```
-full_path1/file1.py
-function: my_function_1
-class: MyClass1
-function: MyClass2.my_method
-
-full_path2/file2.py
-variable: my_var
-function: MyClass3.my_method
-
-full_path3/file3.py
-function: my_function_2
-function: my_function_3
-function: MyClass4.my_method_1
-class: MyClass5
-```
-
-Return just the locations.
 """
 
 
@@ -161,109 +124,12 @@ def render_symbol_localization_prompt(
             prefix_lines=prefix_lines,
             suffix_lines=suffix_lines,
         )
-        label = parser.language
-        if parser.language in {"javascript", "typescript"}:
-            label = (
-                "javascript"
-                if file_name.endswith((".js", ".mjs", ".cjs"))
-                else "typescript"
-            )
-            if file_name.endswith((".jsx", ".tsx")):
-                label = file_name.rsplit(".", 1)[1]
+        label = parser.prompts.code_fences.get(
+            PurePosixPath(file_name).suffix, parser.language
+        )
         template = FILE_BLOCK_TEMPLATE.replace("```python", "```" + label)
         blocks.append(template.format(file_name=file_name, file_content=skeleton))
-    template = SYMBOL_LOCALIZATION_TEMPLATE
-    if parser.language == "go":
-        template = GO_SYMBOL_LOCALIZATION_TEMPLATE
-    elif parser.language == "rust":
-        template = RUST_SYMBOL_LOCALIZATION_TEMPLATE
-    elif parser.language in {"javascript", "typescript"}:
-        template = JS_SYMBOL_LOCALIZATION_TEMPLATE.replace(
-            "file.js", "file" + parser.extension
-        )
-    return template.format(
+    return parser.prompts.symbol_localization.format(
         problem_statement=problem_statement,
         file_contents="".join(blocks),
     )
-
-
-RUST_SYMBOL_LOCALIZATION_TEMPLATE = """
-Identify Rust declarations that need inspection or editing from the issue and skeletons.
-Use source-spelled names with :: separators. Inherent methods use Counter::add;
-trait implementations use <Counter as Reset>::reset. Include generic arguments
-as written in the impl type. Inline modules add their name as a prefix.
-A struct does not include its separate impl blocks. Ambiguous names need qualification
-or an exact line location. Macro-generated declarations are not expanded.
-
-### GitHub Problem Description ###
-{problem_statement}
-
-### Skeleton of Relevant Files ###
-{file_contents}
-
-Return locations in an unlabelled fenced block with repository-relative paths:
-```
-src/lib.rs
-function: add
-method: Counter::add
-type: Counter
-trait: Reset
-impl: <Counter as Reset>
-module: helpers
-constant: LIMIT
-```
-Use line: N for an exact source line.
-"""
-
-
-GO_SYMBOL_LOCALIZATION_TEMPLATE = """
-Please look through the GitHub Problem Description and the Skeleton of Relevant Files.
-Identify the functions, methods, types, package variables or constants that need inspection or editing.
-Use receiver-qualified names for methods, such as Counter.Add. A type declaration
-does not include its separately declared methods; list those methods explicitly.
-
-### GitHub Problem Description ###
-{problem_statement}
-
-### Skeleton of Relevant Files ###
-{file_contents}
-
-Return just the locations in an unlabelled fenced block, using repository-relative paths:
-```
-path/file.go
-function: Add
-method: Counter.Add
-type: Counter
-variable: DefaultLimit
-constant: MaxSize
-```
-You may also use line: N for an exact source line.
-"""
-
-
-JS_SYMBOL_LOCALIZATION_TEMPLATE = """
-Please look through the GitHub Problem Description and the Skeleton of Relevant Files.
-Identify functions, bound arrow functions, classes, methods, fields, variables or
-types that need inspection or editing. Use owner-qualified names for methods and
-fields. A class includes its declared members; list either the class or the members
-you need. Use default for an anonymous default export and the declared name for a
-named default export. Static CommonJS assignments use names such as exports.add.
-
-### GitHub Problem Description ###
-{problem_statement}
-
-### Skeleton of Relevant Files ###
-{file_contents}
-
-Return just the locations in an unlabelled fenced block with repository-relative paths:
-```
-path/file.js
-function: add
-class: Counter
-method: Counter.add
-field: Counter.value
-variable: settings
-type: Options
-```
-Use line: N for an exact source line, including ambiguous or unnamed constructs.
-"""

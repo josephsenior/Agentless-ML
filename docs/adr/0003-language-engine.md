@@ -1,11 +1,15 @@
 # ADR 0003: Collapse language adapters into a generic engine + per-language tables
 
-- **Status:** Cut A implemented (2026-09-13) — see "Implementation record" at the end.
-  Cut B (tree-sitter query files) not started.
+- **Status:** Cut A implemented, and prompt rendering made language-neutral
+  (2026-09-13); see the two implementation records at the end. Cut B (tree-sitter
+  query files) not started. Sections between "Target layout" and "Scope and
+  sequencing" are the plan as written before implementation, kept for the record.
 - **Date:** 2026-09-12
 - **Refines:** [ADR 0002](0002-language-adapter-boundary.md), which established the
   shared `LanguageAdapter` contract but let each language own a full hand-written
-  adapter class. This ADR keeps the contract and replaces the four adapter bodies.
+  adapter class. This ADR keeps the contract and replaces the three Tree-sitter
+  adapter bodies (Go, Rust, JavaScript/TypeScript); Python keeps its parity
+  implementation.
 
 ## Context
 
@@ -89,6 +93,10 @@ ADR 0002 does not change; only what sits behind it does.
 
 ## The invariant (contract.py)
 
+*Plan. The implemented contract compares `kind`, `name`, `qualified_name`,
+spans, hierarchy, order, path, language and `line_count`, grounded in what
+`localization/locations.py` reads; see `src/agentless_ml/structure/contract.py`.*
+
 What must be preserved is the workflow as the model experiences it, not
 byte-identity:
 
@@ -113,6 +121,10 @@ gets the existing byte-diff on rendered localization prompts — a stricter
 check, kept as-is.
 
 ## Go, mapped exactly (the requested first deliverable)
+
+*Plan. As built, the tables are a Python `LanguageSpec`, not TOML, and `_receiver`
+remains a named function; `_specs` became plain table entries (wrappers for
+`type_declaration`, `var_declaration`, `var_spec_list` and `const_declaration`).*
 
 Of `go.py`'s 165 lines:
 
@@ -183,6 +195,12 @@ corpus, not just a structural-equivalence check.
 - `is_test_path` divergence → table, explicitly flagged above, not unified yet.
 
 ## Rollout order (strangler, one language at a time)
+
+*Plan. As built: the step 0 spikes belong to Cut B and were not run; steps 1–2
+were done first; steps 3–5 were done together against
+the full corpus rather than one language per change, with the old class names
+temporarily aliased so existing tests ran unmodified. Step 6 (Python) and step 7
+(`is_test_path` unification) were not done.*
 
 0. **Spike the remaining UNVERIFIED claims above** (Rust impl naming, JS
    `module.exports` predicate, JS member-chain flattening) before committing
@@ -463,11 +481,56 @@ is the marginal cost: a further tree-sitter language is a description of roughly
   so the output is identical (verified on the corpus), and deep expression trees
   can no longer hit Python's recursion limit.
 
-### Still language-specific, outside this ADR's scope
+## Implementation record: prompts (2026-09-13)
 
-Zhang's comment will also apply to `localization/context.py`, which chooses
-localization prompt templates and code-fence labels by `if parser.language ==
-...`, and to the per-language repair examples. Those are prompt text rather
-than parsing, but they are the remaining places where the controller path names
-languages, and the natural next candidate for the same treatment (move the
-choice into the language description).
+Prompt rendering no longer branches on language names either. Before, the
+symbol-localization renderer chose among four templates and derived code-fence
+labels with `if parser.language == ...`, and the repair prompt rewrote its
+example with a chain of `language ==` substitutions.
+
+Every language now supplies a `LanguagePrompts` vocabulary
+(`schemas/prompts.py`), exposed through the `LanguageAdapter` protocol:
+
+- `symbol_localization`: a template. Python supplies the published Agentless
+  v1.5.0 text, moved verbatim into `adapters/languages/python.py`. Go, Rust,
+  JavaScript and TypeScript build theirs with `guided_symbol_localization`, one
+  shared frame into which each language inserts only what its declarations are
+  called, how their names are spelled, and an example location block.
+- `repair_example`: the example *SEARCH/REPLACE* edit (path, search, replace,
+  indented line). The instructions around it are one shared template.
+- `code_fences`: extension to fence label (`.tsx` → `tsx`); default is the
+  language name.
+
+`render_symbol_localization_prompt` and `build_repair_prompt` now contain no
+language names.
+
+**Model-visible change, deliberately made while no live-model results exist.**
+The previous Go, Rust and JS/TS templates had drifted apart in their shared
+parts ("Return just the locations … using" vs "Return locations … with"; "You
+may also use line: N" vs "Use line: N"; Rust lacked the common opening line).
+Those are accidental differences between experimental conditions, so they were
+unified. Every language's naming guidance was carried over word for word.
+`tests/fixtures/prompts/` pins all 15 prompts (file localization, symbol
+localization and repair for five languages), captured before the change:
+
+- identical: all three Python prompts (the existing published-Agentless parity
+  tests, including the repair prompt's SHA-256, still pass), and every file
+  localization and repair prompt for every language;
+- changed: the symbol-localization prompt for Go (last line only), Rust
+  (opening, return line, last line), and JavaScript/TypeScript (line wrapping
+  and one comma).
+
+### Still language-specific
+
+One branch remains in the controller path: `resolve_locations` in
+`localization/locations.py` sends Python files to the published Agentless
+resolver (class/function/global-assignment semantics via LibCST) and every other
+language to the generic kind-and-name resolver. It is the resolution-stage
+counterpart of `PythonAdapter`: a parity seam, not a representation choice. It
+could become part of the language description the same way prompts did, at the
+cost of `resolve_locations` needing the language rather than only a `FileNode`.
+
+Two gaps noticed while checking prompt examples against the resolver's label
+table: Rust `variant` symbols have no accepted location label, so enum variants
+can only be selected by line; and `interface`/`enum`/`struct` are reached
+through `type:`, which the prompts already say.

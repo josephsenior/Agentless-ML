@@ -9,6 +9,11 @@ import tree_sitter_javascript
 import tree_sitter_typescript
 from tree_sitter import Node
 
+from agentless_ml.schemas.prompts import (
+    LanguagePrompts,
+    RepairExample,
+    guided_symbol_localization,
+)
 from agentless_ml.structure.spec import (
     Context,
     Declaration,
@@ -75,6 +80,38 @@ def _commonjs_export(node: Node, context: Context):
         )
 
 
+def _prompts(extension: str, code_fences: dict[str, str]) -> LanguagePrompts:
+    return LanguagePrompts(
+        symbol_localization=guided_symbol_localization(
+            targets="functions, bound arrow functions, classes, methods, fields, variables or types",
+            naming=(
+                "Use owner-qualified names for methods and fields. A class includes its declared\n"
+                "members; list either the class or the members you need. Use default for an\n"
+                "anonymous default export and the declared name for a named default export.\n"
+                "Static CommonJS assignments use names such as exports.add."
+            ),
+            example=(
+                f"path/file{extension}\nfunction: add\nclass: Counter\nmethod: Counter.add\n"
+                "field: Counter.value\nvariable: settings\ntype: Options"
+            ),
+        ),
+        repair_example=RepairExample(
+            path=f"src/format{extension}",
+            search='return "hello";',
+            replace='return "Hello";',
+            indented_line="    console.log(x);",
+        ),
+        code_fences=code_fences,
+    )
+
+
+_JAVASCRIPT_FENCES = {
+    ".js": "javascript",
+    ".mjs": "javascript",
+    ".cjs": "javascript",
+    ".jsx": "jsx",
+}
+
 _javascript_grammar = Grammar("javascript", tree_sitter_javascript.language)
 
 JAVASCRIPT = LanguageSpec(
@@ -133,6 +170,7 @@ JAVASCRIPT = LanguageSpec(
     },
     elided_bodies=frozenset(_FUNCTIONS + _METHODS),
     block_bodies=frozenset({"statement_block"}),
+    prompts=_prompts(".js", _JAVASCRIPT_FENCES),
 )
 
 _typescript_grammar = Grammar("typescript", tree_sitter_typescript.language_typescript)
@@ -150,4 +188,14 @@ TYPESCRIPT = replace(
         ".tsx": Grammar("typescript", tree_sitter_typescript.language_tsx),
         **JAVASCRIPT.grammars,
     },
+    prompts=_prompts(
+        ".ts",
+        {
+            **_JAVASCRIPT_FENCES,
+            ".ts": "typescript",
+            ".mts": "typescript",
+            ".cts": "typescript",
+            ".tsx": "tsx",
+        },
+    ),
 )

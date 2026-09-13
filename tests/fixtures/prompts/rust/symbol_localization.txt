@@ -1,5 +1,6 @@
 
-Identify Rust declarations that need inspection or editing from the issue and skeletons.
+Please look through the GitHub Problem Description and the Skeleton of Relevant Files.
+Identify the functions, methods, types, traits, impl blocks, modules or constants that need inspection or editing.
 Use source-spelled names with :: separators. Inherent methods use Counter::add;
 trait implementations use <Counter as Reset>::reset. Include generic arguments
 as written in the impl type. Inline modules add their name as a prefix.
@@ -24,7 +25,7 @@ impl Counter {
 ```
 
 
-Return locations in an unlabelled fenced block with repository-relative paths:
+Return just the locations in an unlabelled fenced block, using repository-relative paths:
 ```
 src/lib.rs
 function: add
@@ -35,4 +36,4 @@ impl: <Counter as Reset>
 module: helpers
 constant: LIMIT
 ```
-Use line: N for an exact source line.
+Use line: N for an exact source line, including ambiguous or unnamed constructs.

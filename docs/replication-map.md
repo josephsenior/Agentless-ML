@@ -13,14 +13,14 @@ responses. We have not reproduced the published benchmark results.
 | Workflow | Localization, repair sampling, patch validation and reranking | Shared controller consumes supplied localization and repair responses across five languages | [Python](../tests/test_fixed_workflow.py), [Go](../tests/test_go_workflow.py), [JavaScript/TypeScript](../tests/test_javascript_workflow.py) and [Rust tests](../tests/test_rust_workflow.py) check recorded execution and artifacts. No live sampling or complete upstream orchestration parity. |
 | Python structure | Python AST extraction and LibCST skeletons | A legacy projection captures upstream quirks; `PythonAdapter` also exposes normalized structure | [Python tests](../tests/test_python_parity.py) and [scope](python-parity.md). Normalized nesting and async handling intentionally differ. |
 | Localization and context | Hierarchical localization and bounded source context | File and symbol responses, optionally followed by recorded edit-line samples with their own repair groups, resolve to repair context | [Repository parity](../tests/test_repository_context_parity.py), [location parity](../tests/test_location_context_parity.py) and [edit-stage coverage](edit-localization.md). Live sampling and upstream prompt, sampling/merge and error-handling parity remain unfinished. |
-| Repair prompt | Published Python `--cot --diff_format` prompt | Prompt construction for that configuration | [Prompt test](../tests/test_repair_prompt.py). Does not establish parity for every upstream prompt option. |
+| Repair prompt | Published Python `--cot --diff_format` prompt | Prompt construction for that configuration; other languages use the same instructions with a language-supplied example edit | [Prompt test](../tests/test_repair_prompt.py) and [pinned prompts](../tests/test_prompt_goldens.py). Does not establish parity for every upstream prompt option. |
 | Applying model edits | The pinned repair postprocessor uses the first selected file | All accepted SEARCH/REPLACE edits are applied atomically across existing files | [Edit tests](../tests/test_repair_edits.py). This expands repair capability and changes rejection behavior; it is a disclosed difference. |
 | Voting key | Python AST-based normalization of source, including comment/docstring handling | Textual diff normalization that retains context and hunk locations | [Patch tests](../tests/test_patch_and_selection.py). Voting groups can differ from upstream; normalization parity is not established. |
 | Selection | Regression filtering, reproduction preference with fallback, then voting | Same intended ordering and first-appearance tie-break; infrastructure failures are excluded | [Selection tests](../tests/test_patch_and_selection.py) test local policy. They are not an upstream differential test of all edge cases. |
 | Tests used for selection | Regression-test selection and reproduction-test generation, followed by execution | Recorded regression exclusions and reproduction samples; baseline-eligible tests vote by exact source to select one for candidate checks | [Regression selection](regression-selection.md), [reproduction tests](reproduction-tests.md) and [validation note](public-validation.md). Automatic discovery, framework reports, live generation and upstream normalization/marker-protocol parity remain unfinished. |
 | Docker execution | Existing Docker/SWE-bench test infrastructure | Local `DockerTestRunner` executes commands in disposable containers | [Runner tests](../tests/test_docker_validation.py). This reimplements an execution mechanism; it introduces no new Agentless stage. |
 | Benchmark integration | Original SWE-bench task and harness conventions | Projected SWE-bench Pro input records and three recorded Python smoke tasks | [Dataset tests](../tests/test_swe_bench_pro_dataset.py), [smoke inputs](../experiments/swe_bench_pro/python_smoke_set.json). Official scoring and DeepSWE integration remain unfinished. |
-| Language support | Python-specific implementation | Python, Go, JavaScript, TypeScript and Rust adapters selected by the controller | [Go support](go-adapter.md), [JavaScript/TypeScript support](javascript-typescript.md) and [Rust support](rust-adapter.md) cover controlled recorded workflows and optional runtime checks. Real multilingual benchmark coverage remains untested. |
+| Language support | Python-specific implementation | Python keeps a parity implementation; Go, JavaScript, TypeScript and Rust are descriptions read by one Tree-sitter structure engine, and every language supplies prompt vocabulary instead of the renderers branching on its name | [ADR 0003](adr/0003-language-engine.md), the [structure corpus](../tests/test_structure_corpus.py) (real files at pinned commits), [Go](go-adapter.md), [JavaScript/TypeScript](javascript-typescript.md) and [Rust support](rust-adapter.md). Real multilingual benchmark coverage remains untested. |
 
 The relevant upstream sources are
 [repair.py](https://github.com/OpenAutoCoder/Agentless/blob/b150f28465a77a81a7f4776384957a4271f5bd69/agentless/repair/repair.py),
@@ -42,10 +42,22 @@ See [ADR 0001](adr/0001-separate-generalized-baseline.md).
 ### Language-specific structure behind a common workflow
 
 We want to add a language without copying the controller or scattering language
-checks through it. Adapters give parsing code a clear home. The design is still
-provisional: all five initial languages now exercise it, but more varied source
-and real repositories may expose further changes needed in the representation.
-See [ADR 0002](adr/0002-language-adapter-boundary.md).
+checks through it. [ADR 0002](adr/0002-language-adapter-boundary.md) first gave
+each language its own adapter implementation behind a shared contract. That kept
+language checks out of the controller, but the three Tree-sitter adapters each
+re-implemented the same tree walk, span arithmetic and skeleton rendering.
+
+[ADR 0003](adr/0003-language-engine.md) replaced them with one engine that reads
+a per-language description. The remaining per-language code is five small
+functions for names that need tree navigation. Equivalence was checked against a
+corpus captured from the old adapters before the change, including real files at
+pinned commits. The prompt renderers were changed the same way; this unified
+accidental wording differences between the non-Python symbol-localization
+prompts, and that model-visible change is recorded in the ADR. Alternative: keep
+separate adapters, which is simpler per language but multiplies shared logic and
+lets it drift. The design is still provisional: real repositories in benchmark
+tasks may need representation changes, and the Python location resolver remains
+a language-specific branch.
 
 ### Recorded responses during development
 
@@ -94,7 +106,8 @@ even with the same fixed controller. File creation and deletion remain unsupport
 Textual normalization avoids a Python-only AST requirement in the common repair
 code. It is provisional: it can group patches differently from upstream, and
 whitespace normalization is not a proof of semantic equivalence. Retaining upstream
-Python normalization behind a language adapter is an alternative to evaluate.
+Python normalization as part of the Python language description is an
+alternative to evaluate.
 Any resulting change in voting must be documented before experiments.
 
 Majority voting itself is inherited: it is a heuristic when available test evidence

@@ -60,16 +60,27 @@ The current implementation includes:
 - immutable task, repository, patch, validation, prediction, and run schemas;
 - checks that reject answer-like or verifier-only task metadata;
 - a normalized Python file and symbol representation;
-- a Go adapter connected to the recorded controller, including receiver methods,
+- one language-neutral Tree-sitter structure engine for Go, JavaScript,
+  TypeScript and Rust. Each language is a description (node-type tables, path
+  policy and prompt vocabulary) rather than its own adapter implementation; see
+  [ADR 0003](docs/adr/0003-language-engine.md);
+- Go support connected to the recorded controller, including receiver methods,
   types, constants, variables, and a controlled two-file repair test;
-- JavaScript and TypeScript adapters, including JSX/TSX and mixed JS/TS source,
+- JavaScript and TypeScript support, including JSX/TSX and mixed JS/TS source,
   with controlled two-file repair tests through the same controller;
+- Rust support, including traits, impl blocks, inline modules and attributes,
+  with a controlled two-file repair test through the same controller;
+- a structure regression corpus of real files vendored at pinned commits, checked
+  against the workflow-level representation contract, and pinned prompts for
+  every language;
 - Agentless-compatible Python skeleton rendering;
-- filtered project-tree and localization-prompt construction;
+- filtered project-tree and localization-prompt construction, with no
+  language-specific branches in the prompt renderers;
 - parsing and validation of returned file, class, function, variable, and line
   locations;
 - focused source-context construction for the published repair configuration;
-- Agentless-compatible Python repair-prompt construction;
+- Agentless-compatible Python repair-prompt construction, shared by every language
+  with a language-supplied example edit;
 - atomic SEARCH/REPLACE parsing and multi-file edit application;
 - canonical Git patch construction, normalization, and deterministic candidate
   selection;
@@ -126,7 +137,8 @@ not.
 ```text
 src/agentless_ml/schemas/             shared experimental records
 src/agentless_ml/adapters/benchmarks/ benchmark-specific safe task loaders
-src/agentless_ml/adapters/languages/  language-specific structure adapters
+src/agentless_ml/adapters/languages/  language descriptions; Python parity implementation
+src/agentless_ml/structure/           language-neutral structure engine and contract
 src/agentless_ml/localization/        prompt, location, and context logic
 src/agentless_ml/repair/              repair prompts, edits, patches, and selection
 src/agentless_ml/workspace/           isolated local candidate checkouts
@@ -144,7 +156,7 @@ recaptured with scripts in `tools/`; they are not hand-written expected outputs.
 Gold patches and hidden verifier tests are not included in agent-visible task
 records or used for candidate generation or selection.
 
-[Go support](docs/go-adapter.md) explains the first non-Python adapter, its tests,
+[Go support](docs/go-adapter.md) explains the first non-Python language, its tests,
 and the choices that differ from Python. The optional compiler check runs only
 the small authored Go fixture; ordinary tests do not require a Go installation.
 
@@ -199,9 +211,11 @@ development coverage; live-model trials remain separate. The planned sequence is
 1. complete one real pinned Python task end to end — complete;
 2. integrate one target benchmark and run several Python smoke tasks — complete;
 3. add languages while refining shared structures: Go, JavaScript/TypeScript
-   and Rust now have controlled recorded coverage;
+   and Rust now have controlled recorded coverage, and share one structure
+   engine and one set of prompt renderers;
 4. complete the remaining framework behavior and stabilize the multilingual
-   interfaces after testing the planned languages;
+   interfaces after testing the planned languages (the Python location resolver
+   is the last language-specific branch in the controller path);
 5. connect a live model and complete both benchmark integrations;
 6. run a small paired Agentless-ML versus Grinta pilot;
 7. freeze the experimental protocol;
