@@ -4,13 +4,11 @@ from __future__ import annotations
 
 import re
 from collections.abc import Mapping, Sequence
-from dataclasses import dataclass
 from pathlib import PurePosixPath
 
-import libcst as cst
-from libcst import matchers
-
-from agentless_ml.schemas import FileNode, SymbolNode
+from agentless_ml.adapters.languages import get_language_adapter
+from agentless_ml.schemas import FileNode
+from agentless_ml.structure.resolution import ResolvedLocations
 
 
 def extract_code_blocks(text: str) -> list[str]:
@@ -110,78 +108,6 @@ def parse_locations_for_files(
     return {file_name: ["\n".join(results[file_name])] for file_name in results}
 
 
-def _merge_intervals(intervals: list[tuple[int, int]]) -> list[tuple[int, int]]:
-    if not intervals:
-        return []
-    intervals.sort(key=lambda interval: interval[0])
-    merged = [intervals[0]]
-    for current in intervals[1:]:
-        previous = merged[-1]
-        if current[0] <= previous[1]:
-            merged[-1] = (previous[0], max(previous[1], current[1]))
-        else:
-            merged.append(current)
-    return merged
-
-
-class _GlobalAssignmentVisitor(cst.CSTVisitor):
-    METADATA_DEPENDENCIES = (cst.metadata.PositionProvider,)
-
-    def __init__(self) -> None:
-        self.assignments: dict[str, tuple[int, int]] = {}
-
-    def leave_Module(self, original_node: cst.Module) -> None:
-        for statement in original_node.body:
-            if not (
-                matchers.matches(statement, matchers.SimpleStatementLine())
-                and matchers.matches(statement.body[0], matchers.Assign())
-            ):
-                continue
-            position = self.get_metadata(cst.metadata.PositionProvider, statement)
-            assignment = statement.body[0]
-            try:
-                targets = [assignment.targets[0].target.value]
-            except (AttributeError, IndexError):
-                try:
-                    targets = [
-                        element.value.value
-                        for element in assignment.targets[0].target.elements
-                    ]
-                except (AttributeError, IndexError):
-                    targets = []
-            for target in targets:
-                self.assignments[target] = (position.start.line, position.end.line)
-
-
-def _global_assignments(source: str) -> dict[str, tuple[int, int]]:
-    try:
-        wrapper = cst.metadata.MetadataWrapper(cst.parse_module(source))
-    except Exception:
-        return {}
-    visitor = _GlobalAssignmentVisitor()
-    wrapper.visit(visitor)
-    return visitor.assignments
-
-
-def _classes(file_node: FileNode) -> tuple[SymbolNode, ...]:
-    return tuple(symbol for symbol in file_node.symbols if symbol.kind == "class")
-
-
-def _functions(file_node: FileNode) -> tuple[SymbolNode, ...]:
-    return tuple(symbol for symbol in file_node.symbols if symbol.kind == "function")
-
-
-@dataclass(frozen=True, slots=True)
-class ResolvedLocations:
-    line_intervals: tuple[tuple[int, int], ...]
-    context_intervals: tuple[tuple[int, int], ...]
-    unrecognized: tuple[str, ...] = ()
-
-    @property
-    def is_valid(self) -> bool:
-        return bool(self.line_intervals)
-
-
 def resolve_locations(
     locations: str | Sequence[str],
     file_node: FileNode,
@@ -192,235 +118,22 @@ def resolve_locations(
     fine_grained_only: bool = False,
     remove_line_locations: bool = False,
 ) -> ResolvedLocations:
-    """Resolve Agentless location strings to one-based inclusive line spans."""
+    """Resolve location strings to one-based inclusive line spans.
+
+    The file's language decides the semantics: Python applies published Agentless
+    v1.5.0 rules; the others use the language-neutral kind-and-name resolver.
+    """
     if context_window < 0:
         raise ValueError("context_window must not be negative")
-    if file_node.language != "python":
-        return _resolve_symbols(
-            locations,
-            file_node,
-            context_window=context_window,
-            separate_intervals=separate_intervals,
-            fine_grained_only=fine_grained_only,
-            remove_line_locations=remove_line_locations,
-        )
-    groups = [locations] if isinstance(locations, str) else locations
-    classes = _classes(file_node)
-    functions = _functions(file_node)
-    globals_by_name = _global_assignments(source)
-    line_locations: list[tuple[int, int]] = []
-    unrecognized: list[str] = []
-
-    for group in groups:
-        current_class_name = ""
-        for raw_location in group.splitlines():
-            location = raw_location
-            if location.startswith("class: ") and "." not in location:
-                name = location[len("class: ") :].strip()
-                relevant = [symbol for symbol in classes if symbol.name == name]
-                if relevant:
-                    line_locations.append(
-                        (relevant[0].start_line, relevant[0].end_line)
-                    )
-                    current_class_name = name
-                else:
-                    unrecognized.append(name)
-            elif location.startswith("function: ") or "." in location:
-                name = location.split(":", 1)[-1].strip()
-                if "." in name:
-                    class_name, method_name = name.split(".")[:2]
-                    relevant_classes = [
-                        symbol for symbol in classes if symbol.name == class_name
-                    ]
-                    if not relevant_classes:
-                        unrecognized.append(name)
-                    else:
-                        methods = [
-                            child
-                            for child in relevant_classes[0].children
-                            if child.name == method_name
-                        ]
-                        if methods:
-                            line_locations.append(
-                                (methods[0].start_line, methods[0].end_line)
-                            )
-                        else:
-                            unrecognized.append(name)
-                else:
-                    relevant_functions = [
-                        symbol for symbol in functions if symbol.name == name
-                    ]
-                    if relevant_functions:
-                        line_locations.append(
-                            (
-                                relevant_functions[0].start_line,
-                                relevant_functions[0].end_line,
-                            )
-                        )
-                    elif current_class_name:
-                        relevant_class = next(
-                            symbol
-                            for symbol in classes
-                            if symbol.name == current_class_name
-                        )
-                        methods = [
-                            child
-                            for child in relevant_class.children
-                            if child.name == name
-                        ]
-                        if methods:
-                            line_locations.append(
-                                (methods[0].start_line, methods[0].end_line)
-                            )
-                        else:
-                            unrecognized.append(name)
-                    else:
-                        methods = [
-                            child
-                            for parent in classes
-                            for child in parent.children
-                            if child.name == name
-                        ]
-                        if len(methods) == 1:
-                            line_locations.append(
-                                (methods[0].start_line, methods[0].end_line)
-                            )
-                        elif not methods:
-                            unrecognized.append(name)
-            elif location.startswith("line: "):
-                if remove_line_locations:
-                    continue
-                token = location[len("line: ") :].strip().split()[0]
-                try:
-                    line = int(token)
-                except ValueError:
-                    continue
-                line_locations.append((line, line))
-            elif location.startswith("variable:"):
-                names = location[len("variable:") :].strip().split()
-                for name in names:
-                    if name in globals_by_name:
-                        line_locations.append(globals_by_name[name])
-            elif location.strip():
-                unrecognized.append(location)
-
-    if fine_grained_only:
-        filtered: list[tuple[int, int]] = []
-        for start, end in line_locations:
-            if filtered:
-                previous_start, previous_end = filtered[-1]
-                if previous_start <= start and end <= previous_end:
-                    filtered.pop()
-            filtered.append((start, end))
-        line_locations = filtered
-
-    if not line_locations:
-        return ResolvedLocations((), (), tuple(unrecognized))
-
-    line_count = len(source.split("\n"))
-    if separate_intervals:
-        contextual = [
-            (
-                min(max(start - context_window, 0), line_count),
-                max(min(end + context_window, line_count), 0),
-            )
-            for start, end in line_locations
-        ]
-        context_intervals = _merge_intervals(contextual)
-    else:
-        context_intervals = [
-            (
-                max(min(start for start, _ in line_locations) - context_window, 0),
-                min(max(end for _, end in line_locations) + context_window, line_count),
-            )
-        ]
-    return ResolvedLocations(
-        tuple(line_locations), tuple(context_intervals), tuple(unrecognized)
+    return get_language_adapter(file_node.language).resolve_locations(
+        locations,
+        file_node,
+        source,
+        context_window=context_window,
+        separate_intervals=separate_intervals,
+        fine_grained_only=fine_grained_only,
+        remove_line_locations=remove_line_locations,
     )
-
-
-def _resolve_symbols(
-    locations: str | Sequence[str],
-    file_node: FileNode,
-    *,
-    context_window: int,
-    separate_intervals: bool,
-    fine_grained_only: bool,
-    remove_line_locations: bool,
-) -> ResolvedLocations:
-    """Resolve explicit symbol kinds without Python AST or class assumptions."""
-
-    def flatten(symbols):
-        for symbol in symbols:
-            yield symbol
-            yield from flatten(symbol.children)
-
-    symbols = tuple(flatten(file_node.symbols))
-    groups = [locations] if isinstance(locations, str) else locations
-    allowed = {
-        "function": {"function", "method"},
-        "method": {"method"},
-        "type": {"type", "struct", "interface", "enum", "trait"},
-        "trait": {"trait"},
-        "impl": {"impl"},
-        "module": {"module"},
-        "class": {"class"},
-        "field": {"field"},
-        "variable": {"variable", "constant", "object"},
-        "constant": {"constant"},
-    }
-    spans: list[tuple[int, int]] = []
-    unknown = []
-    for group in groups:
-        for raw in group.splitlines():
-            if not raw.strip():
-                continue
-            kind, separator, name = raw.strip().partition(":")
-            name = name.strip()
-            if kind == "line" and separator:
-                if remove_line_locations:
-                    continue
-                if name.isdecimal() and 1 <= int(name) <= file_node.line_count:
-                    spans.append((int(name), int(name)))
-                else:
-                    unknown.append(raw)
-                continue
-            matches = [
-                s
-                for s in symbols
-                if s.kind in allowed.get(kind, set())
-                and (
-                    s.qualified_name == name
-                    or ("." not in name and "::" not in name and s.name == name)
-                )
-            ]
-            if len(matches) == 1:
-                spans.append((matches[0].start_line, matches[0].end_line))
-            else:
-                unknown.append(raw)
-    spans = list(dict.fromkeys(spans))
-    if fine_grained_only:
-        spans = [
-            s
-            for s in spans
-            if not any(
-                s != other and s[0] <= other[0] and other[1] <= s[1] for other in spans
-            )
-        ]
-    if not spans:
-        return ResolvedLocations((), (), tuple(unknown))
-    contextual = [
-        (
-            max(1, start - context_window),
-            min(file_node.line_count, end + context_window),
-        )
-        for start, end in spans
-    ]
-    if separate_intervals:
-        contextual = _merge_intervals(contextual)
-    else:
-        contextual = [(min(s for s, _ in contextual), max(e for _, e in contextual))]
-    return ResolvedLocations(tuple(spans), tuple(contextual), tuple(unknown))
 
 
 def _line_wrap_content(

@@ -28,11 +28,13 @@ Python tree and the prompt-visible representation of `requests/sessions.py`.
 The selected repair context uses the options shown in the published reproduction
 instructions: `--loc_interval`, `--context_window=10`, and `--diff_format`.
 
-The published symbol-localization template and repair example are part of the
-Python language description (`PYTHON_PROMPTS` in
-`src/agentless_ml/adapters/languages/python.py`). The prompt renderers are shared
-by every language and contain no Python-specific text of their own, so these
-parity tests also guard that shared rendering path.
+The published symbol-localization template, repair example and location
+resolution rules are part of the Python language description
+(`src/agentless_ml/adapters/languages/python.py`: `PYTHON_PROMPTS` and
+`PythonAdapter.resolve_locations`). The prompt renderers and
+`localization.resolve_locations` are shared by every language and contain no
+Python-specific rules of their own, so these parity tests also guard those
+shared paths.
 
 ## Why there are two Python representations
 

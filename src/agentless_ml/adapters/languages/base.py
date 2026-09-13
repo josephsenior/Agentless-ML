@@ -1,9 +1,11 @@
 """The source operations required by the fixed workflow."""
 
+from collections.abc import Sequence
 from typing import Protocol
 
 from agentless_ml.schemas import FileNode
 from agentless_ml.schemas.prompts import LanguagePrompts
+from agentless_ml.structure.resolution import ResolvedLocations
 
 
 class LanguageAdapter(Protocol):
@@ -28,3 +30,15 @@ class LanguageAdapter(Protocol):
         prefix_lines: int = 10,
         suffix_lines: int = 10,
     ) -> str: ...
+
+    def resolve_locations(
+        self,
+        locations: str | Sequence[str],
+        file_node: FileNode,
+        source: str,
+        *,
+        context_window: int,
+        separate_intervals: bool,
+        fine_grained_only: bool,
+        remove_line_locations: bool,
+    ) -> ResolvedLocations: ...

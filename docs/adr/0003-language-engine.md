@@ -1,7 +1,7 @@
 # ADR 0003: Collapse language adapters into a generic engine + per-language tables
 
-- **Status:** Cut A implemented, and prompt rendering made language-neutral
-  (2026-09-13); see the two implementation records at the end. Cut B (tree-sitter
+- **Status:** Cut A implemented, and prompt rendering and location resolution
+  made language-neutral (2026-09-13); see the implementation records at the end. Cut B (tree-sitter
   query files) not started. Sections between "Target layout" and "Scope and
   sequencing" are the plan as written before implementation, kept for the record.
 - **Date:** 2026-09-12
@@ -520,17 +520,58 @@ localization and repair for five languages), captured before the change:
   (opening, return line, last line), and JavaScript/TypeScript (line wrapping
   and one comma).
 
-### Still language-specific
-
-One branch remains in the controller path: `resolve_locations` in
-`localization/locations.py` sends Python files to the published Agentless
-resolver (class/function/global-assignment semantics via LibCST) and every other
-language to the generic kind-and-name resolver. It is the resolution-stage
-counterpart of `PythonAdapter`: a parity seam, not a representation choice. It
-could become part of the language description the same way prompts did, at the
-cost of `resolve_locations` needing the language rather than only a `FileNode`.
-
 Two gaps noticed while checking prompt examples against the resolver's label
 table: Rust `variant` symbols have no accepted location label, so enum variants
 can only be selected by line; and `interface`/`enum`/`struct` are reached
 through `type:`, which the prompts already say.
+
+## Implementation record: location resolution (2026-09-13)
+
+The last language-name branch in the controller path was
+`if file_node.language != "python"` in `localization/locations.py`. It sent
+Python files to about 130 lines of published Agentless v1.5.0 resolution rules
+and everything else to the generic resolver. The branch was the visible part of
+a larger problem: the Python rules parse Python source with LibCST to find
+module-level assignments (the normalized Python structure has no variable
+symbols), so Python parsing lived inside the language-neutral localization
+module.
+
+Resolution is now part of the language contract:
+
+- `LanguageAdapter.resolve_locations` is a protocol method.
+- `PythonAdapter` implements it with the published rules, moved verbatim into
+  `adapters/languages/python.py` beside the other parity code, together with
+  the LibCST global-assignment visitor.
+- `TreeSitterLanguage` implements it with the language-neutral kind-and-name
+  resolver, moved verbatim into `structure/resolution.py` with
+  `ResolvedLocations`. It lives under `structure/` because `localization/`
+  imports the language package, so the language package cannot import from it.
+- `localization.resolve_locations` keeps its signature and delegates to
+  `get_language_adapter(file_node.language)`. The anticipated cost of passing
+  the language separately did not arise: `FileNode.language` already names a
+  registered language for every file the workflow parses.
+
+`localization/locations.py` no longer imports LibCST or names a language.
+
+**Equivalence.** A differential check (kept out of the repository; it reruns in
+a few minutes) generated location queries for four Python files, including the
+pinned `requests/sessions.py`, and for every non-rejected file in the structure
+corpus: every label for sampled symbol names, bare and wrongly qualified names,
+`variable:` lists, valid and invalid `line:` locations, `class:` continuation
+groups, and list inputs, under all 16 combinations of `context_window`,
+`separate_intervals`, `fine_grained_only` and `remove_line_locations` for
+grouped queries. Before and after the move: 22,132 resolutions (5,712 of them
+successful), 0 differences. As a check that this detects a wrong dispatch,
+routing Python files to the generic resolver changed 1,105 of the 2,166 Python
+resolutions. The existing published-Agentless location parity tests also pass.
+
+### Remaining Python-specific code in shared modules
+
+No language-name comparison remains outside the language descriptions. One
+Python syntax assumption remains in `localization/locations.py`: the published
+`sticky_scroll` context option recognizes scopes by lines starting with
+`class ` or `def `. The workflow never enables that option (only the Agentless
+fixture-capture tool passes it, as `False`), so it was left in place rather than
+given a language-supplied scope rule nobody uses yet. If a non-Python condition
+ever enables `sticky_scroll`, that rule must move into the language description
+first, and could use symbol spans instead of line prefixes.

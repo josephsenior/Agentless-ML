@@ -3,8 +3,9 @@
 - **Status:** Superseded in part by [ADR 0003](0003-language-engine.md) (2026-09-13).
   The shared `LanguageAdapter` contract and controller boundary below still hold.
   The decision to put each language's parsing code in its own adapter does not:
-  Go, JavaScript, TypeScript and Rust are now descriptions read by one engine, and
-  prompt text comes from per-language vocabulary. Python keeps a dedicated
+  Go, JavaScript, TypeScript and Rust are now descriptions read by one engine,
+  prompt text comes from per-language vocabulary, and location resolution is a
+  method of the language contract. Python keeps a dedicated
   implementation for published-Agentless parity.
 - **Date:** 2026-09-07
 

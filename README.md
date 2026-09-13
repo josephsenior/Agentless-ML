@@ -214,8 +214,8 @@ development coverage; live-model trials remain separate. The planned sequence is
    and Rust now have controlled recorded coverage, and share one structure
    engine and one set of prompt renderers;
 4. complete the remaining framework behavior and stabilize the multilingual
-   interfaces after testing the planned languages (the Python location resolver
-   is the last language-specific branch in the controller path);
+   interfaces after testing the planned languages (the controller path no
+   longer branches on language names);
 5. connect a live model and complete both benchmark integrations;
 6. run a small paired Agentless-ML versus Grinta pilot;
 7. freeze the experimental protocol;

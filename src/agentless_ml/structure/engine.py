@@ -27,6 +27,10 @@ from tree_sitter import Language, Node, Parser
 
 from agentless_ml.schemas import FileNode, SymbolNode
 from agentless_ml.schemas.prompts import LanguagePrompts
+from agentless_ml.structure.resolution import (
+    ResolvedLocations,
+    resolve_symbol_locations,
+)
 from agentless_ml.structure.skeleton import hide_bodies
 from agentless_ml.structure.spec import (
     Context,
@@ -187,6 +191,27 @@ class TreeSitterLanguage:
 
     def parse_file(self, path: str, source: str) -> FileNode:
         return extract(self.spec, path, source)
+
+    def resolve_locations(
+        self,
+        locations: str | Sequence[str],
+        file_node: FileNode,
+        source: str,
+        *,
+        context_window: int,
+        separate_intervals: bool,
+        fine_grained_only: bool,
+        remove_line_locations: bool,
+    ) -> ResolvedLocations:
+        return resolve_symbol_locations(
+            locations,
+            file_node,
+            source,
+            context_window=context_window,
+            separate_intervals=separate_intervals,
+            fine_grained_only=fine_grained_only,
+            remove_line_locations=remove_line_locations,
+        )
 
     def render_skeleton(
         self,

@@ -56,8 +56,10 @@ accidental wording differences between the non-Python symbol-localization
 prompts, and that model-visible change is recorded in the ADR. Alternative: keep
 separate adapters, which is simpler per language but multiplies shared logic and
 lets it drift. The design is still provisional: real repositories in benchmark
-tasks may need representation changes, and the Python location resolver remains
-a language-specific branch.
+tasks may need representation changes. Location resolution followed the same
+path: Python's published Agentless rules are part of the Python description, the
+other languages share one resolver, and a differential check of 22,132
+resolutions found no change.
 
 ### Recorded responses during development
 
