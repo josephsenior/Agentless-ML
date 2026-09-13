@@ -1,0 +1,34 @@
+
+Please look through the GitHub Problem Description and the Skeleton of Relevant Files.
+Identify the functions, methods, types, package variables or constants that need inspection or editing.
+Use receiver-qualified names for methods, such as Counter.Add. A type declaration
+does not include its separately declared methods; list those methods explicitly.
+
+### GitHub Problem Description ###
+Counter.add applies the increment twice when called from the CLI.
+
+### Skeleton of Relevant Files ###
+
+### File: pkg/counter.go ###
+```go
+package pkg
+
+const Limit = 10
+
+type Counter struct{ value int }
+
+func (c *Counter) Add(n int) int { ... }
+
+```
+
+
+Return just the locations in an unlabelled fenced block, using repository-relative paths:
+```
+path/file.go
+function: Add
+method: Counter.Add
+type: Counter
+variable: DefaultLimit
+constant: MaxSize
+```
+You may also use line: N for an exact source line.

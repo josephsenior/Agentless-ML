@@ -1,0 +1,46 @@
+{
+  "description": "Fixed inputs whose rendered prompts are pinned under <language>/. Prompts are model-visible: any change to these files is a change to what the model reads. Produced by tools/capture_prompt_fixtures.py.",
+  "problem_statement": "Counter.add applies the increment twice when called from the CLI.",
+  "languages": {
+    "python": {
+      "repository_paths": ["repo/pkg/app.py", "repo/pkg/tests/test_app.py", "repo/setup.py"],
+      "files": {
+        "pkg/app.py": "import os\n\nLIMIT = 10\n\n\nclass Counter:\n    def add(self, n):\n        return n + n\n\n\ndef main():\n    return Counter().add(os.getpid())\n"
+      },
+      "repair_context": "### pkg/app.py\n    def add(self, n):\n        return n + n"
+    },
+    "go": {
+      "repository_paths": ["repo/cmd/main.go", "repo/pkg/counter.go", "repo/pkg/counter_test.go"],
+      "files": {
+        "pkg/counter.go": "package pkg\n\nconst Limit = 10\n\ntype Counter struct{ value int }\n\nfunc (c *Counter) Add(n int) int {\n\tc.value += n + n\n\treturn c.value\n}\n"
+      },
+      "repair_context": "### pkg/counter.go\nfunc (c *Counter) Add(n int) int {\n\tc.value += n + n"
+    },
+    "rust": {
+      "repository_paths": ["repo/src/lib.rs", "repo/src/cli.rs", "repo/tests/it.rs"],
+      "files": {
+        "src/lib.rs": "pub const LIMIT: i32 = 10;\n\npub struct Counter { value: i32 }\n\nimpl Counter {\n    pub fn add(&mut self, n: i32) { self.value += n + n; }\n}\n"
+      },
+      "repair_context": "### src/lib.rs\n    pub fn add(&mut self, n: i32) { self.value += n + n; }"
+    },
+    "javascript": {
+      "repository_paths": ["repo/src/counter.js", "repo/src/view.jsx", "repo/src/counter.test.js", "repo/lib/cli.cjs"],
+      "files": {
+        "src/counter.js": "export class Counter {\n  add(n) { return n + n; }\n}\n",
+        "src/view.jsx": "export const View = ({ n }) => <span>{n}</span>;\n",
+        "lib/cli.cjs": "module.exports = { run() { return 1; } };\n"
+      },
+      "repair_context": "### src/counter.js\n  add(n) { return n + n; }"
+    },
+    "typescript": {
+      "repository_paths": ["repo/src/counter.ts", "repo/src/view.tsx", "repo/src/util.js", "repo/src/limits.mts", "repo/src/counter.spec.ts"],
+      "files": {
+        "src/counter.ts": "export class Counter {\n  add(n: number): number { return n + n; }\n}\n",
+        "src/view.tsx": "export const View = ({ n }: { n: number }) => <span>{n}</span>;\n",
+        "src/util.js": "exports.helper = () => 1;\n",
+        "src/limits.mts": "export const LIMIT: number = 10;\n"
+      },
+      "repair_context": "### src/counter.ts\n  add(n: number): number { return n + n; }"
+    }
+  }
+}

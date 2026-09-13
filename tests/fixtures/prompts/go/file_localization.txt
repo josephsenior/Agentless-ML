@@ -1,0 +1,23 @@
+Please look through the following GitHub problem description and Repository structure and provide a list of files that one would need to edit to fix the problem.
+
+### GitHub Problem Description ###
+Counter.add applies the increment twice when called from the CLI.
+
+###
+
+### Repository Structure ###
+repo/
+    cmd/
+        main.go
+    pkg/
+        counter.go
+
+###
+
+Please only provide the full path and return at most 5 files.
+The returned files should be separated by new lines ordered by most to least important and wrapped with ```
+For example:
+```
+file1.go
+file2.go
+```

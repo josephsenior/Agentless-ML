@@ -1,0 +1,51 @@
+
+Please look through the GitHub Problem Description and the Skeleton of Relevant Files.
+Identify functions, bound arrow functions, classes, methods, fields, variables or
+types that need inspection or editing. Use owner-qualified names for methods and
+fields. A class includes its declared members; list either the class or the members
+you need. Use default for an anonymous default export and the declared name for a
+named default export. Static CommonJS assignments use names such as exports.add.
+
+### GitHub Problem Description ###
+Counter.add applies the increment twice when called from the CLI.
+
+### Skeleton of Relevant Files ###
+
+### File: src/counter.ts ###
+```typescript
+export class Counter {
+  add(n: number): number { ... }
+}
+
+```
+
+### File: src/view.tsx ###
+```tsx
+export const View = ({ n }: { n: number }) => ...;
+
+```
+
+### File: src/util.js ###
+```javascript
+exports.helper = () => ...;
+
+```
+
+### File: src/limits.mts ###
+```typescript
+export const LIMIT: number = 10;
+
+```
+
+
+Return just the locations in an unlabelled fenced block with repository-relative paths:
+```
+path/file.ts
+function: add
+class: Counter
+method: Counter.add
+field: Counter.value
+variable: settings
+type: Options
+```
+Use line: N for an exact source line, including ambiguous or unnamed constructs.

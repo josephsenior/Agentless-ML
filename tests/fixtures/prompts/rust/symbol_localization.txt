@@ -1,0 +1,38 @@
+
+Identify Rust declarations that need inspection or editing from the issue and skeletons.
+Use source-spelled names with :: separators. Inherent methods use Counter::add;
+trait implementations use <Counter as Reset>::reset. Include generic arguments
+as written in the impl type. Inline modules add their name as a prefix.
+A struct does not include its separate impl blocks. Ambiguous names need qualification
+or an exact line location. Macro-generated declarations are not expanded.
+
+### GitHub Problem Description ###
+Counter.add applies the increment twice when called from the CLI.
+
+### Skeleton of Relevant Files ###
+
+### File: src/lib.rs ###
+```rust
+pub const LIMIT: i32 = 10;
+
+pub struct Counter { value: i32 }
+
+impl Counter {
+    pub fn add(&mut self, n: i32) { ... }
+}
+
+```
+
+
+Return locations in an unlabelled fenced block with repository-relative paths:
+```
+src/lib.rs
+function: add
+method: Counter::add
+type: Counter
+trait: Reset
+impl: <Counter as Reset>
+module: helpers
+constant: LIMIT
+```
+Use line: N for an exact source line.
