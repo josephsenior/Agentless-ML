@@ -72,9 +72,12 @@ def select_candidate(candidates: Sequence[PatchCandidate]) -> SelectionResult:
             if _results(candidate, ValidationKind.REGRESSION)
         ]
         if with_regression:
+            # One unit per failing test when the command wrote a report, otherwise
+            # one per failing command. Every candidate runs the same frozen
+            # schedule, so each command contributes the same kind of unit.
             failures = {
                 candidate.candidate_id: sum(
-                    result.status is not ValidationStatus.PASS
+                    result.failure_count()
                     for result in _results(candidate, ValidationKind.REGRESSION)
                 )
                 for candidate in with_regression

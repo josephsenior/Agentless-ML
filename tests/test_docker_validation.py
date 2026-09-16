@@ -50,44 +50,69 @@ def test_snapshot_excludes_history(tmp_path):
         assert archive.extractfile("a.py").read() == b"value = 1\n"
 
 
-@pytest.mark.parametrize(
-    "exit_code,oom,timed_out,expected",
-    [
-        (0, False, False, "pass"),
-        (1, False, False, "fail"),
-        (2, False, False, "harness_error"),
-        (127, False, False, "harness_error"),
-        (137, True, False, "out_of_memory"),
-        (137, False, True, "timeout"),
-    ],
-)
-def test_execution_outcomes_and_cleanup(
-    tmp_path, monkeypatch, exit_code, oom, timed_out, expected
-):
-    calls = []
+def fake_docker(calls, *, exit_code=0, oom=False, running=True, timed_out=False, files=None):
+    """A Docker CLI stand-in for the exec-based lifecycle.
+
+    ``files`` maps container paths to the bytes a command left there.
+    """
+    files = files or {}
 
     def docker(*args, **kwargs):
         calls.append(args)
-        output = b""
         if args[:2] == ("image", "inspect"):
-            output = json.dumps(
-                [{"Id": "sha256:fixed", "Os": "linux", "Config": {}}]
-            ).encode()
-        elif args[0] == "inspect":
-            output = json.dumps(
-                [{"State": {"ExitCode": exit_code, "OOMKilled": oom}}]
-            ).encode()
-        elif args[0] == "wait" and timed_out:
-            raise subprocess.TimeoutExpired("docker wait", 1)
-        elif args[0] == "logs":
-            output = b"test evidence\n"
-        return subprocess.CompletedProcess(args, 0, output, b"")
+            output = json.dumps([{"Id": "sha256:fixed", "Os": "linux", "Config": {}}])
+            return subprocess.CompletedProcess(args, 0, output.encode(), b"")
+        if args[0] == "inspect":
+            state = {"Running": running, "OOMKilled": oom}
+            return subprocess.CompletedProcess(args, 0, json.dumps([{"State": state}]).encode(), b"")
+        if args[0] == "exec" and "public-test" in args:
+            if timed_out:
+                raise subprocess.TimeoutExpired("docker exec", 1)
+            return subprocess.CompletedProcess(args, exit_code, b"", b"")
+        if args[0] == "exec" and ("read-file" in args or "tail-file" in args):
+            path = args[args.index("read-file" if "read-file" in args else "tail-file") + 1]
+            if path in files:
+                return subprocess.CompletedProcess(args, 0, files[path], b"")
+            return subprocess.CompletedProcess(args, 1, b"", b"")
+        return subprocess.CompletedProcess(args, 0, b"", b"")
 
-    monkeypatch.setattr(DockerTestRunner, "_docker", staticmethod(docker))
+    return docker
+
+
+def run_fake(tmp_path, monkeypatch, command, **state):
+    calls = []
+    monkeypatch.setattr(DockerTestRunner, "_docker", staticmethod(fake_docker(calls, **state)))
     source = tmp_path / "source"
-    source.mkdir()
+    source.mkdir(exist_ok=True)
     runner = DockerTestRunner("python:local", tmp_path / "logs")
-    execution = runner.run(source, PublicTestCommand(("python", "-m", "unittest")))
+    return runner.run(source, command), calls
+
+
+@pytest.mark.parametrize(
+    "exit_code,oom,running,timed_out,expected",
+    [
+        (0, False, True, False, "pass"),
+        (1, False, True, False, "fail"),
+        (2, False, True, False, "harness_error"),
+        (127, False, True, False, "harness_error"),
+        (137, True, True, False, "out_of_memory"),
+        (137, False, False, False, "harness_error"),
+        (None, False, True, True, "timeout"),
+    ],
+)
+def test_execution_outcomes_and_cleanup(
+    tmp_path, monkeypatch, exit_code, oom, running, timed_out, expected
+):
+    execution, calls = run_fake(
+        tmp_path,
+        monkeypatch,
+        PublicTestCommand(("python", "-m", "unittest")),
+        exit_code=exit_code,
+        oom=oom,
+        running=running,
+        timed_out=timed_out,
+        files={"/tmp/agentless-stdout": b"test evidence\n"},
+    )
     assert execution.result.status.value == expected
     assert calls[-1][:3] == ("rm", "--force", "--volumes")
     create = next(call for call in calls if call[0] == "create")
@@ -95,14 +120,79 @@ def test_execution_outcomes_and_cleanup(
     assert "--cap-drop=ALL" in create and "--user=65534:65534" in create
     assert "sha256:fixed" in create
     assert not any(arg.startswith("--mount") or arg == "-v" for arg in create)
+    # The command reaches the container only as positional exec arguments.
+    assert "unittest" not in create
+    command_exec = next(call for call in calls if "public-test" in call)
+    assert command_exec[-3:] == ("python", "-m", "unittest")
     record = json.loads(
         Path(execution.artifact_directory, "execution.json").read_text()
     )
     assert record["result"]["status"] == expected
     assert record["image_id"] == "sha256:fixed"
+    assert record["report"] is None
+    # Output is still collected after a timeout: it explains what was running.
+    assert Path(execution.artifact_directory, "stdout.log").read_bytes() == b"test evidence\n"
 
 
-@pytest.mark.parametrize("failed_operation", ["create", "exec", "start", "logs", "rm"])
+JUNIT = b"""<?xml version="1.0" encoding="utf-8"?>
+<testsuites><testsuite name="pytest" tests="3">
+<testcase classname="tests.test_calc" name="test_add"/>
+<testcase classname="tests.test_calc" name="test_sub"><failure message="boom"/></testcase>
+<testcase classname="tests.test_calc" name="test_skip"><skipped/></testcase>
+</testsuite></testsuites>"""
+
+
+@pytest.mark.parametrize(
+    "exit_code,files,expected,cases,message",
+    [
+        (1, {"/tmp/work/report.xml": JUNIT}, "fail", 3, ""),
+        (0, {"/tmp/work/report.xml": JUNIT}, "harness_error", 0, "contradicts"),
+        (1, {}, "harness_error", 0, "was not written"),
+        (1, {"/tmp/work/report.xml": b"<not xml"}, "harness_error", 0, "malformed"),
+        (
+            1,
+            {"/tmp/work/report.xml": JUNIT.replace(b"<failure message=\"boom\"/>", b"")},
+            "harness_error",
+            0,
+            "shows no failed test",
+        ),
+    ],
+)
+def test_declared_report_becomes_per_test_evidence(
+    tmp_path, monkeypatch, exit_code, files, expected, cases, message
+):
+    from agentless_ml.validation import ReportFormat, TestReport
+
+    command = PublicTestCommand(
+        ("python", "-m", "pytest", "--junitxml=report.xml"),
+        report=TestReport(ReportFormat.JUNIT_XML, "report.xml"),
+    )
+    execution, _ = run_fake(tmp_path, monkeypatch, command, exit_code=exit_code, files=files)
+    assert execution.result.status.value == expected
+    assert len(execution.result.test_cases) == cases
+    assert message in execution.message
+    record = json.loads(Path(execution.artifact_directory, "execution.json").read_text())
+    assert record["report"]["format"] == "junit-xml"
+    if cases:
+        assert record["report"]["artifact"] == "report.xml"
+        assert Path(execution.artifact_directory, "report.xml").read_bytes() == JUNIT
+        assert execution.result.failure_count() == 1
+
+
+def test_report_is_not_read_after_infrastructure_failure(tmp_path, monkeypatch):
+    from agentless_ml.validation import ReportFormat, TestReport
+
+    command = PublicTestCommand(
+        ("pytest",), report=TestReport(ReportFormat.JUNIT_XML, "/tmp/report.xml")
+    )
+    execution, calls = run_fake(
+        tmp_path, monkeypatch, command, timed_out=True, files={"/tmp/report.xml": JUNIT}
+    )
+    assert execution.result.status is ValidationStatus.TIMEOUT
+    assert not any("read-file" in call for call in calls)
+
+
+@pytest.mark.parametrize("failed_operation", ["create", "exec", "start", "inspect", "rm"])
 def test_docker_failures_never_become_test_failures(
     tmp_path, monkeypatch, failed_operation
 ):
@@ -265,3 +355,55 @@ def test_real_container_boundaries(tmp_path, argv, timeout, status):
     execution = runner.run(source, PublicTestCommand(argv, timeout_seconds=timeout))
     assert execution.result.status is status, execution.message
     assert not (source / "scratch").exists()
+
+
+@docker_enabled
+@pytest.mark.parametrize("exit_code,status", [(1, ValidationStatus.FAIL), (0, ValidationStatus.PASS)])
+def test_real_report_is_read_from_read_only_container(tmp_path, exit_code, status):
+    from agentless_ml.validation import ReportFormat, TestReport
+
+    source = tmp_path / "source"
+    source.mkdir()
+    failure = "<failure message='x'/>" if exit_code else ""
+    # Written by the command itself inside /tmp/work, then read before removal.
+    (source / "write_report.py").write_text(
+        "import sys\n"
+        "open('report.xml', 'w').write(\"<testsuites><testsuite>"
+        "<testcase classname='suite' name='kept'/>"
+        f"<testcase classname='suite' name='changed'>{failure}</testcase>"
+        "</testsuite></testsuites>\")\n"
+        f"sys.exit({exit_code})\n",
+        encoding="utf-8",
+    )
+    runner = DockerTestRunner(
+        os.environ.get("AGENTLESS_TEST_IMAGE", "python:3.11-slim"), tmp_path / "logs"
+    )
+    command = PublicTestCommand(
+        ("python", "write_report.py"),
+        report=TestReport(ReportFormat.JUNIT_XML, "report.xml"),
+    )
+    execution = runner.run(source, command)
+    assert execution.result.status is status, execution.message
+    assert [(c.test_id, c.status.value) for c in execution.result.test_cases] == [
+        ("suite::kept", "passed"),
+        ("suite::changed", "failed" if exit_code else "passed"),
+    ]
+    assert Path(execution.artifact_directory, "report.xml").exists()
+    assert not (source / "report.xml").exists()
+
+
+@docker_enabled
+def test_real_out_of_memory_is_not_a_test_failure(tmp_path):
+    source = tmp_path / "source"
+    source.mkdir()
+    runner = DockerTestRunner(
+        os.environ.get("AGENTLESS_TEST_IMAGE", "python:3.11-slim"),
+        tmp_path / "logs",
+        memory_mb=64,
+    )
+    command = PublicTestCommand(
+        ("python", "-c", "b = bytearray(512 * 1024 * 1024); print(len(b))"),
+        timeout_seconds=60,
+    )
+    execution = runner.run(source, command)
+    assert execution.result.status is ValidationStatus.OUT_OF_MEMORY, execution.message

@@ -36,11 +36,16 @@ removal before rebuilding a diff. The resulting voting groups can differ; the
 current textual key is provisional and does not establish semantic equivalence.
 See the [replication map](replication-map.md) for the rationale and alternative.
 
-The selector counts supplied regression results. With the current Docker runner,
-each result describes one command, which may execute many tests. This is not
-equivalent to upstream individual failed-test counts unless the schedule or report
-adapter supplies that granularity. Local policy tests do not establish full
-upstream selection parity.
+The selector sums `failure_count()` over each candidate's regression results. A
+command that declared a test report contributes one unit per failing test; a
+command without one contributes one unit if it failed. Every candidate runs the
+same frozen schedule, so the same command always contributes the same kind of
+unit. Example: two candidates both fail a 100-test suite command; one breaks two
+tests and the other one test, so the second is kept, where command-level counting
+would have tied them. See [per-test results](public-validation.md#per-test-results-from-reports).
+Upstream also restricts the count to regression tests selected at the start; that
+test-level selection is not implemented yet. Local policy tests do not establish
+full upstream selection parity.
 
 ## Still outside this boundary
 

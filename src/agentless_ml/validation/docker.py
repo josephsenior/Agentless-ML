@@ -13,14 +13,25 @@ import uuid
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
-from agentless_ml.schemas import ValidationKind, ValidationResult, ValidationStatus
+from agentless_ml.schemas import (
+    TestCaseStatus,
+    ValidationKind,
+    ValidationResult,
+    ValidationStatus,
+)
+
+from .reports import MAX_REPORT_BYTES, ReportError, TestReport, parse_report
+
+LOG_TAIL_BYTES = 1024 * 1024
 
 
 @dataclass(frozen=True)
 class PublicTestCommand:
     """Exit codes are a controller declaration for a known test runner.
 
-    Each command is one selection unit, not necessarily one individual test.
+    Without ``report`` the command is one selection unit. With ``report`` the
+    runner reads the per-test outcomes the command writes, so each test counts.
+    ``counted_test_ids`` limits which of those tests count during selection.
     For pytest, 1 means test failure; collection/usage errors remain harness errors.
     """
 
@@ -28,6 +39,8 @@ class PublicTestCommand:
     kind: ValidationKind = ValidationKind.REGRESSION
     timeout_seconds: float = 60
     failure_exit_codes: tuple[int, ...] = (1,)
+    report: TestReport | None = None
+    counted_test_ids: tuple[str, ...] | None = None
 
     def __post_init__(self):
         if not self.argv or any(
@@ -41,6 +54,13 @@ class PublicTestCommand:
             for code in self.failure_exit_codes
         ):
             raise ValueError("test failure exit codes must be between 1 and 124")
+        if self.counted_test_ids is not None:
+            if self.report is None:
+                raise ValueError("counted_test_ids requires a test report")
+            if not self.counted_test_ids or len(set(self.counted_test_ids)) != len(
+                self.counted_test_ids
+            ):
+                raise ValueError("counted_test_ids must be nonempty and unique")
 
 
 @dataclass(frozen=True)
@@ -109,7 +129,7 @@ class DockerTestRunner:
         self.pids_limit, self.tmpfs_mb = pids_limit, tmpfs_mb
 
     @staticmethod
-    def _docker(*args: str, timeout: float = 30, stdin=None):
+    def _docker(*args: str, timeout: float = 30, stdin=None, check: bool = True):
         result = subprocess.run(
             ["docker", *args],
             stdin=stdin,
@@ -117,9 +137,26 @@ class DockerTestRunner:
             timeout=timeout,
             check=False,
         )
-        if result.returncode:
+        if check and result.returncode:
             raise DockerError(result.stderr.decode("utf-8", errors="replace")[:2000])
         return result
+
+    def _read_file(self, name: str, path: str, limit: int) -> bytes | None:
+        """The first ``limit`` bytes of a container file, or None if it is absent."""
+        result = self._docker(
+            "exec", name, "/bin/sh", "-c",
+            'test -f "$1" && head -c "$2" "$1"', "read-file", path, str(limit),
+            check=False,
+        )
+        return result.stdout if result.returncode == 0 else None
+
+    def _tail_file(self, name: str, path: str) -> bytes:
+        result = self._docker(
+            "exec", name, "/bin/sh", "-c",
+            'test -f "$1" && tail -c "$2" "$1"', "tail-file", path, str(LOG_TAIL_BYTES),
+            check=False,
+        )
+        return result.stdout if result.returncode == 0 else b""
 
     def run(
         self,
@@ -146,14 +183,17 @@ class DockerTestRunner:
         exit_code = None
         message = ""
         stdout = stderr = b""
+        report_bytes: bytes | None = None
+        test_cases = ()
         attempted_create = False
         try:
             with tempfile.TemporaryDirectory(prefix="agentless-snapshot-") as temporary:
                 snapshot = Path(temporary) / "source.tar"
                 _snapshot(source, snapshot)
                 attempted_create = True
-                # The shell script is fixed. User command arguments are passed as
-                # positional arguments to exec, never interpolated into shell code.
+                # The container itself only waits. The command runs through
+                # `docker exec`, so files it writes to the memory-only /tmp (its
+                # output and report) can be read before the container is removed.
                 self._docker(
                     "create",
                     "--name",
@@ -182,9 +222,7 @@ class DockerTestRunner:
                     "--entrypoint=/bin/sh",
                     self.image_id,
                     "-c",
-                    'while [ ! -f /tmp/ready ]; do sleep 0.1; done; cd /tmp/work || exit 125; exec "$@"',
-                    "public-test",
-                    *command.argv,
+                    "while :; do sleep 1; done",
                 )
                 self._docker("start", name)
                 with snapshot.open("rb") as stream:
@@ -194,29 +232,67 @@ class DockerTestRunner:
                         name,
                         "/bin/sh",
                         "-c",
-                        "mkdir /tmp/work && tar -xf - -C /tmp/work && touch /tmp/ready",
+                        "mkdir /tmp/work && tar -xf - -C /tmp/work",
                         stdin=stream,
                     )
             try:
-                self._docker("wait", name, timeout=command.timeout_seconds)
+                # The shell script is fixed. User command arguments are passed as
+                # positional arguments, never interpolated into shell code.
+                completed = self._docker(
+                    "exec",
+                    name,
+                    "/bin/sh",
+                    "-c",
+                    'cd /tmp/work || exit 125; "$@" >/tmp/agentless-stdout 2>/tmp/agentless-stderr',
+                    "public-test",
+                    *command.argv,
+                    timeout=command.timeout_seconds,
+                    check=False,
+                )
+                exit_code = completed.returncode
             except subprocess.TimeoutExpired:
                 status = ValidationStatus.TIMEOUT
-                self._docker("kill", name)
             state = json.loads(self._docker("inspect", name).stdout)[0]["State"]
-            exit_code = state["ExitCode"]
             if status is not ValidationStatus.TIMEOUT:
                 if state.get("OOMKilled"):
                     status = ValidationStatus.OUT_OF_MEMORY
-                elif state.get("Error") or state.get("Running"):
+                elif state.get("Error") or not state.get("Running"):
                     status = ValidationStatus.HARNESS_ERROR
+                    message = "container stopped while the command was running"
                 elif exit_code == 0:
                     status = ValidationStatus.PASS
                 elif exit_code in command.failure_exit_codes:
                     status = ValidationStatus.FAIL
                 else:
                     status = ValidationStatus.HARNESS_ERROR
-            logs = self._docker("logs", "--tail=1000", name)
-            stdout, stderr = logs.stdout, logs.stderr
+            stdout = self._tail_file(name, "/tmp/agentless-stdout")
+            stderr = self._tail_file(name, "/tmp/agentless-stderr")
+            if command.report is not None and status in (
+                ValidationStatus.PASS,
+                ValidationStatus.FAIL,
+            ):
+                report_path = command.report.container_path()
+                report_bytes = self._read_file(name, report_path, MAX_REPORT_BYTES + 1)
+                try:
+                    if report_bytes is None:
+                        raise ReportError(f"declared test report was not written: {report_path}")
+                    test_cases = parse_report(report_bytes, command.report.format)
+                    failing = any(
+                        case.status in (TestCaseStatus.FAILED, TestCaseStatus.ERROR)
+                        for case in test_cases
+                    )
+                    # A disagreement means the command or its exit codes are
+                    # misdeclared, so neither signal can be trusted as evidence.
+                    if status is ValidationStatus.PASS and failing:
+                        raise ReportError("exit status 0 contradicts failed tests in the report")
+                    if status is ValidationStatus.FAIL and not failing:
+                        raise ReportError(
+                            "failure exit code, but the report shows no failed test"
+                        )
+                except ReportError as exc:
+                    status = ValidationStatus.HARNESS_ERROR
+                    message = str(exc)[:2000]
+                    test_cases = ()
         except (
             DockerError,
             OSError,
@@ -235,6 +311,11 @@ class DockerTestRunner:
                     message += f" Cleanup failed for {name}: {exc}"
         (artifacts / "stdout.log").write_bytes(stdout)
         (artifacts / "stderr.log").write_bytes(stderr)
+        report_artifact = None
+        if report_bytes is not None and command.report is not None:
+            suffix = ".xml" if command.report.format.value == "junit-xml" else ".json"
+            report_artifact = "report" + suffix
+            (artifacts / report_artifact).write_bytes(report_bytes)
         result = ValidationResult(
             status=status,
             command=command.argv,
@@ -243,6 +324,8 @@ class DockerTestRunner:
             stdout_digest=hashlib.sha256(stdout).hexdigest(),
             stderr_digest=hashlib.sha256(stderr).hexdigest(),
             kind=command.kind,
+            test_cases=test_cases,
+            counted_test_ids=command.counted_test_ids,
         )
         execution = TestExecution(result, self.image_id, name, str(artifacts), message)
         record = asdict(execution)
@@ -254,7 +337,17 @@ class DockerTestRunner:
             "timeout_seconds": command.timeout_seconds,
         }
         record["failure_exit_codes"] = command.failure_exit_codes
-        record["logs"] = "last 1000 lines within Docker's rotating 1 MB log"
+        record["logs"] = f"last {LOG_TAIL_BYTES} bytes of the command's stdout and stderr"
+        record["report"] = (
+            None
+            if command.report is None
+            else {
+                "format": command.report.format.value,
+                "path": command.report.path,
+                "artifact": report_artifact,
+                "test_cases": len(test_cases),
+            }
+        )
         (artifacts / "execution.json").write_text(
             json.dumps(record, indent=2) + "\n", encoding="utf-8"
         )

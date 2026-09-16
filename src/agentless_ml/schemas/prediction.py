@@ -20,6 +20,29 @@ class ValidationKind(StrEnum):
     REPRODUCTION = "reproduction"
 
 
+class TestCaseStatus(StrEnum):
+    __test__ = False  # A result schema, not a pytest test class.
+
+    PASSED = "passed"
+    FAILED = "failed"
+    SKIPPED = "skipped"
+    ERROR = "error"
+
+
+@dataclass(frozen=True, slots=True)
+class TestCaseResult:
+    """One individual test's outcome, read from a runner-written report."""
+
+    __test__ = False
+
+    test_id: str
+    status: TestCaseStatus
+
+    def __post_init__(self) -> None:
+        if not self.test_id.strip() or any(c in self.test_id for c in "\r\n\0"):
+            raise ValueError("test_id must be a nonempty single line")
+
+
 @dataclass(frozen=True, slots=True)
 class ValidationResult:
     status: ValidationStatus
@@ -29,12 +52,44 @@ class ValidationResult:
     stdout_digest: str | None = None
     stderr_digest: str | None = None
     kind: ValidationKind = ValidationKind.REGRESSION
+    # Empty when the command declared no report: then the command is one unit.
+    test_cases: tuple[TestCaseResult, ...] = ()
+    # Test IDs whose failure counts during selection; None counts every test case.
+    counted_test_ids: tuple[str, ...] | None = None
 
     def __post_init__(self) -> None:
         if self.duration_seconds < 0:
             raise ValueError("duration_seconds must not be negative")
         if not self.command:
             raise ValueError("validation command must not be empty")
+        ids = [case.test_id for case in self.test_cases]
+        if len(set(ids)) != len(ids):
+            raise ValueError("test case IDs must be unique")
+        has_evidence = self.status in (ValidationStatus.PASS, ValidationStatus.FAIL)
+        if self.counted_test_ids is not None and has_evidence and not self.test_cases:
+            raise ValueError("counted_test_ids requires per-test results")
+
+    def failure_count(self) -> int:
+        """How many selection units failed.
+
+        Without a report the command is one unit. With a report, every failed or
+        errored test counts. When ``counted_test_ids`` names the tests that passed
+        on the unpatched code, each of those counts unless it passed again:
+        skipped or missing from the report is not evidence that it still works.
+        """
+        if not self.test_cases:
+            return 0 if self.status is ValidationStatus.PASS else 1
+        if self.counted_test_ids is None:
+            return sum(
+                case.status in (TestCaseStatus.FAILED, TestCaseStatus.ERROR)
+                for case in self.test_cases
+            )
+        passed = {
+            case.test_id
+            for case in self.test_cases
+            if case.status is TestCaseStatus.PASSED
+        }
+        return sum(test_id not in passed for test_id in self.counted_test_ids)
 
 
 @dataclass(frozen=True, slots=True)
