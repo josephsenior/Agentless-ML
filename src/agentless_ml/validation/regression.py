@@ -1,8 +1,14 @@
 """Select existing regression checks by ID, never by model-generated commands."""
 
-from dataclasses import dataclass
+from collections.abc import Sequence
+from dataclasses import dataclass, replace
 
-from agentless_ml.schemas import ValidationKind
+from agentless_ml.schemas import (
+    TestCaseStatus,
+    ValidationKind,
+    ValidationResult,
+    ValidationStatus,
+)
 
 from .docker import PublicTestCommand
 
@@ -34,6 +40,53 @@ def render_regression_selection_prompt(
         "Return only exact test IDs, one per line, optionally inside an unlabelled fenced block.\n"
         "Return an empty response to exclude none. Do not invent tests or commands."
     )
+
+
+def regression_baseline_ids(test: RegressionTest, result: ValidationResult) -> tuple[str, ...]:
+    """Which IDs this command's baseline run contributes as passing evidence.
+
+    A command with a declared report contributes each test that individually
+    passed, by name, whether the command's own exit was PASS or FAIL: a suite
+    that mixes already-broken tests with working ones should not lose the
+    working ones as evidence. A command with no report contributes its own
+    ``test_id`` as one unit, and only if the whole command passed.
+    """
+    if result.test_cases:
+        return tuple(
+            case.test_id for case in result.test_cases if case.status is TestCaseStatus.PASSED
+        )
+    return (test.test_id,) if result.status is ValidationStatus.PASS else ()
+
+
+@dataclass(frozen=True, slots=True)
+class RegressionBaseline:
+    """One command's baseline outcome, kept to build the frozen schedule."""
+
+    test: RegressionTest
+    passing_ids: tuple[str, ...]
+    from_report: bool
+
+
+def select_regression_commands(
+    baselines: Sequence[RegressionBaseline], excluded: tuple[str, ...]
+) -> tuple[PublicTestCommand, ...]:
+    """The frozen commands for candidates: unchanged, or narrowed to kept tests.
+
+    A command is dropped once none of its baseline-passing IDs survive
+    exclusion: it would contribute exactly zero counted tests either way.
+    """
+    excluded_set = set(excluded)
+    commands = []
+    for baseline in baselines:
+        kept = tuple(test_id for test_id in baseline.passing_ids if test_id not in excluded_set)
+        if not kept:
+            continue
+        commands.append(
+            replace(baseline.test.command, counted_test_ids=kept)
+            if baseline.from_report
+            else baseline.test.command
+        )
+    return tuple(commands)
 
 
 def parse_regression_exclusions(

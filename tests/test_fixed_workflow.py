@@ -398,6 +398,137 @@ def test_regression_selection_failures_stop_candidates(
     assert (directory / "failure.json").exists()
 
 
+class SuiteReportRunner:
+    """A regression command whose report lists three individual tests.
+
+    test_a and test_b already pass on the unpatched code: they are the
+    behavior a repair must not break. test_c is a pre-existing, unrelated
+    failure that is broken before any repair and stays broken after every
+    repair; it was never baseline-passing evidence, so it must never count
+    against a candidate. test_b specifically breaks if a candidate multiplies
+    instead of adds ("*" repair), so it catches a real regression; "+" never
+    triggers it, at baseline or in a repair.
+    """
+
+    image_reference = "python:fixture"
+    image_id = "sha256:fixture"
+
+    def __init__(self):
+        self.calls = []
+
+    def run(self, source, command, *, artifact_root=None):
+        from agentless_ml.schemas import TestCaseResult, TestCaseStatus
+
+        content = (Path(source) / "calculator.py").read_text()
+        self.calls.append(content)
+        cases = (
+            TestCaseResult("test_a", TestCaseStatus.PASSED),
+            TestCaseResult(
+                "test_b",
+                TestCaseStatus.FAILED
+                if "a * b" in content
+                else TestCaseStatus.PASSED,
+            ),
+            TestCaseResult("test_c", TestCaseStatus.FAILED),
+        )
+        destination = Path(artifact_root) / "execution"
+        destination.mkdir(parents=True)
+        return ExecutionRecord(
+            ValidationResult(
+                # test_c always fails, so the command's OWN status is always
+                # FAIL. Selection must rely on failure_count(), never on this.
+                status=ValidationStatus.FAIL,
+                command=command.argv,
+                duration_seconds=0,
+                kind=command.kind,
+                exit_code=1,
+                test_cases=cases,
+            ),
+            self.image_id,
+            "fixture",
+            str(destination),
+        )
+
+
+def test_regression_selection_counts_individual_tests_from_a_report(tmp_path, source):
+    from agentless_ml.validation import RegressionTest, ReportFormat, TestReport
+
+    repository, commit = source
+    runner = SuiteReportRunner()
+    controller = FixedWorkflowController(
+        task=task(commit),
+        source_repository=repository,
+        workspace_root=tmp_path / "workspaces",
+        artifact_root=tmp_path / "runs",
+        runner=runner,
+        public_commands=(),
+        regression_tests=(
+            RegressionTest(
+                "suite",
+                PublicTestCommand(
+                    ("suite",),
+                    report=TestReport(ReportFormat.JUNIT_XML, "report.xml"),
+                ),
+            ),
+        ),
+        implementation_revision="fixture",
+        harness_revision="fixture",
+        model_name="recorded",
+    )
+    result = controller.run(replace(responses(), regression_exclusions=""))
+    directory = Path(result.artifact_directory)
+
+    selection = json.loads((directory / "regression-selection.json").read_text())
+    # test_c never passed at baseline, so it is not shown to the model at all.
+    assert selection["passing_ids"] == ["test_a", "test_b"]
+    assert selection["excluded_ids"] == []
+
+    controller_json = json.loads((directory / "controller.json").read_text())
+    (command,) = controller_json["public_commands"]
+    assert sorted(command["counted_test_ids"]) == ["test_a", "test_b"]
+
+    # repair-2 ("+") is the real fix: test_b starts passing. test_c keeps
+    # failing throughout and never affects which candidate is selected.
+    assert result.prediction.selected_candidate_id == "repair-2"
+
+
+def test_model_can_exclude_one_test_by_name_and_keep_the_rest_of_the_suite(
+    tmp_path, source
+):
+    from agentless_ml.validation import RegressionTest, ReportFormat, TestReport
+
+    repository, commit = source
+    runner = SuiteReportRunner()
+    controller = FixedWorkflowController(
+        task=task(commit),
+        source_repository=repository,
+        workspace_root=tmp_path / "workspaces",
+        artifact_root=tmp_path / "runs",
+        runner=runner,
+        public_commands=(),
+        regression_tests=(
+            RegressionTest(
+                "suite",
+                PublicTestCommand(
+                    ("suite",),
+                    report=TestReport(ReportFormat.JUNIT_XML, "report.xml"),
+                ),
+            ),
+        ),
+        implementation_revision="fixture",
+        harness_revision="fixture",
+        model_name="recorded",
+    )
+    # The model excludes test_b itself: it says the fix is expected to change
+    # that specific test's behavior. test_a stays a counted regression check.
+    result = controller.run(replace(responses(), regression_exclusions="test_b"))
+    controller_json = json.loads(
+        (Path(result.artifact_directory) / "controller.json").read_text()
+    )
+    (command,) = controller_json["public_commands"]
+    assert command["counted_test_ids"] == ["test_a"]
+
+
 def test_inventory_requires_recorded_selection(tmp_path, source):
     runner = RegressionRunner()
     with pytest.raises(WorkflowError, match="together"):

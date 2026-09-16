@@ -132,8 +132,11 @@ report + counted_test_ids        -> each counted test that did not pass;
 
 `counted_test_ids` is meant for tests that passed on the unpatched code: if one of
 them is skipped or disappears after a patch, that is not evidence it still works.
-Nothing sets `counted_test_ids` yet; test-level regression selection is not
-implemented.
+The fixed workflow's regression stage sets it: for a report-bearing command, the
+baseline run's individually-passing test names become the candidate schedule
+(narrowed further by whatever the model excludes by name); a command with no
+report keeps counting as one whole unit, exactly as before. See
+[Regression selection](regression-selection.md).
 
 Timeouts, Docker-reported OOM kills, patch rejection, and infrastructure errors
 remain distinct. Cleanup failures make results ineligible and record the container

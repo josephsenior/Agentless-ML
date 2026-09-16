@@ -53,8 +53,11 @@ from agentless_ml.validation import (
     validate_candidate,
 )
 from agentless_ml.validation.regression import (
+    RegressionBaseline,
     parse_regression_exclusions,
+    regression_baseline_ids,
     render_regression_selection_prompt,
+    select_regression_commands,
 )
 from agentless_ml.validation.reproduction import (
     ReproductionSpec,
@@ -381,7 +384,8 @@ class FixedWorkflowController:
                 public_commands += (spec.command,)
             if self.regression_tests:
                 baseline = []
-                passing_ids = []
+                baselines: list[RegressionBaseline] = []
+                seen_ids: set[str] = set()
                 # Every check starts from the same unpatched revision, without
                 # filesystem state left by another baseline check.
                 for index, test in enumerate(self.regression_tests):
@@ -402,8 +406,19 @@ class FixedWorkflowController:
                                 "workspace": asdict(workspace.provenance),
                             }
                         )
-                    if execution.result.status == ValidationStatus.PASS:
-                        passing_ids.append(test.test_id)
+                    ids = regression_baseline_ids(test, execution.result)
+                    colliding = seen_ids & set(ids)
+                    if colliding:
+                        raise WorkflowError(
+                            "duplicate regression test IDs across commands: "
+                            + ", ".join(sorted(colliding))
+                        )
+                    seen_ids.update(ids)
+                    baselines.append(
+                        RegressionBaseline(
+                            test, ids, from_report=bool(execution.result.test_cases)
+                        )
+                    )
                 _write_json(directory / "regression-baseline.json", baseline)
                 if any(
                     item["result"]["status"]
@@ -413,32 +428,32 @@ class FixedWorkflowController:
                     raise WorkflowError(
                         "regression baseline has an infrastructure failure"
                     )
+                passing_ids = tuple(
+                    test_id for entry in baselines for test_id in entry.passing_ids
+                )
                 prompt = render_regression_selection_prompt(
-                    self.task.problem_statement, tuple(passing_ids)
+                    self.task.problem_statement, passing_ids
                 )
                 (directory / "regression-selection.txt").write_text(
                     prompt + "\n", encoding="utf-8"
                 )
                 try:
                     excluded = parse_regression_exclusions(
-                        responses.regression_exclusions, tuple(passing_ids)
+                        responses.regression_exclusions, passing_ids
                     )
                 except ValueError as exc:
                     raise WorkflowError(str(exc)) from exc
-                selected = tuple(
-                    test
-                    for test in self.regression_tests
-                    if test.test_id in passing_ids and test.test_id not in excluded
-                )
                 public_commands = (
-                    tuple(test.command for test in selected) + public_commands
+                    select_regression_commands(baselines, excluded) + public_commands
                 )
                 _write_json(
                     directory / "regression-selection.json",
                     {
                         "passing_ids": passing_ids,
                         "excluded_ids": excluded,
-                        "selected_ids": [test.test_id for test in selected],
+                        "selected_ids": tuple(
+                            test_id for test_id in passing_ids if test_id not in excluded
+                        ),
                         "response": responses.regression_exclusions,
                     },
                 )
