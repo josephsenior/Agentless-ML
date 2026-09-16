@@ -7,7 +7,7 @@ regenerates the affected fixtures.
 | Component | Pinned revision | How it is used |
 |---|---|---|
 | [OpenAutoCoder/Agentless](https://github.com/OpenAutoCoder/Agentless) | `b150f28465a77a81a7f4776384957a4271f5bd69` | Published v1.5.0 regression reference |
-| [datacurve-ai/deep-swe](https://github.com/datacurve-ai/deep-swe) | `0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea` | Planned benchmark adapter and official harness |
+| [datacurve-ai/deep-swe](https://github.com/datacurve-ai/deep-swe) | `0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea` | Task corpus for the DeepSWE adapter; pinned by `experiments/deepswe/corpus_pin.json` (113 tasks, agent-visible-file SHA-256, resolved full commits for three abbreviated base commits). `tests/fixtures/deepswe/abs-module-cache-flags/` vendors that task's `task.toml` and `instruction.md` only (Apache-2.0; line endings normalized to LF) |
 | [scaleapi/SWE-bench_Pro-os](https://github.com/scaleapi/SWE-bench_Pro-os) | `ca10a60a5fcae51e6948ffe1485d4153d421e6c5` | Official evaluation harness and task scripts |
 | [ScaleAI/SWE-bench_Pro](https://huggingface.co/datasets/ScaleAI/SWE-bench_Pro) | `7ab5114912baf22bb098818e604c02fe7ad2c11f` | Dataset schema and first answer-free task fixture |
 | [qutebrowser/qutebrowser](https://github.com/qutebrowser/qutebrowser) | `ebfe9b7aa0c4ba9d451f993e08955004aaec4345` | Base checkout for the first real Python slice |

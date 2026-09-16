@@ -1,0 +1,11 @@
+{
+  "repository": "https://github.com/datacurve-ai/deep-swe",
+  "revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+  "agent_files_sha256": "a18b40853100a4e7b3daa86449c97174b8e5194130d0dc63022704c7b8413cd9",
+  "task_count": 113,
+  "resolved_base_commits": {
+    "eicrud-keyset-pagination-cursor": "68dafce500a85227b996d8fcab466d7a0c88809e",
+    "koota-entity-snapshot-rollback": "72ebef44b8e024d877250f055eea60cdfaa45069",
+    "langchain-request-coalescing": "7cef35bfdebd22148a4c62a10bf01f1fde36e722"
+  }
+}
