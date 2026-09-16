@@ -96,11 +96,21 @@ def _snapshot(source: Path, target: Path) -> None:
                 archive.addfile(info)
 
 
+UNPRIVILEGED_USER = "65534:65534"
+
+
 class DockerTestRunner:
     """Images must be trusted and already contain public-test dependencies.
 
     Tags resolve once to an immutable local image ID. Images declaring volumes
     are rejected. No host directory, credential, socket, or Git history is mounted.
+
+    Commands run as UID/GID 65534 with ``HOME=/tmp`` by default. Benchmark images
+    are built as root and keep toolchains and pre-downloaded dependencies in
+    ``/root`` (for example Go's module cache), which 65534 cannot read, and the
+    container has no network to fetch them again. ``run_as_image_user=True`` runs
+    commands as the image's own user with its own ``HOME`` instead; every other
+    restriction still applies.
     """
 
     def __init__(
@@ -112,6 +122,7 @@ class DockerTestRunner:
         cpus: float = 1,
         pids_limit: int = 128,
         tmpfs_mb: int = 256,
+        run_as_image_user: bool = False,
     ):
         if not image or image.startswith("-"):
             raise ValueError("image must be a local image reference")
@@ -127,6 +138,13 @@ class DockerTestRunner:
         self.artifact_root = Path(artifact_root).resolve()
         self.memory_mb, self.cpus = memory_mb, cpus
         self.pids_limit, self.tmpfs_mb = pids_limit, tmpfs_mb
+        self.run_as_image_user = run_as_image_user
+        # An image with no configured user runs as root.
+        self.user = (
+            (metadata["Config"].get("User") or "root")
+            if run_as_image_user
+            else UNPRIVILEGED_USER
+        )
 
     @staticmethod
     def _docker(*args: str, timeout: float = 30, stdin=None, check: bool = True):
@@ -194,6 +212,11 @@ class DockerTestRunner:
                 # The container itself only waits. The command runs through
                 # `docker exec`, so files it writes to the memory-only /tmp (its
                 # output and report) can be read before the container is removed.
+                identity = (
+                    ()
+                    if self.run_as_image_user
+                    else (f"--user={UNPRIVILEGED_USER}", "--env=HOME=/tmp")
+                )
                 self._docker(
                     "create",
                     "--name",
@@ -205,19 +228,21 @@ class DockerTestRunner:
                     "--read-only",
                     "--cap-drop=ALL",
                     "--security-opt=no-new-privileges",
-                    "--user=65534:65534",
+                    *identity,
                     f"--memory={self.memory_mb}m",
                     f"--memory-swap={self.memory_mb}m",
                     f"--cpus={self.cpus}",
                     f"--pids-limit={self.pids_limit}",
                     "--init",
+                    # `exec`: compiled test binaries (Go test binaries, Rust cargo
+                    # tests) are built under /tmp and must be able to run. Docker
+                    # mounts tmpfs noexec unless told otherwise.
                     "--tmpfs",
-                    f"/tmp:rw,nosuid,nodev,size={self.tmpfs_mb}m,mode=1777",
+                    f"/tmp:rw,exec,nosuid,nodev,size={self.tmpfs_mb}m,mode=1777",
                     "--log-driver=json-file",
                     "--log-opt=max-size=1m",
                     "--log-opt=max-file=1",
                     "--workdir=/tmp",
-                    "--env=HOME=/tmp",
                     "--env=PYTHONDONTWRITEBYTECODE=1",
                     "--entrypoint=/bin/sh",
                     self.image_id,
@@ -232,7 +257,7 @@ class DockerTestRunner:
                         name,
                         "/bin/sh",
                         "-c",
-                        "mkdir /tmp/work && tar -xf - -C /tmp/work",
+                        "mkdir /tmp/work && tar --no-same-owner -xf - -C /tmp/work",
                         stdin=stream,
                     )
             try:
@@ -337,6 +362,9 @@ class DockerTestRunner:
             "timeout_seconds": command.timeout_seconds,
         }
         record["failure_exit_codes"] = command.failure_exit_codes
+        # Which user ran the command is experimental provenance: every compared
+        # condition must use the same setting for a task.
+        record["user"] = {"run_as_image_user": self.run_as_image_user, "user": self.user}
         record["logs"] = f"last {LOG_TAIL_BYTES} bytes of the command's stdout and stderr"
         record["report"] = (
             None

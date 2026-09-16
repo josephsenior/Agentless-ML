@@ -50,7 +50,7 @@ def test_snapshot_excludes_history(tmp_path):
         assert archive.extractfile("a.py").read() == b"value = 1\n"
 
 
-def fake_docker(calls, *, exit_code=0, oom=False, running=True, timed_out=False, files=None):
+def fake_docker(calls, *, exit_code=0, oom=False, running=True, timed_out=False, files=None, image_user=""):
     """A Docker CLI stand-in for the exec-based lifecycle.
 
     ``files`` maps container paths to the bytes a command left there.
@@ -60,7 +60,7 @@ def fake_docker(calls, *, exit_code=0, oom=False, running=True, timed_out=False,
     def docker(*args, **kwargs):
         calls.append(args)
         if args[:2] == ("image", "inspect"):
-            output = json.dumps([{"Id": "sha256:fixed", "Os": "linux", "Config": {}}])
+            output = json.dumps([{"Id": "sha256:fixed", "Os": "linux", "Config": {"User": image_user}}])
             return subprocess.CompletedProcess(args, 0, output.encode(), b"")
         if args[0] == "inspect":
             state = {"Running": running, "OOMKilled": oom}
@@ -79,12 +79,14 @@ def fake_docker(calls, *, exit_code=0, oom=False, running=True, timed_out=False,
     return docker
 
 
-def run_fake(tmp_path, monkeypatch, command, **state):
+def run_fake(tmp_path, monkeypatch, command, run_as_image_user=False, **state):
     calls = []
     monkeypatch.setattr(DockerTestRunner, "_docker", staticmethod(fake_docker(calls, **state)))
     source = tmp_path / "source"
     source.mkdir(exist_ok=True)
-    runner = DockerTestRunner("python:local", tmp_path / "logs")
+    runner = DockerTestRunner(
+        "python:local", tmp_path / "logs", run_as_image_user=run_as_image_user
+    )
     return runner.run(source, command), calls
 
 
@@ -118,8 +120,11 @@ def test_execution_outcomes_and_cleanup(
     create = next(call for call in calls if call[0] == "create")
     assert "--network=none" in create and "--read-only" in create
     assert "--cap-drop=ALL" in create and "--user=65534:65534" in create
+    assert "--env=HOME=/tmp" in create
     assert "sha256:fixed" in create
     assert not any(arg.startswith("--mount") or arg == "-v" for arg in create)
+    tmpfs = create[create.index("--tmpfs") + 1]
+    assert tmpfs.startswith("/tmp:") and ",exec," in tmpfs and "noexec" not in tmpfs
     # The command reaches the container only as positional exec arguments.
     assert "unittest" not in create
     command_exec = next(call for call in calls if "public-test" in call)
@@ -130,8 +135,33 @@ def test_execution_outcomes_and_cleanup(
     assert record["result"]["status"] == expected
     assert record["image_id"] == "sha256:fixed"
     assert record["report"] is None
+    assert record["user"] == {"run_as_image_user": False, "user": "65534:65534"}
     # Output is still collected after a timeout: it explains what was running.
     assert Path(execution.artifact_directory, "stdout.log").read_bytes() == b"test evidence\n"
+
+
+@pytest.mark.parametrize("image_user,expected_user", [("", "root"), ("node", "node")])
+def test_run_as_image_user_keeps_every_other_restriction(
+    tmp_path, monkeypatch, image_user, expected_user
+):
+    execution, calls = run_fake(
+        tmp_path,
+        monkeypatch,
+        PublicTestCommand(("go", "test", "./...")),
+        run_as_image_user=True,
+        image_user=image_user,
+    )
+    assert execution.result.status is ValidationStatus.PASS
+    create = next(call for call in calls if call[0] == "create")
+    # The image decides the user and HOME, so toolchains find their own caches.
+    assert not any(arg.startswith("--user") for arg in create)
+    assert not any(arg.startswith("--env=HOME") for arg in create)
+    for restriction in ("--network=none", "--read-only", "--cap-drop=ALL",
+                        "--security-opt=no-new-privileges", "--pull=never", "--init"):
+        assert restriction in create
+    assert not any(arg.startswith("--mount") or arg == "-v" for arg in create)
+    record = json.loads(Path(execution.artifact_directory, "execution.json").read_text())
+    assert record["user"] == {"run_as_image_user": True, "user": expected_user}
 
 
 JUNIT = b"""<?xml version="1.0" encoding="utf-8"?>
@@ -407,3 +437,30 @@ def test_real_out_of_memory_is_not_a_test_failure(tmp_path):
     )
     execution = runner.run(source, command)
     assert execution.result.status is ValidationStatus.OUT_OF_MEMORY, execution.message
+
+
+@docker_enabled
+def test_real_image_user_keeps_read_only_root_and_no_network(tmp_path):
+    source = tmp_path / "source"
+    source.mkdir()
+    # Checks run by the command itself, inside the container.
+    (source / "check.py").write_text(
+        "import os, socket, subprocess\n"
+        "assert os.getuid() == 0, os.getuid()\n"
+        "try:\n    open('/usr/agentless-probe', 'w')\nexcept OSError:\n    pass\n"
+        "else:\n    raise SystemExit('root filesystem is writable')\n"
+        "try:\n    socket.create_connection(('1.1.1.1', 53), timeout=2)\n"
+        "except OSError:\n    pass\nelse:\n    raise SystemExit('network is reachable')\n"
+        "open('/tmp/tool.sh', 'w').write('#!/bin/sh\\necho compiled-ok\\n')\n"
+        "os.chmod('/tmp/tool.sh', 0o755)\n"
+        "assert subprocess.run(['/tmp/tool.sh'], capture_output=True, text=True).stdout.strip() == 'compiled-ok'\n",
+        encoding="utf-8",
+    )
+    runner = DockerTestRunner(
+        os.environ.get("AGENTLESS_TEST_IMAGE", "python:3.11-slim"),
+        tmp_path / "logs",
+        run_as_image_user=True,
+    )
+    execution = runner.run(source, PublicTestCommand(("python", "check.py")))
+    stderr = Path(execution.artifact_directory, "stderr.log").read_text(errors="replace")
+    assert execution.result.status is ValidationStatus.PASS, execution.message + stderr

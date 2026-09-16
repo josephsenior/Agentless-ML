@@ -44,10 +44,15 @@ variables are visible to tests, so images must contain only trusted public mater
 
 Each `PublicTestCommand` gets a new container. The runner archives regular source
 files, excludes `.git`, rejects symlinks and special files, and streams source into
-`/tmp/work`. There are no host-directory or Docker-socket mounts. Tests run as
-UID/GID 65534, with networking disabled, capabilities dropped, no privilege
-escalation, and a read-only root filesystem. `/tmp` is a size-limited writable
-memory filesystem. Defaults are 512 MB RAM, no additional swap, one CPU, 128
+`/tmp/work`. There are no host-directory or Docker-socket mounts. Tests run with
+networking disabled, capabilities dropped, no privilege escalation, and a
+read-only root filesystem, as UID/GID 65534 with `HOME=/tmp` unless the runner is
+created with `run_as_image_user=True` (see below). `/tmp` is a size-limited
+writable memory filesystem that allows executing files, because compiled test
+binaries are built there: Docker mounts a tmpfs `noexec` by default, and with
+`noexec` a Go test binary fails with `fork/exec /tmp/go-build.../x.test:
+permission denied`. Executable `/tmp` adds little risk, since the tests already
+run arbitrary code through interpreters such as Python and Node. Defaults are 512 MB RAM, no additional swap, one CPU, 128
 processes, 256 MB temporary storage, and 60 seconds per command. Docker management
 operations have separate 30-second timeouts.
 
@@ -145,17 +150,49 @@ This is an initial local execution backend, not a complete benchmark harness or
 a guarantee against container escape. Dataset preparation, sealed verification,
 test-level regression selection, and model sampling remain separate work.
 
-## Known limit: images built to run as root
+## Running as the image's own user
 
-Commands always run as UID/GID 65534. Benchmark images are built as root, and some
-toolchains keep what they need in `/root`, which only root can read. In a Go image
-built from a DeepSWE task, `go vet ./...` succeeds as root (dependencies are
-pre-downloaded in `/root/go/pkg/mod`). As 65534 the module cache moves to an empty
-`/tmp/go`, Go tries to download dependencies, and the build fails because the
-container has no network; `/root/go/bin/go-ctrf-json-reporter` is also permission
-denied. Rust images keep their toolchain under `/root/.cargo` as well. Python and
-JavaScript images work as 65534. Running such tasks requires deciding whether
-commands may run as the image's own user.
+Benchmark images are built as root, and toolchains keep what they need in
+`/root`, which only root can read. The container has no network, so nothing
+missing can be downloaded again. Running actionlint's Go test suite (from a
+DeepSWE task image) through the runner shows the difference:
+
+```text
+default (UID 65534, HOME=/tmp)
+  go: downloading github.com/mattn/go-runewidth v0.0.17 ...   (module cache is an empty /tmp/go)
+  go-ctrf-json-reporter: Permission denied                   (binary is in /root/go/bin)
+  -> harness_error, 0 tests
+run_as_image_user=True (image user root, image HOME=/root)
+  -> pass, 1748 tests: 1732 passed, 16 skipped
+```
+
+`DockerTestRunner(..., run_as_image_user=True)` omits `--user` and the `HOME`
+override, so commands run as the image's configured user (root when none is
+configured). Every other restriction is unchanged: no network, read-only root
+filesystem, all capabilities dropped, no privilege escalation, no mounts, and the
+same resource limits. Root without capabilities still cannot change the image's
+read-only filesystem or reach the network; the remaining cost is a weaker barrier
+against container-escape exploits, which is the trade-off accepted for images
+that cannot work otherwise. Python and JavaScript images work with the default
+user; Go and Rust images keep toolchains under `/root`.
+
+`execution.json` records the setting and the effective user. Compared conditions
+must use the same setting for a task, or a difference in results could come from
+the environment instead of the method.
+
+Language knowledge stays in the command, not the runner. The Go command used
+above moves Go's build cache off the read-only `/root/.cache` and keeps
+`go test`'s own exit code, which a plain pipe into the reporter would lose:
+
+```text
+sh -c 'GOCACHE=/tmp/go-build go test -json -count=1 "$@" > /tmp/go-test.json; rc=$?;
+       go-ctrf-json-reporter -output /tmp/ctrf.json < /tmp/go-test.json >/dev/null || exit 125;
+       exit $rc' go-test .
+report: ctrf-json at /tmp/ctrf.json
+```
+
+Rust images have not been run; `cargo` also writes lock files under its home
+directory, so they may need a command-level setting of the same kind.
 
 ## Tests
 
