@@ -292,14 +292,13 @@ class _DocstringStripper(cst.CSTTransformer):
 
     @staticmethod
     def _is_docstring_statement(statement: cst.BaseStatement) -> bool:
-        return (
-            matchers.matches(statement, matchers.SimpleStatementLine())
-            and len(statement.body) == 1
-            and matchers.matches(statement.body[0], matchers.Expr())
-            and matchers.matches(
-                statement.body[0].value,
-                matchers.SimpleString() | matchers.ConcatenatedString(),
-            )
+        # isinstance, not matchers.matches: only isinstance narrows the type for
+        # the checker, so `.body`/`.value` below are known to exist.
+        if not isinstance(statement, cst.SimpleStatementLine) or len(statement.body) != 1:
+            return False
+        small_statement = statement.body[0]
+        return isinstance(small_statement, cst.Expr) and isinstance(
+            small_statement.value, (cst.SimpleString, cst.ConcatenatedString)
         )
 
     @classmethod
@@ -350,7 +349,7 @@ def _strip_hash_comments(source: str) -> str:
             for token in tokenize.generate_tokens(io.StringIO(source).readline)
             if token.type == tokenize.COMMENT
         ]
-    except (tokenize.TokenizeError, SyntaxError, IndentationError):
+    except (tokenize.TokenError, SyntaxError, IndentationError):
         return source
     if not comment_tokens:
         return source
