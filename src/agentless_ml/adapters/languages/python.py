@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import ast
+import io
 import re
+import tokenize
 import warnings
 from collections.abc import Sequence
 from dataclasses import dataclass
@@ -263,6 +265,107 @@ class PythonAdapter:
         else:
             code = re.sub(rf"\n[ \t]*{re.escape(marker)}", "\n...", code)
         return code
+
+    def strip_comments(self, source: str, *, path: str | None = None) -> str:
+        """Remove ``#`` comments and module/class/function docstrings.
+
+        Matches published Agentless's own normalization target for the repair
+        voting key only; never used for skeletons, prompts, or applied patches.
+        Falls back to the original source on any parse failure, the same way
+        ``render_skeleton`` does, so a candidate is never lost over this.
+        """
+        try:
+            tree = cst.parse_module(source)
+            without_docstrings = tree.visit(_DocstringStripper()).code
+        except Exception:
+            return source
+        return _strip_hash_comments(without_docstrings)
+
+
+class _DocstringStripper(cst.CSTTransformer):
+    """Drop a leading bare-string statement from a module, class or function body.
+
+    This is the common shape a docstring takes; treated the same way whether or
+    not the string is actually read as ``__doc__`` at runtime, because this is a
+    voting heuristic, not a semantic analysis.
+    """
+
+    @staticmethod
+    def _is_docstring_statement(statement: cst.BaseStatement) -> bool:
+        return (
+            matchers.matches(statement, matchers.SimpleStatementLine())
+            and len(statement.body) == 1
+            and matchers.matches(statement.body[0], matchers.Expr())
+            and matchers.matches(
+                statement.body[0].value,
+                matchers.SimpleString() | matchers.ConcatenatedString(),
+            )
+        )
+
+    @classmethod
+    def _drop_leading_docstring(
+        cls, statements: Sequence[cst.BaseStatement]
+    ) -> tuple[cst.BaseStatement, ...]:
+        if statements and cls._is_docstring_statement(statements[0]):
+            return tuple(statements[1:])
+        return tuple(statements)
+
+    def leave_Module(
+        self, original_node: cst.Module, updated_node: cst.Module
+    ) -> cst.Module:
+        return updated_node.with_changes(
+            body=self._drop_leading_docstring(updated_node.body)
+        )
+
+    def _strip_suite(self, suite: cst.BaseSuite) -> cst.BaseSuite:
+        if not isinstance(suite, cst.IndentedBlock):
+            return suite  # a one-line suite cannot itself be a docstring
+        return suite.with_changes(body=self._drop_leading_docstring(suite.body))
+
+    def leave_ClassDef(
+        self, original_node: cst.ClassDef, updated_node: cst.ClassDef
+    ) -> cst.ClassDef:
+        return updated_node.with_changes(body=self._strip_suite(updated_node.body))
+
+    def leave_FunctionDef(
+        self, original_node: cst.FunctionDef, updated_node: cst.FunctionDef
+    ) -> cst.FunctionDef:
+        return updated_node.with_changes(body=self._strip_suite(updated_node.body))
+
+
+def _strip_hash_comments(source: str) -> str:
+    """Remove ``#`` comments, dropping the whole line if that is all it held.
+
+    Uses the tokenizer rather than a regular expression so a ``#`` inside a
+    string literal is never mistaken for a comment. A comment that is the only
+    non-whitespace content on its line removes the whole line, newline
+    included — otherwise it would leave a blank line behind, and two files
+    differing only by a whole-line comment would still normalize to different
+    text. A trailing comment on a line that also has real code only loses the
+    comment itself.
+    """
+    try:
+        comment_tokens = [
+            token
+            for token in tokenize.generate_tokens(io.StringIO(source).readline)
+            if token.type == tokenize.COMMENT
+        ]
+    except (tokenize.TokenizeError, SyntaxError, IndentationError):
+        return source
+    if not comment_tokens:
+        return source
+    lines = source.splitlines(keepends=True)
+    by_line: dict[int, list[tuple[int, int]]] = {}
+    for token in comment_tokens:
+        row, start_column = token.start
+        _, end_column = token.end
+        by_line.setdefault(row, []).append((start_column, end_column))
+    for row, spans in by_line.items():
+        line = lines[row - 1]
+        for start_column, end_column in sorted(spans, reverse=True):
+            line = line[:start_column] + line[end_column:]
+        lines[row - 1] = "" if line.strip() == "" else line
+    return "".join(lines)
 
 
 class _SkeletonTransformer(cst.CSTTransformer):

@@ -724,6 +724,9 @@ class FixedWorkflowController:
                         ),
                         localization_rank=rank,
                         sample_index=index,
+                        language=self.adapter.language,
+                        original_sources=applied.original_sources,
+                        updated_sources=applied.updated_sources,
                     )
                 except (
                     EditApplicationError,

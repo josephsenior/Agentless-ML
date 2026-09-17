@@ -228,3 +228,17 @@ def test_unsupported_constructs_are_visible_without_invented_symbols():
     assert not node.symbols[0].children
     assert "{x, y: alias}" in adapter.render_skeleton(source)
     assert resolve_locations("line: 1", node, source).is_valid
+
+
+def test_javascript_strip_comments_removes_jsdoc_and_line_comments():
+    source = (
+        "/** jsdoc */\n"
+        "function add(a, b) {\n"
+        "    // inline\n"
+        '    const s = "// not a comment";\n'
+        "    return a + b;\n"
+        "}\n"
+    )
+    stripped = get_language_adapter("javascript").strip_comments(source, path="f.js")
+    assert "jsdoc" not in stripped and "inline" not in stripped
+    assert '"// not a comment"' in stripped

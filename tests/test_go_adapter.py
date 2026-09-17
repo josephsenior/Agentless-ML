@@ -146,3 +146,19 @@ def test_go_paths_and_prompts():
     assert "```go" in repair and "format.go" in repair and "flask" not in repair
     with pytest.raises(ValueError, match="unsupported"):
         get_language_adapter("ruby")
+
+
+def test_go_strip_comments_removes_comments_but_not_string_text():
+    source = (
+        "package p\n"
+        "// leading\n"
+        "func Add(a, b int) int {\n"
+        "    // inline\n"
+        '    s := "// not a comment"\n'
+        "    return a + b // trailing\n"
+        "}\n"
+    )
+    stripped = get_language_adapter("go").strip_comments(source, path="p.go")
+    assert "leading" not in stripped and "inline" not in stripped
+    assert "trailing" not in stripped
+    assert '"// not a comment"' in stripped

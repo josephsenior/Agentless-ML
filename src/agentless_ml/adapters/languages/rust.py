@@ -36,6 +36,10 @@ RUST = LanguageSpec(
     skip_directories=frozenset({"target", "vendor"}),
     skip_prefixes=(".",),
     test_paths=TestPaths(directories=frozenset({"tests", "benches"})),
+    # ``///``/``//!`` doc comments nest a ``doc_comment`` child inside a
+    # ``line_comment`` node rather than being a sibling node type of their own,
+    # so matching these two covers doc comments too without listing them.
+    comment_node_types=frozenset({"line_comment", "block_comment"}),
     declarations={
         "function_item": declares(
             "function", kind_within={"impl": "method", "trait": "method"}

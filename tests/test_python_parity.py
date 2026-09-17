@@ -69,3 +69,21 @@ def test_normalized_structure_intentionally_repairs_legacy_omissions() -> None:
         "run",
     ]
     assert worker.children[1].signature.startswith("async def async_run")
+
+
+def test_python_strip_comments_removes_comments_and_docstrings():
+    source = (
+        '"""Module docstring."""\n'
+        "# leading comment\n"
+        "def add(a, b):\n"
+        '    """Function docstring."""\n'
+        '    marker = "# not a comment"\n'
+        "    # inline\n"
+        "    return a + b  # trailing\n"
+    )
+    stripped = PythonAdapter().strip_comments(source)
+    assert "docstring" not in stripped
+    assert "leading comment" not in stripped and "inline" not in stripped
+    assert "trailing" not in stripped
+    assert '"# not a comment"' in stripped
+    assert "return a + b" in stripped

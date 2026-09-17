@@ -6,6 +6,7 @@ import hashlib
 from collections.abc import Mapping
 from difflib import unified_diff
 
+from agentless_ml.adapters.languages import get_language_adapter
 from agentless_ml.schemas import PatchCandidate
 
 
@@ -60,6 +61,40 @@ def normalize_patch(patch: str) -> str:
     return "\n".join(normalized).strip()
 
 
+def comment_normalized_diff(
+    original_sources: Mapping[str, str],
+    updated_sources: Mapping[str, str],
+    *,
+    language: str,
+) -> str | None:
+    """A voting key with the language's own comments and docstrings removed first.
+
+    This is on top of, not instead of, ``normalize_patch``: build a diff between
+    comment-stripped versions of every changed file, then run the ordinary
+    textual normalization over that diff, so Git framing is still removed the
+    same way it always is.
+
+    Returns ``None`` when there is nothing left to build a key from — every
+    change between the two versions was itself inside a comment or a docstring.
+    That candidate made no change this key can see; the caller falls back to
+    ``normalize_patch`` on the real diff instead, which is still unique.
+    """
+    adapter = get_language_adapter(language)
+    stripped_originals = {
+        path: adapter.strip_comments(source, path=path)
+        for path, source in original_sources.items()
+    }
+    stripped_updated = {
+        path: adapter.strip_comments(source, path=path)
+        for path, source in updated_sources.items()
+    }
+    try:
+        stripped_diff = build_unified_diff(stripped_originals, stripped_updated)
+    except ValueError:
+        return None
+    return normalize_patch(stripped_diff)
+
+
 def build_patch_candidate(
     *,
     candidate_id: str,
@@ -67,10 +102,28 @@ def build_patch_candidate(
     diff: str,
     localization_rank: int,
     sample_index: int,
+    language: str = "python",
+    original_sources: Mapping[str, str] | None = None,
+    updated_sources: Mapping[str, str] | None = None,
 ) -> PatchCandidate:
-    """Create a candidate whose digest and voting key are derived, not trusted."""
+    """Create a candidate whose digest and voting key are derived, not trusted.
+
+    ``original_sources``/``updated_sources`` are the full pre- and post-repair
+    file contents, when the caller has them (the fixed workflow always does).
+    When both are supplied, the voting key is built from comment-and-docstring
+    -stripped versions of the changed files, so two candidates that differ only
+    in a comment vote together. Without them, voting falls back to the plain
+    textual key, as it always did.
+    """
     # Source CRLFs and trailing spaces are part of a patch's payload, not framing.
     canonical = diff if diff.endswith("\n") else diff + "\n"
+    normalized = normalize_patch(canonical)
+    if original_sources is not None and updated_sources is not None:
+        semantic_key = comment_normalized_diff(
+            original_sources, updated_sources, language=language
+        )
+        if semantic_key:
+            normalized = semantic_key
     return PatchCandidate(
         candidate_id=candidate_id,
         diff=canonical,
@@ -78,5 +131,5 @@ def build_patch_candidate(
         localization_rank=localization_rank,
         sample_index=sample_index,
         raw_response=raw_response,
-        normalized_diff=normalize_patch(canonical),
+        normalized_diff=normalized,
     )

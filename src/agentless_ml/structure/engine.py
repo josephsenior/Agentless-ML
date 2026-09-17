@@ -31,7 +31,7 @@ from agentless_ml.structure.resolution import (
     ResolvedLocations,
     resolve_symbol_locations,
 )
-from agentless_ml.structure.skeleton import hide_bodies
+from agentless_ml.structure.skeleton import hide_bodies, strip_comments
 from agentless_ml.structure.spec import (
     Context,
     Declaration,
@@ -231,3 +231,7 @@ class TreeSitterLanguage:
         return hide_bodies(
             data, root, self.spec.elided_bodies, self.spec.block_bodies
         ).decode("utf-8")
+
+    def strip_comments(self, source: str, *, path: str | None = None) -> str:
+        _, data, root = parse(self.spec, path, source)
+        return strip_comments(data, root, self.spec.comment_node_types).decode("utf-8")

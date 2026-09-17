@@ -52,6 +52,7 @@ GO = LanguageSpec(
     skip_directories=frozenset({"vendor", "testdata"}),
     skip_prefixes=(".", "_"),
     test_paths=TestPaths(suffixes=("_test.go",)),
+    comment_node_types=frozenset({"comment"}),
     requires={"package_clause": "a package"},
     declarations={
         "function_declaration": declares("function"),

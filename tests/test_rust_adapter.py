@@ -93,3 +93,17 @@ def test_rust_path_policy():
     assert get_language_adapter("rust").is_source_path("src/lib.rs")
     assert get_language_adapter("rust").is_test_path("tests/integration.rs")
     assert not get_language_adapter("rust").is_test_path("src/lib.rs")
+
+
+def test_rust_strip_comments_removes_doc_and_block_comments():
+    source = (
+        "/// doc comment\n"
+        "fn add(a: i32, b: i32) -> i32 {\n"
+        "    /* inline */\n"
+        '    let s = "/* not a comment */";\n'
+        "    a + b\n"
+        "}\n"
+    )
+    stripped = get_language_adapter("rust").strip_comments(source, path="lib.rs")
+    assert "doc comment" not in stripped and "inline" not in stripped
+    assert '"/* not a comment */"' in stripped

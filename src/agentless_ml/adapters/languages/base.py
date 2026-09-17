@@ -42,3 +42,12 @@ class LanguageAdapter(Protocol):
         fine_grained_only: bool,
         remove_line_locations: bool,
     ) -> ResolvedLocations: ...
+
+    def strip_comments(self, source: str, *, path: str | None = None) -> str:
+        """Remove this language's comments, for the repair voting key only.
+
+        The result need not be valid source; it is never applied as a patch or
+        shown in a prompt. Two sources differing only in comments must strip to
+        the same text.
+        """
+        ...

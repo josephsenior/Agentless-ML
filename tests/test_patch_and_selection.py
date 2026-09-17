@@ -99,6 +99,102 @@ index abc..def 100644
     assert normalize_patch(first) != normalize_patch(moved)
 
 
+@pytest.mark.parametrize(
+    ("language", "path", "original", "fixed_plain", "fixed_commented"),
+    [
+        (
+            "python",
+            "calculator.py",
+            "def add(a, b):\n    return a - b\n",
+            "def add(a, b):\n    return a + b\n",
+            "def add(a, b):\n    # fixed: was subtracting instead of adding\n"
+            "    return a + b\n",
+        ),
+        (
+            "go",
+            "calculator.go",
+            "package p\n\nfunc Add(a, b int) int {\n    return a - b\n}\n",
+            "package p\n\nfunc Add(a, b int) int {\n    return a + b\n}\n",
+            "package p\n\nfunc Add(a, b int) int {\n"
+            "    // fixed: was subtracting instead of adding\n"
+            "    return a + b\n}\n",
+        ),
+    ],
+)
+def test_comment_only_repairs_vote_together_across_languages(
+    language: str, path: str, original: str, fixed_plain: str, fixed_commented: str
+) -> None:
+    """Two candidates make the identical fix; one repair also adds a whole
+    new comment line that does not exist in the other candidate's version."""
+    plain = build_patch_candidate(
+        candidate_id="plain",
+        raw_response="plain",
+        diff=build_unified_diff({path: original}, {path: fixed_plain}),
+        localization_rank=0,
+        sample_index=0,
+        language=language,
+        original_sources={path: original},
+        updated_sources={path: fixed_plain},
+    )
+    commented = build_patch_candidate(
+        candidate_id="commented",
+        raw_response="commented",
+        diff=build_unified_diff({path: original}, {path: fixed_commented}),
+        localization_rank=0,
+        sample_index=1,
+        language=language,
+        original_sources={path: original},
+        updated_sources={path: fixed_commented},
+    )
+    # Different real diff text (one has an extra comment line) ...
+    assert plain.diff != commented.diff
+    # ... but the same voting key, because the comment line disappears entirely
+    # rather than leaving a blank line the other candidate's diff lacks.
+    assert plain.normalized_diff == commented.normalized_diff
+
+
+def test_comment_normalization_is_opt_in_and_backward_compatible() -> None:
+    """Without sources, voting stays on the plain textual key, as before."""
+    path = "calculator.py"
+    old, new_plain = "def add(a, b):\n    return a - b\n", "def add(a, b):\n    return a + b\n"
+    new_commented = "def add(a, b):\n    # fixed\n    return a + b\n"
+    plain = build_patch_candidate(
+        candidate_id="plain",
+        raw_response="plain",
+        diff=build_unified_diff({path: old}, {path: new_plain}),
+        localization_rank=0,
+        sample_index=0,
+    )
+    commented = build_patch_candidate(
+        candidate_id="commented",
+        raw_response="commented",
+        diff=build_unified_diff({path: old}, {path: new_commented}),
+        localization_rank=0,
+        sample_index=1,
+    )
+    assert plain.normalized_diff != commented.normalized_diff
+
+
+def test_comment_only_change_falls_back_to_textual_key() -> None:
+    """A repair that only adds a comment must not crash candidate construction."""
+    path = "calculator.py"
+    old = "def add(a, b):\n    return a + b\n"
+    new = "def add(a, b):\n    # already correct\n    return a + b\n"
+    candidate = build_patch_candidate(
+        candidate_id="comment-only",
+        raw_response="comment-only",
+        diff=build_unified_diff({path: old}, {path: new}),
+        localization_rank=0,
+        sample_index=0,
+        language="python",
+        original_sources={path: old},
+        updated_sources={path: new},
+    )
+    # No crash, and still a usable, non-empty voting key (the plain textual one).
+    assert candidate.normalized_diff.strip()
+    assert candidate.normalized_diff == normalize_patch(candidate.diff)
+
+
 def test_majority_vote_uses_first_appearance_as_tie_break() -> None:
     patch_a = build_unified_diff({"a.py": "x=1\n"}, {"a.py": "x=2\n"})
     patch_b = build_unified_diff({"a.py": "x=1\n"}, {"a.py": "x=3\n"})

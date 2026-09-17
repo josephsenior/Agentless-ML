@@ -11,6 +11,7 @@ from agentless_ml.repair.edits import (
 from agentless_ml.repair.patches import (
     build_patch_candidate,
     build_unified_diff,
+    comment_normalized_diff,
     normalize_patch,
 )
 from agentless_ml.repair.prompts import build_repair_prompt
@@ -32,6 +33,7 @@ __all__ = [
     "build_patch_candidate",
     "build_repair_prompt",
     "build_unified_diff",
+    "comment_normalized_diff",
     "normalize_patch",
     "parse_search_replace_edits",
     "select_candidate",

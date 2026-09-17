@@ -126,6 +126,9 @@ JAVASCRIPT = LanguageSpec(
         directories=frozenset({"test", "tests", "__tests__", "__mocks__"}),
         stem_suffixes=(".test", ".spec"),
     ),
+    # One node type covers line comments, block comments and JSDoc blocks
+    # alike in both grammars; TypeScript inherits this unchanged below.
+    comment_node_types=frozenset({"comment"}),
     # Keep literal key spelling; computed keys and escapes are not evaluated.
     naming=Naming(
         literal=frozenset(

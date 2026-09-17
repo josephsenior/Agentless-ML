@@ -239,3 +239,7 @@ class LanguageSpec:
     requires: Mapping[str, str] = field(default_factory=dict)
     separator: str = "."
     naming: Naming = field(default_factory=Naming)
+    # Node types this language's grammar uses for comments, including doc
+    # comments where those are a distinct node type. Used only to build the
+    # repair voting key (``repair/patches.py``), never to render prompts.
+    comment_node_types: frozenset[str] = frozenset()
