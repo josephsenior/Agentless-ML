@@ -48,11 +48,9 @@ _VALUE_KINDS = {
 
 
 def _binding_kind(declarator: Node) -> str:
-    return (
-        "constant"
-        if any(child.type == "const" for child in declarator.parent.children)
-        else "variable"
-    )
+    parent = declarator.parent
+    assert parent is not None  # grammar: a declarator is never the file root
+    return "constant" if any(child.type == "const" for child in parent.children) else "variable"
 
 
 def _default_export(node: Node, context: Context):
@@ -75,6 +73,7 @@ def _commonjs_export(node: Node, context: Context):
         name == "module.exports" or name.startswith(("exports.", "module.exports."))
     ):
         value = assignment.child_by_field_name("right")
+        assert value is not None  # grammar: every assignment_expression has one
         yield Declaration(
             value, name, _VALUE_KINDS.get(value.type, "variable"), span=assignment
         )

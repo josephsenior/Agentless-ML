@@ -22,7 +22,9 @@ from agentless_ml.structure.spec import (
 
 def _impl_name(node: Node, context: Context) -> str:
     """``impl Counter`` is ``Counter``; ``impl Reset for Counter`` is ``<Counter as Reset>``."""
-    name = context.text(node.child_by_field_name("type"))
+    type_field = node.child_by_field_name("type")
+    assert type_field is not None  # grammar: every impl_item has a type
+    name = context.text(type_field)
     trait = node.child_by_field_name("trait")
     return f"<{name} as {context.text(trait)}>" if trait is not None else name
 

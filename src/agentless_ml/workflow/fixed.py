@@ -230,6 +230,7 @@ class FixedWorkflowController:
         self, samples: tuple[str, ...], directory: Path
     ) -> str:
         spec = self.reproduction_spec
+        assert spec is not None  # only called when the caller guarded on this
         prompt = render_reproduction_prompt(
             self.task.problem_statement, self.task.language, spec
         )
@@ -339,6 +340,10 @@ class FixedWorkflowController:
                 public_commands += (self.reproduction_spec.command,)
             elif self.reproduction_spec is not None:
                 spec = self.reproduction_spec
+                # Guaranteed by the XOR check above: reproduction_spec is set
+                # and reproduction_samples is empty, so reproduction_test must
+                # be the one supplied.
+                assert responses.reproduction_test is not None
                 prompt = render_reproduction_prompt(
                     self.task.problem_statement, self.task.language, spec
                 )
@@ -438,6 +443,9 @@ class FixedWorkflowController:
                     prompt + "\n", encoding="utf-8"
                 )
                 try:
+                    # Guaranteed by the check above: self.regression_tests is
+                    # truthy here, so regression_exclusions must be supplied.
+                    assert responses.regression_exclusions is not None
                     excluded = parse_regression_exclusions(
                         responses.regression_exclusions, passing_ids
                     )

@@ -13,6 +13,7 @@ from typing import Any
 
 import libcst as cst
 import libcst.matchers as matchers
+import libcst.metadata as cst_metadata
 
 from agentless_ml.schemas import FileNode, SymbolNode
 from agentless_ml.schemas.prompts import LanguagePrompts, RepairExample
@@ -133,7 +134,7 @@ def legacy_symbol_projection(source: str) -> dict[str, Any]:
     return {"classes": classes, "functions": functions, "text": lines}
 
 
-def _arguments(node: ast.FunctionDef) -> str:
+def _arguments(node: ast.FunctionDef | ast.AsyncFunctionDef) -> str:
     rendered = ast.unparse(node.args)
     return rendered if rendered.startswith("(") else f"({rendered})"
 
@@ -173,6 +174,9 @@ class PythonAdapter:
                     for child in node.body
                     if isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef))
                 )
+                # ast.parse always sets end_lineno on a real class body; only a
+                # hand-built AST (never produced here) could leave it unset.
+                assert node.end_lineno is not None
                 symbols.append(
                     SymbolNode(
                         kind="class",
@@ -221,6 +225,8 @@ class PythonAdapter:
     ) -> SymbolNode:
         prefix = "async def" if isinstance(node, ast.AsyncFunctionDef) else "def"
         qualified_name = f"{parent}.{node.name}" if parent else node.name
+        # Same guarantee as above: real parsed source always has end_lineno.
+        assert node.end_lineno is not None
         return SymbolNode(
             kind="method" if parent else "function",
             name=node.name,
@@ -373,39 +379,52 @@ class _SkeletonTransformer(cst.CSTTransformer):
     def __init__(self, *, keep_constant: bool) -> None:
         self.keep_constant = keep_constant
 
+    @staticmethod
+    def _is_bare_assignment(statement: cst.BaseStatement) -> bool:
+        # isinstance, not matchers.matches: isinstance narrows the type for the
+        # checker, so `.body[0]` below is known to exist and be indexable.
+        return (
+            isinstance(statement, cst.SimpleStatementLine)
+            and len(statement.body) == 1
+            and isinstance(statement.body[0], cst.Assign)
+        )
+
+    @staticmethod
+    def _is_bare_string_expression(statement: cst.BaseStatement) -> bool:
+        return (
+            isinstance(statement, cst.SimpleStatementLine)
+            and len(statement.body) == 1
+            and isinstance(statement.body[0], cst.Expr)
+            and isinstance(statement.body[0].value, cst.SimpleString)
+        )
+
     def leave_Module(
         self, original_node: cst.Module, updated_node: cst.Module
     ) -> cst.Module:
         body = [
             statement
             for statement in updated_node.body
-            if matchers.matches(statement, matchers.ClassDef())
-            or matchers.matches(statement, matchers.FunctionDef())
-            or (
-                self.keep_constant
-                and matchers.matches(statement, matchers.SimpleStatementLine())
-                and matchers.matches(statement.body[0], matchers.Assign())
-            )
+            if isinstance(statement, (cst.ClassDef, cst.FunctionDef))
+            or (self.keep_constant and self._is_bare_assignment(statement))
         ]
         return updated_node.with_changes(body=body)
 
     def leave_ClassDef(
         self, original_node: cst.ClassDef, updated_node: cst.ClassDef
     ) -> cst.ClassDef:
+        suite = updated_node.body
+        if not isinstance(suite, cst.IndentedBlock):
+            return updated_node  # a one-line class body has no docstring to drop
         body = [
             statement
-            for statement in updated_node.body.body
-            if not (
-                matchers.matches(statement, matchers.SimpleStatementLine())
-                and matchers.matches(statement.body[0], matchers.Expr())
-                and matchers.matches(statement.body[0].value, matchers.SimpleString())
-            )
+            for statement in suite.body
+            if not self._is_bare_string_expression(statement)
         ]
-        return updated_node.with_changes(body=cst.IndentedBlock(body=body))
+        return updated_node.with_changes(body=suite.with_changes(body=body))
 
     def leave_FunctionDef(
         self, original_node: cst.FunctionDef, updated_node: cst.FunctionDef
-    ) -> cst.CSTNode:
+    ) -> cst.FunctionDef:
         expression = cst.Expr(
             value=cst.SimpleString(value=self.replacement_string)
         )
@@ -414,13 +433,14 @@ class _SkeletonTransformer(cst.CSTTransformer):
 
 
 class _AssignmentVisitor(cst.CSTVisitor):
-    METADATA_DEPENDENCIES = (cst.metadata.PositionProvider,)
+    METADATA_DEPENDENCIES = (cst_metadata.PositionProvider,)
 
     def __init__(self) -> None:
         self.spans: list[tuple[int, int]] = []
 
     def leave_Assign(self, original_node: cst.Assign) -> None:
-        position = self.get_metadata(cst.metadata.PositionProvider, original_node)
+        position = self.get_metadata(cst_metadata.PositionProvider, original_node)
+        assert isinstance(position, cst_metadata.CodeRange)
         self.spans.append((position.start.line, position.end.line))
 
 
@@ -432,7 +452,7 @@ def _compress_assignments(
     suffix_lines: int,
 ) -> str:
     try:
-        wrapper = cst.metadata.MetadataWrapper(cst.parse_module(source))
+        wrapper = cst_metadata.MetadataWrapper(cst.parse_module(source))
     except Exception:
         return source
     visitor = _AssignmentVisitor()
@@ -452,37 +472,45 @@ def _compress_assignments(
 
 
 class _GlobalAssignmentVisitor(cst.CSTVisitor):
-    METADATA_DEPENDENCIES = (cst.metadata.PositionProvider,)
+    METADATA_DEPENDENCIES = (cst_metadata.PositionProvider,)
 
     def __init__(self) -> None:
         self.assignments: dict[str, tuple[int, int]] = {}
 
     def leave_Module(self, original_node: cst.Module) -> None:
         for statement in original_node.body:
-            if not (
-                matchers.matches(statement, matchers.SimpleStatementLine())
-                and matchers.matches(statement.body[0], matchers.Assign())
-            ):
+            # isinstance, not matchers.matches: isinstance narrows the type for
+            # the checker, so `.body[0]`/`.targets` below are known to exist.
+            if not isinstance(statement, cst.SimpleStatementLine) or len(
+                statement.body
+            ) != 1:
                 continue
-            position = self.get_metadata(cst.metadata.PositionProvider, statement)
             assignment = statement.body[0]
-            try:
-                targets = [assignment.targets[0].target.value]
-            except (AttributeError, IndexError):
-                try:
+            if not isinstance(assignment, cst.Assign):
+                continue
+            position = self.get_metadata(cst_metadata.PositionProvider, statement)
+            assert isinstance(position, cst_metadata.CodeRange)
+            # isinstance, not try/except AttributeError: narrows the type for
+            # the checker instead of masking any unrelated attribute bug too.
+            targets: list[str] = []
+            if assignment.targets:
+                target = assignment.targets[0].target
+                if isinstance(target, cst.Name):
+                    targets = [target.value]
+                elif isinstance(target, (cst.Tuple, cst.List)):
                     targets = [
                         element.value.value
-                        for element in assignment.targets[0].target.elements
+                        for element in target.elements
+                        if isinstance(element, cst.Element)
+                        and isinstance(element.value, cst.Name)
                     ]
-                except (AttributeError, IndexError):
-                    targets = []
             for target in targets:
                 self.assignments[target] = (position.start.line, position.end.line)
 
 
 def _global_assignments(source: str) -> dict[str, tuple[int, int]]:
     try:
-        wrapper = cst.metadata.MetadataWrapper(cst.parse_module(source))
+        wrapper = cst_metadata.MetadataWrapper(cst.parse_module(source))
     except Exception:
         return {}
     visitor = _GlobalAssignmentVisitor()

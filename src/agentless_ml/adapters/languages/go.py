@@ -27,14 +27,18 @@ def _receiver(node: Node, context: Context) -> str:
     ``Counter``.
     """
     receiver = node.child_by_field_name("receiver")
+    assert receiver is not None  # grammar: every method_declaration has one
     parameter = next(
         n for n in receiver.named_children if n.type == "parameter_declaration"
     )
     receiver_type = parameter.child_by_field_name("type")
+    assert receiver_type is not None  # grammar: every parameter_declaration has one
     if receiver_type.type == "pointer_type":
         receiver_type = receiver_type.named_children[0]
     if receiver_type.type == "generic_type":
-        receiver_type = receiver_type.child_by_field_name("type")
+        generic_type = receiver_type.child_by_field_name("type")
+        assert generic_type is not None  # grammar: every generic_type has one
+        receiver_type = generic_type
     return context.text(receiver_type)
 
 

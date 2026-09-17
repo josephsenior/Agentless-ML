@@ -157,7 +157,7 @@ def declares(
         if not resolved:
             return ()
         resolved_kind = kind
-        if kind_within and context.parent_kind in kind_within:
+        if kind_within and context.parent_kind is not None and context.parent_kind in kind_within:
             resolved_kind = kind_within[context.parent_kind]
         if kind_by_field:
             typed = node.child_by_field_name(kind_by_field[0])
