@@ -151,7 +151,7 @@ reference solutions must be absent from source, commands, and images.
 
 This is an initial local execution backend, not a complete benchmark harness or
 a guarantee against container escape. Dataset preparation, sealed verification,
-test-level regression selection, and model sampling remain separate work.
+and model sampling remain separate work.
 
 ## Running as the image's own user
 
