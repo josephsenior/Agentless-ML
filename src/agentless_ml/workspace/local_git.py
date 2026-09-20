@@ -370,7 +370,7 @@ class LocalGitWorkspace:
                 PatchApplicationStatus.PATCH_ERROR, "unsupported file or mode change"
             )
         try:
-            stat = _git(
+            numstat = _git(
                 self.path,
                 "apply",
                 "--numstat",
@@ -379,13 +379,13 @@ class LocalGitWorkspace:
                 timeout=self._timeout,
                 data=patch,
             )
-            if stat.returncode:
+            if numstat.returncode:
                 return result(
                     PatchApplicationStatus.PATCH_ERROR,
-                    stat.stderr.decode(errors="replace")[:2000],
+                    numstat.stderr.decode(errors="replace")[:2000],
                 )
             paths = []
-            for entry in stat.stdout.split(b"\0"):
+            for entry in numstat.stdout.split(b"\0"):
                 if not entry:
                     continue
                 added, deleted, raw_path = entry.split(b"\t", 2)
