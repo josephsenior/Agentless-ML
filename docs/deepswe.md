@@ -89,12 +89,29 @@ the problem statement and the model cannot act on the instruction. This is a
 model-visible change. It must apply identically to every experimental condition
 built from the same `TaskSpec`.
 
+## Source repositories
+
+Each task's repository is cloned once, ahead of a run, with everything after its
+base commit removed, so the commit that fixes the issue is not sitting in the
+`.git` directory the workflow reads from. The step mirrors the "git time-travel"
+recipe in every task's own `environment/Dockerfile`, which all 113 tasks share
+byte for byte, and whose `ARG BASE_SHA` and clone URL match `task.toml`'s
+`metadata.base_commit_hash` and `metadata.repository_url` in every task — so
+preparation needs no file the adapter does not already read.
+
+```powershell
+$env:PYTHONPATH = 'src'
+python tools/prepare_deepswe_repositories.py `
+  --tasks-root ../benchmarks/deep-swe/tasks `
+  --destination ../benchmarks/deepswe-repos `
+  --task-id actionlint-action-pinning-lint
+```
+
+See [sealed source repositories](workspaces.md#sealed-source-repositories) for
+what the seal guarantees and how it is verified.
+
 ## What is not implemented
 
-- **Source repositories.** Candidate workspaces need a local clone of each task's
-  repository. An upstream clone contains commits made after the base commit, which
-  may include the real fix. DeepSWE's own Dockerfiles delete that future history;
-  a local preparation step must do the same before a clone is used.
 - **Execution.** No DeepSWE task has been run. Each image is about 8 GB on public
   ECR and must be pulled and pinned by digest first.
 - **Public validation schedules.** No regression inventory or reproduction

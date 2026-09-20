@@ -5,6 +5,11 @@ from agentless_ml.workspace.local_git import (
     LocalGitWorkspace,
     LocalGitWorkspaceProvider,
 )
+from agentless_ml.workspace.prepare import (
+    SealedRepository,
+    prepare_sealed_repository,
+    verify_sealed_repository,
+)
 from agentless_ml.workspace.records import (
     PatchApplicationResult,
     PatchApplicationStatus,
@@ -18,7 +23,10 @@ __all__ = [
     "LocalGitWorkspaceProvider",
     "PatchApplicationResult",
     "PatchApplicationStatus",
+    "SealedRepository",
     "WorkspaceError",
     "WorkspaceProvenance",
     "WorkspaceProvider",
+    "prepare_sealed_repository",
+    "verify_sealed_repository",
 ]

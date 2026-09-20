@@ -11,6 +11,39 @@ execution and resource limits are now provided by the separate
 [public validation runner](public-validation.md). Hidden-verifier isolation remains
 future work. A clone contains repository history; the caller must supply a trusted,
 agent-visible repository with no verifier material in that history.
+[Sealed repositories](#sealed-source-repositories) are how that repository is built.
+
+## Sealed source repositories
+
+A benchmark task names an upstream repository and one commit in it. Cloning that
+repository normally also brings down every commit made after it — for these tasks,
+including the commit that actually fixes the issue. Checking out the base commit
+does not help: the fix is still one `git log --all` away inside the same `.git`.
+
+`prepare_sealed_repository` produces a clone with nothing after the base commit:
+the base commit is the tip of the only branch, no other branch, tag or remote
+survives, and the later objects are pruned from the object database, so the fix
+cannot be recovered by ID either. It mirrors the recipe in every DeepSWE task's
+own `environment/Dockerfile` (all 113 are byte-identical once the URL and commit
+are substituted), so a sealed local clone holds the same history the official
+task image holds.
+
+On the `actionlint-action-pinning-lint` task, upstream `rhysd/actionlint` is 42
+commits ahead of the task's base commit `0bdc9571`. The sealed clone keeps 2346
+commits, all of them ancestors of that base commit, 55 tags all of which are
+ancestors, no remote, and no unreachable commits; upstream's current tip
+`011a6d15` is not in the object database at all.
+
+This is the only step in the workflow that uses the network, and it runs once,
+ahead of a run. `LocalGitWorkspaceProvider` then clones from the sealed
+repository with remote protocols disabled. A preparation that fails part way —
+a dropped connection, an unwritable path — deletes its partial clone, because a
+leftover directory would look prepared to the next run.
+`verify_sealed_repository` re-checks an existing repository without cloning.
+
+Use `tools/prepare_deepswe_repositories.py` to prepare DeepSWE task repositories
+from the pinned corpus; it writes each one beside a `.sealed.json` record of the
+URL, commit, tree, branch and Git version it used.
 
 ## Lifecycle
 
