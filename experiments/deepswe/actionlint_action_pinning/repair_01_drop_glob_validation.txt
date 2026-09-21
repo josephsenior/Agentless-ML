@@ -1,0 +1,15 @@
+Per-path action-pinning overrides reuse the "paths" keys, so accept those keys as written.
+
+```go
+### config.go
+<<<<<<< SEARCH
+	for pat := range c.Paths {
+		if !doublestar.ValidatePattern(pat) {
+			return nil, fmt.Errorf("invalid glob pattern %q in \"paths\"", pat)
+		}
+	}
+	return &c, nil
+=======
+	return &c, nil
+>>>>>>> REPLACE
+```

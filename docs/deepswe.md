@@ -144,8 +144,12 @@ pytest layout — which is agent-visible.
 | JavaScript | `mocha --reporter xunit` | JUnit XML | `testem-per-launcher-reports`: 6 tests in 14s |
 
 mocha's `xunit` reporter is built in, so no reporter package has to exist in the
-image. Go's reporter failing is exit 125, kept distinct from a failing test,
-because a report that was never written says nothing about the patch.
+image. The Go command ignores `go-ctrf-json-reporter`'s own exit status: the
+reporter exits 1 whenever a test failed, after writing the complete report and
+logging `build failed`. An earlier version read that as a reporter failure and
+turned every real regression into a harness error. `go test`'s status is the
+result, and a candidate that does not compile still ends as a harness error,
+because the reporter then writes an empty report, which the runner refuses.
 
 ```powershell
 $env:PYTHONPATH = 'src'
@@ -164,6 +168,42 @@ no verifier material. Suites run as the image's own user, because the toolchain
 caches these tests need live under `/root`; every other container restriction
 stays in place.
 
+## Running the workflow on a task
+
+The regression stage needs an inventory of existing tests to protect. On a
+DeepSWE task that inventory is one entry: the language's test command, which
+declares a report. The controller runs it once on the unpatched checkout, and
+every test the report lists as passing becomes a selectable name. The recorded
+exclusion response then removes names by test, and each candidate is judged only
+on the names that remain.
+
+`tools/run_deepswe_workflow.py` runs the fixed workflow this way with recorded
+responses from `experiments/deepswe/<experiment>/`. On
+`actionlint_action_pinning` the three recorded repairs are hand-written harness
+inputs, not attempts at the task:
+
+```text
+baseline      1748 tests, 1732 passing by name -> inventory of 1732
+exclusion     github.com/rhysd/actionlint::TestConfigGenerateDefaultConfigFileOK
+counted       1731 tests per candidate
+
+repair-0      no edit block                      -> repair_error
+repair-1      drops ParseConfig's glob check     -> fail, 2 of 1731 counted broken:
+                TestConfigParseError, TestConfigParseError/invalid_glob_pattern
+repair-2      adds an unused config field        -> pass, 0 of 1731 broken
+selected      repair-2 (best_regression_then_normalized_majority)
+```
+
+The exclusion is the kind a model is asked for: adding an `action-pinning`
+section may legitimately change the generated default config file, so that test
+should not count against a candidate.
+
+The published task names an ECR image; the run uses a local build instead. The
+tool rewrites the task to the local reference and sets `container_digest` to
+that image's immutable ID, which the controller then checks, so the substitution
+is pinned and recorded in the run's `task.json` rather than hidden by retagging
+the local image with the published name.
+
 ## What is not implemented
 
 - **Rust and TypeScript commands.** No image for either has been run here, and a
@@ -178,9 +218,14 @@ stays in place.
   to collect before any candidate is involved. The published images are about
   8 GB each on public ECR and must be pulled and pinned by digest before results
   can rest on them.
-- **Public validation schedules.** No regression inventory or reproduction
-  specification exists for any DeepSWE task, so which tests a task should run is
-  still chosen by hand.
+- **Choosing what to run.** Which part of a repository's suite forms the
+  inventory (`"targets": ["."]` for actionlint) is still written by hand per
+  experiment, and only one task has a recorded experiment. No DeepSWE task has a
+  reproduction specification.
+- **Candidates that do not compile.** They end as harness errors, which selection
+  treats as infrastructure failures and sets aside, rather than as candidates
+  that broke every test. If every candidate for a task breaks the build, the run
+  stops with no selection.
 - **Scoring.** The official verifier (Pier/Harbor, run in a separate pristine
   container) is not integrated. It must only ever run after final selection.
 

@@ -1,0 +1,20 @@
+Add the action-pinning configuration section; a nil value keeps the rule disabled.
+
+```go
+### config.go
+<<<<<<< SEARCH
+	Paths map[string]PathConfig `yaml:"paths"`
+}
+=======
+	Paths map[string]PathConfig `yaml:"paths"`
+	// ActionPinning configures the action-pinning rule. A nil value keeps the rule disabled.
+	ActionPinning *ActionPinningConfig `yaml:"action-pinning"`
+}
+
+// ActionPinningConfig is the "action-pinning" section of the configuration file.
+type ActionPinningConfig struct {
+	// Level is the required pinning level: "major-minor", "semver" or "commit-sha".
+	Level string `yaml:"level"`
+}
+>>>>>>> REPLACE
+```
