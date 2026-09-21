@@ -110,12 +110,77 @@ python tools/prepare_deepswe_repositories.py `
 See [sealed source repositories](workspaces.md#sealed-source-repositories) for
 what the seal guarantees and how it is verified.
 
+## Running a task's tests
+
+A task's image ships the repository already built at `/app`: the Go module cache
+is warm, `node_modules` is installed, the Python package is installed. Tests do
+not run there. The candidate checkout is streamed into `/tmp/work` and the suite
+runs against that, because `/app` is on the container's read-only filesystem and,
+more to the point, a candidate patch exists only in the checkout.
+
+Getting that split wrong is silent rather than loud. In the `cattrs` image the
+package is installed in editable mode through a `.pth` file containing
+`/app/src`, so inside the container `import cattrs` resolves to
+`/app/src/cattrs/__init__.py` even with the candidate sitting in `/tmp/work`.
+Every candidate would then exercise the image's unpatched code, score
+identically, and selection would be ranking noise. Setting
+`PYTHONPATH=/tmp/work/src:/tmp/work` moves the import to
+`/tmp/work/src/cattrs/__init__.py`; the two entries cover a `src/` layout and a
+top-level package with one rule, and a missing entry is ignored. The check that
+this is real is that breaking the candidate checkout changes the outcome:
+sabotaging its `converters.py` turns a run of 16 passing tests into a collection
+error, which it could not do if `/app` were the code under test.
+
+`deepswe_execution.py` holds one command per language, with the report its
+runner writes. The commands are ours, not the benchmark's: a task's own test
+invocation lives in its held-out `tests/` directory. They are built from what
+the repository itself declares — a `go.mod`, a `package.json` test script, a
+pytest layout — which is agent-visible.
+
+| Language | Command | Report | Checked on |
+|---|---|---|---|
+| Go | `go test -json` with `go-ctrf-json-reporter` | CTRF JSON | `actionlint-action-pinning-lint`: 1748 tests (1732 passed, 16 skipped) in 40s |
+| Python | `python -m pytest --junitxml` | JUnit XML | `cattrs-partial-structuring-recovery`: 26 tests in 36s |
+| JavaScript | `mocha --reporter xunit` | JUnit XML | `testem-per-launcher-reports`: 6 tests in 14s |
+
+mocha's `xunit` reporter is built in, so no reporter package has to exist in the
+image. Go's reporter failing is exit 125, kept distinct from a failing test,
+because a report that was never written says nothing about the patch.
+
+```powershell
+$env:PYTHONPATH = 'src'
+python tools/run_deepswe_tests.py `
+  --tasks-root ../benchmarks/deep-swe/tasks `
+  --repositories ../benchmarks/deepswe-repos `
+  --task-id actionlint-action-pinning-lint `
+  --image actionlint-action-pinning-lint__tnaf9tk-main:latest -- ./...
+```
+
+The images used above were built locally from each task's agent-visible
+`environment/` directory. The `actionlint` image's `/app` is the repository at
+`0bdc9571` with 2346 commits and none after it, the same history a
+[sealed clone](workspaces.md#sealed-source-repositories) produces, and it stages
+no verifier material. Suites run as the image's own user, because the toolchain
+caches these tests need live under `/root`; every other container restriction
+stays in place.
+
 ## What is not implemented
 
-- **Execution.** No DeepSWE task has been run. Each image is about 8 GB on public
-  ECR and must be pulled and pinned by digest first.
+- **Rust and TypeScript commands.** No image for either has been run here, and a
+  guessed command would report results from a suite nobody has executed, so
+  `deepswe_test_command` refuses those languages instead.
+- **Official images.** The runs above use images built locally from each task's
+  `environment/` directory, and those builds are not reproducible: the
+  Dockerfiles start from `mars-base:latest` and resolve dependencies at build
+  time. One is already broken by that drift — the `fastapi-implicit-head-options`
+  image resolved starlette 1.2.1, which refuses to run its test client without
+  `httpx2`, while the image has only `httpx` 0.28.1, so `/app`'s own tests fail
+  to collect before any candidate is involved. The published images are about
+  8 GB each on public ECR and must be pulled and pinned by digest before results
+  can rest on them.
 - **Public validation schedules.** No regression inventory or reproduction
-  specification exists for any DeepSWE task.
+  specification exists for any DeepSWE task, so which tests a task should run is
+  still chosen by hand.
 - **Scoring.** The official verifier (Pier/Harbor, run in a separate pristine
   container) is not integrated. It must only ever run after final selection.
 
@@ -127,3 +192,9 @@ access, rejected fields, unreviewed tables, schema versions, network and languag
 checks, abbreviated commits, pin changes, line-ending stability and task
 selection. Set `AGENTLESS_DEEPSWE_TASKS` to a local `deep-swe/tasks` directory at
 the pinned revision to also load all 113 tasks.
+
+[Execution tests](../tests/test_deepswe_execution.py) pin the part of each
+command that makes the checkout the code under test, that targets are passed as
+arguments rather than spliced into the script, and that an unverified language
+is refused. They do not run Docker; the runs recorded above were made with
+`tools/run_deepswe_tests.py` against real images.

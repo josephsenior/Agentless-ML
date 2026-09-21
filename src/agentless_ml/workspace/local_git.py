@@ -57,6 +57,11 @@ def _git(
             "core.autocrlf=false",
             "-c",
             "core.attributesFile=" + os.devnull,
+            # Repositories built on Linux carry paths past Windows' default
+            # limit. Cloning actionlint for a candidate fails here without
+            # this, on a pack index inside .git rather than on task sources.
+            "-c",
+            "core.longpaths=true",
             "-c",
             "protocol.allow=never",
             "-c",
