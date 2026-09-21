@@ -36,10 +36,13 @@ def test_reports_are_declared_where_the_runner_can_read_them():
         assert report.path.startswith("/tmp/")
 
 
-def test_go_separates_a_missing_report_from_a_failing_test():
-    # A reporter that never wrote a report says nothing about the patch, so it
-    # must not look like an ordinary test failure.
-    assert "|| exit 125" in script("go")
+def test_go_result_is_go_tests_exit_status_not_the_reporters():
+    # go-ctrf-json-reporter exits 1 whenever a test failed, after writing the
+    # full report. Acting on that exit would turn every real regression into a
+    # harness error; a missing report is caught by the runner instead.
+    text = script("go")
+    assert "rc=$?" in text and text.endswith("exit $rc")
+    assert "||" not in text
 
 
 def test_targets_are_arguments_not_text_spliced_into_the_script():

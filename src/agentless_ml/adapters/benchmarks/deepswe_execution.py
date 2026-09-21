@@ -58,12 +58,15 @@ class DeepSWETestCommand:
 
 # `go test` compiles the sources in the working directory, so moving to the
 # candidate checkout is all that is needed. The reporter converts `go test
-# -json` into CTRF; its own failure is exit 125, distinct from a test failure,
-# because a report that was never written is not evidence about the patch.
+# -json` into CTRF, and its exit status is ignored: it exits 1 whenever a test
+# failed, while still writing the complete report (and logging "build failed"),
+# so treating that as a reporter failure would turn every real regression into
+# a harness error. `go test`'s own status is the result; a report that was never
+# written is caught by the runner, which refuses a missing or empty report.
 GO = DeepSWETestCommand(
     script=(
         f'cd {WORK} && {_GO_ENVIRONMENT} go test -json -count=1 "$@" > /tmp/go-test.json; rc=$?; '
-        "go-ctrf-json-reporter -output /tmp/ctrf.json < /tmp/go-test.json >/dev/null || exit 125; "
+        "go-ctrf-json-reporter -output /tmp/ctrf.json < /tmp/go-test.json >/dev/null 2>&1; "
         "exit $rc"
     ),
     report=TestReport(ReportFormat.CTRF_JSON, "/tmp/ctrf.json"),

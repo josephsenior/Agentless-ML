@@ -770,6 +770,11 @@ class FixedWorkflowController:
                         localization_rank=rank,
                     )
                 )
+            # Written before selection can fail: when no candidate is selectable,
+            # each attempt's status and message is the only record of why.
+            _write_json(
+                directory / "attempts.json", [asdict(attempt) for attempt in attempts]
+            )
             if not candidates:
                 raise WorkflowError("no repair response produced a patch candidate")
             try:
@@ -802,9 +807,6 @@ class FixedWorkflowController:
                 output_tokens=0,
                 wall_time_seconds=duration,
                 final_patch_sha256=final_digest,
-            )
-            _write_json(
-                directory / "attempts.json", [asdict(attempt) for attempt in attempts]
             )
             _write_json(directory / "prediction.json", asdict(prediction))
             _write_json(directory / "run.json", asdict(record))

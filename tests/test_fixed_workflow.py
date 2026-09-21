@@ -741,6 +741,19 @@ def test_invalid_edit_stage_does_not_fall_back(tmp_path, source):
     assert not (directory / "executions").exists()
 
 
+def test_a_run_with_no_selectable_candidate_still_records_each_attempt(tmp_path, source):
+    # Without this, the only record of a failed run is its final error, and
+    # which candidate failed for what reason cannot be recovered afterwards.
+    bundle = replace(responses(), repairs=("malformed", "also malformed"))
+    with pytest.raises(WorkflowError, match="no repair response"):
+        controller(tmp_path, source, FakeRunner()).run(bundle)
+    directory = next((tmp_path / "runs").iterdir())
+    attempts = json.loads((directory / "attempts.json").read_text(encoding="utf-8"))
+    assert [a["candidate_id"] for a in attempts] == ["repair-0", "repair-1"]
+    assert {a["status"] for a in attempts} == {"repair_error"}
+    assert all(a["message"] for a in attempts)
+
+
 def test_file_location_prefers_exact_path_when_package_matches_repository():
     assert parse_file_locations(
         "```\nqutebrowser/utils/qtlog.py\n```",
