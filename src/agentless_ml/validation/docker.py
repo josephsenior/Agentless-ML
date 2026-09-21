@@ -45,7 +45,7 @@ class PublicTestCommand:
 
     def __post_init__(self):
         if not self.argv or any(
-            not v or "\0" in v for v in self.argv
+            not isinstance(v, str) or not v or "\0" in v for v in self.argv
         ):
             raise ValueError("command must contain nonempty arguments without NULs")
         if not math.isfinite(self.timeout_seconds) or self.timeout_seconds <= 0:
