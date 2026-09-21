@@ -12,6 +12,7 @@ import time
 import uuid
 from dataclasses import asdict, dataclass
 from pathlib import Path
+from typing import IO
 
 from agentless_ml.schemas import (
     TestCaseStatus,
@@ -44,7 +45,7 @@ class PublicTestCommand:
 
     def __post_init__(self):
         if not self.argv or any(
-            not isinstance(v, str) or not v or "\0" in v for v in self.argv
+            not v or "\0" in v for v in self.argv
         ):
             raise ValueError("command must contain nonempty arguments without NULs")
         if not math.isfinite(self.timeout_seconds) or self.timeout_seconds <= 0:
@@ -147,7 +148,12 @@ class DockerTestRunner:
         )
 
     @staticmethod
-    def _docker(*args: str, timeout: float = 30, stdin=None, check: bool = True):
+    def _docker(
+        *args: str,
+        timeout: float = 30,
+        stdin: int | IO[bytes] | None = None,
+        check: bool = True,
+    ) -> subprocess.CompletedProcess[bytes]:
         result = subprocess.run(
             ["docker", *args],
             stdin=stdin,
