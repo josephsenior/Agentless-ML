@@ -176,6 +176,13 @@ def test_failure_count_rules():
     # Without a report the command is one unit.
     assert result([], status=ValidationStatus.FAIL).failure_count() == 1
     assert result([], status=ValidationStatus.PASS).failure_count() == 0
+    # A failed run with no results at all broke the build: every counted test.
+    assert result([], counted=("a", "b", "c")).failure_count() == 3
+
+
+def test_a_pass_claiming_counted_tests_needs_results():
+    with pytest.raises(ValueError, match="requires per-test results"):
+        result([], counted=("a",), status=ValidationStatus.PASS)
 
 
 def candidate(candidate_id, diff_line, cases):

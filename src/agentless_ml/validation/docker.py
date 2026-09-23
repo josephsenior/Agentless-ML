@@ -209,6 +209,10 @@ class DockerTestRunner:
         stdout = stderr = b""
         report_bytes: bytes | None = None
         test_cases = ()
+        # counted_test_ids is only ever set from a baseline in which this exact
+        # command wrote a valid report on the unpatched checkout, so a run of it
+        # that yields no usable results can only be the patch's doing.
+        proven = command.counted_test_ids is not None
         attempted_create = False
         try:
             with tempfile.TemporaryDirectory(prefix="agentless-snapshot-") as temporary:
@@ -294,6 +298,13 @@ class DockerTestRunner:
                     status = ValidationStatus.PASS
                 elif exit_code in command.failure_exit_codes:
                     status = ValidationStatus.FAIL
+                elif proven:
+                    status = ValidationStatus.FAIL
+                    message = (
+                        f"exit {exit_code} is not a declared failure code; counted "
+                        "against the patch because this command reported "
+                        "normally on the unpatched checkout"
+                    )
                 else:
                     status = ValidationStatus.HARNESS_ERROR
             stdout = self._tail_file(name, "/tmp/agentless-stdout")
@@ -308,22 +319,36 @@ class DockerTestRunner:
                     if report_bytes is None:
                         raise ReportError(f"declared test report was not written: {report_path}")
                     test_cases = parse_report(report_bytes, command.report.format)
+                except ReportError as exc:
+                    message = f"{message} {exc}".strip()[:2000]
+                    test_cases = ()
+                    # A failing run that left no usable report, from a command
+                    # proven on the unpatched code, is a patch that broke the
+                    # build or the imports; failure_count() then counts every
+                    # counted test as failed, as published Agentless does when
+                    # none of them appear in the log. Otherwise the harness
+                    # itself is in doubt.
+                    if not (proven and status is ValidationStatus.FAIL):
+                        status = ValidationStatus.HARNESS_ERROR
+                else:
                     failing = any(
                         case.status in (TestCaseStatus.FAILED, TestCaseStatus.ERROR)
                         for case in test_cases
                     )
                     # A disagreement means the command or its exit codes are
                     # misdeclared, so neither signal can be trusted as evidence.
+                    # A proven command failing with no failed test in the report
+                    # is exempt: counted tests missing from the report already
+                    # count as failures.
+                    contradiction = None
                     if status is ValidationStatus.PASS and failing:
-                        raise ReportError("exit status 0 contradicts failed tests in the report")
-                    if status is ValidationStatus.FAIL and not failing:
-                        raise ReportError(
-                            "failure exit code, but the report shows no failed test"
-                        )
-                except ReportError as exc:
-                    status = ValidationStatus.HARNESS_ERROR
-                    message = str(exc)[:2000]
-                    test_cases = ()
+                        contradiction = "exit status 0 contradicts failed tests in the report"
+                    elif status is ValidationStatus.FAIL and not failing and not proven:
+                        contradiction = "failure exit code, but the report shows no failed test"
+                    if contradiction:
+                        status = ValidationStatus.HARNESS_ERROR
+                        message = contradiction
+                        test_cases = ()
         except (
             DockerError,
             OSError,

@@ -244,6 +244,55 @@ def test_infrastructure_failure_cannot_masquerade_as_test_failure() -> None:
         select_candidate([candidate])
 
 
+COUNTED = tuple(f"suite::test_{n}" for n in range(1731))
+
+
+def _suite(broken: tuple[str, ...] = (), *, build_failed: bool = False) -> ValidationResult:
+    from agentless_ml.schemas import TestCaseResult, TestCaseStatus
+
+    cases = () if build_failed else tuple(
+        TestCaseResult(
+            test_id,
+            TestCaseStatus.FAILED if test_id in broken else TestCaseStatus.PASSED,
+        )
+        for test_id in COUNTED
+    )
+    status = ValidationStatus.FAIL if build_failed or broken else ValidationStatus.PASS
+    return ValidationResult(
+        status, ("go", "test"), 1.0, test_cases=cases, counted_test_ids=COUNTED
+    )
+
+
+def test_a_broken_build_ranks_below_any_candidate_that_compiles() -> None:
+    # Published Agentless grades every regression test absent from the log as
+    # failed, so a build failure scores as the worst possible regression.
+    patch_a = build_unified_diff({"a.go": "x\n"}, {"a.go": "y\n"})
+    patch_b = build_unified_diff({"a.go": "x\n"}, {"a.go": "z\n"})
+    broken_build = _suite(build_failed=True)
+    assert broken_build.failure_count() == 1731
+    candidates = [
+        _candidate("broken-build", patch_a, 0, broken_build),
+        _candidate("breaks-one-test", patch_b, 1, _suite(("suite::test_7",))),
+    ]
+    selected = select_candidate(candidates)
+    assert selected.candidate.candidate_id == "breaks-one-test"
+
+
+def test_when_every_candidate_breaks_the_build_one_is_still_selected() -> None:
+    # They all tie at the minimum, as upstream's min() does, and voting picks
+    # among them; an emitted patch can still resolve the task, none cannot.
+    patch_a = build_unified_diff({"a.go": "x\n"}, {"a.go": "y\n"})
+    patch_b = build_unified_diff({"a.go": "x\n"}, {"a.go": "z\n"})
+    candidates = [
+        _candidate("first", patch_a, 0, _suite(build_failed=True)),
+        _candidate("second", patch_b, 1, _suite(build_failed=True)),
+        _candidate("third", patch_b, 2, _suite(build_failed=True)),
+    ]
+    selected = select_candidate(candidates)
+    assert selected.candidate.candidate_id == "second"
+    assert selected.reason == "best_regression_then_normalized_majority"
+
+
 def test_final_prediction_uses_selected_candidate() -> None:
     patch = build_unified_diff({"a.py": "x=1\n"}, {"a.py": "x=2\n"})
     prediction = select_final_prediction(

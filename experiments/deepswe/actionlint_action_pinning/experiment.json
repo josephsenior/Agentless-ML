@@ -9,7 +9,8 @@
   "repairs": {
     "repair_00_malformed.txt": "no edit block; rejected before validation",
     "repair_01_drop_glob_validation.txt": "removes ParseConfig's glob check; expected to break TestConfigParseError/invalid_glob_pattern",
-    "repair_02_config_section.txt": "adds an unused config field; expected to keep every baseline-passing test passing"
+    "repair_02_config_section.txt": "adds an unused config field; expected to keep every baseline-passing test passing",
+    "repair_03_breaks_build.txt": "returns an undefined identifier; expected not to compile, so every counted test counts as failed"
   },
   "regression_exclusions": "TestConfigGenerateDefaultConfigFileOK: adding a config section may legitimately change the generated default config file"
 }

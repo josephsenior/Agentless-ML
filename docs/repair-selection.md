@@ -26,7 +26,11 @@ stages. Preserving those stages does not make this behavior identical to upstrea
 
 Agentless-ML also rejects unsafe paths, empty searches, missing files, ambiguous
 matches, no-op edits, patch errors, and infrastructure-failed candidates. An
-infrastructure failure is never converted into a failed test result. Candidate
+infrastructure failure (a timeout, an out-of-memory kill, a Docker error) is
+never converted into a failed test result. A patch that breaks the build is not
+an infrastructure failure: it counts as failing every counted regression test,
+as in published Agentless, so it ranks last but can still be emitted when every
+candidate is broken ([details](public-validation.md#a-patch-that-breaks-the-build)). Candidate
 workspace isolation is provided separately by the [local workspace layer](workspaces.md).
 
 Patch normalization removes Git framing metadata, normalizes line endings, and

@@ -209,6 +209,64 @@ def test_declared_report_becomes_per_test_evidence(
         assert execution.result.failure_count() == 1
 
 
+PASSES_ONLY = JUNIT.replace(b"<failure message=\"boom\"/>", b"")
+
+
+@pytest.mark.parametrize(
+    "exit_code,files,expected,cases,failures,message",
+    [
+        # The patch broke the build: no report, or an unreadable one.
+        (1, {}, "fail", 0, 2, "was not written"),
+        (1, {"/tmp/work/report.xml": b"<not xml"}, "fail", 0, 2, "malformed"),
+        # pytest exits 2 on a collection error, e.g. an import the patch broke.
+        (2, {}, "fail", 0, 2, "not a declared failure code"),
+        # Every counted test observed, none failed: only the missing one counts.
+        (1, {"/tmp/work/report.xml": PASSES_ONLY}, "fail", 3, 1, ""),
+        # Exit 0 is still no excuse for a missing report or contradicting it.
+        (0, {}, "harness_error", 0, None, "was not written"),
+        (0, {"/tmp/work/report.xml": JUNIT}, "harness_error", 0, None, "contradicts"),
+    ],
+)
+def test_a_command_proven_at_baseline_blames_the_patch_for_missing_results(
+    tmp_path, monkeypatch, exit_code, files, expected, cases, failures, message
+):
+    # counted_test_ids is only set when this command reported normally on the
+    # unpatched code, so a run of it with no usable results is the patch's doing.
+    from agentless_ml.validation import ReportFormat, TestReport
+
+    command = PublicTestCommand(
+        ("python", "-m", "pytest", "--junitxml=report.xml"),
+        report=TestReport(ReportFormat.JUNIT_XML, "report.xml"),
+        counted_test_ids=("tests.test_calc::test_add", "tests.test_calc::test_mul"),
+    )
+    execution, _ = run_fake(tmp_path, monkeypatch, command, exit_code=exit_code, files=files)
+    assert execution.result.status.value == expected
+    assert len(execution.result.test_cases) == cases
+    assert message in execution.message
+    if failures is not None:
+        assert execution.result.failure_count() == failures
+
+
+@pytest.mark.parametrize(
+    "state,expected",
+    [({"timed_out": True}, "timeout"), ({"oom": True}, "out_of_memory")],
+)
+def test_a_proven_command_still_separates_infrastructure_from_the_patch(
+    tmp_path, monkeypatch, state, expected
+):
+    # Published Agentless counts a timed-out run's absent tests as failures;
+    # a slow or starved container says nothing about the patch.
+    from agentless_ml.validation import ReportFormat, TestReport
+
+    command = PublicTestCommand(
+        ("pytest",),
+        report=TestReport(ReportFormat.JUNIT_XML, "report.xml"),
+        counted_test_ids=("tests.test_calc::test_add",),
+    )
+    execution, _ = run_fake(tmp_path, monkeypatch, command, exit_code=1, **state)
+    assert execution.result.status.value == expected
+
+
 def test_report_is_not_read_after_infrastructure_failure(tmp_path, monkeypatch):
     from agentless_ml.validation import ReportFormat, TestReport
 

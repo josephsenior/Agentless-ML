@@ -148,8 +148,9 @@ image. The Go command ignores `go-ctrf-json-reporter`'s own exit status: the
 reporter exits 1 whenever a test failed, after writing the complete report and
 logging `build failed`. An earlier version read that as a reporter failure and
 turned every real regression into a harness error. `go test`'s status is the
-result, and a candidate that does not compile still ends as a harness error,
-because the reporter then writes an empty report, which the runner refuses.
+result. A candidate that does not compile leaves an empty report; on the
+baseline that is a harness error, and on a candidate it counts as failing every
+counted test ([a patch that breaks the build](public-validation.md#a-patch-that-breaks-the-build)).
 
 ```powershell
 $env:PYTHONPATH = 'src'
@@ -179,7 +180,7 @@ on the names that remain.
 
 `tools/run_deepswe_workflow.py` runs the fixed workflow this way with recorded
 responses from `experiments/deepswe/<experiment>/`. On
-`actionlint_action_pinning` the three recorded repairs are hand-written harness
+`actionlint_action_pinning` the four recorded repairs are hand-written harness
 inputs, not attempts at the task:
 
 ```text
@@ -191,8 +192,14 @@ repair-0      no edit block                      -> repair_error
 repair-1      drops ParseConfig's glob check     -> fail, 2 of 1731 counted broken:
                 TestConfigParseError, TestConfigParseError/invalid_glob_pattern
 repair-2      adds an unused config field        -> pass, 0 of 1731 broken
+repair-3      returns an undefined identifier    -> fail, does not compile: 1731 of 1731
 selected      repair-2 (best_regression_then_normalized_majority)
 ```
+
+`repair-3` shows how a broken build ranks. It stays a candidate and scores as the
+worst possible regression, as it would in published Agentless, rather than being
+set aside as an infrastructure failure; had every candidate broken the build,
+they would all tie and voting would still emit one.
 
 The exclusion is the kind a model is asked for: adding an `action-pinning`
 section may legitimately change the generated default config file, so that test
@@ -222,10 +229,6 @@ the local image with the published name.
   inventory (`"targets": ["."]` for actionlint) is still written by hand per
   experiment, and only one task has a recorded experiment. No DeepSWE task has a
   reproduction specification.
-- **Candidates that do not compile.** They end as harness errors, which selection
-  treats as infrastructure failures and sets aside, rather than as candidates
-  that broke every test. If every candidate for a task breaks the build, the run
-  stops with no selection.
 - **Scoring.** The official verifier (Pier/Harbor, run in a separate pristine
   container) is not integrated. It must only ever run after final selection.
 

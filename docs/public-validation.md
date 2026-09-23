@@ -108,14 +108,16 @@ mocha + mocha-ctrf-json-reporter (JavaScript image; command sets NODE_PATH=/app/
 A report path is either relative (inside `/tmp/work`) or an absolute path under
 `/tmp`. Reports come from code under test, so they are untrusted: reading stops at
 32 MB, JUnit files declaring a `DOCTYPE` or entities are refused, and anything
-malformed, empty or missing makes the result a harness error.
+malformed, empty or missing makes the result a harness error — except on a
+failing run of a command already proven at baseline, which is the patch's
+failure ([a patch that breaks the build](#a-patch-that-breaks-the-build)).
 
 The exit code and the report must agree, or neither is trusted:
 
 ```text
 exit 0, report has a failed or errored test          -> harness error
-declared failure exit code, report has no failed test -> harness error
-(for example a collection or build error that wrote an empty-looking report)
+declared failure exit code, report has no failed test -> harness error,
+                                                         or fail for a proven command
 ```
 
 When the command did not finish normally (timeout, out of memory, harness error),
@@ -128,6 +130,7 @@ no report                        -> 1 if the command did not pass, else 0
 report                           -> every failed or errored test; skipped is not a failure
 report + counted_test_ids        -> each counted test that did not pass;
                                     skipped or missing from the report counts as failed
+counted_test_ids, no results     -> every counted test (a failing run that broke the build)
 ```
 
 `counted_test_ids` is meant for tests that passed on the unpatched code: if one of
@@ -137,6 +140,43 @@ baseline run's individually-passing test names become the candidate schedule
 (narrowed further by whatever the model excludes by name); a command with no
 report keeps counting as one whole unit, exactly as before. See
 [Regression selection](regression-selection.md).
+
+### A patch that breaks the build
+
+A candidate that stops the suite from compiling or importing produces no test
+results: Go writes an empty CTRF report, and pytest exits 2 on a collection
+error or 4 when `conftest.py` fails to import. Under the agreement rules above
+that is a harness error, which selection sets aside as an infrastructure failure
+— so the candidate would neither be penalized nor ranked, and a task where every
+candidate breaks the build would end with no patch at all.
+
+Published Agentless treats this differently, and it matters for the score. It
+grades regression tests with SWE-bench's `get_eval_tests_report`, where
+`test_passed(case, sm)` requires `case in sm`: a test absent from the log counts
+as failed. A broken build leaves every regression test absent, so it scores as
+the worst possible regression. Its `rerank.py` then keeps the candidates tied at
+`min(regression_tests)` failures and votes among them, so a broken build loses to
+any candidate that compiles, and if every candidate is broken they all tie and
+one is still emitted.
+
+The runner now does the same, but only for a command that has already proved
+itself. `counted_test_ids` is set only from a baseline in which this exact
+command wrote a valid report on the unpatched checkout. For such a command, a
+failing run with a missing, empty or unreadable report, or an exit code outside
+the declared failure codes, is a `fail` with no test results rather than a harness
+error, and `failure_count` counts every counted test:
+
+```text
+actionlint, a candidate returning an undefined identifier from ParseConfig
+  baseline-style command (no counted_test_ids) -> harness_error, exit 1
+  proven candidate command (1731 counted)      -> fail, exit 1, failure_count 1731
+```
+
+The split keeps one deliberate difference from upstream. Upstream also counts a
+timed-out run's absent tests as failures; here timeouts, out-of-memory kills and
+Docker errors stay infrastructure failures even for a proven command, because a
+slow or starved container says nothing about the patch. An exit 0 with a missing
+report, or exit 0 contradicting failed tests, also stays a harness error.
 
 Timeouts, Docker-reported OOM kills, patch rejection, and infrastructure errors
 remain distinct. Cleanup failures make results ineligible and record the container

@@ -65,8 +65,10 @@ class ValidationResult:
         ids = [case.test_id for case in self.test_cases]
         if len(set(ids)) != len(ids):
             raise ValueError("test case IDs must be unique")
-        has_evidence = self.status in (ValidationStatus.PASS, ValidationStatus.FAIL)
-        if self.counted_test_ids is not None and has_evidence and not self.test_cases:
+        # A FAIL with counted tests and no results is a patch that broke the
+        # build; a PASS claiming counted tests with no results is never evidence.
+        passed = self.status is ValidationStatus.PASS
+        if self.counted_test_ids is not None and passed and not self.test_cases:
             raise ValueError("counted_test_ids requires per-test results")
 
     def failure_count(self) -> int:
@@ -76,9 +78,13 @@ class ValidationResult:
         errored test counts. When ``counted_test_ids`` names the tests that passed
         on the unpatched code, each of those counts unless it passed again:
         skipped or missing from the report is not evidence that it still works.
+        A failed run with no test results at all (a patch that broke the build)
+        therefore counts every one of them.
         """
         if not self.test_cases:
-            return 0 if self.status is ValidationStatus.PASS else 1
+            if self.status is ValidationStatus.PASS:
+                return 0
+            return len(self.counted_test_ids) if self.counted_test_ids else 1
         if self.counted_test_ids is None:
             return sum(
                 case.status in (TestCaseStatus.FAILED, TestCaseStatus.ERROR)

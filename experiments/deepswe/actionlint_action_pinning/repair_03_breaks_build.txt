@@ -1,0 +1,12 @@
+Report an unset pinning level from ParseConfig.
+
+```go
+### config.go
+<<<<<<< SEARCH
+	return &c, nil
+}
+=======
+	return &c, errPinningLevelUnset
+}
+>>>>>>> REPLACE
+```
