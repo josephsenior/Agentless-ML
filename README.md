@@ -157,7 +157,9 @@ All upstream revisions used by the fixtures are listed in
 [PROVENANCE.md](PROVENANCE.md). Golden files include source hashes and are
 recaptured with scripts in `tools/`; they are not hand-written expected outputs.
 Gold patches and hidden verifier tests are not included in agent-visible task
-records or used for candidate generation or selection.
+records or used for candidate generation or selection. Only the post-selection
+scorer (`agentless_ml.scoring`) reads them, and no workflow module imports it
+([DeepSWE scoring](docs/deepswe.md#scoring-a-selected-patch)).
 
 [Go support](docs/go-adapter.md) explains the first non-Python language, its tests,
 and the choices that differ from Python. The optional compiler check runs only
@@ -188,7 +190,8 @@ python tools/run_swe_bench_pro_slice.py \
 ```
 
 Selection uses supplied repository tests and issue-derived reproduction checks. The
-official benchmark verifier remains a separate, post-selection evaluation step.
+official benchmark verifier remains a separate, post-selection evaluation step; it
+is implemented for DeepSWE (`tools/score_deepswe.py`) and not yet for SWE-bench Pro.
 
 ## Roadmap
 

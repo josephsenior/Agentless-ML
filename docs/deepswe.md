@@ -48,6 +48,13 @@ The loader also refuses tasks whose agent needs network access or a non-Linux
 environment, because the Docker runner provides neither. All 113 pinned tasks are
 `no-network` Linux tasks.
 
+One component does read `tests/` and `solution/`: the scorer
+(`agentless_ml.scoring`), which runs after a patch has been selected and says
+whether it solves the task ([scoring](#scoring-a-selected-patch)). It is a
+separate package that no workflow module imports, and
+`tests/test_scoring_boundary.py` fails if one ever does, so held-out material
+cannot reach a prompt or a selection decision through it.
+
 ## Pinning the corpus
 
 `experiments/deepswe/corpus_pin.json` records the dataset revision, the task
@@ -297,6 +304,82 @@ as a local build; the tool then rewrites the task to that reference and its ID,
 so the substitution is pinned and recorded in the run's `task.json` rather than
 hidden by retagging a local image with the published name.
 
+## Scoring a selected patch
+
+The workflow ends with one selected patch. Whether that patch actually solves
+the task is decided by DeepSWE's own hidden tests, which the workflow never sees
+— that is the number a result reports, such as "solves 23 of 113 tasks". The
+scorer runs those tests on the selected patch, after selection, and nothing it
+learns goes back into the workflow.
+
+It reproduces DeepSWE's verifier rather than approximating it. For each task,
+`tests/Dockerfile` builds the verifier from the task's published image plus four
+files: `test.sh`, `test.patch` (the hidden tests), `grader.py` and `config.json`
+(the lists of tests to check). The scorer starts a container of the same pinned
+image, copies those four files to `/tests` and the patch to
+`/logs/artifacts/model.patch`, with no network and the task's `[verifier]`
+limits, and runs `test.sh`. That script applies the patch, applies
+`test.patch`, runs the hidden suites, and writes `reward.json`:
+
+```text
+reward 1   every fail-to-pass test passes and no pass-to-pass test fails
+reward 0   otherwise; a test missing from the report counts as failed
+```
+
+The scorer maps that to `resolved`, `unresolved`, `patch_not_applied` (the patch
+did not apply to the base commit), `verifier_error` (no `reward.json`, including
+DeepSWE's own `-1` crash sentinel) or `timeout`.
+
+Two details decide whether the score equals DeepSWE's:
+
+- The four files are read from git at the pinned revision, not from the working
+  tree. This machine's clone uses `core.autocrlf=true`, and every verifier file
+  is checked out with CRLF line endings — 1778 in actionlint's `test.patch`
+  alone, none in the committed file. `bash test.sh` and `git apply test.patch`
+  fail on those, so every task would have scored as broken.
+- All 113 verifier Dockerfiles have the same shape: the task image, the four
+  `COPY`s and a `chmod`. The scorer copies the files instead of building an
+  image, and refuses a task whose Dockerfile has any other shape, because
+  copying would then no longer be equivalent.
+
+A scorer is only trustworthy if it can tell a solution from nothing, so it was
+first checked with two patches whose answer is known: no change at all, which
+must score `unresolved`, and DeepSWE's reference solution from `solution/`,
+which must score `resolved`. `DeepSWEVerifier` exposes that solution only as
+`reference_patch_for_harness_validation`, and only the scoring tool uses it.
+
+```text
+                                   empty patch                  reference solution
+actionlint-action-pinning-lint     unresolved  f2p  0/55        resolved  f2p 55/55  p2p 145/145
+cattrs-partial-structuring-recovery unresolved f2p  0/69        resolved  f2p 69/69  p2p 7/7
+testem-per-launcher-reports        unresolved  f2p  0/65        resolved  f2p 65/65  p2p 469/469
+awilix-async-container-init...     unresolved  f2p  0/24        resolved  f2p 24/24  p2p 162/162
+ofetch-per-origin-circuit-breaker  unresolved  f2p  0/47        resolved  f2p 47/47  p2p 13/13
+fastapi-implicit-head-options      unresolved  f2p  0/43        resolved  f2p 43/43  p2p 3134/3134
+fd-deterministic-multi-key-sorting unresolved  f2p  0/43        resolved  f2p 43/43  p2p 109/109
+```
+
+Seven tasks, all five languages and all six test runners. In every case the empty patch keeps every pass-to-pass test passing and fails
+every fail-to-pass test, and the reference solution passes all of both.
+
+The patch the workflow itself selected on actionlint, `repair-2` (a hand-written
+harness input that adds an unused config field), scores `unresolved` with 0 of
+55 fail-to-pass tests: the pipeline now runs from the issue text to a score.
+
+```powershell
+$env:PYTHONPATH = 'src'
+python tools/score_deepswe.py `
+  --deepswe-repository ../benchmarks/deep-swe `
+  --tasks-root ../benchmarks/deep-swe/tasks `
+  --task-id actionlint-action-pinning-lint `
+  --prediction <run directory>/prediction.json
+```
+
+`--empty` and `--reference` score the two validation patches instead. Each score
+writes `score.json` with the outcome, the test counts, the image ID, the patch's
+SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
+`ctrf.json` and output.
+
 ## What is not implemented
 
 - **Unchecked JavaScript and TypeScript runners.** Two TypeScript tasks use
@@ -313,8 +396,9 @@ hidden by retagging a local image with the published name.
   inventory (`"targets": ["."]` for actionlint) is still written by hand per
   experiment, and only one task has a recorded experiment. No DeepSWE task has a
   reproduction specification.
-- **Scoring.** The official verifier (Pier/Harbor, run in a separate pristine
-  container) is not integrated. It must only ever run after final selection.
+- **Scoring at scale.** The scorer has been checked on seven tasks, one patch at
+  a time. There is no batch run over many tasks, and its images are pulled by
+  hand.
 
 ## Evidence
 
