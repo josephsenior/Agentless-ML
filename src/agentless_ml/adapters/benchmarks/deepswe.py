@@ -307,6 +307,10 @@ def load_deepswe_task(
     image = _string(record, "docker_image")
     if not _IMAGE.fullmatch(image):
         raise ValueError("DeepSWE docker_image must be a tagged image reference")
+    if container_digest is not None and not re.fullmatch(
+        r"sha256:[0-9a-f]{64}", container_digest
+    ):
+        raise ValueError("container_digest must be a sha256 image digest")
 
     return TaskSpec(
         benchmark=Benchmark.DEEPSWE,

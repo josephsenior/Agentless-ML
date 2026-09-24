@@ -2,6 +2,7 @@ import builtins
 import io
 import json
 import os
+import re
 import shutil
 from pathlib import Path
 
@@ -179,6 +180,24 @@ def test_checked_in_corpus_pin_is_well_formed() -> None:
     assert CORPUS_PIN["task_count"] == 113
     for commit in CORPUS_PIN["resolved_base_commits"].values():
         assert len(commit) == 40 and set(commit) <= set("0123456789abcdef")
+    # Every task's published image is pinned by registry digest, so a moved tag
+    # cannot silently change the environment a result was produced in.
+    digests = CORPUS_PIN["container_digests"]
+    assert len(digests) == 113
+    assert all(re.fullmatch(r"sha256:[0-9a-f]{64}", d) for d in digests.values())
+    assert digests["abs-module-cache-flags"] == digests["abs-stepped-slices"]
+
+
+def test_container_digest_must_be_a_sha256_digest() -> None:
+    record = project_deepswe_task(REAL_TASK)
+    with pytest.raises(ValueError, match="sha256 image digest"):
+        load_deepswe_task(record, dataset_revision=REVISION, container_digest="latest")
+    task = load_deepswe_task(
+        record,
+        dataset_revision=REVISION,
+        container_digest=CORPUS_PIN["container_digests"]["abs-module-cache-flags"],
+    )
+    assert task.container_digest.startswith("sha256:")
 
 
 @pytest.mark.skipif(
@@ -191,7 +210,9 @@ def test_pinned_real_corpus_loads(forbid_held_out) -> None:
         CORPUS_PIN["revision"], CORPUS_PIN["agent_files_sha256"], CORPUS_PIN["task_count"]
     )
     tasks = DeepSWEDataset(Path(os.environ["AGENTLESS_DEEPSWE_TASKS"]), pin).load_tasks(
-        resolved_base_commits=CORPUS_PIN["resolved_base_commits"]
+        resolved_base_commits=CORPUS_PIN["resolved_base_commits"],
+        container_digests=CORPUS_PIN["container_digests"],
     )
     assert len(tasks) == 113
+    assert all(task.container_digest for task in tasks)
     assert {task.language for task in tasks} == {"go", "javascript", "python", "rust", "typescript"}
