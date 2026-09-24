@@ -5,12 +5,14 @@ then, from the repository root:
 
     python tools/run_deepswe_tests.py --tasks-root ../benchmarks/deep-swe/tasks \\
         --repositories ../benchmarks/deepswe-repos \\
-        --task-id actionlint-action-pinning-lint \\
-        --image actionlint-action-pinning-lint__tnaf9tk-main:latest -- ./...
+        --task-id actionlint-action-pinning-lint -- ./...
 
 Arguments after `--` are passed to the language's test runner. This runs the
 unpatched checkout: it is the baseline a regression schedule is built from, and
 what a candidate's results are compared against. No model is called.
+
+By default the task's published image is used, and refused unless its ID matches
+the digest pinned in `corpus_pin.json`. `--image` substitutes another image.
 """
 
 from __future__ import annotations
@@ -21,8 +23,12 @@ import shutil
 from collections import Counter
 from pathlib import Path
 
-from agentless_ml.adapters.benchmarks import DeepSWEDataset, DeepSWEDatasetPin
-from agentless_ml.adapters.benchmarks.deepswe_execution import deepswe_test_command
+from agentless_ml.adapters.benchmarks import (
+    DeepSWEDataset,
+    DeepSWEDatasetPin,
+    deepswe_test_command,
+    deepswe_test_runner,
+)
 from agentless_ml.validation import DockerTestRunner
 from agentless_ml.workspace import LocalGitWorkspaceProvider
 
@@ -35,7 +41,7 @@ def main() -> int:
     parser.add_argument("--tasks-root", type=Path, required=True)
     parser.add_argument("--repositories", type=Path, required=True)
     parser.add_argument("--task-id", required=True)
-    parser.add_argument("--image", required=True)
+    parser.add_argument("--image")
     parser.add_argument("--artifacts", type=Path, default=ROOT / "artifacts" / "deepswe")
     parser.add_argument("--timeout-seconds", type=float, default=1800)
     parser.add_argument("targets", nargs="*")
@@ -53,6 +59,7 @@ def main() -> int:
     (task,) = dataset.load_tasks(
         task_ids=(arguments.task_id,),
         resolved_base_commits=pin["resolved_base_commits"],
+        container_digests=pin["container_digests"],
     )
 
     artifacts = arguments.artifacts / task.instance_id
@@ -65,7 +72,7 @@ def main() -> int:
     # The image's own user owns the toolchain caches under /root that these
     # suites need; every other container restriction stays in place.
     runner = DockerTestRunner(
-        arguments.image,
+        arguments.image or task.container_image,
         artifacts / "logs",
         memory_mb=task.memory_megabytes,
         cpus=2,
@@ -73,15 +80,21 @@ def main() -> int:
         pids_limit=2048,
         run_as_image_user=True,
     )
-    command = deepswe_test_command(
-        task.language,
-        tuple(arguments.targets),
-        timeout_seconds=arguments.timeout_seconds,
-    )
-
-    print(f"{task.instance_id} [{task.language}] at {task.base_commit[:12]}")
-    print(f"image {runner.image_reference} ({runner.image_id[:19]}) as {runner.user}")
+    if not arguments.image and runner.image_id != task.container_digest:
+        raise SystemExit(
+            f"{task.container_image} is {runner.image_id}, "
+            f"not the pinned {task.container_digest}"
+        )
+    source = "substituted" if arguments.image else "published, matches pin"
     with provider.create() as workspace:
+        test_runner = deepswe_test_runner(task.language, workspace.path)
+        command = deepswe_test_command(
+            test_runner,
+            tuple(arguments.targets),
+            timeout_seconds=arguments.timeout_seconds,
+        )
+        print(f"{task.instance_id} [{task.language}, {test_runner}] at {task.base_commit[:12]}")
+        print(f"image {runner.image_reference} ({runner.image_id[:19]}, {source}) as {runner.user}")
         execution = runner.run(workspace.path, command)
     result = execution.result
     counts = Counter(case.status.value for case in result.test_cases)

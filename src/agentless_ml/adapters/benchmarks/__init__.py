@@ -12,6 +12,7 @@ from agentless_ml.adapters.benchmarks.deepswe_execution import (
     TEST_COMMANDS,
     DeepSWETestCommand,
     deepswe_test_command,
+    deepswe_test_runner,
 )
 from agentless_ml.adapters.benchmarks.swe_bench_pro import (
     SWE_BENCH_PRO_AGENT_COLUMNS,
@@ -31,6 +32,7 @@ __all__ = [
     "SWEbenchProDataset",
     "SWEbenchProDatasetPin",
     "deepswe_test_command",
+    "deepswe_test_runner",
     "load_deepswe_task",
     "load_swe_bench_pro_task",
     "project_deepswe_task",

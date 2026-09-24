@@ -8,12 +8,13 @@ failures among the tests that remain. No model is called.
     python tools/run_deepswe_workflow.py --tasks-root ../benchmarks/deep-swe/tasks \\
         --repositories ../benchmarks/deepswe-repos \\
         --experiment actionlint_action_pinning \\
-        --image actionlint-action-pinning-lint__tnaf9tk-main:latest \\
         --workspace-root ../runs/workspaces --artifact-root ../runs/artifacts
 
-``--image`` names a locally built image in place of the task's published one.
-The task is rewritten to that reference and pinned to the image's immutable ID,
-and the substitution is printed and kept in the run's ``task.json``.
+By default the task runs in its published image, which must already be pulled,
+and the controller refuses it unless its ID matches the digest pinned in
+``corpus_pin.json``. ``--image`` substitutes another image, such as a local
+build; the task is then rewritten to that reference and its ID, and the
+substitution is printed and kept in the run's ``task.json``.
 """
 
 from __future__ import annotations
@@ -28,9 +29,11 @@ from agentless_ml.adapters.benchmarks import (
     DeepSWEDataset,
     DeepSWEDatasetPin,
     deepswe_test_command,
+    deepswe_test_runner,
 )
 from agentless_ml.validation import DockerTestRunner, RegressionTest
 from agentless_ml.workflow import FixedWorkflowController, RecordedStageResponses
+from agentless_ml.workspace import LocalGitWorkspaceProvider
 
 ROOT = Path(__file__).resolve().parents[1]
 EXPERIMENTS = ROOT / "experiments" / "deepswe"
@@ -67,7 +70,7 @@ def main() -> None:
     parser.add_argument("--tasks-root", type=Path, required=True)
     parser.add_argument("--repositories", type=Path, required=True)
     parser.add_argument("--experiment", required=True)
-    parser.add_argument("--image", required=True)
+    parser.add_argument("--image")
     parser.add_argument("--workspace-root", type=Path, required=True)
     parser.add_argument("--artifact-root", type=Path, required=True)
     args = parser.parse_args()
@@ -86,10 +89,11 @@ def main() -> None:
     (published,) = dataset.load_tasks(
         task_ids=(spec["task_id"],),
         resolved_base_commits=pin["resolved_base_commits"],
+        container_digests=pin["container_digests"],
     )
 
     runner = DockerTestRunner(
-        args.image,
+        args.image or published.container_image,
         args.artifact_root / "unused-default-executions",
         memory_mb=published.memory_megabytes,
         cpus=2,
@@ -97,15 +101,27 @@ def main() -> None:
         pids_limit=2048,
         run_as_image_user=True,
     )
-    task = replace(
-        published, container_image=runner.image_reference, container_digest=runner.image_id
+    task = (
+        replace(
+            published,
+            container_image=runner.image_reference,
+            container_digest=runner.image_id,
+        )
+        if args.image
+        else published
     )
     suite = spec["suite"]
+    source_repository = args.repositories / task.instance_id
+    # Read the declared runner from a clean checkout of the pinned commit.
+    with LocalGitWorkspaceProvider(
+        source_repository, task.base_commit, args.workspace_root
+    ).create() as checkout:
+        test_runner = deepswe_test_runner(task.language, checkout.path)
     regression_tests = (
         RegressionTest(
             suite["test_id"],
             deepswe_test_command(
-                task.language,
+                test_runner,
                 tuple(suite["targets"]),
                 timeout_seconds=suite["timeout_seconds"],
             ),
@@ -114,7 +130,7 @@ def main() -> None:
 
     result = FixedWorkflowController(
         task=task,
-        source_repository=args.repositories / task.instance_id,
+        source_repository=source_repository,
         workspace_root=args.workspace_root,
         artifact_root=args.artifact_root,
         runner=runner,
@@ -134,9 +150,12 @@ def main() -> None:
                 "instance_id": task.instance_id,
                 "image": {
                     "used": task.container_image,
-                    "image_id": task.container_digest,
+                    "image_id": runner.image_id,
                     "published": published.container_image,
+                    "pinned_digest": published.container_digest,
+                    "substituted": bool(args.image),
                 },
+                "test_runner": test_runner,
                 "baseline_passing": len(selection["passing_ids"]),
                 "excluded": selection["excluded_ids"],
                 "counted": len(selection["selected_ids"]),

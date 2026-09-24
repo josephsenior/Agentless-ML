@@ -131,20 +131,71 @@ this is real is that breaking the candidate checkout changes the outcome:
 sabotaging its `converters.py` turns a run of 16 passing tests into a collection
 error, which it could not do if `/app` were the code under test.
 
-`deepswe_execution.py` holds one command per language, with the report its
+`deepswe_execution.py` holds one command per test runner, with the report the
 runner writes. The commands are ours, not the benchmark's: a task's own test
 invocation lives in its held-out `tests/` directory. They are built from what
-the repository itself declares — a `go.mod`, a `package.json` test script, a
-pytest layout — which is agent-visible.
+the repository itself declares, which is agent-visible.
 
-| Language | Command | Report | Checked on |
+A command per language is not enough for JavaScript and TypeScript. Reading the
+reporters each task's Dockerfile installs gives, for the 40 JavaScript and
+TypeScript tasks:
+
+```text
+vitest (built-in JUnit reporter)        20 TypeScript
+jest + jest-ctrf-json-reporter           8 TypeScript, 1 JavaScript
+mocha + mocha-ctrf-json-reporter         2 TypeScript, 3 JavaScript
+no reporter in the Dockerfile            5 TypeScript, 1 JavaScript
+```
+
+`deepswe_test_runner` therefore picks the runner a repository's `package.json`
+test script invokes — `jest` in awilix's `npm run check && jest`, `vitest` in
+ofetch's `pnpm lint && vitest run --coverage` — and failing that the one runner
+among its dependencies. A repository where neither settles it is refused. Go,
+Python and Rust have one runner each.
+
+| Runner | Report | Failed-test exit | Checked on the published image |
 |---|---|---|---|
-| Go | `go test -json` with `go-ctrf-json-reporter` | CTRF JSON | `actionlint-action-pinning-lint`: 1748 tests (1732 passed, 16 skipped) in 40s |
-| Python | `python -m pytest --junitxml` | JUnit XML | `cattrs-partial-structuring-recovery`: 26 tests in 36s |
-| JavaScript | `mocha --reporter xunit` | JUnit XML | `testem-per-launcher-reports`: 6 tests in 14s |
+| `go test -json` + `go-ctrf-json-reporter` | CTRF JSON | 1 | `actionlint-action-pinning-lint` (Go): 1748 tests, 1732 passed, 16 skipped |
+| `pytest --junitxml` | JUnit XML | 1 | `cattrs-partial-structuring-recovery` (Python): 26 tests; `fastapi-implicit-head-options`: 10 tests |
+| `mocha --reporter xunit` | JUnit XML | 1–124 | `testem-per-launcher-reports` (JavaScript): 6 tests |
+| `jest` + `jest-ctrf-json-reporter` | CTRF JSON | 1 | `awilix-async-container-initialization` (TypeScript): 158 tests |
+| `vitest run --reporter=junit` | JUnit XML | 1 | `ofetch-per-origin-circuit-breaker` (TypeScript): 28 tests, 27 passed, 1 already failing |
+| `cargo nextest run` | JUnit XML | 100 | `fd-deterministic-multi-key-sorting` (Rust): 241 tests, built from source offline in 110 s |
 
-mocha's `xunit` reporter is built in, so no reporter package has to exist in the
-image. The Go command ignores `go-ctrf-json-reporter`'s own exit status: the
+For each runner added here, a small change to the candidate checkout — one that
+still compiles — has to change the result, test by test, or the checkout is not
+what is being tested:
+
+```text
+                                       unchanged checkout      one-line change to it
+mocha    testem   lib/api.js           6 passed                3 passed, 3 failed, exit 3
+jest     awilix   src/utils.ts         158 passed              153 passed, 5 failed
+vitest   ofetch   src/utils.ts         27 passed, 1 failed     24 passed, 4 failed
+nextest  fd       src/fmt/input.rs     241 passed              230 passed, 11 failed, exit 100
+```
+
+Details each of these needed, found by running them:
+
+- mocha's `xunit` reporter is built in, so no reporter package has to exist in
+  the image. mocha exits with the number of failed tests, 3 for three, so exits
+  1 to 124 all mean failed tests; above that the exit is indistinguishable from
+  a signal.
+- jest's reporter comes from `/opt/jest-ctrf`, which every jest task image
+  installs outside the repository. It writes `ctrf/ctrf-report.json` in the
+  checkout and takes no output option on the command line, so any such file
+  already in the checkout is deleted first.
+- vitest bundles `vitest.config.ts` into `node_modules/.vite-temp`. A single link
+  from the checkout to the read-only `/app/node_modules` made that fail before
+  any test ran, so each JavaScript runner gets a writable `node_modules` with one
+  link per installed package.
+- nextest 0.9.97 writes its JUnit file under the workspace's own `target/` and
+  ignores `CARGO_TARGET_DIR`, so its store directory is set explicitly. Cargo
+  takes a lock inside `CARGO_HOME`, on the read-only root, so `CARGO_HOME` is a
+  writable directory linking back to the image's already-downloaded crates, and
+  the build runs offline. Exit 100 is failed tests; exit 101, a failed build, is
+  left undeclared.
+
+The Go command ignores `go-ctrf-json-reporter`'s own exit status: the
 reporter exits 1 whenever a test failed, after writing the complete report and
 logging `build failed`. An earlier version read that as a reporter failure and
 turned every real regression into a harness error. `go test`'s status is the
@@ -157,17 +208,52 @@ $env:PYTHONPATH = 'src'
 python tools/run_deepswe_tests.py `
   --tasks-root ../benchmarks/deep-swe/tasks `
   --repositories ../benchmarks/deepswe-repos `
-  --task-id actionlint-action-pinning-lint `
-  --image actionlint-action-pinning-lint__tnaf9tk-main:latest -- ./...
+  --task-id actionlint-action-pinning-lint -- ./...
 ```
 
-The images used above were built locally from each task's agent-visible
-`environment/` directory. The `actionlint` image's `/app` is the repository at
-`0bdc9571` with 2346 commits and none after it, the same history a
-[sealed clone](workspaces.md#sealed-source-repositories) produces, and it stages
-no verifier material. Suites run as the image's own user, because the toolchain
-caches these tests need live under `/root`; every other container restriction
-stays in place.
+Suites run as the image's own user, because the toolchain caches these tests
+need live under `/root`; every other container restriction stays in place.
+
+## Pinned published images
+
+A task names its published image by tag, for example
+`public.ecr.aws/d3j8x8q7/swe-bench-202605:kh79dnvkvq8j9bs22ededmsc79823akj-v1.1`
+for actionlint. A tag can be moved to different contents at any time; a digest
+cannot. `tools/pin_deepswe_images.py` looks up each tag's digest from the
+registry, without downloading the image, and records all 113 in
+`corpus_pin.json` as `container_digests`. Tasks loaded with that mapping carry
+the digest, the controller refuses to run a task in an image whose ID differs,
+and `run_deepswe_tests.py` checks the same before running. On Docker's
+containerd image store the local image ID after a pull is that registry digest.
+Every tag resolves to a single-platform image manifest.
+
+The images are much smaller to fetch than they are on disk: actionlint's is
+0.78 GB to download, and the largest Rust image is 2.14 GB.
+
+113 tasks resolve to 106 distinct images. The seven shared ones are all between
+tasks on the same repository and base commit, published under different tags —
+for example `httpx-deterministic-cookie-store`, `httpx-multipart-response-parsing`
+and `httpx-streaming-json-iteration` share one. That is also evidence about the
+trust boundary: two different tasks run in a byte-identical image, so the image
+cannot contain either task's held-out tests.
+
+Every run recorded on this page uses the published image, pinned by digest.
+The same suites were first run in images built locally from each task's
+`environment/` directory, and gave identical counts. The `actionlint` image's
+`/app` is the repository at `0bdc9571` with 2346 commits and none after it, the
+same history a [sealed clone](workspaces.md#sealed-source-repositories)
+produces.
+
+One published image cannot run its suite as installed. In
+`fastapi-implicit-head-options`, fastapi's `pyproject.toml` sets pytest's
+`filterwarnings = ["error"]`, so any warning fails the run. The repository's
+`uv.lock` pins starlette 0.52.1, but the image installed starlette 1.2.1, which
+warns when it falls back to `httpx` (0.28.1 is installed; it wants `httpx2`).
+Collection fails before any test runs, in the image's own `/app` as much as in a
+checkout. Ignoring exactly that warning class, and still failing on every other
+warning, lets the suite run: 10 tests pass with
+`-W ignore::starlette.exceptions.StarletteDeprecationWarning` passed as a test
+argument. This is a per-task argument, not part of the pytest command.
 
 ## Running the workflow on a task
 
@@ -205,26 +291,24 @@ The exclusion is the kind a model is asked for: adding an `action-pinning`
 section may legitimately change the generated default config file, so that test
 should not count against a candidate.
 
-The published task names an ECR image; the run uses a local build instead. The
-tool rewrites the task to the local reference and sets `container_digest` to
-that image's immutable ID, which the controller then checks, so the substitution
-is pinned and recorded in the run's `task.json` rather than hidden by retagging
-the local image with the published name.
+The run uses the task's published image, and the controller refuses it unless
+its ID matches the pinned digest. `--image` can substitute another image, such
+as a local build; the tool then rewrites the task to that reference and its ID,
+so the substitution is pinned and recorded in the run's `task.json` rather than
+hidden by retagging a local image with the published name.
 
 ## What is not implemented
 
-- **Rust and TypeScript commands.** No image for either has been run here, and a
-  guessed command would report results from a suite nobody has executed, so
-  `deepswe_test_command` refuses those languages instead.
-- **Official images.** The runs above use images built locally from each task's
-  `environment/` directory, and those builds are not reproducible: the
-  Dockerfiles start from `mars-base:latest` and resolve dependencies at build
-  time. One is already broken by that drift — the `fastapi-implicit-head-options`
-  image resolved starlette 1.2.1, which refuses to run its test client without
-  `httpx2`, while the image has only `httpx` 0.28.1, so `/app`'s own tests fail
-  to collect before any candidate is involved. The published images are about
-  8 GB each on public ECR and must be pulled and pinned by digest before results
-  can rest on them.
+- **Unchecked JavaScript and TypeScript runners.** Two TypeScript tasks use
+  mocha; they would get the mocha command, which has only been run on
+  JavaScript. Five TypeScript tasks and one JavaScript task install no reporter
+  their Dockerfiles show; none has been run, and `deepswe_test_runner` refuses a
+  repository whose runner it cannot tell rather than guessing.
+- **Per-task quirks.** Two of the tasks run here needed an argument specific to
+  them: fastapi's warning filter, and awilix's
+  `--testPathIgnorePatterns=rollup.test`, because `rollup.test.ts` imports the
+  build output `lib/awilix`, which is not in the repository. Such arguments are
+  found by running a task, not derived automatically.
 - **Choosing what to run.** Which part of a repository's suite forms the
   inventory (`"targets": ["."]` for actionlint) is still written by hand per
   experiment, and only one task has a recorded experiment. No DeepSWE task has a
