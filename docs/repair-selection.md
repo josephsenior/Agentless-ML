@@ -47,9 +47,10 @@ same frozen schedule, so the same command always contributes the same kind of
 unit. Example: two candidates both fail a 100-test suite command; one breaks two
 tests and the other one test, so the second is kept, where command-level counting
 would have tied them. See [per-test results](public-validation.md#per-test-results-from-reports).
-Upstream also restricts the count to regression tests selected at the start; that
-test-level selection is not implemented yet. Local policy tests do not establish
-full upstream selection parity.
+Upstream also restricts the count to regression tests selected at the start; the
+fixed workflow does the same, by test name, through `counted_test_ids`
+([regression selection](regression-selection.md)). Local policy tests do not
+establish full upstream selection parity.
 
 ## Still outside this boundary
 
