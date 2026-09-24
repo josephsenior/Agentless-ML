@@ -25,6 +25,8 @@ from __future__ import annotations
 
 import json
 import re
+import shlex
+from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -93,11 +95,17 @@ GO = DeepSWETestCommand(
 )
 
 # pytest writes JUnit XML itself. `-p no:cacheprovider` keeps it from writing a
-# cache directory into the checkout.
+# cache directory into the checkout. By default one test module that cannot be
+# imported stops the whole session before any test runs: in the cattrs image six
+# modules import packages the image does not install (bson, immutables, ...),
+# and the entire suite yielded no tests. `--continue-on-collection-errors` runs
+# every module that loads; the ones that do not are reported as errors, so they
+# stay out of the inventory, and a candidate that breaks an import loses only
+# that module's tests.
 PYTEST = DeepSWETestCommand(
     script=(
         f"cd {WORK} && {_PYTHON_PATH} python -m pytest -p no:cacheprovider "
-        '--junitxml=/tmp/report.xml "$@"'
+        '--continue-on-collection-errors --junitxml=/tmp/report.xml "$@"'
     ),
     report=TestReport(ReportFormat.JUNIT_XML, "/tmp/report.xml"),
 )
@@ -197,7 +205,7 @@ def deepswe_test_runner(language: str, checkout: Path) -> str:
     if language not in ("javascript", "typescript"):
         raise ValueError(f"no DeepSWE test runner for language {language!r}")
     manifest = json.loads((Path(checkout) / "package.json").read_text(encoding="utf-8"))
-    script = (manifest.get("scripts") or {}).get("test") or ""
+    script = _package_script(checkout)
     named = {
         runner
         for runner in _NODE_RUNNERS
@@ -216,6 +224,105 @@ def deepswe_test_runner(language: str, checkout: Path) -> str:
         f"cannot tell which test runner this repository uses: test script {script!r}, "
         f"runner dependencies {installed}"
     )
+
+
+def _package_script(checkout: Path) -> str:
+    manifest = json.loads((Path(checkout) / "package.json").read_text(encoding="utf-8"))
+    return (manifest.get("scripts") or {}).get("test") or ""
+
+
+# Flags of the repository's own mocha invocation that would replace the report
+# this command depends on, or keep mocha running instead of exiting.
+_MOCHA_DROPPED = {"-R", "--reporter", "-O", "--reporter-option", "--reporter-options",
+                  "-w", "--watch"}
+_MOCHA_DROPPED_WITH_VALUE = {"-R", "--reporter", "-O", "--reporter-option",
+                             "--reporter-options"}
+
+
+def deepswe_test_targets(runner: str, checkout: Path) -> tuple[str, ...]:
+    """What the whole suite is, as the repository declares it.
+
+    Every runner but mocha finds its tests from the repository's own
+    configuration (pytest's testpaths, jest's and vitest's config, Cargo's
+    workspace), so it is given none; Go is given ``./...``, every package. mocha
+    is given the arguments the ``package.json`` test script passes it — testem's
+    ``mocha tests/*_tests.js tests/**/*_tests.js`` gives the two globs — minus
+    reporter and watch flags, which would replace the report this command reads.
+    """
+    if runner == "go":
+        return ("./...",)
+    if runner != "mocha":
+        return ()
+    script = _package_script(checkout)
+    for segment in re.split(r"&&|\|\||;", script):
+        try:
+            tokens = shlex.split(segment)
+        except ValueError:
+            continue
+        starts = [i for i, token in enumerate(tokens) if Path(token).name in ("mocha", "_mocha")]
+        if not starts:
+            continue
+        arguments, skip = [], False
+        for token in tokens[starts[0] + 1:]:
+            if skip:
+                skip = False
+                continue
+            flag = token.split("=", 1)[0]
+            if flag in _MOCHA_DROPPED:
+                skip = flag == token and flag in _MOCHA_DROPPED_WITH_VALUE
+                continue
+            arguments.append(token)
+        return tuple(arguments)
+    raise ValueError(f"no mocha invocation in the test script {script!r}")
+
+
+@dataclass(frozen=True, slots=True)
+class DeepSWETestPlan:
+    """Which runner, on which targets, a task's regression suite uses."""
+
+    runner: str
+    targets: tuple[str, ...]
+    override_reason: str | None = None
+
+    def command(self, *, timeout_seconds: float = 1800) -> PublicTestCommand:
+        return deepswe_test_command(self.runner, self.targets, timeout_seconds=timeout_seconds)
+
+
+def load_test_overrides(path: Path) -> dict[str, dict[str, object]]:
+    """Per-task corrections that cannot be derived, each with its reason.
+
+    Keys are task IDs; each entry has a nonempty ``reason`` and ``arguments``
+    appended after the derived targets, or ``targets`` replacing them.
+    """
+    raw = json.loads(Path(path).read_text(encoding="utf-8"))
+    overrides: dict[str, dict[str, object]] = {}
+    for task_id, entry in raw.items():
+        if not isinstance(entry, dict) or set(entry) - {"reason", "arguments", "targets"}:
+            raise ValueError(f"override for {task_id} has unknown keys")
+        if not isinstance(entry.get("reason"), str) or not entry["reason"].strip():
+            raise ValueError(f"override for {task_id} needs a reason")
+        for key in ("arguments", "targets"):
+            value = entry.get(key, [])
+            if not isinstance(value, list) or not all(isinstance(v, str) and v for v in value):
+                raise ValueError(f"override for {task_id}: {key} must be a list of strings")
+        if not entry.get("arguments") and "targets" not in entry:
+            raise ValueError(f"override for {task_id} changes nothing")
+        overrides[task_id] = entry
+    return overrides
+
+
+def deepswe_test_plan(
+    language: str, checkout: Path, override: Mapping[str, object] | None = None
+) -> DeepSWETestPlan:
+    """The runner and targets for a task's whole suite, plus any override."""
+    runner = deepswe_test_runner(language, checkout)
+    targets = deepswe_test_targets(runner, checkout)
+    if override is None:
+        return DeepSWETestPlan(runner, targets)
+    if "targets" in override:
+        targets = tuple(override["targets"])  # type: ignore[arg-type]
+    targets += tuple(override.get("arguments", ()))  # type: ignore[arg-type]
+    return DeepSWETestPlan(runner, targets, str(override["reason"]))
 
 
 def deepswe_test_command(

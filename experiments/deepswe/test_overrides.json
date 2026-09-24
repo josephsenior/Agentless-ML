@@ -1,0 +1,10 @@
+{
+  "awilix-async-container-initialization": {
+    "arguments": ["--testPathIgnorePatterns=rollup.test"],
+    "reason": "src/__tests__/rollup.test.ts requires ../../lib/awilix, the output of `npm run build`, which is not in the repository; the file cannot load in any checkout and jest reports no test for it, so the run's exit code and report disagree."
+  },
+  "fastapi-implicit-head-options": {
+    "arguments": ["-W", "ignore::starlette.exceptions.StarletteDeprecationWarning"],
+    "reason": "pyproject.toml makes every warning an error; uv.lock pins starlette 0.52.1 but the published image installs 1.2.1, which warns when it falls back to httpx, so collection fails before any test runs. Only that warning class is ignored."
+  }
+}

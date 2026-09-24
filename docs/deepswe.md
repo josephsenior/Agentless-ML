@@ -262,19 +262,78 @@ warning, lets the suite run: 10 tests pass with
 `-W ignore::starlette.exceptions.StarletteDeprecationWarning` passed as a test
 argument. This is a per-task argument, not part of the pytest command.
 
+## Surveying tasks
+
+Before a model is ever called on a task, four things have to hold: its sealed
+repository exists, its pinned image is present, the tests to run are known, and
+running them on the unpatched code yields at least one passing test — those
+passing tests are the regression inventory. `tools/survey_deepswe.py` checks all
+four, task by task, and records the outcome of each, so the tasks that need
+attention are known in advance rather than discovered mid-experiment.
+
+What to run is derived, not written per task. `deepswe_test_plan` takes the
+runner the repository declares and its whole suite as the repository defines it:
+Go gets `./...`; pytest, jest, vitest and Cargo find their own tests from the
+repository's configuration; mocha gets the arguments the `package.json` test
+script passes it (testem's `mocha tests/*_tests.js tests/**/*_tests.js` gives
+the two globs), minus reporter and watch flags that would replace the report.
+What cannot be derived lives in `experiments/deepswe/test_overrides.json`, one
+entry per task, each with its reason — today fastapi's warning filter and
+awilix's build-dependent test file.
+
+Surveyed with whole suites on the seven tasks whose images are here:
+
+```text
+task                                   runner          passing / tests
+actionlint-action-pinning-lint         go               1802 / 1834
+awilix-async-container-initialization  jest              158 / 158   (override)
+cattrs-partial-structuring-recovery    pytest            879 / 900
+fastapi-implicit-head-options          pytest           3134 / 3160  (override)
+fd-deterministic-multi-key-sorting     cargo-nextest     241 / 241
+ofetch-per-origin-circuit-breaker      vitest             27 / 28
+testem-per-launcher-reports            mocha             488 / 500
+```
+
+The whole suites are much larger than the targets picked by hand earlier:
+testem's two globs cover 500 tests where one file had 6, and fastapi's suite is
+3160 where two files had 10. fastapi's 3134 passing tests equal the 3134
+pass-to-pass tests DeepSWE's own verifier checks for that task, an independent
+confirmation that the derived suite is the right one.
+
+The first survey of cattrs found no tests at all. Six of its test modules import
+packages the image does not install (`bson`, `immutables`, ...), and pytest by
+default stops the whole session on one module that cannot be imported. The
+pytest command now passes `--continue-on-collection-errors`: the six modules are
+reported as errors and stay out of the inventory, and the other 879 tests pass.
+
+```powershell
+python tools/survey_deepswe.py `
+  --tasks-root ../benchmarks/deep-swe/tasks `
+  --repositories ../benchmarks/deepswe-repos --language go --pull
+```
+
+Each task's outcome is one line in `--results`; a surveyed task is skipped next
+time, so an interrupted survey resumes. `--pull` fetches missing images and
+checks them against their pinned digests; without it a missing image is
+reported as `no_image`. Other outcomes are `no_passing_tests`, `no_runner`,
+`image_mismatch`, `repository_failed`, and the runner's `harness_error`,
+`timeout` and `out_of_memory`. The survey reads only agent-visible material.
+
 ## Running the workflow on a task
 
 The regression stage needs an inventory of existing tests to protect. On a
-DeepSWE task that inventory is one entry: the language's test command, which
+DeepSWE task that inventory is one entry: the task's test plan, whose command
 declares a report. The controller runs it once on the unpatched checkout, and
 every test the report lists as passing becomes a selectable name. The recorded
 exclusion response then removes names by test, and each candidate is judged only
 on the names that remain.
 
 `tools/run_deepswe_workflow.py` runs the fixed workflow this way with recorded
-responses from `experiments/deepswe/<experiment>/`. On
-`actionlint_action_pinning` the four recorded repairs are hand-written harness
-inputs, not attempts at the task:
+responses from `experiments/deepswe/<experiment>/`. By default the inventory is
+the task's whole suite, as in the survey; an experiment can narrow it, and
+`actionlint_action_pinning` keeps the root package with `"targets": ["."]`
+(1748 tests rather than the whole suite's 1834). Its four recorded repairs are
+hand-written harness inputs, not attempts at the task:
 
 ```text
 baseline      1748 tests, 1732 passing by name -> inventory of 1732
@@ -387,18 +446,14 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   JavaScript. Five TypeScript tasks and one JavaScript task install no reporter
   their Dockerfiles show; none has been run, and `deepswe_test_runner` refuses a
   repository whose runner it cannot tell rather than guessing.
-- **Per-task quirks.** Two of the tasks run here needed an argument specific to
-  them: fastapi's warning filter, and awilix's
-  `--testPathIgnorePatterns=rollup.test`, because `rollup.test.ts` imports the
-  build output `lib/awilix`, which is not in the repository. Such arguments are
-  found by running a task, not derived automatically.
-- **Choosing what to run.** Which part of a repository's suite forms the
-  inventory (`"targets": ["."]` for actionlint) is still written by hand per
-  experiment, and only one task has a recorded experiment. No DeepSWE task has a
-  reproduction specification.
-- **Scoring at scale.** The scorer has been checked on seven tasks, one patch at
-  a time. There is no batch run over many tasks, and its images are pulled by
-  hand.
+- **Surveying the whole corpus.** The survey tool runs over all 113 tasks, but
+  has been run on the seven whose images are on this machine. The other 97
+  images are 97.4 GB to download.
+- **Workflow and scoring over many tasks.** The survey establishes each task's
+  regression inventory, but running the workflow needs repair responses, and
+  only actionlint has recorded ones; without a model there is nothing to run for
+  the other tasks. The scorer likewise scores one patch at a time. No DeepSWE
+  task has a reproduction specification.
 
 ## Evidence
 

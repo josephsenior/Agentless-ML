@@ -11,8 +11,12 @@ from agentless_ml.adapters.benchmarks.deepswe import (
 from agentless_ml.adapters.benchmarks.deepswe_execution import (
     TEST_COMMANDS,
     DeepSWETestCommand,
+    DeepSWETestPlan,
     deepswe_test_command,
+    deepswe_test_plan,
     deepswe_test_runner,
+    deepswe_test_targets,
+    load_test_overrides,
 )
 from agentless_ml.adapters.benchmarks.swe_bench_pro import (
     SWE_BENCH_PRO_AGENT_COLUMNS,
@@ -28,11 +32,15 @@ __all__ = [
     "DeepSWEDataset",
     "DeepSWEDatasetPin",
     "DeepSWETestCommand",
+    "DeepSWETestPlan",
     "SWE_BENCH_PRO_AGENT_COLUMNS",
     "SWEbenchProDataset",
     "SWEbenchProDatasetPin",
     "deepswe_test_command",
+    "deepswe_test_plan",
     "deepswe_test_runner",
+    "deepswe_test_targets",
+    "load_test_overrides",
     "load_deepswe_task",
     "load_swe_bench_pro_task",
     "project_deepswe_task",

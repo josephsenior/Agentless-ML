@@ -5,11 +5,12 @@ then, from the repository root:
 
     python tools/run_deepswe_tests.py --tasks-root ../benchmarks/deep-swe/tasks \\
         --repositories ../benchmarks/deepswe-repos \\
-        --task-id actionlint-action-pinning-lint -- ./...
+        --task-id actionlint-action-pinning-lint
 
-Arguments after `--` are passed to the language's test runner. This runs the
-unpatched checkout: it is the baseline a regression schedule is built from, and
-what a candidate's results are compared against. No model is called.
+The task's whole suite runs, as its repository declares it, with any override
+from `experiments/deepswe/test_overrides.json`; arguments after `--` replace
+that plan's targets. This runs the unpatched checkout: it is the baseline a
+regression schedule is built from. No model is called.
 
 By default the task's published image is used, and refused unless its ID matches
 the digest pinned in `corpus_pin.json`. `--image` substitutes another image.
@@ -27,7 +28,8 @@ from agentless_ml.adapters.benchmarks import (
     DeepSWEDataset,
     DeepSWEDatasetPin,
     deepswe_test_command,
-    deepswe_test_runner,
+    deepswe_test_plan,
+    load_test_overrides,
 )
 from agentless_ml.validation import DockerTestRunner
 from agentless_ml.workspace import LocalGitWorkspaceProvider
@@ -86,14 +88,16 @@ def main() -> int:
             f"not the pinned {task.container_digest}"
         )
     source = "substituted" if arguments.image else "published, matches pin"
+    overrides = load_test_overrides(PIN.parent / "test_overrides.json")
     with provider.create() as workspace:
-        test_runner = deepswe_test_runner(task.language, workspace.path)
+        plan = deepswe_test_plan(task.language, workspace.path, overrides.get(task.instance_id))
+        # Targets on the command line replace the task's derived plan.
+        targets = tuple(arguments.targets) if arguments.targets else plan.targets
         command = deepswe_test_command(
-            test_runner,
-            tuple(arguments.targets),
-            timeout_seconds=arguments.timeout_seconds,
+            plan.runner, targets, timeout_seconds=arguments.timeout_seconds
         )
-        print(f"{task.instance_id} [{task.language}, {test_runner}] at {task.base_commit[:12]}")
+        print(f"{task.instance_id} [{task.language}, {plan.runner}] at {task.base_commit[:12]}")
+        print(f"targets {list(targets)}")
         print(f"image {runner.image_reference} ({runner.image_id[:19]}, {source}) as {runner.user}")
         execution = runner.run(workspace.path, command)
     result = execution.result

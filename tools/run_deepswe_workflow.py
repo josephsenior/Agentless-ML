@@ -29,7 +29,8 @@ from agentless_ml.adapters.benchmarks import (
     DeepSWEDataset,
     DeepSWEDatasetPin,
     deepswe_test_command,
-    deepswe_test_runner,
+    deepswe_test_plan,
+    load_test_overrides,
 )
 from agentless_ml.validation import DockerTestRunner, RegressionTest
 from agentless_ml.workflow import FixedWorkflowController, RecordedStageResponses
@@ -110,20 +111,24 @@ def main() -> None:
         if args.image
         else published
     )
-    suite = spec["suite"]
+    suite = spec.get("suite", {})
     source_repository = args.repositories / task.instance_id
+    overrides = load_test_overrides(EXPERIMENTS / "test_overrides.json")
     # Read the declared runner from a clean checkout of the pinned commit.
     with LocalGitWorkspaceProvider(
         source_repository, task.base_commit, args.workspace_root
     ).create() as checkout:
-        test_runner = deepswe_test_runner(task.language, checkout.path)
+        plan = deepswe_test_plan(task.language, checkout.path, overrides.get(task.instance_id))
+    test_runner = plan.runner
+    # An experiment may narrow the suite; by default it is the task's whole plan.
+    targets = tuple(suite["targets"]) if "targets" in suite else plan.targets
     regression_tests = (
         RegressionTest(
-            suite["test_id"],
+            suite.get("test_id", "suite"),
             deepswe_test_command(
                 test_runner,
-                tuple(suite["targets"]),
-                timeout_seconds=suite["timeout_seconds"],
+                targets,
+                timeout_seconds=suite.get("timeout_seconds", 1800),
             ),
         ),
     )

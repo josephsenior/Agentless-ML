@@ -4,11 +4,18 @@ import json
 
 import pytest
 
+from pathlib import Path
+
 from agentless_ml.adapters.benchmarks.deepswe_execution import (
     TEST_COMMANDS,
     deepswe_test_command,
+    deepswe_test_plan,
     deepswe_test_runner,
+    deepswe_test_targets,
+    load_test_overrides,
 )
+
+OVERRIDES = Path(__file__).resolve().parents[1] / "experiments" / "deepswe" / "test_overrides.json"
 from agentless_ml.validation import ReportFormat
 
 
@@ -22,6 +29,12 @@ def test_python_puts_the_checkout_ahead_of_the_images_installed_package():
     text = script("pytest")
     assert "PYTHONPATH=/tmp/work/src:/tmp/work" in text
     assert text.index("PYTHONPATH") < text.index("pytest")
+
+
+def test_one_unimportable_test_module_does_not_empty_a_python_inventory():
+    # cattrs: six modules import packages the image lacks; without this flag
+    # pytest stops before running any of the suite.
+    assert "--continue-on-collection-errors" in script("pytest")
 
 
 def test_every_runner_works_inside_the_candidate_checkout():
@@ -139,3 +152,70 @@ def test_go_python_and_rust_do_not_read_the_checkout(tmp_path):
     assert deepswe_test_runner("go", tmp_path) == "go"
     assert deepswe_test_runner("python", tmp_path) == "pytest"
     assert deepswe_test_runner("rust", tmp_path) == "cargo-nextest"
+
+
+@pytest.mark.parametrize(
+    "script,expected",
+    [
+        # testem's real script.
+        ("mocha tests/*_tests.js tests/**/*_tests.js", ("tests/*_tests.js", "tests/**/*_tests.js")),
+        # Reporter and watch flags would replace the report this command reads.
+        ("mocha -R spec --reporter-option foo=1 --watch test/", ("test/",)),
+        ("mocha --reporter=dot --timeout 5000 test/", ("--timeout", "5000", "test/")),
+        # The runner is found after other steps and behind a path.
+        ("npm run lint && ./node_modules/.bin/_mocha test/unit", ("test/unit",)),
+    ],
+)
+def test_mocha_targets_are_what_the_test_script_passes_it(tmp_path, script, expected):
+    checkout = package(tmp_path, script, mocha="^10")
+    assert deepswe_test_targets("mocha", checkout) == expected
+
+
+def test_other_runners_use_their_own_discovery_and_go_every_package(tmp_path):
+    assert deepswe_test_targets("go", tmp_path) == ("./...",)
+    for runner in ("pytest", "jest", "vitest", "cargo-nextest"):
+        assert deepswe_test_targets(runner, tmp_path) == ()
+
+
+def test_a_mocha_repository_whose_script_never_calls_mocha_is_refused(tmp_path):
+    with pytest.raises(ValueError, match="no mocha invocation"):
+        deepswe_test_targets("mocha", package(tmp_path, "node run-tests.js", mocha="^10"))
+
+
+def test_an_override_appends_arguments_and_keeps_its_reason(tmp_path):
+    checkout = package(tmp_path, "npm run check && jest", jest="^29")
+    override = {"arguments": ["--testPathIgnorePatterns=rollup.test"], "reason": "needs a build"}
+    plan = deepswe_test_plan("typescript", checkout, override)
+    assert (plan.runner, plan.targets) == ("jest", ("--testPathIgnorePatterns=rollup.test",))
+    assert plan.override_reason == "needs a build"
+    assert plan.command().argv[4:] == ("--testPathIgnorePatterns=rollup.test",)
+
+
+def test_an_override_can_replace_the_derived_targets(tmp_path):
+    plan = deepswe_test_plan("go", tmp_path, {"targets": ["."], "reason": "root package only"})
+    assert plan.targets == (".",)
+
+
+def test_the_checked_in_overrides_are_well_formed_and_explained():
+    overrides = load_test_overrides(OVERRIDES)
+    assert set(overrides) == {
+        "awilix-async-container-initialization",
+        "fastapi-implicit-head-options",
+    }
+    assert all(len(entry["reason"]) > 40 for entry in overrides.values())
+
+
+@pytest.mark.parametrize(
+    "entry,message",
+    [
+        ({"arguments": ["-x"]}, "needs a reason"),
+        ({"reason": "why", "arguments": ["-x"], "image": "other"}, "unknown keys"),
+        ({"reason": "why"}, "changes nothing"),
+        ({"reason": "why", "arguments": "-x"}, "list of strings"),
+    ],
+)
+def test_malformed_overrides_are_refused(tmp_path, entry, message):
+    path = tmp_path / "overrides.json"
+    path.write_text(json.dumps({"task": entry}), encoding="utf-8")
+    with pytest.raises(ValueError, match=message):
+        load_test_overrides(path)
