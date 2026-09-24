@@ -30,6 +30,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import shutil
 import subprocess
 import time
 from collections import Counter
@@ -167,6 +168,9 @@ def main() -> int:
     parser.add_argument("--artifacts", type=Path, default=ROOT / "artifacts" / "deepswe" / "survey")
     parser.add_argument("--timeout-seconds", type=float, default=1800)
     parser.add_argument("--tmpfs-mb", type=int, default=4096)
+    # Pulling every image is about 100 GB; stop before the disk is full rather
+    # than fail tasks for reasons that have nothing to do with them.
+    parser.add_argument("--min-free-gb", type=float, default=30)
     args = parser.parse_args()
 
     pin = json.loads((EXPERIMENTS / "corpus_pin.json").read_text(encoding="utf-8"))
@@ -185,6 +189,10 @@ def main() -> int:
     for task in tasks:
         if task.instance_id in recorded and not args.rerun:
             continue
+        free_gb = shutil.disk_usage(args.repositories.anchor or ".").free / 1e9
+        if free_gb < args.min_free_gb:
+            print(f"stopping: {free_gb:.0f} GB free, below --min-free-gb {args.min_free_gb:g}")
+            break
         record = _survey(task, args, overrides)
         with args.results.open("a", encoding="utf-8", newline="\n") as results:
             results.write(json.dumps(record) + "\n")
