@@ -96,9 +96,14 @@ def _test_id(*parts: object) -> str:
     if not text:
         raise ReportError("test case has no name")
     test_id = "::".join(text)
-    if any(c in test_id for c in "\r\n\0"):
-        raise ReportError("test case name must be a single line")
-    return test_id
+    if "\0" in test_id:
+        raise ReportError("test case name must not contain NUL")
+    # Test IDs are listed one per line in the regression prompt and read back
+    # line by line, so a line break inside one is written as a visible escape.
+    # katex's jest suite names tests with multi-line template strings, and
+    # refusing them threw away the whole report. The escape is applied the same
+    # way to every report, so baseline and candidate IDs still match.
+    return test_id.replace("\r\n", "\\n").replace("\n", "\\n").replace("\r", "\\r")
 
 
 def _junit_cases(data: bytes) -> list[tuple[str, TestCaseStatus]]:

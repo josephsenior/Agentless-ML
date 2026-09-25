@@ -107,6 +107,19 @@ def test_duplicate_test_keeps_the_worst_outcome():
     assert statuses(parse_report(report, ReportFormat.CTRF_JSON)) == [("t", F)]
 
 
+def test_a_multi_line_test_name_is_kept_as_one_escaped_line():
+    # katex's jest suite names tests with multi-line template strings; refusing
+    # them discarded the whole report. IDs must stay one line for the prompt.
+    report = json.dumps(
+        {"results": {"tests": [
+            {"name": "renders\nmulti\r\nline", "suite": "array", "status": "passed"},
+        ]}}
+    ).encode()
+    (case,) = parse_report(report, ReportFormat.CTRF_JSON)
+    assert case.test_id == "array::renders\\nmulti\\nline"
+    assert "\n" not in case.test_id
+
+
 @pytest.mark.parametrize(
     "data,report_format,message",
     [

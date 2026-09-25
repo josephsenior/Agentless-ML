@@ -226,3 +226,20 @@ def test_malformed_overrides_are_refused(tmp_path, entry, message):
     path.write_text(json.dumps({"task": entry}), encoding="utf-8")
     with pytest.raises(ValueError, match=message):
         load_test_overrides(path)
+
+
+def test_go_workspace_targets_every_module(tmp_path):
+    # arcane: go.work ties three modules together and the root is not a module,
+    # so ./... matched nothing and go test exited before running a test.
+    (tmp_path / "go.work").write_text(
+        "go 1.26.0\n\n// the backend\nuse (\n\t./backend\n\t./cli\n\t./types\n)\nuse ./tools\n",
+        encoding="utf-8",
+    )
+    assert deepswe_test_targets("go", tmp_path) == (
+        "./backend/...", "./cli/...", "./types/...", "./tools/...",
+    )
+
+
+def test_go_command_leaves_module_mode_to_go():
+    # Forcing -mod=mod is refused in workspace mode.
+    assert "-mod=" not in script("go")

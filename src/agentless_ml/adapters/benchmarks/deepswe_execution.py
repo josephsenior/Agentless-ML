@@ -36,8 +36,10 @@ from agentless_ml.validation.reports import ReportFormat, TestReport
 WORK = "/tmp/work"
 
 # Paths a language's tooling writes to; on the read-only root filesystem they
-# must land in the writable /tmp.
-_GO_ENVIRONMENT = "GOCACHE=/tmp/go-build GOFLAGS=-mod=mod"
+# must land in the writable /tmp. Go's own module mode is left alone: forcing
+# -mod=mod made arcane, a go.work workspace, exit before running a single test,
+# since Go refuses that flag in workspace mode.
+_GO_ENVIRONMENT = "GOCACHE=/tmp/go-build"
 
 # src-layout first, then flat layout. A missing entry is ignored by Python, so
 # one rule covers `src/cattrs/` and a top-level `fastapi/` package alike, and
@@ -171,13 +173,23 @@ VITEST = DeepSWETestCommand(
 # on the read-only root, so CARGO_HOME is a writable directory that links back
 # to that registry. nextest exits 100 when tests failed; 101 (build failed) is
 # left undeclared, so a candidate that breaks the build is handled as one, and a
-# baseline that does not build stops the run.
+# baseline that does not build stops the run. The build lives in the size-capped
+# memory-backed /tmp, and boa's full debug build did not fit in 4 GB ("No space
+# left on device" after 22 minutes). Most of a debug build is debug information
+# and the incremental cache, neither of which a one-off test run uses, so the
+# build keeps only line tables (failures still report file and line) and no
+# incremental cache; debug assertions and overflow checks are separate settings
+# and stay on.
+_CARGO_BUILD = (
+    "CARGO_INCREMENTAL=0 CARGO_PROFILE_DEV_DEBUG=line-tables-only "
+    "CARGO_PROFILE_TEST_DEBUG=line-tables-only"
+)
 CARGO_NEXTEST = DeepSWETestCommand(
     script=(
         "mkdir -p /tmp/cargo-home && ln -sfn /root/.cargo/registry /tmp/cargo-home/registry && "
         "printf '[store]\\ndir = \"/tmp/nextest-store\"\\n"
         "[profile.default.junit]\\npath = \"junit.xml\"\\n' > /tmp/nextest.toml && "
-        f"cd {WORK} && CARGO_HOME=/tmp/cargo-home CARGO_TARGET_DIR=/tmp/target "
+        f"cd {WORK} && CARGO_HOME=/tmp/cargo-home CARGO_TARGET_DIR=/tmp/target {_CARGO_BUILD} "
         "CARGO_NET_OFFLINE=true cargo nextest run --config-file /tmp/nextest.toml "
         '--no-fail-fast "$@"'
     ),
@@ -246,18 +258,46 @@ _MOCHA_DROPPED_WITH_VALUE = {"-R", "--reporter", "-O", "--reporter-option",
                              "--reporter-options"}
 
 
+def _go_targets(checkout: Path) -> tuple[str, ...]:
+    """Every package: ``./...``, or one pattern per module of a go.work workspace.
+
+    In a workspace whose root is not itself a module, ``./...`` matches nothing
+    ("directory prefix . does not contain modules listed in go.work"); arcane's
+    go.work uses ./backend, ./cli and ./types, which become ./backend/... and so
+    on.
+    """
+    work = checkout / "go.work"
+    if not work.is_file():
+        return ("./...",)
+    text = re.sub(r"//[^\n]*", "", work.read_text(encoding="utf-8"))
+    used: list[str] = []
+    for block in re.findall(r"^\s*use\s*\(([^)]*)\)", text, flags=re.MULTILINE):
+        used += block.split()
+    used += re.findall(r"^\s*use\s+([^\s(][^\s]*)\s*$", text, flags=re.MULTILINE)
+    targets = []
+    for directory in used:
+        directory = directory.strip('"').rstrip("/")
+        if directory in (".", "./"):
+            targets.append("./...")
+        else:
+            prefix = "" if directory.startswith(("./", "../")) else "./"
+            targets.append(f"{prefix}{directory}/...")
+    return tuple(dict.fromkeys(targets)) or ("./...",)
+
+
 def deepswe_test_targets(runner: str, checkout: Path) -> tuple[str, ...]:
     """What the whole suite is, as the repository declares it.
 
     Every runner but mocha finds its tests from the repository's own
     configuration (pytest's testpaths, jest's and vitest's config, Cargo's
-    workspace), so it is given none; Go is given ``./...``, every package. mocha
+    workspace), so it is given none; Go is given every package, per module in a
+    go.work workspace. mocha
     is given the arguments the ``package.json`` test script passes it — testem's
     ``mocha tests/*_tests.js tests/**/*_tests.js`` gives the two globs — minus
     reporter and watch flags, which would replace the report this command reads.
     """
     if runner == "go":
-        return ("./...",)
+        return _go_targets(Path(checkout))
     if runner != "mocha":
         return ()
     script = _package_script(checkout)
