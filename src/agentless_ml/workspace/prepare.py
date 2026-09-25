@@ -26,6 +26,7 @@ import re
 import shutil
 import stat
 import subprocess
+import tempfile
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -136,16 +137,41 @@ def prepare_sealed_repository(
         raise WorkspaceError(f"destination already exists: {destination}")
     destination.parent.mkdir(parents=True, exist_ok=True)
 
+    # The clone is made and sealed in a temporary directory and moved into place
+    # only once it is locked. While a clone still has its upstream address, an
+    # editor that auto-fetches every repository in a folder it has open can
+    # fetch into it: VS Code's git fetched 183,431 objects into a half-made
+    # clone under benchmarks/, and held its files open so it could not be
+    # removed.
+    staging = Path(tempfile.mkdtemp(prefix="agentless-ml-seal-"))
+    workdir = staging / destination.name
     try:
-        return _clone_and_seal(
-            source, repository_url, base_commit, destination, timeout_seconds
+        branch, base_tree, git_version = _clone_and_seal(
+            source, base_commit, workdir, timeout_seconds
         )
+        shutil.move(str(workdir), str(destination))
+        verify_sealed_repository(destination, base_commit, timeout_seconds=timeout_seconds)
     except BaseException:
         # A clone interrupted by a network drop or an unwritable path leaves a
         # partial repository behind. Left in place, the next run would mistake
         # it for a prepared one, so remove what this call created.
+        _remove_tree(staging)
         _remove_tree(destination)
         raise
+    _remove_tree(staging)
+    sealed = SealedRepository(
+        path=str(destination.resolve()),
+        repository_url=repository_url,
+        base_commit=base_commit,
+        base_tree=base_tree,
+        branch=branch,
+        git_version=git_version,
+        prepared_at=datetime.now(UTC).isoformat(),
+    )
+    (destination.parent / (destination.name + ".sealed.json")).write_text(
+        json.dumps(asdict(sealed), indent=2) + "\n", encoding="utf-8", newline="\n"
+    )
+    return sealed
 
 
 def _remove_tree(directory: Path) -> None:
@@ -165,11 +191,11 @@ def _remove_tree(directory: Path) -> None:
 
 def _clone_and_seal(
     source: str,
-    repository_url: str,
     base_commit: str,
     destination: Path,
     timeout_seconds: float,
-) -> SealedRepository:
+) -> tuple[str, str, str]:
+    """Clone, seal and lock; return the branch, base tree and git version."""
     _require(
         destination.parent,
         "clone",
@@ -195,31 +221,9 @@ def _clone_and_seal(
     # do, so the checkout looks like an ordinary branch rather than a detached
     # HEAD that some build tooling treats as a broken repository.
     _require(destination, "checkout", "-B", branch, base_commit, timeout=timeout_seconds)
+    _prune_refs(destination, branch, timeout_seconds)
     _require(destination, "remote", "remove", "origin", timeout=timeout_seconds)
-
-    for ref in _require(
-        destination,
-        "for-each-ref",
-        "--format=%(refname:short)",
-        "refs/heads",
-        timeout=timeout_seconds,
-    ).splitlines():
-        if ref and ref != branch:
-            _require(destination, "branch", "-D", ref, timeout=timeout_seconds)
-    for tag in _require(destination, "tag", timeout=timeout_seconds).splitlines():
-        if tag and _git(
-            destination, "merge-base", "--is-ancestor", tag, "HEAD", timeout=60
-        ).returncode:
-            _require(destination, "tag", "-d", tag, timeout=timeout_seconds)
-    for ref in _require(
-        destination,
-        "for-each-ref",
-        "--format=%(refname)",
-        "refs/remotes",
-        timeout=timeout_seconds,
-    ).splitlines():
-        if ref:
-            _require(destination, "update-ref", "-d", ref, timeout=timeout_seconds)
+    lock_sealed_repository(destination)
 
     # Deleting refs only unlinks the later commits; the objects are still in the
     # repository, and reachable by ID, until the reflog is dropped and unreachable
@@ -228,21 +232,51 @@ def _clone_and_seal(
     _require(destination, "gc", "--prune=now", timeout=timeout_seconds)
 
     verify_sealed_repository(destination, base_commit, timeout_seconds=timeout_seconds)
-    sealed = SealedRepository(
-        path=str(destination.resolve()),
-        repository_url=repository_url,
-        base_commit=base_commit,
-        base_tree=_require(
-            destination, "rev-parse", base_commit + "^{tree}", timeout=timeout_seconds
-        ),
-        branch=branch,
-        git_version=_require(destination, "--version", timeout=timeout_seconds),
-        prepared_at=datetime.now(UTC).isoformat(),
+    return (
+        branch,
+        _require(destination, "rev-parse", base_commit + "^{tree}", timeout=timeout_seconds),
+        _require(destination, "--version", timeout=timeout_seconds),
     )
-    (destination.parent / (destination.name + ".sealed.json")).write_text(
-        json.dumps(asdict(sealed), indent=2) + "\n", encoding="utf-8"
-    )
-    return sealed
+
+
+def lock_sealed_repository(repository: Path) -> None:
+    """Make any later network fetch into ``repository`` fail.
+
+    Removing the remote is not enough. A sealed katex repository inside the
+    folder an editor had open was fetched into 80 seconds after sealing and
+    regained 268 later commits: the editor's git integration fetches every
+    repository it finds, and did so while it still knew the upstream address.
+    With every transport disallowed in the repository's own configuration,
+    such a fetch fails whatever runs it. Cloning from the repository is
+    unaffected, since that is governed by the cloning process's configuration.
+    """
+    _require(repository, "config", "protocol.allow", "never", timeout=30)
+
+
+def _prune_refs(repository: Path, branch: str, timeout: float) -> None:
+    """Delete every ref except ``branch`` and the tags already in its history.
+
+    This is an allow-list. Deleting named kinds of ref (other branches, later
+    tags, remote-tracking refs) left whatever a clone happened to contain
+    beyond them: two DeepSWE clones made while upstream was being pushed to
+    failed verification, one with later commits still referenced, one with
+    ``refs/remotes/origin/HEAD`` pointing at nothing.
+    """
+    # A symbolic ref whose target is gone is skipped by for-each-ref but still
+    # breaks later commands, so the remote's HEAD is removed without being
+    # followed. It may not exist; that is not an error.
+    _git(repository, "symbolic-ref", "--delete", "refs/remotes/origin/HEAD", timeout=30)
+    keep = f"refs/heads/{branch}"
+    for ref in _require(
+        repository, "for-each-ref", "--format=%(refname)", timeout=timeout
+    ).splitlines():
+        if not ref or ref == keep:
+            continue
+        if ref.startswith("refs/tags/") and not _git(
+            repository, "merge-base", "--is-ancestor", ref, "HEAD", timeout=60
+        ).returncode:
+            continue
+        _require(repository, "update-ref", "--no-deref", "-d", ref, timeout=timeout)
 
 
 def verify_sealed_repository(
@@ -253,6 +287,21 @@ def verify_sealed_repository(
     head = _require(repository, "rev-parse", "HEAD", timeout=timeout_seconds)
     if head != base_commit:
         raise WorkspaceError(f"sealed repository HEAD is {head}, not {base_commit}")
+    listing = _git(
+        repository, "for-each-ref", "--format=%(refname)", timeout=timeout_seconds
+    )
+    if listing.returncode or b"broken ref" in listing.stderr:
+        raise WorkspaceError(
+            "sealed repository has a broken ref: "
+            + listing.stderr.decode("utf-8", errors="replace").strip()[:300]
+        )
+    stray = [
+        ref
+        for ref in listing.stdout.decode().split()
+        if not ref.startswith(("refs/heads/", "refs/tags/"))
+    ]
+    if stray:
+        raise WorkspaceError(f"sealed repository keeps refs it should not: {stray[:5]}")
     extra = _require(
         repository, "rev-list", "--all", "--not", "HEAD", timeout=timeout_seconds
     )
@@ -264,6 +313,14 @@ def verify_sealed_repository(
     remotes = _require(repository, "remote", timeout=timeout_seconds)
     if remotes:
         raise WorkspaceError(f"sealed repository still has remotes: {remotes}")
+    lock = _git(
+        repository, "config", "--local", "--get", "protocol.allow", timeout=timeout_seconds
+    )
+    if lock.stdout.decode().strip() != "never":
+        raise WorkspaceError(
+            "sealed repository does not refuse network fetches (protocol.allow is not "
+            "'never' in its own config); another program could fetch later history into it"
+        )
     unreachable = [
         line
         for line in _require(

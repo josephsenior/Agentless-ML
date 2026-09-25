@@ -45,6 +45,34 @@ Use `tools/prepare_deepswe_repositories.py` to prepare DeepSWE task repositories
 from the pinned corpus; it writes each one beside a `.sealed.json` record of the
 URL, commit, tree, branch and Git version it used.
 
+### What surveying 113 tasks changed about sealing
+
+Three things went wrong at scale, and each is now closed off:
+
+- **References the seal did not know about.** The seal used to delete named
+  kinds of reference: other branches, later tags, remote-tracking refs. Two
+  clones made while upstream was being pushed to kept something else: in one,
+  later commits were still reachable; in the other,
+  `refs/remotes/origin/HEAD` pointed at nothing and every later git command
+  failed. The seal is now an allow-list: it keeps the one branch and the tags
+  already in the base commit's history, and deletes every other reference,
+  including broken symbolic ones. Verification names any reference outside
+  `refs/heads/` and `refs/tags/`.
+- **Another program fetching into a sealed repository.** A katex repository
+  passed verification and, 80 seconds later, held 268 commits after its base
+  commit again. Its git log recorded the update as a `fetch`. The editor had
+  the parent folder open, and VS Code Insiders' git integration runs `git
+  fetch` in every repository it finds there; process listings showed its `git
+  fetch` pulling 183,431 objects into a clone still in progress. A sealed
+  repository now sets `protocol.allow = never` in its own configuration, so any
+  fetch into it fails whatever runs it, and verification requires that setting.
+  Cloning from it for candidate workspaces is unaffected, because that is
+  governed by the cloning process's configuration.
+- **The window before the seal.** While a clone is in progress it still has its
+  upstream address, and the editor fetched into it and held its files open. The
+  clone is now made and sealed in a temporary directory and moved into place only
+  once it is locked.
+
 ## Lifecycle
 
 1. Validate the local repository and full base commit. Reject unsupported tree

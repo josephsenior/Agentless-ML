@@ -7,6 +7,7 @@ from agentless_ml.workspace.local_git import (
 )
 from agentless_ml.workspace.prepare import (
     SealedRepository,
+    lock_sealed_repository,
     prepare_sealed_repository,
     verify_sealed_repository,
 )
@@ -27,6 +28,7 @@ __all__ = [
     "WorkspaceError",
     "WorkspaceProvenance",
     "WorkspaceProvider",
+    "lock_sealed_repository",
     "prepare_sealed_repository",
     "verify_sealed_repository",
 ]

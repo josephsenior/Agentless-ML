@@ -102,6 +102,11 @@ def test_verification_rejects_a_repository_that_kept_later_commits(upstream, tmp
     # Checking out the base commit is not sealing: the fix is still one
     # `git log --all` away, which is exactly what verification must catch.
     git(unsealed, "checkout", "--quiet", base)
+    with pytest.raises(WorkspaceError, match="keeps refs it should not"):
+        verify_sealed_repository(unsealed, base)
+    # With the remote gone, a local branch left at the fix is still caught.
+    git(unsealed, "branch", "--quiet", "later", "origin/main")
+    git(unsealed, "remote", "remove", "origin")
     with pytest.raises(WorkspaceError, match="outside the base commit"):
         verify_sealed_repository(unsealed, base)
 
@@ -126,3 +131,82 @@ def test_inputs_must_be_a_full_commit_and_an_unused_destination(upstream, tmp_pa
     (tmp_path / "taken").mkdir()
     with pytest.raises(WorkspaceError, match="already exists"):
         prepare_sealed_repository(str(root), base, tmp_path / "taken")
+
+
+def seal_by_hand(clone, base):
+    from agentless_ml.workspace import lock_sealed_repository
+    from agentless_ml.workspace.prepare import _prune_refs
+
+    git(clone, "checkout", "--quiet", "-B", "main", base)
+    _prune_refs(clone, "main", 60)
+    git(clone, "remote", "remove", "origin")
+    lock_sealed_repository(clone)
+    git(clone, "reflog", "expire", "--expire=now", "--all")
+    git(clone, "gc", "--quiet", "--prune=now")
+
+
+def test_refs_of_any_kind_pointing_past_the_base_are_removed(upstream, tmp_path):
+    # Deleting only branches, tags and remotes let a clone made mid-push keep
+    # later commits reachable; every ref outside the allow-list must go.
+    root, base, fix = upstream
+    clone = tmp_path / "clone"
+    git(tmp_path, "clone", "--quiet", str(root), str(clone))
+    git(clone, "update-ref", "refs/pull/1/head", fix)
+    git(clone, "update-ref", "refs/notes/commits", fix)
+    git(clone, "tag", "v1.0", base)
+    seal_by_hand(clone, base)
+    verify_sealed_repository(clone, base)
+    refs = git(clone, "for-each-ref", "--format=%(refname)").split()
+    assert refs == ["refs/heads/main", "refs/tags/v1.0"]
+    assert subprocess.run(["git", "cat-file", "-e", fix], cwd=clone).returncode != 0
+
+
+def test_a_dangling_remote_head_does_not_break_the_seal(upstream, tmp_path):
+    # drizzle: refs/remotes/origin/HEAD pointed at a ref that was never fetched,
+    # and every later git command failed with "invalid sha1 pointer".
+    root, base, _ = upstream
+    clone = tmp_path / "clone"
+    git(tmp_path, "clone", "--quiet", str(root), str(clone))
+    git(clone, "symbolic-ref", "refs/remotes/origin/HEAD", "refs/remotes/origin/gone")
+    seal_by_hand(clone, base)
+    verify_sealed_repository(clone, base)
+
+
+def test_verification_names_a_stray_ref_even_inside_the_base_history(upstream, tmp_path):
+    root, base, _ = upstream
+    clone = tmp_path / "clone"
+    git(tmp_path, "clone", "--quiet", str(root), str(clone))
+    seal_by_hand(clone, base)
+    git(clone, "update-ref", "refs/notes/commits", base)
+    with pytest.raises(WorkspaceError, match="keeps refs it should not"):
+        verify_sealed_repository(clone, base)
+
+
+def test_a_sealed_repository_refuses_a_later_fetch(upstream, tmp_path):
+    # katex, inside a folder an editor had open, was fetched into after sealing
+    # and regained 268 later commits. Whatever runs the fetch, it must fail.
+    root, base, fix = upstream
+    sealed = prepare_sealed_repository(str(root), base, tmp_path / "sealed")
+    fetch = subprocess.run(
+        ["git", "fetch", str(root), "+refs/heads/*:refs/remotes/editor/*"],
+        cwd=sealed.path, capture_output=True, text=True,
+    )
+    assert fetch.returncode != 0
+    assert subprocess.run(["git", "cat-file", "-e", fix], cwd=sealed.path).returncode != 0
+    verify_sealed_repository(sealed.path, base)
+
+
+def test_verification_rejects_a_repository_that_would_accept_a_fetch(upstream, tmp_path):
+    root, base, _ = upstream
+    sealed = prepare_sealed_repository(str(root), base, tmp_path / "sealed")
+    git(sealed.path, "config", "--unset", "protocol.allow")
+    with pytest.raises(WorkspaceError, match="does not refuse network fetches"):
+        verify_sealed_repository(sealed.path, base)
+
+
+def test_the_sealed_repository_still_provisions_workspaces_when_locked(upstream, tmp_path):
+    root, base, _ = upstream
+    sealed = prepare_sealed_repository(str(root), base, tmp_path / "sealed")
+    provider = LocalGitWorkspaceProvider(sealed.path, base, tmp_path / "workspaces")
+    with provider.create() as workspace:
+        assert (workspace.path / "calculator.py").read_text() == BUG
