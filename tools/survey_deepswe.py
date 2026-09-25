@@ -34,6 +34,7 @@ import argparse
 import json
 import shutil
 import subprocess
+import tempfile
 import time
 from collections import Counter
 from pathlib import Path
@@ -108,8 +109,14 @@ def _survey(task, args, overrides) -> dict:
 
     artifacts = args.artifacts / task.instance_id
     try:
+        # Candidate checkouts go to the system temp folder, not under the
+        # results: an editor with the results' parent folder open picked up a
+        # fresh checkout as a git repository and held it open, so it could not
+        # be deleted after the run.
         provider = LocalGitWorkspaceProvider(
-            repository, task.base_commit, artifacts / "workspaces"
+            repository,
+            task.base_commit,
+            Path(tempfile.gettempdir()) / "agentless-ml-survey-workspaces",
         )
     except WorkspaceError as error:
         # Candidate workspaces refuse, for example, repositories with symlinks

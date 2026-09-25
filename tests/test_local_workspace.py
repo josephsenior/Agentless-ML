@@ -321,3 +321,40 @@ def test_fatal_git_apply_error_is_classified_as_infrastructure(
             workspace.apply_candidate(candidate()).status
             is PatchApplicationStatus.HARNESS_ERROR
         )
+
+
+class _Locked(PermissionError):
+    # What Windows raises when another process has the file open.
+    winerror = 32
+
+
+def test_cleanup_waits_out_a_momentary_lock(monkeypatch):
+    # An editor's git integration held a fresh checkout open for a moment,
+    # and cleanup failed the whole survey task instead of trying again.
+    from agentless_ml.workspace import local_git
+
+    monkeypatch.setattr(local_git.time, "sleep", lambda seconds: None)
+    calls = []
+
+    def remove():
+        calls.append(1)
+        if len(calls) < 3:
+            raise _Locked("in use")
+
+    local_git._retry_while_locked(remove)
+    assert len(calls) == 3
+
+
+def test_cleanup_does_not_retry_other_permission_errors(monkeypatch):
+    from agentless_ml.workspace import local_git
+
+    monkeypatch.setattr(local_git.time, "sleep", lambda seconds: None)
+    calls = []
+
+    def remove():
+        calls.append(1)
+        raise PermissionError("access denied")
+
+    with pytest.raises(PermissionError):
+        local_git._retry_while_locked(remove)
+    assert len(calls) == 1

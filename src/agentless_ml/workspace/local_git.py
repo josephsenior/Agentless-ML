@@ -15,6 +15,7 @@ import shutil
 import stat
 import subprocess
 import tempfile
+import time
 import uuid
 from dataclasses import asdict
 from datetime import UTC, datetime
@@ -160,11 +161,29 @@ def _remove_owned(directory: Path, root: Path, token: str) -> None:
         if child == marker:
             continue
         if child.is_symlink() or child.is_file():
-            child.unlink()
+            _retry_while_locked(child.unlink)
         else:
-            shutil.rmtree(child, onerror=remove_readonly)
+            _retry_while_locked(lambda child=child: shutil.rmtree(child, onerror=remove_readonly))
     marker.unlink()
-    directory.rmdir()
+    _retry_while_locked(directory.rmdir)
+
+
+def _retry_while_locked(remove, attempts: int = 8) -> None:
+    """Retry a removal Windows refuses because another process has the file open.
+
+    Editors' git integrations, search indexers and antivirus open files in a
+    fresh checkout for a moment; a removal during that moment fails with
+    WinError 32. Anything else, or a lock that outlasts about 13 seconds,
+    is raised.
+    """
+    for attempt in range(attempts):
+        try:
+            remove()
+            return
+        except PermissionError as error:
+            if getattr(error, "winerror", None) != 32 or attempt == attempts - 1:
+                raise
+            time.sleep(0.1 * 2**attempt)
 
 
 class LocalGitWorkspaceProvider:
