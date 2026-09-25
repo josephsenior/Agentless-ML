@@ -182,17 +182,21 @@ class DeepSWEDataset:
         task_ids: tuple[str, ...] | None = None,
         container_digests: Mapping[str, str] | None = None,
         resolved_base_commits: Mapping[str, str] | None = None,
+        language_corrections: Mapping[str, str] | None = None,
     ) -> tuple[TaskSpec, ...]:
         """Load normalized tasks in task-name order.
 
         ``resolved_base_commits`` maps task IDs to the full commit their
-        abbreviated ``base_commit_hash`` resolves to.
+        abbreviated ``base_commit_hash`` resolves to; ``language_corrections``
+        maps task IDs to the language their mislabelled ``language`` should be.
+        ``language`` filters on the corrected label.
         """
         requested = None if task_ids is None else frozenset(task_ids)
         if task_ids is not None and len(requested) != len(task_ids):
             raise ValueError("task_ids must not contain duplicates")
         digests = container_digests or {}
         resolved = resolved_base_commits or {}
+        corrections = language_corrections or {}
         tasks: list[TaskSpec] = []
         for directory in self._task_directories():
             if requested is not None and directory.name not in requested:
@@ -208,6 +212,7 @@ class DeepSWEDataset:
                 dataset_revision=self.pin.revision,
                 container_digest=digests.get(directory.name),
                 resolved_base_commit=resolved.get(directory.name),
+                corrected_language=corrections.get(directory.name),
             )
             if language is None or task.language == language.casefold():
                 tasks.append(task)
@@ -217,6 +222,25 @@ class DeepSWEDataset:
                 names = ", ".join(sorted(missing))
                 raise KeyError(f"DeepSWE tasks not found: {names}")
         return tuple(tasks)
+
+
+def pinned_load_options(pin: Mapping[str, Any]) -> dict[str, dict[str, str]]:
+    """``load_tasks`` keyword arguments from a corpus pin file's contents.
+
+    Every correction the pin records is applied: full commits for abbreviated
+    ones, image digests, and languages the corpus mislabels. A language
+    correction without a written reason is refused.
+    """
+    corrections: dict[str, str] = {}
+    for task_id, entry in pin.get("language_corrections", {}).items():
+        if not isinstance(entry.get("reason"), str) or not entry["reason"].strip():
+            raise ValueError(f"language correction for {task_id} needs a reason")
+        corrections[task_id] = entry["language"]
+    return {
+        "resolved_base_commits": dict(pin.get("resolved_base_commits", {})),
+        "container_digests": dict(pin.get("container_digests", {})),
+        "language_corrections": corrections,
+    }
 
 
 def _string(record: Mapping[str, Any], name: str) -> str:
@@ -252,12 +276,17 @@ def load_deepswe_task(
     dataset_revision: str,
     container_digest: str | None = None,
     resolved_base_commit: str | None = None,
+    corrected_language: str | None = None,
 ) -> TaskSpec:
     """Normalize one projected, answer-free DeepSWE record.
 
     An abbreviated ``base_commit`` needs ``resolved_base_commit``: the full commit
     it names. Resolution happens against the real repository, outside this
     function, and is pinned by the caller.
+
+    ``corrected_language`` replaces a language label the corpus gets wrong, as
+    pinned by the caller with its reason. It must differ from the recorded
+    label, so a correction that the corpus has since fixed is noticed.
     """
     if not isinstance(record, Mapping):
         raise TypeError("DeepSWE record must be a mapping")
@@ -281,6 +310,14 @@ def load_deepswe_task(
     language = _string(record, "language").casefold()
     if language not in _LANGUAGES:
         raise ValueError(f"unsupported DeepSWE language: {language}")
+    if corrected_language is not None:
+        if corrected_language not in _LANGUAGES:
+            raise ValueError(f"unsupported corrected language: {corrected_language}")
+        if corrected_language == language:
+            raise ValueError(
+                f"{task_id} is already labelled {language}; drop its language correction"
+            )
+        language = corrected_language
     repository_match = _REPOSITORY_URL.fullmatch(_string(record, "repository_url"))
     if repository_match is None:
         raise ValueError("DeepSWE repository_url must be a GitHub repository URL")

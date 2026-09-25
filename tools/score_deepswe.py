@@ -26,7 +26,7 @@ import json
 from dataclasses import asdict
 from pathlib import Path
 
-from agentless_ml.adapters.benchmarks import DeepSWEDataset, DeepSWEDatasetPin
+from agentless_ml.adapters.benchmarks import DeepSWEDataset, DeepSWEDatasetPin, pinned_load_options
 from agentless_ml.scoring import DeepSWEVerifier
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -53,8 +53,7 @@ def main() -> int:
         DeepSWEDatasetPin(pin["revision"], pin["agent_files_sha256"], pin["task_count"]),
     ).load_tasks(
         task_ids=(args.task_id,),
-        resolved_base_commits=pin["resolved_base_commits"],
-        container_digests=pin["container_digests"],
+        **pinned_load_options(pin),
     )
     verifier = DeepSWEVerifier(args.deepswe_repository, pin["revision"])
 

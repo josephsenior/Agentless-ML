@@ -6,6 +6,7 @@ from agentless_ml.adapters.benchmarks.deepswe import (
     DeepSWEDataset,
     DeepSWEDatasetPin,
     load_deepswe_task,
+    pinned_load_options,
     project_deepswe_task,
 )
 from agentless_ml.adapters.benchmarks.deepswe_execution import (
@@ -41,6 +42,7 @@ __all__ = [
     "deepswe_test_runner",
     "deepswe_test_targets",
     "load_test_overrides",
+    "pinned_load_options",
     "load_deepswe_task",
     "load_swe_bench_pro_task",
     "project_deepswe_task",

@@ -24,7 +24,7 @@ import subprocess
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-from agentless_ml.adapters.benchmarks import DeepSWEDataset, DeepSWEDatasetPin
+from agentless_ml.adapters.benchmarks import DeepSWEDataset, DeepSWEDatasetPin, pinned_load_options
 
 ROOT = Path(__file__).resolve().parents[1]
 PIN = ROOT / "experiments" / "deepswe" / "corpus_pin.json"
@@ -60,7 +60,7 @@ def main() -> int:
             agent_files_sha256=pin["agent_files_sha256"],
             task_count=pin["task_count"],
         ),
-    ).load_tasks(resolved_base_commits=pin["resolved_base_commits"])
+    ).load_tasks(**pinned_load_options(pin))
 
     def resolve(task):
         try:

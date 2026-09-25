@@ -39,6 +39,7 @@ from collections import Counter
 from pathlib import Path
 
 from agentless_ml.adapters.benchmarks import (
+    pinned_load_options,
     DeepSWEDataset,
     DeepSWEDatasetPin,
     deepswe_test_plan,
@@ -190,8 +191,7 @@ def main() -> int:
     ).load_tasks(
         language=args.language,
         task_ids=tuple(args.task_ids) if args.task_ids else None,
-        resolved_base_commits=pin["resolved_base_commits"],
-        container_digests=pin["container_digests"],
+        **pinned_load_options(pin),
     )
     args.results.parent.mkdir(parents=True, exist_ok=True)
     recorded = _latest(args.results)

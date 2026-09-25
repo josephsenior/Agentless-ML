@@ -17,7 +17,7 @@ import argparse
 import json
 from pathlib import Path
 
-from agentless_ml.adapters.benchmarks import DeepSWEDataset, DeepSWEDatasetPin
+from agentless_ml.adapters.benchmarks import DeepSWEDataset, DeepSWEDatasetPin, pinned_load_options
 from agentless_ml.workspace import (
     WorkspaceError,
     prepare_sealed_repository,
@@ -50,7 +50,7 @@ def main() -> int:
     tasks = dataset.load_tasks(
         language=arguments.language,
         task_ids=tuple(arguments.task_ids) if arguments.task_ids else None,
-        resolved_base_commits=pin_data["resolved_base_commits"],
+        **pinned_load_options(pin_data),
     )
 
     failures = 0

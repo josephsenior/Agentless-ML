@@ -25,6 +25,7 @@ from collections import Counter
 from pathlib import Path
 
 from agentless_ml.adapters.benchmarks import (
+    pinned_load_options,
     DeepSWEDataset,
     DeepSWEDatasetPin,
     deepswe_test_command,
@@ -60,8 +61,7 @@ def main() -> int:
     )
     (task,) = dataset.load_tasks(
         task_ids=(arguments.task_id,),
-        resolved_base_commits=pin["resolved_base_commits"],
-        container_digests=pin["container_digests"],
+        **pinned_load_options(pin),
     )
 
     artifacts = arguments.artifacts / task.instance_id

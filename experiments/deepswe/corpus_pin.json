@@ -122,5 +122,19 @@
     "yaegi-go-embed-directives": "sha256:4cf42295c9eedbe7dcbd8ba986988742aa5ed70f67b12fe0958b9f8b4a1e0f4c",
     "yjs-map-conflict-detection": "sha256:91b1986f864befaef716579fa641d57051257ea5484515f9befd30a4f5d800ef",
     "ytt-jsonpath-query-api": "sha256:34d04ef8efcbbcb74b634e35141bd2defde29cd01073cc3ba07b2b70aa911bdf"
+  },
+  "language_corrections": {
+    "httpx-deterministic-cookie-store": {
+      "language": "python",
+      "reason": "task.toml says typescript, but the repository is encode/httpx (pyproject.toml, httpx/, tests/), the instruction adds httpx.CookieStore, and the task image installs pytest; the other two httpx tasks are labelled python."
+    },
+    "koota-entity-snapshot-rollback": {
+      "language": "typescript",
+      "reason": "task.toml says python, but koota is a TypeScript ECS library, the instruction exports TypeScript APIs from the package, the task image installs vitest, and the four other koota tasks are labelled typescript."
+    },
+    "prometheus-transactional-reload-status": {
+      "language": "go",
+      "reason": "task.toml says typescript, but the instruction changes Prometheus's config reloaders and --enable-feature flags in its Go server, and the task image installs go-ctrf-json-reporter for Go tests."
+    }
   }
 }

@@ -1,9 +1,11 @@
 # DeepSWE integration
 
-DeepSWE provides 113 tasks across Go (34), Python (34), TypeScript (35),
+DeepSWE provides 113 tasks across Go (35), Python (34), TypeScript (34),
 JavaScript (5) and Rust (5), pinned at `datacurve-ai/deep-swe`
-`0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea`. It is the only target benchmark
-that covers all five workflow languages; SWE-bench Pro has no Rust tasks.
+`0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea`. These counts use the three
+[corrected language labels](#language-corrections); the corpus's own labels give
+34, 34 and 35. It is the only target benchmark that covers all five workflow
+languages; SWE-bench Pro has no Rust tasks.
 
 The adapter turns a task directory into a `TaskSpec`. It does not run tasks, pull
 images, or score results.
@@ -80,6 +82,29 @@ second commit later. The adapter therefore accepts an abbreviated commit only
 together with a pinned full commit that starts with it; without one it raises an
 error naming the task. The full commits above were resolved through the GitHub
 commits API and are stored in the corpus pin.
+
+## Language corrections
+
+A task's language decides which parser reads its code during localization and
+which test runner runs its suite, so a wrong label derails the whole workflow on
+that task. Three tasks are mislabelled in the corpus. Comparing each task's
+label with GitHub's main language for its repository flagged four; the task's
+own instruction and the test tooling its environment Dockerfile installs, both
+agent-visible, settled each:
+
+```text
+task                                     corpus label   corrected   evidence
+httpx-deterministic-cookie-store         typescript     python      adds httpx.CookieStore; image installs pytest
+koota-entity-snapshot-rollback           python         typescript  koota ECS API; image installs vitest
+prometheus-transactional-reload-status   typescript     go          Prometheus reloaders; image installs the Go reporter
+claude-code-by-agents-recursive-...      typescript     (correct)   GitHub says Swift for the repository, but the task
+                                                                    is its TypeScript chat flow, tested with vitest
+```
+
+The corrections are recorded in `corpus_pin.json` under `language_corrections`,
+each with its reason, and `pinned_load_options` applies them whenever a tool loads
+tasks. A correction must differ from the corpus label, so if a later corpus
+revision fixes a label, loading fails until the stale correction is removed.
 
 ## Normalized problem statement
 

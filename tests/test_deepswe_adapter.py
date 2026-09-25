@@ -216,3 +216,27 @@ def test_pinned_real_corpus_loads(forbid_held_out) -> None:
     assert len(tasks) == 113
     assert all(task.container_digest for task in tasks)
     assert {task.language for task in tasks} == {"go", "javascript", "python", "rust", "typescript"}
+
+
+def test_a_language_correction_replaces_a_mislabel() -> None:
+    record = project_deepswe_task(REAL_TASK)
+    task = load_deepswe_task(record, dataset_revision=REVISION, corrected_language="rust")
+    assert task.language == "rust"
+    with pytest.raises(ValueError, match="already labelled go"):
+        load_deepswe_task(record, dataset_revision=REVISION, corrected_language="go")
+    with pytest.raises(ValueError, match="unsupported corrected language"):
+        load_deepswe_task(record, dataset_revision=REVISION, corrected_language="cobol")
+
+
+def test_the_pinned_language_corrections_are_explained() -> None:
+    from agentless_ml.adapters.benchmarks import pinned_load_options
+
+    corrections = pinned_load_options(CORPUS_PIN)["language_corrections"]
+    assert corrections == {
+        "httpx-deterministic-cookie-store": "python",
+        "koota-entity-snapshot-rollback": "typescript",
+        "prometheus-transactional-reload-status": "go",
+    }
+    unexplained = {"language_corrections": {"t": {"language": "go", "reason": " "}}}
+    with pytest.raises(ValueError, match="needs a reason"):
+        pinned_load_options(unexplained)
