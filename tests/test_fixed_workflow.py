@@ -836,3 +836,53 @@ def test_real_docker_recorded_workflow(tmp_path, source):
         ValidationStatus.PASS,
     ]
     assert result.prediction.selected_candidate_id == "repair-2"
+
+
+class NewModuleRunner(FakeRunner):
+    """Passes only when the candidate's own new file is present in its workspace."""
+
+    def run(self, source, command, *, artifact_root=None):
+        destination = Path(artifact_root) / "fake-execution"
+        destination.mkdir(parents=True)
+        root = Path(source)
+        passed = (root / "mathops.py").is_file() and "plus(a, b)" in (
+            root / "calculator.py"
+        ).read_text()
+        result = ValidationResult(
+            status=ValidationStatus.PASS if passed else ValidationStatus.FAIL,
+            command=command.argv,
+            duration_seconds=0.01,
+            exit_code=0 if passed else 1,
+            kind=command.kind,
+        )
+        return ExecutionRecord(result, self.image_id, "fake-container", str(destination))
+
+
+def test_a_repair_can_create_a_new_file_and_it_reaches_the_prediction(tmp_path, source):
+    repository, _ = source
+    creates = (
+        "```python\n### mathops.py\n<<<<<<< SEARCH\n=======\n"
+        "def plus(a, b):\n    return a + b\n>>>>>>> REPLACE\n\n"
+        "### calculator.py\n<<<<<<< SEARCH\ndef add(a, b):\n    return a - b\n=======\n"
+        "from mathops import plus\n\n\ndef add(a, b):\n    return plus(a, b)\n"
+        ">>>>>>> REPLACE\n```"
+    )
+    overwrites = (
+        "```python\n### test_public.py\n<<<<<<< SEARCH\n=======\npass\n"
+        ">>>>>>> REPLACE\n```"
+    )
+    recorded = RecordedStageResponses(
+        file_localization="```\ncalculator.py\n```",
+        symbol_localization="```\ncalculator.py\nfunction: add\n```",
+        repairs=(overwrites, creates),
+        source="controlled fixture",
+    )
+    result = controller(tmp_path, source, NewModuleRunner()).run(recorded)
+
+    assert result.attempts[0].status == "repair_error"
+    assert "already exists: test_public.py" in result.attempts[0].message
+    assert result.prediction.selected_candidate_id == "repair-1"
+    patch = result.prediction.model_patch
+    assert "diff --git a/mathops.py b/mathops.py\nnew file mode 100644\n" in patch
+    assert "+++ b/mathops.py\n@@ -0,0 +1,2 @@\n+def plus(a, b):\n" in patch
+    assert not (repository / "mathops.py").exists()

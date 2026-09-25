@@ -6,7 +6,7 @@ import re
 from dataclasses import dataclass
 from pathlib import PurePosixPath
 from types import MappingProxyType
-from typing import Mapping, Sequence
+from typing import Collection, Mapping, Sequence
 
 
 class EditParseError(ValueError):
@@ -19,15 +19,18 @@ class EditApplicationError(ValueError):
 
 @dataclass(frozen=True, slots=True)
 class SearchReplaceEdit:
+    """One edit. An empty ``search`` creates a new file whose content is ``replacement``."""
+
     path: str
     search: str
     replacement: str
 
     def __post_init__(self) -> None:
-        normalized = _normalize_path(self.path)
-        if not self.search:
-            raise EditParseError("SEARCH content must not be empty")
-        object.__setattr__(self, "path", normalized)
+        object.__setattr__(self, "path", _normalize_path(self.path))
+
+    @property
+    def creates_file(self) -> bool:
+        return not self.search
 
 
 @dataclass(frozen=True, slots=True)
@@ -36,6 +39,7 @@ class AppliedRepair:
     original_sources: Mapping[str, str]
     updated_sources: Mapping[str, str]
     changed_paths: tuple[str, ...]
+    created_paths: tuple[str, ...] = ()
 
 
 _FENCED_BLOCK = re.compile(r"```[^\n`]*\n(.*?)(?:\n```|\Z)", re.DOTALL)
@@ -135,11 +139,18 @@ def apply_search_replace_edits(
     edits: Sequence[SearchReplaceEdit],
     *,
     allowed_intervals: Mapping[str, Sequence[tuple[int, int]]] | None = None,
+    existing_paths: Collection[str] | None = None,
 ) -> AppliedRepair:
     """Apply all edits in memory, failing atomically on an invalid edit.
 
     A SEARCH block must identify exactly one eligible occurrence. No caller-owned
     mapping is changed when any edit fails.
+
+    An empty SEARCH block creates a new file. ``existing_paths`` is every path the
+    repository already tracks; creation is refused without it, and for any path it
+    contains (compared case-insensitively, as a Windows or macOS checkout would).
+    A created file has no interval: all of it is new, so later edits in the same
+    response may change any part of it. It appears in ``updated_sources`` only.
     """
     if not edits:
         raise EditApplicationError("at least one edit is required")
@@ -153,6 +164,13 @@ def apply_search_replace_edits(
         originals[normalized_path] = content
     updated = dict(originals)
     changed_paths: list[str] = []
+    created_paths: list[str] = []
+    taken = (
+        None
+        if existing_paths is None
+        else {_normalize_path(path).casefold() for path in existing_paths}
+        | {path.casefold() for path in originals}
+    )
     normalized_intervals: dict[str, tuple[tuple[int, int], ...]] | None = None
     if allowed_intervals is not None:
         normalized_intervals = {}
@@ -166,11 +184,34 @@ def apply_search_replace_edits(
             normalized_intervals[normalized_path] = checked
 
     for edit in edits:
+        if edit.creates_file:
+            if edit.path in created_paths:
+                raise EditApplicationError(f"file is created more than once: {edit.path}")
+            if edit.path in updated:
+                raise EditApplicationError(
+                    f"SEARCH content must not be empty for an existing file: {edit.path}"
+                )
+            if taken is None:
+                raise EditApplicationError(
+                    "file creation requires the repository's tracked paths"
+                )
+            if edit.path.casefold() in taken:
+                raise EditApplicationError(
+                    f"cannot create a file that already exists: {edit.path}"
+                )
+            content = edit.replacement
+            if content and not content.endswith("\n"):
+                content += "\n"
+            updated[edit.path] = content
+            taken.add(edit.path.casefold())
+            created_paths.append(edit.path)
+            changed_paths.append(edit.path)
+            continue
         if edit.path not in updated:
             raise EditApplicationError(f"edited file is not visible: {edit.path}")
         source = updated[edit.path]
         matches = _occurrences(source, edit.search)
-        if normalized_intervals is not None:
+        if normalized_intervals is not None and edit.path not in created_paths:
             if edit.path not in normalized_intervals:
                 raise EditApplicationError(
                     f"edited file has no authorized interval: {edit.path}"
@@ -191,7 +232,11 @@ def apply_search_replace_edits(
         if edit.path not in changed_paths:
             changed_paths.append(edit.path)
 
-    changed_paths = [path for path in changed_paths if updated[path] != originals[path]]
+    changed_paths = [
+        path
+        for path in changed_paths
+        if path in created_paths or updated[path] != originals[path]
+    ]
     if not changed_paths:
         raise EditApplicationError("edits do not change the repository")
     return AppliedRepair(
@@ -199,4 +244,5 @@ def apply_search_replace_edits(
         original_sources=MappingProxyType(originals),
         updated_sources=MappingProxyType(updated),
         changed_paths=tuple(changed_paths),
+        created_paths=tuple(created_paths),
     )

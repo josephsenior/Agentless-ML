@@ -14,22 +14,26 @@ def build_unified_diff(
     original_sources: Mapping[str, str],
     updated_sources: Mapping[str, str],
 ) -> str:
-    """Build one deterministic Git-style patch for all changed visible files."""
-    if set(original_sources) != set(updated_sources):
-        raise ValueError(
-            "file creation and deletion are not supported at this boundary"
-        )
+    """Build one deterministic Git-style patch for all changed visible files.
+
+    A path present only in ``updated_sources`` is a new regular file (mode 100644).
+    A path present only in ``original_sources`` would be a deletion, which is not
+    supported.
+    """
+    if not set(original_sources) <= set(updated_sources):
+        raise ValueError("file deletion is not supported at this boundary")
     chunks: list[str] = []
-    for path in sorted(original_sources):
-        old = original_sources[path]
+    for path in sorted(updated_sources):
+        created = path not in original_sources
+        old = "" if created else original_sources[path]
         new = updated_sources[path]
-        if old == new:
+        if old == new and not created:
             continue
         body = list(
             unified_diff(
                 old.splitlines(keepends=True),
                 new.splitlines(keepends=True),
-                fromfile=f"a/{path}",
+                fromfile="/dev/null" if created else f"a/{path}",
                 tofile=f"b/{path}",
                 lineterm="\n",
             )
@@ -38,7 +42,10 @@ def build_unified_diff(
             line if line.endswith("\n") else line + "\n\\ No newline at end of file\n"
             for line in body
         )
-        chunks.append(f"diff --git a/{path} b/{path}\n" + rendered)
+        header = f"diff --git a/{path} b/{path}\n"
+        if created:
+            header += "new file mode 100644\n"
+        chunks.append(header + rendered)
     if not chunks:
         raise ValueError("cannot build an empty patch")
     return "".join(chunks)
@@ -80,13 +87,19 @@ def comment_normalized_diff(
     ``normalize_patch`` on the real diff instead, which is still unique.
     """
     adapter = get_language_adapter(language)
+
+    def stripped(path: str, source: str) -> str:
+        # A created file may be in another format (a data file in a Go task);
+        # only the task language's own files have comments this adapter knows.
+        if not path.endswith(adapter.extensions):
+            return source
+        return adapter.strip_comments(source, path=path)
+
     stripped_originals = {
-        path: adapter.strip_comments(source, path=path)
-        for path, source in original_sources.items()
+        path: stripped(path, source) for path, source in original_sources.items()
     }
     stripped_updated = {
-        path: adapter.strip_comments(source, path=path)
-        for path, source in updated_sources.items()
+        path: stripped(path, source) for path, source in updated_sources.items()
     }
     try:
         stripped_diff = build_unified_diff(stripped_originals, stripped_updated)

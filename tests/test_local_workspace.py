@@ -358,3 +358,50 @@ def test_cleanup_does_not_retry_other_permission_errors(monkeypatch):
     with pytest.raises(PermissionError):
         local_git._retry_while_locked(remove)
     assert len(calls) == 1
+
+
+def _patched(patch: str):
+    return replace(
+        candidate(), diff=patch, diff_sha256=hashlib.sha256(patch.encode()).hexdigest()
+    )
+
+
+def test_a_patch_may_create_new_files_in_new_folders(source) -> None:
+    repository, commit, root = source
+    patch = build_unified_diff(
+        {"a.py": "value = 1\n"},
+        {"a.py": "value = 2\n", "pkg/rule.py": "RULE = 1\n", "pkg/__init__.py": ""},
+    )
+    with LocalGitWorkspaceProvider(repository, commit, root).create() as workspace:
+        result = workspace.apply_candidate(_patched(patch))
+        assert result.status is PatchApplicationStatus.APPLIED, result.message
+        assert set(result.changed_paths) == {"a.py", "pkg/rule.py", "pkg/__init__.py"}
+        assert (workspace.path / "pkg" / "rule.py").read_bytes() == b"RULE = 1\n"
+        assert (workspace.path / "pkg" / "__init__.py").read_bytes() == b""
+    assert not (repository / "pkg").exists()
+
+
+@pytest.mark.parametrize(
+    "patch",
+    [
+        # a "new" file that is already tracked, spelled exactly or in other case
+        build_unified_diff({}, {"b.py": "other = 2\n"}),
+        build_unified_diff({}, {"B.py": "other = 2\n"}),
+        # an ignored, untracked file already on disk in the source is never created over
+        build_unified_diff({}, {".git/hooks/pre-commit": "echo\n"}),
+        # only ordinary files: no executable or symlink modes
+        "diff --git a/run.sh b/run.sh\nnew file mode 100755\n--- /dev/null\n"
+        "+++ b/run.sh\n@@ -0,0 +1 @@\n+echo\n",
+        # a new-file header whose two paths disagree
+        "diff --git a/x.py b/y.py\nnew file mode 100644\n--- /dev/null\n"
+        "+++ b/y.py\n@@ -0,0 +1 @@\n+y\n",
+        # an untracked path that is not declared as new
+        "--- a/new.py\n+++ b/new.py\n@@ -0,0 +1 @@\n+y\n",
+    ],
+)
+def test_new_files_never_replace_escape_or_change_mode(source, patch) -> None:
+    repository, commit, root = source
+    with LocalGitWorkspaceProvider(repository, commit, root).create() as workspace:
+        result = workspace.apply_candidate(_patched(patch))
+        assert result.status is PatchApplicationStatus.PATCH_ERROR
+        assert git(workspace.path, "status", "--porcelain", "--untracked-files=all") == b""

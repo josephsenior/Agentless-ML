@@ -106,6 +106,22 @@ def _safe_path(raw: str) -> str:
     return path.as_posix()
 
 
+def _created_paths(diff: str) -> frozenset[str]:
+    """Paths a patch declares as new regular files (``new file mode 100644``)."""
+    created: set[str] = set()
+    lines = diff.splitlines()
+    for index, line in enumerate(lines):
+        if line != "new file mode 100644":
+            continue
+        header = lines[index - 1] if index else ""
+        rest = header.removeprefix("diff --git a/")
+        path = rest[: max(0, len(rest) - 3) // 2]
+        if header == rest or rest != f"{path} b/{path}":
+            raise WorkspaceError("new file mode without a matching diff header")
+        created.add(_safe_path(path))
+    return frozenset(created)
+
+
 def _tracked_paths(repository: Path, commit: str, timeout: float) -> frozenset[str]:
     listing = _require_git(
         repository, "ls-tree", "-rz", "--full-tree", commit, timeout=timeout
@@ -372,28 +388,29 @@ class LocalGitWorkspace:
             return result(
                 PatchApplicationStatus.PATCH_ERROR, "candidate patch digest mismatch"
             )
-        # This version accepts modifications to existing regular text files only.
+        # This version accepts modifications to existing regular text files and
+        # new regular (mode 100644) text files; nothing else.
         if any(
             line.startswith(
                 (
                     "old mode ",
                     "new mode ",
-                    "new file mode ",
                     "deleted file mode ",
                     "rename from ",
                     "copy from ",
-                    "--- /dev/null",
                     "+++ /dev/null",
                     "GIT binary patch",
                     "Binary files ",
                 )
             )
+            or (line.startswith("new file mode ") and line != "new file mode 100644")
             for line in candidate.diff.splitlines()
         ):
             return result(
                 PatchApplicationStatus.PATCH_ERROR, "unsupported file or mode change"
             )
         try:
+            created = _created_paths(candidate.diff)
             numstat = _git(
                 self.path,
                 "apply",
@@ -414,12 +431,16 @@ class LocalGitWorkspace:
                     continue
                 added, deleted, raw_path = entry.split(b"\t", 2)
                 path = _safe_path(raw_path.decode("utf-8"))
-                if added == b"-" or deleted == b"-" or path not in self._paths:
+                if added == b"-" or deleted == b"-":
+                    raise WorkspaceError("patch must change text files only")
+                target = self.path / path
+                if path in created:
+                    self._require_creatable(path)
+                elif path not in self._paths:
                     raise WorkspaceError(
                         "patch must modify existing regular text files"
                     )
-                target = self.path / path
-                if (
+                elif (
                     target.is_symlink()
                     or target.resolve() != target
                     or not target.is_file()
@@ -478,6 +499,23 @@ class LocalGitWorkspace:
             return result(PatchApplicationStatus.PATCH_ERROR, str(exc))
         except OSError as exc:
             return result(PatchApplicationStatus.HARNESS_ERROR, str(exc))
+
+    def _require_creatable(self, path: str) -> None:
+        """A new file may not replace, shadow or escape anything in the checkout."""
+        folded = path.casefold()
+        if any(existing.casefold() == folded for existing in self._paths):
+            raise WorkspaceError(f"new file collides with a tracked path: {path}")
+        target = self.path / path
+        if target.exists() or target.is_symlink():
+            raise WorkspaceError(f"new file already exists: {path}")
+        root = self.path.resolve()
+        parent = target.parent
+        while parent != self.path:
+            if parent.is_symlink() or (parent.exists() and not parent.is_dir()):
+                raise WorkspaceError(f"new file has an unsafe parent: {path}")
+            parent = parent.parent
+        if not target.parent.resolve().is_relative_to(root):
+            raise WorkspaceError(f"new file escapes the workspace: {path}")
 
     def close(self) -> None:
         if not self._closed:

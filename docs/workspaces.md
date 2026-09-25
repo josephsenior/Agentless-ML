@@ -119,9 +119,13 @@ receives frozen provenance and application records suitable for serialization.
 
 ## Current limits
 
-The backend accepts patches to existing regular text files only. File creation,
-deletion, rename/copy, executable-mode changes, symlink changes, binary patches,
-and submodules are rejected explicitly. These are initial capability limits,
+The backend accepts patches to existing regular text files, and patches that
+create new regular (mode `100644`) text files. A new file must be declared with
+`new file mode 100644` under a matching `diff --git` header, must not exist, must
+not collide case-insensitively with a tracked path, and must not sit under a
+symlink or a non-directory; Git creates any missing parent directories. Deletion,
+rename/copy, executable-mode changes, symlink changes, binary patches, and
+submodules are rejected explicitly. These are initial capability limits,
 not evidence that such tasks should be excluded from the eventual study.
 
 Patch errors, command timeouts, and infrastructure errors have distinct outcomes.

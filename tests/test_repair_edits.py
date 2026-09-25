@@ -112,3 +112,65 @@ new
         apply_search_replace_edits(
             {"a.py": "old\n"}, edits, allowed_intervals={"other.py": [(1, 1)]}
         )
+
+
+def _create(path: str, content: str) -> str:
+    return f"""### {path}
+{'<' * 7} SEARCH
+{'=' * 7}
+{content}
+{'>' * 7} REPLACE"""
+
+
+def test_empty_search_creates_a_new_file_outside_every_interval() -> None:
+    edits = parse_search_replace_edits(
+        _create("pkg/rule.go", "package pkg\n\nfunc Rule() {}")
+        + f"""
+### pkg/rule.go
+{'<' * 7} SEARCH
+func Rule() {{}}
+{'=' * 7}
+func Rule() int {{ return 1 }}
+{'>' * 7} REPLACE"""
+    )
+    applied = apply_search_replace_edits(
+        {"a.go": "package a\n"},
+        edits,
+        allowed_intervals={"a.go": [(1, 1)]},
+        existing_paths={"a.go", "b.go"},
+    )
+    assert applied.created_paths == ("pkg/rule.go",)
+    assert applied.changed_paths == ("pkg/rule.go",)
+    assert "pkg/rule.go" not in applied.original_sources
+    assert applied.updated_sources["pkg/rule.go"] == (
+        "package pkg\n\nfunc Rule() int { return 1 }\n"
+    )
+
+
+def test_an_empty_new_file_can_be_created() -> None:
+    edits = parse_search_replace_edits(_create("pkg/__init__.py", ""))
+    applied = apply_search_replace_edits({}, edits, existing_paths=set())
+    assert applied.updated_sources == {"pkg/__init__.py": ""}
+
+
+@pytest.mark.parametrize(
+    ("sources", "existing", "path", "message"),
+    [
+        ({"a.py": "x\n"}, {"a.py"}, "a.py", "must not be empty for an existing file"),
+        ({}, {"hidden.py"}, "hidden.py", "already exists"),
+        ({}, {"Pkg/Mod.py"}, "pkg/mod.py", "already exists"),
+        ({}, None, "new.py", "requires the repository's tracked paths"),
+    ],
+)
+def test_creation_never_overwrites_or_guesses(sources, existing, path, message) -> None:
+    edits = parse_search_replace_edits(_create(path, "content"))
+    with pytest.raises(EditApplicationError, match=message):
+        apply_search_replace_edits(sources, edits, existing_paths=existing)
+
+
+def test_a_file_cannot_be_created_twice_in_one_response() -> None:
+    edits = parse_search_replace_edits(
+        _create("new.py", "one") + "\n" + _create("new.py", "two")
+    )
+    with pytest.raises(EditApplicationError, match="created more than once"):
+        apply_search_replace_edits({}, edits, existing_paths=set())

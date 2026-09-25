@@ -8,7 +8,9 @@ tool loop. Recorded responses can therefore exercise it deterministically.
 
 - The Python repair prompt matches Agentless v1.5.0 at revision
   `b150f28465a77a81a7f4776384957a4271f5bd69` for its documented
-  `--cot --diff_format` condition. A golden prompt checksum protects that seam.
+  `--cot --diff_format` condition, plus one added paragraph explaining file
+  creation (below). A golden prompt checksum of the published text, taken with
+  that one paragraph removed, protects that seam.
 - Responses use fenced SEARCH/REPLACE blocks with repository-relative paths.
 - Candidate filtering prefers the minimum number of public regression failures.
 - When reproduction evidence is enabled, reproduction-passing candidates are
@@ -24,7 +26,19 @@ an intentional capability difference: tasks can require consistent changes acros
 multiple files, while candidate generation and selection remain fixed controller
 stages. Preserving those stages does not make this behavior identical to upstream.
 
-Agentless-ML also rejects unsafe paths, empty searches, missing files, ambiguous
+A response may also create a new file: an empty SEARCH block under a path the
+repository does not track makes the REPLACE block that file's whole content. The
+repair prompt says so in one paragraph added to every language's prompt,
+`FILE_CREATION_INSTRUCTION`. Upstream v1.5.0 cannot create files, so this is a
+second intentional capability difference, and a model-visible one. It exists
+because DeepSWE tasks are feature work whose reference solutions routinely add
+files: actionlint's adds `rule_action_pinning.go` (730 lines), which no patch
+limited to existing files can match. A created file needs no localization
+interval, since all of it is new; it may not replace, case-collide with or sit
+under anything tracked, and it is always an ordinary (mode 100644) text file.
+Deletion, renames and mode changes remain unsupported.
+
+Agentless-ML also rejects unsafe paths, empty searches on existing files, missing files, ambiguous
 matches, no-op edits, patch errors, and infrastructure-failed candidates. An
 infrastructure failure (a timeout, an out-of-memory kill, a Docker error) is
 never converted into a failed test result. A patch that breaks the build is not

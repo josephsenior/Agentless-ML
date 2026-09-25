@@ -24,6 +24,8 @@ Every *SEARCH/REPLACE* edit must use this format:
 5. The lines to replace into the source code
 6. The end of the replace block: >>>>>>> REPLACE
 
+To create a new file, write the new file's path and leave the SEARCH block empty (nothing between the search line and the dividing line); the replace block is then the whole content of the new file.
+
 Here is an example:
 
 ```python

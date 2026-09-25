@@ -722,7 +722,10 @@ class FixedWorkflowController:
                 try:
                     edits = parse_search_replace_edits(response)
                     applied = apply_search_replace_edits(
-                        sources, edits, allowed_intervals=candidate_intervals
+                        sources,
+                        edits,
+                        allowed_intervals=candidate_intervals,
+                        existing_paths=self.provider.paths,
                     )
                     candidate = build_patch_candidate(
                         candidate_id=candidate_id,

@@ -31,6 +31,8 @@ Every *SEARCH/REPLACE* edit must use this format:
 5. The lines to replace into the source code
 6. The end of the replace block: >>>>>>> REPLACE
 
+{file_creation_instruction}
+
 Here is an example:
 
 ```{language}
@@ -47,6 +49,15 @@ Wrap the *SEARCH/REPLACE* edit in blocks ```{language}...```.
 """
 
 
+# Not in Agentless v1.5.0: its repair post-processing cannot create files, and
+# this workflow can. Everything else in the Python prompt is the published text.
+FILE_CREATION_INSTRUCTION = (
+    "To create a new file, write the new file's path and leave the SEARCH block "
+    "empty (nothing between the search line and the dividing line); the replace "
+    "block is then the whole content of the new file."
+)
+
+
 def build_repair_prompt(
     problem_statement: str,
     selected_context: str,
@@ -55,9 +66,9 @@ def build_repair_prompt(
 ) -> str:
     """Build the fixed repair-stage prompt.
 
-    Python output is byte-compatible with the v1.5.0 ``--cot --diff_format``
-    template. Every language supplies its own example edit; the instructions
-    around it are shared.
+    Python output is the v1.5.0 ``--cot --diff_format`` template plus one added
+    paragraph, ``FILE_CREATION_INSTRUCTION``. Every language supplies its own
+    example edit; the instructions around it are shared.
     """
     if not problem_statement.strip():
         raise ValueError("problem_statement must not be empty")
@@ -68,6 +79,7 @@ def build_repair_prompt(
     return _SEARCH_REPLACE_PROMPT.format(
         problem_statement=problem_statement,
         repair_relevant_file_instruction=_RELEVANT_FILE_INSTRUCTION,
+        file_creation_instruction=FILE_CREATION_INSTRUCTION,
         content=selected_context.rstrip(),
         language=adapter.language,
         example_path=example.path,

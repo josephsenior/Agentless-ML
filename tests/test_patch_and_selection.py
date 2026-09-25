@@ -302,3 +302,35 @@ def test_final_prediction_uses_selected_candidate() -> None:
     )
     assert prediction.selected_candidate_id == "candidate-1"
     assert prediction.model_patch == patch
+
+
+def test_a_created_file_becomes_a_new_file_patch() -> None:
+    patch = build_unified_diff(
+        {"a.py": "x = 1\n"}, {"a.py": "x = 1\n", "pkg/new.py": "y = 2\n", "pkg/__init__.py": ""}
+    )
+    assert patch == (
+        "diff --git a/pkg/__init__.py b/pkg/__init__.py\n"
+        "new file mode 100644\n"
+        "diff --git a/pkg/new.py b/pkg/new.py\n"
+        "new file mode 100644\n"
+        "--- /dev/null\n"
+        "+++ b/pkg/new.py\n"
+        "@@ -0,0 +1 @@\n"
+        "+y = 2\n"
+    )
+    with pytest.raises(ValueError, match="deletion"):
+        build_unified_diff({"a.py": "x = 1\n"}, {})
+
+
+def test_created_files_vote_together_when_only_comments_differ() -> None:
+    def key(comment: str) -> str:
+        updated = {"a.go": "package a\n", "b.go": f"package a\n{comment}\nfunc B() {{}}\n",
+                   "data.json": "{}\n"}
+        return build_patch_candidate(
+            candidate_id="c", raw_response="r",
+            diff=build_unified_diff({"a.go": "package a\n"}, updated),
+            localization_rank=0, sample_index=0, language="go",
+            original_sources={"a.go": "package a\n"}, updated_sources=updated,
+        ).normalized_diff
+
+    assert key("// B does nothing.") == key("// B is a placeholder.")

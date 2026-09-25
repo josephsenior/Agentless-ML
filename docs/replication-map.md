@@ -103,7 +103,10 @@ See [the benchmark note](swe-bench-pro.md).
 
 Multi-file application supports repairs that span files, but can accept repairs the
 pinned upstream postprocessor would not produce. It therefore affects capability,
-even with the same fixed controller. File creation and deletion remain unsupported.
+even with the same fixed controller. File creation is supported (an empty SEARCH
+block under an untracked path), which upstream v1.5.0 also cannot do, and which adds
+one paragraph to every repair prompt; deletion remains unsupported. See
+[repair and selection](repair-selection.md#intentional-changes).
 
 Textual normalization avoids a Python-only AST requirement in the common repair
 code. It is provisional: it can group patches differently from upstream, and
