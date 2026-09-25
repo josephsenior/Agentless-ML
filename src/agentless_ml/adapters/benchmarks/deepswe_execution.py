@@ -85,10 +85,17 @@ class DeepSWETestCommand:
 # so treating that as a reporter failure would turn every real regression into
 # a harness error. `go test`'s own status is the result; a report that was never
 # written is caught by the runner, which refuses a missing or empty report.
+# Since Go 1.24, `go test -json` also reports a package that fails to build as
+# "build-output" and "build-fail" events, and go-ctrf-json-reporter v0.1.0
+# writes a 0-byte report when it meets them. In abs, one package imports
+# syscall/js, which only builds for WebAssembly, and that single package cost
+# the whole suite's 170 test results. Those events are dropped before the
+# reporter; the package itself is still reported as failed, without tests.
 GO = DeepSWETestCommand(
     script=(
         f'cd {WORK} && {_GO_ENVIRONMENT} go test -json -count=1 "$@" > /tmp/go-test.json; rc=$?; '
-        "go-ctrf-json-reporter -output /tmp/ctrf.json < /tmp/go-test.json >/dev/null 2>&1; "
+        "grep -v '\"Action\":\"build-' /tmp/go-test.json "
+        "| go-ctrf-json-reporter -output /tmp/ctrf.json >/dev/null 2>&1; "
         "exit $rc"
     ),
     report=TestReport(ReportFormat.CTRF_JSON, "/tmp/ctrf.json"),

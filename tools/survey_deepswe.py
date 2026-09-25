@@ -23,7 +23,9 @@ Outcomes:
   no_image           the pinned image is not present (use --pull)
   image_mismatch     the local image is not the pinned digest
   repository_failed  the sealed repository could not be prepared or verified
+  unsupported_repository  candidate workspaces refuse it (symlinks, submodules)
   harness_error, timeout, out_of_memory   as the runner reports them
+  survey_error       anything unexpected; recorded, and the survey goes on
 """
 
 from __future__ import annotations
@@ -104,7 +106,14 @@ def _survey(task, args, overrides) -> dict:
         return done(status, message=message)
 
     artifacts = args.artifacts / task.instance_id
-    provider = LocalGitWorkspaceProvider(repository, task.base_commit, artifacts / "workspaces")
+    try:
+        provider = LocalGitWorkspaceProvider(
+            repository, task.base_commit, artifacts / "workspaces"
+        )
+    except WorkspaceError as error:
+        # Candidate workspaces refuse, for example, repositories with symlinks
+        # or submodules; the workflow cannot run such a task at all.
+        return done("unsupported_repository", message=str(error)[:500])
     with provider.create() as workspace:
         try:
             plan = deepswe_test_plan(
@@ -193,7 +202,15 @@ def main() -> int:
         if free_gb < args.min_free_gb:
             print(f"stopping: {free_gb:.0f} GB free, below --min-free-gb {args.min_free_gb:g}")
             break
-        record = _survey(task, args, overrides)
+        try:
+            record = _survey(task, args, overrides)
+        except Exception as error:  # noqa: BLE001 - one task must not end a batch
+            record = {
+                "task_id": task.instance_id,
+                "language": task.language,
+                "status": "survey_error",
+                "message": f"{type(error).__name__}: {error}"[:500],
+            }
         with args.results.open("a", encoding="utf-8", newline="\n") as results:
             results.write(json.dumps(record) + "\n")
         detail = (

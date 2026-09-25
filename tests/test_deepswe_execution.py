@@ -98,6 +98,13 @@ def test_go_result_is_go_tests_exit_status_not_the_reporters():
     assert "||" not in text
 
 
+def test_go_build_events_never_reach_the_reporter():
+    # One package that cannot build (abs imports syscall/js) made the reporter
+    # write a 0-byte report and lost all 170 results of the rest of the suite.
+    text = script("go")
+    assert text.index("grep -v '\"Action\":\"build-'") < text.index("go-ctrf-json-reporter")
+
+
 def test_jest_cannot_read_a_stale_report_left_in_the_checkout():
     assert "rm -rf /tmp/work/ctrf" in script("jest")
 
