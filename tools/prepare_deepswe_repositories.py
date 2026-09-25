@@ -2,8 +2,8 @@
 
 Usage (from the repository root):
 
-    python tools/prepare_deepswe_repositories.py --tasks-root ../benchmarks/deep-swe/tasks \\
-        --destination ../benchmarks/deepswe-repos --task-id abs-module-cache-flags
+    python tools/prepare_deepswe_repositories.py --tasks-root ../benchmarks/deepswe/corpus/tasks \\
+        --destination ../benchmarks/deepswe/repos --task-id abs-module-cache-flags
 
 Each repository lands in ``<destination>/<task-id>`` with no history after the
 task's base commit, beside a ``<task-id>.sealed.json`` provenance record. This

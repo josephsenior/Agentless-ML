@@ -8,7 +8,7 @@ the mapping into ``experiments/deepswe/corpus_pin.json`` as
 ``container_digests``. Loading tasks with that mapping makes the controller
 refuse to run a task in any image other than the pinned one.
 
-    python tools/pin_deepswe_images.py --tasks-root ../benchmarks/deep-swe/tasks
+    python tools/pin_deepswe_images.py --tasks-root ../benchmarks/deepswe/corpus/tasks
 
 On Docker's containerd image store, which is the default here, the local image
 ID after a pull equals this registry digest, and that ID is what the runner

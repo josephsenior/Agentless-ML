@@ -134,8 +134,8 @@ preparation needs no file the adapter does not already read.
 ```powershell
 $env:PYTHONPATH = 'src'
 python tools/prepare_deepswe_repositories.py `
-  --tasks-root ../benchmarks/deep-swe/tasks `
-  --destination ../benchmarks/deepswe-repos `
+  --tasks-root ../benchmarks/deepswe/corpus/tasks `
+  --destination ../benchmarks/deepswe/repos `
   --task-id actionlint-action-pinning-lint
 ```
 
@@ -238,8 +238,8 @@ counted test ([a patch that breaks the build](public-validation.md#a-patch-that-
 ```powershell
 $env:PYTHONPATH = 'src'
 python tools/run_deepswe_tests.py `
-  --tasks-root ../benchmarks/deep-swe/tasks `
-  --repositories ../benchmarks/deepswe-repos `
+  --tasks-root ../benchmarks/deepswe/corpus/tasks `
+  --repositories ../benchmarks/deepswe/repos `
   --task-id actionlint-action-pinning-lint -- ./...
 ```
 
@@ -333,8 +333,8 @@ reported as errors and stay out of the inventory, and the other 879 tests pass.
 
 ```powershell
 python tools/survey_deepswe.py `
-  --tasks-root ../benchmarks/deep-swe/tasks `
-  --repositories ../benchmarks/deepswe-repos --language go --pull
+  --tasks-root ../benchmarks/deepswe/corpus/tasks `
+  --repositories ../benchmarks/deepswe/repos --language go --pull
 ```
 
 Each task's outcome is one line in `--results`; a surveyed task is skipped next
@@ -453,8 +453,8 @@ harness input that adds an unused config field), scores `unresolved` with 0 of
 ```powershell
 $env:PYTHONPATH = 'src'
 python tools/score_deepswe.py `
-  --deepswe-repository ../benchmarks/deep-swe `
-  --tasks-root ../benchmarks/deep-swe/tasks `
+  --deepswe-repository ../benchmarks/deepswe/corpus `
+  --tasks-root ../benchmarks/deepswe/corpus/tasks `
   --task-id actionlint-action-pinning-lint `
   --prediction <run directory>/prediction.json
 ```

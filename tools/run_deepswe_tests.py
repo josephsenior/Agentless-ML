@@ -3,8 +3,8 @@
 Prepare the task's repository first with `tools/prepare_deepswe_repositories.py`,
 then, from the repository root:
 
-    python tools/run_deepswe_tests.py --tasks-root ../benchmarks/deep-swe/tasks \\
-        --repositories ../benchmarks/deepswe-repos \\
+    python tools/run_deepswe_tests.py --tasks-root ../benchmarks/deepswe/corpus/tasks \\
+        --repositories ../benchmarks/deepswe/repos \\
         --task-id actionlint-action-pinning-lint
 
 The task's whole suite runs, as its repository declares it, with any override

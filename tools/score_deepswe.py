@@ -3,8 +3,8 @@
 This is step 5, after selection: it reads the task's held-out tests, which the
 workflow never sees, and reports whether the patch solves the task.
 
-    python tools/score_deepswe.py --deepswe-repository ../benchmarks/deep-swe \\
-        --tasks-root ../benchmarks/deep-swe/tasks \\
+    python tools/score_deepswe.py --deepswe-repository ../benchmarks/deepswe/corpus \\
+        --tasks-root ../benchmarks/deepswe/corpus/tasks \\
         --task-id actionlint-action-pinning-lint --prediction <run>/prediction.json
 
 What to score is one of:

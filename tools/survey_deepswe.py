@@ -7,8 +7,8 @@ passing tests are the regression inventory. This tool does exactly that for
 many tasks and records the outcome of each, so the tasks that need attention
 are known before a model is ever called.
 
-    python tools/survey_deepswe.py --tasks-root ../benchmarks/deep-swe/tasks \\
-        --repositories ../benchmarks/deepswe-repos --language go --pull
+    python tools/survey_deepswe.py --tasks-root ../benchmarks/deepswe/corpus/tasks \\
+        --repositories ../benchmarks/deepswe/repos --language go --pull
 
 Results are appended to ``--results`` as one JSON object per line. A task that
 already has a result is skipped, so an interrupted survey resumes; ``--rerun``

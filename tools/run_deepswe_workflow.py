@@ -5,8 +5,8 @@ The controller runs it once on the unpatched checkout, keeps every test that
 passed by name, applies the recorded exclusions, and counts each candidate's
 failures among the tests that remain. No model is called.
 
-    python tools/run_deepswe_workflow.py --tasks-root ../benchmarks/deep-swe/tasks \\
-        --repositories ../benchmarks/deepswe-repos \\
+    python tools/run_deepswe_workflow.py --tasks-root ../benchmarks/deepswe/corpus/tasks \\
+        --repositories ../benchmarks/deepswe/repos \\
         --experiment actionlint_action_pinning \\
         --workspace-root ../runs/workspaces --artifact-root ../runs/artifacts
 
