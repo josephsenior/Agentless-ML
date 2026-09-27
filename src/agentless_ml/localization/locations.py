@@ -5,10 +5,19 @@ from __future__ import annotations
 import re
 from collections.abc import Mapping, Sequence
 from pathlib import PurePosixPath
+from typing import Protocol
 
-from agentless_ml.adapters.languages import get_language_adapter
-from agentless_ml.schemas import FileNode
-from agentless_ml.structure.resolution import ResolvedLocations
+from agentless_ml.adapters.languages import (  # pyright: ignore[reportMissingTypeStubs]
+    get_language_adapter,
+)
+from agentless_ml.schemas import FileNode  # pyright: ignore[reportMissingTypeStubs]
+
+
+class ResolvedLocations(Protocol):
+    """Structural type returned by language-specific location resolvers."""
+
+    is_valid: bool
+    context_intervals: Sequence[tuple[int, int]]
 
 
 def extract_code_blocks(text: str) -> list[str]:
@@ -17,6 +26,47 @@ def extract_code_blocks(text: str) -> list[str]:
     if not matches and "```" in text:
         return [text.split("```", 1)[-1].strip()]
     return matches
+
+
+def _normalize_location_path(
+    raw_line: str,
+    known: frozenset[str],
+    repository_name: str | None,
+) -> str | None:
+    raw = raw_line.strip().strip("`'\"").replace("\\", "/")
+    if not raw or raw.startswith(("#", "- ")):
+        return None
+    path = PurePosixPath(raw)
+    if path.is_absolute() or ".." in path.parts:
+        return None
+    normalized = path.as_posix()
+    # Prefer an exact tracked path. A repository can have a top-level package
+    # with the same name, so stripping the display-only root prefix first is
+    # ambiguous.
+    if (
+        repository_name
+        and normalized not in known
+        and normalized.startswith(repository_name + "/")
+    ):
+        normalized = normalized[len(repository_name) + 1 :]
+    return normalized
+
+
+def _is_new_location(
+    raw_line: str,
+    known: frozenset[str],
+    selected: Sequence[str],
+    repository_name: str | None,
+    extension: str | tuple[str, ...],
+) -> str | None:
+    normalized = _normalize_location_path(raw_line, known, repository_name)
+    if normalized is None:
+        return None
+    if normalized not in known or not normalized.endswith(extension):
+        return None
+    if normalized in selected:
+        return None
+    return normalized
 
 
 def parse_file_locations(
@@ -41,30 +91,18 @@ def parse_file_locations(
     candidates = blocks if blocks else [response]
     for block in candidates:
         for raw_line in block.splitlines():
-            raw = raw_line.strip().strip("`'\"").replace("\\", "/")
-            if not raw or raw.startswith(("#", "- ")):
+            normalized = _is_new_location(
+                raw_line,
+                known,
+                selected,
+                repository_name,
+                extension,
+            )
+            if normalized is None:
                 continue
-            path = PurePosixPath(raw)
-            if path.is_absolute() or ".." in path.parts:
-                continue
-            normalized = path.as_posix()
-            # Prefer an exact tracked path. A repository can have a top-level
-            # package with the same name (for example qutebrowser/qutebrowser),
-            # so stripping the display-only root prefix first is ambiguous.
-            if (
-                repository_name
-                and normalized not in known
-                and normalized.startswith(repository_name + "/")
-            ):
-                normalized = normalized[len(repository_name) + 1 :]
-            if (
-                normalized in known
-                and normalized.endswith(extension)
-                and normalized not in selected
-            ):
-                selected.append(normalized)
-                if len(selected) == maximum_files:
-                    return tuple(selected)
+            selected.append(normalized)
+            if len(selected) == maximum_files:
+                return tuple(selected)
     return tuple(selected)
 
 
@@ -100,7 +138,7 @@ def parse_locations_for_files(
                     "module:",
                 )
             ):
-                if current_file_name in file_names:
+                if current_file_name is not None and current_file_name in file_names:
                     results.setdefault(current_file_name, []).append(line)
 
     for file_name in file_names:
@@ -144,65 +182,96 @@ def _line_wrap_content(
     no_line_number: bool,
     sticky_scroll: bool,
 ) -> str:
-    def is_scope(line: str) -> bool:
-        return line.startswith("class ") or line.strip().startswith("def ")
-
     lines = source.split("\n")
     active_intervals = list(intervals) or [(0, len(lines))]
     new_lines: list[str] = []
     previous_scopes: list[dict[str, int | str]] = []
-    line_format = "{line}"
-    if not no_line_number:
-        line_format = (
-            "{line_number}|{line}" if not add_space else "{line_number}| {line} "
-        )
+    line_format = _line_format(add_space, no_line_number)
 
-    max_line = len(lines)
     for min_line, max_line in active_intervals:
         if min_line != 0:
             new_lines.append("...")
-        scopes: list[dict[str, int | str]] = []
-        for index, line in enumerate(lines):
-            if sticky_scroll and is_scope(line):
-                indent_level = len(line) - len(line.lstrip())
-                while scopes and int(scopes[-1]["indent_level"]) >= indent_level:
-                    scopes.pop()
-                scopes.append(
-                    {
-                        "line": line,
-                        "line_number": index,
-                        "indent_level": indent_level,
-                    }
-                )
-            if min_line != -1 and index < min_line - 1:
-                continue
-            if sticky_scroll and index == min_line - 1:
-                last_scope_line: int | None = None
-                for scope_index, scope in enumerate(scopes):
-                    if (
-                        len(previous_scopes) > scope_index
-                        and previous_scopes[scope_index]["line_number"]
-                        == scope["line_number"]
-                    ):
-                        continue
-                    if index == scope["line_number"]:
-                        continue
-                    new_lines.append(
-                        line_format.format(
-                            line_number=int(scope["line_number"]) + 1,
-                            line=scope["line"],
-                        )
-                    )
-                    last_scope_line = int(scope["line_number"])
-                if last_scope_line is not None and last_scope_line < index - 1:
-                    new_lines.append("...")
-            new_lines.append(line_format.format(line_number=index + 1, line=line))
-            if max_line != -1 and index >= max_line - 1:
-                break
+        scopes = _render_interval(
+            lines,
+            min_line,
+            max_line,
+            line_format,
+            sticky_scroll,
+            previous_scopes,
+            new_lines,
+        )
         previous_scopes = scopes
-    if max_line != len(lines):
+    if active_intervals[-1][1] != len(lines):
         new_lines.append("...")
     return "\n".join(new_lines)
+
+
+def _line_format(add_space: bool, no_line_number: bool) -> str:
+    if no_line_number:
+        return "{line}"
+    return "{line_number}| {line} " if add_space else "{line_number}|{line}"
+
+
+def _update_scopes(
+    scopes: list[dict[str, int | str]], line: str, index: int
+) -> None:
+    if not (line.startswith("class ") or line.strip().startswith("def ")):
+        return
+    indent_level = len(line) - len(line.lstrip())
+    while scopes and int(scopes[-1]["indent_level"]) >= indent_level:
+        scopes.pop()
+    scopes.append({"line": line, "line_number": index, "indent_level": indent_level})
+
+
+def _append_sticky_scopes(
+    scopes: Sequence[dict[str, int | str]],
+    previous_scopes: Sequence[dict[str, int | str]],
+    index: int,
+    line_format: str,
+    new_lines: list[str],
+) -> None:
+    last_scope_line: int | None = None
+    for scope_index, scope in enumerate(scopes):
+        same_scope = (
+            len(previous_scopes) > scope_index
+            and previous_scopes[scope_index]["line_number"] == scope["line_number"]
+        )
+        if same_scope or index == scope["line_number"]:
+            continue
+        new_lines.append(
+            line_format.format(
+                line_number=int(scope["line_number"]) + 1,
+                line=scope["line"],
+            )
+        )
+        last_scope_line = int(scope["line_number"])
+    if last_scope_line is not None and last_scope_line < index - 1:
+        new_lines.append("...")
+
+
+def _render_interval(
+    lines: Sequence[str],
+    min_line: int,
+    max_line: int,
+    line_format: str,
+    sticky_scroll: bool,
+    previous_scopes: Sequence[dict[str, int | str]],
+    new_lines: list[str],
+) -> list[dict[str, int | str]]:
+    scopes: list[dict[str, int | str]] = []
+    for index, line in enumerate(lines):
+        if sticky_scroll:
+            _update_scopes(scopes, line, index)
+        if min_line != -1 and index < min_line - 1:
+            continue
+        if sticky_scroll and index == min_line - 1:
+            _append_sticky_scopes(
+                scopes, previous_scopes, index, line_format, new_lines
+            )
+        new_lines.append(line_format.format(line_number=index + 1, line=line))
+        if max_line != -1 and index >= max_line - 1:
+            break
+    return scopes
 
 
 def construct_selected_context(
