@@ -8,10 +8,10 @@ mean the task was solved. Each task's latest result and message are in the local
 
 | Latest status | Tasks |
 |---|---:|
-| Ready | 67 |
+| Ready | 68 |
 | Repository contains symlinks or submodules unsupported by local-git-v1 | 22 |
 | Test runner not yet supported or identifiable | 6 |
-| Test command or report failed | 8 |
+| Test command or report failed | 7 |
 | No passing baseline tests | 4 |
 | Repository preparation or seal failed | 3 |
 | Pinned image absent | 1 |
@@ -23,8 +23,9 @@ language fixes added six. The 14 tasks that had previously stopped at GitHub
 DNS now all clone successfully: seven became ready, four reached the repository
 support boundary, two reached test-harness problems, and one exposed a custom
 runner. Narrow, documented Prometheus test plans added two more ready tasks. A
-shared pnpm-workspace runner then brought all five Koota tasks to ready. That
-brings the count to 67 without treating a failed build as a passing suite.
+shared pnpm-workspace runner then brought all five Koota tasks to ready. Clearing
+Returns's unsupported pytest plugin options added one more. That brings the
+count to 68 without treating a failed build as a passing suite.
 
 ## What remains
 
@@ -61,13 +62,12 @@ checkout and writes a structured per-test report.
 and `yjs-map-conflict-detection` has a custom Node test entry point. These are
 not interchangeable with a guessed root-level Vitest command.
 
-The eight `harness_error` tasks reached a runner but did not produce a
+The seven `harness_error` tasks reached a runner but did not produce a
 trustworthy result. `bandit-structured-nosec-directives` lacks pytest in its
 image; `csstree-shorthand-expansion-compression` wrote empty JUnit XML;
 `kea-atomic-signal-selectors` failed during Jest setup;
 `mnamer-daemon-watch-lifecycle` needs a version source without relying on a
-candidate `.git` directory; `returns-validated-error-accumulation` invokes
-pytest options from an unavailable plugin; and
+candidate `.git` directory; and
 `sql-formatter-bigquery-pipe-formatting` needs generated parser files before
 its tests can run. `true-myth-iterable-collection-combinators` tries to write
 Vitest typecheck state under read-only `/app/node_modules`, while
@@ -93,7 +93,7 @@ repeatable baseline.
 ## Next checks
 
 The next shared runner work is the two other nested-package projects, then the
-single-tool and custom runners. The eight harness errors should be fixed
+single-tool and custom runners. The seven harness errors should be fixed
 with small task-specific checks where the published image is incomplete; keep
 the report/exit-code consistency check in place. Symlink and submodule support
 is a separate workspace safety change and should stay excluded until tested.

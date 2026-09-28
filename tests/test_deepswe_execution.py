@@ -264,6 +264,7 @@ def test_the_checked_in_overrides_are_well_formed_and_explained():
         "fastapi-implicit-head-options",
         "prometheus-transactional-reload-status",
         "prometheus-typed-label-sorting",
+        "returns-validated-error-accumulation",
     }
     assert all(len(entry["reason"]) > 40 for entry in overrides.values())
 

@@ -16,5 +16,9 @@
   "prometheus-typed-label-sorting": {
     "targets": ["./promql/..."],
     "reason": "The existing sort_by_label implementation and its tests live under promql. The whole go.work suite includes a tools-only module and unrelated packages that do not build offline in this image, so it produces no usable report. The promql package tree tests the task's candidate code directly."
+  },
+  "returns-validated-error-accumulation": {
+    "arguments": ["-o", "addopts="],
+    "reason": "setup.cfg injects pytest-cov and pytest-mypy command-line options, but the published image does not install those plugins. Those options make pytest exit during argument parsing before any tests run; clearing only addopts leaves the repository's test discovery and test code unchanged."
   }
 }
