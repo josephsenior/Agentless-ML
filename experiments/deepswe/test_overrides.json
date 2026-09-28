@@ -6,5 +6,14 @@
   "fastapi-implicit-head-options": {
     "arguments": ["-W", "ignore::starlette.exceptions.StarletteDeprecationWarning"],
     "reason": "pyproject.toml makes every warning an error; uv.lock pins starlette 0.52.1 but the published image installs 1.2.1, which warns when it falls back to httpx, so collection fails before any test runs. Only that warning class is ignored."
+  },
+  "prometheus-transactional-reload-status": {
+    "runner": "go-module",
+    "targets": ["./cmd/prometheus"],
+    "reason": "The published image warms and documents GOWORK=off go test ./cmd/prometheus as the offline test target for this task, with GOFLAGS=-mod=mod. Workspace mode rejects that image flag, and the broader go.work suite includes unrelated packages that fail to build offline. This target covers the Prometheus command that implements transactional reload."
+  },
+  "prometheus-typed-label-sorting": {
+    "targets": ["./promql/..."],
+    "reason": "The existing sort_by_label implementation and its tests live under promql. The whole go.work suite includes a tools-only module and unrelated packages that do not build offline in this image, so it produces no usable report. The promql package tree tests the task's candidate code directly."
   }
 }

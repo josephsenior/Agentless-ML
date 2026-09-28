@@ -36,9 +36,9 @@ from agentless_ml.validation.reports import ReportFormat, TestReport
 WORK = "/tmp/work"
 
 # Paths a language's tooling writes to; on the read-only root filesystem they
-# must land in the writable /tmp. Go's own module mode is left alone: forcing
-# -mod=mod made arcane, a go.work workspace, exit before running a single test,
-# since Go refuses that flag in workspace mode.
+# must land in the writable /tmp. We do not force a Go module mode. Some images
+# set GOFLAGS=-mod=mod themselves, though, which Go refuses in workspace mode;
+# clear that image default only when the checkout has go.work.
 _GO_ENVIRONMENT = "GOCACHE=/tmp/go-build"
 
 # src-layout first, then flat layout. A missing entry is ignored by Python, so
@@ -93,13 +93,29 @@ class DeepSWETestCommand:
 # syscall/js, which only builds for WebAssembly, and that single package cost
 # the whole suite's 170 test results. Those events are dropped before the
 # reporter; the package itself is still reported as failed, without tests.
-GO = DeepSWETestCommand(
-    script=(
-        f'cd {WORK} && {_GO_ENVIRONMENT} go test -json -count=1 "$@" > /tmp/go-test.json; rc=$?; '
+# Prometheus's transactional-reload image warms the main module with GOWORK=off
+# and sets GOFLAGS=-mod=mod. It therefore needs a separate module-mode command:
+# clearing GOFLAGS while leaving the workspace on cannot reproduce that build.
+def _go_script(mode: str) -> str:
+    setup = (
+        "export GOWORK=off; " if mode == "module"
+        else "if [ -f go.work ]; then export GOFLAGS=; fi; "
+    )
+    return (
+        f"cd {WORK} && {setup}"
+        f'{_GO_ENVIRONMENT} go test -json -count=1 "$@" > /tmp/go-test.json; rc=$?; '
         "grep -v '\"Action\":\"build-' /tmp/go-test.json "
         "| go-ctrf-json-reporter -output /tmp/ctrf.json >/dev/null 2>&1; "
         "exit $rc"
-    ),
+    )
+
+
+GO = DeepSWETestCommand(
+    script=_go_script("workspace"),
+    report=TestReport(ReportFormat.CTRF_JSON, "/tmp/ctrf.json"),
+)
+GO_MODULE = DeepSWETestCommand(
+    script=_go_script("module"),
     report=TestReport(ReportFormat.CTRF_JSON, "/tmp/ctrf.json"),
 )
 
@@ -199,6 +215,7 @@ CARGO_NEXTEST = DeepSWETestCommand(
 
 TEST_COMMANDS = {
     "go": GO,
+    "go-module": GO_MODULE,
     "pytest": PYTEST,
     "mocha": MOCHA,
     "jest": JEST,
@@ -296,7 +313,7 @@ def deepswe_test_targets(runner: str, checkout: Path) -> tuple[str, ...]:
     ``mocha tests/*_tests.js tests/**/*_tests.js`` gives the two globs — minus
     reporter and watch flags, which would replace the report this command reads.
     """
-    if runner == "go":
+    if runner in ("go", "go-module"):
         return _go_targets(Path(checkout))
     if runner != "mocha":
         return ()
@@ -338,13 +355,13 @@ class DeepSWETestPlan:
 def load_test_overrides(path: Path) -> dict[str, dict[str, object]]:
     """Per-task corrections that cannot be derived, each with its reason.
 
-    Keys are task IDs; each entry has a nonempty ``reason`` and ``arguments``
-    appended after the derived targets, or ``targets`` replacing them.
+    Keys are task IDs; each entry has a nonempty ``reason`` and may replace the
+    runner or targets, or append arguments after the derived targets.
     """
     raw = json.loads(Path(path).read_text(encoding="utf-8"))
     overrides: dict[str, dict[str, object]] = {}
     for task_id, entry in raw.items():
-        if not isinstance(entry, dict) or set(entry) - {"reason", "arguments", "targets"}:
+        if not isinstance(entry, dict) or set(entry) - {"reason", "arguments", "targets", "runner"}:
             raise ValueError(f"override for {task_id} has unknown keys")
         if not isinstance(entry.get("reason"), str) or not entry["reason"].strip():
             raise ValueError(f"override for {task_id} needs a reason")
@@ -352,7 +369,11 @@ def load_test_overrides(path: Path) -> dict[str, dict[str, object]]:
             value = entry.get(key, [])
             if not isinstance(value, list) or not all(isinstance(v, str) and v for v in value):
                 raise ValueError(f"override for {task_id}: {key} must be a list of strings")
-        if not entry.get("arguments") and "targets" not in entry:
+        if "runner" in entry and (
+            not isinstance(entry["runner"], str) or entry["runner"] not in TEST_COMMANDS
+        ):
+            raise ValueError(f"override for {task_id} has unknown runner")
+        if not entry.get("arguments") and "targets" not in entry and "runner" not in entry:
             raise ValueError(f"override for {task_id} changes nothing")
         overrides[task_id] = entry
     return overrides
@@ -363,6 +384,8 @@ def deepswe_test_plan(
 ) -> DeepSWETestPlan:
     """The runner and targets for a task's whole suite, plus any override."""
     runner = deepswe_test_runner(language, checkout)
+    if override is not None and "runner" in override:
+        runner = str(override["runner"])
     targets = deepswe_test_targets(runner, checkout)
     if override is None:
         return DeepSWETestPlan(runner, targets)

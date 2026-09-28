@@ -208,8 +208,26 @@ def test_the_checked_in_overrides_are_well_formed_and_explained():
     assert set(overrides) == {
         "awilix-async-container-initialization",
         "fastapi-implicit-head-options",
+        "prometheus-transactional-reload-status",
+        "prometheus-typed-label-sorting",
     }
     assert all(len(entry["reason"]) > 40 for entry in overrides.values())
+
+
+def test_prometheus_overrides_name_their_intended_packages():
+    overrides = load_test_overrides(OVERRIDES)
+    assert overrides["prometheus-transactional-reload-status"]["runner"] == "go-module"
+    assert overrides["prometheus-transactional-reload-status"]["targets"] == [
+        "./cmd/prometheus",
+    ]
+    assert overrides["prometheus-typed-label-sorting"]["targets"] == ["./promql/..."]
+
+
+def test_runner_override_changes_the_command_without_changing_targets(tmp_path):
+    override = {"runner": "go-module", "targets": ["./cmd/prometheus"], "reason": "image mode"}
+    plan = deepswe_test_plan("go", tmp_path, override)
+    assert (plan.runner, plan.targets) == ("go-module", ("./cmd/prometheus",))
+    assert "GOWORK=off" in plan.command().argv[2]
 
 
 @pytest.mark.parametrize(
@@ -219,6 +237,7 @@ def test_the_checked_in_overrides_are_well_formed_and_explained():
         ({"reason": "why", "arguments": ["-x"], "image": "other"}, "unknown keys"),
         ({"reason": "why"}, "changes nothing"),
         ({"reason": "why", "arguments": "-x"}, "list of strings"),
+        ({"reason": "why", "runner": []}, "unknown runner"),
     ],
 )
 def test_malformed_overrides_are_refused(tmp_path, entry, message):
@@ -243,3 +262,17 @@ def test_go_workspace_targets_every_module(tmp_path):
 def test_go_command_leaves_module_mode_to_go():
     # Forcing -mod=mod is refused in workspace mode.
     assert "-mod=" not in script("go")
+
+
+def test_go_command_clears_image_goflags_only_for_workspaces():
+    # Prometheus's image exports GOFLAGS=-mod=mod; go.work cannot use it.
+    text = script("go")
+    assert "if [ -f go.work ]; then export GOFLAGS=; fi" in text
+    assert text.index("export GOFLAGS=") < text.index("go test -json")
+
+
+def test_go_module_command_uses_the_images_offline_module_setup():
+    text = script("go-module")
+    assert "export GOWORK=off" in text
+    assert "export GOFLAGS=" not in text
+    assert deepswe_test_command("go-module").report == deepswe_test_command("go").report
