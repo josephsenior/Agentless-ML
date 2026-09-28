@@ -103,6 +103,7 @@ def test_go_build_events_never_reach_the_reporter():
     # write a 0-byte report and lost all 170 results of the rest of the suite.
     text = script("go")
     assert text.index("grep -v '\"Action\":\"build-'") < text.index("go-ctrf-json-reporter")
+    assert "build-output" in text  # Retain compiler diagnostics when reporting fails.
 
 
 def test_jest_cannot_read_a_stale_report_left_in_the_checkout():
@@ -217,6 +218,7 @@ def test_the_checked_in_overrides_are_well_formed_and_explained():
 def test_prometheus_overrides_name_their_intended_packages():
     overrides = load_test_overrides(OVERRIDES)
     assert overrides["prometheus-transactional-reload-status"]["runner"] == "go-module"
+    assert overrides["prometheus-transactional-reload-status"]["tmpfs_mb"] == 8192
     assert overrides["prometheus-transactional-reload-status"]["targets"] == [
         "./cmd/prometheus",
     ]
@@ -238,6 +240,8 @@ def test_runner_override_changes_the_command_without_changing_targets(tmp_path):
         ({"reason": "why"}, "changes nothing"),
         ({"reason": "why", "arguments": "-x"}, "list of strings"),
         ({"reason": "why", "runner": []}, "unknown runner"),
+        ({"reason": "why", "tmpfs_mb": 0}, "positive integer"),
+        ({"reason": "why", "tmpfs_mb": "8192"}, "positive integer"),
     ],
 )
 def test_malformed_overrides_are_refused(tmp_path, entry, message):
@@ -274,5 +278,6 @@ def test_go_command_clears_image_goflags_only_for_workspaces():
 def test_go_module_command_uses_the_images_offline_module_setup():
     text = script("go-module")
     assert "export GOWORK=off" in text
+    assert "cp -a /opt/gocache/. /tmp/go-build/" in text
     assert "export GOFLAGS=" not in text
     assert deepswe_test_command("go-module").report == deepswe_test_command("go").report

@@ -92,13 +92,15 @@ def main() -> None:
         task_ids=(spec["task_id"],),
         **pinned_load_options(pin),
     )
+    overrides = load_test_overrides(EXPERIMENTS / "test_overrides.json")
+    override = overrides.get(published.instance_id)
 
     runner = DockerTestRunner(
         args.image or published.container_image,
         args.artifact_root / "unused-default-executions",
         memory_mb=published.memory_megabytes,
         cpus=2,
-        tmpfs_mb=4096,
+        tmpfs_mb=override.get("tmpfs_mb", 4096) if override else 4096,
         pids_limit=2048,
         run_as_image_user=True,
     )
@@ -113,12 +115,11 @@ def main() -> None:
     )
     suite = spec.get("suite", {})
     source_repository = args.repositories / task.instance_id
-    overrides = load_test_overrides(EXPERIMENTS / "test_overrides.json")
     # Read the declared runner from a clean checkout of the pinned commit.
     with LocalGitWorkspaceProvider(
         source_repository, task.base_commit, args.workspace_root
     ).create() as checkout:
-        plan = deepswe_test_plan(task.language, checkout.path, overrides.get(task.instance_id))
+        plan = deepswe_test_plan(task.language, checkout.path, override)
     test_runner = plan.runner
     # An experiment may narrow the suite; by default it is the task's whole plan.
     targets = tuple(suite["targets"]) if "targets" in suite else plan.targets

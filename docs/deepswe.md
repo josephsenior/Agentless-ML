@@ -303,10 +303,15 @@ repository's configuration; mocha gets the arguments the `package.json` test
 script passes it (testem's `mocha tests/*_tests.js tests/**/*_tests.js` gives
 the two globs), minus reporter and watch flags that would replace the report.
 What cannot be derived lives in `experiments/deepswe/test_overrides.json`, one
-entry per task, each with its reason — today fastapi's warning filter and
-awilix's build-dependent test file.
+entry per task, each with its reason. The file records, for example, FastAPI's
+warning filter and the Prometheus tasks' testable package targets. The
+transactional-reload image also needs its warmed Go cache copied into writable
+temporary storage; its 8 GB `/tmp` allowance is recorded there and used by the
+survey, standalone test tool and workflow alike.
 
-Surveyed with whole suites on the seven tasks whose images are here:
+The first seven image-backed runs established the runners and candidate-code
+checks. Some of their results are shown below as examples, not as the current
+survey total:
 
 ```text
 task                                   runner          passing / tests
@@ -316,7 +321,7 @@ cattrs-partial-structuring-recovery    pytest            879 / 900
 fastapi-implicit-head-options          pytest           3134 / 3160  (override)
 fd-deterministic-multi-key-sorting     cargo-nextest     241 / 241
 ofetch-per-origin-circuit-breaker      vitest             27 / 28
-testem-per-launcher-reports            mocha             488 / 500
+testem-per-launcher-reports            mocha             488 / 500   (first run; later full-suite run timed out)
 ```
 
 The whole suites are much larger than the targets picked by hand earlier:
@@ -466,14 +471,13 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
 
 ## What is not implemented
 
-- **Unchecked JavaScript and TypeScript runners.** Two TypeScript tasks use
-  mocha; they would get the mocha command, which has only been run on
-  JavaScript. Five TypeScript tasks and one JavaScript task install no reporter
-  their Dockerfiles show; none has been run, and `deepswe_test_runner` refuses a
-  repository whose runner it cannot tell rather than guessing.
-- **Surveying the whole corpus.** The survey tool runs over all 113 tasks, but
-  has been run on the seven whose images are on this machine. The other 97
-  images are 97.4 GB to download.
+- **Runner gaps.** Eleven tasks still need a verified runner, mostly because
+  their root script delegates to packages or uses a tool beyond Jest, Vitest
+  and Mocha. `deepswe_test_runner` refuses those rather than guessing or
+  accidentally testing the image's copy of a workspace package.
+- **Baseline eligibility across the corpus.** The survey has attempted all 113
+  pinned tasks. The [28 September triage](deepswe-survey-2026-09-28.md) records
+  which 62 have a usable baseline and why the other 51 do not yet.
 - **Workflow and scoring over many tasks.** The survey establishes each task's
   regression inventory, but running the workflow needs repair responses, and
   only actionlint has recorded ones; without a model there is nothing to run for

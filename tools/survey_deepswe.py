@@ -124,9 +124,8 @@ def _survey(task, args, overrides) -> dict:
         return done("unsupported_repository", message=str(error)[:500])
     with provider.create() as workspace:
         try:
-            plan = deepswe_test_plan(
-                task.language, workspace.path, overrides.get(task.instance_id)
-            )
+            override = overrides.get(task.instance_id)
+            plan = deepswe_test_plan(task.language, workspace.path, override)
         except (ValueError, OSError) as error:
             return done("no_runner", message=str(error)[:500])
         runner = DockerTestRunner(
@@ -134,7 +133,7 @@ def _survey(task, args, overrides) -> dict:
             artifacts / "logs",
             memory_mb=task.memory_megabytes,
             cpus=2,
-            tmpfs_mb=args.tmpfs_mb,
+            tmpfs_mb=override.get("tmpfs_mb", args.tmpfs_mb) if override else args.tmpfs_mb,
             pids_limit=2048,
             run_as_image_user=True,
         )

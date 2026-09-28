@@ -63,6 +63,8 @@ def main() -> int:
         task_ids=(arguments.task_id,),
         **pinned_load_options(pin),
     )
+    overrides = load_test_overrides(PIN.parent / "test_overrides.json")
+    override = overrides.get(task.instance_id)
 
     artifacts = arguments.artifacts / task.instance_id
     shutil.rmtree(artifacts, ignore_errors=True)
@@ -78,7 +80,7 @@ def main() -> int:
         artifacts / "logs",
         memory_mb=task.memory_megabytes,
         cpus=2,
-        tmpfs_mb=4096,
+        tmpfs_mb=override.get("tmpfs_mb", 4096) if override else 4096,
         pids_limit=2048,
         run_as_image_user=True,
     )
@@ -88,9 +90,8 @@ def main() -> int:
             f"not the pinned {task.container_digest}"
         )
     source = "substituted" if arguments.image else "published, matches pin"
-    overrides = load_test_overrides(PIN.parent / "test_overrides.json")
     with provider.create() as workspace:
-        plan = deepswe_test_plan(task.language, workspace.path, overrides.get(task.instance_id))
+        plan = deepswe_test_plan(task.language, workspace.path, override)
         # Targets on the command line replace the task's derived plan.
         targets = tuple(arguments.targets) if arguments.targets else plan.targets
         command = deepswe_test_command(

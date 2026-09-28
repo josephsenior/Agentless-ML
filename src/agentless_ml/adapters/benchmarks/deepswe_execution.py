@@ -96,14 +96,19 @@ class DeepSWETestCommand:
 # Prometheus's transactional-reload image warms the main module with GOWORK=off
 # and sets GOFLAGS=-mod=mod. It therefore needs a separate module-mode command:
 # clearing GOFLAGS while leaving the workspace on cannot reproduce that build.
+# The prebuilt cache is copied into writable /tmp: a cold rebuild did not fit
+# the runner's temporary filesystem, while /opt/gocache itself is read-only.
 def _go_script(mode: str) -> str:
     setup = (
-        "export GOWORK=off; " if mode == "module"
+        "export GOWORK=off; mkdir -p /tmp/go-build && "
+        "cp -a /opt/gocache/. /tmp/go-build/ && " if mode == "module"
         else "if [ -f go.work ]; then export GOFLAGS=; fi; "
     )
     return (
         f"cd {WORK} && {setup}"
         f'{_GO_ENVIRONMENT} go test -json -count=1 "$@" > /tmp/go-test.json; rc=$?; '
+        "if [ \"$rc\" -ne 0 ]; then "
+        "grep '\"Action\":\"build-output\"' /tmp/go-test.json | tail -n 20 >&2; fi; "
         "grep -v '\"Action\":\"build-' /tmp/go-test.json "
         "| go-ctrf-json-reporter -output /tmp/ctrf.json >/dev/null 2>&1; "
         "exit $rc"
@@ -356,12 +361,14 @@ def load_test_overrides(path: Path) -> dict[str, dict[str, object]]:
     """Per-task corrections that cannot be derived, each with its reason.
 
     Keys are task IDs; each entry has a nonempty ``reason`` and may replace the
-    runner or targets, or append arguments after the derived targets.
+    runner or targets, append arguments, or raise the disposable /tmp size.
     """
     raw = json.loads(Path(path).read_text(encoding="utf-8"))
     overrides: dict[str, dict[str, object]] = {}
     for task_id, entry in raw.items():
-        if not isinstance(entry, dict) or set(entry) - {"reason", "arguments", "targets", "runner"}:
+        if not isinstance(entry, dict) or set(entry) - {
+            "reason", "arguments", "targets", "runner", "tmpfs_mb"
+        }:
             raise ValueError(f"override for {task_id} has unknown keys")
         if not isinstance(entry.get("reason"), str) or not entry["reason"].strip():
             raise ValueError(f"override for {task_id} needs a reason")
@@ -373,7 +380,13 @@ def load_test_overrides(path: Path) -> dict[str, dict[str, object]]:
             not isinstance(entry["runner"], str) or entry["runner"] not in TEST_COMMANDS
         ):
             raise ValueError(f"override for {task_id} has unknown runner")
-        if not entry.get("arguments") and "targets" not in entry and "runner" not in entry:
+        if "tmpfs_mb" in entry and (
+            type(entry["tmpfs_mb"]) is not int or entry["tmpfs_mb"] <= 0
+        ):
+            raise ValueError(f"override for {task_id}: tmpfs_mb must be a positive integer")
+        if not entry.get("arguments") and not any(
+            key in entry for key in ("targets", "runner", "tmpfs_mb")
+        ):
             raise ValueError(f"override for {task_id} changes nothing")
         overrides[task_id] = entry
     return overrides

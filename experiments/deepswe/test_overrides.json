@@ -10,7 +10,8 @@
   "prometheus-transactional-reload-status": {
     "runner": "go-module",
     "targets": ["./cmd/prometheus"],
-    "reason": "The published image warms and documents GOWORK=off go test ./cmd/prometheus as the offline test target for this task, with GOFLAGS=-mod=mod. Workspace mode rejects that image flag, and the broader go.work suite includes unrelated packages that fail to build offline. This target covers the Prometheus command that implements transactional reload."
+    "tmpfs_mb": 8192,
+    "reason": "The published image warms and documents GOWORK=off go test ./cmd/prometheus as the offline test target for this task, with GOFLAGS=-mod=mod. Workspace mode rejects that image flag, and the broader go.work suite includes unrelated packages that fail to build offline. Its 2.5 GB warmed Go cache must be copied into writable temporary storage before testing the candidate checkout; the default 4 GB temporary filesystem ran out of room, while 8 GB produced 82 passing tests."
   },
   "prometheus-typed-label-sorting": {
     "targets": ["./promql/..."],
