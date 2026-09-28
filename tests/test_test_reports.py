@@ -85,6 +85,21 @@ def test_go_ctrf_ids_and_statuses():
     ]
 
 
+def test_mocha_json_ids_and_statuses():
+    report = json.dumps(
+        {
+            "passes": [{"file": "test/a.js", "fullTitle": "suite works"}],
+            "failures": [{"file": "test/a.js", "fullTitle": "suite fails"}],
+            "pending": [{"file": None, "fullTitle": "suite pending"}],
+        }
+    ).encode()
+    assert statuses(parse_report(report, ReportFormat.MOCHA_JSON)) == [
+        ("test/a.js::suite works", P),
+        ("test/a.js::suite fails", F),
+        ("suite pending", S),
+    ]
+
+
 def test_ctrf_other_and_pending_statuses_and_missing_suite():
     report = json.dumps(
         {"results": {"tests": [{"name": "a", "status": "other"}, {"name": "b", "status": "pending"}]}}
@@ -135,6 +150,8 @@ def test_a_multi_line_test_name_is_kept_as_one_escaped_line():
         (b'{"results": {}}', ReportFormat.CTRF_JSON, "no results.tests"),
         (b'{"results": {"tests": [{"name": "a", "status": "flaky"}]}}', ReportFormat.CTRF_JSON, "unknown CTRF"),
         (b'{"results": {"tests": [{"status": "passed"}]}}', ReportFormat.CTRF_JSON, "no name"),
+        (b"{", ReportFormat.MOCHA_JSON, "malformed Mocha JSON"),
+        (b'{"passes": [], "failures": []}', ReportFormat.MOCHA_JSON, "no pending list"),
     ],
 )
 def test_malformed_reports_are_rejected(data, report_format, message):

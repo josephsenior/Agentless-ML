@@ -38,6 +38,7 @@ class ReportError(ValueError):
 class ReportFormat(StrEnum):
     JUNIT_XML = "junit-xml"
     CTRF_JSON = "ctrf-json"
+    MOCHA_JSON = "mocha-json"
 
 
 @dataclass(frozen=True, slots=True)
@@ -78,6 +79,8 @@ def parse_report(data: bytes, report_format: ReportFormat) -> tuple[TestCaseResu
         cases = _junit_cases(data)
     elif report_format is ReportFormat.CTRF_JSON:
         cases = _ctrf_cases(data)
+    elif report_format is ReportFormat.MOCHA_JSON:
+        cases = _mocha_cases(data)
     else:  # pragma: no cover - ReportFormat is closed
         raise ReportError(f"unsupported report format: {report_format}")
     if not cases:
@@ -164,4 +167,28 @@ def _ctrf_cases(data: bytes) -> list[tuple[str, TestCaseStatus]]:
         if isinstance(suite, list):
             suite = "::".join(str(part) for part in suite)
         cases.append((_test_id(suite, test.get("name")), status))
+    return cases
+
+
+def _mocha_cases(data: bytes) -> list[tuple[str, TestCaseStatus]]:
+    """Read Mocha's built-in JSON reporter output without reporter plugins."""
+    try:
+        document = json.loads(data)
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ReportError(f"malformed Mocha JSON: {exc}") from exc
+    if not isinstance(document, dict):
+        raise ReportError("Mocha report must be an object")
+    cases: list[tuple[str, TestCaseStatus]] = []
+    for key, status in (
+        ("passes", TestCaseStatus.PASSED),
+        ("failures", TestCaseStatus.FAILED),
+        ("pending", TestCaseStatus.SKIPPED),
+    ):
+        entries = document.get(key)
+        if not isinstance(entries, list):
+            raise ReportError(f"Mocha report has no {key} list")
+        for entry in entries:
+            if not isinstance(entry, dict):
+                raise ReportError("Mocha test entry must be an object")
+            cases.append((_test_id(entry.get("file"), entry.get("fullTitle") or entry.get("title")), status))
     return cases

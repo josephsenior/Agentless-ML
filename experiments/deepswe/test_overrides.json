@@ -1,4 +1,9 @@
 {
+  "csstree-shorthand-expansion-compression": {
+    "runner": "mocha-json",
+    "reason": "The pinned Mocha 9.2.2 image emits an empty xUnit report for this otherwise healthy suite. Its built-in JSON reporter records the same per-test outcomes without adding a dependency.",
+    "arguments": []
+  },
   "awilix-async-container-initialization": {
     "arguments": ["--testPathIgnorePatterns=rollup.test"],
     "reason": "src/__tests__/rollup.test.ts requires ../../lib/awilix, the output of `npm run build`, which is not in the repository; the file cannot load in any checkout and jest reports no test for it, so the run's exit code and report disagree."

@@ -157,6 +157,18 @@ MOCHA = DeepSWETestCommand(
     failure_exit_codes=tuple(range(1, 125)),
 )
 
+# Some pinned Mocha versions emit an empty xUnit report for otherwise healthy
+# suites. The built-in JSON reporter avoids an image-level reporter dependency.
+MOCHA_JSON = DeepSWETestCommand(
+    script=(
+        f"cd {WORK} && {_NODE_MODULES}"
+        "NODE_PATH=/app/node_modules /app/node_modules/.bin/mocha "
+        '--reporter json "$@" > /tmp/mocha-report.json'
+    ),
+    report=TestReport(ReportFormat.MOCHA_JSON, "/tmp/mocha-report.json"),
+    failure_exit_codes=tuple(range(1, 125)),
+)
+
 # jest has no built-in structured report; the jest task images install
 # jest-ctrf-json-reporter into /opt/jest-ctrf, outside /app. It takes no output
 # option on the command line and writes ctrf/ctrf-report.json under the working
@@ -259,6 +271,7 @@ TEST_COMMANDS = {
     "go-module": GO_MODULE,
     "pytest": PYTEST,
     "mocha": MOCHA,
+    "mocha-json": MOCHA_JSON,
     "jest": JEST,
     "vitest": VITEST,
     "koota-vitest": KOOTA_VITEST,
@@ -368,7 +381,7 @@ def deepswe_test_targets(runner: str, checkout: Path) -> tuple[str, ...]:
     """
     if runner in ("go", "go-module"):
         return _go_targets(Path(checkout))
-    if runner != "mocha":
+    if runner not in {"mocha", "mocha-json"}:
         return ()
     script = _package_script(checkout)
     for segment in re.split(r"&&|\|\||;", script):

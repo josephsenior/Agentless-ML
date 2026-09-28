@@ -49,7 +49,7 @@ def test_every_runner_works_inside_the_candidate_checkout():
 def test_node_runners_get_a_writable_node_modules_linking_each_package():
     # vite creates node_modules/.vite-temp; a single link to the read-only
     # /app/node_modules made that fail before any test ran.
-    for runner in ("mocha", "jest", "vitest"):
+    for runner in ("mocha", "mocha-json", "jest", "vitest"):
         text = script(runner)
         assert "mkdir -p /tmp/work/node_modules" in text
         assert "ln -s /app/node_modules /tmp/work/node_modules" not in text
@@ -92,6 +92,7 @@ def test_koota_runner_refuses_a_selector_it_cannot_apply_to_both_packages():
         ("go", ReportFormat.CTRF_JSON, "/tmp/ctrf.json"),
         ("pytest", ReportFormat.JUNIT_XML, "/tmp/report.xml"),
         ("mocha", ReportFormat.JUNIT_XML, "/tmp/report.xml"),
+        ("mocha-json", ReportFormat.MOCHA_JSON, "/tmp/mocha-report.json"),
         ("jest", ReportFormat.CTRF_JSON, "ctrf/ctrf-report.json"),
         ("vitest", ReportFormat.JUNIT_XML, "/tmp/report.xml"),
         ("koota-vitest", ReportFormat.JUNIT_XML, "/tmp/report.xml"),
@@ -261,6 +262,7 @@ def test_the_checked_in_overrides_are_well_formed_and_explained():
     overrides = load_test_overrides(OVERRIDES)
     assert set(overrides) == {
         "awilix-async-container-initialization",
+        "csstree-shorthand-expansion-compression",
         "fastapi-implicit-head-options",
         "prometheus-transactional-reload-status",
         "prometheus-typed-label-sorting",
