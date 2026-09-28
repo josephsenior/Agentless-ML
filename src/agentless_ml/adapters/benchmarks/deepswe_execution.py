@@ -197,6 +197,24 @@ VITEST = DeepSWETestCommand(
     report=TestReport(ReportFormat.JUNIT_XML, "/tmp/report.xml"),
 )
 
+# A few images run Vitest's typechecker, which writes tsbuildinfo into Vitest's
+# own package directory. The image's installed package is read-only; copy only
+# that small package into the candidate's writable node_modules and launch the
+# same CLI there. Its sibling dependencies remain linked from the image.
+VITEST_WRITABLE = DeepSWETestCommand(
+    script=(
+        f"cd {WORK} && {_NODE_MODULES}"
+        "vitest_src=$(readlink -f /app/node_modules/vitest) && "
+        "cp -aL \"$vitest_src\" /tmp/work/node_modules/vitest-writable && "
+        "rm -rf /tmp/work/node_modules/vitest-writable/node_modules && "
+        "ln -s \"$(dirname \"$vitest_src\")\" /tmp/work/node_modules/vitest-writable/node_modules && "
+        "node /tmp/work/node_modules/vitest-writable/vitest.mjs run "
+        "--reporter=default --reporter=junit "
+        '--outputFile.junit=/tmp/report.xml "$@"'
+    ),
+    report=TestReport(ReportFormat.JUNIT_XML, "/tmp/report.xml"),
+)
+
 # Koota's root test script runs the core and React packages separately. Copying
 # the image's pnpm links (not their resolved targets) into the candidate keeps
 # react/node_modules/@koota/core -> ../../../core pointing at candidate code.
@@ -274,6 +292,7 @@ TEST_COMMANDS = {
     "mocha-json": MOCHA_JSON,
     "jest": JEST,
     "vitest": VITEST,
+    "vitest-writable": VITEST_WRITABLE,
     "koota-vitest": KOOTA_VITEST,
     "cargo-nextest": CARGO_NEXTEST,
 }

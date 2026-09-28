@@ -8,10 +8,10 @@ mean the task was solved. Each task's latest result and message are in the local
 
 | Latest status | Tasks |
 |---|---:|
-| Ready | 69 |
+| Ready | 70 |
 | Repository contains symlinks or submodules unsupported by local-git-v1 | 22 |
 | Test runner not yet supported or identifiable | 6 |
-| Test command or report failed | 6 |
+| Test command or report failed | 5 |
 | No passing baseline tests | 4 |
 | Repository preparation or seal failed | 3 |
 | Pinned image absent | 1 |
@@ -29,7 +29,11 @@ count to 68 without treating a failed build as a passing suite. A task-specific
 Mocha JSON report path recovered CSS-tree: its pinned Mocha xUnit reporter wrote
 an empty file despite the suite passing, while Mocha's built-in JSON reporter
 recorded 16,715 passing tests and two pending tests. The snapshot now has 69
-ready tasks.
+ready tasks. `true-myth-iterable-collection-combinators` also reached ready:
+its Vitest typecheck writes into the installed Vitest package, so its runner
+copies that small package into writable space while retaining its dependency
+links. The unpatched suite then passed 561 tests; the snapshot now has 70 ready
+tasks.
 
 ## What remains
 
@@ -66,15 +70,14 @@ checkout and writes a structured per-test report.
 and `yjs-map-conflict-detection` has a custom Node test entry point. These are
 not interchangeable with a guessed root-level Vitest command.
 
-The six `harness_error` tasks reached a runner but did not produce a
+The five `harness_error` tasks reached a runner but did not produce a
 trustworthy result. `bandit-structured-nosec-directives` lacks pytest in its
 image; `kea-atomic-signal-selectors` failed during Jest setup;
 `mnamer-daemon-watch-lifecycle` needs a version source without relying on a
 candidate `.git` directory; and
 `sql-formatter-bigquery-pipe-formatting` needs generated parser files before
-its tests can run. `true-myth-iterable-collection-combinators` tries to write
-Vitest typecheck state under read-only `/app/node_modules`, while
-`vitest-duration-sharding` tries to launch its own unbuilt `dist/cli.js`.
+its tests can run. `vitest-duration-sharding` tries to launch its own unbuilt
+`dist/cli.js`.
 
 Four tasks produced no passing baseline: `eicrud-keyset-pagination-cursor`
 (suite setup timeouts), `igel-persist-feature-schema` (two failing tests and
@@ -96,7 +99,7 @@ repeatable baseline.
 ## Next checks
 
 The next shared runner work is the two other nested-package projects, then the
-single-tool and custom runners. The six harness errors should be fixed
+single-tool and custom runners. The five harness errors should be fixed
 with small task-specific checks where the published image is incomplete; keep
 the report/exit-code consistency check in place. Symlink and submodule support
 is a separate workspace safety change and should stay excluded until tested.
