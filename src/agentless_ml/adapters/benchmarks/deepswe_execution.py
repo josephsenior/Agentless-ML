@@ -185,6 +185,41 @@ VITEST = DeepSWETestCommand(
     report=TestReport(ReportFormat.JUNIT_XML, "/tmp/report.xml"),
 )
 
+# Koota's root test script runs the core and React packages separately. Copying
+# the image's pnpm links (not their resolved targets) into the candidate keeps
+# react/node_modules/@koota/core -> ../../../core pointing at candidate code.
+# Each package writes JUnit; prefixing class names before merging prevents a
+# same-named test in the two packages from collapsing into one identity.
+_KOOTA_MERGE = (
+    "import sys,xml.etree.ElementTree as E; "
+    'root=E.Element("testsuites"); '
+    'reports=[(pkg,E.parse(path).getroot()) for pkg,path in '
+    'zip(("core","react"),sys.argv[2:])]; '
+    '[case.set("classname",pkg+"/"+(case.get("classname") or "")) '
+    'for pkg,report in reports for case in report.iter("testcase")]; '
+    '[root.extend(report.iter("testsuite")) for _,report in reports]; '
+    'E.ElementTree(root).write(sys.argv[1],encoding="utf-8",xml_declaration=True)'
+)
+KOOTA_VITEST = DeepSWETestCommand(
+    script=(
+        f"set -e; cd {WORK}; "
+        "cp -a /app/node_modules node_modules; "
+        "cp -a /app/packages/core/node_modules packages/core/node_modules; "
+        "cp -a /app/packages/react/node_modules packages/react/node_modules; "
+        "set +e; "
+        "(cd packages/core && ./node_modules/.bin/vitest run "
+        "--reporter=default --reporter=junit --outputFile.junit=/tmp/koota-core.xml); "
+        "core_rc=$?; "
+        "(cd packages/react && ./node_modules/.bin/vitest run --environment=jsdom "
+        "--reporter=default --reporter=junit --outputFile.junit=/tmp/koota-react.xml); "
+        "react_rc=$?; "
+        f"python -c '{_KOOTA_MERGE}' /tmp/report.xml /tmp/koota-core.xml /tmp/koota-react.xml "
+        "|| exit 2; "
+        '[ "$core_rc" -eq 0 ] && [ "$react_rc" -eq 0 ]'
+    ),
+    report=TestReport(ReportFormat.JUNIT_XML, "/tmp/report.xml"),
+)
+
 # cargo-nextest ships in the Rust images and writes JUnit XML from a profile;
 # the profile lives in /tmp so a repository's own nextest config is not edited.
 # Its store directory is set explicitly: by default nextest 0.9.97 writes under
@@ -225,6 +260,7 @@ TEST_COMMANDS = {
     "mocha": MOCHA,
     "jest": JEST,
     "vitest": VITEST,
+    "koota-vitest": KOOTA_VITEST,
     "cargo-nextest": CARGO_NEXTEST,
 }
 
@@ -247,6 +283,17 @@ def deepswe_test_runner(language: str, checkout: Path) -> str:
         raise ValueError(f"no DeepSWE test runner for language {language!r}")
     manifest = json.loads((Path(checkout) / "package.json").read_text(encoding="utf-8"))
     script = _package_script(checkout)
+    if script == "pnpm -F core test run && pnpm -F react test run":
+        core = json.loads(
+            (Path(checkout) / "packages/core/package.json").read_text(encoding="utf-8")
+        )
+        react = json.loads(
+            (Path(checkout) / "packages/react/package.json").read_text(encoding="utf-8")
+        )
+        if (core.get("scripts") or {}).get("test") == "vitest" and (
+            (react.get("scripts") or {}).get("test") == "vitest --environment=jsdom"
+        ):
+            return "koota-vitest"
     named = {
         runner
         for runner in _NODE_RUNNERS

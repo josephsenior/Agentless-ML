@@ -1,6 +1,9 @@
 """The candidate checkout, not the image's own copy, must be the code under test."""
 
 import json
+import subprocess
+import sys
+from xml.etree import ElementTree
 
 import pytest
 
@@ -8,6 +11,7 @@ from pathlib import Path
 
 from agentless_ml.adapters.benchmarks.deepswe_execution import (
     TEST_COMMANDS,
+    _KOOTA_MERGE,
     deepswe_test_command,
     deepswe_test_plan,
     deepswe_test_runner,
@@ -51,6 +55,30 @@ def test_node_runners_get_a_writable_node_modules_linking_each_package():
         assert "ln -s /app/node_modules /tmp/work/node_modules" not in text
 
 
+def test_koota_runner_copies_relative_workspace_links_into_the_candidate():
+    text = script("koota-vitest")
+    assert "cp -a /app/node_modules node_modules" in text
+    assert "cp -a /app/packages/react/node_modules packages/react/node_modules" in text
+    assert "cd packages/core" in text and "cd packages/react" in text
+    assert "--environment=jsdom" in text
+
+
+def test_koota_reports_keep_same_named_tests_separate(tmp_path):
+    for package in ("core", "react"):
+        (tmp_path / f"{package}.xml").write_text(
+            '<testsuite><testcase classname="suite" name="same" /></testsuite>',
+            encoding="utf-8",
+        )
+    merged = tmp_path / "merged.xml"
+    subprocess.run(
+        [sys.executable, "-c", _KOOTA_MERGE, str(merged),
+         str(tmp_path / "core.xml"), str(tmp_path / "react.xml")],
+        check=True,
+    )
+    names = [case.get("classname") for case in ElementTree.parse(merged).iter("testcase")]
+    assert names == ["core/suite", "react/suite"]
+
+
 @pytest.mark.parametrize(
     "runner,expected,path",
     [
@@ -59,6 +87,7 @@ def test_node_runners_get_a_writable_node_modules_linking_each_package():
         ("mocha", ReportFormat.JUNIT_XML, "/tmp/report.xml"),
         ("jest", ReportFormat.CTRF_JSON, "ctrf/ctrf-report.json"),
         ("vitest", ReportFormat.JUNIT_XML, "/tmp/report.xml"),
+        ("koota-vitest", ReportFormat.JUNIT_XML, "/tmp/report.xml"),
         ("cargo-nextest", ReportFormat.JUNIT_XML, "/tmp/nextest-store/default/junit.xml"),
     ],
 )
@@ -74,6 +103,7 @@ def test_reports_are_declared_where_each_runner_writes_them(runner, expected, pa
         ("pytest", (1,)),
         ("jest", (1,)),
         ("vitest", (1,)),
+        ("koota-vitest", (1,)),
         # nextest: 100 means tests failed; 101, a failed build, is undeclared.
         ("cargo-nextest", (100,)),
     ],
@@ -154,6 +184,22 @@ def test_an_ambiguous_node_repository_is_refused_not_guessed(tmp_path):
     checkout = package(tmp_path, "node scripts/test.js", jest="^29", mocha="^10")
     with pytest.raises(ValueError, match="cannot tell which test runner"):
         deepswe_test_runner("javascript", checkout)
+
+
+def test_koota_workspace_runner_requires_both_declared_package_scripts(tmp_path):
+    checkout = package(tmp_path, "pnpm -F core test run && pnpm -F react test run")
+    core = checkout / "packages/core"
+    react = checkout / "packages/react"
+    core.mkdir(parents=True)
+    react.mkdir(parents=True)
+    (core / "package.json").write_text('{"scripts":{"test":"vitest"}}', encoding="utf-8")
+    (react / "package.json").write_text(
+        '{"scripts":{"test":"vitest --environment=jsdom"}}', encoding="utf-8"
+    )
+    assert deepswe_test_runner("typescript", checkout) == "koota-vitest"
+    (react / "package.json").write_text('{"scripts":{"test":"jest"}}', encoding="utf-8")
+    with pytest.raises(ValueError, match="cannot tell which test runner"):
+        deepswe_test_runner("typescript", checkout)
 
 
 def test_go_python_and_rust_do_not_read_the_checkout(tmp_path):
