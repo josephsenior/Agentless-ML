@@ -206,6 +206,7 @@ KOOTA_VITEST = DeepSWETestCommand(
         "cp -a /app/node_modules node_modules; "
         "cp -a /app/packages/core/node_modules packages/core/node_modules; "
         "cp -a /app/packages/react/node_modules packages/react/node_modules; "
+        f'test "$(readlink -f packages/react/node_modules/@koota/core)" = "{WORK}/packages/core"; '
         "set +e; "
         "(cd packages/core && ./node_modules/.bin/vitest run "
         "--reporter=default --reporter=junit --outputFile.junit=/tmp/koota-core.xml); "
@@ -463,6 +464,8 @@ def deepswe_test_command(
     ``targets`` are paths or test selectors the runner understands:
     ``("./...",)`` for Go, ``("tests/test_any.py",)`` for pytest.
     """
+    if runner == "koota-vitest" and targets:
+        raise ValueError("Koota's two-package runner does not support narrowed targets")
     try:
         template = TEST_COMMANDS[runner]
     except KeyError:

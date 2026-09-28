@@ -59,6 +59,8 @@ def test_koota_runner_copies_relative_workspace_links_into_the_candidate():
     text = script("koota-vitest")
     assert "cp -a /app/node_modules node_modules" in text
     assert "cp -a /app/packages/react/node_modules packages/react/node_modules" in text
+    assert 'readlink -f packages/react/node_modules/@koota/core' in text
+    assert '= "/tmp/work/packages/core"' in text
     assert "cd packages/core" in text and "cd packages/react" in text
     assert "--environment=jsdom" in text
 
@@ -77,6 +79,11 @@ def test_koota_reports_keep_same_named_tests_separate(tmp_path):
     )
     names = [case.get("classname") for case in ElementTree.parse(merged).iter("testcase")]
     assert names == ["core/suite", "react/suite"]
+
+
+def test_koota_runner_refuses_a_selector_it_cannot_apply_to_both_packages():
+    with pytest.raises(ValueError, match="does not support narrowed targets"):
+        deepswe_test_command("koota-vitest", ("tests/entity.test.ts",))
 
 
 @pytest.mark.parametrize(

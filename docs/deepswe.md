@@ -471,13 +471,13 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
 
 ## What is not implemented
 
-- **Runner gaps.** Eleven tasks still need a verified runner, mostly because
+- **Runner gaps.** Six tasks still need a verified runner, mostly because
   their root script delegates to packages or uses a tool beyond Jest, Vitest
   and Mocha. `deepswe_test_runner` refuses those rather than guessing or
   accidentally testing the image's copy of a workspace package.
 - **Baseline eligibility across the corpus.** The survey has attempted all 113
   pinned tasks. The [28 September triage](deepswe-survey-2026-09-28.md) records
-  which 62 have a usable baseline and why the other 51 do not yet.
+  which 67 have a usable baseline and why the other 46 do not yet.
 - **Workflow and scoring over many tasks.** The survey establishes each task's
   regression inventory, but running the workflow needs repair responses, and
   only actionlint has recorded ones; without a model there is nothing to run for

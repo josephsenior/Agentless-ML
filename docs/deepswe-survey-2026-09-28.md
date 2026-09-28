@@ -8,9 +8,9 @@ mean the task was solved. Each task's latest result and message are in the local
 
 | Latest status | Tasks |
 |---|---:|
-| Ready | 62 |
+| Ready | 67 |
 | Repository contains symlinks or submodules unsupported by local-git-v1 | 22 |
-| Test runner not yet supported or identifiable | 11 |
+| Test runner not yet supported or identifiable | 6 |
 | Test command or report failed | 8 |
 | No passing baseline tests | 4 |
 | Repository preparation or seal failed | 3 |
@@ -22,8 +22,9 @@ The first sweep had 47 ready tasks. Rerunning results made stale by runner and
 language fixes added six. The 14 tasks that had previously stopped at GitHub
 DNS now all clone successfully: seven became ready, four reached the repository
 support boundary, two reached test-harness problems, and one exposed a custom
-runner. Narrow, documented Prometheus test plans added two more ready tasks.
-That brings the count to 62 without treating a failed build as a passing suite.
+runner. Narrow, documented Prometheus test plans added two more ready tasks. A
+shared pnpm-workspace runner then brought all five Koota tasks to ready. That
+brings the count to 67 without treating a failed build as a passing suite.
 
 ## What remains
 
@@ -45,14 +46,16 @@ post-base history. The other 18 are `adaptix-name-mapping-aliases`,
 `query-persist-restored-query-state`, `scc-bounded-memory-spilling`,
 `sqlfmt-create-table-ddl-formatting` and `task-task-graph-export`.
 
-The 11 `no_runner` tasks need a command that tests the candidate checkout and
-writes a structured per-test report. Five Koota tasks
-(`koota-composite-trait-aspects`, `koota-deferred-mutation-buffer`,
-`koota-entity-snapshot-rollback`, `koota-pair-relation-tracking` and
-`koota-query-predicates`) share a pnpm workspace: its root script delegates to
-core and React, and React's link to core must resolve to the candidate, not
-`/app`. `claude-code-by-agents-recursive-delegation` and
-`quill-shared-toolbar-focus` also need package-level runner discovery.
+The five Koota tasks share a pnpm workspace. Their runner copies relative
+dependency links into the candidate, so React's `@koota/core` resolves to the
+candidate core package rather than `/app`. It runs both package suites and
+merges their reports with distinct `core/` and `react/` test IDs. All five
+baseline runs passed, with 160 to 172 tests each.
+
+The six remaining `no_runner` tasks need a command that tests the candidate
+checkout and writes a structured per-test report.
+`claude-code-by-agents-recursive-delegation` and
+`quill-shared-toolbar-focus` need package-level runner discovery.
 `cliffy-config-file-parsing` uses Deno, `ink-grid-box-layout` uses AVA,
 `kysely-window-grouping-helpers` invokes Mocha through a build-and-test script,
 and `yjs-map-conflict-detection` has a custom Node test entry point. These are
@@ -89,10 +92,8 @@ repeatable baseline.
 
 ## Next checks
 
-The best shared runner gain is the Koota workspace, provided its dependency
-links can be rebuilt toward the candidate and both package reports combined
-without losing test identities. Then handle the two other nested-package
-projects and the single-tool runners. The eight harness errors should be fixed
+The next shared runner work is the two other nested-package projects, then the
+single-tool and custom runners. The eight harness errors should be fixed
 with small task-specific checks where the published image is incomplete; keep
 the report/exit-code consistency check in place. Symlink and submodule support
 is a separate workspace safety change and should stay excluded until tested.
