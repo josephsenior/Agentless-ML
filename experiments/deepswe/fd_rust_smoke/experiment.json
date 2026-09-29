@@ -1,0 +1,13 @@
+{
+  "task_id": "fd-deterministic-multi-key-sorting",
+  "purpose": "Exercise a real Rust DeepSWE task through the fixed workflow. The hand-written patches deliberately do not implement multi-key sorting; this is a workflow check, not a solve attempt.",
+  "suite": {
+    "test_id": "fd-public-suite",
+    "timeout_seconds": 600
+  },
+  "repairs": {
+    "repair_00_malformed.txt": "No edit block; should be rejected before validation.",
+    "repair_01_clear_buffer.txt": "Clears buffered results, deliberately breaking existing behavior.",
+    "repair_02_unstable_sort.txt": "Changes the existing path sort to an unstable sort; expected to preserve current tests but does not add task features."
+  }
+}

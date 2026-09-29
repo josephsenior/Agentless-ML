@@ -175,7 +175,7 @@ def test_unsafe_or_untracked_patch_paths_are_rejected(source, path) -> None:
         assert git(workspace.path, "status", "--porcelain") == b""
 
 
-def test_symlink_tree_is_rejected_before_checkout(source) -> None:
+def test_untouched_symlink_is_excluded_from_context_and_patch_targets(source) -> None:
     repository, _, root = source
     blob = (
         git(repository, "hash-object", "-w", "--stdin", data=b"../outside")
@@ -185,9 +185,28 @@ def test_symlink_tree_is_rejected_before_checkout(source) -> None:
     git(repository, "update-index", "--add", "--cacheinfo", "120000", blob, "link")
     git(repository, "commit", "-m", "symlink fixture")
     commit = git(repository, "rev-parse", "HEAD").decode().strip()
-    with pytest.raises(WorkspaceError, match="symlinks"):
-        LocalGitWorkspaceProvider(repository, commit, root)
-    assert not root.exists()
+    provider = LocalGitWorkspaceProvider(repository, commit, root)
+    assert "link" not in provider.paths
+    assert provider.symlink_paths == frozenset({"link"})
+    with provider.create() as workspace:
+        assert (
+            workspace.apply_candidate(candidate()).status
+            is PatchApplicationStatus.APPLIED
+        )
+    with provider.create() as workspace:
+        patch = build_unified_diff(
+            {"link": "../outside\n"}, {"link": "../different\n"}
+        )
+        assert (
+            workspace.apply_candidate(_patched(patch)).status
+            is PatchApplicationStatus.PATCH_ERROR
+        )
+    with provider.create() as workspace:
+        patch = build_unified_diff({}, {"link/new.py": "value = 1\n"})
+        assert (
+            workspace.apply_candidate(_patched(patch)).status
+            is PatchApplicationStatus.PATCH_ERROR
+        )
 
 
 def test_uninitialized_submodule_does_not_block_regular_file_edits(source) -> None:

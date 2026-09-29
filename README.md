@@ -91,7 +91,7 @@ The current implementation includes:
 - a fixed recorded-response controller spanning Python localization through
   candidate validation, selection, final prediction, and reproducibility export;
 - a fail-closed SWE-bench Pro V2 loader for all 642 pinned agent-visible tasks,
-  plus recorded Python, Go and JavaScript smoke runs in official V2 images;
+  plus recorded Python, Go, JavaScript and TypeScript smoke runs in official V2 images;
   three earlier qutebrowser smoke runs used V1 images;
 - a fail-closed DeepSWE adapter that loads all 113 pinned tasks (Go, Python,
   TypeScript, JavaScript and Rust) from their agent-visible files only, without
@@ -211,6 +211,18 @@ The next recorded V2 task checks NodeBB's JavaScript admin upload handler with
 function-member symbol, a public missing-folder reproduction, candidate
 selection, and post-selection V2 scoring. This too is a hand-written workflow
 check, not a model result.
+
+The TypeScript V2 smoke task uses Tutanota's credential-decryption path. Run
+`tools/run_swe_bench_pro_v2_ts_slice.py` with the same five arguments as the Go
+runner. Its public check distinguishes the incomplete one-file repair from the
+selected two-file repair. The latter resolved in the local V2 verifier; empty
+and reference patches returned 0 and 1 respectively. This is a recorded
+engineering check, not a live-model score or a full TypeScript project build.
+
+A real Rust DeepSWE `fd` task has also traversed the recorded controller and
+post-selection scorer. Its deliberately non-solving control patch preserved all
+241 baseline tests and scored unresolved on the held-out verifier, as expected.
+See [the DeepSWE note](docs/deepswe.md#recorded-rust-workflow-smoke-task).
 
 Selection uses supplied repository tests and issue-derived reproduction checks. The
 official benchmark verifier remains a separate, post-selection evaluation step; it

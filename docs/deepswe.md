@@ -393,6 +393,24 @@ as a local build; the tool then rewrites the task to that reference and its ID,
 so the substitution is pinned and recorded in the run's `task.json` rather than
 hidden by retagging a local image with the published name.
 
+## Recorded Rust workflow smoke task
+
+`experiments/deepswe/fd_rust_smoke/` takes the real
+`fd-deterministic-multi-key-sorting` task through localization, Rust edit
+application, the pinned image's `cargo nextest` suite, selection, and a final
+prediction. Run it with `tools/run_deepswe_workflow.py --experiment fd_rust_smoke`
+and the usual tasks, repositories, workspace, and artifact paths. These
+hand-written responses are controls, not a solution attempt: one removes
+buffered output, while the other retains the current path ordering with an
+unstable sort. The baseline had 241 passing tests. The first patch failed 80
+of those tests; the second kept all 241 passing and was selected. The
+post-selection DeepSWE verifier scored that selected patch unresolved: 0/43
+fail-to-pass and 109/109 pass-to-pass. This checks that the Rust workflow can
+emit and score a prediction without claiming to implement multi-key sorting.
+The empty patch was also unresolved (0/43); the reference patch resolved all
+43 fail-to-pass tests and preserved all 109 pass-to-pass tests. Those two
+patches were used only after selection to check the scorer.
+
 ## Scoring a selected patch
 
 The workflow ends with one selected patch. Whether that patch actually solves

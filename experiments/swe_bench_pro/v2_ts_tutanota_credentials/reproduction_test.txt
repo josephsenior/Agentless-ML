@@ -1,0 +1,78 @@
+```typescript
+// Public instruction-derived check. It executes the two real TypeScript modules
+// after transpiling them and stubs only their external dependencies.
+const assert = require("node:assert/strict")
+const fs = require("node:fs")
+const path = require("node:path")
+const ts = require("typescript")
+
+class LibraryCryptoError extends Error {}
+class ApplicationCryptoError extends Error {}
+class KeyPermanentlyInvalidatedError extends Error {}
+let decryptMode = "library-error"
+
+const mocks = {
+	"@tutao/tutanota-crypto": {
+		aes256Decrypt() {
+			if (decryptMode === "library-error") throw new LibraryCryptoError("invalid mac")
+			if (decryptMode === "other-error") throw new Error("other failure")
+			return Uint8Array.from(Buffer.from("saved-token"))
+		},
+		CryptoError: LibraryCryptoError,
+		uint8ArrayToBitArray: bytes => bytes,
+	},
+	"@tutao/tutanota-utils": {
+		base64ToUint8Array: value => Uint8Array.from(Buffer.from(value, "base64")),
+		utf8Uint8ArrayToString: bytes => Buffer.from(bytes).toString("utf8"),
+	},
+}
+
+function load(relativePath) {
+	const source = fs.readFileSync(path.resolve(__dirname, "..", relativePath), "utf8")
+	const compiled = ts.transpileModule(source, {
+		fileName: relativePath,
+		reportDiagnostics: true,
+		compilerOptions: {module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020},
+	})
+	const errors = (compiled.diagnostics || []).filter(d => d.category === ts.DiagnosticCategory.Error)
+	assert.equal(errors.length, 0, `TypeScript syntax errors in ${relativePath}`)
+	const module = {exports: {}}
+	const requireStub = name => {
+		if (name.includes("KeyPermanentlyInvalidatedError")) return {KeyPermanentlyInvalidatedError}
+		if (name.includes("common/error/CryptoError")) return {CryptoError: ApplicationCryptoError}
+		if (name.includes("MessageDispatcher")) return {Request: class Request {}}
+		if (name in mocks) return mocks[name]
+		throw new Error(`Unexpected runtime dependency: ${name}`)
+	}
+	new Function("require", "module", "exports", compiled.outputText)(requireStub, module, module.exports)
+	return module.exports
+}
+
+const {DeviceEncryptionFacadeImpl} = load("src/api/worker/facades/DeviceEncryptionFacade.ts")
+const {NativeCredentialsEncryption} = load("src/misc/credentials/NativeCredentialsEncryption.ts")
+const device = new DeviceEncryptionFacadeImpl()
+const native = new NativeCredentialsEncryption(
+	{getCredentialsKey: async () => new Uint8Array([1])},
+	device,
+	{invokeNative: async () => []},
+)
+const saved = {
+	credentialInfo: {login: "user@example.org", userId: "user", type: "internal"},
+	encryptedPassword: "encrypted",
+	accessToken: Buffer.from("ciphertext").toString("base64"),
+}
+
+async function main() {
+	await assert.rejects(device.decrypt(new Uint8Array([1]), new Uint8Array([2])),
+		error => error instanceof ApplicationCryptoError && !(error instanceof LibraryCryptoError))
+	await assert.rejects(native.decrypt(saved), error => error instanceof KeyPermanentlyInvalidatedError)
+	decryptMode = "other-error"
+	await assert.rejects(device.decrypt(new Uint8Array([1]), new Uint8Array([2])),
+		error => error.message === "other failure")
+	decryptMode = "success"
+	assert.equal((await native.decrypt(saved)).accessToken, "saved-token")
+	console.log("public credential-decryption reproduction passed")
+}
+
+main().catch(error => { console.error(error); process.exitCode = 1 })
+```

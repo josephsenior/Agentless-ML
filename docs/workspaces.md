@@ -75,9 +75,10 @@ Three things went wrong at scale, and each is now closed off:
 
 ## Lifecycle
 
-1. Validate the local repository and full base commit. Reject symlinks, unsafe
-   or case-colliding paths before checkout. Uninitialized submodule entries are
-   allowed but reserved: the workspace does not fetch or edit their contents.
+1. Validate the local repository and full base commit. Reject unsafe or
+   case-colliding paths before checkout. Tracked symlinks and uninitialized
+   submodule entries may be present, but their paths are reserved and never
+   exposed as editable source files or patch targets.
 2. Allocate a uniquely named directory under an explicitly configured workspace
    root, separate from the source repository.
 3. Clone without hardlinks or inherited templates and check out the pinned
@@ -126,8 +127,12 @@ create new regular (mode `100644`) text files. A new file must be declared with
 not collide case-insensitively with a tracked path, and must not sit under a
 symlink or a non-directory; Git creates any missing parent directories. Deletion,
 rename/copy, executable-mode changes, symlink changes, binary patches, and
-submodule edits are rejected explicitly. An unchanged, uninitialized submodule
-does not block edits to regular files elsewhere in the repository. These are
+submodule edits are rejected explicitly. Unchanged symlinks and uninitialized
+submodules do not block edits to regular files elsewhere in the repository.
+Symlink paths are omitted from localization context, and new files cannot be
+created at or below one. The Docker snapshotter still refuses live filesystem
+symlinks; on Windows, the checked Tutanota symlinks are checked out as regular
+link-target text files by Git. These are
 initial capability limits,
 not evidence that such tasks should be excluded from the eventual study.
 

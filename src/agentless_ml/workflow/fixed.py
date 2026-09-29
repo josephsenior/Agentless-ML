@@ -725,7 +725,7 @@ class FixedWorkflowController:
                         sources,
                         edits,
                         allowed_intervals=candidate_intervals,
-                        existing_paths=self.provider.paths,
+                        existing_paths=self.provider.paths | self.provider.symlink_paths,
                     )
                     candidate = build_patch_candidate(
                         candidate_id=candidate_id,

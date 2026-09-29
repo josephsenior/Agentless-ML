@@ -1,0 +1,27 @@
+Translate the library crypto error at the device facade boundary.
+
+```typescript
+### src/api/worker/facades/DeviceEncryptionFacade.ts
+<<<<<<< SEARCH
+import {aes256Decrypt, aes256Encrypt, aes256RandomKey, bitArrayToUint8Array, generateIV, uint8ArrayToBitArray} from "@tutao/tutanota-crypto"
+=======
+import {aes256Decrypt, aes256Encrypt, aes256RandomKey, bitArrayToUint8Array, CryptoError as LibraryCryptoError, generateIV, uint8ArrayToBitArray} from "@tutao/tutanota-crypto"
+import {CryptoError} from "../../common/error/CryptoError"
+>>>>>>> REPLACE
+<<<<<<< SEARCH
+	async decrypt(deviceKey: Uint8Array, encryptedData: Uint8Array): Promise<Uint8Array> {
+		return aes256Decrypt(uint8ArrayToBitArray(deviceKey), encryptedData)
+	}
+=======
+	async decrypt(deviceKey: Uint8Array, encryptedData: Uint8Array): Promise<Uint8Array> {
+		try {
+			return await aes256Decrypt(uint8ArrayToBitArray(deviceKey), encryptedData)
+		} catch (error) {
+			if (error instanceof LibraryCryptoError) {
+				throw new CryptoError("Device decryption failed", error)
+			}
+			throw error
+		}
+	}
+>>>>>>> REPLACE
+```

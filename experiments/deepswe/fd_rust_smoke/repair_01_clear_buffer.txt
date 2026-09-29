@@ -1,0 +1,10 @@
+Deliberately break the existing buffered-output behavior as a negative control.
+
+```rust
+### src/walk.rs
+<<<<<<< SEARCH
+            self.buffer.sort();
+=======
+            self.buffer.clear();
+>>>>>>> REPLACE
+```

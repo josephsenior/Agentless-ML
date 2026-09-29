@@ -122,36 +122,39 @@ def _created_paths(diff: str) -> frozenset[str]:
     return frozenset(created)
 
 
-def _tracked_paths(repository: Path, commit: str, timeout: float) -> frozenset[str]:
+def _tracked_paths(
+    repository: Path, commit: str, timeout: float
+) -> tuple[frozenset[str], frozenset[str]]:
     listing = _require_git(
         repository, "ls-tree", "-rz", "--full-tree", commit, timeout=timeout
     )
     paths: set[str] = set()
+    symlinks: set[str] = set()
     folded: set[str] = set()
     for record in listing.split(b"\0"):
         if not record:
             continue
         metadata, raw_path = record.split(b"\t", 1)
         mode, kind, _ = metadata.split()
-        if not (
-            mode in {b"100644", b"100755"}
-            and kind == b"blob"
-            or mode == b"160000"
-            and kind == b"commit"
-        ):
-            raise WorkspaceError(
-                "symlinks and unsupported tree entries are not supported"
-            )
+        regular = mode in {b"100644", b"100755"} and kind == b"blob"
+        gitlink = mode == b"160000" and kind == b"commit"
+        symlink = mode == b"120000" and kind == b"blob"
+        if not (regular or gitlink or symlink):
+            raise WorkspaceError("unsupported tree entry")
         try:
             path = _safe_path(raw_path.decode("utf-8"))
         except UnicodeDecodeError as exc:
             raise WorkspaceError("non-UTF-8 repository path") from exc
         if path.casefold() in folded:
             raise WorkspaceError(f"case-colliding repository path: {path}")
-        # Keep gitlinks reserved even though they are never initialized or editable.
-        paths.add(path)
+        # Symlinks stay out of source context and patch targets, but reserve
+        # their names so a new file cannot shadow or traverse one.
+        if symlink:
+            symlinks.add(path)
+        else:
+            paths.add(path)
         folded.add(path.casefold())
-    return frozenset(paths)
+    return frozenset(paths), frozenset(symlinks)
 
 
 def _remove_owned(directory: Path, root: Path, token: str) -> None:
@@ -266,7 +269,9 @@ class LocalGitWorkspaceProvider:
             .decode()
             .strip()
         )
-        self.paths = _tracked_paths(self.source_repository, resolved, timeout_seconds)
+        self.paths, self.symlink_paths = _tracked_paths(
+            self.source_repository, resolved, timeout_seconds
+        )
 
     def create(self) -> LocalGitWorkspace:
         """Create a detached, clean clone; ignore source working-tree modifications."""
@@ -324,6 +329,7 @@ class LocalGitWorkspaceProvider:
                 token,
                 provenance,
                 self.paths,
+                self.symlink_paths,
                 self.timeout_seconds,
             )
             workspace._require_pristine()
@@ -347,12 +353,17 @@ class LocalGitWorkspace:
         token: str,
         provenance: WorkspaceProvenance,
         paths: frozenset[str],
+        symlink_paths: frozenset[str],
         timeout: float,
     ):
         self.path = directory / "checkout"
         self.provenance = provenance
         self._directory, self._root, self._token = directory, root, token
-        self._paths, self._timeout = paths, timeout
+        self._paths, self._symlink_paths, self._timeout = (
+            paths,
+            symlink_paths,
+            timeout,
+        )
         self._attempted = False
         self._closed = False
 
@@ -514,7 +525,7 @@ class LocalGitWorkspace:
         if any(
             folded == existing.casefold()
             or folded.startswith(existing.casefold() + "/")
-            for existing in self._paths
+            for existing in self._paths | self._symlink_paths
         ):
             raise WorkspaceError(f"new file collides with a tracked path: {path}")
         target = self.path / path

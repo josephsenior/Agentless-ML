@@ -1,0 +1,15 @@
+{
+  "instance_id": "instance_tutao__tutanota-de49d486feef842101506adf040a0f00ded59519-v10a26bfb45a064b93f4fc044a0254925037b88f1",
+  "image_id": "sha256:f0c1d1561d3fe50a845212497843831b6b1fc9535c88751edc3cb6fda8a425b4",
+  "base_commit": "cf4bcf0b4c5ecc970715c4ca59e57cfa2c4246af",
+  "regression": {
+    "test_id": "credential-modules-parse",
+    "argv": ["env", "NODE_PATH=/app/node_modules", "node", "-e", "const ts=require('typescript'),fs=require('fs'); for(const p of ['src/api/worker/facades/DeviceEncryptionFacade.ts','src/misc/credentials/NativeCredentialsEncryption.ts']) { const r=ts.transpileModule(fs.readFileSync(p,'utf8'),{fileName:p,reportDiagnostics:true,compilerOptions:{module:ts.ModuleKind.CommonJS}}); if((r.diagnostics||[]).some(d=>d.category===ts.DiagnosticCategory.Error)) process.exitCode=1; }"],
+    "timeout_seconds": 60
+  },
+  "reproduction": {
+    "path": "test/agentless_v2_credentials_reproduction.cjs",
+    "argv": ["env", "NODE_PATH=/app/node_modules", "node", "test/agentless_v2_credentials_reproduction.cjs"],
+    "timeout_seconds": 60
+  }
+}

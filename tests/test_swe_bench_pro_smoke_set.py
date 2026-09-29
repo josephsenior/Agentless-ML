@@ -57,4 +57,10 @@ def test_smoke_inputs_do_not_name_dataset_answer_or_verifier_columns() -> None:
     for path in EXPERIMENT_ROOT.rglob("*"):
         if path.is_file() and path.name != "task.json":
             content = path.read_text(encoding="utf-8").casefold()
-            assert all(token not in content for token in forbidden)
+            # Field names may occur after an underscore (for example
+            # gold_patch), but "patch" inside MessageDispatcher is not one.
+            assert all(
+                re.search(rf"(?<![a-z0-9]){re.escape(token)}(?![a-z0-9])", content)
+                is None
+                for token in forbidden
+            )

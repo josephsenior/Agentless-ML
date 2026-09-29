@@ -1,0 +1,4 @@
+```
+src/api/worker/facades/DeviceEncryptionFacade.ts
+src/misc/credentials/NativeCredentialsEncryption.ts
+```

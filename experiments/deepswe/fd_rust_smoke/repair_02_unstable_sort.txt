@@ -1,0 +1,10 @@
+Keep the existing path ordering but use an unstable sort as a non-solution control.
+
+```rust
+### src/walk.rs
+<<<<<<< SEARCH
+            self.buffer.sort();
+=======
+            self.buffer.sort_unstable();
+>>>>>>> REPLACE
+```

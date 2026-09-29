@@ -1,0 +1,8 @@
+```
+src/api/worker/facades/DeviceEncryptionFacade.ts
+line: 4
+method: DeviceEncryptionFacadeImpl.decrypt
+src/misc/credentials/NativeCredentialsEncryption.ts
+line: 8
+method: NativeCredentialsEncryption.decrypt
+```
