@@ -48,11 +48,16 @@ candidate is broken ([details](public-validation.md#a-patch-that-breaks-the-buil
 workspace isolation is provided separately by the [local workspace layer](workspaces.md).
 
 Patch normalization removes Git framing metadata, normalizes line endings, and
-strips trailing whitespace. It retains hunk offsets and source context. Upstream
-instead normalizes Python source through AST operations and comment/docstring
-removal before rebuilding a diff. The resulting voting groups can differ; the
-current textual key is provisional and does not establish semantic equivalence.
-See the [replication map](replication-map.md) for the rationale and alternative.
+strips trailing whitespace. With source snapshots, Python files are now parsed
+and unparsed through the AST before comments and docstrings are removed; other
+languages retain the comment-stripped textual diff. This brings Python spacing
+variants into the same voting group, as in upstream. It is not full upstream
+normalization parity: upstream applies a special context-free diff for a newly
+added function, and its tokenizer-based docstring removal and Git diff can still
+produce different keys. Comment-only changes retain a non-empty textual key
+here, whereas upstream may exclude them. The key remains a voting heuristic,
+not evidence that two patches are semantically equivalent.
+See the [replication map](replication-map.md) for the remaining differences.
 
 The selector sums `failure_count()` over each candidate's regression results. A
 command that declared a test report contributes one unit per failing test; a

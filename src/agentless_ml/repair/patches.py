@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import ast
 import hashlib
 from collections.abc import Mapping
 from difflib import unified_diff
@@ -74,12 +75,11 @@ def comment_normalized_diff(
     *,
     language: str,
 ) -> str | None:
-    """A voting key with the language's own comments and docstrings removed first.
+    """A voting key from language-normalized source snapshots.
 
-    This is on top of, not instead of, ``normalize_patch``: build a diff between
-    comment-stripped versions of every changed file, then run the ordinary
-    textual normalization over that diff, so Git framing is still removed the
-    same way it always is.
+    Python source is AST-canonicalized before comment/docstring removal. Other
+    languages only strip comments and docstrings. Build a diff from the resulting
+    files, then remove Git framing with ``normalize_patch``.
 
     Returns ``None`` when there is nothing left to build a key from — every
     change between the two versions was itself inside a comment or a docstring.
@@ -93,7 +93,22 @@ def comment_normalized_diff(
         # only the task language's own files have comments this adapter knows.
         if not path.endswith(adapter.extensions):
             return source
-        return adapter.strip_comments(source, path=path)
+        if language == "python":
+            # Upstream canonicalizes parseable Python before removing docstrings.
+            # Keep invalid source unchanged, as its normalize_code() does.
+            try:
+                source = ast.unparse(ast.parse(source))
+            except (SyntaxError, ValueError, RecursionError):
+                pass
+        without_comments = adapter.strip_comments(source, path=path)
+        if language == "python":
+            # Removing a sole docstring can leave an empty suite. Upstream keeps
+            # the AST-normalized source when that stripped version will not parse.
+            try:
+                ast.parse(without_comments)
+            except (SyntaxError, ValueError, RecursionError):
+                return source
+        return without_comments
 
     stripped_originals = {
         path: stripped(path, source) for path, source in original_sources.items()
@@ -123,10 +138,9 @@ def build_patch_candidate(
 
     ``original_sources``/``updated_sources`` are the full pre- and post-repair
     file contents, when the caller has them (the fixed workflow always does).
-    When both are supplied, the voting key is built from comment-and-docstring
-    -stripped versions of the changed files, so two candidates that differ only
-    in a comment vote together. Without them, voting falls back to the plain
-    textual key, as it always did.
+    When both are supplied, the voting key is built from normalized source:
+    Python is AST-canonicalized first, then language comments and docstrings
+    are removed. Without source snapshots, voting uses the plain textual key.
     """
     # Source CRLFs and trailing spaces are part of a patch's payload, not framing.
     canonical = diff if diff.endswith("\n") else diff + "\n"

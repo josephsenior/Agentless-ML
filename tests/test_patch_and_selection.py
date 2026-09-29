@@ -175,6 +175,47 @@ def test_comment_normalization_is_opt_in_and_backward_compatible() -> None:
     assert plain.normalized_diff != commented.normalized_diff
 
 
+def test_python_voting_canonicalizes_formatting_before_diffing() -> None:
+    path = "answer.py"
+    original = {path: "answer = 0\n"}
+
+    def candidate(identifier: str, source: str):
+        updated = {path: source}
+        return build_patch_candidate(
+            candidate_id=identifier,
+            raw_response=identifier,
+            diff=build_unified_diff(original, updated),
+            localization_rank=0,
+            sample_index=0,
+            language="python",
+            original_sources=original,
+            updated_sources=updated,
+        )
+
+    compact = candidate("compact", "answer=1\n")
+    spaced = candidate("spaced", "answer = 1\n")
+    assert compact.diff != spaced.diff
+    assert compact.normalized_diff == spaced.normalized_diff
+    assert select_candidate((compact, spaced)).vote_count == 2
+
+
+def test_invalid_python_source_keeps_textual_voting_key() -> None:
+    path = "answer.py"
+    original = {path: "answer = (\n"}
+    updated = {path: "answer = (1\n"}
+    candidate = build_patch_candidate(
+        candidate_id="invalid",
+        raw_response="invalid",
+        diff=build_unified_diff(original, updated),
+        localization_rank=0,
+        sample_index=0,
+        language="python",
+        original_sources=original,
+        updated_sources=updated,
+    )
+    assert candidate.normalized_diff == normalize_patch(candidate.diff)
+
+
 def test_comment_only_change_falls_back_to_textual_key() -> None:
     """A repair that only adds a comment must not crash candidate construction."""
     path = "calculator.py"
