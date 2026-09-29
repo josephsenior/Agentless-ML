@@ -1,0 +1,84 @@
+```javascript
+'use strict';
+
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const Module = require('node:module');
+const os = require('node:os');
+const path = require('node:path');
+
+const uploadRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'agentless-upload-'));
+fs.mkdirSync(path.join(uploadRoot, 'system'));
+fs.writeFileSync(path.join(uploadRoot, 'not-a-directory'), 'x');
+
+const controllerPath = path.resolve(__dirname, '../src/controllers/admin/uploads.js');
+const saved = [];
+const deleted = [];
+const fileStub = {
+	saveFileToLocal: async (name, folder) => {
+		saved.push(folder);
+		return { url: `/assets/uploads/${folder}/${name}` };
+	},
+	delete: (filename) => deleted.push(filename),
+};
+const originalLoad = Module._load;
+Module._load = function (request, parent, isMain) {
+	if (parent && parent.filename === controllerPath) {
+		if (request === 'nconf') {
+			return { get: key => key === 'upload_path' ? uploadRoot : undefined };
+		}
+		if (request === '../../file') {
+			return fileStub;
+		}
+		if (request.startsWith('../../')) {
+			return {};
+		}
+	}
+	return originalLoad.call(this, request, parent, isMain);
+};
+let controller;
+try {
+	controller = require(controllerPath);
+} finally {
+	Module._load = originalLoad;
+}
+
+async function exercise(folder, expectedToSucceed) {
+	saved.length = 0;
+	deleted.length = 0;
+	let response;
+	let error;
+	await controller.uploadFile(
+		{
+			files: { files: [{ name: 'photo.png', path: '/tmp/uploaded-photo' }] },
+			body: { params: JSON.stringify({ folder }) },
+		},
+		{ json: value => { response = value; } },
+		err => { error = err; }
+	);
+	assert.deepEqual(deleted, ['/tmp/uploaded-photo']);
+	if (expectedToSucceed) {
+		assert.equal(error, undefined);
+		assert.deepEqual(saved, [folder]);
+		assert.equal(response[0].url, `/assets/uploads/${folder}/photo.png`);
+	} else {
+		assert.equal(error && error.message, '[[error:invalid-path]]');
+		assert.deepEqual(saved, []);
+		assert.equal(response, undefined);
+	}
+}
+
+(async () => {
+	try {
+		await exercise('missing-folder', false);
+		await exercise('not-a-directory', false);
+		await exercise('system', true);
+		console.log('public upload-path reproduction passed');
+	} finally {
+		fs.rmSync(uploadRoot, { recursive: true, force: true });
+	}
+})().catch(err => {
+	console.error(err);
+	process.exitCode = 1;
+});
+```

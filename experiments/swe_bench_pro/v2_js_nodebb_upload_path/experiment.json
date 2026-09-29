@@ -1,0 +1,15 @@
+{
+  "instance_id": "instance_NodeBB__NodeBB-f9ce92df988db7c1ae55d9ef96d247d27478bc70-vf2cf3cbd463b7ad942381f1c6d077626485a1e9e",
+  "image_id": "sha256:cc8c9217344bf50df0a4276abad046538bb20e5c2f2815a1b2e201871c5cf364",
+  "base_commit": "61d17c95e573f91ab5c65d25218451e9afd07d77",
+  "regression": {
+    "test_id": "admin-uploads-syntax",
+    "argv": ["node", "--check", "src/controllers/admin/uploads.js"],
+    "timeout_seconds": 60
+  },
+  "reproduction": {
+    "path": "test/agentless_v2_upload_path.js",
+    "argv": ["node", "test/agentless_v2_upload_path.js"],
+    "timeout_seconds": 60
+  }
+}

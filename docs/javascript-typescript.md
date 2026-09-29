@@ -44,12 +44,16 @@ bundler configuration or ignore files to determine the build's actual inputs.
 | Interface method/property | `method: Reader.read` or `field: Reader.ready` |
 | Anonymous default export | `function: default` or `class: default`, as applicable |
 | Static CommonJS assignment | `function: exports.add` or `method: module.exports.api.run` |
+| Top-level function assigned to a named member | `function: controller.uploadFile` |
 
 Named default exports keep their declared name. Named export declarations are
 unwrapped for parsing; export/import statements remain visible in skeletons.
 Re-export lists do not create copies of declarations in another file. CommonJS
 names describe the syntax of assignments; the adapter does not evaluate whether
 `module` or `exports` has been rebound.
+The same lexical rule covers top-level `object.member = function (...) {}` and
+arrow-function assignments; it does not infer computed member names or turn
+non-function property assignments into callable symbols.
 
 Bound functions use the variable's name because that is what callers see. For
 example, `const f = function inner() { ... }` is localized as `function: f`.

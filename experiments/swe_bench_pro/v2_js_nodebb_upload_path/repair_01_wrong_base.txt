@@ -1,0 +1,15 @@
+Check that the requested folder exists before saving.
+
+```javascript
+### src/controllers/admin/uploads.js
+<<<<<<< SEARCH
+	try {
+		const data = await file.saveFileToLocal(uploadedFile.name, params.folder, uploadedFile.path);
+=======
+	try {
+		if (!fs.existsSync(params.folder)) {
+			throw new Error('[[error:invalid-path]]');
+		}
+		const data = await file.saveFileToLocal(uploadedFile.name, params.folder, uploadedFile.path);
+>>>>>>> REPLACE
+```

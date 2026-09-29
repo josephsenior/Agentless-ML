@@ -190,6 +190,159 @@
       },
       {
         "kind": "function",
+        "name": "app.init",
+        "qualified_name": "app.init",
+        "signature": "app.init = function init()",
+        "start_line": 64,
+        "end_line": 70,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "app.defaultConfiguration",
+        "qualified_name": "app.defaultConfiguration",
+        "signature": "app.defaultConfiguration = function defaultConfiguration()",
+        "start_line": 77,
+        "end_line": 134,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "app.lazyrouter",
+        "qualified_name": "app.lazyrouter",
+        "signature": "app.lazyrouter = function lazyrouter()",
+        "start_line": 144,
+        "end_line": 154,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "app.handle",
+        "qualified_name": "app.handle",
+        "signature": "app.handle = function handle(req, res, callback)",
+        "start_line": 165,
+        "end_line": 182,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "app.use",
+        "qualified_name": "app.use",
+        "signature": "app.use = function use(fn)",
+        "start_line": 194,
+        "end_line": 249,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "app.route",
+        "qualified_name": "app.route",
+        "signature": "app.route = function route(path)",
+        "start_line": 261,
+        "end_line": 264,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "app.engine",
+        "qualified_name": "app.engine",
+        "signature": "app.engine = function engine(ext, fn)",
+        "start_line": 300,
+        "end_line": 314,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "app.param",
+        "qualified_name": "app.param",
+        "signature": "app.param = function param(name, fn)",
+        "start_line": 328,
+        "end_line": 342,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "app.set",
+        "qualified_name": "app.set",
+        "signature": "app.set = function set(setting, val)",
+        "start_line": 359,
+        "end_line": 401,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "app.path",
+        "qualified_name": "app.path",
+        "signature": "app.path = function path()",
+        "start_line": 417,
+        "end_line": 421,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "app.enabled",
+        "qualified_name": "app.enabled",
+        "signature": "app.enabled = function enabled(setting)",
+        "start_line": 438,
+        "end_line": 440,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "app.disabled",
+        "qualified_name": "app.disabled",
+        "signature": "app.disabled = function disabled(setting)",
+        "start_line": 457,
+        "end_line": 459,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "app.enable",
+        "qualified_name": "app.enable",
+        "signature": "app.enable = function enable(setting)",
+        "start_line": 469,
+        "end_line": 471,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "app.disable",
+        "qualified_name": "app.disable",
+        "signature": "app.disable = function disable(setting)",
+        "start_line": 481,
+        "end_line": 483,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "app.all",
+        "qualified_name": "app.all",
+        "signature": "app.all = function all(path)",
+        "start_line": 514,
+        "end_line": 525,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "app.render",
+        "qualified_name": "app.render",
+        "signature": "app.render = function render(name, options, callback)",
+        "start_line": 548,
+        "end_line": 610,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "app.listen",
+        "qualified_name": "app.listen",
+        "signature": "app.listen = function listen()",
+        "start_line": 633,
+        "end_line": 636,
+        "children": []
+      },
+      {
+        "kind": "function",
         "name": "logerror",
         "qualified_name": "logerror",
         "signature": "function logerror(err)",

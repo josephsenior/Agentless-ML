@@ -50,7 +50,11 @@ _VALUE_KINDS = {
 def _binding_kind(declarator: Node) -> str:
     parent = declarator.parent
     assert parent is not None  # grammar: a declarator is never the file root
-    return "constant" if any(child.type == "const" for child in parent.children) else "variable"
+    return (
+        "constant"
+        if any(child.type == "const" for child in parent.children)
+        else "variable"
+    )
 
 
 def _default_export(node: Node, context: Context):
@@ -60,20 +64,34 @@ def _default_export(node: Node, context: Context):
     value = node.child_by_field_name("value")
     if value is not None:
         name = context.name(value.child_by_field_name("name")) or "default"
-        yield Declaration(value, name, _VALUE_KINDS.get(value.type, "constant"), span=node)
+        yield Declaration(
+            value, name, _VALUE_KINDS.get(value.type, "constant"), span=node
+        )
 
 
-def _commonjs_export(node: Node, context: Context):
-    """``module.exports = ...`` and ``exports.name = ...`` at the top level."""
-    if node.named_child_count != 1 or node.named_children[0].type != "assignment_expression":
+def _top_level_assignment(node: Node, context: Context):
+    """CommonJS exports and statically named function-member assignments."""
+    if (
+        node.named_child_count != 1
+        or node.named_children[0].type != "assignment_expression"
+    ):
         return
     assignment = node.named_children[0]
-    name = context.name(assignment.child_by_field_name("left"))
-    if name and (
-        name == "module.exports" or name.startswith(("exports.", "module.exports."))
-    ):
-        value = assignment.child_by_field_name("right")
-        assert value is not None  # grammar: every assignment_expression has one
+    left = assignment.child_by_field_name("left")
+    value = assignment.child_by_field_name("right")
+    assert value is not None  # grammar: every assignment_expression has one
+    name = context.name(left)
+    if not name:
+        return
+    is_export = name == "module.exports" or name.startswith(
+        ("exports.", "module.exports.")
+    )
+    is_function_member = (
+        left is not None
+        and left.type == "member_expression"
+        and value.type in _FUNCTIONS
+    )
+    if is_export or is_function_member:
         yield Declaration(
             value, name, _VALUE_KINDS.get(value.type, "variable"), span=assignment
         )
@@ -150,7 +168,7 @@ JAVASCRIPT = LanguageSpec(
         "enum_declaration": declares("enum"),
         "variable_declarator": binds(_binding_kind, value_kinds=_VALUE_KINDS),
         "export_statement": _default_export,
-        "expression_statement": _commonjs_export,
+        "expression_statement": _top_level_assignment,
     },
     wrappers={
         "export_statement": Wrapper("declaration", widens_span=True),

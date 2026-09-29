@@ -127,6 +127,51 @@
       },
       {
         "kind": "function",
+        "name": "proto.param",
+        "qualified_name": "proto.param",
+        "signature": "proto.param = function param(name, fn)",
+        "start_line": 97,
+        "end_line": 129,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "proto.handle",
+        "qualified_name": "proto.handle",
+        "signature": "proto.handle = function handle(req, res, out)",
+        "start_line": 136,
+        "end_line": 331,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "proto.process_params",
+        "qualified_name": "proto.process_params",
+        "signature": "proto.process_params = function process_params(layer, called, req, res, done)",
+        "start_line": 338,
+        "end_line": 422,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "proto.use",
+        "qualified_name": "proto.use",
+        "signature": "proto.use = function use(fn)",
+        "start_line": 439,
+        "end_line": 487,
+        "children": []
+      },
+      {
+        "kind": "function",
+        "name": "proto.route",
+        "qualified_name": "proto.route",
+        "signature": "proto.route = function route(path)",
+        "start_line": 502,
+        "end_line": 515,
+        "children": []
+      },
+      {
+        "kind": "function",
         "name": "appendMethods",
         "qualified_name": "appendMethods",
         "signature": "function appendMethods(list, addition)",

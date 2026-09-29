@@ -57,7 +57,10 @@ def test_typescript_declarations_and_lexical_children():
 
 @pytest.mark.parametrize(
     "adapter,path",
-    [(get_language_adapter("javascript"), "example.js"), (get_language_adapter("typescript"), "example.ts")],
+    [
+        (get_language_adapter("javascript"), "example.js"),
+        (get_language_adapter("typescript"), "example.ts"),
+    ],
 )
 def test_exports_bound_functions_and_class_expressions(adapter, path):
     source = (
@@ -82,6 +85,24 @@ def test_exports_bound_functions_and_class_expressions(adapter, path):
     assert resolve_locations("method: module.exports.api.run", node, source).is_valid
     assert resolve_locations("function: default", node, source).is_valid
     assert not resolve_locations("function: inner", node, source).is_valid
+
+
+@pytest.mark.parametrize(
+    "language,extension", [("javascript", "js"), ("typescript", "ts")]
+)
+def test_top_level_static_function_member_assignment(language, extension):
+    source = (
+        "const controller = module.exports;\n"
+        "controller.uploadFile = async function (req) { return req; };\n"
+        "controller.count = 1;\n"
+        "controller[dynamic] = () => 0;\n"
+    )
+    node = get_language_adapter(language).parse_file(f"uploads.{extension}", source)
+    names = [symbol.qualified_name for symbol in node.symbols]
+    assert "controller.uploadFile" in names
+    assert "controller.count" not in names
+    assert not any("dynamic" in name for name in names)
+    assert resolve_locations("function: controller.uploadFile", node, source).is_valid
 
 
 def test_typescript_and_tsx_use_different_grammars():
@@ -111,7 +132,9 @@ def test_skeleton_hides_bodies_and_keeps_declarations_and_unicode():
     assert "return this.value" not in skeleton and "a + b" not in skeleton
     assert "add = (amount: number): number => ..." in skeleton
     assert "declare function external" in skeleton
-    crlf = get_language_adapter("typescript").render_skeleton(source.replace("\n", "\r\n"))
+    crlf = get_language_adapter("typescript").render_skeleton(
+        source.replace("\n", "\r\n")
+    )
     assert crlf.replace("\r\n", "\n") == skeleton
 
 

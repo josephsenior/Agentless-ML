@@ -317,6 +317,15 @@
             "children": []
           }
         ]
+      },
+      {
+        "kind": "function",
+        "name": "Base.prototype.extra",
+        "qualified_name": "Base.prototype.extra",
+        "signature": "Base.prototype.extra = function ()",
+        "start_line": 44,
+        "end_line": 44,
+        "children": []
       }
     ]
   },

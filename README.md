@@ -91,8 +91,8 @@ The current implementation includes:
 - a fixed recorded-response controller spanning Python localization through
   candidate validation, selection, final prediction, and reproducibility export;
 - a fail-closed SWE-bench Pro V2 loader for all 642 pinned agent-visible tasks,
-  plus recorded Python and Go smoke runs in official V2 images; three earlier
-  qutebrowser smoke runs used V1 images;
+  plus recorded Python, Go and JavaScript smoke runs in official V2 images;
+  three earlier qutebrowser smoke runs used V1 images;
 - a fail-closed DeepSWE adapter that loads all 113 pinned tasks (Go, Python,
   TypeScript, JavaScript and Rust) from their agent-visible files only, without
   opening hidden tests or reference solutions; see [DeepSWE](docs/deepswe.md);
@@ -205,6 +205,12 @@ On that task, the selected patch passed public checks and the local V2 verifier;
 the empty patch failed and the reference patch passed. These are engineering
 checks with hand-written responses, not model benchmark results. See the
 [benchmark note](docs/swe-bench-pro.md) for the exact task and limitations.
+
+The next recorded V2 task checks NodeBB's JavaScript admin upload handler with
+`tools/run_swe_bench_pro_v2_js_slice.py`. It exercised a real top-level
+function-member symbol, a public missing-folder reproduction, candidate
+selection, and post-selection V2 scoring. This too is a hand-written workflow
+check, not a model result.
 
 Selection uses supplied repository tests and issue-derived reproduction checks. The
 official benchmark verifier remains a separate, post-selection evaluation step; it
