@@ -25,6 +25,9 @@ from agentless_ml.adapters.benchmarks.swe_bench_pro import (
     SWEbenchProDatasetPin,
     load_swe_bench_pro_task,
 )
+from agentless_ml.adapters.benchmarks.swe_bench_pro_v2 import (
+    load_swe_bench_pro_v2_task,
+)
 
 __all__ = [
     "DEEPSWE_AGENT_FIELDS",
@@ -45,5 +48,6 @@ __all__ = [
     "pinned_load_options",
     "load_deepswe_task",
     "load_swe_bench_pro_task",
+    "load_swe_bench_pro_v2_task",
     "project_deepswe_task",
 ]

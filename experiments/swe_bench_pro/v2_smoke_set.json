@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "66f92766bba642462d4bbe5479e83f91f9211862",
+  "experiments": {
+    "qutebrowser_network_error": {
+      "instance_id": "instance_qutebrowser__qutebrowser-0833b5f6f140d04200ec91605f88704dd18e2970-v059c6fdc75567943479b23ebca7c07b5e9a7f34c",
+      "container_digest": "sha256:d664721bb9fc5d0a9019f9ef46f14e567c46ed8e53371b0f0c7ab26db2e779d8",
+      "visible_sha256": {
+        "task.toml": "d4048dff55436e01af5fcb44710733b662cef682a434ccd722ebe7818b42f411",
+        "instruction.md": "60d2e7c3747d44301f456cac319ad73f2fcc7db610e0ad9a3ef655d400087a1c"
+      }
+    }
+  }
+}

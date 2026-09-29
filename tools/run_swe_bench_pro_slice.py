@@ -10,11 +10,11 @@ from pathlib import Path
 from agentless_ml.adapters.benchmarks import (
     SWEbenchProDataset,
     SWEbenchProDatasetPin,
+    load_swe_bench_pro_v2_task,
 )
 from agentless_ml.schemas import ValidationKind
 from agentless_ml.validation import DockerTestRunner, PublicTestCommand
 from agentless_ml.workflow import FixedWorkflowController, RecordedStageResponses
-
 
 ROOT = Path(__file__).resolve().parents[1]
 EXPERIMENT_ROOT = ROOT / "experiments" / "swe_bench_pro"
@@ -55,6 +55,31 @@ def _responses(experiment: Path) -> RecordedStageResponses:
     )
 
 
+def _verify_v2_base_checkout(task) -> None:
+    """V2's manifest omits the base commit; check the pinned image itself."""
+    result = subprocess.run(
+        [
+            "docker",
+            "run",
+            "--rm",
+            "--network",
+            "none",
+            "--entrypoint",
+            "git",
+            task.container_digest,
+            "-C",
+            "/app",
+            "rev-parse",
+            "HEAD",
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    if result.stdout.strip() != task.base_commit:
+        raise ValueError("V2 image base commit differs from pinned V1 metadata")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset-parquet", type=Path, required=True)
@@ -62,6 +87,11 @@ def main() -> None:
     parser.add_argument("--source-repository", type=Path, required=True)
     parser.add_argument("--workspace-root", type=Path, required=True)
     parser.add_argument("--artifact-root", type=Path, required=True)
+    parser.add_argument(
+        "--v2-task-dir",
+        type=Path,
+        help="Agent-visible V2 task directory for the pinned V2 smoke slice",
+    )
     args = parser.parse_args()
 
     smoke_set = json.loads(
@@ -82,6 +112,21 @@ def main() -> None:
         instance_ids=(entry["instance_id"],),
         container_digests={entry["instance_id"]: entry["container_digest"]},
     )[0]
+    if args.v2_task_dir is not None:
+        v2_set = json.loads(
+            (EXPERIMENT_ROOT / "v2_smoke_set.json").read_text(encoding="utf-8")
+        )
+        v2_entry = v2_set["experiments"].get(args.experiment)
+        if v2_entry is None or v2_entry["instance_id"] != task.instance_id:
+            parser.error("experiment is not in the pinned V2 smoke set")
+        task = load_swe_bench_pro_v2_task(
+            args.v2_task_dir,
+            task,
+            dataset_revision=v2_set["dataset_revision"],
+            visible_sha256=v2_entry["visible_sha256"],
+            container_digest=v2_entry["container_digest"],
+        )
+        _verify_v2_base_checkout(task)
     validation = json.loads(
         (experiment / "validation.json").read_text(encoding="utf-8")
     )
@@ -109,8 +154,16 @@ def main() -> None:
         runner=runner,
         public_commands=commands,
         implementation_revision=_revision(),
-        harness_revision=smoke_set["harness_revision"],
-        model_name="recorded/manual-v1",
+        harness_revision=(
+            v2_set["dataset_revision"]
+            if args.v2_task_dir
+            else smoke_set["harness_revision"]
+        ),
+        model_name=(
+            "recorded/manual-v1-reused-for-v2-smoke"
+            if args.v2_task_dir
+            else "recorded/manual-v1"
+        ),
     ).run(_responses(experiment))
     print(
         json.dumps(
