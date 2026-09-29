@@ -1,4 +1,8 @@
 {
+  "bandit-structured-nosec-directives": {
+    "runner": "stestr",
+    "reason": "Bandit's test configuration and published image use stestr, with subunit2junitxml installed for JUnit output. The image does not install pytest, so the generic Python runner cannot execute the existing public suite."
+  },
   "csstree-shorthand-expansion-compression": {
     "runner": "mocha-json",
     "reason": "The pinned Mocha 9.2.2 image emits an empty xUnit report for this otherwise healthy suite. Its built-in JSON reporter records the same per-test outcomes without adding a dependency.",

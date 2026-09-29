@@ -140,6 +140,20 @@ PYTEST = DeepSWETestCommand(
     report=TestReport(ReportFormat.JUNIT_XML, "/tmp/report.xml"),
 )
 
+# Bandit declares stestr in its own test setup; its published image installs
+# stestr and subunit2junitxml, but not pytest. Keep candidate source first on
+# PYTHONPATH for stestr's child test processes, and preserve stestr's exit code
+# after converting its subunit stream into the report used for selection.
+STESTR = DeepSWETestCommand(
+    script=(
+        f"cd {WORK} && export {_PYTHON_PATH} && "
+        'stestr run --subunit "$@" > /tmp/stestr.subunit; rc=$?; '
+        "subunit2junitxml --no-passthrough --output-to=/tmp/report.xml "
+        "< /tmp/stestr.subunit || exit 2; exit $rc"
+    ),
+    report=TestReport(ReportFormat.JUNIT_XML, "/tmp/report.xml"),
+)
+
 # mocha's built-in xunit reporter writes JUnit XML, so no reporter package has
 # to be present in the image. mocha exits with the number of failed tests (3
 # for three failures), not 1, so every exit a test failure can produce is
@@ -288,6 +302,7 @@ TEST_COMMANDS = {
     "go": GO,
     "go-module": GO_MODULE,
     "pytest": PYTEST,
+    "stestr": STESTR,
     "mocha": MOCHA,
     "mocha-json": MOCHA_JSON,
     "jest": JEST,

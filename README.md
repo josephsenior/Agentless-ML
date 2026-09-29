@@ -172,10 +172,11 @@ checks. Ordinary framework tests do not require Node or a TypeScript compiler.
 [Rust support](docs/rust-adapter.md) covers traits, impl blocks, modules and the
 optional compiler check. Ordinary framework tests do not require Rust installed.
 
-## SWE-bench Pro Python smoke set
+## SWE-bench Pro V1 Python smoke set
 
-The first benchmark integration uses three pinned SWE-bench Pro qutebrowser
-tasks described in [the benchmark note](docs/swe-bench-pro.md). Their
+SWE-bench Pro V2 is the selected research target. The existing smoke set uses
+three pinned V1 qutebrowser tasks described in
+[the benchmark note](docs/swe-bench-pro.md). Their
 localization and repair responses are recorded inputs, so these runs make zero
 model calls. After cloning qutebrowser and pulling the pinned images, run one
 experiment with:

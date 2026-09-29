@@ -34,6 +34,11 @@ def test_python_puts_the_checkout_ahead_of_the_images_installed_package():
     assert "PYTHONPATH=/tmp/work/src:/tmp/work" in text
     assert text.index("PYTHONPATH") < text.index("pytest")
 
+    stestr = script("stestr")
+    assert "export PYTHONPATH=/tmp/work/src:/tmp/work" in stestr
+    assert "stestr run --subunit" in stestr
+    assert "subunit2junitxml" in stestr
+
 
 def test_one_unimportable_test_module_does_not_empty_a_python_inventory():
     # cattrs: six modules import packages the image lacks; without this flag
@@ -91,6 +96,7 @@ def test_koota_runner_refuses_a_selector_it_cannot_apply_to_both_packages():
     [
         ("go", ReportFormat.CTRF_JSON, "/tmp/ctrf.json"),
         ("pytest", ReportFormat.JUNIT_XML, "/tmp/report.xml"),
+        ("stestr", ReportFormat.JUNIT_XML, "/tmp/report.xml"),
         ("mocha", ReportFormat.JUNIT_XML, "/tmp/report.xml"),
         ("mocha-json", ReportFormat.MOCHA_JSON, "/tmp/mocha-report.json"),
         ("jest", ReportFormat.CTRF_JSON, "ctrf/ctrf-report.json"),
@@ -263,6 +269,7 @@ def test_the_checked_in_overrides_are_well_formed_and_explained():
     overrides = load_test_overrides(OVERRIDES)
     assert set(overrides) == {
         "awilix-async-container-initialization",
+        "bandit-structured-nosec-directives",
         "csstree-shorthand-expansion-compression",
         "fastapi-implicit-head-options",
         "prometheus-transactional-reload-status",

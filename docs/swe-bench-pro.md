@@ -1,6 +1,17 @@
 # SWE-bench Pro integration
 
-This integration starts with three real Python tasks before additional languages.
+The research target is SWE-bench Pro V2. Scale publishes its 642 public V2
+tasks in Harbor format with public images and a final verifier; the intended
+experiment will pin that release and use its official grading protocol. The
+current adapter and three recorded Python runs below use the older V1 dataset
+and Docker Hub images. They remain evidence about workflow mechanics, not V2
+benchmark runs or scores. V2 loading, candidate environments and final scoring
+still need implementation and verification.
+
+See the [official V2 format and protocol](https://github.com/scaleapi/SWE-bench_Pro-os/blob/main/v2/README.md).
+
+The existing V1 integration starts with three real Python tasks before additional
+languages.
 The smoke set covers a two-file API relocation, a Qt signal update, and a larger
 method-level error-message change at three distinct qutebrowser base commits.
 

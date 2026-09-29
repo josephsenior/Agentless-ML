@@ -8,10 +8,10 @@ mean the task was solved. Each task's latest result and message are in the local
 
 | Latest status | Tasks |
 |---|---:|
-| Ready | 70 |
+| Ready | 71 |
 | Repository contains symlinks or submodules unsupported by local-git-v1 | 22 |
 | Test runner not yet supported or identifiable | 6 |
-| Test command or report failed | 5 |
+| Test command or report failed | 4 |
 | No passing baseline tests | 4 |
 | Repository preparation or seal failed | 3 |
 | Pinned image absent | 1 |
@@ -34,6 +34,12 @@ its Vitest typecheck writes into the installed Vitest package, so its runner
 copies that small package into writable space while retaining its dependency
 links. The unpatched suite then passed 561 tests; the snapshot now has 70 ready
 tasks.
+
+The Bandit task exposed a wrong assumption in our runner: Python did not mean
+pytest. The published image lacks pytest, but its repository declares stestr
+and the image installs it. Running `stestr run` in the image passed 273 tests.
+The candidate checkout then passed the same 273 through stestr with a JUnit
+report converted from its subunit output. The snapshot now has 71 ready tasks.
 
 ## What remains
 
@@ -70,9 +76,8 @@ checkout and writes a structured per-test report.
 and `yjs-map-conflict-detection` has a custom Node test entry point. These are
 not interchangeable with a guessed root-level Vitest command.
 
-The five `harness_error` tasks reached a runner but did not produce a
-trustworthy result. `bandit-structured-nosec-directives` lacks pytest in its
-image; `kea-atomic-signal-selectors` failed during Jest setup;
+The four `harness_error` tasks reached a runner but did not produce a
+trustworthy result. `kea-atomic-signal-selectors` failed during Jest setup;
 `mnamer-daemon-watch-lifecycle` needs a version source without relying on a
 candidate `.git` directory; and
 `sql-formatter-bigquery-pipe-formatting` needs generated parser files before
@@ -99,7 +104,7 @@ repeatable baseline.
 ## Next checks
 
 The next shared runner work is the two other nested-package projects, then the
-single-tool and custom runners. The five harness errors should be fixed
+single-tool and custom runners. The four harness errors should be fixed
 with small task-specific checks where the published image is incomplete; keep
 the report/exit-code consistency check in place. Symlink and submodule support
 is a separate workspace safety change and should stay excluded until tested.

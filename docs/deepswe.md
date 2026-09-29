@@ -477,7 +477,7 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   accidentally testing the image's copy of a workspace package.
 - **Baseline eligibility across the corpus.** The survey has attempted all 113
   pinned tasks. The [28 September triage](deepswe-survey-2026-09-28.md) records
-  which 68 have a usable baseline and why the other 45 do not yet.
+  which 71 have a usable baseline and why the other 42 do not yet.
 - **Workflow and scoring over many tasks.** The survey establishes each task's
   regression inventory, but running the workflow needs repair responses, and
   only actionlint has recorded ones; without a model there is nothing to run for
