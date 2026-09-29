@@ -1,0 +1,26 @@
+```go
+package scanner
+
+import (
+	"net/http"
+	"testing"
+)
+
+func TestDebianMissingKernelVersion(t *testing.T) {
+	header := http.Header{}
+	header.Set("X-Vuls-OS-Family", "debian")
+	header.Set("X-Vuls-OS-Release", "8.10")
+	header.Set("X-Vuls-Kernel-Release", "3.16.0-4-amd64")
+
+	result, err := ViaHTTP(header, "", false)
+	if err != nil {
+		t.Fatalf("missing optional kernel version rejected: %v", err)
+	}
+	if result.Family != "debian" || result.Release != "8.10" {
+		t.Fatalf("wrong OS: family=%q release=%q", result.Family, result.Release)
+	}
+	if result.RunningKernel.Release != "3.16.0-4-amd64" || result.RunningKernel.Version != "" {
+		t.Fatalf("wrong kernel: %#v", result.RunningKernel)
+	}
+}
+```

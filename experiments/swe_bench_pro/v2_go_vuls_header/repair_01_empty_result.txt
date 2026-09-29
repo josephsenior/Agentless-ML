@@ -1,0 +1,14 @@
+Do not report an error when the header is missing.
+
+```go
+### scanner/serverapi.go
+<<<<<<< SEARCH
+	if family == constant.Debian && kernelVersion == "" {
+		return models.ScanResult{}, errKernelVersionHeader
+	}
+=======
+	if family == constant.Debian && kernelVersion == "" {
+		return models.ScanResult{}, nil
+	}
+>>>>>>> REPLACE
+```

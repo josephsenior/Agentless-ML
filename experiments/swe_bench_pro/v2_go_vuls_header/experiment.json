@@ -1,0 +1,15 @@
+{
+  "instance_id": "instance_future-architect__vuls-fe8d252c51114e922e6836055ef86a15f79ad042",
+  "image_id": "sha256:0961d389ef0bcdd51da0df664b631a83938427ab3d485ecbe23996033eb73f28",
+  "base_commit": "0cdc7a3af55e323b86d4e76e17fdc90112b42a63",
+  "regression": {
+    "test_id": "scanner.TestSplitAptCachePolicy",
+    "argv": ["env", "GOCACHE=/tmp/go-build", "GOPROXY=off", "go", "test", "./scanner", "-run", "^TestSplitAptCachePolicy$", "-count=1"],
+    "timeout_seconds": 600
+  },
+  "reproduction": {
+    "path": "scanner/agentless_v2_reproduction_test.go",
+    "argv": ["env", "GOCACHE=/tmp/go-build", "GOPROXY=off", "go", "test", "./scanner", "-run", "^TestDebianMissingKernelVersion$", "-count=1"],
+    "timeout_seconds": 600
+  }
+}

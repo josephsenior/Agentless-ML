@@ -1,0 +1,11 @@
+Let the existing result construction handle an empty optional version.
+
+```go
+### scanner/serverapi.go
+<<<<<<< SEARCH
+	if family == constant.Debian && kernelVersion == "" {
+		return models.ScanResult{}, errKernelVersionHeader
+	}
+=======
+>>>>>>> REPLACE
+```

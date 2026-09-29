@@ -133,9 +133,14 @@ def _tracked_paths(repository: Path, commit: str, timeout: float) -> frozenset[s
             continue
         metadata, raw_path = record.split(b"\t", 1)
         mode, kind, _ = metadata.split()
-        if mode not in {b"100644", b"100755"} or kind != b"blob":
+        if not (
+            mode in {b"100644", b"100755"}
+            and kind == b"blob"
+            or mode == b"160000"
+            and kind == b"commit"
+        ):
             raise WorkspaceError(
-                "symlinks and submodules are not supported by local-git-v1"
+                "symlinks and unsupported tree entries are not supported"
             )
         try:
             path = _safe_path(raw_path.decode("utf-8"))
@@ -143,6 +148,7 @@ def _tracked_paths(repository: Path, commit: str, timeout: float) -> frozenset[s
             raise WorkspaceError("non-UTF-8 repository path") from exc
         if path.casefold() in folded:
             raise WorkspaceError(f"case-colliding repository path: {path}")
+        # Keep gitlinks reserved even though they are never initialized or editable.
         paths.add(path)
         folded.add(path.casefold())
     return frozenset(paths)
@@ -179,7 +185,9 @@ def _remove_owned(directory: Path, root: Path, token: str) -> None:
         if child.is_symlink() or child.is_file():
             _retry_while_locked(child.unlink)
         else:
-            _retry_while_locked(lambda child=child: shutil.rmtree(child, onerror=remove_readonly))
+            _retry_while_locked(
+                lambda child=child: shutil.rmtree(child, onerror=remove_readonly)
+            )
     marker.unlink()
     _retry_while_locked(directory.rmdir)
 
@@ -503,7 +511,11 @@ class LocalGitWorkspace:
     def _require_creatable(self, path: str) -> None:
         """A new file may not replace, shadow or escape anything in the checkout."""
         folded = path.casefold()
-        if any(existing.casefold() == folded for existing in self._paths):
+        if any(
+            folded == existing.casefold()
+            or folded.startswith(existing.casefold() + "/")
+            for existing in self._paths
+        ):
             raise WorkspaceError(f"new file collides with a tracked path: {path}")
         target = self.path / path
         if target.exists() or target.is_symlink():

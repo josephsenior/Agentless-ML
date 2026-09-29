@@ -190,6 +190,33 @@ def test_symlink_tree_is_rejected_before_checkout(source) -> None:
     assert not root.exists()
 
 
+def test_uninitialized_submodule_does_not_block_regular_file_edits(source) -> None:
+    repository, base, root = source
+    git(
+        repository,
+        "update-index",
+        "--add",
+        "--cacheinfo",
+        "160000",
+        base,
+        "integration",
+    )
+    git(repository, "commit", "-m", "gitlink fixture")
+    commit = git(repository, "rev-parse", "HEAD").decode().strip()
+    provider = LocalGitWorkspaceProvider(repository, commit, root)
+    with provider.create() as workspace:
+        assert (workspace.path / "integration").is_dir()
+        assert not any((workspace.path / "integration").iterdir())
+        assert (
+            workspace.apply_candidate(candidate()).status
+            is PatchApplicationStatus.APPLIED
+        )
+    with provider.create() as workspace:
+        patch = build_unified_diff({}, {"integration/new.py": "value = 1\n"})
+        result = workspace.apply_candidate(_patched(patch))
+        assert result.status is PatchApplicationStatus.PATCH_ERROR
+
+
 def test_cleanup_on_exception_and_closed_workspace_rejection(source) -> None:
     repository, commit, root = source
     with (
@@ -390,11 +417,15 @@ def test_a_patch_may_create_new_files_in_new_folders(source) -> None:
         # an ignored, untracked file already on disk in the source is never created over
         build_unified_diff({}, {".git/hooks/pre-commit": "echo\n"}),
         # only ordinary files: no executable or symlink modes
-        "diff --git a/run.sh b/run.sh\nnew file mode 100755\n--- /dev/null\n"
-        "+++ b/run.sh\n@@ -0,0 +1 @@\n+echo\n",
+        (
+            "diff --git a/run.sh b/run.sh\nnew file mode 100755\n--- /dev/null\n"
+            "+++ b/run.sh\n@@ -0,0 +1 @@\n+echo\n"
+        ),
         # a new-file header whose two paths disagree
-        "diff --git a/x.py b/y.py\nnew file mode 100644\n--- /dev/null\n"
-        "+++ b/y.py\n@@ -0,0 +1 @@\n+y\n",
+        (
+            "diff --git a/x.py b/y.py\nnew file mode 100644\n--- /dev/null\n"
+            "+++ b/y.py\n@@ -0,0 +1 @@\n+y\n"
+        ),
         # an untracked path that is not declared as new
         "--- a/new.py\n+++ b/new.py\n@@ -0,0 +1 @@\n+y\n",
     ],
@@ -404,4 +435,6 @@ def test_new_files_never_replace_escape_or_change_mode(source, patch) -> None:
     with LocalGitWorkspaceProvider(repository, commit, root).create() as workspace:
         result = workspace.apply_candidate(_patched(patch))
         assert result.status is PatchApplicationStatus.PATCH_ERROR
-        assert git(workspace.path, "status", "--porcelain", "--untracked-files=all") == b""
+        assert (
+            git(workspace.path, "status", "--porcelain", "--untracked-files=all") == b""
+        )

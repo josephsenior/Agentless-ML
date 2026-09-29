@@ -91,7 +91,7 @@ The current implementation includes:
 - a fixed recorded-response controller spanning Python localization through
   candidate validation, selection, final prediction, and reproducibility export;
 - a fail-closed SWE-bench Pro V2 loader for all 642 pinned agent-visible tasks,
-  plus one recorded qutebrowser smoke run in its official V2 image; three earlier
+  plus recorded Python and Go smoke runs in official V2 images; three earlier
   qutebrowser smoke runs used V1 images;
 - a fail-closed DeepSWE adapter that loads all 113 pinned tasks (Go, Python,
   TypeScript, JavaScript and Rust) from their agent-visible files only, without
@@ -173,7 +173,7 @@ checks. Ordinary framework tests do not require Node or a TypeScript compiler.
 [Rust support](docs/rust-adapter.md) covers traits, impl blocks, modules and the
 optional compiler check. Ordinary framework tests do not require Rust installed.
 
-## SWE-bench Pro V2 loading and Python smoke set
+## SWE-bench Pro V2 loading and recorded smoke tasks
 
 SWE-bench Pro V2 is the selected research target. The pinned loader checks all
 642 V2 tasks using only `task.toml` and `instruction.md`, joined to repository
@@ -198,9 +198,17 @@ For the V2 smoke run, use `qutebrowser_network_error` and add
 only needs its two agent-visible files. The recorded V1 responses are reused
 for a workflow check, not a V2 benchmark score.
 
+The first non-Python V2 run uses a pinned Vuls Go task. Its separate recorded
+runner, `tools/run_swe_bench_pro_v2_go_slice.py`, takes `--v1-parquet`,
+`--v2-tasks`, `--source-repository`, `--workspace-root`, and `--artifact-root`.
+On that task, the selected patch passed public checks and the local V2 verifier;
+the empty patch failed and the reference patch passed. These are engineering
+checks with hand-written responses, not model benchmark results. See the
+[benchmark note](docs/swe-bench-pro.md) for the exact task and limitations.
+
 Selection uses supplied repository tests and issue-derived reproduction checks. The
 official benchmark verifier remains a separate, post-selection evaluation step; it
-is implemented for DeepSWE (`tools/score_deepswe.py`). For the V2 smoke task,
+is implemented for DeepSWE (`tools/score_deepswe.py`). For the V2 smoke tasks,
 `tools/score_swe_bench_pro_v2.py` also runs the pinned V2 verifier in a fresh
 image after selection. See the [benchmark note](docs/swe-bench-pro.md) for its
 empty/reference checks and the limits of this local result; official Harbor
