@@ -26,7 +26,10 @@ from agentless_ml.adapters.benchmarks.swe_bench_pro import (
     load_swe_bench_pro_task,
 )
 from agentless_ml.adapters.benchmarks.swe_bench_pro_v2 import (
+    SWEbenchProV2Dataset,
+    SWEbenchProV2DatasetPin,
     load_swe_bench_pro_v2_task,
+    v2_visible_corpus_digest,
 )
 
 __all__ = [
@@ -40,6 +43,8 @@ __all__ = [
     "SWE_BENCH_PRO_AGENT_COLUMNS",
     "SWEbenchProDataset",
     "SWEbenchProDatasetPin",
+    "SWEbenchProV2Dataset",
+    "SWEbenchProV2DatasetPin",
     "deepswe_test_command",
     "deepswe_test_plan",
     "deepswe_test_runner",
@@ -50,4 +55,5 @@ __all__ = [
     "load_swe_bench_pro_task",
     "load_swe_bench_pro_v2_task",
     "project_deepswe_task",
+    "v2_visible_corpus_digest",
 ]

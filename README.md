@@ -90,8 +90,9 @@ The current implementation includes:
   outcomes, and a prepared two-patch selection demonstration without model calls;
 - a fixed recorded-response controller spanning Python localization through
   candidate validation, selection, final prediction, and reproducibility export;
-- a fail-closed SWE-bench Pro adapter and three pinned qutebrowser Python tasks run
-  against its official container image without exposing gold or verifier fields;
+- a fail-closed SWE-bench Pro V2 loader for all 642 pinned agent-visible tasks,
+  plus one recorded qutebrowser smoke run in its official V2 image; three earlier
+  qutebrowser smoke runs used V1 images;
 - a fail-closed DeepSWE adapter that loads all 113 pinned tasks (Go, Python,
   TypeScript, JavaScript and Rust) from their agent-visible files only, without
   opening hidden tests or reference solutions; see [DeepSWE](docs/deepswe.md);
@@ -172,11 +173,13 @@ checks. Ordinary framework tests do not require Node or a TypeScript compiler.
 [Rust support](docs/rust-adapter.md) covers traits, impl blocks, modules and the
 optional compiler check. Ordinary framework tests do not require Rust installed.
 
-## SWE-bench Pro V1 Python smoke set
+## SWE-bench Pro V2 loading and Python smoke set
 
-SWE-bench Pro V2 is the selected research target. The existing smoke set uses
-three pinned V1 qutebrowser tasks described in
-[the benchmark note](docs/swe-bench-pro.md). Their
+SWE-bench Pro V2 is the selected research target. The pinned loader checks all
+642 V2 tasks using only `task.toml` and `instruction.md`, joined to repository
+and base-commit metadata from the pinned V1 dataset. See
+[the benchmark note](docs/swe-bench-pro.md) for the corpus check and trust
+boundary. The existing smoke set also has three pinned V1 qutebrowser tasks. Their
 localization and repair responses are recorded inputs, so these runs make zero
 model calls. After cloning qutebrowser and pulling the pinned images, run one
 experiment with:
@@ -189,6 +192,11 @@ python tools/run_swe_bench_pro_slice.py \
   --workspace-root /path/to/temporary-workspaces \
   --artifact-root /path/to/run-artifacts
 ```
+
+For the V2 smoke run, use `qutebrowser_network_error` and add
+`--v2-task-dir /path/to/SWE-bench_Pro-os/v2/tasks/<instance_id>`. That directory
+only needs its two agent-visible files. The recorded V1 responses are reused
+for a workflow check, not a V2 benchmark score.
 
 Selection uses supplied repository tests and issue-derived reproduction checks. The
 official benchmark verifier remains a separate, post-selection evaluation step; it

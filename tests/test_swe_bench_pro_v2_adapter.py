@@ -4,16 +4,20 @@ from pathlib import Path
 import pytest
 
 from agentless_ml.adapters.benchmarks import (
+    SWEbenchProV2Dataset,
+    SWEbenchProV2DatasetPin,
     load_swe_bench_pro_task,
     load_swe_bench_pro_v2_task,
+    v2_visible_corpus_digest,
 )
+from agentless_ml.schemas import TaskSpec
 
 INSTANCE = "instance_qutebrowser__qutebrowser-example-v123"
 REVISION = "a" * 40
 DIGEST = "sha256:" + "b" * 64
 
 
-def _fixture(directory: Path) -> tuple[object, dict[str, str]]:
+def _fixture(directory: Path) -> tuple[TaskSpec, dict[str, str]]:
     directory.mkdir()
     (directory / "task.toml").write_text(
         'schema_version = "1.4"\n'
@@ -48,6 +52,53 @@ def _fixture(directory: Path) -> tuple[object, dict[str, str]]:
         dataset_revision="d" * 40,
     )
     return v1, pins
+
+
+class _BaseDataset:
+    def __init__(self, tasks: tuple[TaskSpec, ...]) -> None:
+        self.tasks = tasks
+
+    def load_tasks(self) -> tuple[TaskSpec, ...]:
+        return self.tasks
+
+
+def test_v2_corpus_loads_with_pinned_base_metadata(tmp_path: Path) -> None:
+    v1, _ = _fixture(tmp_path / INSTANCE)
+    pin = SWEbenchProV2DatasetPin(
+        REVISION,
+        v2_visible_corpus_digest((tmp_path / INSTANCE,)),
+        1,
+    )
+    dataset = SWEbenchProV2Dataset(tmp_path, pin, _BaseDataset((v1,)))
+    tasks = dataset.load_tasks(instance_ids=(INSTANCE,), language="python")
+    assert len(tasks) == 1
+    assert tasks[0].base_commit == v1.base_commit
+    assert tasks[0].container_digest is None
+
+
+def test_v2_corpus_pin_detects_changed_visible_file(tmp_path: Path) -> None:
+    v1, _ = _fixture(tmp_path / INSTANCE)
+    pin = SWEbenchProV2DatasetPin(
+        REVISION,
+        v2_visible_corpus_digest((tmp_path / INSTANCE,)),
+        1,
+    )
+    (tmp_path / INSTANCE / "instruction.md").write_text("Changed", encoding="utf-8")
+    dataset = SWEbenchProV2Dataset(tmp_path, pin, _BaseDataset((v1,)))
+    with pytest.raises(ValueError, match="do not match their pin"):
+        dataset.load_tasks()
+
+
+def test_v2_corpus_rejects_task_without_base_metadata(tmp_path: Path) -> None:
+    _fixture(tmp_path / INSTANCE)
+    pin = SWEbenchProV2DatasetPin(
+        REVISION,
+        v2_visible_corpus_digest((tmp_path / INSTANCE,)),
+        1,
+    )
+    dataset = SWEbenchProV2Dataset(tmp_path, pin, _BaseDataset(()))
+    with pytest.raises(ValueError, match="no pinned V1 metadata"):
+        dataset.load_tasks()
 
 
 def test_v2_loads_only_pinned_visible_files(tmp_path: Path) -> None:
