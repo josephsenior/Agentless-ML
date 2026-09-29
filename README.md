@@ -200,7 +200,11 @@ for a workflow check, not a V2 benchmark score.
 
 Selection uses supplied repository tests and issue-derived reproduction checks. The
 official benchmark verifier remains a separate, post-selection evaluation step; it
-is implemented for DeepSWE (`tools/score_deepswe.py`) and not yet for SWE-bench Pro.
+is implemented for DeepSWE (`tools/score_deepswe.py`). For the V2 smoke task,
+`tools/score_swe_bench_pro_v2.py` also runs the pinned V2 verifier in a fresh
+image after selection. See the [benchmark note](docs/swe-bench-pro.md) for its
+empty/reference checks and the limits of this local result; official Harbor
+re-grading is not yet integrated.
 
 ## Roadmap
 

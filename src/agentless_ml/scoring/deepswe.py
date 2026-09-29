@@ -58,7 +58,7 @@ _MAX_RESULT_BYTES = 32 * 1024 * 1024
 
 
 class ScoringError(RuntimeError):
-    """The scorer could not run the verifier as DeepSWE defines it."""
+    """The scorer could not run the benchmark verifier as defined."""
 
 
 class ScoreStatus(StrEnum):

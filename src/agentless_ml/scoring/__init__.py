@@ -10,11 +10,17 @@ from agentless_ml.scoring.deepswe import (
     ScoreStatus,
     ScoringError,
 )
+from agentless_ml.scoring.swe_bench_pro_v2 import (
+    SWEbenchProV2Score,
+    SWEbenchProV2Verifier,
+)
 
 __all__ = [
     "VERIFIER_FILES",
     "DeepSWEScore",
     "DeepSWEVerifier",
+    "SWEbenchProV2Score",
+    "SWEbenchProV2Verifier",
     "ScoreStatus",
     "ScoringError",
 ]
