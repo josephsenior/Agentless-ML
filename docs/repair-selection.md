@@ -52,11 +52,14 @@ strips trailing whitespace. With source snapshots, Python files are now parsed
 and unparsed through the AST before comments and docstrings are removed; other
 languages retain the comment-stripped textual diff. This brings Python spacing
 variants into the same voting group, as in upstream. It is not full upstream
-normalization parity: upstream applies a special context-free diff for a newly
-added function, and its tokenizer-based docstring removal and Git diff can still
-produce different keys. Comment-only changes retain a non-empty textual key
-here, whereas upstream may exclude them. The key remains a voting heuristic,
-not evidence that two patches are semantically equivalent.
+normalization parity: we now also apply upstream's context-free diff rule for
+newly added Python functions, but its tokenizer-based docstring removal and Git
+diff can still produce different keys on untested inputs. A captured comparison
+against the pinned normalizer matches eight ordinary and new-function cases
+exactly ([tests](../tests/test_python_voting_parity.py)). Comment-only changes
+retain a non-empty textual key here, whereas upstream emits an empty key and may
+exclude them. The key remains a voting heuristic, not evidence that two patches
+are semantically equivalent.
 See the [replication map](replication-map.md) for the remaining differences.
 
 The selector sums `failure_count()` over each candidate's regression results. A

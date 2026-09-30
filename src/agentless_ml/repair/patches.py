@@ -69,6 +69,50 @@ def normalize_patch(patch: str) -> str:
     return "\n".join(normalized).strip()
 
 
+def _python_functions(source: str) -> dict[str, str]:
+    """Use the function names and bodies checked by upstream's new-function rule."""
+    tree = ast.parse(source)
+    functions: dict[str, str] = {}
+
+    class TopLevelVisitor(ast.NodeVisitor):
+        def __init__(self) -> None:
+            self.class_depth = 0
+
+        def visit_ClassDef(self, node: ast.ClassDef) -> None:
+            self.class_depth += 1
+            self.generic_visit(node)
+            self.class_depth -= 1
+
+        def visit_FunctionDef(self, node: ast.FunctionDef) -> None:
+            if not self.class_depth:
+                functions[node.name] = ast.unparse(node)
+            self.generic_visit(node)
+
+        visit_AsyncFunctionDef = visit_FunctionDef
+
+    class ClassVisitor(ast.NodeVisitor):
+        def visit_ClassDef(self, node: ast.ClassDef) -> None:
+            for member in node.body:
+                if isinstance(member, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                    functions[f"{node.name}.{member.name}"] = ast.unparse(member)
+            self.generic_visit(node)
+
+    TopLevelVisitor().visit(tree)
+    ClassVisitor().visit(tree)
+    return functions
+
+
+def _is_just_new_python_function(old: str, new: str) -> bool:
+    try:
+        before = _python_functions(old)
+        after = _python_functions(new)
+    except (SyntaxError, ValueError, RecursionError):
+        return False
+    return all(name in after and after[name] == body for name, body in before.items()) and bool(
+        after.keys() - before.keys()
+    )
+
+
 def comment_normalized_diff(
     original_sources: Mapping[str, str],
     updated_sources: Mapping[str, str],
@@ -102,6 +146,11 @@ def comment_normalized_diff(
                 pass
         without_comments = adapter.strip_comments(source, path=path)
         if language == "python":
+            # The published tokenizer also drops every empty line before the
+            # normalized diff is built.
+            without_comments = "\n".join(
+                line for line in without_comments.splitlines() if line.strip()
+            )
             # Removing a sole docstring can leave an empty suite. Upstream keeps
             # the AST-normalized source when that stripped version will not parse.
             try:
@@ -120,6 +169,15 @@ def comment_normalized_diff(
         stripped_diff = build_unified_diff(stripped_originals, stripped_updated)
     except ValueError:
         return None
+    if language == "python" and len(stripped_originals) == len(stripped_updated) == 1:
+        path = next(iter(stripped_updated))
+        if path.endswith(adapter.extensions) and _is_just_new_python_function(
+            stripped_originals[path], stripped_updated[path]
+        ):
+            # Upstream removes context and hunk headers for an added function.
+            stripped_diff = "\n".join(
+                line for line in stripped_diff.splitlines() if line.startswith(("-", "+"))
+            )
     return normalize_patch(stripped_diff)
 
 

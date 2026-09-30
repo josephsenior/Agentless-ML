@@ -35,6 +35,11 @@ The files under `tests/fixtures/python/` were produced by running the capture
 utilities against the pinned checkouts above. Each source-dependent fixture
 records a SHA-256 digest of its input. The parity tests compare Agentless-ML with
 these captured outputs byte for byte.
+The voting fixture was captured from the pinned `postprocess_data.py` with
+temporary, argument-list Git helpers substituted for its shell-based apply/diff
+helpers, so the normalizer itself ran unchanged without invoking its `rm -rf`
+cleanup. Its source SHA-256 and revision are recorded in the fixture; recapture
+with `tools/capture_agentless_voting_fixture.py --upstream <pinned checkout>`.
 
 `tests/fixtures/structure/` is the regression corpus for the Go, Rust,
 JavaScript and TypeScript representations ([ADR 0003](docs/adr/0003-language-engine.md)).

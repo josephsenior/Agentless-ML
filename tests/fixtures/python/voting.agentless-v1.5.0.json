@@ -1,0 +1,61 @@
+{
+  "upstream_revision": "b150f28465a77a81a7f4776384957a4271f5bd69",
+  "upstream_source_sha256": "dc3d237d6760af223a9a0e4a3ad70bd5f255a19ba0c77315ed9645dcc76cb683",
+  "capture_method": "published normalize_patch with temporary Git apply/diff helpers",
+  "cases": [
+    {
+      "id": "simple_fix",
+      "original": "answer = 0\n",
+      "updated": "answer = 1\n",
+      "upstream_key": "--- a/example.py\n+++ b/example.py\n@@ -1 +1 @@\n-answer = 0\n\\ No newline at end of file\n+answer = 1\n\\ No newline at end of file"
+    },
+    {
+      "id": "spacing_variant",
+      "original": "answer = 0\n",
+      "updated": "answer=1\n",
+      "upstream_key": "--- a/example.py\n+++ b/example.py\n@@ -1 +1 @@\n-answer = 0\n\\ No newline at end of file\n+answer = 1\n\\ No newline at end of file"
+    },
+    {
+      "id": "inline_comment",
+      "original": "def answer():\n    return 0\n",
+      "updated": "def answer():\n    return 1  # corrected\n",
+      "upstream_key": "--- a/example.py\n+++ b/example.py\n@@ -1,2 +1,2 @@\n def answer():\n-    return 0\n\\ No newline at end of file\n+    return 1\n\\ No newline at end of file"
+    },
+    {
+      "id": "same_fix_no_comment",
+      "original": "def answer():\n    return 0\n",
+      "updated": "def answer():\n    return 1\n",
+      "upstream_key": "--- a/example.py\n+++ b/example.py\n@@ -1,2 +1,2 @@\n def answer():\n-    return 0\n\\ No newline at end of file\n+    return 1\n\\ No newline at end of file"
+    },
+    {
+      "id": "docstring_change",
+      "original": "def answer():\n    \"\"\"Old.\"\"\"\n    return 0\n",
+      "updated": "def answer():\n    \"\"\"New.\"\"\"\n    return 1\n",
+      "upstream_key": "--- a/example.py\n+++ b/example.py\n@@ -1,2 +1,2 @@\n def answer():\n-    return 0\n\\ No newline at end of file\n+    return 1\n\\ No newline at end of file"
+    },
+    {
+      "id": "new_function",
+      "original": "VALUE = 1\n\ndef existing():\n    return VALUE\n",
+      "updated": "VALUE = 1\n\ndef existing():\n    return VALUE\n\ndef added():\n    return 2\n",
+      "upstream_key": "--- a/example.py\n+++ b/example.py\n-    return VALUE\n+    return VALUE\n+def added():\n+    return 2"
+    },
+    {
+      "id": "new_function_before",
+      "original": "def first():\n    return 1\n\ndef last():\n    return 3\n",
+      "updated": "def added():\n    return 2\n\ndef first():\n    return 1\n\ndef last():\n    return 3\n",
+      "upstream_key": "--- a/example.py\n+++ b/example.py\n+def added():\n+    return 2"
+    },
+    {
+      "id": "new_function_between",
+      "original": "def first():\n    return 1\n\ndef last():\n    return 3\n",
+      "updated": "def first():\n    return 1\n\ndef added():\n    return 2\n\ndef last():\n    return 3\n",
+      "upstream_key": "--- a/example.py\n+++ b/example.py\n+def added():\n+    return 2"
+    },
+    {
+      "id": "comment_only",
+      "original": "def answer():\n    return 1\n",
+      "updated": "def answer():\n    # explanation\n    return 1\n",
+      "upstream_key": ""
+    }
+  ]
+}
