@@ -1,4 +1,21 @@
 {
+  "vitest-duration-sharding": {
+    "runner": "vitest-monorepo",
+    "tmpfs_mb": 8192,
+    "reason": "The published image installs workspace dependencies but has no packages/vitest/dist/cli.js. Copy relative workspace links, build candidate packages using the public root build script, then run the core/thread suite selected by the public root test script using the candidate-built CLI. This is not the broader test:ci schedule. The offline build was verified with an 8 GB writable temporary filesystem."
+  },
+  "kea-atomic-signal-selectors": {
+    "runner": "kea-jest",
+    "reason": "The public test:jest script sets BABEL_ENV=test, enabling its Babel test transforms. The image also forces NODE_ENV=production, which disables React's act helper; set NODE_ENV=test to restore Jest's normal test environment. Run the complete configured Jest suite without excluding tests."
+  },
+  "sql-formatter-bigquery-pipe-formatting": {
+    "runner": "sql-formatter-jest",
+    "reason": "The public test script generates src/parser/grammar.ts with nearleyc before Jest. Generate it from the candidate grammar.ne using the installed compiler, rather than borrowing the image's generated parser or disabling TypeScript diagnostics."
+  },
+  "mnamer-daemon-watch-lifecycle": {
+    "runner": "mnamer-pytest",
+    "reason": "The clean candidate snapshot excludes Git history and the untracked version file. Restore only the published image's mnamer/__version__.py stub (0.0.0) when absent, matching its existing test environment rather than inventing a version; keep candidate source first on PYTHONPATH and retain any candidate-provided version file."
+  },
   "yjs-map-conflict-detection": {
     "runner": "yjs-lib0",
     "reason": "The public entry point uses lib0/testing without a structured reporter. Wrap its registered functions to record CTRF outcomes while the original runner retains filtering, repetitions, seeds and skips. Copy installed dependencies so the relative @y/y self-link resolves to the candidate checkout."

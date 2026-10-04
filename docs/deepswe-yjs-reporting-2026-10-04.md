@@ -5,6 +5,9 @@ zero failed** at the pinned base revision. The latest DeepSWE survey has **76
 ready tasks out of 113**. This checks infrastructure, not task-solving ability;
 no model was called.
 
+Follow-up: the [harness review](deepswe-harness-review-2026-10-04.md) records
+the next recoveries. The counts here describe the Yjs checkpoint.
+
 ## Why an adapter was needed
 
 The tests and runner already exist. The public `tests/index.js` calls

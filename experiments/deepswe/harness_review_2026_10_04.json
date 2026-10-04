@@ -1,0 +1,115 @@
+{
+  "date": "2026-10-04",
+  "corpus_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+  "model_calls": 0,
+  "latest_corpus_ready": 80,
+  "corpus_tasks": 113,
+  "scope": "Five previous harness errors reviewed; four recovered without excluding tests from their declared public schedule. Other task evidence unchanged.",
+  "counts": {
+    "ready": 80,
+    "unsupported_repository": 22,
+    "survey_error": 1,
+    "harness_error": 1,
+    "repository_failed": 3,
+    "no_passing_tests": 4,
+    "no_image": 1,
+    "timeout": 1
+  },
+  "tasks": [
+    {
+      "task_id": "cliffy-config-file-parsing",
+      "language": "typescript",
+      "base_commit": "132a437c40cffbdfbe474ca808c8debde59e2633",
+      "status": "harness_error",
+      "runner": "deno",
+      "targets": [],
+      "exit_code": 1,
+      "tests": 0,
+      "passed": 0,
+      "failed": 0,
+      "skipped": 0,
+      "image_id": "sha256:0a8dd8f1270ec4bb88efadad3021762e1d07274f686276c8a484d26a00bd91b5",
+      "seconds": 14
+    },
+    {
+      "task_id": "kea-atomic-signal-selectors",
+      "language": "typescript",
+      "base_commit": "6c7ebba57821989733a11d6f3888816658584d97",
+      "status": "ready",
+      "runner": "kea-jest",
+      "targets": [],
+      "exit_code": 0,
+      "tests": 153,
+      "passed": 153,
+      "failed": 0,
+      "skipped": 0,
+      "image_id": "sha256:2a3e673e71b0516d27fa3a93f094633d606f5aa6fdcb01521334cafaacd47f24",
+      "seconds": 62.4
+    },
+    {
+      "task_id": "mnamer-daemon-watch-lifecycle",
+      "language": "python",
+      "base_commit": "73f5b537c8cad998e8e6d6bc40ad60e2e23bf268",
+      "status": "ready",
+      "runner": "mnamer-pytest",
+      "targets": [],
+      "exit_code": 1,
+      "tests": 522,
+      "passed": 310,
+      "failed": 204,
+      "skipped": 8,
+      "image_id": "sha256:ca9060c7f9c2b86afdf58ea464a5eb9598f87fc21d1c6a99631d6a6e0eb03bd2",
+      "seconds": 446.8
+    },
+    {
+      "task_id": "sql-formatter-bigquery-pipe-formatting",
+      "language": "typescript",
+      "base_commit": "954e5a474b9e3d45ca58f02a3a4eac8e1947acc5",
+      "status": "ready",
+      "runner": "sql-formatter-jest",
+      "targets": [],
+      "exit_code": 0,
+      "tests": 5711,
+      "passed": 5709,
+      "failed": 0,
+      "skipped": 2,
+      "image_id": "sha256:55cb06e5abda4330f35745e53a6485d53bc13db6732f4c40bff783c0bacc34e8",
+      "seconds": 30.6
+    },
+    {
+      "task_id": "vitest-duration-sharding",
+      "language": "typescript",
+      "base_commit": "647e6ade3b99523e3a0387a65fccfe918c331236",
+      "status": "ready",
+      "runner": "vitest-monorepo",
+      "targets": [],
+      "exit_code": 1,
+      "tests": 2220,
+      "passed": 2123,
+      "failed": 4,
+      "skipped": 93,
+      "image_id": "sha256:11087ec4eb0320e80546ad5eda89c67938e72be69cbb7c6730cf9baf88dc7556",
+      "seconds": 160.2
+    }
+  ],
+  "notes": {
+    "cliffy": "Missing cached https://jsr.io/@std/io/meta.json; no downloads, image changes or smaller suite introduced.",
+    "kea": "BABEL_ENV=test enables Babel transforms; NODE_ENV=test overrides the image's production React environment.",
+    "mnamer": "Restore only the image's 0.0.0 version stub when absent. Full suite and declared network retries retained; 300-second attempt timed out, 900-second follow-up completed.",
+    "sql_formatter": "Compile candidate grammar.ne before Jest; never copy the image's generated parser.",
+    "vitest": "Offline candidate build followed by the core/thread schedule declared by the public root test script; not the broader test:ci suite. tmpfs_mb=8192.",
+    "failed": "Survey failed counts combine failed and error test outcomes. Only baseline-passing test IDs form regression requirements."
+  },
+  "vitest_build_probe": {
+    "exit_code": 0,
+    "seconds": 117.2,
+    "memory_mb": 8192,
+    "tmpfs_mb": 8192,
+    "network": "none"
+  },
+  "verification": {
+    "package_tests_passed": 546,
+    "package_tests_skipped": 15,
+    "runner_contract_tests_passed": 67
+  }
+}

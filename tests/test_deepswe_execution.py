@@ -41,6 +41,48 @@ def test_python_puts_the_checkout_ahead_of_the_images_installed_package():
     assert "subunit2junitxml" in stestr
 
 
+def test_kea_preserves_the_public_babel_test_environment():
+    text = script("kea-jest")
+    assert text.startswith("export NODE_ENV=test BABEL_ENV=test;")
+    assert text.index("BABEL_ENV=test") < text.index("/app/node_modules/.bin/jest")
+    assert "testPathIgnorePatterns" not in text
+    assert deepswe_test_command("kea-jest", ("test/jest/actions.js",)).argv[-1] == "test/jest/actions.js"
+
+
+def test_sql_formatter_generates_its_candidate_grammar_before_jest():
+    text = script("sql-formatter-jest")
+    assert "set -e; cd /tmp/work" in text
+    generation = "node_modules/.bin/nearleyc src/parser/grammar.ne -o src/parser/grammar.ts"
+    assert generation in text
+    assert text.index("rm -rf /tmp/work/ctrf") < text.index(generation)
+    assert text.index(generation) < text.index("/app/node_modules/.bin/jest")
+    assert "cp /app/src" not in text
+    assert "diagnostics=false" not in text
+    assert deepswe_test_command("sql-formatter-jest").report == TEST_COMMANDS["jest"].report
+
+
+def test_mnamer_restores_only_missing_generated_metadata():
+    text = script("mnamer-pytest")
+    assert "if [ ! -f mnamer/__version__.py ]; then" in text
+    assert "cp /app/mnamer/__version__.py mnamer/__version__.py; fi" in text
+    assert "PYTHONPATH=/tmp/work/src:/tmp/work" in text
+    assert text.index("cp /app/mnamer/__version__.py") < text.index("python -m pytest")
+    assert "SETUPTOOLS_SCM_PRETEND_VERSION" not in text
+    assert deepswe_test_command("mnamer-pytest").report == TEST_COMMANDS["pytest"].report
+
+
+def test_vitest_monorepo_builds_and_runs_candidate_packages():
+    text = script("vitest-monorepo")
+    assert "cp -a /app/node_modules node_modules" in text
+    assert "/app/packages/*/node_modules /app/test/*/node_modules" in text
+    assert 'readlink -f node_modules/vitest' in text
+    assert '= "/tmp/work/packages/vitest"' in text
+    assert text.index("pnpm run build") < text.index("cd test/core")
+    assert "node /tmp/work/packages/vitest/vitest.mjs run --project threads" in text
+    assert "/app/node_modules/.bin/vitest run" not in text
+    assert deepswe_test_command("vitest-monorepo", ("test/basic.test.ts",)).argv[-1] == "test/basic.test.ts"
+
+
 def test_one_unimportable_test_module_does_not_empty_a_python_inventory():
     # cattrs: six modules import packages the image lacks; without this flag
     # pytest stops before running any of the suite.
@@ -283,6 +325,10 @@ def test_the_checked_in_overrides_are_well_formed_and_explained():
         "ink-grid-box-layout",
         "kysely-window-grouping-helpers",
         "yjs-map-conflict-detection",
+        "kea-atomic-signal-selectors",
+        "sql-formatter-bigquery-pipe-formatting",
+        "mnamer-daemon-watch-lifecycle",
+        "vitest-duration-sharding",
     }
     assert all(len(entry["reason"]) > 40 for entry in overrides.values())
 

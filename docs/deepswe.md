@@ -494,11 +494,13 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   [Yjs reporting check](deepswe-yjs-reporting-2026-10-04.md) recovered a fifth,
   using its original lib0 runner. Cliffy's Deno suite cannot load offline
   with the published image's incomplete dependency cache.
+  The [harness review](deepswe-harness-review-2026-10-04.md) then recovered
+  Kea, SQL Formatter, mnamer and Vitest through their public setup steps.
 - **Baseline eligibility across the corpus.** The survey has attempted all 113
   pinned tasks. The [28 September triage](deepswe-survey-2026-09-28.md) records
   which 71 had a usable baseline and why the other 42 did not. The 4 October
-  checks, including Yjs, bring the latest count to 76; earlier outcomes for other
-  tasks remain unchanged.
+  checks, including Yjs and the harness review, bring the latest count to 80;
+  earlier outcomes for other tasks remain unchanged.
 - **Workflow and scoring over many tasks.** The survey establishes each task's
   regression inventory, but running the workflow needs repair responses, and
   only actionlint has recorded ones; without a model there is nothing to run for

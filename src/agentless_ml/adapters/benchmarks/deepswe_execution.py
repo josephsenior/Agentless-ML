@@ -380,6 +380,50 @@ KYSELY_MOCHA = DeepSWETestCommand(
     failure_exit_codes=tuple(range(1, 125)),
 )
 
+# These repositories need setup from their public configuration before the
+# generic runner can load tests. Do not suppress collection errors instead.
+KEA_JEST = DeepSWETestCommand(
+    script="export NODE_ENV=test BABEL_ENV=test; " + JEST.script,
+    report=JEST.report,
+)
+SQL_FORMATTER_JEST = DeepSWETestCommand(
+    script=(
+        f"set -e; cd {WORK}; {_NODE_MODULES}"
+        f"rm -rf {WORK}/ctrf; "
+        "node_modules/.bin/nearleyc src/parser/grammar.ne -o src/parser/grammar.ts; "
+        # JEST links dependencies itself, so run just its reporting invocation.
+        "/app/node_modules/.bin/jest --ci --reporters=default "
+        "--reporters=/opt/jest-ctrf/node_modules/jest-ctrf-json-reporter/dist/index.js "
+        '"$@"'
+    ),
+    report=JEST.report,
+)
+MNAMER_PYTEST = DeepSWETestCommand(
+    script=(
+        f"set -e; cd {WORK}; "
+        # The image's version stub is build metadata, not package
+        # source. Keep any candidate-provided file rather than overwriting it.
+        "if [ ! -f mnamer/__version__.py ]; then "
+        "cp /app/mnamer/__version__.py mnamer/__version__.py; fi; "
+        + PYTEST.script
+    ),
+    report=PYTEST.report,
+)
+
+VITEST_MONOREPO = DeepSWETestCommand(
+    script=(
+        f"set -e; cd {WORK}; cp -a /app/node_modules node_modules; "
+        "for entry in /app/packages/*/node_modules /app/test/*/node_modules; do "
+        '[ -d "$entry" ] || continue; target=${entry#/app/}; '
+        'mkdir -p "$(dirname "$target")"; cp -a "$entry" "$target"; done; '
+        f'[ "$(readlink -f node_modules/vitest)" = "{WORK}/packages/vitest" ] || exit 2; '
+        "pnpm run build; cd test/core; "
+        f"node {WORK}/packages/vitest/vitest.mjs run --project threads "
+        '--reporter=default --reporter=junit --outputFile.junit=/tmp/report.xml "$@"'
+    ),
+    report=VITEST.report,
+)
+
 YJS_LIB0 = DeepSWETestCommand(
     script=(
         f"set -e; cd {WORK}; cp -a /app/node_modules node_modules; "
@@ -410,6 +454,10 @@ TEST_COMMANDS = {
     "ava": AVA,
     "kysely-mocha": KYSELY_MOCHA,
     "yjs-lib0": YJS_LIB0,
+    "kea-jest": KEA_JEST,
+    "sql-formatter-jest": SQL_FORMATTER_JEST,
+    "mnamer-pytest": MNAMER_PYTEST,
+    "vitest-monorepo": VITEST_MONOREPO,
 }
 
 _RUNNER_BY_LANGUAGE = {"go": "go", "python": "pytest", "rust": "cargo-nextest"}
