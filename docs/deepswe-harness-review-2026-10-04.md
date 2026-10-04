@@ -133,3 +133,6 @@ Next, review the 22 unsupported repositories and three preparation failures.
 Classify their exact snapshot or checkout restrictions before extending the
 workspace code. Cliffy needs a separately documented environment decision,
 not another parser or reporter workaround.
+
+Follow-up: the [repository review](deepswe-repository-review-2026-10-04.md)
+classifies those 25 tasks without changing baseline readiness.

@@ -501,6 +501,10 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   which 71 had a usable baseline and why the other 42 did not. The 4 October
   checks, including Yjs and the harness review, bring the latest count to 80;
   earlier outcomes for other tasks remain unchanged.
+  The [repository review](deepswe-repository-review-2026-10-04.md) found that
+  all 22 old unsupported-task trees are accepted by the current provider, but
+  Linux symlink semantics and submodule requirements still need runtime checks.
+  That read-only preflight does not change the 80/113 readiness count.
 - **Workflow and scoring over many tasks.** The survey establishes each task's
   regression inventory, but running the workflow needs repair responses, and
   only actionlint has recorded ones; without a model there is nothing to run for

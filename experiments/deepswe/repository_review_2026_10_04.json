@@ -1,0 +1,2286 @@
+{
+  "scope": "Read-only repository preflight; no baseline statuses changed",
+  "model_calls": 0,
+  "baseline_counts": {
+    "ready": 80,
+    "unsupported_repository": 22,
+    "survey_error": 1,
+    "harness_error": 1,
+    "repository_failed": 3,
+    "no_passing_tests": 4,
+    "no_image": 1,
+    "timeout": 1
+  },
+  "counts": {
+    "accepted_by_current_workspace": 22,
+    "missing_repository": 3
+  },
+  "tasks": [
+    {
+      "task_id": "adaptix-name-mapping-aliases",
+      "base_commit": "a691069fcadf9131e5f7a5a130a022dc678f3e1d",
+      "previous_status": "unsupported_repository",
+      "previous_message": "symlinks and submodules are not supported by local-git-v1",
+      "special_entries": [
+        {
+          "path": "benchmarks/release_data",
+          "mode": "160000",
+          "kind": "commit",
+          "oid": "8e124e34a312ba44419dcfbf656f873b5281541b"
+        }
+      ],
+      "entry_modes": {
+        "100644": 488,
+        "160000": 1
+      },
+      "preflight": "accepted_by_current_workspace",
+      "workspace_tracked_paths": 489,
+      "excluded_symlink_paths": 0
+    },
+    {
+      "task_id": "arktype-json-schema-refs-dependencies",
+      "base_commit": "04355e8b26d1ad5264ef62314a2bc46c4de58ed8",
+      "previous_status": "unsupported_repository",
+      "previous_message": "symlinks and submodules are not supported by local-git-v1",
+      "special_entries": [
+        {
+          "path": "README.md",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "c45725229ab5f3b5055fb43ffb9c1cb2c00580b0",
+          "target": "./ark/type/README.md",
+          "normalized_direct_target": "ark/type/README.md",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "ark/README.md",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "47d9d4e5bee9ea6d343e2260b409501d77447c3c",
+          "target": "./type/README.md",
+          "normalized_direct_target": "ark/type/README.md",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "ark/extension/LICENSE",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "30cff7403da04711c46979a06f6bf8eb10ee088a",
+          "target": "../../LICENSE",
+          "normalized_direct_target": "LICENSE",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "ark/repo/tsconfig.js.json",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "0a3ba4f74b0d41761535220c6c465dda71b18d75",
+          "target": "./tsconfig.esm.json",
+          "normalized_direct_target": "ark/repo/tsconfig.esm.json",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "ark/themes/LICENSE",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "30cff7403da04711c46979a06f6bf8eb10ee088a",
+          "target": "../../LICENSE",
+          "normalized_direct_target": "LICENSE",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        }
+      ],
+      "entry_modes": {
+        "100644": 560,
+        "120000": 5,
+        "100755": 2
+      },
+      "preflight": "accepted_by_current_workspace",
+      "workspace_tracked_paths": 562,
+      "excluded_symlink_paths": 5
+    },
+    {
+      "task_id": "clack-async-autocomplete-options",
+      "base_commit": "8a96e2dcd7f821d1250b58cf71c327679f94de25",
+      "previous_status": "unsupported_repository",
+      "previous_message": "symlinks and submodules are not supported by local-git-v1",
+      "special_entries": [
+        {
+          "path": "LICENSE",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "271bd413a872ef93f60c8190b13d06c59f818cde",
+          "target": "packages/core/LICENSE",
+          "normalized_direct_target": "packages/core/LICENSE",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        }
+      ],
+      "entry_modes": {
+        "100644": 151,
+        "120000": 1
+      },
+      "preflight": "accepted_by_current_workspace",
+      "workspace_tracked_paths": 151,
+      "excluded_symlink_paths": 1
+    },
+    {
+      "task_id": "drizzle-orm-window-function-builders",
+      "base_commit": "e8e6edfef5ca69c6188d320388ad440265911057",
+      "previous_status": "repository_failed",
+      "previous_message": "error: refs/remotes/origin/HEAD: invalid sha1 pointer 0000000000000000000000000000000000000000\n",
+      "preflight": "missing_repository"
+    },
+    {
+      "task_id": "effect-sse-httpapi-streaming",
+      "base_commit": "9245bc59ebfa688e8c92dd691296ee69d0815e59",
+      "previous_status": "unsupported_repository",
+      "previous_message": "symlinks and submodules are not supported by local-git-v1",
+      "special_entries": [
+        {
+          "path": "packages/cluster/test/fixtures/utils-mysql.ts",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "e28433ef83089fe3ee94e915a8913fec671213e5",
+          "target": "../../../sql-mysql2/test/utils.ts",
+          "normalized_direct_target": "packages/sql-mysql2/test/utils.ts",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/cluster/test/fixtures/utils-pg.ts",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "676460d21a96926b632819fac8245f7de489bda3",
+          "target": "../../../sql-pg/test/utils.ts",
+          "normalized_direct_target": "packages/sql-pg/test/utils.ts",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/platform-browser/test/fixtures/rpc-schemas.ts",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "ff01864630fadcd72fadb5e8cb1dfd74d9c5d937",
+          "target": "../../../platform-node/test/fixtures/rpc-schemas.ts",
+          "normalized_direct_target": "packages/platform-node/test/fixtures/rpc-schemas.ts",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/platform-browser/test/rpc-e2e.ts",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "f502a696d43edc3cd6e277af0724a6acee418e29",
+          "target": "../../platform-node/test/rpc-e2e.ts",
+          "normalized_direct_target": "packages/platform-node/test/rpc-e2e.ts",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/sql-drizzle/test/utils-mysql.ts",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "94128b20bf9547a8822c4bb570a9d7412231aa52",
+          "target": "../../sql-mysql2/test/utils.ts",
+          "normalized_direct_target": "packages/sql-mysql2/test/utils.ts",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/sql-drizzle/test/utils-pg.ts",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "ac08e06753bf213d954dbe088c6524344d3dcf0e",
+          "target": "../../sql-pg/test/utils.ts",
+          "normalized_direct_target": "packages/sql-pg/test/utils.ts",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        }
+      ],
+      "entry_modes": {
+        "100644": 2197,
+        "100755": 10,
+        "120000": 6
+      },
+      "preflight": "accepted_by_current_workspace",
+      "workspace_tracked_paths": 2207,
+      "excluded_symlink_paths": 6
+    },
+    {
+      "task_id": "goreleaser-retry-publish-auditing",
+      "base_commit": "399ef141161f212f4e81b5d7497b84633fc712d9",
+      "previous_status": "unsupported_repository",
+      "previous_message": "symlinks and submodules are not supported by local-git-v1",
+      "special_entries": [
+        {
+          "path": "pkg/archive/testdata/badlink.txt",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "35b629a152ea953489e94a706d973ffcb953bcf1",
+          "target": "regular3.txt",
+          "normalized_direct_target": "pkg/archive/testdata/regular3.txt",
+          "direct_target_kind": "missing_target",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pkg/archive/testdata/link.txt",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "397e10770b673f7abe291ed9bea9073e4b292159",
+          "target": "regular.txt",
+          "normalized_direct_target": "pkg/archive/testdata/regular.txt",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        }
+      ],
+      "entry_modes": {
+        "100644": 1043,
+        "100755": 19,
+        "120000": 2
+      },
+      "preflight": "accepted_by_current_workspace",
+      "workspace_tracked_paths": 1062,
+      "excluded_symlink_paths": 2
+    },
+    {
+      "task_id": "helm-array-merge-strategies",
+      "base_commit": "42f78ba60edf531d5161e00d9819a7c34d976343",
+      "previous_status": "unsupported_repository",
+      "previous_message": "symlinks and submodules are not supported by local-git-v1",
+      "special_entries": [
+        {
+          "path": "internal/chart/v3/loader/testdata/frobnitz_with_dev_null/null",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "dc1dc0cde0f7dff7b7f7c9347fff75936d705cb8",
+          "target": "/dev/null",
+          "direct_target_kind": "absolute_target",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "internal/third_party/dep/fs/testdata/symlinks/file-symlink",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "4c52274de03d033b81624d6e4166dad4ed318305",
+          "target": "../test.file",
+          "normalized_direct_target": "internal/third_party/dep/fs/testdata/test.file",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "internal/third_party/dep/fs/testdata/symlinks/invalid-symlink",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "0edf4f301b10b187dc83623bd7355ddabde08b31",
+          "target": "/non/existing/file",
+          "direct_target_kind": "absolute_target",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "internal/third_party/dep/fs/testdata/symlinks/windows-file-symlink",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "af1d6c8f573953098bec93dace071d9c84880297",
+          "target": "C:/Users/ibrahim/go/src/github.com/golang/dep/internal/fs/testdata/test.file",
+          "direct_target_kind": "absolute_target",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pkg/chart/v2/loader/testdata/frobnitz_with_dev_null/null",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "dc1dc0cde0f7dff7b7f7c9347fff75936d705cb8",
+          "target": "/dev/null",
+          "direct_target_kind": "absolute_target",
+          "host_representation": "regular_file"
+        }
+      ],
+      "entry_modes": {
+        "100644": 1864,
+        "100755": 116,
+        "120000": 5
+      },
+      "preflight": "accepted_by_current_workspace",
+      "workspace_tracked_paths": 1980,
+      "excluded_symlink_paths": 5
+    },
+    {
+      "task_id": "helm-unified-manifest-stream",
+      "base_commit": "42f78ba60edf531d5161e00d9819a7c34d976343",
+      "previous_status": "unsupported_repository",
+      "previous_message": "symlinks and submodules are not supported by local-git-v1",
+      "special_entries": [
+        {
+          "path": "internal/chart/v3/loader/testdata/frobnitz_with_dev_null/null",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "dc1dc0cde0f7dff7b7f7c9347fff75936d705cb8",
+          "target": "/dev/null",
+          "direct_target_kind": "absolute_target",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "internal/third_party/dep/fs/testdata/symlinks/file-symlink",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "4c52274de03d033b81624d6e4166dad4ed318305",
+          "target": "../test.file",
+          "normalized_direct_target": "internal/third_party/dep/fs/testdata/test.file",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "internal/third_party/dep/fs/testdata/symlinks/invalid-symlink",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "0edf4f301b10b187dc83623bd7355ddabde08b31",
+          "target": "/non/existing/file",
+          "direct_target_kind": "absolute_target",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "internal/third_party/dep/fs/testdata/symlinks/windows-file-symlink",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "af1d6c8f573953098bec93dace071d9c84880297",
+          "target": "C:/Users/ibrahim/go/src/github.com/golang/dep/internal/fs/testdata/test.file",
+          "direct_target_kind": "absolute_target",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pkg/chart/v2/loader/testdata/frobnitz_with_dev_null/null",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "dc1dc0cde0f7dff7b7f7c9347fff75936d705cb8",
+          "target": "/dev/null",
+          "direct_target_kind": "absolute_target",
+          "host_representation": "regular_file"
+        }
+      ],
+      "entry_modes": {
+        "100644": 1864,
+        "100755": 116,
+        "120000": 5
+      },
+      "preflight": "accepted_by_current_workspace",
+      "workspace_tracked_paths": 1980,
+      "excluded_symlink_paths": 5
+    },
+    {
+      "task_id": "kgateway-consistent-hash-policy",
+      "base_commit": "7abc5278782e3280fec8292b39807ec1b537eaf4",
+      "previous_status": "unsupported_repository",
+      "previous_message": "symlinks and submodules are not supported by local-git-v1",
+      "special_entries": [
+        {
+          "path": "CLAUDE.md",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "47dc3e3d863cfb5727b87d785d09abf9743c0a72",
+          "target": "AGENTS.md",
+          "normalized_direct_target": "AGENTS.md",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        }
+      ],
+      "entry_modes": {
+        "100644": 2052,
+        "100755": 13,
+        "120000": 1
+      },
+      "preflight": "accepted_by_current_workspace",
+      "workspace_tracked_paths": 2065,
+      "excluded_symlink_paths": 1
+    },
+    {
+      "task_id": "langchain-request-coalescing",
+      "base_commit": "7cef35bfdebd22148a4c62a10bf01f1fde36e722",
+      "previous_status": "repository_failed",
+      "previous_message": "Cloning into 'C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\benchmarks\\deepswe-repos\\langchain-request-coalescing'...\nBUG: refs/files-backend.c:3157: initial ref transaction called with existing refs\n",
+      "preflight": "missing_repository"
+    },
+    {
+      "task_id": "meriyah-explicit-resource-declarations",
+      "base_commit": "d141eb14a40b79c04d1b1db5c20c6afa3844c0d9",
+      "previous_status": "repository_failed",
+      "previous_message": "sealed repository still references commits outside the base commit's history: 5ec39a6aaf2374513934c2cab2e1a10ebe284feb b396409b14a7d00b4e918b028a9aa468b4f505d9 aee1da23f1bd7e6bad0cb635f98e55cb38d3462a 81ee85276f344e643498afe33a9a65081d952113 d65167678c8e3461803a4c83706e9fa77754f8d4",
+      "preflight": "missing_repository"
+    },
+    {
+      "task_id": "optique-conditional-option-dependencies",
+      "base_commit": "14bbe4efc7ded67932771b9ca18d9d637bb4cf27",
+      "previous_status": "unsupported_repository",
+      "previous_message": "symlinks and submodules are not supported by local-git-v1",
+      "special_entries": [
+        {
+          "path": ".cursorrules",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "47dc3e3d863cfb5727b87d785d09abf9743c0a72",
+          "target": "AGENTS.md",
+          "normalized_direct_target": "AGENTS.md",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": ".github/copilot-instructions.md",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "47dc3e3d863cfb5727b87d785d09abf9743c0a72",
+          "target": "AGENTS.md",
+          "normalized_direct_target": ".github/AGENTS.md",
+          "direct_target_kind": "missing_target",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": ".windsurfrules",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "47dc3e3d863cfb5727b87d785d09abf9743c0a72",
+          "target": "AGENTS.md",
+          "normalized_direct_target": "AGENTS.md",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "AGENT.md",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "47dc3e3d863cfb5727b87d785d09abf9743c0a72",
+          "target": "AGENTS.md",
+          "normalized_direct_target": "AGENTS.md",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "CLAUDE.md",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "47dc3e3d863cfb5727b87d785d09abf9743c0a72",
+          "target": "AGENTS.md",
+          "normalized_direct_target": "AGENTS.md",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "GEMINI.md",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "47dc3e3d863cfb5727b87d785d09abf9743c0a72",
+          "target": "AGENTS.md",
+          "normalized_direct_target": "AGENTS.md",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "examples/gitique/.cursorrules",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "47dc3e3d863cfb5727b87d785d09abf9743c0a72",
+          "target": "AGENTS.md",
+          "normalized_direct_target": "examples/gitique/AGENTS.md",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "examples/gitique/.windsurfrules",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "47dc3e3d863cfb5727b87d785d09abf9743c0a72",
+          "target": "AGENTS.md",
+          "normalized_direct_target": "examples/gitique/AGENTS.md",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "examples/gitique/AGENT.md",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "47dc3e3d863cfb5727b87d785d09abf9743c0a72",
+          "target": "AGENTS.md",
+          "normalized_direct_target": "examples/gitique/AGENTS.md",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "examples/gitique/CLAUDE.md",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "47dc3e3d863cfb5727b87d785d09abf9743c0a72",
+          "target": "AGENTS.md",
+          "normalized_direct_target": "examples/gitique/AGENTS.md",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "examples/gitique/GEMINI.md",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "47dc3e3d863cfb5727b87d785d09abf9743c0a72",
+          "target": "AGENTS.md",
+          "normalized_direct_target": "examples/gitique/AGENTS.md",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        }
+      ],
+      "entry_modes": {
+        "100644": 202,
+        "120000": 11
+      },
+      "preflight": "accepted_by_current_workspace",
+      "workspace_tracked_paths": 202,
+      "excluded_symlink_paths": 11
+    },
+    {
+      "task_id": "participle-grammar-conflict-analysis",
+      "base_commit": "1051d4767b5a469936daf5f1cebb63da6c9fb776",
+      "previous_status": "unsupported_repository",
+      "previous_message": "symlinks and submodules are not supported by local-git-v1",
+      "special_entries": [
+        {
+          "path": "bin/.go-1.23.5.pkg",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "383f4511d444516caed0fd113ee8a2b640cd2290",
+          "target": "hermit",
+          "normalized_direct_target": "bin/hermit",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "bin/.golangci-lint-1.63.4.pkg",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "383f4511d444516caed0fd113ee8a2b640cd2290",
+          "target": "hermit",
+          "normalized_direct_target": "bin/hermit",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "bin/.goreleaser-1.26.2.pkg",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "383f4511d444516caed0fd113ee8a2b640cd2290",
+          "target": "hermit",
+          "normalized_direct_target": "bin/hermit",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "bin/go",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "abaace1750036ef1c6d8550b685a8effc2f49367",
+          "target": ".go-1.23.5.pkg",
+          "normalized_direct_target": "bin/.go-1.23.5.pkg",
+          "direct_target_kind": "symlink",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "bin/gofmt",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "abaace1750036ef1c6d8550b685a8effc2f49367",
+          "target": ".go-1.23.5.pkg",
+          "normalized_direct_target": "bin/.go-1.23.5.pkg",
+          "direct_target_kind": "symlink",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "bin/golangci-lint",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "ea21783b543a0510c0da6a67a4006953f4d707f3",
+          "target": ".golangci-lint-1.63.4.pkg",
+          "normalized_direct_target": "bin/.golangci-lint-1.63.4.pkg",
+          "direct_target_kind": "symlink",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "bin/goreleaser",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "90ecbf1ffdab1e6dfc5476e9c6a59a47937bcd5e",
+          "target": ".goreleaser-1.26.2.pkg",
+          "normalized_direct_target": "bin/.goreleaser-1.26.2.pkg",
+          "direct_target_kind": "symlink",
+          "host_representation": "regular_file"
+        }
+      ],
+      "entry_modes": {
+        "100644": 113,
+        "120000": 7,
+        "100755": 4
+      },
+      "preflight": "accepted_by_current_workspace",
+      "workspace_tracked_paths": 117,
+      "excluded_symlink_paths": 7
+    },
+    {
+      "task_id": "pebble-durability-wait-apis",
+      "base_commit": "1454d2bc0f378d7f34766afafee68a77e7b85995",
+      "previous_status": "unsupported_repository",
+      "previous_message": "symlinks and submodules are not supported by local-git-v1",
+      "special_entries": [
+        {
+          "path": "internal/mkbench/testdata/data-symlink",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "460aa0ea10b839c0a511fa2428884291a66d5c1d",
+          "target": "./data",
+          "normalized_direct_target": "internal/mkbench/testdata/data",
+          "direct_target_kind": "directory",
+          "host_representation": "regular_file"
+        }
+      ],
+      "entry_modes": {
+        "100644": 1348,
+        "120000": 1,
+        "100755": 11
+      },
+      "preflight": "accepted_by_current_workspace",
+      "workspace_tracked_paths": 1359,
+      "excluded_symlink_paths": 1
+    },
+    {
+      "task_id": "pest-character-class-coalescing",
+      "base_commit": "79dd30d11aab6f0fba3cd79bd48f456209b966b3",
+      "previous_status": "unsupported_repository",
+      "previous_message": "symlinks and submodules are not supported by local-git-v1",
+      "special_entries": [
+        {
+          "path": "debugger/_README.md",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "32d46ee883b58d6a383eed06eb98f33aa6530ded",
+          "target": "../README.md",
+          "normalized_direct_target": "README.md",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "derive/LICENSE-APACHE",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "965b606f331b51d566b46025f9ff311a7aad0c12",
+          "target": "../LICENSE-APACHE",
+          "normalized_direct_target": "LICENSE-APACHE",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "derive/LICENSE-MIT",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "76219eb72e8524f15c21ec93b9b2592da49b5460",
+          "target": "../LICENSE-MIT",
+          "normalized_direct_target": "LICENSE-MIT",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "derive/_README.md",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "32d46ee883b58d6a383eed06eb98f33aa6530ded",
+          "target": "../README.md",
+          "normalized_direct_target": "README.md",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "generator/LICENSE-APACHE",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "965b606f331b51d566b46025f9ff311a7aad0c12",
+          "target": "../LICENSE-APACHE",
+          "normalized_direct_target": "LICENSE-APACHE",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "generator/LICENSE-MIT",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "76219eb72e8524f15c21ec93b9b2592da49b5460",
+          "target": "../LICENSE-MIT",
+          "normalized_direct_target": "LICENSE-MIT",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "generator/_README.md",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "32d46ee883b58d6a383eed06eb98f33aa6530ded",
+          "target": "../README.md",
+          "normalized_direct_target": "README.md",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "grammars/LICENSE-APACHE",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "965b606f331b51d566b46025f9ff311a7aad0c12",
+          "target": "../LICENSE-APACHE",
+          "normalized_direct_target": "LICENSE-APACHE",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "grammars/LICENSE-MIT",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "76219eb72e8524f15c21ec93b9b2592da49b5460",
+          "target": "../LICENSE-MIT",
+          "normalized_direct_target": "LICENSE-MIT",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "grammars/_README.md",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "32d46ee883b58d6a383eed06eb98f33aa6530ded",
+          "target": "../README.md",
+          "normalized_direct_target": "README.md",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "grammars/fuzz/README.md",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "a6a21968ca053b4dfc35f4e43921cd51fe9ee9a7",
+          "target": "../../FUZZING.md",
+          "normalized_direct_target": "FUZZING.md",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "meta/LICENSE-APACHE",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "965b606f331b51d566b46025f9ff311a7aad0c12",
+          "target": "../LICENSE-APACHE",
+          "normalized_direct_target": "LICENSE-APACHE",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "meta/LICENSE-MIT",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "76219eb72e8524f15c21ec93b9b2592da49b5460",
+          "target": "../LICENSE-MIT",
+          "normalized_direct_target": "LICENSE-MIT",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "meta/_README.md",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "32d46ee883b58d6a383eed06eb98f33aa6530ded",
+          "target": "../README.md",
+          "normalized_direct_target": "README.md",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "meta/fuzz/README.md",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "a6a21968ca053b4dfc35f4e43921cd51fe9ee9a7",
+          "target": "../../FUZZING.md",
+          "normalized_direct_target": "FUZZING.md",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pest/LICENSE-APACHE",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "965b606f331b51d566b46025f9ff311a7aad0c12",
+          "target": "../LICENSE-APACHE",
+          "normalized_direct_target": "LICENSE-APACHE",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pest/LICENSE-MIT",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "76219eb72e8524f15c21ec93b9b2592da49b5460",
+          "target": "../LICENSE-MIT",
+          "normalized_direct_target": "LICENSE-MIT",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pest/_README.md",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "32d46ee883b58d6a383eed06eb98f33aa6530ded",
+          "target": "../README.md",
+          "normalized_direct_target": "README.md",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "vm/_README.md",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "32d46ee883b58d6a383eed06eb98f33aa6530ded",
+          "target": "../README.md",
+          "normalized_direct_target": "README.md",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "vm/tests/grammar.pest",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "0cfe64c2a59a9b49cc8d631717fd63de22611ea9",
+          "target": "../../derive/tests/grammar.pest",
+          "normalized_direct_target": "derive/tests/grammar.pest",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "vm/tests/lists.pest",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "3a975e54001d20e03b29b095e34436ebacba241a",
+          "target": "../../derive/tests/lists.pest",
+          "normalized_direct_target": "derive/tests/lists.pest",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "vm/tests/reporting.pest",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "15cc1f7ee1dc9ec6c977ef683e08f56f0500db43",
+          "target": "../../derive/tests/reporting.pest",
+          "normalized_direct_target": "derive/tests/reporting.pest",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "vm/tests/surround.pest",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "209c64412217a0ee80eb61c73fe9432f310109d0",
+          "target": "../../derive/tests/surround.pest",
+          "normalized_direct_target": "derive/tests/surround.pest",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        }
+      ],
+      "entry_modes": {
+        "100644": 145,
+        "120000": 23,
+        "100755": 3
+      },
+      "preflight": "accepted_by_current_workspace",
+      "workspace_tracked_paths": 148,
+      "excluded_symlink_paths": 23
+    },
+    {
+      "task_id": "pwntools-tube-multiplexing",
+      "base_commit": "76894a5404a65d2800b6d0adaf3485ecba275caa",
+      "previous_status": "unsupported_repository",
+      "previous_message": "symlinks and submodules are not supported by local-git-v1",
+      "special_entries": [
+        {
+          "path": "pwnlib/constants/android",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "9c52cb36f47ec904cdc4fd9a33e000b6170bb0b0",
+          "target": "linux",
+          "normalized_direct_target": "pwnlib/constants/linux",
+          "direct_target_kind": "directory",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/constants/cgc/aarch64.py",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "e928d5db941c6039ef182b838a584e9dc2df2f27",
+          "target": "thumb.py",
+          "normalized_direct_target": "pwnlib/constants/cgc/thumb.py",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/constants/cgc/alpha.py",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "e928d5db941c6039ef182b838a584e9dc2df2f27",
+          "target": "thumb.py",
+          "normalized_direct_target": "pwnlib/constants/cgc/thumb.py",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/constants/cgc/amd64.py",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "e928d5db941c6039ef182b838a584e9dc2df2f27",
+          "target": "thumb.py",
+          "normalized_direct_target": "pwnlib/constants/cgc/thumb.py",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/constants/cgc/arm.py",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "e928d5db941c6039ef182b838a584e9dc2df2f27",
+          "target": "thumb.py",
+          "normalized_direct_target": "pwnlib/constants/cgc/thumb.py",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/constants/cgc/i386.py",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "e928d5db941c6039ef182b838a584e9dc2df2f27",
+          "target": "thumb.py",
+          "normalized_direct_target": "pwnlib/constants/cgc/thumb.py",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/constants/cgc/ia64.py",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "e928d5db941c6039ef182b838a584e9dc2df2f27",
+          "target": "thumb.py",
+          "normalized_direct_target": "pwnlib/constants/cgc/thumb.py",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/constants/cgc/mips.py",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "e928d5db941c6039ef182b838a584e9dc2df2f27",
+          "target": "thumb.py",
+          "normalized_direct_target": "pwnlib/constants/cgc/thumb.py",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/constants/cgc/powerpc.py",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "e928d5db941c6039ef182b838a584e9dc2df2f27",
+          "target": "thumb.py",
+          "normalized_direct_target": "pwnlib/constants/cgc/thumb.py",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/constants/cgc/powerpc64.py",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "e928d5db941c6039ef182b838a584e9dc2df2f27",
+          "target": "thumb.py",
+          "normalized_direct_target": "pwnlib/constants/cgc/thumb.py",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/constants/cgc/s390.py",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "e928d5db941c6039ef182b838a584e9dc2df2f27",
+          "target": "thumb.py",
+          "normalized_direct_target": "pwnlib/constants/cgc/thumb.py",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/constants/cgc/s390x.py",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "e928d5db941c6039ef182b838a584e9dc2df2f27",
+          "target": "thumb.py",
+          "normalized_direct_target": "pwnlib/constants/cgc/thumb.py",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/constants/cgc/sparc.py",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "e928d5db941c6039ef182b838a584e9dc2df2f27",
+          "target": "thumb.py",
+          "normalized_direct_target": "pwnlib/constants/cgc/thumb.py",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/constants/cgc/sparc64.py",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "e928d5db941c6039ef182b838a584e9dc2df2f27",
+          "target": "thumb.py",
+          "normalized_direct_target": "pwnlib/constants/cgc/thumb.py",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/data/includes/android",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "9c52cb36f47ec904cdc4fd9a33e000b6170bb0b0",
+          "target": "linux",
+          "normalized_direct_target": "pwnlib/data/includes/linux",
+          "direct_target_kind": "directory",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/data/includes/cgc/aarch64.h",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "6ea5141762f134db68cd272aa297475dc657c1da",
+          "target": "arm.h",
+          "normalized_direct_target": "pwnlib/data/includes/cgc/arm.h",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/data/includes/cgc/alpha.h",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "6ea5141762f134db68cd272aa297475dc657c1da",
+          "target": "arm.h",
+          "normalized_direct_target": "pwnlib/data/includes/cgc/arm.h",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/data/includes/cgc/amd64.h",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "6ea5141762f134db68cd272aa297475dc657c1da",
+          "target": "arm.h",
+          "normalized_direct_target": "pwnlib/data/includes/cgc/arm.h",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/data/includes/cgc/i386.h",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "6ea5141762f134db68cd272aa297475dc657c1da",
+          "target": "arm.h",
+          "normalized_direct_target": "pwnlib/data/includes/cgc/arm.h",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/data/includes/cgc/ia64.h",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "6ea5141762f134db68cd272aa297475dc657c1da",
+          "target": "arm.h",
+          "normalized_direct_target": "pwnlib/data/includes/cgc/arm.h",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/data/includes/cgc/mips.h",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "6ea5141762f134db68cd272aa297475dc657c1da",
+          "target": "arm.h",
+          "normalized_direct_target": "pwnlib/data/includes/cgc/arm.h",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/data/includes/cgc/powerpc.h",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "6ea5141762f134db68cd272aa297475dc657c1da",
+          "target": "arm.h",
+          "normalized_direct_target": "pwnlib/data/includes/cgc/arm.h",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/data/includes/cgc/powerpc64.h",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "6ea5141762f134db68cd272aa297475dc657c1da",
+          "target": "arm.h",
+          "normalized_direct_target": "pwnlib/data/includes/cgc/arm.h",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/data/includes/cgc/s390.h",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "6ea5141762f134db68cd272aa297475dc657c1da",
+          "target": "arm.h",
+          "normalized_direct_target": "pwnlib/data/includes/cgc/arm.h",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/data/includes/cgc/s390x.h",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "6ea5141762f134db68cd272aa297475dc657c1da",
+          "target": "arm.h",
+          "normalized_direct_target": "pwnlib/data/includes/cgc/arm.h",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/data/includes/cgc/sparc.h",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "6ea5141762f134db68cd272aa297475dc657c1da",
+          "target": "arm.h",
+          "normalized_direct_target": "pwnlib/data/includes/cgc/arm.h",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/data/includes/cgc/sparc64.h",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "6ea5141762f134db68cd272aa297475dc657c1da",
+          "target": "arm.h",
+          "normalized_direct_target": "pwnlib/data/includes/cgc/arm.h",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/data/includes/cgc/thumb.h",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "6ea5141762f134db68cd272aa297475dc657c1da",
+          "target": "arm.h",
+          "normalized_direct_target": "pwnlib/data/includes/cgc/arm.h",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/data/includes/freebsd/aarch64.h",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "6cac59007c46a91c170d1108baf2232fa0353123",
+          "target": "../freebsd.h",
+          "normalized_direct_target": "pwnlib/data/includes/freebsd.h",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/data/includes/freebsd/alpha.h",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "6cac59007c46a91c170d1108baf2232fa0353123",
+          "target": "../freebsd.h",
+          "normalized_direct_target": "pwnlib/data/includes/freebsd.h",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/data/includes/freebsd/amd64.h",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "6cac59007c46a91c170d1108baf2232fa0353123",
+          "target": "../freebsd.h",
+          "normalized_direct_target": "pwnlib/data/includes/freebsd.h",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/data/includes/freebsd/arm.h",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "6cac59007c46a91c170d1108baf2232fa0353123",
+          "target": "../freebsd.h",
+          "normalized_direct_target": "pwnlib/data/includes/freebsd.h",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/data/includes/freebsd/i386.h",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "6cac59007c46a91c170d1108baf2232fa0353123",
+          "target": "../freebsd.h",
+          "normalized_direct_target": "pwnlib/data/includes/freebsd.h",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/data/includes/freebsd/ia64.h",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "6cac59007c46a91c170d1108baf2232fa0353123",
+          "target": "../freebsd.h",
+          "normalized_direct_target": "pwnlib/data/includes/freebsd.h",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/data/includes/freebsd/mips.h",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "6cac59007c46a91c170d1108baf2232fa0353123",
+          "target": "../freebsd.h",
+          "normalized_direct_target": "pwnlib/data/includes/freebsd.h",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/data/includes/freebsd/powerpc.h",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "6cac59007c46a91c170d1108baf2232fa0353123",
+          "target": "../freebsd.h",
+          "normalized_direct_target": "pwnlib/data/includes/freebsd.h",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/data/includes/freebsd/powerpc64.h",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "6cac59007c46a91c170d1108baf2232fa0353123",
+          "target": "../freebsd.h",
+          "normalized_direct_target": "pwnlib/data/includes/freebsd.h",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/data/includes/freebsd/s390.h",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "6cac59007c46a91c170d1108baf2232fa0353123",
+          "target": "../freebsd.h",
+          "normalized_direct_target": "pwnlib/data/includes/freebsd.h",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/data/includes/freebsd/s390x.h",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "6cac59007c46a91c170d1108baf2232fa0353123",
+          "target": "../freebsd.h",
+          "normalized_direct_target": "pwnlib/data/includes/freebsd.h",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/data/includes/freebsd/sparc.h",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "6cac59007c46a91c170d1108baf2232fa0353123",
+          "target": "../freebsd.h",
+          "normalized_direct_target": "pwnlib/data/includes/freebsd.h",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/data/includes/freebsd/sparc64.h",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "6cac59007c46a91c170d1108baf2232fa0353123",
+          "target": "../freebsd.h",
+          "normalized_direct_target": "pwnlib/data/includes/freebsd.h",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/data/includes/freebsd/thumb.h",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "6cac59007c46a91c170d1108baf2232fa0353123",
+          "target": "../freebsd.h",
+          "normalized_direct_target": "pwnlib/data/includes/freebsd.h",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/shellcraft/templates/aarch64/android",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "9c52cb36f47ec904cdc4fd9a33e000b6170bb0b0",
+          "target": "linux",
+          "normalized_direct_target": "pwnlib/shellcraft/templates/aarch64/linux",
+          "direct_target_kind": "directory",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/shellcraft/templates/aarch64/linux/kill.asm",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "118bebff84c83473af2610bfce1d25dabab55194",
+          "target": "../../common/linux/kill.asm",
+          "normalized_direct_target": "pwnlib/shellcraft/templates/common/linux/kill.asm",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/shellcraft/templates/aarch64/linux/sleep.asm",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "5949528ed8240b408e759ea0465653cc1d3f657b",
+          "target": "../../common/linux/sleep.asm",
+          "normalized_direct_target": "pwnlib/shellcraft/templates/common/linux/sleep.asm",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/shellcraft/templates/aarch64/linux/syscalls",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "82bc97edbfa52157ee89d396d0d5771365e62e8e",
+          "target": "../../common/linux/syscalls",
+          "normalized_direct_target": "pwnlib/shellcraft/templates/common/linux/syscalls",
+          "direct_target_kind": "directory",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/shellcraft/templates/aarch64/trap.asm",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "709fd82da04c7fdb51a0d06a9265fa17a575781f",
+          "target": "breakpoint.asm",
+          "normalized_direct_target": "pwnlib/shellcraft/templates/aarch64/breakpoint.asm",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/shellcraft/templates/amd64/android",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "9c52cb36f47ec904cdc4fd9a33e000b6170bb0b0",
+          "target": "linux",
+          "normalized_direct_target": "pwnlib/shellcraft/templates/amd64/linux",
+          "direct_target_kind": "directory",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/shellcraft/templates/amd64/linux/kill.asm",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "118bebff84c83473af2610bfce1d25dabab55194",
+          "target": "../../common/linux/kill.asm",
+          "normalized_direct_target": "pwnlib/shellcraft/templates/common/linux/kill.asm",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/shellcraft/templates/amd64/linux/sleep.asm",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "5949528ed8240b408e759ea0465653cc1d3f657b",
+          "target": "../../common/linux/sleep.asm",
+          "normalized_direct_target": "pwnlib/shellcraft/templates/common/linux/sleep.asm",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/shellcraft/templates/amd64/linux/syscalls",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "82bc97edbfa52157ee89d396d0d5771365e62e8e",
+          "target": "../../common/linux/syscalls",
+          "normalized_direct_target": "pwnlib/shellcraft/templates/common/linux/syscalls",
+          "direct_target_kind": "directory",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/shellcraft/templates/arm/android",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "9c52cb36f47ec904cdc4fd9a33e000b6170bb0b0",
+          "target": "linux",
+          "normalized_direct_target": "pwnlib/shellcraft/templates/arm/linux",
+          "direct_target_kind": "directory",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/shellcraft/templates/arm/linux/kill.asm",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "118bebff84c83473af2610bfce1d25dabab55194",
+          "target": "../../common/linux/kill.asm",
+          "normalized_direct_target": "pwnlib/shellcraft/templates/common/linux/kill.asm",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/shellcraft/templates/arm/linux/sleep.asm",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "5949528ed8240b408e759ea0465653cc1d3f657b",
+          "target": "../../common/linux/sleep.asm",
+          "normalized_direct_target": "pwnlib/shellcraft/templates/common/linux/sleep.asm",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/shellcraft/templates/arm/linux/syscalls",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "82bc97edbfa52157ee89d396d0d5771365e62e8e",
+          "target": "../../common/linux/syscalls",
+          "normalized_direct_target": "pwnlib/shellcraft/templates/common/linux/syscalls",
+          "direct_target_kind": "directory",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/shellcraft/templates/i386/android",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "9c52cb36f47ec904cdc4fd9a33e000b6170bb0b0",
+          "target": "linux",
+          "normalized_direct_target": "pwnlib/shellcraft/templates/i386/linux",
+          "direct_target_kind": "directory",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/shellcraft/templates/i386/linux/kill.asm",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "118bebff84c83473af2610bfce1d25dabab55194",
+          "target": "../../common/linux/kill.asm",
+          "normalized_direct_target": "pwnlib/shellcraft/templates/common/linux/kill.asm",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/shellcraft/templates/i386/linux/sleep.asm",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "5949528ed8240b408e759ea0465653cc1d3f657b",
+          "target": "../../common/linux/sleep.asm",
+          "normalized_direct_target": "pwnlib/shellcraft/templates/common/linux/sleep.asm",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/shellcraft/templates/i386/linux/syscalls",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "82bc97edbfa52157ee89d396d0d5771365e62e8e",
+          "target": "../../common/linux/syscalls",
+          "normalized_direct_target": "pwnlib/shellcraft/templates/common/linux/syscalls",
+          "direct_target_kind": "directory",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/shellcraft/templates/loongarch64/linux/syscalls",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "82bc97edbfa52157ee89d396d0d5771365e62e8e",
+          "target": "../../common/linux/syscalls",
+          "normalized_direct_target": "pwnlib/shellcraft/templates/common/linux/syscalls",
+          "direct_target_kind": "directory",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/shellcraft/templates/mips/android",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "9c52cb36f47ec904cdc4fd9a33e000b6170bb0b0",
+          "target": "linux",
+          "normalized_direct_target": "pwnlib/shellcraft/templates/mips/linux",
+          "direct_target_kind": "directory",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/shellcraft/templates/mips/linux/kill.asm",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "118bebff84c83473af2610bfce1d25dabab55194",
+          "target": "../../common/linux/kill.asm",
+          "normalized_direct_target": "pwnlib/shellcraft/templates/common/linux/kill.asm",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/shellcraft/templates/mips/linux/sleep.asm",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "5949528ed8240b408e759ea0465653cc1d3f657b",
+          "target": "../../common/linux/sleep.asm",
+          "normalized_direct_target": "pwnlib/shellcraft/templates/common/linux/sleep.asm",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/shellcraft/templates/mips/linux/syscalls",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "82bc97edbfa52157ee89d396d0d5771365e62e8e",
+          "target": "../../common/linux/syscalls",
+          "normalized_direct_target": "pwnlib/shellcraft/templates/common/linux/syscalls",
+          "direct_target_kind": "directory",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/shellcraft/templates/powerpc/android",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "9c52cb36f47ec904cdc4fd9a33e000b6170bb0b0",
+          "target": "linux",
+          "normalized_direct_target": "pwnlib/shellcraft/templates/powerpc/linux",
+          "direct_target_kind": "directory",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/shellcraft/templates/powerpc/linux/syscalls",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "82bc97edbfa52157ee89d396d0d5771365e62e8e",
+          "target": "../../common/linux/syscalls",
+          "normalized_direct_target": "pwnlib/shellcraft/templates/common/linux/syscalls",
+          "direct_target_kind": "directory",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/shellcraft/templates/riscv64/linux/kill.asm",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "118bebff84c83473af2610bfce1d25dabab55194",
+          "target": "../../common/linux/kill.asm",
+          "normalized_direct_target": "pwnlib/shellcraft/templates/common/linux/kill.asm",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/shellcraft/templates/riscv64/linux/sleep.asm",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "5949528ed8240b408e759ea0465653cc1d3f657b",
+          "target": "../../common/linux/sleep.asm",
+          "normalized_direct_target": "pwnlib/shellcraft/templates/common/linux/sleep.asm",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/shellcraft/templates/riscv64/linux/syscalls",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "82bc97edbfa52157ee89d396d0d5771365e62e8e",
+          "target": "../../common/linux/syscalls",
+          "normalized_direct_target": "pwnlib/shellcraft/templates/common/linux/syscalls",
+          "direct_target_kind": "directory",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/shellcraft/templates/thumb/android",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "9c52cb36f47ec904cdc4fd9a33e000b6170bb0b0",
+          "target": "linux",
+          "normalized_direct_target": "pwnlib/shellcraft/templates/thumb/linux",
+          "direct_target_kind": "directory",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/shellcraft/templates/thumb/linux/kill.asm",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "118bebff84c83473af2610bfce1d25dabab55194",
+          "target": "../../common/linux/kill.asm",
+          "normalized_direct_target": "pwnlib/shellcraft/templates/common/linux/kill.asm",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/shellcraft/templates/thumb/linux/sleep.asm",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "5949528ed8240b408e759ea0465653cc1d3f657b",
+          "target": "../../common/linux/sleep.asm",
+          "normalized_direct_target": "pwnlib/shellcraft/templates/common/linux/sleep.asm",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "pwnlib/shellcraft/templates/thumb/linux/syscalls",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "82bc97edbfa52157ee89d396d0d5771365e62e8e",
+          "target": "../../common/linux/syscalls",
+          "normalized_direct_target": "pwnlib/shellcraft/templates/common/linux/syscalls",
+          "direct_target_kind": "directory",
+          "host_representation": "regular_file"
+        }
+      ],
+      "entry_modes": {
+        "100644": 1303,
+        "100755": 85,
+        "120000": 73
+      },
+      "preflight": "accepted_by_current_workspace",
+      "workspace_tracked_paths": 1388,
+      "excluded_symlink_paths": 73
+    },
+    {
+      "task_id": "python-statemachine-state-data-scoping",
+      "base_commit": "8d17ba9f6ba8420cf05fddb94013bc221ed9a222",
+      "previous_status": "unsupported_repository",
+      "previous_message": "symlinks and submodules are not supported by local-git-v1",
+      "special_entries": [
+        {
+          "path": "CLAUDE.md",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "47dc3e3d863cfb5727b87d785d09abf9743c0a72",
+          "target": "AGENTS.md",
+          "normalized_direct_target": "AGENTS.md",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        }
+      ],
+      "entry_modes": {
+        "100644": 525,
+        "120000": 1,
+        "100755": 1
+      },
+      "preflight": "accepted_by_current_workspace",
+      "workspace_tracked_paths": 526,
+      "excluded_symlink_paths": 1
+    },
+    {
+      "task_id": "query-persist-restored-query-state",
+      "base_commit": "1047cdc393fac7c98822c993d70c28f58833c63d",
+      "previous_status": "unsupported_repository",
+      "previous_message": "symlinks and submodules are not supported by local-git-v1",
+      "special_entries": [
+        {
+          "path": "packages/angular-query-experimental/root.eslint.config.js",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "35dedbe5a4a099776a29ef57b3d89c575a52c993",
+          "target": "../../eslint.config.js",
+          "normalized_direct_target": "eslint.config.js",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/angular-query-persist-client/root.eslint.config.js",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "35dedbe5a4a099776a29ef57b3d89c575a52c993",
+          "target": "../../eslint.config.js",
+          "normalized_direct_target": "eslint.config.js",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/eslint-plugin-query/root.eslint.config.js",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "35dedbe5a4a099776a29ef57b3d89c575a52c993",
+          "target": "../../eslint.config.js",
+          "normalized_direct_target": "eslint.config.js",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/preact-query-persist-client/root.eslint.config.js",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "35dedbe5a4a099776a29ef57b3d89c575a52c993",
+          "target": "../../eslint.config.js",
+          "normalized_direct_target": "eslint.config.js",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/preact-query-persist-client/root.tsup.config.js",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "fb8e9add9a3195f39f186a2525d6b0ea473c4f22",
+          "target": "../../scripts/getTsupConfig.js",
+          "normalized_direct_target": "scripts/getTsupConfig.js",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/preact-query/root.eslint.config.js",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "35dedbe5a4a099776a29ef57b3d89c575a52c993",
+          "target": "../../eslint.config.js",
+          "normalized_direct_target": "eslint.config.js",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/preact-query/root.tsup.config.js",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "fb8e9add9a3195f39f186a2525d6b0ea473c4f22",
+          "target": "../../scripts/getTsupConfig.js",
+          "normalized_direct_target": "scripts/getTsupConfig.js",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/query-async-storage-persister/root.eslint.config.js",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "35dedbe5a4a099776a29ef57b3d89c575a52c993",
+          "target": "../../eslint.config.js",
+          "normalized_direct_target": "eslint.config.js",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/query-async-storage-persister/root.tsup.config.js",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "fb8e9add9a3195f39f186a2525d6b0ea473c4f22",
+          "target": "../../scripts/getTsupConfig.js",
+          "normalized_direct_target": "scripts/getTsupConfig.js",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/query-broadcast-client-experimental/root.eslint.config.js",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "35dedbe5a4a099776a29ef57b3d89c575a52c993",
+          "target": "../../eslint.config.js",
+          "normalized_direct_target": "eslint.config.js",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/query-broadcast-client-experimental/root.tsup.config.js",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "fb8e9add9a3195f39f186a2525d6b0ea473c4f22",
+          "target": "../../scripts/getTsupConfig.js",
+          "normalized_direct_target": "scripts/getTsupConfig.js",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/query-codemods/root.eslint.config.js",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "35dedbe5a4a099776a29ef57b3d89c575a52c993",
+          "target": "../../eslint.config.js",
+          "normalized_direct_target": "eslint.config.js",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/query-core/root.eslint.config.js",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "35dedbe5a4a099776a29ef57b3d89c575a52c993",
+          "target": "../../eslint.config.js",
+          "normalized_direct_target": "eslint.config.js",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/query-core/root.tsup.config.js",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "fb8e9add9a3195f39f186a2525d6b0ea473c4f22",
+          "target": "../../scripts/getTsupConfig.js",
+          "normalized_direct_target": "scripts/getTsupConfig.js",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/query-devtools/root.eslint.config.js",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "35dedbe5a4a099776a29ef57b3d89c575a52c993",
+          "target": "../../eslint.config.js",
+          "normalized_direct_target": "eslint.config.js",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/query-persist-client-core/root.eslint.config.js",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "35dedbe5a4a099776a29ef57b3d89c575a52c993",
+          "target": "../../eslint.config.js",
+          "normalized_direct_target": "eslint.config.js",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/query-persist-client-core/root.tsup.config.js",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "fb8e9add9a3195f39f186a2525d6b0ea473c4f22",
+          "target": "../../scripts/getTsupConfig.js",
+          "normalized_direct_target": "scripts/getTsupConfig.js",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/query-sync-storage-persister/root.eslint.config.js",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "35dedbe5a4a099776a29ef57b3d89c575a52c993",
+          "target": "../../eslint.config.js",
+          "normalized_direct_target": "eslint.config.js",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/query-sync-storage-persister/root.tsup.config.js",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "fb8e9add9a3195f39f186a2525d6b0ea473c4f22",
+          "target": "../../scripts/getTsupConfig.js",
+          "normalized_direct_target": "scripts/getTsupConfig.js",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/query-test-utils/root.eslint.config.js",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "35dedbe5a4a099776a29ef57b3d89c575a52c993",
+          "target": "../../eslint.config.js",
+          "normalized_direct_target": "eslint.config.js",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/react-query-devtools/root.eslint.config.js",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "35dedbe5a4a099776a29ef57b3d89c575a52c993",
+          "target": "../../eslint.config.js",
+          "normalized_direct_target": "eslint.config.js",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/react-query-devtools/root.tsup.config.js",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "fb8e9add9a3195f39f186a2525d6b0ea473c4f22",
+          "target": "../../scripts/getTsupConfig.js",
+          "normalized_direct_target": "scripts/getTsupConfig.js",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/react-query-next-experimental/root.eslint.config.js",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "35dedbe5a4a099776a29ef57b3d89c575a52c993",
+          "target": "../../eslint.config.js",
+          "normalized_direct_target": "eslint.config.js",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/react-query-next-experimental/root.tsup.config.js",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "fb8e9add9a3195f39f186a2525d6b0ea473c4f22",
+          "target": "../../scripts/getTsupConfig.js",
+          "normalized_direct_target": "scripts/getTsupConfig.js",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/react-query-persist-client/root.eslint.config.js",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "35dedbe5a4a099776a29ef57b3d89c575a52c993",
+          "target": "../../eslint.config.js",
+          "normalized_direct_target": "eslint.config.js",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/react-query-persist-client/root.tsup.config.js",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "fb8e9add9a3195f39f186a2525d6b0ea473c4f22",
+          "target": "../../scripts/getTsupConfig.js",
+          "normalized_direct_target": "scripts/getTsupConfig.js",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/react-query/root.eslint.config.js",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "35dedbe5a4a099776a29ef57b3d89c575a52c993",
+          "target": "../../eslint.config.js",
+          "normalized_direct_target": "eslint.config.js",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/react-query/root.tsup.config.js",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "fb8e9add9a3195f39f186a2525d6b0ea473c4f22",
+          "target": "../../scripts/getTsupConfig.js",
+          "normalized_direct_target": "scripts/getTsupConfig.js",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/solid-query-devtools/root.eslint.config.js",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "35dedbe5a4a099776a29ef57b3d89c575a52c993",
+          "target": "../../eslint.config.js",
+          "normalized_direct_target": "eslint.config.js",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/solid-query-persist-client/root.eslint.config.js",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "35dedbe5a4a099776a29ef57b3d89c575a52c993",
+          "target": "../../eslint.config.js",
+          "normalized_direct_target": "eslint.config.js",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/solid-query/root.eslint.config.js",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "35dedbe5a4a099776a29ef57b3d89c575a52c993",
+          "target": "../../eslint.config.js",
+          "normalized_direct_target": "eslint.config.js",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/svelte-query-devtools/root.eslint.config.js",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "35dedbe5a4a099776a29ef57b3d89c575a52c993",
+          "target": "../../eslint.config.js",
+          "normalized_direct_target": "eslint.config.js",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/svelte-query-persist-client/root.eslint.config.js",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "35dedbe5a4a099776a29ef57b3d89c575a52c993",
+          "target": "../../eslint.config.js",
+          "normalized_direct_target": "eslint.config.js",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/svelte-query/root.eslint.config.js",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "35dedbe5a4a099776a29ef57b3d89c575a52c993",
+          "target": "../../eslint.config.js",
+          "normalized_direct_target": "eslint.config.js",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/vue-query-devtools/root.eslint.config.js",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "35dedbe5a4a099776a29ef57b3d89c575a52c993",
+          "target": "../../eslint.config.js",
+          "normalized_direct_target": "eslint.config.js",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/vue-query/root.eslint.config.js",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "35dedbe5a4a099776a29ef57b3d89c575a52c993",
+          "target": "../../eslint.config.js",
+          "normalized_direct_target": "eslint.config.js",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "packages/vue-query/root.tsup.config.js",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "fb8e9add9a3195f39f186a2525d6b0ea473c4f22",
+          "target": "../../scripts/getTsupConfig.js",
+          "normalized_direct_target": "scripts/getTsupConfig.js",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        }
+      ],
+      "entry_modes": {
+        "100644": 2118,
+        "100755": 3,
+        "120000": 37
+      },
+      "preflight": "accepted_by_current_workspace",
+      "workspace_tracked_paths": 2121,
+      "excluded_symlink_paths": 37
+    },
+    {
+      "task_id": "scc-bounded-memory-spilling",
+      "base_commit": "bc2796e01998ebc2d40818323f93113aed2542ea",
+      "previous_status": "unsupported_repository",
+      "previous_message": "symlinks and submodules are not supported by local-git-v1",
+      "special_entries": [
+        {
+          "path": "examples/symlink/link.py",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "946566431178e0a9c90cbe958377d1b624befb05",
+          "target": "test.py",
+          "normalized_direct_target": "examples/symlink/test.py",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "examples/symlink/link2.py",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "91e08e1370df4ab7380bd39bac8b1d8ea24e29f7",
+          "target": "link.py",
+          "normalized_direct_target": "examples/symlink/link.py",
+          "direct_target_kind": "symlink",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "examples/symlink/link3.py",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "f65f2d4438c2fc4d964528d2f751e1f91e78214c",
+          "target": "link2.py",
+          "normalized_direct_target": "examples/symlink/link2.py",
+          "direct_target_kind": "symlink",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "examples/symlink/link4.py",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "b59ed54ccf614616d92106a8518460fc5af83e0e",
+          "target": "link3.py",
+          "normalized_direct_target": "examples/symlink/link3.py",
+          "direct_target_kind": "symlink",
+          "host_representation": "regular_file"
+        }
+      ],
+      "entry_modes": {
+        "100644": 1050,
+        "120000": 4,
+        "100755": 1
+      },
+      "preflight": "accepted_by_current_workspace",
+      "workspace_tracked_paths": 1051,
+      "excluded_symlink_paths": 4
+    },
+    {
+      "task_id": "sqlfmt-create-table-ddl-formatting",
+      "base_commit": "da140993a4547170ef85dc5ce7ce1c270f4322b3",
+      "previous_status": "unsupported_repository",
+      "previous_message": "symlinks and submodules are not supported by local-git-v1",
+      "special_entries": [
+        {
+          "path": "tests/data/unit_tests/test_api/test_file_discovery/a_directory/symlink_target_directory",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "75db6d28d2caded20fa94ca58945ddfec8b229c9",
+          "target": "symlink_source_directory",
+          "normalized_direct_target": "tests/data/unit_tests/test_api/test_file_discovery/a_directory/symlink_source_directory",
+          "direct_target_kind": "directory",
+          "host_representation": "regular_file"
+        }
+      ],
+      "entry_modes": {
+        "100755": 9,
+        "100644": 225,
+        "120000": 1
+      },
+      "preflight": "accepted_by_current_workspace",
+      "workspace_tracked_paths": 234,
+      "excluded_symlink_paths": 1
+    },
+    {
+      "task_id": "task-task-graph-export",
+      "base_commit": "54bdcba369357b47e19066b57badfb216a4c8d95",
+      "previous_status": "unsupported_repository",
+      "previous_message": "symlinks and submodules are not supported by local-git-v1",
+      "special_entries": [
+        {
+          "path": "testdata/evaluate_symlinks_in_paths/src/shared",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "8fba6b66ae1b3d5c30626aa5a86283c4e96d80b2",
+          "target": "../shared",
+          "normalized_direct_target": "testdata/evaluate_symlinks_in_paths/shared",
+          "direct_target_kind": "directory",
+          "host_representation": "regular_file"
+        }
+      ],
+      "entry_modes": {
+        "100644": 739,
+        "100755": 3,
+        "120000": 1
+      },
+      "preflight": "accepted_by_current_workspace",
+      "workspace_tracked_paths": 742,
+      "excluded_symlink_paths": 1
+    },
+    {
+      "task_id": "tomlkit-toml-table-converters",
+      "base_commit": "dd05eebc8ed9e30fc6c223088a5a450cb54c1cab",
+      "previous_status": "unsupported_repository",
+      "previous_message": "symlinks and submodules are not supported by local-git-v1",
+      "special_entries": [
+        {
+          "path": "tests/toml-test",
+          "mode": "160000",
+          "kind": "commit",
+          "oid": "08ed8697864548b3cdb4b8decbf496bef47e1c82"
+        }
+      ],
+      "entry_modes": {
+        "100644": 80,
+        "160000": 1
+      },
+      "preflight": "accepted_by_current_workspace",
+      "workspace_tracked_paths": 81,
+      "excluded_symlink_paths": 0
+    },
+    {
+      "task_id": "valibot-recursive-schema-composition",
+      "base_commit": "50016c77c808f9ca80391cf1abc96cc5416cf57d",
+      "previous_status": "unsupported_repository",
+      "previous_message": "symlinks and submodules are not supported by local-git-v1",
+      "special_entries": [
+        {
+          "path": ".claude/skills",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "2b7a412b8fa0fb7e985b0793321bd4e698f2b6cd",
+          "target": "../.agents/skills",
+          "normalized_direct_target": ".agents/skills",
+          "direct_target_kind": "directory",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "CLAUDE.md",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "47dc3e3d863cfb5727b87d785d09abf9743c0a72",
+          "target": "AGENTS.md",
+          "normalized_direct_target": "AGENTS.md",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        },
+        {
+          "path": "README.md",
+          "mode": "120000",
+          "kind": "blob",
+          "oid": "e0b21290042a2bffb8e24918800c60b70578a939",
+          "target": "./library/README.md",
+          "normalized_direct_target": "library/README.md",
+          "direct_target_kind": "file",
+          "host_representation": "regular_file"
+        }
+      ],
+      "entry_modes": {
+        "100644": 3221,
+        "120000": 3,
+        "100755": 1
+      },
+      "preflight": "accepted_by_current_workspace",
+      "workspace_tracked_paths": 3222,
+      "excluded_symlink_paths": 3
+    },
+    {
+      "task_id": "wasmi-trap-coredumps",
+      "base_commit": "e1f76e285b9ad68a952b7cf5297bbb7ab91e6028",
+      "previous_status": "unsupported_repository",
+      "previous_message": "symlinks and submodules are not supported by local-git-v1",
+      "special_entries": [
+        {
+          "path": "crates/wasmi/benches/rust",
+          "mode": "160000",
+          "kind": "commit",
+          "oid": "cf035b986969a93a61004b7a28f6f5cde69b84d7"
+        },
+        {
+          "path": "crates/wast/tests/spec",
+          "mode": "160000",
+          "kind": "commit",
+          "oid": "d76759e746f3564a03f6106ae19679742f2a1831"
+        },
+        {
+          "path": "crates/wast/tests/wasmi",
+          "mode": "160000",
+          "kind": "commit",
+          "oid": "60701c2664b235ec07ca0231c32a1764dbce4f23"
+        }
+      ],
+      "entry_modes": {
+        "100644": 332,
+        "160000": 3
+      },
+      "preflight": "accepted_by_current_workspace",
+      "workspace_tracked_paths": 335,
+      "excluded_symlink_paths": 0
+    },
+    {
+      "task_id": "wazero-multi-module-snapshots",
+      "base_commit": "3ec1e028c8cbda984a71bf72321008723ebdcb51",
+      "previous_status": "unsupported_repository",
+      "previous_message": "symlinks and submodules are not supported by local-git-v1",
+      "special_entries": [
+        {
+          "path": "site/themes/hello-friend",
+          "mode": "160000",
+          "kind": "commit",
+          "oid": "3ffa8121a004a29d6fd5f1133257ab2ebfea22c4"
+        }
+      ],
+      "entry_modes": {
+        "100644": 10119,
+        "100755": 18,
+        "160000": 1
+      },
+      "preflight": "accepted_by_current_workspace",
+      "workspace_tracked_paths": 10138,
+      "excluded_symlink_paths": 0
+    }
+  ]
+}
