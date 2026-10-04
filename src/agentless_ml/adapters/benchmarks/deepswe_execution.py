@@ -298,6 +298,87 @@ CARGO_NEXTEST = DeepSWETestCommand(
     failure_exit_codes=(100,),
 )
 
+_PACKAGE_MERGE = (
+    'import sys,xml.etree.ElementTree as E; root=E.Element("testsuites"); '
+    'reports=[(name,E.parse(path).getroot()) for name,path in '
+    'zip(sys.argv[2::2],sys.argv[3::2])]; '
+    '[case.set("classname",name+"/"+(case.get("classname") or "")) '
+    'for name,report in reports for case in report.iter("testcase")]; '
+    '[root.extend(report.iter("testsuite")) for _,report in reports]; '
+    'E.ElementTree(root).write(sys.argv[1],encoding="utf-8",xml_declaration=True)'
+)
+
+
+def _nested_vitest(suites: tuple[tuple[str, str, str], ...]) -> DeepSWETestCommand:
+    # Keep relative workspace dependency links inside the candidate tree.
+    preparation = (
+        f"set -e; cd {WORK}; "
+        "if [ -d /app/node_modules ]; then cp -a /app/node_modules node_modules; "
+        "else mkdir node_modules; fi; "
+    )
+    for package in dict.fromkeys(package for _, package, _ in suites):
+        preparation += (
+            f"if [ -d /app/{package}/node_modules ]; then "
+            f"cp -a /app/{package}/node_modules {package}/node_modules; fi; "
+        )
+    execution = "set +e; failed=0; "
+    reports = []
+    for name, package, arguments in suites:
+        report = f"/tmp/{name}.xml"
+        execution += (
+            f"(cd {package} && npm exec --offline -- vitest run {arguments} "
+            f"--reporter=default --reporter=junit --outputFile.junit={report}); "
+            '[ "$?" -eq 0 ] || failed=1; '
+        )
+        reports.extend((name, report))
+    execution += (
+        f"python -c '{_PACKAGE_MERGE}' /tmp/report.xml "
+        + " ".join(reports)
+        + " || exit 2; exit $failed"
+    )
+    return DeepSWETestCommand(
+        preparation + execution, TestReport(ReportFormat.JUNIT_XML, "/tmp/report.xml")
+    )
+
+
+AGENTROOMS_VITEST = _nested_vitest((
+    ("backend", "backend", ""), ("frontend", "frontend", ""),
+))
+QUILL_VITEST = _nested_vitest((
+    ("unit", "packages/quill", "--config test/unit/vitest.config.ts --browser.headless"),
+    ("fuzz", "packages/quill", "--config test/fuzz/vitest.config.ts"),
+))
+DENO = DeepSWETestCommand(
+    script=(
+        f"set -e; cd {WORK}; cp -a /deno-cache /tmp/deno-cache; "
+        "DENO_DIR=/tmp/deno-cache deno test --cached-only --allow-run=deno "
+        '--allow-env --allow-read --allow-write=./ --parallel --junit-path=/tmp/report.xml "$@"'
+    ),
+    report=TestReport(ReportFormat.JUNIT_XML, "/tmp/report.xml"),
+)
+AVA = DeepSWETestCommand(
+    script=(
+        f"set -e; cd {WORK}; {_NODE_MODULES}"
+        "npm run build; set +e; "
+        '/app/node_modules/.bin/ava --tap "$@" > /tmp/ava.tap; rc=$?; '
+        "cat /tmp/ava.tap; "
+        "node /app/node_modules/tap-junit/bin/tap-junit "
+        "< /tmp/ava.tap > /tmp/report.xml "
+        "|| exit 2; exit $rc"
+    ),
+    report=TestReport(ReportFormat.JUNIT_XML, "/tmp/report.xml"),
+)
+KYSELY_MOCHA = DeepSWETestCommand(
+    script=(
+        f"set -e; cd {WORK}; {_NODE_MODULES}"
+        "pnpm build; pnpm test:node:build; "
+        "DIALECTS=sqlite /app/node_modules/.bin/mocha --timeout 15000 "
+        '--reporter json --reporter-option output=/tmp/mocha-report.json "test/node/dist/**/*.test.js" "$@"'
+    ),
+    report=TestReport(ReportFormat.MOCHA_JSON, "/tmp/mocha-report.json"),
+    failure_exit_codes=tuple(range(1, 125)),
+)
+
 TEST_COMMANDS = {
     "go": GO,
     "go-module": GO_MODULE,
@@ -310,6 +391,11 @@ TEST_COMMANDS = {
     "vitest-writable": VITEST_WRITABLE,
     "koota-vitest": KOOTA_VITEST,
     "cargo-nextest": CARGO_NEXTEST,
+    "agentrooms-vitest": AGENTROOMS_VITEST,
+    "quill-vitest": QUILL_VITEST,
+    "deno": DENO,
+    "ava": AVA,
+    "kysely-mocha": KYSELY_MOCHA,
 }
 
 _RUNNER_BY_LANGUAGE = {"go": "go", "python": "pytest", "rust": "cargo-nextest"}
@@ -491,9 +577,11 @@ def deepswe_test_plan(
     language: str, checkout: Path, override: Mapping[str, object] | None = None
 ) -> DeepSWETestPlan:
     """The runner and targets for a task's whole suite, plus any override."""
-    runner = deepswe_test_runner(language, checkout)
-    if override is not None and "runner" in override:
-        runner = str(override["runner"])
+    runner = (
+        str(override["runner"])
+        if override is not None and "runner" in override
+        else deepswe_test_runner(language, checkout)
+    )
     targets = deepswe_test_targets(runner, checkout)
     if override is None:
         return DeepSWETestPlan(runner, targets)
@@ -511,8 +599,8 @@ def deepswe_test_command(
     ``targets`` are paths or test selectors the runner understands:
     ``("./...",)`` for Go, ``("tests/test_any.py",)`` for pytest.
     """
-    if runner == "koota-vitest" and targets:
-        raise ValueError("Koota's two-package runner does not support narrowed targets")
+    if runner in {"koota-vitest", "agentrooms-vitest", "quill-vitest"} and targets:
+        raise ValueError(f"{runner}'s multi-suite runner does not support narrowed targets")
     try:
         template = TEST_COMMANDS[runner]
     except KeyError:

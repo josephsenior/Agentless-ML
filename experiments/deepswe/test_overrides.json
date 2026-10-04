@@ -1,4 +1,24 @@
 {
+  "claude-code-by-agents-recursive-delegation": {
+    "runner": "agentrooms-vitest",
+    "reason": "The root Electron package has no test script; backend and frontend each declare a Vitest suite. Run both from the candidate packages and namespace their JUnit test IDs."
+  },
+  "quill-shared-toolbar-focus": {
+    "runner": "quill-vitest",
+    "reason": "The root package delegates to packages/quill. Run its declared browser unit and jsdom fuzz suites with their own configs. Playwright end-to-end tests require a separate web-server build and are outside this public regression schedule."
+  },
+  "cliffy-config-file-parsing": {
+    "runner": "deno",
+    "reason": "deno.json declares deno test with subprocess, environment, read and local write permissions. Use its built-in JUnit reporter and the published dependency cache, copied to writable temporary storage; cached-only preserves offline execution."
+  },
+  "ink-grid-box-layout": {
+    "runner": "ava",
+    "reason": "package.json declares AVA and the published image installs tap-junit. Rebuild the candidate package before running AVA's TAP output through that installed converter. A failed build is a harness failure, never a passing baseline."
+  },
+  "kysely-window-grouping-helpers": {
+    "runner": "kysely-mocha",
+    "reason": "Build the candidate library and Node tests before Mocha. The public test setup exposes DIALECTS; select sqlite because the pinned image has no running PostgreSQL, MySQL or MSSQL services. Collect the existing SQLite and dialect-independent tests through Mocha JSON; this is a narrower public schedule, not the full multi-database suite."
+  },
   "bandit-structured-nosec-directives": {
     "runner": "stestr",
     "reason": "Bandit's test configuration and published image use stestr, with subunit2junitxml installed for JUnit output. The image does not install pytest, so the generic Python runner cannot execute the existing public suite."

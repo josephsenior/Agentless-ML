@@ -12,6 +12,7 @@ from pathlib import Path
 from agentless_ml.adapters.benchmarks.deepswe_execution import (
     TEST_COMMANDS,
     _KOOTA_MERGE,
+    _PACKAGE_MERGE,
     deepswe_test_command,
     deepswe_test_plan,
     deepswe_test_runner,
@@ -276,6 +277,11 @@ def test_the_checked_in_overrides_are_well_formed_and_explained():
         "prometheus-typed-label-sorting",
         "returns-validated-error-accumulation",
         "true-myth-iterable-collection-combinators",
+        "claude-code-by-agents-recursive-delegation",
+        "quill-shared-toolbar-focus",
+        "cliffy-config-file-parsing",
+        "ink-grid-box-layout",
+        "kysely-window-grouping-helpers",
     }
     assert all(len(entry["reason"]) > 40 for entry in overrides.values())
 
@@ -295,6 +301,33 @@ def test_runner_override_changes_the_command_without_changing_targets(tmp_path):
     plan = deepswe_test_plan("go", tmp_path, override)
     assert (plan.runner, plan.targets) == ("go-module", ("./cmd/prometheus",))
     assert "GOWORK=off" in plan.command().argv[2]
+
+
+def test_reviewed_runner_override_works_without_a_root_node_manifest(tmp_path):
+    # Cliffy has deno.json instead of package.json; automatic Node discovery
+    # must not run before its explicit, reviewed override.
+    plan = deepswe_test_plan("typescript", tmp_path, {"runner": "deno", "reason": "Deno project"})
+    assert plan.runner == "deno"
+    assert plan.command().report.path == "/tmp/report.xml"
+
+
+def test_nested_package_reports_keep_same_named_tests_separate(tmp_path):
+    report = '<testsuites><testsuite><testcase classname="suite" name="same" /></testsuite></testsuites>'
+    arguments = []
+    for package in ("backend", "frontend"):
+        path = tmp_path / f"{package}.xml"
+        path.write_text(report, encoding="utf-8")
+        arguments.extend((package, str(path)))
+    merged = tmp_path / "merged.xml"
+    subprocess.run([sys.executable, "-c", _PACKAGE_MERGE, str(merged), *arguments], check=True)
+    names = [case.get("classname") for case in ElementTree.parse(merged).iter("testcase")]
+    assert names == ["backend/suite", "frontend/suite"]
+
+
+@pytest.mark.parametrize("runner", ("agentrooms-vitest", "quill-vitest"))
+def test_nested_suites_refuse_unsupported_target_filtering(runner):
+    with pytest.raises(ValueError, match="does not support narrowed targets"):
+        deepswe_test_command(runner, ("some-test.ts",))
 
 
 @pytest.mark.parametrize(

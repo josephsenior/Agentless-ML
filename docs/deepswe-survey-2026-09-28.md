@@ -1,5 +1,9 @@
 # DeepSWE baseline survey, 28 September 2026
 
+Follow-up: the [4 October runner review](deepswe-runner-review-2026-10-04.md)
+recovered four of the six missing-runner tasks and brought the latest readiness
+count to 75. The counts below preserve this earlier snapshot.
+
 This is a snapshot of the pinned 113-task corpus, before using a repair model.
 "Ready" means that the unpatched candidate checkout ran in the task's pinned
 image and produced at least one passing test with a usable report. It does not

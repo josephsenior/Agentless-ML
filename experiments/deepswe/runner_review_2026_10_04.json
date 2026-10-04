@@ -1,0 +1,17 @@
+{
+  "date": "2026-10-04",
+  "corpus_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+  "model_calls": 0,
+  "latest_corpus_ready": 75,
+  "corpus_tasks": 113,
+  "scope": "Six previously missing-runner tasks rerun; other tasks retain previous survey evidence.",
+  "tasks": [
+    {"task_id": "claude-code-by-agents-recursive-delegation", "runner": "agentrooms-vitest", "status": "ready", "tests": 79, "passed": 52, "failed": 27, "image_id": "sha256:4baf10f1e66f9ab4d82991e538c13620c387c862974ec36dd5bd5d52f635920e"},
+    {"task_id": "quill-shared-toolbar-focus", "runner": "quill-vitest", "status": "ready", "tests": 524, "passed": 524, "failed": 0, "image_id": "sha256:19bc4ef0f9b9be1da3f7b54e160ff9d57cfc9d43d231c1a1eae2c9da8fe30cf9", "scope": "Browser unit and jsdom fuzz suites; separate Playwright end-to-end suite excluded."},
+    {"task_id": "ink-grid-box-layout", "runner": "ava", "status": "ready", "tests": 932, "passed": 930, "failed": 2, "image_id": "sha256:c50fcbacd80c6e4b42e18fedf0f8f4bcb2c591ef9a04e4dba39e588e095d4b8e"},
+    {"task_id": "kysely-window-grouping-helpers", "runner": "kysely-mocha", "status": "ready", "tests": 438, "passed": 438, "failed": 0, "image_id": "sha256:5129913072a3ce64024e5822a210f7930f0663931c33c09e4f1f40967ff87e09", "scope": "DIALECTS=sqlite; the full suite needs database services absent from this image."},
+    {"task_id": "cliffy-config-file-parsing", "runner": "deno", "status": "harness_error", "tests": 0, "passed": 0, "image_id": "sha256:0a8dd8f1270ec4bb88efadad3021762e1d07274f686276c8a484d26a00bd91b5", "reason": "Pinned dependency cache lacks https://jsr.io/@std/io/meta.json; cached-only loading stops before tests."},
+    {"task_id": "yjs-map-conflict-detection", "status": "no_runner", "reason": "The public tests/index.js drives lib0/testing.runTests with console output; a structured per-test report adapter is still needed."}
+  ],
+  "candidate_probe": {"task_id": "claude-code-by-agents-recursive-delegation", "result": "passed", "test_id": "backend/agentless-candidate-probe.test.ts::agentless candidate probe", "observed_status": "failed"}
+}
