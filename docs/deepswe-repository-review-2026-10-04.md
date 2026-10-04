@@ -107,3 +107,7 @@ with tests for Windows placeholders, directory links, chains and dangling
 targets. Keep links out of source context and patch targets, never dereference
 them on the host, and keep the Helm fixture policy explicit. Reprepare the
 three missing repositories separately rather than changing benchmark pins.
+
+Follow-up: [Git-aware Linux snapshots](git-aware-linux-snapshots-2026-10-04.md)
+implement the contained-link policy and validate it on a real Python task.
+The counts above retain this preflight checkpoint.

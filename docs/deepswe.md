@@ -505,6 +505,9 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   all 22 old unsupported-task trees are accepted by the current provider, but
   Linux symlink semantics and submodule requirements still need runtime checks.
   That read-only preflight does not change the 80/113 readiness count.
+  [Git-aware Linux snapshots](git-aware-linux-snapshots-2026-10-04.md) now
+  preserve contained relative links and Git executable modes. Absolute-link
+  fixtures remain unsupported; other tasks still require baseline reruns.
 - **Workflow and scoring over many tasks.** The survey establishes each task's
   regression inventory, but running the workflow needs repair responses, and
   only actionlint has recorded ones; without a model there is nothing to run for

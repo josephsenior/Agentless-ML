@@ -5,6 +5,9 @@ from __future__ import annotations
 import hashlib
 import json
 import math
+import os
+import re
+import stat
 import subprocess
 import tarfile
 import tempfile
@@ -20,6 +23,8 @@ from agentless_ml.schemas import (
     ValidationResult,
     ValidationStatus,
 )
+from agentless_ml.workspace.local_git import _require_git, _safe_path
+from agentless_ml.workspace.records import WorkspaceError
 
 from .reports import MAX_REPORT_BYTES, ReportError, TestReport, parse_report
 
@@ -77,24 +82,134 @@ class DockerError(RuntimeError):
     pass
 
 
-def _snapshot(source: Path, target: Path) -> None:
-    """Copy regular source files only, with portable permissions and no history."""
-    with tarfile.open(target, "w") as archive:
-        for path in sorted(source.rglob("*")):
-            relative = path.relative_to(source)
-            if any(part.casefold() == ".git" for part in relative.parts):
+def _snapshot_git_metadata(source: Path) -> tuple[dict[str, str], frozenset[str]]:
+    """Read link targets from HEAD, never from a host link's destination."""
+    gitdir = source / ".git"
+    if gitdir.is_symlink():
+        raise DockerError("snapshot Git metadata must not be a host symlink")
+    # Plain source fixtures can contain an excluded .git directory without
+    # being repositories. Workspaces produced by local-git-v1 are full clones.
+    if not (gitdir / "HEAD").is_file() or not (gitdir / "objects").is_dir():
+        return {}, frozenset()
+    try:
+        root = _require_git(source, "rev-parse", "--show-toplevel", timeout=30).decode().strip()
+        if Path(root).resolve() != source.resolve():
+            raise DockerError("snapshot source must be the Git checkout root")
+        listing = _require_git(source, "ls-tree", "-rz", "--full-tree", "HEAD", timeout=30)
+        links = {}
+        executable = set()
+        for record in listing.split(b"\0"):
+            if not record:
                 continue
-            if path.is_symlink() or (not path.is_file() and not path.is_dir()):
+            metadata, raw_path = record.split(b"\t", 1)
+            mode, kind, oid = metadata.split()
+            if mode == b"100755" and kind == b"blob":
+                executable.add(_safe_path(raw_path.decode("utf-8")))
+            if mode == b"120000" and kind == b"blob":
+                name = _safe_path(raw_path.decode("utf-8"))
+                links[name] = _require_git(
+                    source, "cat-file", "blob", oid.decode("ascii"), timeout=30
+                ).decode("utf-8")
+    except (WorkspaceError, UnicodeError, ValueError) as error:
+        raise DockerError(f"cannot read snapshot Git links: {error}") from error
+    return links, frozenset(executable)
+
+
+def _validate_snapshot_links(links: dict[str, str]) -> None:
+    """Resolve metadata components without collapsing '..' across a link."""
+    for name, destination in links.items():
+        if (not destination or len(destination.encode("utf-8")) > 4095
+                or destination.startswith("/") or "\\" in destination
+                or "\0" in destination or re.match(r"^[A-Za-z]:", destination)):
+            raise DockerError(f"unsupported snapshot link target: {name}")
+    for name in links:
+        pending = name.split("/")
+        resolved: list[str] = []
+        expansions = 0
+        while pending:
+            part = pending.pop(0)
+            if part in {"", "."}:
+                continue
+            if part == "..":
+                if not resolved:
+                    raise DockerError(f"snapshot link escapes checkout: {name}")
+                resolved.pop()
+                continue
+            if part.casefold() in {".git", "git~1"}:
+                raise DockerError(f"snapshot link targets Git metadata: {name}")
+            candidate = "/".join([*resolved, part])
+            if candidate in links:
+                expansions += 1
+                if expansions > 40:
+                    raise DockerError(f"snapshot link cycle or excessive chain: {name}")
+                pending = links[candidate].split("/") + pending
+            else:
+                resolved.append(part)
+
+
+def _snapshot(source: Path, target: Path) -> None:
+    """Archive candidate files and unchanged, checkout-contained Git links.
+
+    Windows Git link placeholders become tar symlink entries. Host links are
+    never traversed; untracked links, changed targets and escapes are refused.
+    Links are emitted last so extraction cannot write files through them.
+    """
+    links, executable = _snapshot_git_metadata(source)
+    _validate_snapshot_links(links)
+    entries: list[Path] = []
+    found = set()
+
+    def visit(directory: Path) -> None:
+        for path in sorted(directory.iterdir()):
+            if path.name.casefold() == ".git":
+                continue
+            relative = path.relative_to(source).as_posix()
+            metadata = path.lstat()
+            if relative in links:
+                if stat.S_ISLNK(metadata.st_mode):
+                    actual = os.readlink(path)
+                elif stat.S_ISREG(metadata.st_mode):
+                    try:
+                        actual = path.read_bytes().decode("utf-8")
+                    except UnicodeError as error:
+                        raise DockerError(f"snapshot Git link was changed: {relative}") from error
+                else:
+                    raise DockerError(f"snapshot link has unexpected host type: {relative}")
+                if actual != links[relative]:
+                    raise DockerError(f"snapshot Git link was changed: {relative}")
+                found.add(relative)
+                continue
+            # FILE_ATTRIBUTE_REPARSE_POINT also catches Windows junctions.
+            if (stat.S_ISLNK(metadata.st_mode)
+                    or getattr(metadata, "st_file_attributes", 0) & 0x400
+                    or not (stat.S_ISREG(metadata.st_mode) or stat.S_ISDIR(metadata.st_mode))):
                 raise DockerError(f"unsupported snapshot entry: {relative}")
+            entries.append(path)
+            if stat.S_ISDIR(metadata.st_mode):
+                visit(path)
+
+    visit(source)
+    if missing := set(links) - found:
+        raise DockerError(f"snapshot Git links are missing: {sorted(missing)[:5]}")
+    with tarfile.open(target, "w") as archive:
+        for path in entries:
+            relative = path.relative_to(source)
             info = archive.gettarinfo(str(path), arcname=relative.as_posix())
             info.uid = info.gid = 0
             info.uname = info.gname = ""
-            info.mode = 0o755 if path.is_dir() or info.mode & 0o111 else 0o644
+            is_executable = relative.as_posix() in executable or info.mode & 0o111
+            info.mode = 0o755 if path.is_dir() or is_executable else 0o644
             if path.is_file():
                 with path.open("rb") as stream:
                     archive.addfile(info, stream)
             else:
                 archive.addfile(info)
+        for name, destination in sorted(links.items()):
+            info = tarfile.TarInfo(name)
+            info.type = tarfile.SYMTYPE
+            info.linkname = destination
+            info.mode = 0o777
+            archive.addfile(info)
 
 
 UNPRIVILEGED_USER = "65534:65534"
