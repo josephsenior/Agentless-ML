@@ -49,6 +49,10 @@ experimental condition.
 
 ## Remaining blockers
 
+Follow-up: the [Yjs reporting check](deepswe-yjs-reporting-2026-10-04.md)
+subsequently recovered Yjs and raised readiness to 76/113. The outcomes below
+describe the initial six-task review, before that follow-up.
+
 Cliffy's Deno runner can use the installed tool and write JUnit, but the whole
 public suite cannot load offline with the image's incomplete dependency cache.
 The run stops before producing test results. Resolving that requires a separately

@@ -30,6 +30,7 @@ from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path
 
+from agentless_ml.adapters.benchmarks.deepswe_yjs import YJS_PREPARE, YJS_REPORTER
 from agentless_ml.validation.docker import PublicTestCommand
 from agentless_ml.validation.reports import ReportFormat, TestReport
 
@@ -379,6 +380,18 @@ KYSELY_MOCHA = DeepSWETestCommand(
     failure_exit_codes=tuple(range(1, 125)),
 )
 
+YJS_LIB0 = DeepSWETestCommand(
+    script=(
+        f"set -e; cd {WORK}; cp -a /app/node_modules node_modules; "
+        # npm's self-link is relative: copying it must resolve to the candidate.
+        f'[ "$(readlink -f node_modules/@y/y)" = "{WORK}" ] || exit 2; '
+        f"printf %s {shlex.quote(YJS_REPORTER)} > tests/.agentless-reporter.mjs; "
+        f"node -e {shlex.quote(YJS_PREPARE)}; "
+        'NODE_ENV=development node tests/.agentless-entry.mjs --repetition-time 50 "$@"'
+    ),
+    report=TestReport(ReportFormat.CTRF_JSON, "/tmp/ctrf.json"),
+)
+
 TEST_COMMANDS = {
     "go": GO,
     "go-module": GO_MODULE,
@@ -396,6 +409,7 @@ TEST_COMMANDS = {
     "deno": DENO,
     "ava": AVA,
     "kysely-mocha": KYSELY_MOCHA,
+    "yjs-lib0": YJS_LIB0,
 }
 
 _RUNNER_BY_LANGUAGE = {"go": "go", "python": "pytest", "rust": "cargo-nextest"}

@@ -282,6 +282,7 @@ def test_the_checked_in_overrides_are_well_formed_and_explained():
         "cliffy-config-file-parsing",
         "ink-grid-box-layout",
         "kysely-window-grouping-helpers",
+        "yjs-map-conflict-detection",
     }
     assert all(len(entry["reason"]) > 40 for entry in overrides.values())
 

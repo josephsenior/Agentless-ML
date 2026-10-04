@@ -490,14 +490,15 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
 ## What is not implemented
 
 - **Runner and environment gaps.** The [4 October review](deepswe-runner-review-2026-10-04.md)
-  recovered four of the six missing-runner tasks. Yjs still needs a per-test
-  adapter for its custom lib0 runner; Cliffy's Deno suite cannot load offline
+  recovered four of the six missing-runner tasks. The subsequent
+  [Yjs reporting check](deepswe-yjs-reporting-2026-10-04.md) recovered a fifth,
+  using its original lib0 runner. Cliffy's Deno suite cannot load offline
   with the published image's incomplete dependency cache.
 - **Baseline eligibility across the corpus.** The survey has attempted all 113
   pinned tasks. The [28 September triage](deepswe-survey-2026-09-28.md) records
   which 71 had a usable baseline and why the other 42 did not. The 4 October
-  checks bring the latest count to 75; earlier outcomes for other tasks remain
-  unchanged.
+  checks, including Yjs, bring the latest count to 76; earlier outcomes for other
+  tasks remain unchanged.
 - **Workflow and scoring over many tasks.** The survey establishes each task's
   regression inventory, but running the workflow needs repair responses, and
   only actionlint has recorded ones; without a model there is nothing to run for

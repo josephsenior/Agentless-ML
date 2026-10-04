@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-04",
+  "corpus_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+  "model_calls": 0,
+  "latest_corpus_ready": 76,
+  "corpus_tasks": 113,
+  "scope": "Yjs rerun with reporting around its original public lib0 runner; other tasks unchanged.",
+  "task_id": "yjs-map-conflict-detection",
+  "runner": "yjs-lib0",
+  "base_commit": "7795050a749bd1111cbbdd9d0219b27226a8e710",
+  "image_id": "sha256:91b1986f864befaef716579fa641d57051257ea5484515f9befd30a4f5d800ef",
+  "status": "ready",
+  "exit_code": 0,
+  "tests": 237,
+  "passed": 231,
+  "failed": 0,
+  "skipped": 6,
+  "seconds": 28.4,
+  "candidate_probe": {
+    "result": "passed",
+    "filter": "agentless",
+    "observed": {
+      "map::testAgentlessCandidateProbe": "failed",
+      "map::testRepeatAgentlessProbe": "failed",
+      "map::testAgentlessSkipProbe": "skipped"
+    },
+    "candidate_source_import": "@y/y resolves a candidate-only source export",
+    "other_tests": "skipped by the original lib0 filter"
+  }
+}

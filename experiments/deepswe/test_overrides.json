@@ -1,4 +1,8 @@
 {
+  "yjs-map-conflict-detection": {
+    "runner": "yjs-lib0",
+    "reason": "The public entry point uses lib0/testing without a structured reporter. Wrap its registered functions to record CTRF outcomes while the original runner retains filtering, repetitions, seeds and skips. Copy installed dependencies so the relative @y/y self-link resolves to the candidate checkout."
+  },
   "claude-code-by-agents-recursive-delegation": {
     "runner": "agentrooms-vitest",
     "reason": "The root Electron package has no test script; backend and frontend each declare a Vitest suite. Run both from the candidate packages and namespace their JUnit test IDs."
