@@ -33,6 +33,6 @@ record and report. Large raw artifacts stay outside the repository under
 `output/deepswe-diagnostics/wazero-16g/`, beside this checkout. They are separate
 from `output/deepswe-survey/survey.jsonl`.
 
-The next useful check is whether running the complete public schedule with
-lower test concurrency can stay within 8 GiB. A passing larger-memory diagnostic
-alone does not settle that question.
+The subsequent [8-GiB retries](wazero-8g-retries-2026-10-06.md) tried serial
+package/test execution and then earlier Go garbage collection. Both ended in
+OOM, so neither supplied a passing baseline at the published resource limit.

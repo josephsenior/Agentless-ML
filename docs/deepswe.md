@@ -513,6 +513,10 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   passed the full public schedule at a 16-GiB container limit, with observed
   memory above the published 8-GiB cap. It validates report conversion on the
   large suite but does not change the 81/113 count.
+  The subsequent [8-GiB retries](wazero-8g-retries-2026-10-06.md) also ended in
+  OOM with serial execution and earlier garbage collection. The serial run
+  identified the public `TestEngineInterpreter/huge_binary` stress test as an
+  OOM victim; Wazero remains resource-blocked for the full public schedule.
 - **Workflow and scoring over many tasks.** The survey establishes each task's
   regression inventory, but running the workflow needs repair responses, and
   only actionlint has recorded ones; without a model there is nothing to run for

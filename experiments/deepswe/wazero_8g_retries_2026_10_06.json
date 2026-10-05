@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-06",
+  "task_id": "wazero-multi-module-snapshots",
+  "base_commit": "3ec1e028c8cbda984a71bf72321008723ebdcb51",
+  "image_id": "sha256:919deb52eb7b2bf568155881aac94349d93c711c5edddeced559138bfbd3c66f",
+  "framework_parent_commit": "bbaebb07c3e7156f11d3a026e919f4356bb5da8e",
+  "memory_mb": 8192,
+  "cpus": 2,
+  "tmpfs_mb": 4096,
+  "timeout_seconds": 1800,
+  "attempts": [
+    {
+      "name": "serial",
+      "arguments": ["-p", "1", "-parallel", "1", "./..."],
+      "status": "out_of_memory",
+      "exit_code": 1,
+      "execution_duration_seconds": 321.9522862999984,
+      "survey_duration_seconds": 335.2,
+      "observed_cgroup_peak_bytes": 8589934592,
+      "observed_oom_kill_count": 1,
+      "observed_killed_test": "github.com/tetratelabs/wazero/internal/integration_test/engine::TestEngineInterpreter/huge_binary",
+      "observed_test_output": "signal: killed",
+      "artifacts": "../output/deepswe-survey/wazero-multi-module-snapshots/logs/agentless-ml-3eb077949987450697907a9ba20a1bf8",
+      "execution_sha256": "99de9e0fafdf4177726b56397176422ebb5ecb3256f4e496f321cbbc54026a78"
+    },
+    {
+      "name": "serial_with_earlier_gc",
+      "arguments": ["-p", "1", "-parallel", "1", "-exec", "env GOGC=20 GOMEMLIMIT=6GiB", "./..."],
+      "status": "out_of_memory",
+      "exit_code": 1,
+      "execution_duration_seconds": 524.9916773000004,
+      "survey_duration_seconds": 534.3,
+      "observed_cgroup_peak_before_completion_bytes": 8382431232,
+      "observed_running_test_at_last_sample": "TestEngineInterpreter/huge_binary",
+      "artifacts": "../output/deepswe-survey/wazero-multi-module-snapshots/logs/agentless-ml-dc54962d219b4bb399c58ef6fb80a46e",
+      "execution_sha256": "d8e869b5d6374922f10dcab316349876c6ed04be2dafcbc6945d4724194ff636"
+    }
+  ],
+  "operational_override_retained": false,
+  "official_ready_tasks": 81
+}
