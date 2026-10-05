@@ -88,17 +88,20 @@ class DeepSWETestCommand:
 # so treating that as a reporter failure would turn every real regression into
 # a harness error. `go test`'s own status is the result; a report that was never
 # written is caught by the runner, which refuses a missing or empty report.
-# Since Go 1.24, `go test -json` also reports a package that fails to build as
-# "build-output" and "build-fail" events, and go-ctrf-json-reporter v0.1.0
-# writes a 0-byte report when it meets them. In abs, one package imports
-# syscall/js, which only builds for WebAssembly, and that single package cost
-# the whole suite's 170 test results. Those events are dropped before the
-# reporter; the package itself is still reported as failed, without tests.
+# Since Go 1.24, `go test -json` also reports package build events. The small
+# streaming converter below ignores build and output events and writes only
+# terminal per-test outcomes. Unlike a general-purpose reporter, it never
+# retains the full event stream or all test results in memory.
 # Prometheus's transactional-reload image warms the main module with GOWORK=off
 # and sets GOFLAGS=-mod=mod. It therefore needs a separate module-mode command:
 # clearing GOFLAGS while leaving the workspace on cannot reproduce that build.
 # The prebuilt cache is copied into writable /tmp: a cold rebuild did not fit
 # the runner's temporary filesystem, while /opt/gocache itself is read-only.
+_GO_JSON_TO_CTRF = Path(__file__).with_name("go_json_to_ctrf.go").read_text(
+    encoding="utf-8"
+)
+
+
 def _go_script(mode: str) -> str:
     setup = (
         "export GOWORK=off; mkdir -p /tmp/go-build && "
@@ -110,8 +113,9 @@ def _go_script(mode: str) -> str:
         f'{_GO_ENVIRONMENT} go test -json -count=1 "$@" > /tmp/go-test.json; rc=$?; '
         "if [ \"$rc\" -ne 0 ]; then "
         "grep '\"Action\":\"build-output\"' /tmp/go-test.json | tail -n 20 >&2; fi; "
-        "grep -v '\"Action\":\"build-' /tmp/go-test.json "
-        "| go-ctrf-json-reporter -output /tmp/ctrf.json >/dev/null 2>&1; "
+        "cat > /tmp/agentless-go-json-to-ctrf.go <<'AGENTLESS_GO_REPORTER'\n"
+        f"{_GO_JSON_TO_CTRF}\nAGENTLESS_GO_REPORTER\n"
+        f"{_GO_ENVIRONMENT} go run /tmp/agentless-go-json-to-ctrf.go /tmp/go-test.json /tmp/ctrf.json || exit 125; "
         "exit $rc"
     )
 

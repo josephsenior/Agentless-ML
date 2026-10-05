@@ -37,6 +37,9 @@ dev = ["pytest>=8,<9"]
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+"agentless_ml.adapters.benchmarks" = ["go_json_to_ctrf.go"]
+
 [tool.pytest.ini_options]
 addopts = "-ra -p no:cacheprovider"
 testpaths = ["tests"]

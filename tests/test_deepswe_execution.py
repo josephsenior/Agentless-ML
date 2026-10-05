@@ -1,6 +1,7 @@
 """The candidate checkout, not the image's own copy, must be the code under test."""
 
 import json
+import shutil
 import subprocess
 import sys
 from xml.etree import ElementTree
@@ -21,7 +22,7 @@ from agentless_ml.adapters.benchmarks.deepswe_execution import (
 )
 
 OVERRIDES = Path(__file__).resolve().parents[1] / "experiments" / "deepswe" / "test_overrides.json"
-from agentless_ml.validation import ReportFormat
+from agentless_ml.validation import ReportFormat, parse_report
 
 
 def script(runner, targets=()):
@@ -177,21 +178,61 @@ def test_mocha_exits_with_its_failure_count():
     assert 3 in codes and 124 in codes and 125 not in codes
 
 
-def test_go_result_is_go_tests_exit_status_not_the_reporters():
-    # go-ctrf-json-reporter exits 1 whenever a test failed, after writing the
-    # full report. Acting on that exit would turn every real regression into a
-    # harness error; a missing report is caught by the runner instead.
+def test_go_result_is_go_tests_exit_status_not_the_converter():
+    # The converter's exit only signals whether it produced a valid report;
+    # go test's own exit status remains the public-test result.
     text = script("go")
     assert "rc=$?" in text and text.endswith("exit $rc")
-    assert "||" not in text
+    assert "|| exit 125" in text
 
 
-def test_go_build_events_never_reach_the_reporter():
-    # One package that cannot build (abs imports syscall/js) made the reporter
-    # write a 0-byte report and lost all 170 results of the rest of the suite.
+def test_go_build_events_do_not_become_test_cases():
     text = script("go")
-    assert text.index("grep -v '\"Action\":\"build-'") < text.index("go-ctrf-json-reporter")
-    assert "build-output" in text  # Retain compiler diagnostics when reporting fails.
+    assert text.index("grep '\"Action\":\"build-output\"'") < text.index("go run")
+    assert '\"Action\":\"build-' in text
+    assert 'event.Test == ""' in text  # Package/build outcomes are not individual tests.
+    assert "build-output" in text  # Retain compiler diagnostics for failed builds.
+
+
+def test_go_report_conversion_streams_only_terminal_test_events():
+    text = script("go")
+    assert "json.NewDecoder" in text
+    assert 'case "pass":' in text and 'status = "passed"' in text
+    assert 'case "fail":' in text and 'status = "failed"' in text
+    assert 'case "skip":' in text and 'status = "skipped"' in text
+    assert "go-ctrf-json-reporter" not in text
+
+
+@pytest.mark.skipif(shutil.which("go") is None, reason="Go toolchain is not installed")
+def test_go_stream_converter_compiles_and_preserves_test_outcomes(tmp_path):
+    source = Path(__file__).resolve().parents[1] / (
+        "src/agentless_ml/adapters/benchmarks/go_json_to_ctrf.go"
+    )
+    events = tmp_path / "events.jsonl"
+    report = tmp_path / "report.json"
+    events.write_text(
+        '\n'.join((
+            '{"Action":"run","Package":"example/pkg","Test":"TestPass"}',
+            '{"Action":"output","Package":"example/pkg","Test":"TestPass","Output":"verbose log"}',
+            '{"Action":"pass","Package":"example/pkg","Test":"TestPass"}',
+            '{"Action":"skip","Package":"example/pkg","Test":"TestSkip"}',
+            '{"Action":"fail","Package":"example/pkg","Test":"TestFail"}',
+            '{"Action":"fail","Package":"example/build","Output":"compile error"}',
+        )) + '\n',
+        encoding="utf-8",
+    )
+    subprocess.run(
+        ["go", "run", str(source), str(events), str(report)],
+        check=True,
+        timeout=60,
+    )
+
+    cases = parse_report(report.read_bytes(), ReportFormat.CTRF_JSON)
+    assert [(case.test_id, case.status.value) for case in cases] == [
+        ("example/pkg::TestPass", "passed"),
+        ("example/pkg::TestSkip", "skipped"),
+        ("example/pkg::TestFail", "failed"),
+    ]
 
 
 def test_jest_cannot_read_a_stale_report_left_in_the_checkout():

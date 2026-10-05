@@ -85,7 +85,15 @@ baseline in its own image. Submodule-only tasks require a separate check of
 whether their schedules need the uninitialized contents. The three missing
 repositories still need fresh sealed preparation.
 
-Wazero's first unchanged full Go schedule exceeded the 300-second smoke limit.
-The follow-up allows 900 seconds without selecting fewer packages. Its outcome
-is recorded separately from the link implementation, so a slow suite or report
-converter cannot be mistaken for a symlink failure.
+Wazero's unchanged full Go schedule exceeded the 300-second smoke limit. A
+900-second follow-up also ended as `out_of_memory` after 1,014 seconds. The run
+produced a 146 MB Go JSON event stream; its test-report conversion was still
+running after the Go test process exited. This is a survey/reporting resource
+limit, not evidence of a symlink failure. A streaming Go-to-CTRF converter now
+avoids retaining the event stream and test list; a local fixture test confirms
+it preserves pass/fail/skip outcomes and ignores non-test events. However, a
+full Wazero rerun under the task's declared 8 GiB memory cap was itself
+OOM-killed after about 306 seconds, before producing a report. The converter
+therefore has not yet been exercised on Wazero's full output, and Wazero remains
+unready. Raising the memory cap would change the pinned task environment, so it
+is not counted as a baseline.
