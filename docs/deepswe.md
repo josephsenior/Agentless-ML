@@ -500,19 +500,24 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   pinned tasks. The [28 September triage](deepswe-survey-2026-09-28.md) records
   which 71 had a usable baseline and why the other 42 did not. The 4 October
   checks, including Yjs, the harness review, and the Python symlink-task rerun,
-  bring the latest count to 81;
-  earlier outcomes for other tasks remain unchanged.
+  brought the count to 81. The subsequent
+  [contained-symlink reruns](deepswe-symlink-reruns-2026-10-06.md) recovered
+  six more public baselines, bringing the latest count to **87/113**;
+  tasks outside those reviews retain their earlier outcomes.
   The [repository review](deepswe-repository-review-2026-10-04.md) found that
   all 22 old unsupported-task trees are accepted by the current provider, but
   Linux symlink semantics and submodule requirements still need runtime checks.
   [Git-aware Linux snapshots](git-aware-linux-snapshots-2026-10-04.md) now
   preserve contained relative links and Git executable modes. The Python
-  symlink task now has a passing full public baseline; other affected tasks
-  still require baseline reruns, and absolute-link fixtures remain unsupported.
+  symlink task now has a passing full public baseline. All 15 remaining
+  contained-symlink tasks have since been revisited: six are ready and nine
+  exposed runner, setup or memory blockers. Absolute-link fixtures remain
+  unsupported, and three submodule-only tasks still need runtime checks.
   A separate [Wazero memory diagnostic](wazero-memory-diagnostic-2026-10-05.md)
   passed the full public schedule at a 16-GiB container limit, with observed
   memory above the published 8-GiB cap. It validates report conversion on the
-  large suite but does not change the 81/113 count.
+  large suite but did not change readiness; it remains outside the current
+  87/113 count.
   The subsequent [8-GiB retries](wazero-8g-retries-2026-10-06.md) also ended in
   OOM with serial execution and earlier garbage collection. The serial run
   identified the public `TestEngineInterpreter/huge_binary` stress test as an
