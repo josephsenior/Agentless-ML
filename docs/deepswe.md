@@ -509,6 +509,10 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   preserve contained relative links and Git executable modes. The Python
   symlink task now has a passing full public baseline; other affected tasks
   still require baseline reruns, and absolute-link fixtures remain unsupported.
+  A separate [Wazero memory diagnostic](wazero-memory-diagnostic-2026-10-05.md)
+  passed the full public schedule at a 16-GiB container limit, with observed
+  memory above the published 8-GiB cap. It validates report conversion on the
+  large suite but does not change the 81/113 count.
 - **Workflow and scoring over many tasks.** The survey establishes each task's
   regression inventory, but running the workflow needs repair responses, and
   only actionlint has recorded ones; without a model there is nothing to run for

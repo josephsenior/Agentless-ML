@@ -94,6 +94,9 @@ avoids retaining the event stream and test list; a local fixture test confirms
 it preserves pass/fail/skip outcomes and ignores non-test events. However, a
 full Wazero rerun under the task's declared 8 GiB memory cap was itself
 OOM-killed after about 306 seconds, before producing a report. The converter
-therefore has not yet been exercised on Wazero's full output, and Wazero remains
-unready. Raising the memory cap would change the pinned task environment, so it
-is not counted as a baseline.
+was not exercised on Wazero's full output in that attempt. The subsequent
+[16-GiB diagnostic](wazero-memory-diagnostic-2026-10-05.md) completed the full
+schedule and report conversion with 155,928 passes and 39 skips. Observed
+container memory exceeded 8 GiB during test execution. Wazero still has no
+passing baseline at its published 8-GiB limit; the diagnostic leaves the
+official readiness count unchanged.
