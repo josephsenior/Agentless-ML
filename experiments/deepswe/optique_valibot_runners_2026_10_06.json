@@ -1,0 +1,135 @@
+{
+  "date": "2026-10-06",
+  "framework_parent_commit": "c1bbeec4de46a40a6b935874d88b248ddc03ed83",
+  "corpus_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+  "agent_files_sha256": "a18b40853100a4e7b3daa86449c97174b8e5194130d0dc63022704c7b8413cd9",
+  "memory_mb": 8192,
+  "cpus": 2,
+  "tmpfs_mb": 4096,
+  "baseline_timeout_seconds": 1800,
+  "candidate_probe_timeout_seconds": 600,
+  "network_enabled": false,
+  "model_calls": 0,
+  "held_out_tests_used": false,
+  "ready_before": 90,
+  "ready_after": 92,
+  "remaining_no_runner": 0,
+  "corpus_status_counts": {
+    "harness_error": 4,
+    "no_image": 1,
+    "no_passing_tests": 4,
+    "out_of_memory": 2,
+    "ready": 92,
+    "repository_failed": 3,
+    "survey_error": 1,
+    "timeout": 1,
+    "unsupported_repository": 5
+  },
+  "initial_optique_probe": {
+    "status": "harness_error",
+    "exit_code": 1,
+    "message": "failure exit code, but the report shows no failed test",
+    "artifacts": "../output/deepswe-survey/candidate-probes/delegated/optique-conditional-option-dependencies/agentless-ml-28cd9c0660aa489fa26bb37d072a234c",
+    "execution_sha256": "bef0f0eec684c958b4b8c08dc813343675be5524584eb46bea0cc503b58bf7f5",
+    "correction": "Retain root-level cases and nested suites once, and qualify Node test IDs with file and suite context."
+  },
+  "verification": {
+    "command_tests_passed": 81,
+    "full_suite_passed": 604,
+    "full_suite_skipped": 23,
+    "new_candidate_probe_tests_passed": 2
+  },
+  "tasks": [
+    {
+      "task_id": "optique-conditional-option-dependencies",
+      "language": "typescript",
+      "base_commit": "14bbe4efc7ded67932771b9ca18d9d637bb4cf27",
+      "status": "ready",
+      "runner": "optique-node",
+      "targets": [],
+      "override": "The pinned image has Node but no Deno. deno.json explicitly declares test:node as the recursive pnpm package tests. Copy workspace dependencies, rebuild all nine test packages from the candidate, and run their declared Node type-transform test discovery, including man's explicit src glob. Namespace built-in JUnit reports. This is the public Node schedule, not the Deno or Bun suites.",
+      "exit_code": 0,
+      "tests": 3056,
+      "passed": 3046,
+      "failed": 0,
+      "skipped": 10,
+      "image_id": "sha256:081a0ad371727807a1a3ba2613345b4876fd0e148bbf78cd70f013918be28084",
+      "message": "",
+      "artifacts": "../output/deepswe-survey/optique-conditional-option-dependencies/logs/agentless-ml-3d786ba52af546de8a57c13f86beeec8",
+      "seconds": 44,
+      "execution_sha256": "ed496fcc117b9ce12c67b04ec021f4c9e4056087a5de882e6d831abed43d4b31",
+      "expected_image_id": "sha256:081a0ad371727807a1a3ba2613345b4876fd0e148bbf78cd70f013918be28084",
+      "skipped_test_ids": [
+        "core/packages/core/src/completion.test.ts/completion module/zsh shell completion::should work with actual zsh shell",
+        "core/packages/core/src/completion.test.ts/completion module/pwsh shell completion::should work with actual pwsh shell",
+        "core/packages/core/src/completion.test.ts/completion module/fish shell completion::should work with actual fish shell",
+        "core/packages/core/src/completion.test.ts/completion module/nu shell completion::should work with actual nu shell",
+        "man/packages/man/src/compat.test.ts/man/groff compatibility::should be parseable by groff",
+        "man/packages/man/src/compat.test.ts/man/groff compatibility::should be renderable by man command",
+        "man/packages/man/src/compat.test.ts/man/groff compatibility::should render parser-generated man page with groff",
+        "man/packages/man/src/compat.test.ts/man/groff compatibility::should handle special characters correctly in groff",
+        "man/packages/man/src/compat.test.ts/man/groff compatibility::should handle empty sections correctly in groff",
+        "man/packages/man/src/compat.test.ts/man/groff compatibility::should handle all section types correctly in groff"
+      ],
+      "candidate_probe": {
+        "status": "fail",
+        "exit_code": 1,
+        "tests": 3058,
+        "visible": [
+          {
+            "test_id": "run/packages/run/src/agentless-candidate-probe.test.ts::agentless candidate source visible",
+            "status": "passed"
+          }
+        ],
+        "intentional_failure": [
+          {
+            "test_id": "run/packages/run/src/agentless-candidate-probe.test.ts::agentless candidate failure detected",
+            "status": "failed"
+          }
+        ],
+        "artifacts": "../output/deepswe-survey/candidate-probes/delegated/optique-conditional-option-dependencies/agentless-ml-bec2809e72084dad985c767942423182",
+        "execution_sha256": "8c8d3027c67bcff0bf33c8890525caee71dfb989f02df63dbcddc73ece9ca62a"
+      }
+    },
+    {
+      "task_id": "valibot-recursive-schema-composition",
+      "language": "typescript",
+      "base_commit": "50016c77c808f9ca80391cf1abc96cc5416cf57d",
+      "status": "ready",
+      "runner": "valibot-vitest",
+      "targets": [],
+      "override": "The root recursive test script covers library and to-json-schema with Vitest typecheck, plus the zod-to-valibot codemod's Vitest suite. Copy installed workspace dependencies and build candidate library exports for the codemod's workspace import; retain all three configurations and both declared typecheck flags. Namespace their JUnit reports.",
+      "exit_code": 0,
+      "tests": 4509,
+      "passed": 4509,
+      "failed": 0,
+      "skipped": 0,
+      "image_id": "sha256:a52ea332702ee2470bf584a9d07be8064466c110f16230242ba6863b62c7154d",
+      "message": "",
+      "artifacts": "../output/deepswe-survey/valibot-recursive-schema-composition/logs/agentless-ml-b37f6f2994c541f19d9dbc03a1e0fa77",
+      "seconds": 101.6,
+      "execution_sha256": "3a834094f94333ce134d3c25917254426c72c41dfb927af5be6ed3743819354a",
+      "expected_image_id": "sha256:a52ea332702ee2470bf584a9d07be8064466c110f16230242ba6863b62c7154d",
+      "skipped_test_ids": [],
+      "candidate_probe": {
+        "status": "fail",
+        "exit_code": 1,
+        "tests": 4511,
+        "visible": [
+          {
+            "test_id": "to-json-schema/src/agentless-candidate-probe.test.ts::agentless candidate source visible",
+            "status": "passed"
+          }
+        ],
+        "intentional_failure": [
+          {
+            "test_id": "to-json-schema/src/agentless-candidate-probe.test.ts::agentless candidate failure detected",
+            "status": "failed"
+          }
+        ],
+        "artifacts": "../output/deepswe-survey/candidate-probes/delegated/valibot-recursive-schema-composition/agentless-ml-39c2d79a3f15419eb5c9ebaf4b1e92d6",
+        "execution_sha256": "89f70fca1a7ac9323222710b251837a3a3c07f046b11814655cef4bda983ceb2"
+      }
+    }
+  ]
+}

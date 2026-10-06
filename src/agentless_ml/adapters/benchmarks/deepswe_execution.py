@@ -346,25 +346,58 @@ _PACKAGE_MERGE = (
     'zip(sys.argv[2::2],sys.argv[3::2])]; '
     '[case.set("classname",name+"/"+(case.get("classname") or "")) '
     'for name,report in reports for case in report.iter("testcase")]; '
-    '[root.extend(report.iter("testsuite")) for _,report in reports]; '
+    # Node also emits root-level cases. Keep each subtree exactly once rather
+    # than dropping those cases or duplicating nested suites by flattening.
+    '[root.append(report) if report.tag=="testsuite" else root.extend(list(report)) '
+    'for _,report in reports]; '
     'E.ElementTree(root).write(sys.argv[1],encoding="utf-8",xml_declaration=True)'
 )
 
+# Node gives many cases the classname "test", even across different files and
+# describe blocks. Preserve that context before the common report parser sees
+# the names; otherwise distinct public tests collapse into one outcome.
+_NODE_PACKAGE_MERGE = """
+import sys
+import xml.etree.ElementTree as E
+root = E.Element("testsuites")
+for package, path in zip(sys.argv[2::2], sys.argv[3::2]):
+    report = E.parse(path).getroot()
+    def qualify(node, suites=()):
+        if node.tag == "testsuite":
+            suites += (node.get("name") or "suite",)
+        if node.tag == "testcase":
+            source = (node.get("file") or "no-file").removeprefix("/tmp/work/")
+            node.set("classname", "/".join((package, source, *suites)))
+        for child in node:
+            qualify(child, suites)
+    qualify(report)
+    if report.tag == "testsuite":
+        root.append(report)
+    else:
+        root.extend(list(report))
+E.ElementTree(root).write(sys.argv[1], encoding="utf-8", xml_declaration=True)
+""".strip()
 
-def _nested_vitest(
-    suites: tuple[tuple[str, str, str], ...], *, build_command: str = ""
-) -> DeepSWETestCommand:
+
+def _workspace_dependencies(packages: tuple[str, ...]) -> str:
     # Keep relative workspace dependency links inside the candidate tree.
     preparation = (
         f"set -e; cd {WORK}; "
         "if [ -d /app/node_modules ]; then cp -a /app/node_modules node_modules; "
         "else mkdir node_modules; fi; "
     )
-    for package in dict.fromkeys(package for _, package, _ in suites):
+    for package in dict.fromkeys(packages):
         preparation += (
             f"if [ -d /app/{package}/node_modules ]; then "
             f"cp -a /app/{package}/node_modules {package}/node_modules; fi; "
         )
+    return preparation
+
+
+def _nested_vitest(
+    suites: tuple[tuple[str, str, str], ...], *, build_command: str = ""
+) -> DeepSWETestCommand:
+    preparation = _workspace_dependencies(tuple(package for _, package, _ in suites))
     if build_command:
         preparation += f"{build_command} || exit 125; "
     execution = "set +e; failed=0; "
@@ -398,6 +431,43 @@ CLACK_VITEST = _nested_vitest(
     (("core", "packages/core", ""), ("prompts", "packages/prompts", "")),
     build_command="pnpm run build",
 )
+VALIBOT_VITEST = _nested_vitest(
+    (
+        ("library", "library", "--typecheck"),
+        ("to-json-schema", "packages/to-json-schema", "--typecheck"),
+        ("zod-to-valibot", "codemod/zod-to-valibot", ""),
+    ),
+    build_command="(cd library && npm run build)",
+)
+
+
+def _optique_node() -> DeepSWETestCommand:
+    # deno.json also declares test:node. The published image supplies Node,
+    # not Deno; retain all nine packages from that public recursive schedule.
+    packages = ("core", "config", "git", "logtape", "man", "run", "temporal", "valibot", "zod")
+    preparation = _workspace_dependencies(tuple(f"packages/{name}" for name in packages))
+    preparation += "pnpm -r --filter './packages/*' run build || exit 125; "
+    execution = "set +e; failed=0; "
+    reports = []
+    for name in packages:
+        report = f"/tmp/{name}.xml"
+        targets = " 'src/**/*.test.ts'" if name == "man" else ""
+        execution += (
+            f"(cd packages/{name} && node --experimental-transform-types --test "
+            f"--test-reporter=junit --test-reporter-destination={report}{targets}); "
+            '[ "$?" -eq 0 ] || failed=1; '
+        )
+        reports.extend((name, report))
+    execution += (
+        f"python -c '{_NODE_PACKAGE_MERGE}' /tmp/report.xml "
+        + " ".join(reports) + " || exit 2; exit $failed"
+    )
+    return DeepSWETestCommand(
+        preparation + execution, TestReport(ReportFormat.JUNIT_XML, "/tmp/report.xml")
+    )
+
+
+OPTIQUE_NODE = _optique_node()
 DENO = DeepSWETestCommand(
     script=(
         f"set -e; cd {WORK}; cp -a /deno-cache /tmp/deno-cache; "
@@ -502,6 +572,8 @@ TEST_COMMANDS = {
     "agentrooms-vitest": AGENTROOMS_VITEST,
     "quill-vitest": QUILL_VITEST,
     "clack-vitest": CLACK_VITEST,
+    "valibot-vitest": VALIBOT_VITEST,
+    "optique-node": OPTIQUE_NODE,
     "deno": DENO,
     "ava": AVA,
     "kysely-mocha": KYSELY_MOCHA,
@@ -713,7 +785,10 @@ def deepswe_test_command(
     ``targets`` are paths or test selectors the runner understands:
     ``("./...",)`` for Go, ``("tests/test_any.py",)`` for pytest.
     """
-    if runner in {"koota-vitest", "agentrooms-vitest", "quill-vitest", "clack-vitest"} and targets:
+    if runner in {
+        "koota-vitest", "agentrooms-vitest", "quill-vitest", "clack-vitest",
+        "valibot-vitest", "optique-node",
+    } and targets:
         raise ValueError(f"{runner}'s multi-suite runner does not support narrowed targets")
     try:
         template = TEST_COMMANDS[runner]

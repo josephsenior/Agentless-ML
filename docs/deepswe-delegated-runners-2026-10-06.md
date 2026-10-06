@@ -86,3 +86,7 @@ regression inventories, not task-solving results.
 
 Next: review Optique's Deno workspace and Valibot's delegated package tests,
 the two remaining `no_runner` tasks.
+
+Follow-up: the [Optique and Valibot review](deepswe-optique-valibot-runners-2026-10-06.md)
+recovered both, using Optique's declared Node alternative in its Node-only
+published image. Readiness is now 92/113.

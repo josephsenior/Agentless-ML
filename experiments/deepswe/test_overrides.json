@@ -1,4 +1,12 @@
 {
+  "optique-conditional-option-dependencies": {
+    "runner": "optique-node",
+    "reason": "The pinned image has Node but no Deno. deno.json explicitly declares test:node as the recursive pnpm package tests. Copy workspace dependencies, rebuild all nine test packages from the candidate, and run their declared Node type-transform test discovery, including man's explicit src glob. Preserve root cases and file/suite context in namespaced JUnit reports. This is the public Node schedule, not the Deno or Bun suites."
+  },
+  "valibot-recursive-schema-composition": {
+    "runner": "valibot-vitest",
+    "reason": "The root recursive test script covers library and to-json-schema with Vitest typecheck, plus the zod-to-valibot codemod's Vitest suite. Copy installed workspace dependencies and build candidate library exports for the codemod's workspace import; retain all three configurations and both declared typecheck flags. Namespace their JUnit reports."
+  },
   "arktype-json-schema-refs-dependencies": {
     "runner": "arktype-mocha",
     "targets": ["--exclude", "ark/attest/**/*.test.*", "--skipTypes"],

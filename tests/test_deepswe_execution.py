@@ -15,6 +15,7 @@ from agentless_ml.adapters.benchmarks.deepswe_execution import (
     TEST_COMMANDS,
     _KOOTA_MERGE,
     _PACKAGE_MERGE,
+    _NODE_PACKAGE_MERGE,
     deepswe_test_command,
     deepswe_test_plan,
     deepswe_test_runner,
@@ -373,6 +374,8 @@ def test_an_override_can_replace_the_derived_targets(tmp_path):
 def test_the_checked_in_overrides_are_well_formed_and_explained():
     overrides = load_test_overrides(OVERRIDES)
     assert set(overrides) == {
+        "optique-conditional-option-dependencies",
+        "valibot-recursive-schema-composition",
         "arktype-json-schema-refs-dependencies",
         "clack-async-autocomplete-options",
         "pest-character-class-coalescing",
@@ -436,7 +439,55 @@ def test_nested_package_reports_keep_same_named_tests_separate(tmp_path):
     assert names == ["backend/suite", "frontend/suite"]
 
 
-@pytest.mark.parametrize("runner", ("agentrooms-vitest", "quill-vitest", "clack-vitest"))
+def test_package_merge_keeps_root_cases_and_nested_suites_exactly_once(tmp_path):
+    report = tmp_path / "node.xml"
+    report.write_text(
+        '<testsuites><testcase name="visible" />'
+        '<testcase name="failure"><failure message="intentional" /></testcase>'
+        '<testsuite name="outer"><testsuite name="inner">'
+        '<testcase classname="suite" name="nested"><skipped /></testcase>'
+        '</testsuite></testsuite></testsuites>', encoding="utf-8",
+    )
+    merged = tmp_path / "merged.xml"
+    subprocess.run(
+        [sys.executable, "-c", _PACKAGE_MERGE, str(merged), "node", str(report)],
+        check=True,
+    )
+    cases = list(ElementTree.parse(merged).iter("testcase"))
+    assert len(cases) == 3
+    assert [case.get("name") for case in cases] == ["visible", "failure", "nested"]
+    outcomes = parse_report(merged.read_bytes(), ReportFormat.JUNIT_XML)
+    assert [case.status.value for case in outcomes] == ["passed", "failed", "skipped"]
+
+
+def test_node_merge_keeps_file_and_nested_suite_context_in_test_ids(tmp_path):
+    report = tmp_path / "node.xml"
+    report.write_text(
+        '<testsuites><testcase name="root" file="/tmp/work/src/a.test.ts">'
+        '<failure /></testcase><testsuite name="first">'
+        '<testcase classname="test" name="same" file="/tmp/work/src/a.test.ts" />'
+        '</testsuite><testsuite name="second">'
+        '<testcase classname="test" name="same" file="/tmp/work/src/a.test.ts" />'
+        '<testcase classname="test" name="same" file="/tmp/work/src/b.test.ts" />'
+        '</testsuite></testsuites>', encoding="utf-8",
+    )
+    merged = tmp_path / "merged.xml"
+    subprocess.run(
+        [sys.executable, "-c", _NODE_PACKAGE_MERGE, str(merged), "pkg", str(report)],
+        check=True,
+    )
+    cases = parse_report(merged.read_bytes(), ReportFormat.JUNIT_XML)
+    assert len(cases) == 4
+    assert cases[0].status.value == "failed"
+    assert {case.test_id for case in cases[1:]} == {
+        "pkg/src/a.test.ts/first::same", "pkg/src/a.test.ts/second::same",
+        "pkg/src/b.test.ts/second::same",
+    }
+
+
+@pytest.mark.parametrize("runner", (
+    "agentrooms-vitest", "quill-vitest", "clack-vitest", "valibot-vitest", "optique-node",
+))
 def test_nested_suites_refuse_unsupported_target_filtering(runner):
     with pytest.raises(ValueError, match="does not support narrowed targets"):
         deepswe_test_command(runner, ("some-test.ts",))
@@ -469,9 +520,37 @@ def test_clack_builds_before_both_public_package_suites(tmp_path):
     assert "core /tmp/core.xml prompts /tmp/prompts.xml" in text
 
 
+def test_valibot_keeps_all_three_suites_and_public_typechecks(tmp_path):
+    override = load_test_overrides(OVERRIDES)["valibot-recursive-schema-composition"]
+    plan = deepswe_test_plan("typescript", tmp_path, override)
+    assert plan.targets == ()
+    text = plan.command().argv[2]
+    assert text.index("cd library && npm run build") < text.index("vitest run")
+    assert "cd library && npm exec --offline -- vitest run --typecheck" in text
+    assert "cd packages/to-json-schema && npm exec --offline -- vitest run --typecheck" in text
+    assert "cd codemod/zod-to-valibot && npm exec --offline -- vitest run" in text
+    assert "cp -a /app/codemod/zod-to-valibot/node_modules codemod/zod-to-valibot/node_modules" in text
+    assert "to-json-schema /tmp/to-json-schema.xml zod-to-valibot /tmp/zod-to-valibot.xml" in text
+
+
+def test_optique_uses_its_public_node_alternative_with_all_nine_packages(tmp_path):
+    override = load_test_overrides(OVERRIDES)["optique-conditional-option-dependencies"]
+    plan = deepswe_test_plan("typescript", tmp_path, override)
+    assert plan.runner == "optique-node" and plan.targets == ()
+    text = plan.command().argv[2]
+    assert "pnpm -r --filter './packages/*' run build || exit 125" in text
+    assert text.index("run build") < text.index("--experimental-transform-types --test")
+    assert text.count("--test-reporter=junit") == 9
+    for package in ("core", "config", "git", "logtape", "man", "run", "temporal", "valibot", "zod"):
+        assert f"cd packages/{package} && node" in text
+        assert f"{package} /tmp/{package}.xml" in text
+    assert "--test-reporter-destination=/tmp/man.xml 'src/**/*.test.ts'" in text
+    assert plan.command().report.format == ReportFormat.JUNIT_XML
+
+
 @pytest.mark.skipif(
     not os.environ.get("AGENTLESS_DELEGATED_TASK_REPOSITORIES"),
-    reason="opt-in pinned Arktype and Clack candidate isolation checks",
+    reason="opt-in pinned delegated-runner candidate isolation checks",
 )
 @pytest.mark.parametrize(
     "task_id,base_commit,image_id,source_path,probe_path,probe",
@@ -498,6 +577,35 @@ def test_clack_builds_before_both_public_package_suites(tmp_path):
             "packages/prompts/test/agentless-candidate-probe.test.ts",
             "import { it, expect } from 'vitest';\n"
             "import { agentlessCandidateSourceProbe } from '@clack/core';\n"
+            "it('agentless candidate source visible', () => "
+            "expect(agentlessCandidateSourceProbe).toBe(true));\n"
+            "it('agentless candidate failure detected', () => { "
+            "expect(agentlessCandidateSourceProbe).toBe(true); "
+            "throw Error('intentional candidate failure'); });\n",
+        ),
+        (
+            "optique-conditional-option-dependencies",
+            "14bbe4efc7ded67932771b9ca18d9d637bb4cf27",
+            "sha256:081a0ad371727807a1a3ba2613345b4876fd0e148bbf78cd70f013918be28084",
+            "packages/core/src/index.ts",
+            "packages/run/src/agentless-candidate-probe.test.ts",
+            "import { it } from 'node:test';\n"
+            "import assert from 'node:assert/strict';\n"
+            "import { agentlessCandidateSourceProbe } from '@optique/core';\n"
+            "it('agentless candidate source visible', () => "
+            "assert.equal(agentlessCandidateSourceProbe, true));\n"
+            "it('agentless candidate failure detected', () => { "
+            "assert.equal(agentlessCandidateSourceProbe, true); "
+            "throw Error('intentional candidate failure'); });\n",
+        ),
+        (
+            "valibot-recursive-schema-composition",
+            "50016c77c808f9ca80391cf1abc96cc5416cf57d",
+            "sha256:a52ea332702ee2470bf584a9d07be8064466c110f16230242ba6863b62c7154d",
+            "library/src/index.ts",
+            "packages/to-json-schema/src/agentless-candidate-probe.test.ts",
+            "import { it, expect } from 'vitest';\n"
+            "import { agentlessCandidateSourceProbe } from 'valibot';\n"
             "it('agentless candidate source visible', () => "
             "expect(agentlessCandidateSourceProbe).toBe(true));\n"
             "it('agentless candidate failure detected', () => { "
