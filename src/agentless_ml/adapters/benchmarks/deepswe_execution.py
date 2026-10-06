@@ -290,17 +290,38 @@ _CARGO_BUILD = (
     "CARGO_INCREMENTAL=0 CARGO_PROFILE_DEV_DEBUG=line-tables-only "
     "CARGO_PROFILE_TEST_DEBUG=line-tables-only"
 )
+_CARGO_SETUP = (
+    "mkdir -p /tmp/cargo-home && ln -sfn /root/.cargo/registry /tmp/cargo-home/registry && "
+    "printf '[store]\\ndir = \"/tmp/nextest-store\"\\n"
+    "[profile.default.junit]\\npath = \"junit.xml\"\\n' > /tmp/nextest.toml && "
+    f"cd {WORK} && "
+)
+_CARGO_ENV = (
+    f"CARGO_HOME=/tmp/cargo-home CARGO_TARGET_DIR=/tmp/target {_CARGO_BUILD} "
+    "CARGO_NET_OFFLINE=true "
+)
+_CARGO_NEXTEST_RUN = (
+    _CARGO_ENV + "cargo nextest run --config-file /tmp/nextest.toml "
+    '--no-fail-fast "$@"'
+)
 CARGO_NEXTEST = DeepSWETestCommand(
-    script=(
-        "mkdir -p /tmp/cargo-home && ln -sfn /root/.cargo/registry /tmp/cargo-home/registry && "
-        "printf '[store]\\ndir = \"/tmp/nextest-store\"\\n"
-        "[profile.default.junit]\\npath = \"junit.xml\"\\n' > /tmp/nextest.toml && "
-        f"cd {WORK} && CARGO_HOME=/tmp/cargo-home CARGO_TARGET_DIR=/tmp/target {_CARGO_BUILD} "
-        "CARGO_NET_OFFLINE=true cargo nextest run --config-file /tmp/nextest.toml "
-        '--no-fail-fast "$@"'
-    ),
+    script=_CARGO_SETUP + _CARGO_NEXTEST_RUN,
     report=TestReport(ReportFormat.JUNIT_XML, "/tmp/nextest-store/default/junit.xml"),
     failure_exit_codes=(100,),
+)
+
+# Pest's public meta/build.rs launches ../target/debug/pest_bootstrap. Build
+# that executable from the candidate first, as its public CI setup does, and
+# keep the expected path pointing at the same writable temporary build tree.
+PEST_CARGO_NEXTEST = DeepSWETestCommand(
+    script=(
+        _CARGO_SETUP
+        + "mkdir -p /tmp/target && ln -s /tmp/target target || exit 125; "
+        + _CARGO_ENV + "cargo build --package pest_bootstrap || exit 125; "
+        + _CARGO_NEXTEST_RUN
+    ),
+    report=CARGO_NEXTEST.report,
+    failure_exit_codes=CARGO_NEXTEST.failure_exit_codes,
 )
 
 _PACKAGE_MERGE = (
@@ -452,6 +473,7 @@ TEST_COMMANDS = {
     "vitest-writable": VITEST_WRITABLE,
     "koota-vitest": KOOTA_VITEST,
     "cargo-nextest": CARGO_NEXTEST,
+    "pest-cargo-nextest": PEST_CARGO_NEXTEST,
     "agentrooms-vitest": AGENTROOMS_VITEST,
     "quill-vitest": QUILL_VITEST,
     "deno": DENO,

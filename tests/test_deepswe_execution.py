@@ -148,6 +148,7 @@ def test_koota_runner_refuses_a_selector_it_cannot_apply_to_both_packages():
         ("vitest-writable", ReportFormat.JUNIT_XML, "/tmp/report.xml"),
         ("koota-vitest", ReportFormat.JUNIT_XML, "/tmp/report.xml"),
         ("cargo-nextest", ReportFormat.JUNIT_XML, "/tmp/nextest-store/default/junit.xml"),
+        ("pest-cargo-nextest", ReportFormat.JUNIT_XML, "/tmp/nextest-store/default/junit.xml"),
     ],
 )
 def test_reports_are_declared_where_each_runner_writes_them(runner, expected, path):
@@ -165,6 +166,7 @@ def test_reports_are_declared_where_each_runner_writes_them(runner, expected, pa
         ("koota-vitest", (1,)),
         # nextest: 100 means tests failed; 101, a failed build, is undeclared.
         ("cargo-nextest", (100,)),
+        ("pest-cargo-nextest", (100,)),
     ],
 )
 def test_failure_exit_codes_are_what_each_runner_uses_for_failed_tests(runner, codes):
@@ -176,6 +178,22 @@ def test_mocha_exits_with_its_failure_count():
     # harness error. 125 and above also mean signals, so they stay undeclared.
     codes = deepswe_test_command("mocha").failure_exit_codes
     assert 3 in codes and 124 in codes and 125 not in codes
+
+
+def test_pest_bootstrap_builds_candidate_before_the_unchanged_test_schedule(tmp_path):
+    override = load_test_overrides(OVERRIDES)["pest-character-class-coalescing"]
+    plan = deepswe_test_plan("rust", tmp_path, override)
+    assert plan.runner == "pest-cargo-nextest"
+    assert plan.targets == ()
+    text = plan.command().argv[2]
+    assert "cd /tmp/work && " in text
+    assert "mkdir -p /tmp/target && ln -s /tmp/target target || exit 125" in text
+    bootstrap = "cargo build --package pest_bootstrap || exit 125"
+    assert text.index(bootstrap) < text.index("cargo nextest run")
+    assert text.count("CARGO_HOME=/tmp/cargo-home") == 2
+    assert text.count("CARGO_TARGET_DIR=/tmp/target") == 2
+    assert text.count("CARGO_NET_OFFLINE=true") == 2
+    assert text.endswith('cargo nextest run --config-file /tmp/nextest.toml --no-fail-fast "$@"')
 
 
 def test_go_result_is_go_tests_exit_status_not_the_converter():
@@ -352,6 +370,7 @@ def test_an_override_can_replace_the_derived_targets(tmp_path):
 def test_the_checked_in_overrides_are_well_formed_and_explained():
     overrides = load_test_overrides(OVERRIDES)
     assert set(overrides) == {
+        "pest-character-class-coalescing",
         "awilix-async-container-initialization",
         "bandit-structured-nosec-directives",
         "csstree-shorthand-expansion-compression",

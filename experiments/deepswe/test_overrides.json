@@ -1,4 +1,8 @@
 {
+  "pest-character-class-coalescing": {
+    "runner": "pest-cargo-nextest",
+    "reason": "The public meta/build.rs launches target/debug/pest_bootstrap before compiling the candidate grammar, and public CI builds pest_bootstrap first. Build that executable from the candidate with the cached registry, link target to the temporary build directory expected by the build script, then retain the existing complete nextest schedule."
+  },
   "vitest-duration-sharding": {
     "runner": "vitest-monorepo",
     "tmpfs_mb": 8192,
