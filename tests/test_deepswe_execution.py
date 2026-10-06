@@ -1,6 +1,7 @@
 """The candidate checkout, not the image's own copy, must be the code under test."""
 
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -23,6 +24,8 @@ from agentless_ml.adapters.benchmarks.deepswe_execution import (
 
 OVERRIDES = Path(__file__).resolve().parents[1] / "experiments" / "deepswe" / "test_overrides.json"
 from agentless_ml.validation import ReportFormat, parse_report
+from agentless_ml.validation import DockerTestRunner
+from agentless_ml.workspace import LocalGitWorkspaceProvider
 
 
 def script(runner, targets=()):
@@ -370,6 +373,8 @@ def test_an_override_can_replace_the_derived_targets(tmp_path):
 def test_the_checked_in_overrides_are_well_formed_and_explained():
     overrides = load_test_overrides(OVERRIDES)
     assert set(overrides) == {
+        "arktype-json-schema-refs-dependencies",
+        "clack-async-autocomplete-options",
         "pest-character-class-coalescing",
         "awilix-async-container-initialization",
         "bandit-structured-nosec-directives",
@@ -431,10 +436,109 @@ def test_nested_package_reports_keep_same_named_tests_separate(tmp_path):
     assert names == ["backend/suite", "frontend/suite"]
 
 
-@pytest.mark.parametrize("runner", ("agentrooms-vitest", "quill-vitest"))
+@pytest.mark.parametrize("runner", ("agentrooms-vitest", "quill-vitest", "clack-vitest"))
 def test_nested_suites_refuse_unsupported_target_filtering(runner):
     with pytest.raises(ValueError, match="does not support narrowed targets"):
         deepswe_test_command(runner, ("some-test.ts",))
+
+
+def test_arktype_alias_keeps_public_mocha_arguments_and_candidate_links(tmp_path):
+    override = load_test_overrides(OVERRIDES)["arktype-json-schema-refs-dependencies"]
+    plan = deepswe_test_plan("typescript", tmp_path, override)
+    assert plan.targets == ("--exclude", "ark/attest/**/*.test.*", "--skipTypes")
+    command = plan.command()
+    text = command.argv[2]
+    assert "cp -a /app/node_modules node_modules" in text
+    assert "/app/ark/*/node_modules" in text
+    assert 'package=${entry#/app/}' in text
+    assert "node node_modules/mocha/bin/mocha.js" in text
+    assert "--reporter-option output=/tmp/mocha-report.json" in text
+    assert command.report.format == ReportFormat.MOCHA_JSON
+    assert command.argv[-3:] == plan.targets
+
+
+def test_clack_builds_before_both_public_package_suites(tmp_path):
+    override = load_test_overrides(OVERRIDES)["clack-async-autocomplete-options"]
+    plan = deepswe_test_plan("typescript", tmp_path, override)
+    assert plan.targets == ()
+    text = plan.command().argv[2]
+    assert "cp -a /app/packages/core/node_modules packages/core/node_modules" in text
+    assert "cp -a /app/packages/prompts/node_modules packages/prompts/node_modules" in text
+    assert text.index("pnpm run build || exit 125") < text.index("cd packages/core && npm exec")
+    assert "cd packages/prompts && npm exec --offline -- vitest run" in text
+    assert "core /tmp/core.xml prompts /tmp/prompts.xml" in text
+
+
+@pytest.mark.skipif(
+    not os.environ.get("AGENTLESS_DELEGATED_TASK_REPOSITORIES"),
+    reason="opt-in pinned Arktype and Clack candidate isolation checks",
+)
+@pytest.mark.parametrize(
+    "task_id,base_commit,image_id,source_path,probe_path,probe",
+    [
+        (
+            "arktype-json-schema-refs-dependencies",
+            "04355e8b26d1ad5264ef62314a2bc46c4de58ed8",
+            "sha256:e0b0410d828b816474cfb89a448c448f15cf7d617c3fbddfacd45a1c1b232ef9",
+            "ark/util/index.ts",
+            "ark/type/__tests__/agentless-candidate-probe.test.ts",
+            "import assert from 'node:assert/strict';\n"
+            "import { agentlessCandidateSourceProbe } from '@ark/util';\n"
+            "it('agentless candidate source visible', () => "
+            "assert.equal(agentlessCandidateSourceProbe, true));\n"
+            "it('agentless candidate failure detected', () => { "
+            "assert.equal(agentlessCandidateSourceProbe, true); "
+            "throw Error('intentional candidate failure'); });\n",
+        ),
+        (
+            "clack-async-autocomplete-options",
+            "8a96e2dcd7f821d1250b58cf71c327679f94de25",
+            "sha256:32a72ef7d4a9d3ae8937aef9c42e18166284c817c8edf137d66772e4f34abf74",
+            "packages/core/src/index.ts",
+            "packages/prompts/test/agentless-candidate-probe.test.ts",
+            "import { it, expect } from 'vitest';\n"
+            "import { agentlessCandidateSourceProbe } from '@clack/core';\n"
+            "it('agentless candidate source visible', () => "
+            "expect(agentlessCandidateSourceProbe).toBe(true));\n"
+            "it('agentless candidate failure detected', () => { "
+            "expect(agentlessCandidateSourceProbe).toBe(true); "
+            "throw Error('intentional candidate failure'); });\n",
+        ),
+    ],
+)
+def test_delegated_runner_detects_candidate_workspace_source(
+    tmp_path, task_id, base_commit, image_id, source_path, probe_path, probe
+):
+    repositories = Path(os.environ["AGENTLESS_DELEGATED_TASK_REPOSITORIES"])
+    provider = LocalGitWorkspaceProvider(
+        repositories / task_id, base_commit, tmp_path / "workspaces"
+    )
+    artifacts = Path(os.environ.get(
+        "AGENTLESS_DELEGATED_TASK_ARTIFACTS", str(tmp_path / "logs")
+    )) / task_id
+    runner = DockerTestRunner(
+        image_id, artifacts, memory_mb=8192, cpus=2, tmpfs_mb=4096,
+        pids_limit=2048, run_as_image_user=True,
+    )
+    override = load_test_overrides(OVERRIDES)[task_id]
+    with provider.create() as workspace:
+        source = workspace.path / source_path
+        source.write_text(
+            source.read_text(encoding="utf-8")
+            + "\nexport const agentlessCandidateSourceProbe = true;\n",
+            encoding="utf-8",
+        )
+        probe_file = workspace.path / probe_path
+        probe_file.parent.mkdir(parents=True, exist_ok=True)
+        probe_file.write_text(probe, encoding="utf-8")
+        plan = deepswe_test_plan("typescript", workspace.path, override)
+        execution = runner.run(workspace.path, plan.command(timeout_seconds=600))
+    cases = execution.result.test_cases
+    assert execution.result.status.value == "fail", execution.message
+    visible = [case for case in cases if "agentless candidate source visible" in case.test_id]
+    failed = [case for case in cases if "agentless candidate failure detected" in case.test_id]
+    assert len(visible) == 1 and visible[0].status.value == "passed"
+    assert len(failed) == 1 and failed[0].status.value == "failed"
 
 
 @pytest.mark.parametrize(

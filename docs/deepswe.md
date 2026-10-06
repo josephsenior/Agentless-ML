@@ -504,7 +504,9 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   [contained-symlink reruns](deepswe-symlink-reruns-2026-10-06.md) recovered
   six more public baselines, bringing the count to 87/113. The
   [Pest bootstrap step](pest-bootstrap-baseline-2026-10-06.md) then recovered
-  another baseline, bringing the latest count to **88/113**;
+  another baseline, bringing the count to 88/113. The
+  [Arktype and Clack runner review](deepswe-delegated-runners-2026-10-06.md)
+  then recovered both delegated scripts, bringing the latest count to **90/113**;
   tasks outside those reviews retain their earlier outcomes.
   The [repository review](deepswe-repository-review-2026-10-04.md) found that
   all 22 old unsupported-task trees are accepted by the current provider, but
@@ -513,14 +515,14 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   preserve contained relative links and Git executable modes. The Python
   symlink task now has a passing full public baseline. All 15 remaining
   contained-symlink tasks have since been revisited: six were recovered in that
-  batch, and Pest's public bootstrap setup recovered a seventh. Eight retain
-  runner, setup or memory blockers. Absolute-link fixtures remain
+  batch; Pest's bootstrap and the Arktype/Clack runners recovered three more.
+  Six retain runner, setup or memory blockers. Absolute-link fixtures remain
   unsupported, and three submodule-only tasks still need runtime checks.
   A separate [Wazero memory diagnostic](wazero-memory-diagnostic-2026-10-05.md)
   passed the full public schedule at a 16-GiB container limit, with observed
   memory above the published 8-GiB cap. It validates report conversion on the
   large suite but did not change readiness; it remains outside the current
-  88/113 count.
+  90/113 count.
   The subsequent [8-GiB retries](wazero-8g-retries-2026-10-06.md) also ended in
   OOM with serial execution and earlier garbage collection. The serial run
   identified the public `TestEngineInterpreter/huge_binary` stress test as an

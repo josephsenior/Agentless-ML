@@ -188,6 +188,22 @@ MOCHA_JSON = DeepSWETestCommand(
     failure_exit_codes=tuple(range(1, 125)),
 )
 
+# Arktype's root test delegates to testTyped. Copying the dependency trees
+# keeps @ark workspace links inside the candidate, including its TS loaders.
+# Write JSON directly to a file: the attest global setup also logs to stdout.
+ARKTYPE_MOCHA = DeepSWETestCommand(
+    script=(
+        f"set -e; cd {WORK}; cp -a /app/node_modules node_modules; "
+        "for entry in /app/ark/*/node_modules; do "
+        '[ -d "$entry" ] || continue; package=${entry#/app/}; '
+        'cp -a "$entry" "$package"; done; '
+        'node node_modules/mocha/bin/mocha.js --reporter json '
+        '--reporter-option output=/tmp/mocha-report.json "$@"'
+    ),
+    report=MOCHA_JSON.report,
+    failure_exit_codes=MOCHA_JSON.failure_exit_codes,
+)
+
 # jest has no built-in structured report; the jest task images install
 # jest-ctrf-json-reporter into /opt/jest-ctrf, outside /app. It takes no output
 # option on the command line and writes ctrf/ctrf-report.json under the working
@@ -335,7 +351,9 @@ _PACKAGE_MERGE = (
 )
 
 
-def _nested_vitest(suites: tuple[tuple[str, str, str], ...]) -> DeepSWETestCommand:
+def _nested_vitest(
+    suites: tuple[tuple[str, str, str], ...], *, build_command: str = ""
+) -> DeepSWETestCommand:
     # Keep relative workspace dependency links inside the candidate tree.
     preparation = (
         f"set -e; cd {WORK}; "
@@ -347,6 +365,8 @@ def _nested_vitest(suites: tuple[tuple[str, str, str], ...]) -> DeepSWETestComma
             f"if [ -d /app/{package}/node_modules ]; then "
             f"cp -a /app/{package}/node_modules {package}/node_modules; fi; "
         )
+    if build_command:
+        preparation += f"{build_command} || exit 125; "
     execution = "set +e; failed=0; "
     reports = []
     for name, package, arguments in suites:
@@ -374,6 +394,10 @@ QUILL_VITEST = _nested_vitest((
     ("unit", "packages/quill", "--config test/unit/vitest.config.ts --browser.headless"),
     ("fuzz", "packages/quill", "--config test/fuzz/vitest.config.ts"),
 ))
+CLACK_VITEST = _nested_vitest(
+    (("core", "packages/core", ""), ("prompts", "packages/prompts", "")),
+    build_command="pnpm run build",
+)
 DENO = DeepSWETestCommand(
     script=(
         f"set -e; cd {WORK}; cp -a /deno-cache /tmp/deno-cache; "
@@ -468,6 +492,7 @@ TEST_COMMANDS = {
     "stestr": STESTR,
     "mocha": MOCHA,
     "mocha-json": MOCHA_JSON,
+    "arktype-mocha": ARKTYPE_MOCHA,
     "jest": JEST,
     "vitest": VITEST,
     "vitest-writable": VITEST_WRITABLE,
@@ -476,6 +501,7 @@ TEST_COMMANDS = {
     "pest-cargo-nextest": PEST_CARGO_NEXTEST,
     "agentrooms-vitest": AGENTROOMS_VITEST,
     "quill-vitest": QUILL_VITEST,
+    "clack-vitest": CLACK_VITEST,
     "deno": DENO,
     "ava": AVA,
     "kysely-mocha": KYSELY_MOCHA,
@@ -687,7 +713,7 @@ def deepswe_test_command(
     ``targets`` are paths or test selectors the runner understands:
     ``("./...",)`` for Go, ``("tests/test_any.py",)`` for pytest.
     """
-    if runner in {"koota-vitest", "agentrooms-vitest", "quill-vitest"} and targets:
+    if runner in {"koota-vitest", "agentrooms-vitest", "quill-vitest", "clack-vitest"} and targets:
         raise ValueError(f"{runner}'s multi-suite runner does not support narrowed targets")
     try:
         template = TEST_COMMANDS[runner]

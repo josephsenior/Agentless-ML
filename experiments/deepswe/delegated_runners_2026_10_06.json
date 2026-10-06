@@ -1,0 +1,112 @@
+{
+  "date": "2026-10-06",
+  "framework_parent_commit": "42e0775204c8d056e956659276afac1f6b888f86",
+  "corpus_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+  "agent_files_sha256": "a18b40853100a4e7b3daa86449c97174b8e5194130d0dc63022704c7b8413cd9",
+  "memory_mb": 8192,
+  "cpus": 2,
+  "tmpfs_mb": 4096,
+  "baseline_timeout_seconds": 1800,
+  "candidate_probe_timeout_seconds": 600,
+  "network_enabled": false,
+  "model_calls": 0,
+  "held_out_tests_used": false,
+  "ready_before": 88,
+  "ready_after": 90,
+  "corpus_status_counts": {
+    "harness_error": 4,
+    "no_image": 1,
+    "no_passing_tests": 4,
+    "no_runner": 2,
+    "out_of_memory": 2,
+    "ready": 90,
+    "repository_failed": 3,
+    "survey_error": 1,
+    "timeout": 1,
+    "unsupported_repository": 5
+  },
+  "tasks": [
+    {
+      "task_id": "arktype-json-schema-refs-dependencies",
+      "language": "typescript",
+      "base_commit": "04355e8b26d1ad5264ef62314a2bc46c4de58ed8",
+      "status": "ready",
+      "runner": "arktype-mocha",
+      "targets": [
+        "--exclude",
+        "ark/attest/**/*.test.*",
+        "--skipTypes"
+      ],
+      "override": "The root test script delegates to testTyped, which invokes Mocha with the attest-test exclusion and receives --skipTypes from the root script. Preserve the root Mocha configuration and copy installed dependencies so relative @ark workspace links resolve to candidate source. Write the built-in JSON report directly to a file, separately from attest setup logging.",
+      "exit_code": 0,
+      "tests": 1678,
+      "passed": 1678,
+      "failed": 0,
+      "skipped": 0,
+      "image_id": "sha256:e0b0410d828b816474cfb89a448c448f15cf7d617c3fbddfacd45a1c1b232ef9",
+      "message": "",
+      "artifacts": "../output/deepswe-survey/arktype-json-schema-refs-dependencies/logs/agentless-ml-4b017357981b4569af656f3f3f41eec9",
+      "seconds": 56.8,
+      "execution_sha256": "85d0bfc11c71d01580257e3c8b753ce3a119e80a6497a5c8dbc721a05d592437",
+      "expected_image_id": "sha256:e0b0410d828b816474cfb89a448c448f15cf7d617c3fbddfacd45a1c1b232ef9",
+      "candidate_probe": {
+        "status": "fail",
+        "exit_code": 1,
+        "tests": 1680,
+        "visible": [
+          {
+            "test_id": "/tmp/work/ark/type/__tests__/agentless-candidate-probe.test.ts::agentless candidate source visible",
+            "status": "passed"
+          }
+        ],
+        "intentional_failure": [
+          {
+            "test_id": "/tmp/work/ark/type/__tests__/agentless-candidate-probe.test.ts::agentless candidate failure detected",
+            "status": "failed"
+          }
+        ],
+        "artifacts": "../output/deepswe-survey/candidate-probes/delegated/arktype-json-schema-refs-dependencies/agentless-ml-0b06b71c3fc74ea883c2de507c036f1f",
+        "execution_sha256": "1187362f1ccde0922e0244f4cfe6812ea4c121d5fac0e94943835caef619c40b"
+      }
+    },
+    {
+      "task_id": "clack-async-autocomplete-options",
+      "language": "typescript",
+      "base_commit": "8a96e2dcd7f821d1250b58cf71c327679f94de25",
+      "status": "ready",
+      "runner": "clack-vitest",
+      "targets": [],
+      "override": "The public root pretest runs the build script, then recursive test invokes Vitest in packages/core and packages/prompts; example packages have no test script. Copy installed workspace dependencies, rebuild both candidate packages through pnpm run build, retain each package configuration and namespace their JUnit test IDs.",
+      "exit_code": 0,
+      "tests": 640,
+      "passed": 640,
+      "failed": 0,
+      "skipped": 0,
+      "image_id": "sha256:32a72ef7d4a9d3ae8937aef9c42e18166284c817c8edf137d66772e4f34abf74",
+      "message": "",
+      "artifacts": "../output/deepswe-survey/clack-async-autocomplete-options/logs/agentless-ml-2ff14afccdc243d68d6870cec2bfd9d4",
+      "seconds": 41.9,
+      "execution_sha256": "545d54ded81b786557452d1c7258e2940595740deea2d2cb4bc88e634e0165fa",
+      "expected_image_id": "sha256:32a72ef7d4a9d3ae8937aef9c42e18166284c817c8edf137d66772e4f34abf74",
+      "candidate_probe": {
+        "status": "fail",
+        "exit_code": 1,
+        "tests": 642,
+        "visible": [
+          {
+            "test_id": "prompts/test/agentless-candidate-probe.test.ts::agentless candidate source visible",
+            "status": "passed"
+          }
+        ],
+        "intentional_failure": [
+          {
+            "test_id": "prompts/test/agentless-candidate-probe.test.ts::agentless candidate failure detected",
+            "status": "failed"
+          }
+        ],
+        "artifacts": "../output/deepswe-survey/candidate-probes/delegated/clack-async-autocomplete-options/agentless-ml-d1c9bb900fda487e8807b9273e89c2b3",
+        "execution_sha256": "d4a12081dd61f7b7f723a682829af63e33d2cb391eb789752782fbea351f185c"
+      }
+    }
+  ]
+}

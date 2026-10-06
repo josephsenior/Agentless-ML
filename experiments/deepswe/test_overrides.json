@@ -1,4 +1,13 @@
 {
+  "arktype-json-schema-refs-dependencies": {
+    "runner": "arktype-mocha",
+    "targets": ["--exclude", "ark/attest/**/*.test.*", "--skipTypes"],
+    "reason": "The root test script delegates to testTyped, which invokes Mocha with the attest-test exclusion and receives --skipTypes from the root script. Preserve the root Mocha configuration and copy installed dependencies so relative @ark workspace links resolve to candidate source. Write the built-in JSON report directly to a file, separately from attest setup logging."
+  },
+  "clack-async-autocomplete-options": {
+    "runner": "clack-vitest",
+    "reason": "The public root pretest runs the build script, then recursive test invokes Vitest in packages/core and packages/prompts; example packages have no test script. Copy installed workspace dependencies, rebuild both candidate packages through pnpm run build, retain each package configuration and namespace their JUnit test IDs."
+  },
   "pest-character-class-coalescing": {
     "runner": "pest-cargo-nextest",
     "reason": "The public meta/build.rs launches target/debug/pest_bootstrap before compiling the candidate grammar, and public CI builds pest_bootstrap first. Build that executable from the candidate with the cached registry, link target to the temporary build directory expected by the build script, then retain the existing complete nextest schedule."
