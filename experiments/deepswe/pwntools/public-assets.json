@@ -1,0 +1,1292 @@
+{
+  "date": "2026-10-07",
+  "framework_parent_commit": "a9d3c1e65972a01128cb72fb2f9c9409d4cdb596",
+  "task_id": "pwntools-tube-multiplexing",
+  "base_commit": "76894a5404a65d2800b6d0adaf3485ecba275caa",
+  "inspection_image": "sha256:168f8c6b98131e2e58a4ba9265ac16b658174636cbb2d2de6493a0778c856318",
+  "summary": {
+    "distinct_library_files_verified": 25,
+    "symbol_files_verified": 24,
+    "public_symbol_query_libraries": 20,
+    "debug_files_verified": 2,
+    "debug_archives_publisher_sha256_matched": 2,
+    "current_libc_loader_package_verified": true,
+    "elfutils_libasm1_archives_verified": true,
+    "all_nonnegative_literal_lookup_requests_resolved": true
+  },
+  "image_built": false,
+  "downloaded_binaries_executed": false,
+  "packages_installed": false,
+  "benchmark_tests_rerun": false,
+  "canonical_readiness_changed": false,
+  "canonical_ready": 92,
+  "canonical_total": 113,
+  "last_diagnostic_public_groups": {
+    "passed": 44,
+    "failed": 10
+  },
+  "model_calls": 0,
+  "held_out_files_read": false,
+  "trust_limits": [
+    "GNU build IDs are identity checks, not cryptographic publisher authentication.",
+    "API-provided hashes match actual binaries; example-provided SHA-256 values independently match the two historical hash-lookup libraries.",
+    "Ubuntu debug archive SHA-256 values match publisher Packages indexes fetched over HTTPS; Release OpenPGP signatures were not verified.",
+    "Current Debian libc6 and elfutils/libasm1 SHA-256 values came from APT-authenticated metadata.",
+    "Symbol files match API symbol values and are content-pinned; no independent publisher signature is claimed.",
+    "Library/code redistribution terms require separate review before publishing any bundled image."
+  ],
+  "artifacts": [
+    {
+      "path": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-4yujzi0z/verification.json",
+      "sha256": "e78c55fab6cb3ab6693a4818371c14c66aa8cdaa2e5a600695731e7ef5e6fd5d"
+    },
+    {
+      "path": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-4xmhonj3/verification.json",
+      "sha256": "4ef1f11b29aab3fc23820299dc08e478bcc18ccc63caa3dc4bf20183521bd0fb"
+    },
+    {
+      "path": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn/verification.json",
+      "sha256": "fc438c5948ba4bc390b0dd0e3e18db4dcc8b04cbed96bf5e3d057996da292e19"
+    },
+    {
+      "path": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-ot8u_o97/verification.json",
+      "sha256": "ac336234dc19a35f794968b3efaa980c2ea97ffdc8dc53abdf6ba4ca1e56b32b"
+    }
+  ],
+  "libraries": [
+    {
+      "bytes": 2216304,
+      "build_id_matches": true,
+      "md5": "3d7240354d70ebbd11911187f1acd6e8",
+      "status": 200,
+      "final_url": "https://libc.rip/download/libc6_2.35-0ubuntu3.1_amd64.so",
+      "url": "https://libc.rip/download/libc6_2.35-0ubuntu3.1_amd64.so",
+      "sha1": "8f7d59c6f95b0cf57a8db165033296dda91d1239",
+      "elf": {
+        "build_id": "69389d485a9793dbe873f0ea2c93e02efaa9aa3d",
+        "machine": "EM_X86_64",
+        "symbols": {
+          "read": 1132928,
+          "system": 331104
+        }
+      },
+      "artifact": "015-568740b06a8afa26db4874f8cf61985ecbc6dd127f4229416fe95da8f9ec13fb.download",
+      "metadata_hashes_match": true,
+      "sha256": "568740b06a8afa26db4874f8cf61985ecbc6dd127f4229416fe95da8f9ec13fb",
+      "label": "libc libc6_2.35-0ubuntu3.1_amd64",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-4yujzi0z"
+    },
+    {
+      "bytes": 1839792,
+      "build_id_matches": true,
+      "md5": "74f2d3062180572fc8bcd964b587eeae",
+      "status": 200,
+      "final_url": "https://libc.rip/download/libc6_2.31-3_amd64.so",
+      "url": "https://libc.rip/download/libc6_2.31-3_amd64.so",
+      "sha1": "0041d2f397bc2498f62aeb4134d522c5b2635e87",
+      "elf": {
+        "build_id": "a5a3c3f65fd94f4c7f323a175707c3a79cbbd614",
+        "machine": "EM_X86_64",
+        "symbols": {
+          "read": 978752,
+          "system": 298784
+        }
+      },
+      "artifact": "017-5d78fc60054df18df20480c71f3379218790751090f452baffb62ac6b2aff7ee.download",
+      "metadata_hashes_match": true,
+      "sha256": "5d78fc60054df18df20480c71f3379218790751090f452baffb62ac6b2aff7ee",
+      "label": "libc libc6_2.31-3_amd64",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-4yujzi0z"
+    },
+    {
+      "bytes": 2072888,
+      "build_id_matches": true,
+      "md5": "cac294ad0dceaacfb968152e4edffc2f",
+      "status": 200,
+      "final_url": "https://libc.rip/download/libc6_2.36-0ubuntu4_amd64.so",
+      "url": "https://libc.rip/download/libc6_2.36-0ubuntu4_amd64.so",
+      "sha1": "dd0ddeaf2293dd418123b8fb03022337d7ac6ac3",
+      "elf": {
+        "build_id": "d1704d25fbbb72fa95d517b883131828c0883fe9",
+        "machine": "EM_X86_64",
+        "symbols": {
+          "system": 320800,
+          "read": 1101024
+        }
+      },
+      "artifact": "019-3e1acd28cd6324679281e833b6e938cf847ba3fe909f28ee3bf0ffa25b1edb40.download",
+      "metadata_hashes_match": true,
+      "sha256": "3e1acd28cd6324679281e833b6e938cf847ba3fe909f28ee3bf0ffa25b1edb40",
+      "label": "libc libc6_2.36-0ubuntu4_amd64",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-4yujzi0z"
+    },
+    {
+      "bytes": 1926828,
+      "build_id_matches": true,
+      "md5": "a805de42b2bb5aa33e80764dcee42f2b",
+      "status": 200,
+      "final_url": "https://libc.rip/download/libc6-i386_2.27-3ubuntu1.2_amd64.so",
+      "url": "https://libc.rip/download/libc6-i386_2.27-3ubuntu1.2_amd64.so",
+      "sha1": "da5beae2020c853e8a5efe3f39eba132dfb85add",
+      "elf": {
+        "build_id": "2d1c5e0b85cb06ff47fa6fa088ec22cb6e06074e",
+        "machine": "EM_386",
+        "symbols": {
+          "read": 939712,
+          "system": 249216
+        }
+      },
+      "artifact": "021-77208598b3d5155b8a665d1aa0841d75d3df584b24023e7daa351cee3ebbfaf7.download",
+      "metadata_hashes_match": true,
+      "sha256": "77208598b3d5155b8a665d1aa0841d75d3df584b24023e7daa351cee3ebbfaf7",
+      "label": "libc libc6-i386_2.27-3ubuntu1.2_amd64",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-4yujzi0z"
+    },
+    {
+      "bytes": 2029592,
+      "build_id_matches": true,
+      "md5": "bf729448dee0966904d3bff97467fdbe",
+      "status": 200,
+      "final_url": "https://libc.rip/download/libc6_2.31-0ubuntu9.10_amd64.so",
+      "url": "https://libc.rip/download/libc6_2.31-0ubuntu9.10_amd64.so",
+      "sha1": "1aefea4ea9865b354dead8030c4123fa5d034220",
+      "elf": {
+        "build_id": "965ff93b372ec6e456142d04b7d3795aefdcf0c5",
+        "machine": "EM_X86_64",
+        "symbols": {
+          "read": 1105856,
+          "system": 336528
+        }
+      },
+      "artifact": "023-7ee6f1d397c152dc83caeb6a86e888d9f86e5f0c2d33559a9100923bda872cd4.download",
+      "metadata_hashes_match": true,
+      "sha256": "7ee6f1d397c152dc83caeb6a86e888d9f86e5f0c2d33559a9100923bda872cd4",
+      "label": "libc libc6_2.31-0ubuntu9.10_amd64",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-4yujzi0z"
+    },
+    {
+      "sha1": "34471e355a5e71400b9d65e78d2cd6ce7fc49de5",
+      "elf": {
+        "build_id": "fe136e485814fee2268cf19e5c124ed0f73f4400",
+        "machine": "EM_386",
+        "symbols": {
+          "read": 893536,
+          "system": 262000
+        }
+      },
+      "artifact": "008-5e877a8272da934812d2d1f9ee94f73c77c790cbc5d8251f5322389fc9667f21.download",
+      "url": "https://gitlab.com/libcdb/libcdb/-/raw/master/libc/libc6-i386-2.18-6/lib32/libc-2.18.so",
+      "final_url": "https://gitlab.com/libcdb/libcdb/-/raw/master/libc/libc6-i386-2.18-6/lib32/libc-2.18.so",
+      "sha256": "5e877a8272da934812d2d1f9ee94f73c77c790cbc5d8251f5322389fc9667f21",
+      "md5": "7a71dafb87606f360043dcd638e411bd",
+      "bytes": 1742516,
+      "status": 200,
+      "requested_identifier_matches": true,
+      "label": "GitLab sha256:5e877a8272da934812d2d1f9ee94f73c77c790cbc5d8251f5322389fc9667f21 hop 1",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-4xmhonj3"
+    },
+    {
+      "sha1": "1430c57bf7ca6bd7f84a11c2cb7580fc39da07f5",
+      "md5": "5898fac5d2680d0d8fefdadd632b7188",
+      "url": "https://libc.rip/download/libc6_2.31-0ubuntu9.9_amd64.so",
+      "artifact": "001-80378c2017456829f32645e6a8f33b4c40c8efa87db7e8c931a229afa7bf6712.download",
+      "build_id_matches": true,
+      "label": "symbol-query libc libc6_2.31-0ubuntu9.9_amd64",
+      "elf": {
+        "build_id": "1878e6b475720c7c51969e69ab2d276fae6d1dee",
+        "machine": "EM_X86_64",
+        "symbols": {
+          "read": 1105856,
+          "system": 336528
+        }
+      },
+      "final_url": "https://libc.rip/download/libc6_2.31-0ubuntu9.9_amd64.so",
+      "status": 200,
+      "bytes": 2029592,
+      "metadata_hashes_match": true,
+      "sha256": "80378c2017456829f32645e6a8f33b4c40c8efa87db7e8c931a229afa7bf6712",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    },
+    {
+      "sha1": "957a705e586fcefc6a3330b78a66d070a00d72ec",
+      "md5": "993088888bcc0bf78d74e1e8ca0d33a6",
+      "url": "https://libc.rip/download/libc6_2.31-0ubuntu9.8_amd64.so",
+      "artifact": "003-e29f30c7204d46c55fb1ac1323707cae0884a189b82a24a144861c1e6220da6d.download",
+      "build_id_matches": true,
+      "label": "symbol-query libc libc6_2.31-0ubuntu9.8_amd64",
+      "elf": {
+        "build_id": "c9d56de82ddd00d822d6100034f3075ef1709cd2",
+        "machine": "EM_X86_64",
+        "symbols": {
+          "read": 1105856,
+          "system": 336528
+        }
+      },
+      "final_url": "https://libc.rip/download/libc6_2.31-0ubuntu9.8_amd64.so",
+      "status": 200,
+      "bytes": 2029592,
+      "metadata_hashes_match": true,
+      "sha256": "e29f30c7204d46c55fb1ac1323707cae0884a189b82a24a144861c1e6220da6d",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    },
+    {
+      "sha1": "4366e2e6d98af359e0618a70e634b6f8c9a2a11c",
+      "md5": "a10a650d83ec2aeb0d3148616cb636a4",
+      "url": "https://libc.rip/download/libc6_2.31-0ubuntu9.11_amd64.so",
+      "artifact": "005-2b6bed023586bf7763bc884ba037a708a585f770c7f32e9a5c58eedbbe259ccb.download",
+      "build_id_matches": true,
+      "label": "symbol-query libc libc6_2.31-0ubuntu9.11_amd64",
+      "elf": {
+        "build_id": "e5c7405f81e3b82520c73abd858191cbb3f4653b",
+        "machine": "EM_X86_64",
+        "symbols": {
+          "read": 1105856,
+          "system": 336528
+        }
+      },
+      "final_url": "https://libc.rip/download/libc6_2.31-0ubuntu9.11_amd64.so",
+      "status": 200,
+      "bytes": 2029592,
+      "metadata_hashes_match": true,
+      "sha256": "2b6bed023586bf7763bc884ba037a708a585f770c7f32e9a5c58eedbbe259ccb",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    },
+    {
+      "sha1": "e5d2a10a8e24b6a6a727bb93f79bc64b687ad035",
+      "md5": "43f465780e27467000a85d8dee3d84b7",
+      "url": "https://libc.rip/download/libc6_2.31-0ubuntu9.16_amd64.so",
+      "artifact": "007-46dcc397c118276bc5b4fa3fa918a0590da5e63fb3915f146784be2c903a3654.download",
+      "build_id_matches": true,
+      "label": "symbol-query libc libc6_2.31-0ubuntu9.16_amd64",
+      "elf": {
+        "build_id": "0702430aef5fa3dda43986563e9ffcc47efbd75e",
+        "machine": "EM_X86_64",
+        "symbols": {
+          "read": 1106400,
+          "system": 336528
+        }
+      },
+      "final_url": "https://libc.rip/download/libc6_2.31-0ubuntu9.16_amd64.so",
+      "status": 200,
+      "bytes": 2029592,
+      "metadata_hashes_match": true,
+      "sha256": "46dcc397c118276bc5b4fa3fa918a0590da5e63fb3915f146784be2c903a3654",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    },
+    {
+      "sha1": "4965c5e6e61ddf39810e425dd128a1c31d8a963e",
+      "md5": "442cd4b76ddb88a67aa82b334d595570",
+      "url": "https://libc.rip/download/libc6_2.31-0ubuntu9.12_amd64.so",
+      "artifact": "009-48ea7b546311a4bb9a1206203d821615e0c24af58d576a9b3ce771d116cbd223.download",
+      "build_id_matches": true,
+      "label": "symbol-query libc libc6_2.31-0ubuntu9.12_amd64",
+      "elf": {
+        "build_id": "e678fe54a5d2c2092f8e47eb0b33105e380f7340",
+        "machine": "EM_X86_64",
+        "symbols": {
+          "read": 1105856,
+          "system": 336528
+        }
+      },
+      "final_url": "https://libc.rip/download/libc6_2.31-0ubuntu9.12_amd64.so",
+      "status": 200,
+      "bytes": 2029592,
+      "metadata_hashes_match": true,
+      "sha256": "48ea7b546311a4bb9a1206203d821615e0c24af58d576a9b3ce771d116cbd223",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    },
+    {
+      "sha1": "39ada2a53752e3c4c30c203359913a05a201de0f",
+      "md5": "8f59e8ce960275f3d8bfc286ce41e934",
+      "url": "https://libc.rip/download/libc6_2.31-0ubuntu9.14_amd64.so",
+      "artifact": "011-fa2be2458b59a6123bf561e67b3d5d850431e7d05cacb6435483d1e47eff6de5.download",
+      "build_id_matches": true,
+      "label": "symbol-query libc libc6_2.31-0ubuntu9.14_amd64",
+      "elf": {
+        "build_id": "eebe5d5f4b608b8a53ec446b63981bba373ca0ca",
+        "machine": "EM_X86_64",
+        "symbols": {
+          "read": 1106400,
+          "system": 336528
+        }
+      },
+      "final_url": "https://libc.rip/download/libc6_2.31-0ubuntu9.14_amd64.so",
+      "status": 200,
+      "bytes": 2029592,
+      "metadata_hashes_match": true,
+      "sha256": "fa2be2458b59a6123bf561e67b3d5d850431e7d05cacb6435483d1e47eff6de5",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    },
+    {
+      "sha1": "929d0a0de1105a6049ac2fd988529aa472df393f",
+      "md5": "570a4d2f670e339ca78a438141a2e2dd",
+      "url": "https://libc.rip/download/libc6_2.31-0ubuntu9.17_amd64.so",
+      "artifact": "013-45da41d458c90f934a4d79bc9147871c50f36f2ffac28b0d15ee6aec869faba0.download",
+      "build_id_matches": true,
+      "label": "symbol-query libc libc6_2.31-0ubuntu9.17_amd64",
+      "elf": {
+        "build_id": "0323ab4806bee6f846d9ad4bccfc29afdca49a58",
+        "machine": "EM_X86_64",
+        "symbols": {
+          "read": 1106400,
+          "system": 336528
+        }
+      },
+      "final_url": "https://libc.rip/download/libc6_2.31-0ubuntu9.17_amd64.so",
+      "status": 200,
+      "bytes": 2029592,
+      "metadata_hashes_match": true,
+      "sha256": "45da41d458c90f934a4d79bc9147871c50f36f2ffac28b0d15ee6aec869faba0",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    },
+    {
+      "sha1": "6c3db567280e093e35b04b404de307da5fa6b24b",
+      "md5": "db998b46d6c79cbba3ca09f4692cebb5",
+      "url": "https://libc.rip/download/libc6_2.31-0ubuntu9.18_amd64.so",
+      "artifact": "015-53b909551f8e581120ddc2d24cfb5df76c52e3c2e2a5dac0d202b25638b3e902.download",
+      "build_id_matches": true,
+      "label": "symbol-query libc libc6_2.31-0ubuntu9.18_amd64",
+      "elf": {
+        "build_id": "5792732f783158c66fb4f3756458ca24e46e827d",
+        "machine": "EM_X86_64",
+        "symbols": {
+          "read": 1106400,
+          "system": 336528
+        }
+      },
+      "final_url": "https://libc.rip/download/libc6_2.31-0ubuntu9.18_amd64.so",
+      "status": 200,
+      "bytes": 2029592,
+      "metadata_hashes_match": true,
+      "sha256": "53b909551f8e581120ddc2d24cfb5df76c52e3c2e2a5dac0d202b25638b3e902",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    },
+    {
+      "sha1": "b3a928be66435785c8431b45b84ecbe465b047e5",
+      "md5": "2fe71f6716a4ed8b8df6a82052b4df0a",
+      "url": "https://libc.rip/download/libc6_2.31-0ubuntu9.15_amd64.so",
+      "artifact": "017-429b2fcd5014ceca9481e3041c321a22486c1ab27549a268a2fa05ba83c364e6.download",
+      "build_id_matches": true,
+      "label": "symbol-query libc libc6_2.31-0ubuntu9.15_amd64",
+      "elf": {
+        "build_id": "87b331c034a6458c64ce09c03939e947212e18ce",
+        "machine": "EM_X86_64",
+        "symbols": {
+          "read": 1106400,
+          "system": 336528
+        }
+      },
+      "final_url": "https://libc.rip/download/libc6_2.31-0ubuntu9.15_amd64.so",
+      "status": 200,
+      "bytes": 2029592,
+      "metadata_hashes_match": true,
+      "sha256": "429b2fcd5014ceca9481e3041c321a22486c1ab27549a268a2fa05ba83c364e6",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    },
+    {
+      "sha1": "b74cd14d903fe7f8ee73e31aceb7d11ca7cb2f00",
+      "md5": "6ddb6ee1e79c9a333e250c2852e31e61",
+      "url": "https://libc.rip/download/libc6-amd64_2.36-0ubuntu4_i386.so",
+      "artifact": "019-84400920e130ed9e482c4cf9f605895c3d04cbcef99f436c3e17e5f2fdef99d3.download",
+      "build_id_matches": true,
+      "label": "symbol-query libc libc6-amd64_2.36-0ubuntu4_i386",
+      "elf": {
+        "build_id": "bbd486a25183f3d7dcef8d83781107d2f658b65d",
+        "machine": "EM_X86_64",
+        "symbols": {
+          "system": 300528,
+          "read": 1013792
+        }
+      },
+      "final_url": "https://libc.rip/download/libc6-amd64_2.36-0ubuntu4_i386.so",
+      "status": 200,
+      "bytes": 1946784,
+      "metadata_hashes_match": true,
+      "sha256": "84400920e130ed9e482c4cf9f605895c3d04cbcef99f436c3e17e5f2fdef99d3",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    },
+    {
+      "sha1": "49ca0cdaf11d9c225c65e437cad53993079914f8",
+      "md5": "e204bec5fa95f1addb64b96cc77c382d",
+      "url": "https://libc.rip/download/libc-2.35-9.fc36.x86_64.so",
+      "artifact": "021-a2720169ae725e713400fce0d358a8028d7ce18cf8a3743b06d544d6b20d7e44.download",
+      "build_id_matches": true,
+      "label": "symbol-query libc libc-2.35-9.fc36.x86_64",
+      "elf": {
+        "build_id": "9c90ea4e9a0d08b2ed6fe98dd45d5096386dd47b",
+        "machine": "EM_X86_64",
+        "symbols": {
+          "read": 1054816,
+          "system": 310192,
+          "main_arena": 2063488
+        }
+      },
+      "final_url": "https://libc.rip/download/libc-2.35-9.fc36.x86_64.so",
+      "status": 200,
+      "bytes": 2371472,
+      "metadata_hashes_match": true,
+      "sha256": "a2720169ae725e713400fce0d358a8028d7ce18cf8a3743b06d544d6b20d7e44",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    },
+    {
+      "sha1": "3e590f78c3cfdf60141f51c75deb0fc78327f8b0",
+      "md5": "b6414865eafa1fa05a5eefd3408953c4",
+      "url": "https://libc.rip/download/libc-2.35.9000-9.fc37.x86_64.so",
+      "artifact": "023-964bb2f53cc77d87ac107146ccce1bf8e2a3a47576c499dda1f6147159a893ff.download",
+      "build_id_matches": true,
+      "label": "symbol-query libc libc-2.35.9000-9.fc37.x86_64",
+      "elf": {
+        "build_id": "d7c83597663a6c6d53ff23f0877d4d2e468512f5",
+        "machine": "EM_X86_64",
+        "symbols": {
+          "read": 1071104,
+          "system": 326400,
+          "main_arena": 2063008
+        }
+      },
+      "final_url": "https://libc.rip/download/libc-2.35.9000-9.fc37.x86_64.so",
+      "status": 200,
+      "bytes": 2373856,
+      "metadata_hashes_match": true,
+      "sha256": "964bb2f53cc77d87ac107146ccce1bf8e2a3a47576c499dda1f6147159a893ff",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    },
+    {
+      "sha1": "b089796c13e9e4dfe4174ce35ac41ea9756c1ed6",
+      "md5": "1c83328b01173177b1b06b889c877e28",
+      "url": "https://libc.rip/download/libc-2.35.9000-29.fc37.x86_64.so",
+      "artifact": "025-d170205bb7fe79aef479b4042945628285fbc71bdf7a9094365171f160ea33a0.download",
+      "build_id_matches": true,
+      "label": "symbol-query libc libc-2.35.9000-29.fc37.x86_64",
+      "elf": {
+        "build_id": "6d56e7844d9b62abe49a0f6286ffff0a0283d11d",
+        "machine": "EM_X86_64",
+        "symbols": {
+          "read": 1009952,
+          "system": 299328,
+          "main_arena": 1895552
+        }
+      },
+      "final_url": "https://libc.rip/download/libc-2.35.9000-29.fc37.x86_64.so",
+      "status": 200,
+      "bytes": 2202880,
+      "metadata_hashes_match": true,
+      "sha256": "d170205bb7fe79aef479b4042945628285fbc71bdf7a9094365171f160ea33a0",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    },
+    {
+      "sha1": "7d307db56b9d33810ee41356bb797e9479ceec24",
+      "md5": "8c2358d6ee9a1ae7ad843c0b883c9dbe",
+      "url": "https://libc.rip/download/libc-2.35.9000-19.fc37.x86_64.so",
+      "artifact": "027-38d197c5d3fab749de7b8276262c625074ee1eb07aa5d9bfb7c2812ace99753a.download",
+      "build_id_matches": true,
+      "label": "symbol-query libc libc-2.35.9000-19.fc37.x86_64",
+      "elf": {
+        "build_id": "007bdd8a989ad0adc7384bb12d7229cee2eaca8f",
+        "machine": "EM_X86_64",
+        "symbols": {
+          "read": 1010448,
+          "system": 299584,
+          "main_arena": 1887360
+        }
+      },
+      "final_url": "https://libc.rip/download/libc-2.35.9000-19.fc37.x86_64.so",
+      "status": 200,
+      "bytes": 2194128,
+      "metadata_hashes_match": true,
+      "sha256": "38d197c5d3fab749de7b8276262c625074ee1eb07aa5d9bfb7c2812ace99753a",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    },
+    {
+      "sha1": "4085acef8d5042eeca506b6cf8ba95abef1d6df5",
+      "md5": "c50c0dec53b7334664b1598b9fae4081",
+      "url": "https://libc.rip/download/libc6_2.36-0ubuntu2_amd64.so",
+      "artifact": "029-f1fa3c74bfdcbea35c46c182b546d3e26c92f07820628234fb54ae5d9afbbba6.download",
+      "build_id_matches": true,
+      "label": "symbol-query libc libc6_2.36-0ubuntu2_amd64",
+      "elf": {
+        "build_id": "6b78228edf61bed248e503b8107a29c1e67ceeee",
+        "machine": "EM_X86_64",
+        "symbols": {
+          "system": 320512,
+          "read": 1100528
+        }
+      },
+      "final_url": "https://libc.rip/download/libc6_2.36-0ubuntu2_amd64.so",
+      "status": 200,
+      "bytes": 2072888,
+      "metadata_hashes_match": true,
+      "sha256": "f1fa3c74bfdcbea35c46c182b546d3e26c92f07820628234fb54ae5d9afbbba6",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    },
+    {
+      "sha1": "1261313e0322fdd6e744a34348024c2b7afc665a",
+      "md5": "65ebdc9fe9cbddd7cae2aca3b70103f0",
+      "url": "https://libc.rip/download/libc-2.35.9000-16.fc37.x86_64.so",
+      "artifact": "031-fa57c52eef6b5f013b331c562632ac0efbd3df3704bc04a451ff091893073f64.download",
+      "build_id_matches": true,
+      "label": "symbol-query libc libc-2.35.9000-16.fc37.x86_64",
+      "elf": {
+        "build_id": "153801259379573f7940fad21bfbd2547f1bf518",
+        "machine": "EM_X86_64",
+        "symbols": {
+          "read": 1035232,
+          "system": 323936,
+          "main_arena": 1916032
+        }
+      },
+      "final_url": "https://libc.rip/download/libc-2.35.9000-16.fc37.x86_64.so",
+      "status": 200,
+      "bytes": 2222920,
+      "metadata_hashes_match": true,
+      "sha256": "fa57c52eef6b5f013b331c562632ac0efbd3df3704bc04a451ff091893073f64",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    },
+    {
+      "sha1": "c8ad5082554354e8140fb544522bb8636dad79c9",
+      "md5": "236040eb033b33f9c59d84ccc37e5e9c",
+      "url": "https://libc.rip/download/libc-2.35-10.fc36.x86_64.so",
+      "artifact": "033-c688e6f79efa053b489e11b4c371c622e61d836cb8f07efc11479fd4953121aa.download",
+      "build_id_matches": true,
+      "label": "symbol-query libc libc-2.35-10.fc36.x86_64",
+      "elf": {
+        "build_id": "1c77a0a72d1f478b401fc461d8881bbe1b8f4faf",
+        "machine": "EM_X86_64",
+        "symbols": {
+          "read": 1054816,
+          "system": 310192,
+          "main_arena": 2063488
+        }
+      },
+      "final_url": "https://libc.rip/download/libc-2.35-10.fc36.x86_64.so",
+      "status": 200,
+      "bytes": 2371472,
+      "metadata_hashes_match": true,
+      "sha256": "c688e6f79efa053b489e11b4c371c622e61d836cb8f07efc11479fd4953121aa",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    },
+    {
+      "sha1": "06f95ba398e6f8c6b701981ee59613675a7f183d",
+      "md5": "fa1bb22fac8f1348b6ca48eded130c82",
+      "url": "https://libc.rip/download/libc-2.35-15.fc36.x86_64.so",
+      "artifact": "035-ca8569e539935153ec4cd984016e213ef9ba7edeffc13ad713cedffc48d3a044.download",
+      "build_id_matches": true,
+      "label": "symbol-query libc libc-2.35-15.fc36.x86_64",
+      "elf": {
+        "build_id": "6f5ce514a9e7f51e0247a527c3a41ed981c04458",
+        "machine": "EM_X86_64",
+        "symbols": {
+          "read": 1054784,
+          "system": 310192,
+          "main_arena": 2067584
+        }
+      },
+      "final_url": "https://libc.rip/download/libc-2.35-15.fc36.x86_64.so",
+      "status": 200,
+      "bytes": 2375216,
+      "metadata_hashes_match": true,
+      "sha256": "ca8569e539935153ec4cd984016e213ef9ba7edeffc13ad713cedffc48d3a044",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    },
+    {
+      "sha1": "d110b7d73534f4186a7e3648d6e5cd92cd76a5df",
+      "md5": "606d07f468466a9dd44166a3d284eb07",
+      "url": "https://libc.rip/download/libc6-amd64_2.36-0ubuntu3_i386.so",
+      "artifact": "037-46df69f99fc15728de0f523c29a8fbc3fab87d9b01621c1926c98d29505cce9f.download",
+      "build_id_matches": true,
+      "label": "symbol-query libc libc6-amd64_2.36-0ubuntu3_i386",
+      "elf": {
+        "build_id": "beba838c55c95e5564a1feec9532bf468fe181e7",
+        "machine": "EM_X86_64",
+        "symbols": {
+          "system": 300096,
+          "read": 1013184
+        }
+      },
+      "final_url": "https://libc.rip/download/libc6-amd64_2.36-0ubuntu3_i386.so",
+      "status": 200,
+      "bytes": 1946784,
+      "metadata_hashes_match": true,
+      "sha256": "46df69f99fc15728de0f523c29a8fbc3fab87d9b01621c1926c98d29505cce9f",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    }
+  ],
+  "symbol_files": [
+    {
+      "bytes": 82975,
+      "api_symbols_match": true,
+      "md5": "6ce007b50894cb02f0ef5b5b817808c3",
+      "status": 200,
+      "final_url": "https://libc.rip/download/libc6_2.35-0ubuntu3.1_amd64.symbols",
+      "url": "https://libc.rip/download/libc6_2.35-0ubuntu3.1_amd64.symbols",
+      "sha1": "cf630d98bdb44d2f26c326b2edb62eeafc94616d",
+      "missing_api_symbols": [],
+      "artifact": "016-8dfb555a686f6f2d5188733ae440e0ac5e64868e3caa91c5e21ea011793fd7db.download",
+      "sha256": "8dfb555a686f6f2d5188733ae440e0ac5e64868e3caa91c5e21ea011793fd7db",
+      "label": "symbols libc6_2.35-0ubuntu3.1_amd64",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-4yujzi0z"
+    },
+    {
+      "bytes": 67784,
+      "api_symbols_match": true,
+      "md5": "0db9b62535e553d6f7072832cc76b184",
+      "status": 200,
+      "final_url": "https://libc.rip/download/libc6_2.31-3_amd64.symbols",
+      "url": "https://libc.rip/download/libc6_2.31-3_amd64.symbols",
+      "sha1": "b5ccd243d37537e1a8fc8bc0c358fdafe6560e28",
+      "missing_api_symbols": [],
+      "artifact": "018-db0ef5b469d5f3205c020db5ed9d1c00d747de509c57454aeb4a11f8f40911e6.download",
+      "sha256": "db0ef5b469d5f3205c020db5ed9d1c00d747de509c57454aeb4a11f8f40911e6",
+      "label": "symbols libc6_2.31-3_amd64",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-4yujzi0z"
+    },
+    {
+      "bytes": 83500,
+      "api_symbols_match": true,
+      "md5": "d35ff7b217e5e1b3621b7ae2664065b8",
+      "status": 200,
+      "final_url": "https://libc.rip/download/libc6_2.36-0ubuntu4_amd64.symbols",
+      "url": "https://libc.rip/download/libc6_2.36-0ubuntu4_amd64.symbols",
+      "sha1": "c32cd7ea7c078e713bdfd3db8c16cd632fa536d5",
+      "missing_api_symbols": [],
+      "artifact": "020-3cafd0a09919262e6da464e652fdcc6a910ac7c2efa1bd0613c16761d84b5d28.download",
+      "sha256": "3cafd0a09919262e6da464e652fdcc6a910ac7c2efa1bd0613c16761d84b5d28",
+      "label": "symbols libc6_2.36-0ubuntu4_amd64",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-4yujzi0z"
+    },
+    {
+      "bytes": 51821,
+      "api_symbols_match": true,
+      "md5": "e025829a3bd28def235eee9b1676adea",
+      "status": 200,
+      "final_url": "https://libc.rip/download/libc6-i386_2.27-3ubuntu1.2_amd64.symbols",
+      "url": "https://libc.rip/download/libc6-i386_2.27-3ubuntu1.2_amd64.symbols",
+      "sha1": "2dbd68c7b2a853d69494bfb0f9c3f7b68092a1f1",
+      "missing_api_symbols": [],
+      "artifact": "022-e031c32b4d0a3361ef8f1b9b38cb885e1eb60374954c5e5bf11c6906f2c7ad9d.download",
+      "sha256": "e031c32b4d0a3361ef8f1b9b38cb885e1eb60374954c5e5bf11c6906f2c7ad9d",
+      "label": "symbols libc6-i386_2.27-3ubuntu1.2_amd64",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-4yujzi0z"
+    },
+    {
+      "bytes": 65850,
+      "api_symbols_match": true,
+      "md5": "04e541d04b48c9d66b9f7109ad29d1de",
+      "status": 200,
+      "final_url": "https://libc.rip/download/libc6_2.31-0ubuntu9.10_amd64.symbols",
+      "url": "https://libc.rip/download/libc6_2.31-0ubuntu9.10_amd64.symbols",
+      "sha1": "233b44b8caa35386cf53ba815dd8f5d13fd061e1",
+      "missing_api_symbols": [],
+      "artifact": "024-374cb8accf7def0f22427a976036f34dcb588ca8321bd21621c4664076ac7bd0.download",
+      "sha256": "374cb8accf7def0f22427a976036f34dcb588ca8321bd21621c4664076ac7bd0",
+      "label": "symbols libc6_2.31-0ubuntu9.10_amd64",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-4yujzi0z"
+    },
+    {
+      "sha1": "dc757d3862ea26bf7270dd5984510072927c2f81",
+      "md5": "0a39fe17e16cb1e2863a7b172848c7d5",
+      "url": "https://libc.rip/download/libc6_2.31-0ubuntu9.9_amd64.symbols",
+      "artifact": "002-7c2fadfe64a6b0392d742217f34ff31516765781cbf3cf6c399a8f450aa98dce.download",
+      "api_symbols_match": true,
+      "label": "symbol-query symbols libc6_2.31-0ubuntu9.9_amd64",
+      "final_url": "https://libc.rip/download/libc6_2.31-0ubuntu9.9_amd64.symbols",
+      "status": 200,
+      "bytes": 65850,
+      "sha256": "7c2fadfe64a6b0392d742217f34ff31516765781cbf3cf6c399a8f450aa98dce",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    },
+    {
+      "sha1": "dc757d3862ea26bf7270dd5984510072927c2f81",
+      "md5": "0a39fe17e16cb1e2863a7b172848c7d5",
+      "url": "https://libc.rip/download/libc6_2.31-0ubuntu9.8_amd64.symbols",
+      "artifact": "004-7c2fadfe64a6b0392d742217f34ff31516765781cbf3cf6c399a8f450aa98dce.download",
+      "api_symbols_match": true,
+      "label": "symbol-query symbols libc6_2.31-0ubuntu9.8_amd64",
+      "final_url": "https://libc.rip/download/libc6_2.31-0ubuntu9.8_amd64.symbols",
+      "status": 200,
+      "bytes": 65850,
+      "sha256": "7c2fadfe64a6b0392d742217f34ff31516765781cbf3cf6c399a8f450aa98dce",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    },
+    {
+      "sha1": "233b44b8caa35386cf53ba815dd8f5d13fd061e1",
+      "md5": "04e541d04b48c9d66b9f7109ad29d1de",
+      "url": "https://libc.rip/download/libc6_2.31-0ubuntu9.11_amd64.symbols",
+      "artifact": "006-374cb8accf7def0f22427a976036f34dcb588ca8321bd21621c4664076ac7bd0.download",
+      "api_symbols_match": true,
+      "label": "symbol-query symbols libc6_2.31-0ubuntu9.11_amd64",
+      "final_url": "https://libc.rip/download/libc6_2.31-0ubuntu9.11_amd64.symbols",
+      "status": 200,
+      "bytes": 65850,
+      "sha256": "374cb8accf7def0f22427a976036f34dcb588ca8321bd21621c4664076ac7bd0",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    },
+    {
+      "sha1": "d682e89a239bfd29002f1b07bb953105fb54a0fb",
+      "md5": "1a7f453c128eebb296037efe3e374bc2",
+      "url": "https://libc.rip/download/libc6_2.31-0ubuntu9.16_amd64.symbols",
+      "artifact": "008-aaca9f7abceab6833a980821a40ab5361c9e49d8c3152388497afd6883901a9a.download",
+      "api_symbols_match": true,
+      "label": "symbol-query symbols libc6_2.31-0ubuntu9.16_amd64",
+      "final_url": "https://libc.rip/download/libc6_2.31-0ubuntu9.16_amd64.symbols",
+      "status": 200,
+      "bytes": 65850,
+      "sha256": "aaca9f7abceab6833a980821a40ab5361c9e49d8c3152388497afd6883901a9a",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    },
+    {
+      "sha1": "233b44b8caa35386cf53ba815dd8f5d13fd061e1",
+      "md5": "04e541d04b48c9d66b9f7109ad29d1de",
+      "url": "https://libc.rip/download/libc6_2.31-0ubuntu9.12_amd64.symbols",
+      "artifact": "010-374cb8accf7def0f22427a976036f34dcb588ca8321bd21621c4664076ac7bd0.download",
+      "api_symbols_match": true,
+      "label": "symbol-query symbols libc6_2.31-0ubuntu9.12_amd64",
+      "final_url": "https://libc.rip/download/libc6_2.31-0ubuntu9.12_amd64.symbols",
+      "status": 200,
+      "bytes": 65850,
+      "sha256": "374cb8accf7def0f22427a976036f34dcb588ca8321bd21621c4664076ac7bd0",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    },
+    {
+      "sha1": "d682e89a239bfd29002f1b07bb953105fb54a0fb",
+      "md5": "1a7f453c128eebb296037efe3e374bc2",
+      "url": "https://libc.rip/download/libc6_2.31-0ubuntu9.14_amd64.symbols",
+      "artifact": "012-aaca9f7abceab6833a980821a40ab5361c9e49d8c3152388497afd6883901a9a.download",
+      "api_symbols_match": true,
+      "label": "symbol-query symbols libc6_2.31-0ubuntu9.14_amd64",
+      "final_url": "https://libc.rip/download/libc6_2.31-0ubuntu9.14_amd64.symbols",
+      "status": 200,
+      "bytes": 65850,
+      "sha256": "aaca9f7abceab6833a980821a40ab5361c9e49d8c3152388497afd6883901a9a",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    },
+    {
+      "sha1": "d682e89a239bfd29002f1b07bb953105fb54a0fb",
+      "md5": "1a7f453c128eebb296037efe3e374bc2",
+      "url": "https://libc.rip/download/libc6_2.31-0ubuntu9.17_amd64.symbols",
+      "artifact": "014-aaca9f7abceab6833a980821a40ab5361c9e49d8c3152388497afd6883901a9a.download",
+      "api_symbols_match": true,
+      "label": "symbol-query symbols libc6_2.31-0ubuntu9.17_amd64",
+      "final_url": "https://libc.rip/download/libc6_2.31-0ubuntu9.17_amd64.symbols",
+      "status": 200,
+      "bytes": 65850,
+      "sha256": "aaca9f7abceab6833a980821a40ab5361c9e49d8c3152388497afd6883901a9a",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    },
+    {
+      "sha1": "d682e89a239bfd29002f1b07bb953105fb54a0fb",
+      "md5": "1a7f453c128eebb296037efe3e374bc2",
+      "url": "https://libc.rip/download/libc6_2.31-0ubuntu9.18_amd64.symbols",
+      "artifact": "016-aaca9f7abceab6833a980821a40ab5361c9e49d8c3152388497afd6883901a9a.download",
+      "api_symbols_match": true,
+      "label": "symbol-query symbols libc6_2.31-0ubuntu9.18_amd64",
+      "final_url": "https://libc.rip/download/libc6_2.31-0ubuntu9.18_amd64.symbols",
+      "status": 200,
+      "bytes": 65850,
+      "sha256": "aaca9f7abceab6833a980821a40ab5361c9e49d8c3152388497afd6883901a9a",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    },
+    {
+      "sha1": "d682e89a239bfd29002f1b07bb953105fb54a0fb",
+      "md5": "1a7f453c128eebb296037efe3e374bc2",
+      "url": "https://libc.rip/download/libc6_2.31-0ubuntu9.15_amd64.symbols",
+      "artifact": "018-aaca9f7abceab6833a980821a40ab5361c9e49d8c3152388497afd6883901a9a.download",
+      "api_symbols_match": true,
+      "label": "symbol-query symbols libc6_2.31-0ubuntu9.15_amd64",
+      "final_url": "https://libc.rip/download/libc6_2.31-0ubuntu9.15_amd64.symbols",
+      "status": 200,
+      "bytes": 65850,
+      "sha256": "aaca9f7abceab6833a980821a40ab5361c9e49d8c3152388497afd6883901a9a",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    },
+    {
+      "sha1": "9b5dbdf90bacaf49da6740e27a1520dc71d8681b",
+      "md5": "bde07defb64aaeeceb8886765a89aa95",
+      "url": "https://libc.rip/download/libc6-amd64_2.36-0ubuntu4_i386.symbols",
+      "artifact": "020-89177c0105b013cf688599b9506fa0b485e5896b68119e338eaffb9bde701d13.download",
+      "api_symbols_match": true,
+      "label": "symbol-query symbols libc6-amd64_2.36-0ubuntu4_i386",
+      "final_url": "https://libc.rip/download/libc6-amd64_2.36-0ubuntu4_i386.symbols",
+      "status": 200,
+      "bytes": 83500,
+      "sha256": "89177c0105b013cf688599b9506fa0b485e5896b68119e338eaffb9bde701d13",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    },
+    {
+      "sha1": "47ecb761067b62810c9395c5a5011c376686c7e3",
+      "md5": "1176c6a5378212c9de22c7c710fff2dc",
+      "url": "https://libc.rip/download/libc-2.35-9.fc36.x86_64.symbols",
+      "artifact": "022-0ea4180351453fe8ccaa976609c15d79283a957d7fddcb7c6078bd618fbdac82.download",
+      "api_symbols_match": true,
+      "label": "symbol-query symbols libc-2.35-9.fc36.x86_64",
+      "final_url": "https://libc.rip/download/libc-2.35-9.fc36.x86_64.symbols",
+      "status": 200,
+      "bytes": 243527,
+      "sha256": "0ea4180351453fe8ccaa976609c15d79283a957d7fddcb7c6078bd618fbdac82",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    },
+    {
+      "sha1": "1c7168d11397c1e6f0290f0590da9629d6c0f485",
+      "md5": "3dde77d7b7ec14bc70114b4524958c4d",
+      "url": "https://libc.rip/download/libc-2.35.9000-9.fc37.x86_64.symbols",
+      "artifact": "024-5d5ef3c563a128714a178886bd9bbdfe33e58b7ed0585cb8b7455eec990b64b2.download",
+      "api_symbols_match": true,
+      "label": "symbol-query symbols libc-2.35.9000-9.fc37.x86_64",
+      "final_url": "https://libc.rip/download/libc-2.35.9000-9.fc37.x86_64.symbols",
+      "status": 200,
+      "bytes": 243314,
+      "sha256": "5d5ef3c563a128714a178886bd9bbdfe33e58b7ed0585cb8b7455eec990b64b2",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    },
+    {
+      "sha1": "1d1a8051a26a57118db1b0618f2c3a7673c6b072",
+      "md5": "94f652c704d2ad53ce6d0bf6d9c67167",
+      "url": "https://libc.rip/download/libc-2.35.9000-29.fc37.x86_64.symbols",
+      "artifact": "026-466c10bbef75349d2f367df5c11be61e6e14a4f6d6b43c300bb3ad107eecaec5.download",
+      "api_symbols_match": true,
+      "label": "symbol-query symbols libc-2.35.9000-29.fc37.x86_64",
+      "final_url": "https://libc.rip/download/libc-2.35.9000-29.fc37.x86_64.symbols",
+      "status": 200,
+      "bytes": 242881,
+      "sha256": "466c10bbef75349d2f367df5c11be61e6e14a4f6d6b43c300bb3ad107eecaec5",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    },
+    {
+      "sha1": "ce63e2c1e35b39f33216d4d454ed76bc726fac79",
+      "md5": "1135023fc33f853e5ea09faa98778925",
+      "url": "https://libc.rip/download/libc-2.35.9000-19.fc37.x86_64.symbols",
+      "artifact": "028-7fa3f777fb2b2c888330013b5d993b04761269b689eb76a45691ce46e75c824b.download",
+      "api_symbols_match": true,
+      "label": "symbol-query symbols libc-2.35.9000-19.fc37.x86_64",
+      "final_url": "https://libc.rip/download/libc-2.35.9000-19.fc37.x86_64.symbols",
+      "status": 200,
+      "bytes": 242432,
+      "sha256": "7fa3f777fb2b2c888330013b5d993b04761269b689eb76a45691ce46e75c824b",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    },
+    {
+      "sha1": "394d72fef1a8a085a9f11938097b8f060367ada3",
+      "md5": "25aa16a67f98f92ee2610aee0ec386f2",
+      "url": "https://libc.rip/download/libc6_2.36-0ubuntu2_amd64.symbols",
+      "artifact": "030-5455deab5021279f592cc963fa06fa174761b5ab1b9b662bcfa5f30dc5cd0473.download",
+      "api_symbols_match": true,
+      "label": "symbol-query symbols libc6_2.36-0ubuntu2_amd64",
+      "final_url": "https://libc.rip/download/libc6_2.36-0ubuntu2_amd64.symbols",
+      "status": 200,
+      "bytes": 83500,
+      "sha256": "5455deab5021279f592cc963fa06fa174761b5ab1b9b662bcfa5f30dc5cd0473",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    },
+    {
+      "sha1": "4afd963f05b6cc60dee7ae396da32c23c9c536e7",
+      "md5": "e2b8c3bf2362de7358b9f387312622cc",
+      "url": "https://libc.rip/download/libc-2.35.9000-16.fc37.x86_64.symbols",
+      "artifact": "032-5801caf727847830f6e9101a3c20dbf908d6b36819fd783ec5be41c4210da68b.download",
+      "api_symbols_match": true,
+      "label": "symbol-query symbols libc-2.35.9000-16.fc37.x86_64",
+      "final_url": "https://libc.rip/download/libc-2.35.9000-16.fc37.x86_64.symbols",
+      "status": 200,
+      "bytes": 242623,
+      "sha256": "5801caf727847830f6e9101a3c20dbf908d6b36819fd783ec5be41c4210da68b",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    },
+    {
+      "sha1": "47ecb761067b62810c9395c5a5011c376686c7e3",
+      "md5": "1176c6a5378212c9de22c7c710fff2dc",
+      "url": "https://libc.rip/download/libc-2.35-10.fc36.x86_64.symbols",
+      "artifact": "034-0ea4180351453fe8ccaa976609c15d79283a957d7fddcb7c6078bd618fbdac82.download",
+      "api_symbols_match": true,
+      "label": "symbol-query symbols libc-2.35-10.fc36.x86_64",
+      "final_url": "https://libc.rip/download/libc-2.35-10.fc36.x86_64.symbols",
+      "status": 200,
+      "bytes": 243527,
+      "sha256": "0ea4180351453fe8ccaa976609c15d79283a957d7fddcb7c6078bd618fbdac82",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    },
+    {
+      "sha1": "44e4e00b03e6eaaf2f0b160e4ebc0d60bbb9c06c",
+      "md5": "4cb9ab19086f5290bb1d98912d9c2255",
+      "url": "https://libc.rip/download/libc-2.35-15.fc36.x86_64.symbols",
+      "artifact": "036-2b52db8f8bf7c3cbaf92fe49238da0d28de4f869198f534a5fd46238cdd2acb6.download",
+      "api_symbols_match": true,
+      "label": "symbol-query symbols libc-2.35-15.fc36.x86_64",
+      "final_url": "https://libc.rip/download/libc-2.35-15.fc36.x86_64.symbols",
+      "status": 200,
+      "bytes": 243217,
+      "sha256": "2b52db8f8bf7c3cbaf92fe49238da0d28de4f869198f534a5fd46238cdd2acb6",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    },
+    {
+      "sha1": "c4a1ce259fa1127dfcd48761e175eb5bc1326b2e",
+      "md5": "3aa47bdfc6f5c27a4b700f2660766063",
+      "url": "https://libc.rip/download/libc6-amd64_2.36-0ubuntu3_i386.symbols",
+      "artifact": "038-e2477a068a4778ec809fe82f07dcbc05b3bada724b8011aeb2288bab7b199493.download",
+      "api_symbols_match": true,
+      "label": "symbol-query symbols libc6-amd64_2.36-0ubuntu3_i386",
+      "final_url": "https://libc.rip/download/libc6-amd64_2.36-0ubuntu3_i386.symbols",
+      "status": 200,
+      "bytes": 83500,
+      "sha256": "e2477a068a4778ec809fe82f07dcbc05b3bada724b8011aeb2288bab7b199493",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-6o1ybyfn"
+    }
+  ],
+  "debug_packages": [
+    {
+      "sha1": "5edad332c510ad3b59380368847c9b931da4f626",
+      "artifact": "010-76884b5e6b5a911cbfd9d9d71653f94454d438881f9fc6d63d388623bd58cf36.download",
+      "url": "https://launchpad.net/ubuntu/+archive/primary/+files/libc6-dbg_2.35-0ubuntu3.1_amd64.deb",
+      "debug_member": {
+        "name": "./usr/lib/debug/.build-id/69/389d485a9793dbe873f0ea2c93e02efaa9aa3d.debug",
+        "bytes": 4415848,
+        "md5": "ec0bc50f2c0694c7cfd7f1924830901b",
+        "sha1": "e94dd59a385fa8a4ec00d36b47993cda5f2f5876",
+        "sha256": "0e50c8edfdc06a29bdce9f787686db39e245a622fdabd1a1b9a430f30d5cf618",
+        "elf": {
+          "build_id": "69389d485a9793dbe873f0ea2c93e02efaa9aa3d",
+          "machine": "EM_X86_64",
+          "symbols": {
+            "main_arena": 2202752,
+            "read": 1132928,
+            "system": 331104
+          }
+        }
+      },
+      "final_url": "https://launchpadlibrarian.net/612471216/libc6-dbg_2.35-0ubuntu3.1_amd64.deb",
+      "build_id_matches": true,
+      "sha256": "76884b5e6b5a911cbfd9d9d71653f94454d438881f9fc6d63d388623bd58cf36",
+      "md5": "c532292b14167c1ded74ac8f6e1745f7",
+      "bytes": 13769704,
+      "status": 200,
+      "label": "publisher debug package 69389d485a9793dbe873f0ea2c93e02efaa9aa3d",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-4xmhonj3",
+      "publisher_index": {
+        "url": "https://snapshot.ubuntu.com/ubuntu/20230301T000000Z/dists/jammy-updates/main/binary-amd64/Packages.xz",
+        "sha256": "b1a4149189daa6a2b2ba38f965d3c9866f5b6aaf1e3b7a72b5d35eee71a759e4",
+        "package": {
+          "Package": "libc6-dbg",
+          "Version": "2.35-0ubuntu3.1",
+          "Architecture": "amd64",
+          "Filename": "pool/main/g/glibc/libc6-dbg_2.35-0ubuntu3.1_amd64.deb",
+          "Size": "13769704",
+          "SHA256": "76884b5e6b5a911cbfd9d9d71653f94454d438881f9fc6d63d388623bd58cf36"
+        }
+      },
+      "publisher_sha256_matches": true,
+      "release_signature_verified": false
+    },
+    {
+      "sha1": "1040747e1e3cfee5d9fffee4e4948b22f8f91eeb",
+      "artifact": "011-c6128653f0d9688e05741a6c67c9c644f276e91f49f1fe77171be12a57f78391.download",
+      "url": "https://old-releases.ubuntu.com/ubuntu/pool/main/g/glibc/libc6-dbg_2.36-0ubuntu4_amd64.deb",
+      "debug_member": {
+        "name": "./usr/lib/debug/.build-id/d1/704d25fbbb72fa95d517b883131828c0883fe9.debug",
+        "bytes": 4363608,
+        "md5": "d8af59e9f8f128522a20286900695b32",
+        "sha1": "45321b11785bd94cfc8efe495f823be8abfe4302",
+        "sha256": "e92b969b4fead2f29f73856f037140610344b9e1c0fd67484b635489a23d71a1",
+        "elf": {
+          "build_id": "d1704d25fbbb72fa95d517b883131828c0883fe9",
+          "machine": "EM_X86_64",
+          "symbols": {
+            "main_arena": 2059360,
+            "read": 1101024,
+            "system": 320800
+          }
+        }
+      },
+      "final_url": "https://old-releases.ubuntu.com/ubuntu/pool/main/g/glibc/libc6-dbg_2.36-0ubuntu4_amd64.deb",
+      "build_id_matches": true,
+      "sha256": "c6128653f0d9688e05741a6c67c9c644f276e91f49f1fe77171be12a57f78391",
+      "md5": "04be8ba1b892f25401b2fa150cc63294",
+      "bytes": 13693430,
+      "status": 200,
+      "label": "publisher debug package d1704d25fbbb72fa95d517b883131828c0883fe9",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-4xmhonj3",
+      "publisher_index": {
+        "url": "https://old-releases.ubuntu.com/ubuntu/dists/kinetic/main/binary-amd64/Packages.xz",
+        "sha256": "20e520be2b25621602be9d2eb595ac59380bb629ee9edc49f645111bd2e50228",
+        "package": {
+          "Package": "libc6-dbg",
+          "Version": "2.36-0ubuntu4",
+          "Architecture": "amd64",
+          "Filename": "pool/main/g/glibc/libc6-dbg_2.36-0ubuntu4_amd64.deb",
+          "Size": "13693430",
+          "SHA256": "c6128653f0d9688e05741a6c67c9c644f276e91f49f1fe77171be12a57f78391"
+        }
+      },
+      "publisher_sha256_matches": true,
+      "release_signature_verified": false
+    }
+  ],
+  "tool_packages": [
+    {
+      "md5": "0b05c28dc7fe19ca8edf2cdaee9361b6",
+      "bytes": 458720,
+      "sha1": "1ecccdde993efdbbf5c5df5ff9a06950e1572efd",
+      "checksum_source": "APT-authenticated Debian bookworm package metadata, version 0.188-2.1 amd64",
+      "url": "https://deb.debian.org/debian/pool/main/e/elfutils/elfutils_0.188-2.1_amd64.deb",
+      "expected_sha256": "31e479c38d2eb1a5d134c1d12bf619d1a1a1fa4482b073e95c70021c07443c23",
+      "sha256": "31e479c38d2eb1a5d134c1d12bf619d1a1a1fa4482b073e95c70021c07443c23",
+      "final_url": "https://deb.debian.org/debian/pool/main/e/elfutils/elfutils_0.188-2.1_amd64.deb",
+      "label": "unstrip tooling elfutils",
+      "status": 200,
+      "publisher_sha256_matches": true,
+      "artifact": "001-31e479c38d2eb1a5d134c1d12bf619d1a1a1fa4482b073e95c70021c07443c23.download",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-ot8u_o97"
+    },
+    {
+      "md5": "67b2c020318c77a349f007aac3ddc392",
+      "bytes": 27736,
+      "sha1": "5e021310b1d9169eaf6779d2f17dee388086d6c8",
+      "checksum_source": "APT-authenticated Debian bookworm package metadata, version 0.188-2.1 amd64",
+      "url": "https://deb.debian.org/debian/pool/main/e/elfutils/libasm1_0.188-2.1_amd64.deb",
+      "expected_sha256": "7d550ea35716c3f413e0132b4b498492655a2090a65c756f492d11e004aeabc6",
+      "sha256": "7d550ea35716c3f413e0132b4b498492655a2090a65c756f492d11e004aeabc6",
+      "final_url": "https://deb.debian.org/debian/pool/main/e/elfutils/libasm1_0.188-2.1_amd64.deb",
+      "label": "unstrip tooling libasm1",
+      "status": 200,
+      "publisher_sha256_matches": true,
+      "artifact": "002-7d550ea35716c3f413e0132b4b498492655a2090a65c756f492d11e004aeabc6.download",
+      "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-ot8u_o97"
+    }
+  ],
+  "current_library_package": {
+    "checksum_source": "APT-authenticated Debian bookworm package metadata: libc6=2.36-9+deb12u14 amd64",
+    "label": "matching current libc/loader package",
+    "status": 200,
+    "url": "https://deb.debian.org/debian/pool/main/g/glibc/libc6_2.36-9+deb12u14_amd64.deb",
+    "sha1": "c534c6c7f912b61ca26b7cf4082235a0343b8751",
+    "md5": "8d98f0c882f269aaee8437bcfe89346e",
+    "bytes": 2759320,
+    "inspected_members": [
+      {
+        "name": "./lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+        "bytes": 215000,
+        "md5": "108877c29ef6a482337ddc42ea8b0985",
+        "sha1": "2ae43971459c5256179755cd66c67514d5ed9522",
+        "sha256": "02bcda52c1a5dfc236f94d9e5255b4a0e26347d8a372a5223b650e31f291ce3c",
+        "elf": {
+          "build_id": "7ebc65e52f2bbea498b4040fa92f7238377aaba9",
+          "machine": "EM_X86_64",
+          "symbols": {}
+        }
+      },
+      {
+        "name": "./lib/x86_64-linux-gnu/libc.so.6",
+        "bytes": 1926232,
+        "md5": "33f1cb6525f26614bd3a334d63632484",
+        "sha1": "4afd40c9fab267a550de1c6883ccb5d499a710cc",
+        "sha256": "6b4a45352fd0c540a9c7c718f35ce8c8e46a4e482f9d3885a910c32d1a0e1421",
+        "elf": {
+          "build_id": "93ac61ec5a8eb1396f9fbd350e3169a558528a40",
+          "machine": "EM_X86_64",
+          "symbols": {
+            "system": 312464,
+            "read": 1016480
+          }
+        }
+      },
+      {
+        "name": "./usr/share/doc/libc6/copyright",
+        "bytes": 25467,
+        "md5": "d848be5c37cd71d76c5a7b9e7e28868a",
+        "sha1": "5c4df62d190848821200ce4041d2753bd431a7eb",
+        "sha256": "40c7e1f2118531f038ca22999bd976901254e1bc5cd1b0f0211bdd064c599987"
+      }
+    ],
+    "expected_sha256": "ba4f88f73dbc3ae9055f3c20f4523bfdbaf1ad13ff95e258924f77d20b4fbedf",
+    "artifact": "031-ba4f88f73dbc3ae9055f3c20f4523bfdbaf1ad13ff95e258924f77d20b4fbedf.download",
+    "sha256": "ba4f88f73dbc3ae9055f3c20f4523bfdbaf1ad13ff95e258924f77d20b4fbedf",
+    "final_url": "https://deb.debian.org/debian/pool/main/g/glibc/libc6_2.36-9+deb12u14_amd64.deb",
+    "publisher_sha256_matches": true,
+    "artifact_base": "../output/deepswe-survey/pwntools-public-assets-2026-10-07/verification-4yujzi0z"
+  },
+  "lookup_aliases": [
+    {
+      "kind": "build_id",
+      "value": "69389d485a9793dbe873f0ea2c93e02efaa9aa3d",
+      "ids": [
+        "libc6_2.35-0ubuntu3.1_amd64"
+      ]
+    },
+    {
+      "kind": "build_id",
+      "value": "a5a3c3f65fd94f4c7f323a175707c3a79cbbd614",
+      "ids": [
+        "libc6_2.31-3_amd64"
+      ]
+    },
+    {
+      "kind": "build_id",
+      "value": "d1704d25fbbb72fa95d517b883131828c0883fe9",
+      "ids": [
+        "libc6_2.36-0ubuntu4_amd64"
+      ]
+    },
+    {
+      "kind": "build_id",
+      "value": "fe136e485814fee2268cf19e5c124ed0f73f4400",
+      "ids": []
+    },
+    {
+      "kind": "hash",
+      "value": "2d1c5e0b85cb06ff47fa6fa088ec22cb6e06074e",
+      "ids": [
+        "libc6-i386_2.27-3ubuntu1.2_amd64"
+      ]
+    },
+    {
+      "kind": "libs_id",
+      "value": "libc6_2.31-3_amd64",
+      "ids": [
+        "libc6_2.31-3_amd64"
+      ]
+    },
+    {
+      "kind": "md5",
+      "value": "74f2d3062180572fc8bcd964b587eeae",
+      "ids": [
+        "libc6_2.31-3_amd64"
+      ]
+    },
+    {
+      "kind": "md5",
+      "value": "7a71dafb87606f360043dcd638e411bd",
+      "ids": []
+    },
+    {
+      "kind": "sha1",
+      "value": "0041d2f397bc2498f62aeb4134d522c5b2635e87",
+      "ids": [
+        "libc6_2.31-3_amd64"
+      ]
+    },
+    {
+      "kind": "sha1",
+      "value": "34471e355a5e71400b9d65e78d2cd6ce7fc49de5",
+      "ids": []
+    },
+    {
+      "kind": "sha256",
+      "value": "5d78fc60054df18df20480c71f3379218790751090f452baffb62ac6b2aff7ee",
+      "ids": [
+        "libc6_2.31-3_amd64"
+      ]
+    },
+    {
+      "kind": "sha256",
+      "value": "5e877a8272da934812d2d1f9ee94f73c77c790cbc5d8251f5322389fc9667f21",
+      "ids": []
+    }
+  ],
+  "gitlab_fallback_resolutions": [
+    {
+      "label": "GitLab build_id:fe136e485814fee2268cf19e5c124ed0f73f4400 hop 1",
+      "url": "https://gitlab.com/libcdb/libcdb/-/raw/master/libc/libc6-i386-2.18-6/lib32/libc-2.18.so",
+      "sha256": "5e877a8272da934812d2d1f9ee94f73c77c790cbc5d8251f5322389fc9667f21",
+      "build_id": "fe136e485814fee2268cf19e5c124ed0f73f4400",
+      "requested_identifier_matches": true
+    },
+    {
+      "label": "GitLab md5:7a71dafb87606f360043dcd638e411bd hop 1",
+      "url": "https://gitlab.com/libcdb/libcdb/-/raw/master/libc/libc6-i386-2.18-6/lib32/libc-2.18.so",
+      "sha256": "5e877a8272da934812d2d1f9ee94f73c77c790cbc5d8251f5322389fc9667f21",
+      "build_id": "fe136e485814fee2268cf19e5c124ed0f73f4400",
+      "requested_identifier_matches": true
+    },
+    {
+      "label": "GitLab sha1:34471e355a5e71400b9d65e78d2cd6ce7fc49de5 hop 1",
+      "url": "https://gitlab.com/libcdb/libcdb/-/raw/master/libc/libc6-i386-2.18-6/lib32/libc-2.18.so",
+      "sha256": "5e877a8272da934812d2d1f9ee94f73c77c790cbc5d8251f5322389fc9667f21",
+      "build_id": "fe136e485814fee2268cf19e5c124ed0f73f4400",
+      "requested_identifier_matches": true
+    },
+    {
+      "label": "GitLab sha256:5e877a8272da934812d2d1f9ee94f73c77c790cbc5d8251f5322389fc9667f21 hop 1",
+      "url": "https://gitlab.com/libcdb/libcdb/-/raw/master/libc/libc6-i386-2.18-6/lib32/libc-2.18.so",
+      "sha256": "5e877a8272da934812d2d1f9ee94f73c77c790cbc5d8251f5322389fc9667f21",
+      "build_id": "fe136e485814fee2268cf19e5c124ed0f73f4400",
+      "requested_identifier_matches": true
+    }
+  ],
+  "symbol_query_snapshot": [
+    {
+      "query": {
+        "puts": "0x420",
+        "printf": "0xc90"
+      },
+      "ordered_ids": [
+        "libc6_2.31-0ubuntu9.10_amd64",
+        "libc6_2.31-0ubuntu9.9_amd64",
+        "libc6_2.31-0ubuntu9.8_amd64",
+        "libc6_2.31-0ubuntu9.11_amd64",
+        "libc6_2.31-0ubuntu9.16_amd64",
+        "libc6_2.31-0ubuntu9.12_amd64",
+        "libc6_2.31-0ubuntu9.14_amd64",
+        "libc6_2.31-0ubuntu9.17_amd64",
+        "libc6_2.31-0ubuntu9.18_amd64",
+        "libc6_2.31-0ubuntu9.15_amd64"
+      ]
+    },
+    {
+      "query": {
+        "__libc_start_main_ret": "7f89ad926550"
+      },
+      "ordered_ids": [
+        "libc6-amd64_2.36-0ubuntu4_i386",
+        "libc-2.35-9.fc36.x86_64",
+        "libc-2.35.9000-9.fc37.x86_64",
+        "libc-2.35.9000-29.fc37.x86_64",
+        "libc-2.35.9000-19.fc37.x86_64",
+        "libc6_2.36-0ubuntu2_amd64",
+        "libc-2.35.9000-16.fc37.x86_64",
+        "libc-2.35-10.fc36.x86_64",
+        "libc-2.35-15.fc36.x86_64",
+        "libc6-amd64_2.36-0ubuntu3_i386"
+      ]
+    }
+  ],
+  "unavailable_original_endpoints": [
+    {
+      "label": "debuginfo 69389d485a9793dbe873f0ea2c93e02efaa9aa3d",
+      "url": "https://debuginfod.ubuntu.com/buildid/69389d485a9793dbe873f0ea2c93e02efaa9aa3d/debuginfo",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "label": "debuginfo 69389d485a9793dbe873f0ea2c93e02efaa9aa3d",
+      "url": "https://debuginfod.debian.net/buildid/69389d485a9793dbe873f0ea2c93e02efaa9aa3d/debuginfo",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "label": "debuginfo 69389d485a9793dbe873f0ea2c93e02efaa9aa3d",
+      "url": "https://debuginfod.elfutils.org/buildid/69389d485a9793dbe873f0ea2c93e02efaa9aa3d/debuginfo",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "label": "debuginfo d1704d25fbbb72fa95d517b883131828c0883fe9",
+      "url": "https://debuginfod.ubuntu.com/buildid/d1704d25fbbb72fa95d517b883131828c0883fe9/debuginfo",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "label": "debuginfo d1704d25fbbb72fa95d517b883131828c0883fe9",
+      "url": "https://debuginfod.debian.net/buildid/d1704d25fbbb72fa95d517b883131828c0883fe9/debuginfo",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "label": "debuginfo d1704d25fbbb72fa95d517b883131828c0883fe9",
+      "url": "https://debuginfod.elfutils.org/buildid/d1704d25fbbb72fa95d517b883131828c0883fe9/debuginfo",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "label": "publisher debug package 69389d485a9793dbe873f0ea2c93e02efaa9aa3d",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/g/glibc/libc6-dbg_2.35-0ubuntu3.1_amd64.deb",
+      "error": "HTTP Error 404: Not Found"
+    }
+  ],
+  "verification_tests": {
+    "framework_passed": 629,
+    "framework_skipped": 29,
+    "asset_unit_passed": 9
+  },
+  "note": "Verification-only inventory, not an offline image or proof that unchanged doctests pass. Raw downloads and API responses remain outside Git; every content pin must be rechecked before reuse."
+}

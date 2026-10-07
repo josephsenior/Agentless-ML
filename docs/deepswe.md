@@ -537,6 +537,11 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   lookup while identifying missing historical library/package/debug data
   and an upstream provider-list mutation. No data snapshot or new image was
   added, and no public failures were hidden.
+  The [public dependency audit](deepswe-pwntools-public-assets-2026-10-07.md)
+  verifies all required lookup libraries, the complete symbol-query snapshot,
+  matching debug files and pinned tool archives. Some original URLs are gone,
+  but exact files remain available through provider/publisher fallbacks.
+  No offline image was built and readiness is unchanged.
   The [repository review](deepswe-repository-review-2026-10-04.md) found that
   all 22 old unsupported-task trees are accepted by the current provider, but
   Linux symlink semantics and submodule requirements still need runtime checks.

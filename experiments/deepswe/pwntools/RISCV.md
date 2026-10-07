@@ -8,6 +8,9 @@ The [process-failure diagnosis](../../../docs/deepswe-pwntools-process-2026-10-0
 explains three remaining examples without modifying this image or schedule.
 The [libcdb diagnosis](../../../docs/deepswe-pwntools-libcdb-2026-10-07.md)
 separates working local lookup from missing public library and debug data.
+The [public dependency audit](../../../docs/deepswe-pwntools-public-assets-2026-10-07.md)
+and [asset pins](public-assets.json) verify files for a future separate offline
+image; no such image is included in this checkpoint.
 APT authenticates repository metadata; the recipe additionally checks the
 downloaded archives before installation.
 
