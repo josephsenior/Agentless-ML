@@ -374,6 +374,7 @@ def test_an_override_can_replace_the_derived_targets(tmp_path):
 def test_the_checked_in_overrides_are_well_formed_and_explained():
     overrides = load_test_overrides(OVERRIDES)
     assert set(overrides) == {
+        "pwntools-tube-multiplexing",
         "optique-conditional-option-dependencies",
         "valibot-recursive-schema-composition",
         "arktype-json-schema-refs-dependencies",

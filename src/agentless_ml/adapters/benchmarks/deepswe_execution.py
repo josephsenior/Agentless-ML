@@ -145,6 +145,20 @@ PYTEST = DeepSWETestCommand(
     report=TestReport(ReportFormat.JUNIT_XML, "/tmp/report.xml"),
 )
 
+# Public TESTING.md invokes Sphinx, not pytest. The published image lacks
+# Sphinx; the same command deliberately fails there rather than installing
+# dependencies at test time or silently substituting another environment.
+_PWNTOOLS_REPORTER = Path(__file__).with_name("deepswe_pwntools.py").read_text(encoding="utf-8")
+PWNTOOLS_DOCTEST = DeepSWETestCommand(
+    script=(
+        "cat > /tmp/agentless-pwntools-doctest.py <<'AGENTLESS_PWNTOOLS_REPORTER'\n"
+        f"{_PWNTOOLS_REPORTER}\nAGENTLESS_PWNTOOLS_REPORTER\n"
+        f"cd {WORK}/docs && {_PYTHON_PATH} PWNLIB_NOTERM=1 "
+        "python /tmp/agentless-pwntools-doctest.py"
+    ),
+    report=TestReport(ReportFormat.CTRF_JSON, "/tmp/ctrf.json"),
+)
+
 # Bandit declares stestr in its own test setup; its published image installs
 # stestr and subunit2junitxml, but not pytest. Keep candidate source first on
 # PYTHONPATH for stestr's child test processes, and preserve stestr's exit code
@@ -559,6 +573,7 @@ TEST_COMMANDS = {
     "go": GO,
     "go-module": GO_MODULE,
     "pytest": PYTEST,
+    "pwntools-doctest": PWNTOOLS_DOCTEST,
     "stestr": STESTR,
     "mocha": MOCHA,
     "mocha-json": MOCHA_JSON,
@@ -787,7 +802,7 @@ def deepswe_test_command(
     """
     if runner in {
         "koota-vitest", "agentrooms-vitest", "quill-vitest", "clack-vitest",
-        "valibot-vitest", "optique-node",
+        "valibot-vitest", "optique-node", "pwntools-doctest",
     } and targets:
         raise ValueError(f"{runner}'s multi-suite runner does not support narrowed targets")
     try:

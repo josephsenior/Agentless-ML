@@ -1,0 +1,160 @@
+{
+  "date": "2026-10-07",
+  "base_image_id": "sha256:8d726c8e36df1fbee86df7607a3c3b4b441841455b83d806cc2f40533f7976de",
+  "derived_image_id": "sha256:57532e55794896c77c6c030962d434ab02bf5211356d1211cb33b49c7390bf2e",
+  "note": "The venv shadows base pip 25.3 with ensurepip's 25.0.1; existing runtime package versions are unchanged. Build networking only; doctest execution is offline.",
+  "changed_existing": {
+    "pip": [
+      "25.3",
+      "25.0.1"
+    ]
+  },
+  "added": {
+    "alabaster": "1.0.0",
+    "babel": "2.18.0",
+    "docutils": "0.21.2",
+    "imagesize": "2.0.1",
+    "jinja2": "3.1.6",
+    "snowballstemmer": "3.1.1",
+    "sphinx": "8.1.3",
+    "sphinx-rtd-theme": "3.0.2",
+    "sphinxcontrib-applehelp": "2.0.0",
+    "sphinxcontrib-autoprogram": "0.1.5",
+    "sphinxcontrib-devhelp": "2.0.0",
+    "sphinxcontrib-htmlhelp": "2.1.0",
+    "sphinxcontrib-jquery": "4.1",
+    "sphinxcontrib-jsmath": "1.0.1",
+    "sphinxcontrib-qthelp": "2.0.0",
+    "sphinxcontrib-serializinghtml": "2.0.0"
+  },
+  "downloads": [
+    {
+      "name": "alabaster",
+      "version": "1.0.0",
+      "url": "https://files.pythonhosted.org/packages/7e/b3/6b4067be973ae96ba0d615946e314c5ae35f9f993eca561b356540bb0c2b/alabaster-1.0.0-py3-none-any.whl",
+      "hashes": {
+        "sha256": "fc6786402dc3fcb2de3cabd5fe455a2db534b371124f1f21de8731783dec828b"
+      }
+    },
+    {
+      "name": "babel",
+      "version": "2.18.0",
+      "url": "https://files.pythonhosted.org/packages/77/f5/21d2de20e8b8b0408f0681956ca2c69f1320a3848ac50e6e7f39c6159675/babel-2.18.0-py3-none-any.whl",
+      "hashes": {
+        "sha256": "e2b422b277c2b9a9630c1d7903c2a00d0830c409c59ac8cae9081c92f1aeba35"
+      }
+    },
+    {
+      "name": "docutils",
+      "version": "0.21.2",
+      "url": "https://files.pythonhosted.org/packages/8f/d7/9322c609343d929e75e7e5e6255e614fcc67572cfd083959cdef3b7aad79/docutils-0.21.2-py3-none-any.whl",
+      "hashes": {
+        "sha256": "dafca5b9e384f0e419294eb4d2ff9fa826435bf15f15b7bd45723e8ad76811b2"
+      }
+    },
+    {
+      "name": "imagesize",
+      "version": "2.0.1",
+      "url": "https://files.pythonhosted.org/packages/01/f9/575c8d760eae1fc99651b7cc5efd96ad5379ca4d6b53750b0fb4fe983f34/imagesize-2.0.1-py3-none-any.whl",
+      "hashes": {
+        "sha256": "ea0c9a0384df69ed86a943a15cde37d0360b82491b3910dc2215e202e62b5b02"
+      }
+    },
+    {
+      "name": "Jinja2",
+      "version": "3.1.6",
+      "url": "https://files.pythonhosted.org/packages/62/a1/3d680cbfd5f4b8f15abc1d571870c5fc3e594bb582bc3b64ea099db13e56/jinja2-3.1.6-py3-none-any.whl",
+      "hashes": {
+        "sha256": "85ece4451f492d0c13c5dd7c13a64681a86afae63a5f347908daf103ce6d2f67"
+      }
+    },
+    {
+      "name": "snowballstemmer",
+      "version": "3.1.1",
+      "url": "https://files.pythonhosted.org/packages/4c/07/2ebca9b11fb9be7340a818d8d6f63feaebb146be2c4afbd6061701d6df6e/snowballstemmer-3.1.1-py3-none-any.whl",
+      "hashes": {
+        "sha256": "7e207fa178741da09cdee59d3ecec3827ad5f92b1fc5c9ff3755b639f71f5752"
+      }
+    },
+    {
+      "name": "Sphinx",
+      "version": "8.1.3",
+      "url": "https://files.pythonhosted.org/packages/26/60/1ddff83a56d33aaf6f10ec8ce84b4c007d9368b21008876fceda7e7381ef/sphinx-8.1.3-py3-none-any.whl",
+      "hashes": {
+        "sha256": "09719015511837b76bf6e03e42eb7595ac8c2e41eeb9c29c5b755c6b677992a2"
+      }
+    },
+    {
+      "name": "sphinx-rtd-theme",
+      "version": "3.0.2",
+      "url": "https://files.pythonhosted.org/packages/85/77/46e3bac77b82b4df5bb5b61f2de98637724f246b4966cfc34bc5895d852a/sphinx_rtd_theme-3.0.2-py2.py3-none-any.whl",
+      "hashes": {
+        "sha256": "422ccc750c3a3a311de4ae327e82affdaf59eb695ba4936538552f3b00f4ee13"
+      }
+    },
+    {
+      "name": "sphinxcontrib-applehelp",
+      "version": "2.0.0",
+      "url": "https://files.pythonhosted.org/packages/5d/85/9ebeae2f76e9e77b952f4b274c27238156eae7979c5421fba91a28f4970d/sphinxcontrib_applehelp-2.0.0-py3-none-any.whl",
+      "hashes": {
+        "sha256": "4cd3f0ec4ac5dd9c17ec65e9ab272c9b867ea77425228e68ecf08d6b28ddbdb5"
+      }
+    },
+    {
+      "name": "sphinxcontrib-autoprogram",
+      "version": "0.1.5",
+      "url": "https://files.pythonhosted.org/packages/ef/ab/a2b4abe9cfb48b850156b8009163cb4ca40f19d30ce58a9b68db4b5cfbfa/sphinxcontrib_autoprogram-0.1.5-py2.py3-none-any.whl",
+      "hashes": {
+        "sha256": "5c1af55d44c0a4301807eb42174a0f474d97decc137169c7c9305e56ed4d3000"
+      }
+    },
+    {
+      "name": "sphinxcontrib-devhelp",
+      "version": "2.0.0",
+      "url": "https://files.pythonhosted.org/packages/35/7a/987e583882f985fe4d7323774889ec58049171828b58c2217e7f79cdf44e/sphinxcontrib_devhelp-2.0.0-py3-none-any.whl",
+      "hashes": {
+        "sha256": "aefb8b83854e4b0998877524d1029fd3e6879210422ee3780459e28a1f03a8a2"
+      }
+    },
+    {
+      "name": "sphinxcontrib-htmlhelp",
+      "version": "2.1.0",
+      "url": "https://files.pythonhosted.org/packages/0a/7b/18a8c0bcec9182c05a0b3ec2a776bba4ead82750a55ff798e8d406dae604/sphinxcontrib_htmlhelp-2.1.0-py3-none-any.whl",
+      "hashes": {
+        "sha256": "166759820b47002d22914d64a075ce08f4c46818e17cfc9470a9786b759b19f8"
+      }
+    },
+    {
+      "name": "sphinxcontrib-jquery",
+      "version": "4.1",
+      "url": "https://files.pythonhosted.org/packages/76/85/749bd22d1a68db7291c89e2ebca53f4306c3f205853cf31e9de279034c3c/sphinxcontrib_jquery-4.1-py2.py3-none-any.whl",
+      "hashes": {
+        "sha256": "f936030d7d0147dd026a4f2b5a57343d233f1fc7b363f68b3d4f1cb0993878ae"
+      }
+    },
+    {
+      "name": "sphinxcontrib-jsmath",
+      "version": "1.0.1",
+      "url": "https://files.pythonhosted.org/packages/c2/42/4c8646762ee83602e3fb3fbe774c2fac12f317deb0b5dbeeedd2d3ba4b77/sphinxcontrib_jsmath-1.0.1-py2.py3-none-any.whl",
+      "hashes": {
+        "sha256": "2ec2eaebfb78f3f2078e73666b1415417a116cc848b72e5172e596c871103178"
+      }
+    },
+    {
+      "name": "sphinxcontrib-qthelp",
+      "version": "2.0.0",
+      "url": "https://files.pythonhosted.org/packages/27/83/859ecdd180cacc13b1f7e857abf8582a64552ea7a061057a6c716e790fce/sphinxcontrib_qthelp-2.0.0-py3-none-any.whl",
+      "hashes": {
+        "sha256": "b18a828cdba941ccd6ee8445dbe72ffa3ef8cbe7505d8cd1fa0d42d3f2d5f3eb"
+      }
+    },
+    {
+      "name": "sphinxcontrib-serializinghtml",
+      "version": "2.0.0",
+      "url": "https://files.pythonhosted.org/packages/52/a7/d2782e4e3f77c8450f727ba74a8f12756d5ba823d81b941f1b04da9d033a/sphinxcontrib_serializinghtml-2.0.0-py3-none-any.whl",
+      "hashes": {
+        "sha256": "6e2cb0eef194e10c27ec0023bfeb25badbbb5868244cf5bc5bdc04e4464bf331"
+      }
+    }
+  ]
+}

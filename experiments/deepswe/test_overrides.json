@@ -1,4 +1,8 @@
 {
+  "pwntools-tube-multiplexing": {
+    "runner": "pwntools-doctest",
+    "reason": "Public TESTING.md runs PWNLIB_NOTERM=1 make -C docs doctest, not pytest. Preserve Sphinx's public config and platform-aware builder; report complete document/groups conservatively, with setup/cleanup errors excluded from passing inventory. The published image lacks Sphinx; dependency-augmented diagnostics must use an explicitly substituted image and do not change canonical readiness."
+  },
   "optique-conditional-option-dependencies": {
     "runner": "optique-node",
     "reason": "The pinned image has Node but no Deno. deno.json explicitly declares test:node as the recursive pnpm package tests. Copy workspace dependencies, rebuild all nine test packages from the candidate, and run their declared Node type-transform test discovery, including man's explicit src glob. Preserve root cases and file/suite context in namespaced JUnit reports. This is the public Node schedule, not the Deno or Bun suites."

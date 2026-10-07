@@ -510,6 +510,11 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   [Optique and Valibot](deepswe-optique-valibot-runners-2026-10-06.md) recovered
   the last two missing-runner tasks, bringing the latest count to **92/113**;
   tasks outside those reviews retain their earlier outcomes.
+  The [Pwntools doctest review](deepswe-pwntools-doctest-2026-10-07.md) replaces
+  its incorrect pytest invocation with the public Sphinx runner. The published
+  image lacks Sphinx; a separately augmented diagnostic also exposed missing
+  native tools and repeated stalls. Its interrupted run is not a completed
+  baseline and does not change the 92/113 count.
   The [repository review](deepswe-repository-review-2026-10-04.md) found that
   all 22 old unsupported-task trees are accepted by the current provider, but
   Linux symlink semantics and submodule requirements still need runtime checks.
