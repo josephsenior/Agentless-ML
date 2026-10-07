@@ -555,6 +555,11 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   tests `core.native.%p` and passes all 107 core-file and 176 ROP examples.
   The same schedule improves to 47/7, with no new exclusions or container
   permission changes. The host setting was restored again; readiness stays 92/113.
+  The [SSH filesystem follow-up](deepswe-pwntools-ssh-aligned-2026-10-08.md)
+  uses a separate offline-derived image to align the public home path and
+  SFTP creation mask. The unchanged filesystem page passes 148/149 examples,
+  up from 144/149; its tmpfs block-allocation expectation remains failed.
+  This is a selected-page result, not another full schedule or readiness change.
   The [repository review](deepswe-repository-review-2026-10-04.md) found that
   all 22 old unsupported-task trees are accepted by the current provider, but
   Linux symlink semantics and submodule requirements still need runtime checks.

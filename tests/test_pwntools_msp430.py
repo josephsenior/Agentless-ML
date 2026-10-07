@@ -3,6 +3,7 @@
 import importlib.util
 import json
 import os
+import sys
 from pathlib import Path
 
 import pytest
@@ -12,6 +13,17 @@ from agentless_ml.validation.docker import PublicTestCommand
 from agentless_ml.validation.reports import ReportFormat, TestReport
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+@pytest.mark.parametrize("schedule", ("--full", "--public-docker-schedule"))
+def test_selected_pages_cannot_be_reported_as_a_complete_schedule(monkeypatch, schedule):
+    spec = importlib.util.spec_from_file_location("pwntools_native_cli", ROOT / "tools/run_pwntools_native_tests.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    monkeypatch.setattr(sys, "argv", ["native", schedule, "--targets", "source/filesystem.rst"])
+    with pytest.raises(SystemExit) as error:
+        module.main()
+    assert error.value.code == 2
 
 
 def test_archive_checksum_is_pinned_before_extraction():

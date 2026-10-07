@@ -7,6 +7,13 @@ The follow-on [MSP430 image](MSP430.md) fixes the selected assembly failure
 and provides an explicit broader public-Docker-schedule diagnostic. Its
 results are separate from the native-image results recorded here.
 
+The separate [SSH-aligned follow-up](../../../docs/deepswe-pwntools-ssh-aligned-2026-10-08.md)
+extends the offline image, advertises `/home/travis` through a link to the same
+temporary filesystem, and sets the SFTP creation mask expected by the public
+examples. Its selected filesystem result is 148/149, not a full baseline.
+The shared bootstrap now resolves home/key paths from the account database;
+existing image tags retain the original bootstrap until explicitly rebuilt.
+
 From the repository root, verify the Sphinx parent before building:
 
 ```powershell

@@ -1,0 +1,9 @@
+# Keep the previous offline diagnostic intact; no dependency downloads.
+FROM agentless-ml/pwntools-offline:2026-10-08
+USER root
+# Only the advertised path changes. Writable home data stays on the same
+# disposable /tmp tmpfs; no extra mounts or runtime privileges are needed.
+RUN usermod --home /home/travis travis \
+    && ln -s /tmp/pwntools-ssh-user /home/travis
+COPY setup-local-ssh.sh /opt/pwntools-setup-local-ssh-native.sh
+USER travis

@@ -3,6 +3,7 @@
 Defaults to public assembly, SSH and example documentation pages. --full runs
 the entire unchanged public suite; --public-docker-schedule applies only the
 three documented public Docker page exclusions. No mode changes readiness.
+--targets selects public documentation pages for a focused diagnostic.
 Artifacts accumulate in unique runner directories; nothing is deleted.
 """
 
@@ -36,11 +37,13 @@ def main() -> int:
     schedule = parser.add_mutually_exclusive_group()
     schedule.add_argument("--full", action="store_true")
     schedule.add_argument("--public-docker-schedule", action="store_true")
+    schedule.add_argument("--targets", nargs="+", metavar="SOURCE_RST",
+                          help="selected public source/*.rst pages, not a full baseline")
     parser.add_argument("--timeout-seconds", type=float, default=300)
     arguments = parser.parse_args()
-    targets = () if arguments.full or arguments.public_docker_schedule else (
+    targets = () if arguments.full or arguments.public_docker_schedule else tuple(arguments.targets or (
         "source/asm.rst", "source/tubes/ssh.rst", "source/testexample.rst",
-    )
+    ))
     runner = DockerTestRunner(
         arguments.image, arguments.artifacts / "logs", memory_mb=8192,
         cpus=2, tmpfs_mb=4096, pids_limit=2048, run_as_image_user=True,
