@@ -1,0 +1,205 @@
+{
+  "date": "2026-10-07",
+  "framework_parent_commit": "90ad307f322e393844344ae7ff4a44071df9f0ef",
+  "task_id": "pwntools-tube-multiplexing",
+  "base_commit": "76894a5404a65d2800b6d0adaf3485ecba275caa",
+  "image_id": "sha256:168f8c6b98131e2e58a4ba9265ac16b658174636cbb2d2de6493a0778c856318",
+  "purpose": "Classify public libcdb data requirements and verify ordinary offline controls, without adding historical fixtures or enabling test networking.",
+  "public_schedule_rerun": false,
+  "previous_schedule_evidence": "pwntools_riscv_2026_10_07.json",
+  "previous_schedule_passed_groups": 44,
+  "previous_schedule_failed_groups": 10,
+  "previous_libcdb_examples": 42,
+  "previous_libcdb_failures": 21,
+  "model_calls": 0,
+  "held_out_files_read": false,
+  "historical_data_downloaded": false,
+  "existing_public_source_or_tests_modified": false,
+  "runner_modified": false,
+  "image_modified": false,
+  "new_exclusions": [],
+  "permissions_changed": false,
+  "canonical_readiness_changed": false,
+  "canonical_ready": 92,
+  "canonical_total": 113,
+  "isolation": {
+    "network": "none",
+    "read_only_root": true,
+    "cap_drop": "ALL",
+    "no_new_privileges": true,
+    "user": "travis (non-root)",
+    "memory_mb": 8192,
+    "cpus": 2,
+    "pids_limit": 2048,
+    "tmpfs_mb": 4096
+  },
+  "conclusions": {
+    "local_lookup": "Real system-libc hash lookup and authored local-database lookup succeed offline with byte-identical results.",
+    "missing_data": "Default /var/lib/libc-database is absent. The public historical build ID cannot be found locally. Matching loader-package download returns None with external DNS blocked.",
+    "missing_debug_support": "eu-unstrip is absent; source also requires matching debuginfo from cache or debuginfod. Installing elfutils alone does not supply those files.",
+    "negative_cache": "An unsuccessful lookup creates an empty cache entry that suppresses retries for 604800 seconds in the same cache. Containers use fresh temporary filesystems.",
+    "provider_list_bug": "Default lookup mutates PROVIDERS['offline'] by appending online providers, even when the local provider succeeds. Later offline_only=True cannot be treated as a complete network boundary.",
+    "debug_flag_scope": "Source inspection: offline_only restricts hash-provider selection, not unstrip_libc's separate debug downloads; unstrip=False used for controls.",
+    "limitations": "Online provider and asset availability were not checked. Historical fixtures, debug stripping/unstripping and offline symbol-offset matching were not validated."
+  },
+  "next_step": "Plan an explicit public-data inventory: exact libc binaries, .symbols/.url metadata, matching libc/loader archives and debuginfo, each with provenance/checksums/licensing. Inspect available assets before building another image; do not fabricate API results or offset expectations.",
+  "checks": {
+    "live_host_passed": 1,
+    "container_cases_passed": 5,
+    "focused_unit_tests_passed": 10,
+    "focused_skipped": 5
+  },
+  "execution": {
+    "artifact_path": "../output/deepswe-survey/pwntools-libcdb-diagnosis-final-2026-10-07/agentless-ml-6699c5d89d9a447d857e8c9933533abe/execution.json",
+    "execution_sha256": "f64c8d5685c084b8ee575025bf5990ee0f959353d21a3cbc987f250d9baaafea",
+    "status": "pass",
+    "exit_code": 0,
+    "duration_seconds": 26.948918100009905,
+    "stdout_sha256": "3150da9780e183003b3445787ea54cb51438d9a4535858c343073cb3a8271dcd",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "test_cases": [
+      {
+        "test_id": "agentless_libcdb_probe::test_system_lookup_works_without_database_or_network",
+        "status": "passed"
+      },
+      {
+        "test_id": "agentless_libcdb_probe::test_missing_public_build_id_creates_negative_cache",
+        "status": "passed"
+      },
+      {
+        "test_id": "agentless_libcdb_probe::test_local_database_lookup_with_existing_library",
+        "status": "passed"
+      },
+      {
+        "test_id": "agentless_libcdb_probe::test_matching_package_is_not_available_offline",
+        "status": "passed"
+      },
+      {
+        "test_id": "agentless_libcdb_probe::test_default_lookup_mutates_offline_provider_list",
+        "status": "passed"
+      }
+    ],
+    "observations": [
+      {
+        "database_exists": false,
+        "eu_unstrip": null,
+        "literal_public_requests": [
+          [
+            "build_id",
+            "69389d485a9793dbe873f0ea2c93e02efaa9aa3d"
+          ],
+          [
+            "build_id",
+            "XX"
+          ],
+          [
+            "build_id",
+            "a5a3c3f65fd94f4c7f323a175707c3a79cbbd614"
+          ],
+          [
+            "build_id",
+            "d1704d25fbbb72fa95d517b883131828c0883fe9"
+          ],
+          [
+            "build_id",
+            "fe136e485814fee2268cf19e5c124ed0f73f4400"
+          ],
+          [
+            "hash",
+            "2d1c5e0b85cb06ff47fa6fa088ec22cb6e06074e"
+          ],
+          [
+            "libs_id",
+            "XX"
+          ],
+          [
+            "libs_id",
+            "libc6_2.31-3_amd64"
+          ],
+          [
+            "md5",
+            "74f2d3062180572fc8bcd964b587eeae"
+          ],
+          [
+            "md5",
+            "7a71dafb87606f360043dcd638e411bd"
+          ],
+          [
+            "md5",
+            "XX"
+          ],
+          [
+            "sha1",
+            "0041d2f397bc2498f62aeb4134d522c5b2635e87"
+          ],
+          [
+            "sha1",
+            "34471e355a5e71400b9d65e78d2cd6ce7fc49de5"
+          ],
+          [
+            "sha1",
+            "XX"
+          ],
+          [
+            "sha256",
+            "5d78fc60054df18df20480c71f3379218790751090f452baffb62ac6b2aff7ee"
+          ],
+          [
+            "sha256",
+            "5e877a8272da934812d2d1f9ee94f73c77c790cbc5d8251f5322389fc9667f21"
+          ],
+          [
+            "sha256",
+            "XX"
+          ]
+        ],
+        "local_database": "/var/lib/libc-database",
+        "local_offline_lookup_passed": true,
+        "probe": "inventory-and-local-control",
+        "shorter_than_usual_hash_width": [],
+        "system_build_id": "93ac61ec5a8eb1396f9fbd350e3169a558528a40",
+        "system_libc": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+        "system_sha256": "6b4a45352fd0c540a9c7c718f35ce8c8e46a4e482f9d3885a910c32d1a0e1421"
+      },
+      {
+        "build_id": "2d1c5e0b85cb06ff47fa6fa088ec22cb6e06074e",
+        "negative_cache_bytes": 0,
+        "original_offline_providers": [
+          "provider_local_system",
+          "provider_local_database"
+        ],
+        "probe": "missing-public-id",
+        "result": null,
+        "retry_expiry_seconds": 604800
+      },
+      {
+        "lookup_by_build_id_and_libs_id_passed": true,
+        "matched_existing_system_bytes": true,
+        "probe": "authored-local-db-control",
+        "public_historical_data_added": false
+      },
+      {
+        "network_enabled": false,
+        "probe": "matching-library-package",
+        "result": null,
+        "system_build_id": "93ac61ec5a8eb1396f9fbd350e3169a558528a40",
+        "unstrip_requested": false
+      },
+      {
+        "after": [
+          "provider_local_system",
+          "provider_local_database",
+          "provider_libcdb",
+          "provider_libc_rip"
+        ],
+        "before": [
+          "provider_local_system",
+          "provider_local_database"
+        ],
+        "offline_only_not_a_sufficient_network_guard_after_default_lookup": true,
+        "probe": "provider-list-aliasing",
+        "successful_local_default_lookup": true
+      }
+    ]
+  }
+}

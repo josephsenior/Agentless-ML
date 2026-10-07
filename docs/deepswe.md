@@ -533,6 +533,10 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   reproduces a denied ASLR request, an upstream relative-path bug and a
   nonportable PID-1 expectation. No benchmark code or runner was patched;
   the 44/10 diagnostic result and canonical readiness remain unchanged.
+  The [libcdb diagnosis](deepswe-pwntools-libcdb-2026-10-07.md) verifies local
+  lookup while identifying missing historical library/package/debug data
+  and an upstream provider-list mutation. No data snapshot or new image was
+  added, and no public failures were hidden.
   The [repository review](deepswe-repository-review-2026-10-04.md) found that
   all 22 old unsupported-task trees are accepted by the current provider, but
   Linux symlink semantics and submodule requirements still need runtime checks.
