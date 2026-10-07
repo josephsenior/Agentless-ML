@@ -551,6 +551,10 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   restores native core retrieval and improves the same schedule to 46/8.
   It also introduces six ARM/QEMU failures, so it is not a general fix.
   The original WSL host setting was restored; readiness remains unchanged.
+  The approved [non-colliding filename follow-up](deepswe-pwntools-noncolliding-core-2026-10-08.md)
+  tests `core.native.%p` and passes all 107 core-file and 176 ROP examples.
+  The same schedule improves to 47/7, with no new exclusions or container
+  permission changes. The host setting was restored again; readiness stays 92/113.
   The [repository review](deepswe-repository-review-2026-10-04.md) found that
   all 22 old unsupported-task trees are accepted by the current provider, but
   Linux symlink semantics and submodule requirements still need runtime checks.

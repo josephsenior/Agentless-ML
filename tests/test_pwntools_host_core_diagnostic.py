@@ -32,12 +32,13 @@ def test_original_pattern_is_one_literal_exec_argument(monkeypatch):
     assert calls[0][1] == {"check": True, "timeout": 30}
 
 
-def test_restore_changes_temporary_value_back_and_checks_it(monkeypatch):
-    values = iter([diagnostic.TEMPORARY, diagnostic.EXPECTED_ORIGINAL])
+@pytest.mark.parametrize("pattern", [diagnostic.TEMPORARY, diagnostic.NONCOLLIDING])
+def test_restore_changes_temporary_value_back_and_checks_it(monkeypatch, pattern):
+    values = iter([pattern, diagnostic.EXPECTED_ORIGINAL])
     writes = []
     monkeypatch.setattr(diagnostic, "read_setting", lambda _: next(values))
     monkeypatch.setattr(diagnostic, "set_pattern", writes.append)
-    diagnostic.restore(diagnostic.EXPECTED_ORIGINAL)
+    diagnostic.restore(diagnostic.EXPECTED_ORIGINAL, pattern)
     assert writes == [diagnostic.EXPECTED_ORIGINAL]
 
 
@@ -62,8 +63,9 @@ def test_already_restored_value_is_not_written_again(monkeypatch):
 
 
 @pytest.mark.parametrize("failure", ["apply", "probe", "schedule"])
-def test_controller_restores_after_failures(monkeypatch, tmp_path, failure):
-    monkeypatch.setattr(diagnostic.sys, "argv", ["diagnostic", "--apply-temporary-host-setting", "--artifacts", str(tmp_path)])
+@pytest.mark.parametrize("pattern", [diagnostic.TEMPORARY, diagnostic.NONCOLLIDING])
+def test_controller_restores_after_failures(monkeypatch, tmp_path, failure, pattern):
+    monkeypatch.setattr(diagnostic.sys, "argv", ["diagnostic", "--apply-temporary-host-setting", "--artifacts", str(tmp_path), "--pattern", pattern])
     monkeypatch.setattr(diagnostic.subprocess, "check_output",
                         lambda command, **_: diagnostic.IMAGE_ID if "inspect" in command else "")
     state = {"pattern": diagnostic.EXPECTED_ORIGINAL}
@@ -71,7 +73,7 @@ def test_controller_restores_after_failures(monkeypatch, tmp_path, failure):
 
     def set_pattern(value):
         state["pattern"] = value
-        if value == diagnostic.TEMPORARY and failure == "apply":
+        if value == pattern and failure == "apply":
             raise RuntimeError("Failure after applying setting")
 
     def run(command, **kwargs):
@@ -90,3 +92,17 @@ def test_controller_restores_after_failures(monkeypatch, tmp_path, failure):
     evidence = json.loads(next(tmp_path.glob("diagnostic-*/host-setting.json")).read_text())
     assert evidence["restored"] is True
     assert evidence["final_core_uses_pid"] == "0"
+    assert evidence["temporary_core_pattern"] == pattern
+
+
+def test_restore_does_not_accept_the_other_diagnostic_pattern(monkeypatch):
+    monkeypatch.setattr(diagnostic, "read_setting", lambda _: diagnostic.TEMPORARY)
+    monkeypatch.setattr(diagnostic, "set_pattern", lambda _: pytest.fail("Unexpected concurrent change"))
+    with pytest.raises(RuntimeError, match="concurrently"):
+        diagnostic.restore(diagnostic.EXPECTED_ORIGINAL, diagnostic.NONCOLLIDING)
+
+
+def test_noncolliding_probe_requires_both_guest_and_native_checks():
+    assert "assert core.eip == core.eax == core.fault_addr" in diagnostic.PROBE
+    assert "assert core.arch == 'arm'" in diagnostic.PROBE
+    assert "dump_inventory" in diagnostic.PROBE

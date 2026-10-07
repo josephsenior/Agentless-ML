@@ -1,0 +1,64 @@
+{
+  "diagnostic_only": true,
+  "user_approved_temporary_host_change": true,
+  "image": "agentless-ml/pwntools-offline:2026-10-08",
+  "image_id": "sha256:4d9295759148dbdb3b1a18fe58b25d7d4d4ae17d7f6223c3c09db138eeafc5ba",
+  "original_core_pattern": "|/wsl-capture-crash %t %E %p %s",
+  "temporary_core_pattern": "core.native.%p",
+  "restored_core_pattern": "|/wsl-capture-crash %t %E %p %s",
+  "restoration_verified_from": ["docker-desktop", "Ubuntu", "isolated container"],
+  "core_uses_pid_before_and_after": "0",
+  "persistent_configuration_changed": false,
+  "native_probe": {"automatic_retrieval": true, "file": "/tmp/core.native.15", "signal": 11, "eip": 3735928559, "eax": 3735928559, "fault_addr": 3735928559},
+  "arm_probe": {
+    "automatic_guest_retrieval": true,
+    "selected": "/tmp/qemu_step3_20261007-225045_23.core",
+    "pc": 3405691582,
+    "r0": 3735928559,
+    "exe_address": 1094778880,
+    "dump_inventory": [
+      {"path": "/tmp/core.native.23", "arch": "amd64", "bytes": 163987456},
+      {"path": "/tmp/qemu_step3_20261007-225045_23.core", "arch": "arm", "bytes": 8404992}
+    ]
+  },
+  "schedule": "public-docker-schedule",
+  "excluded_pages": ["gdb.rst", "adb.rst", "protocols.rst"],
+  "command_identical_to_previous_run": true,
+  "container_security_and_limits_changed": false,
+  "status": "fail",
+  "exit_code": 1,
+  "duration_seconds": 155.082549600018,
+  "groups_passed": 47,
+  "groups_failed": 7,
+  "examples": 3071,
+  "example_failures": 26,
+  "setup_failures": 0,
+  "cleanup_failures": 0,
+  "previous_host_result": {"pattern": "core.%p", "groups_passed": 46, "groups_failed": 8, "example_failures": 32},
+  "previous_original_host_result": {"groups_passed": 45, "groups_failed": 9, "example_failures": 43},
+  "corefile_group": {"examples": 107, "example_failures": 0},
+  "rop_group": {"examples": 176, "example_failures": 0},
+  "libcdb_group": {"examples": 42, "example_failures": 0},
+  "remaining_example_failures": {"context": 2, "filesystem": 5, "tubes/processes": 2, "tubes/sockets": 7, "update": 5, "util/proc": 1, "util/web": 4},
+  "canonical_readiness": {"ready": 92, "total": 113, "changed": false},
+  "held_out_files_read": false,
+  "model_calls": 0,
+  "focused_tests": {"passed": 110, "skipped": 4},
+  "artifact_directory": "../output/deepswe-survey/pwntools-host-core-native-2026-10-08/diagnostic-q8bo3moj",
+  "control_artifacts_sha256": {
+    "host-setting.json": "8162c5379ed118658fc667acee019ceb3c157277560c92b94fd29a300c658a04",
+    "probe.stdout.log": "3c9caf78c56f41cddccd6f0c91fee91c21ab2694f99f92163069d0084f1050ee",
+    "probe.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "schedule.stdout.log": "4fab55987419eccbb764bb2982e04ea05e9d1ab3b907bf7e5c2823e38c47d546",
+    "schedule.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "schedule_artifacts": {
+    "directory": "public-schedule/logs/agentless-ml-47c43d86040e4ffd8fad42c8d7dafe92",
+    "sha256": {
+      "execution.json": "bc5e5d80ed0be619549f2e649feeb1d716468df5b089475d287912a690d5b715",
+      "report.json": "272703724c9cccadf185c6c5b99957ffb44b4135506ee821bf7cd5a965b41b7a",
+      "stderr.log": "399d22b048a804b12c539c5ac5b66d0879b41e56395c141ebc8c230219261e31",
+      "stdout.log": "be57bdab15faee8527f52c066c3e4457489791f8b6f748bfb299d50ec0c587c7"
+    }
+  }
+}

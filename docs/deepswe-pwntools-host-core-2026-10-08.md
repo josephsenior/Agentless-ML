@@ -109,3 +109,8 @@ The full framework suite was not rerun for this diagnostic-only addition.
 
 Next: investigate the ARM guest-core behavior under the temporary pattern
 before considering this setting for any regular benchmark environment.
+
+Follow-up: the [non-colliding filename diagnostic](deepswe-pwntools-noncolliding-core-2026-10-08.md)
+uses a separate approved host window and tests `core.native.%p`. It passes the
+ARM examples as well as native retrieval, with the original setting restored
+afterward. This earlier `core.%p` result remains recorded as a comparison.
