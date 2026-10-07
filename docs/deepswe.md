@@ -547,6 +547,10 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   examples. The unchanged public Docker schedule improves to 45 passing
   groups / 9 failing groups, with no new exclusions or permission changes.
   Canonical readiness remains 92/113.
+  The separately approved [temporary host core-dump diagnostic](deepswe-pwntools-host-core-2026-10-08.md)
+  restores native core retrieval and improves the same schedule to 46/8.
+  It also introduces six ARM/QEMU failures, so it is not a general fix.
+  The original WSL host setting was restored; readiness remains unchanged.
   The [repository review](deepswe-repository-review-2026-10-04.md) found that
   all 22 old unsupported-task trees are accepted by the current provider, but
   Linux symlink semantics and submodule requirements still need runtime checks.
