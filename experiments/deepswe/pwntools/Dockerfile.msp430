@@ -1,0 +1,28 @@
+# Source-built MSP430 tools; retain the previously reviewed native environment.
+FROM agentless-ml/pwntools-native:2026-10-07 AS msp430-build
+USER root
+WORKDIR /tmp/msp430-build
+
+# Publisher's SHA-256 from GNU's Binutils 2.40 release announcement.
+RUN curl --fail --location --retry 3 \
+      https://sourceware.org/pub/binutils/releases/binutils-2.40.tar.xz \
+      --output binutils-2.40.tar.xz \
+    && printf '%s  %s\n' \
+      0f8a4c272d7f17f369ded10a4aca28b8e304828e95526da482b0ccc4dfc9d8e1 \
+      binutils-2.40.tar.xz | sha256sum --check --strict \
+    && tar -xf binutils-2.40.tar.xz \
+    && mkdir build && cd build \
+    && ../binutils-2.40/configure --target=msp430-elf \
+      --prefix=/opt/pwntools-msp430 --disable-nls --disable-werror \
+      --disable-gdb --disable-gprofng --disable-gprof --disable-sim \
+      --disable-libctf --disable-shared --disable-debuginfod \
+    && make -j2 MAKEINFO=true all-binutils all-gas all-ld \
+    && make MAKEINFO=true install-binutils install-gas install-ld \
+    && cp ../binutils-2.40/COPYING /opt/pwntools-msp430/COPYING \
+    && sha256sum /opt/pwntools-msp430/bin/* > /opt/pwntools-msp430/binary-sha256.txt
+
+FROM agentless-ml/pwntools-native:2026-10-07
+COPY --from=msp430-build /opt/pwntools-msp430 /opt/pwntools-msp430
+COPY msp430-source.json /opt/pwntools-msp430/source.json
+ENV PATH="/opt/pwntools-msp430/bin:${PATH}"
+# Inherit non-root USER travis. Runtime isolation is unchanged.

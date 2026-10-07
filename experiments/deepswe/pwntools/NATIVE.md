@@ -3,6 +3,10 @@
 This extends the Sphinx-only image; it does not replace either that image or
 the published benchmark image. See the [review and results](../../../docs/deepswe-pwntools-native-2026-10-07.md).
 
+The follow-on [MSP430 image](MSP430.md) fixes the selected assembly failure
+and provides an explicit broader public-Docker-schedule diagnostic. Its
+results are separate from the native-image results recorded here.
+
 From the repository root, verify the Sphinx parent before building:
 
 ```powershell

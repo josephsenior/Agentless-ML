@@ -1,0 +1,13 @@
+{
+  "project": "GNU Binutils",
+  "version": "2.40",
+  "target": "msp430-elf",
+  "archive_url": "https://sourceware.org/pub/binutils/releases/binutils-2.40.tar.xz",
+  "archive_sha256": "0f8a4c272d7f17f369ded10a4aca28b8e304828e95526da482b0ccc4dfc9d8e1",
+  "checksum_source": "https://lists.gnu.org/archive/html/info-gnu/2023-01/msg00003.html",
+  "verification": "Match publisher-announced SHA-256 before extraction; no signature verification claimed.",
+  "version_reason": "Match the 2.40 binutils generation already supplied by the Debian diagnostic environment.",
+  "configure_arguments": ["--target=msp430-elf", "--prefix=/opt/pwntools-msp430", "--disable-nls", "--disable-werror", "--disable-gdb", "--disable-gprofng", "--disable-gprof", "--disable-sim", "--disable-libctf", "--disable-shared", "--disable-debuginfod"],
+  "make_targets": ["all-binutils", "all-gas", "all-ld"],
+  "build_jobs": 2
+}

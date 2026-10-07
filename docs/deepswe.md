@@ -519,6 +519,12 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   verifies loopback SSH with the runner's capabilities still dropped. Selected
   public pages completed with one MSP430-toolchain failure; this augmented,
   non-root environment is still diagnostic evidence, not a full baseline.
+  The [MSP430 follow-up](deepswe-pwntools-msp430-2026-10-07.md) verifies a
+  checksum-pinned source-built toolchain: all 431 selected examples pass.
+  The documented public Docker schedule completed with 42 passing and 12
+  failing groups, using only its three documented page exclusions and our
+  existing container restrictions. These derived-image results leave
+  canonical readiness unchanged.
   The [repository review](deepswe-repository-review-2026-10-04.md) found that
   all 22 old unsupported-task trees are accepted by the current provider, but
   Linux symlink semantics and submodule requirements still need runtime checks.

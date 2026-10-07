@@ -1,0 +1,684 @@
+{
+  "date": "2026-10-07",
+  "framework_parent_commit": "b27bf17ceb9674b78a9814e20c24ecf998b00f99",
+  "corpus_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+  "agent_files_sha256": "a18b40853100a4e7b3daa86449c97174b8e5194130d0dc63022704c7b8413cd9",
+  "task_id": "pwntools-tube-multiplexing",
+  "base_commit": "76894a5404a65d2800b6d0adaf3485ecba275caa",
+  "native_parent_image_id": "sha256:3edc96947982c955bf4e7161e8f3dbadcf157d1943b27ecab1716ab9ff7560e4",
+  "msp430_image_tag": "agentless-ml/pwntools-msp430:2026-10-07",
+  "msp430_image_id": "sha256:0ce9ca7ee932ed675d22d42eee8ef570c6b18cae73ba0370c689e9067cd045a6",
+  "source_manifest": "pwntools/msp430-source.json",
+  "source_verification": "Publisher SHA-256 checked before extraction; no GPG signature verification claimed.",
+  "installed_binary_hashes_verified": 15,
+  "new_apt_or_python_packages": 0,
+  "model_calls": 0,
+  "held_out_files_read": false,
+  "canonical_readiness_changed": false,
+  "canonical_ready": 92,
+  "canonical_total": 113,
+  "complete_unmodified_public_suite": false,
+  "runner": "pwntools-native-doctest",
+  "public_docker_schedule_exclusions": [
+    "gdb.rst",
+    "adb.rst",
+    "protocols.rst"
+  ],
+  "exclusions_scope": "Only fresh disposable workspace pages; sealed public repository unchanged. No further failure-based exclusions.",
+  "isolation": {
+    "network": "none; ephemeral loopback SSH only",
+    "read_only_root": true,
+    "cap_drop": "ALL",
+    "no_new_privileges": true,
+    "user": "travis (non-root)",
+    "memory_mb": 8192,
+    "cpus": 2,
+    "pids_limit": 2048,
+    "tmpfs_mb": 4096,
+    "published_ports": [],
+    "host_credentials_mounted": false,
+    "host_socket_mounted": false
+  },
+  "selected_summary": {
+    "executed_examples": 431,
+    "example_failures": 0,
+    "passed_groups": 4,
+    "failed_groups": 0
+  },
+  "public_docker_summary": {
+    "executed_examples": 3071,
+    "example_failures": 75,
+    "passed_groups": 42,
+    "failed_groups": 12,
+    "setup_failures": 0,
+    "cleanup_failures": 0,
+    "completed": true,
+    "timeout": false
+  },
+  "inventory_note": "A whole document/group is a case. Passing examples within a failed group do not independently enter the regression inventory. Derived-image results do not establish canonical readiness.",
+  "initial_probe_corrections": [
+    "The fixture initially linked at 0x1000 outside the upstream flash region; corrected to 0x8000.",
+    "Disassembly uses the equivalent br #0x002a alias, not a mov #42 spelling; corrected fixture assertion. Both initial failures retained in local artifacts."
+  ],
+  "framework_tests": {
+    "passed": 619,
+    "skipped": 26
+  },
+  "live_msp430_fixture": {
+    "host_tests_passed": 3,
+    "container_cases_passed": 3
+  },
+  "runs": {
+    "preflight-verified": {
+      "exit_code": 0,
+      "execution_sha256": "9a37c4aac631350ad491aa8216d54d0984e0a404b05cf498f2ab5b279ac436b8",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "5a9d4421a4bc1a3db69fb71504562ab2743679a723c680324430ed0f75dca3fa",
+      "duration_seconds": 3.744647499988787,
+      "status": "pass",
+      "artifact_path": "../output/deepswe-survey/pwntools-msp430-preflight-verified-2026-10-07/agentless-ml-89abd0452d114c728799303531429d7a/execution.json"
+    },
+    "selected": {
+      "stdout_sha256": "650b839c7c9c0c019c3686534c2c0c17e30b06da23f9cc8571aa0e25913eca7b",
+      "stderr_sha256": "57cc7694ee5c9aa300bc6df2c0d84da9a6d2d067f2cb89368e84af5e3696b5c8",
+      "exit_code": 0,
+      "status": "pass",
+      "duration_seconds": 77.35298739999416,
+      "execution_sha256": "5c7857786e6f485379389c58458a83b66b11b059e49dc45fd2363ec37d68d7fe",
+      "groups": [
+        {
+          "suite": "asm",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 54,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "testexample",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 6,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "tubes",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 219,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "tubes/ssh",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 152,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        }
+      ],
+      "artifact_path": "../output/deepswe-survey/pwntools-msp430-selected-2026-10-07/logs/agentless-ml-b4f4f61009154c509c2d4406404d75d0/execution.json"
+    },
+    "public-docker": {
+      "stdout_sha256": "72c40e2e032717a49c5610c6f459d48a3d399e3d835de07080290b57e40b414f",
+      "stderr_sha256": "5cbede8416436bbe9b093fe1b1cb5d65c2cf0fc470205a9a7a1109946f22d759",
+      "exit_code": 1,
+      "status": "fail",
+      "duration_seconds": 175.23073640000075,
+      "execution_sha256": "eec835e2241b9f4e7c39476fd11465fc34e2a138c96bf6821265e20070e84f14",
+      "groups": [
+        {
+          "suite": "asm",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 54,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "constants",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 11,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "context",
+          "name": "default",
+          "status": "failed",
+          "duration": 0,
+          "examples": 164,
+          "exampleFailures": 2,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "elf/config",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 5,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "elf/corefile",
+          "name": "default",
+          "status": "failed",
+          "duration": 0,
+          "examples": 107,
+          "exampleFailures": 14,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "elf/elf",
+          "name": "default",
+          "status": "failed",
+          "duration": 0,
+          "examples": 105,
+          "exampleFailures": 8,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "encoders",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 51,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "filepointer",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 35,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "filesystem",
+          "name": "default",
+          "status": "failed",
+          "duration": 0,
+          "examples": 149,
+          "exampleFailures": 5,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "flag",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 4,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "fmtstr",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 69,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "globals",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 1,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "intro",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 34,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "libc/glibc",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 5,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "libcdb",
+          "name": "default",
+          "status": "failed",
+          "duration": 0,
+          "examples": 42,
+          "exampleFailures": 21,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "memleak",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 119,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "qemu",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 4,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "regsort",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 28,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "rop/ret2dlresolve",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 20,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "rop/rop",
+          "name": "default",
+          "status": "failed",
+          "duration": 0,
+          "examples": 176,
+          "exampleFailures": 3,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "rop/srop",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 164,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "runner",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 17,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "shellcraft/aarch64",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 63,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "shellcraft/amd64",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 95,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "shellcraft/arm",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 39,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "shellcraft/i386",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 123,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "shellcraft/loongarch64",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 22,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "shellcraft/mips",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 46,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "shellcraft/riscv64",
+          "name": "default",
+          "status": "failed",
+          "duration": 0,
+          "examples": 29,
+          "exampleFailures": 3,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "shellcraft/thumb",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 54,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "term/readline",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 1,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "testexample",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 6,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "timeout",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 11,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "tubes",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 219,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "tubes/buffer",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 34,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "tubes/processes",
+          "name": "default",
+          "status": "failed",
+          "duration": 0,
+          "examples": 185,
+          "exampleFailures": 2,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "tubes/sockets",
+          "name": "default",
+          "status": "failed",
+          "duration": 0,
+          "examples": 35,
+          "exampleFailures": 7,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "tubes/ssh",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 152,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "ui",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 26,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "update",
+          "name": "default",
+          "status": "failed",
+          "duration": 0,
+          "examples": 11,
+          "exampleFailures": 5,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "useragents",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 4,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "util/crc",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 134,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "util/cyclic",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 58,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "util/fiddling",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 80,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "util/getdents",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 2,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "util/iters",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 86,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "util/lists",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 17,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "util/misc",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 20,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "util/net",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 2,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "util/packing",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 85,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "util/proc",
+          "name": "default",
+          "status": "failed",
+          "duration": 0,
+          "examples": 18,
+          "exampleFailures": 1,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "util/safeeval",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 11,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "util/sh_string",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 33,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "util/web",
+          "name": "default",
+          "status": "failed",
+          "duration": 0,
+          "examples": 6,
+          "exampleFailures": 4,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        }
+      ],
+      "artifact_path": "../output/deepswe-survey/pwntools-msp430-public-docker-2026-10-07/logs/agentless-ml-accfb49304b74d31955914e9a25badc7/execution.json"
+    }
+  }
+}
