@@ -4,10 +4,17 @@ The unchanged public `update` page passes **all 11 examples** against a
 container-local HTTPS service serving a genuine public PyPI snapshot. The
 previous network-none run failed five examples in that group.
 
+The follow-up run of the unchanged public `util/web` page passes **all six
+examples**, recovering its four previous failures. It uses the exact same
+image, snapshots, certificate policy and Docker restrictions. The request
+log records two real HTTPS downloads after the bootstrap checks: one returns
+the bytes, and the other saves them for the public file-content comparison.
+There are zero setup or cleanup failures in both selected-page reports.
+
 This is an **offline-service diagnostic — modified environment**, not the
-original benchmark baseline. Canonical readiness remains **92/113**. Only
-the selected update page was run; the public download page and full schedule
-have not been rerun in this condition.
+original benchmark baseline. Canonical readiness remains **92/113**. The
+update and download pages were run separately; the full schedule has not
+been rerun in this condition.
 
 ## Why a service rather than a cache shortcut
 
@@ -23,7 +30,8 @@ seed `available_on_pypi.cached` or replace requests/socket functions.
 
 The same server serves genuine `httpbingo.org/robots.txt` bytes. An authored
 preflight verifies Pwntools' real download, streaming and save-to-file paths.
-That preflight is not a claimed pass of the public download page.
+That authored preflight is separate from the subsequent unchanged public
+download-page result above.
 
 ## Scope and safeguards
 
@@ -108,6 +116,14 @@ Selected public-run evidence is under `update-reviewed/logs/` in that same
 diagnostic artifact root. Request logs should contain the bootstrap checks
 and an additional real PyPI request from the public update examples.
 
+The download follow-up evidence is under
+`web-reviewed/logs/agentless-ml-002393876d6d40f8a8e7568b190bdea9/`
+in the same artifact root. Its `report.json` contains one passing `util/web`
+group, six examples and zero example/setup/cleanup failures. Its condition
+record pins the same image identity and selects only `source/util/web.rst`.
+The normal unreachable external Sphinx inventory warnings remain visible;
+the diagnostic does not provide arbitrary internet access.
+
 ## Reproduction
 
 From the repository root, reuse the retained capture without network:
@@ -122,6 +138,10 @@ $env:AGENTLESS_PWNTOOLS_SERVICE_IMAGE = 'agentless-ml/pwntools-services:2026-10-
 
 .\.venv\Scripts\python.exe tools/run_pwntools_service_tests.py `
   --artifacts ../output/deepswe-survey/pwntools-services-update-repeat
+
+.\.venv\Scripts\python.exe tools/run_pwntools_service_tests.py `
+  --artifacts ../output/deepswe-survey/pwntools-services-web-repeat `
+  --targets source/util/web.rst
 ```
 
 Omitting `--snapshots` fetches the two public URLs on the host, with standard
@@ -131,5 +151,5 @@ a new artifact directory and refuses to overwrite one. The helper restricts
 selected pages to `source/update.rst` and `source/util/web.rst`; it does not
 offer an unreviewed full-suite mode.
 
-Next: run the unchanged public `util/web` page in this same labelled condition.
-The socket/proxy groups need a separate protocol-service assessment.
+Next: assess separate local TCP/TLS services for the socket/proxy examples.
+They cannot be recovered by adding more static snapshot files alone.
