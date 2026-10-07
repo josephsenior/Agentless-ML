@@ -166,7 +166,8 @@ def test_sphinx_uses_candidate_source_and_preserves_public_setup_and_flags(tmp_p
 
    raise RuntimeError('intentional cleanup failure')
 ''', encoding="utf-8")
-        execution = runner.run(workspace.path, deepswe_test_command("pwntools-doctest", timeout_seconds=180))
+        probe_runner = os.environ.get("AGENTLESS_PWNTOOLS_DOCS_RUNNER", "pwntools-doctest")
+        execution = runner.run(workspace.path, deepswe_test_command(probe_runner, timeout_seconds=180))
     assert execution.result.status.value == "fail", execution.message
     cases = {case.test_id: case.status.value for case in execution.result.test_cases}
     assert cases == {

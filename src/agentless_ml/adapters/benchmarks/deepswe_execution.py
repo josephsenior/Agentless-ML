@@ -28,7 +28,7 @@ import re
 import shlex
 from collections.abc import Mapping
 from dataclasses import dataclass
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 from agentless_ml.adapters.benchmarks.deepswe_yjs import YJS_PREPARE, YJS_REPORTER
 from agentless_ml.validation.docker import PublicTestCommand
@@ -157,6 +157,14 @@ PWNTOOLS_DOCTEST = DeepSWETestCommand(
         "python /tmp/agentless-pwntools-doctest.py"
     ),
     report=TestReport(ReportFormat.CTRF_JSON, "/tmp/ctrf.json"),
+)
+
+# Explicit diagnostic only, never selected by the canonical task override.
+# The separate native image provides an ephemeral loopback-only SSH service.
+# Sphinx file selectors are public travis/docker's documented TARGET mechanism.
+PWNTOOLS_NATIVE_DOCTEST = DeepSWETestCommand(
+    script=(". /opt/pwntools-setup-local-ssh.sh\n" + PWNTOOLS_DOCTEST.script + ' "$@"'),
+    report=PWNTOOLS_DOCTEST.report,
 )
 
 # Bandit declares stestr in its own test setup; its published image installs
@@ -574,6 +582,7 @@ TEST_COMMANDS = {
     "go-module": GO_MODULE,
     "pytest": PYTEST,
     "pwntools-doctest": PWNTOOLS_DOCTEST,
+    "pwntools-native-doctest": PWNTOOLS_NATIVE_DOCTEST,
     "stestr": STESTR,
     "mocha": MOCHA,
     "mocha-json": MOCHA_JSON,
@@ -800,6 +809,12 @@ def deepswe_test_command(
     ``targets`` are paths or test selectors the runner understands:
     ``("./...",)`` for Go, ``("tests/test_any.py",)`` for pytest.
     """
+    if runner == "pwntools-native-doctest" and any(
+        not target.startswith("source/") or not target.endswith(".rst")
+        or ".." in PurePosixPath(target).parts or "\\" in target
+        for target in targets
+    ):
+        raise ValueError("Pwntools diagnostic targets must be source/*.rst file paths")
     if runner in {
         "koota-vitest", "agentrooms-vitest", "quill-vitest", "clack-vitest",
         "valibot-vitest", "optique-node", "pwntools-doctest",

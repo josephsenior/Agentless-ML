@@ -1,0 +1,22 @@
+# Public Linux/bootstrap and Docker test requirements available on Debian 12.
+openssh-server
+gdb
+gdbserver
+gdb-multiarch
+binutils-multiarch
+binutils-aarch64-linux-gnu
+binutils-arm-linux-gnueabihf
+binutils-mips-linux-gnu
+binutils-powerpc-linux-gnu
+binutils-s390x-linux-gnu
+binutils-sparc64-linux-gnu
+qemu-user-static
+gcc-multilib
+libc6-dev-i386
+bash-static
+ksh
+mksh
+zsh
+socat
+sshpass
+tmux

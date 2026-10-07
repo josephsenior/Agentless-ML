@@ -4,6 +4,10 @@ This is a separate environment, not a replacement for the published DeepSWE
 image. That image has pytest but lacks Sphinx, the runner named in the public
 repository's `TESTING.md`.
 
+The follow-on [native/SSH diagnostic](NATIVE.md) is a different image with its
+own dependency changes and results. The Dockerfile described here stays
+Sphinx-only.
+
 The Dockerfile adds only the documentation packages needed by the public
 Sphinx configuration. It does not run the public machine-install or SSH setup
 scripts, create users or keys, install GDB or cross-architecture toolchains,

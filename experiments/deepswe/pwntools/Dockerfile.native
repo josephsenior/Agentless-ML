@@ -1,0 +1,28 @@
+# Separate native-tool diagnostic; the canonical published image is unchanged.
+FROM agentless-ml/pwntools-docs:2026-10-07
+
+COPY native-packages.txt /opt/pwntools-native-packages.txt
+
+# These correspond to public travis/install.sh and travis/docker/Dockerfile.
+# Do not execute their host-network/privileged entrypoint or fetch old binaries.
+RUN dpkg-query -W -f='${binary:Package}\t${Version}\n' > /opt/pwntools-base-dpkg.tsv \
+    && apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+       $(sed '/^#/d; /^$/d' /opt/pwntools-native-packages.txt) \
+    && dpkg-query -W -f='${binary:Package}\t${Version}\n' > /opt/pwntools-native-dpkg.tsv \
+    && useradd --no-create-home --home-dir /tmp/pwntools-ssh-user --shell /bin/bash travis \
+    && passwd --delete travis \
+    && mkdir -p /run/sshd \
+    && chmod 755 /run/sshd \
+    && python -m pip check
+
+# A non-root daemon can authenticate only its own account without SETUID/GID.
+# Keep Docker's cap-drop=ALL rather than granting daemon privilege transitions.
+COPY setup-local-ssh.sh /opt/pwntools-setup-local-ssh.sh
+
+# GDB embeds Debian Python 3.11, whereas the benchmark uses Python 3.12.
+# Install the same pure-Python RPC versions into GDB's own site directory.
+RUN python -m pip install --no-deps --no-cache-dir \
+    --target /usr/local/lib/python3.11/dist-packages \
+    --report /opt/pwntools-gdb-python-install.json 'rpyc==6.0.2' 'plumbum==2.0.1'
+USER travis

@@ -515,6 +515,10 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   image lacks Sphinx; a separately augmented diagnostic also exposed missing
   native tools and repeated stalls. Its interrupted run is not a completed
   baseline and does not change the 92/113 count.
+  The follow-on [native-tool/SSH review](deepswe-pwntools-native-2026-10-07.md)
+  verifies loopback SSH with the runner's capabilities still dropped. Selected
+  public pages completed with one MSP430-toolchain failure; this augmented,
+  non-root environment is still diagnostic evidence, not a full baseline.
   The [repository review](deepswe-repository-review-2026-10-04.md) found that
   all 22 old unsupported-task trees are accepted by the current provider, but
   Linux symlink semantics and submodule requirements still need runtime checks.

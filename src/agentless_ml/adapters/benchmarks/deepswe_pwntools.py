@@ -13,7 +13,7 @@ import sys
 from pathlib import Path
 
 
-def run(report_path: Path = Path("/tmp/ctrf.json")) -> int:
+def run(report_path: Path = Path("/tmp/ctrf.json"), *, files: tuple[str, ...] = ()) -> int:
     from sphinx.cmd.build import build_main
     from sphinx.ext.doctest import DocTestBuilder
 
@@ -52,7 +52,7 @@ def run(report_path: Path = Path("/tmp/ctrf.json")) -> int:
 
     DocTestBuilder.test_doc = test_doc
     DocTestBuilder.test_group = test_group
-    arguments = ["-b", "doctest", "-d", "build/doctrees", "source", "build/doctest"]
+    arguments = ["-b", "doctest", "-d", "build/doctrees", "source", "build/doctest", *files]
     # conf.py explicitly checks argv for 'doctest' before registering its
     # PlatformDocTestBuilder. Retain the same arguments as make -C docs doctest.
     original_argv = sys.argv
@@ -70,4 +70,4 @@ def run(report_path: Path = Path("/tmp/ctrf.json")) -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(run())
+    raise SystemExit(run(files=tuple(sys.argv[1:])))

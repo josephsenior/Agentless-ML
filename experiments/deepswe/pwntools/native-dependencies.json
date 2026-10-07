@@ -1,0 +1,134 @@
+{
+  "date": "2026-10-07",
+  "published_image_id": "sha256:8d726c8e36df1fbee86df7607a3c3b4b441841455b83d806cc2f40533f7976de",
+  "documentation_parent_image_id": "sha256:57532e55794896c77c6c030962d434ab02bf5211356d1211cb33b49c7390bf2e",
+  "native_image_id": "sha256:3edc96947982c955bf4e7161e8f3dbadcf157d1943b27ecab1716ab9ff7560e4",
+  "build_note": "Native APT inputs are not version locked. This manifest records the exact observed installation (63 additions and 9 upgrades). A rebuild must be compared to this manifest and assigned its own image ID; it is not automatically a reproduction of this environment.",
+  "added": {
+    "bash-static": "5.2.15-2+b13",
+    "binutils-aarch64-linux-gnu": "2.40-2",
+    "binutils-arm-linux-gnueabihf": "2.40-2",
+    "binutils-mips-linux-gnu": "2.40-2cross2",
+    "binutils-multiarch": "2.40-2",
+    "binutils-powerpc-linux-gnu": "2.40-2",
+    "binutils-s390x-linux-gnu": "2.40-2",
+    "binutils-sparc64-linux-gnu": "2.40-2",
+    "gcc-12-multilib": "12.2.0-14+deb12u1",
+    "gcc-multilib": "4:12.2.0-3",
+    "gdb": "13.1-3",
+    "gdb-multiarch": "13.1-3",
+    "gdbserver": "13.1-3",
+    "ksh": "20230128",
+    "ksh93u+m": "1.0.4-3",
+    "lib32asan8": "12.2.0-14+deb12u1",
+    "lib32atomic1": "12.2.0-14+deb12u1",
+    "lib32gcc-12-dev": "12.2.0-14+deb12u1",
+    "lib32gcc-s1": "12.2.0-14+deb12u1",
+    "lib32gomp1": "12.2.0-14+deb12u1",
+    "lib32itm1": "12.2.0-14+deb12u1",
+    "lib32quadmath0": "12.2.0-14+deb12u1",
+    "lib32stdc++6": "12.2.0-14+deb12u1",
+    "lib32ubsan1": "12.2.0-14+deb12u1",
+    "libbabeltrace1:amd64": "1.5.11-1+b2",
+    "libboost-regex1.74.0:amd64": "1.74.0+ds1-21",
+    "libc6-dev-i386": "2.36-9+deb12u14",
+    "libc6-dev-x32": "2.36-9+deb12u14",
+    "libc6-i386": "2.36-9+deb12u14",
+    "libc6-x32": "2.36-9+deb12u14",
+    "libdebuginfod-common": "0.188-2.1",
+    "libdebuginfod1:amd64": "0.188-2.1",
+    "libdw1:amd64": "0.188-2.1",
+    "libelf1:amd64": "0.188-2.1",
+    "libevent-core-2.1-7:amd64": "2.1.12-stable-8+deb12u1",
+    "libglib2.0-0:amd64": "2.74.6-2+deb12u9",
+    "libicu72:amd64": "72.1-3+deb12u1",
+    "libipt2": "2.0.5-1",
+    "libsource-highlight-common": "3.1.9-4.2",
+    "libsource-highlight4v5:amd64": "3.1.9-4.2+b3",
+    "libutempter0:amd64": "1.2.1-3",
+    "libwrap0:amd64": "7.6.q-32",
+    "libx32asan8": "12.2.0-14+deb12u1",
+    "libx32atomic1": "12.2.0-14+deb12u1",
+    "libx32gcc-12-dev": "12.2.0-14+deb12u1",
+    "libx32gcc-s1": "12.2.0-14+deb12u1",
+    "libx32gomp1": "12.2.0-14+deb12u1",
+    "libx32itm1": "12.2.0-14+deb12u1",
+    "libx32quadmath0": "12.2.0-14+deb12u1",
+    "libx32stdc++6": "12.2.0-14+deb12u1",
+    "libx32ubsan1": "12.2.0-14+deb12u1",
+    "mksh": "59c-28+deb12u1",
+    "openssh-server": "1:9.2p1-2+deb12u10",
+    "openssh-sftp-server": "1:9.2p1-2+deb12u10",
+    "qemu-user-static": "1:7.2+dfsg-7+deb12u18+b3",
+    "runit-helper": "2.15.2",
+    "sensible-utils": "0.0.17+nmu1",
+    "socat": "1.7.4.4-2",
+    "sshpass": "1.09-1+b1",
+    "tmux": "3.3a-3",
+    "ucf": "3.0043+nmu1+deb12u1",
+    "zsh": "5.9-4+b15",
+    "zsh-common": "5.9-4"
+  },
+  "changed": {
+    "bash": {
+      "before": "5.2.15-2+b9",
+      "after": "5.2.15-2+b13"
+    },
+    "libc-bin": {
+      "before": "2.36-9+deb12u13",
+      "after": "2.36-9+deb12u14"
+    },
+    "libc-dev-bin": {
+      "before": "2.36-9+deb12u13",
+      "after": "2.36-9+deb12u14"
+    },
+    "libc6:amd64": {
+      "before": "2.36-9+deb12u13",
+      "after": "2.36-9+deb12u14"
+    },
+    "libc6-dev:amd64": {
+      "before": "2.36-9+deb12u13",
+      "after": "2.36-9+deb12u14"
+    },
+    "libssl-dev:amd64": {
+      "before": "3.0.17-1~deb12u3",
+      "after": "3.0.22-1~deb12u1"
+    },
+    "libssl3:amd64": {
+      "before": "3.0.17-1~deb12u3",
+      "after": "3.0.22-1~deb12u1"
+    },
+    "openssh-client": {
+      "before": "1:9.2p1-2+deb12u7",
+      "after": "1:9.2p1-2+deb12u10"
+    },
+    "openssl": {
+      "before": "3.0.17-1~deb12u3",
+      "after": "3.0.22-1~deb12u1"
+    }
+  },
+  "gdb_python_downloads": [
+    {
+      "name": "rpyc",
+      "version": "6.0.2",
+      "url": "https://files.pythonhosted.org/packages/3f/99/2e119d541d596daea39643eb9312b47c7847383951300f889166938035b1/rpyc-6.0.2-py3-none-any.whl",
+      "hashes": {
+        "sha256": "8072308ad30725bc281c42c011fc8c922be15f3eeda6eafb2917cafe1b6f00ec"
+      }
+    },
+    {
+      "name": "plumbum",
+      "version": "2.0.1",
+      "url": "https://files.pythonhosted.org/packages/59/2d/d741fbbbcba7eb6f9f1a829373c558114d59cb882b95f941aa0dc060861f/plumbum-2.0.1-py3-none-any.whl",
+      "hashes": {
+        "sha256": "27a454980f91689aae8f18242a36daaf2636219171cf0e6a849744aa1d6fff85"
+      }
+    }
+  ],
+  "uid": 1000,
+  "user_environment": null,
+  "benchmark_python_rpc_versions": {
+    "rpyc": "6.0.2",
+    "plumbum": "2.0.1"
+  }
+}

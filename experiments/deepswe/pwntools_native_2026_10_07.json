@@ -1,0 +1,385 @@
+{
+  "date": "2026-10-07",
+  "framework_parent_commit": "1a66f208e375bd2bc0cdbeb2fc6c1d914e095863",
+  "corpus_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+  "agent_files_sha256": "a18b40853100a4e7b3daa86449c97174b8e5194130d0dc63022704c7b8413cd9",
+  "task_id": "pwntools-tube-multiplexing",
+  "base_commit": "76894a5404a65d2800b6d0adaf3485ecba275caa",
+  "published_image_id": "sha256:8d726c8e36df1fbee86df7607a3c3b4b441841455b83d806cc2f40533f7976de",
+  "native_image_id": "sha256:3edc96947982c955bf4e7161e8f3dbadcf157d1943b27ecab1716ab9ff7560e4",
+  "dependency_manifest": "pwntools/native-dependencies.json",
+  "model_calls": 0,
+  "held_out_files_read": false,
+  "canonical_readiness_changed": false,
+  "canonical_ready": 92,
+  "canonical_total": 113,
+  "complete_full_baseline": false,
+  "runner": "pwntools-native-doctest",
+  "requested_documents": [
+    "source/asm.rst",
+    "source/tubes/ssh.rst",
+    "source/testexample.rst"
+  ],
+  "reported_document_groups": [
+    "asm::default",
+    "testexample::default",
+    "tubes::default",
+    "tubes/ssh::default"
+  ],
+  "executed_examples": 431,
+  "example_failures": 1,
+  "passing_report_groups": 3,
+  "failed_report_groups": 1,
+  "inventory_note": "Only three whole groups pass conservatively; 430 passing examples are not 430 independent regression-inventory cases. These selected-page augmented results are not canonical readiness evidence.",
+  "remaining_failure": "MSP430 assembler unavailable in configured Debian 12 APT repositories (Installed none, Candidate none). No replacement toolchain or test skip was introduced.",
+  "isolation": {
+    "network": "none (container loopback service only)",
+    "read_only_root": true,
+    "cap_drop": "ALL",
+    "no_new_privileges": true,
+    "published_ports": [],
+    "host_credentials_mounted": false,
+    "host_socket_mounted": false,
+    "user": "travis (non-root)",
+    "effective_capabilities_verified_zero": true,
+    "ssh_password_authentication": false,
+    "ssh_root_login": false,
+    "ephemeral_keys": true,
+    "host_key_verification": "strict, freshly generated host key pinned in known_hosts"
+  },
+  "public_docker_review": {
+    "reviewed_files": [
+      "TESTING.md",
+      "travis/install.sh",
+      "travis/ssh_setup.sh",
+      "travis/docker/Dockerfile",
+      "travis/docker/Makefile",
+      "travis/docker/doctest3"
+    ],
+    "public_permissions": [
+      "--privileged",
+      "--net=host"
+    ],
+    "public_entrypoint_exclusions": [
+      "gdb.rst",
+      "adb.rst",
+      "protocols.rst"
+    ],
+    "those_settings_or_exclusions_applied_here": false,
+    "host_sysctl_or_binfmt_changes": false
+  },
+  "runs": [
+    {
+      "role": "initial_ssh_setup_failure",
+      "image_id": "sha256:3c26de439da3c8e759f1c189163adbc37cdbad4da871c5e6790f2ff616cdf07a",
+      "user": "travis",
+      "status": "harness_error",
+      "exit_code": 125,
+      "duration_seconds": 3.6470627000089735,
+      "test_cases": [],
+      "groups": [],
+      "limits": {
+        "memory_mb": 8192,
+        "cpus": 2,
+        "pids_limit": 2048,
+        "tmpfs_mb": 4096,
+        "timeout_seconds": 90
+      },
+      "artifact_directory": "../output/deepswe-survey/pwntools-native-preflight-2026-10-07/agentless-ml-f3e3ed9ea9a34eda8530dd34ebe1f39b",
+      "execution_sha256": "1d8ed11a7160e452e7c02861e8c20eab7d91658ab6214dc2836c42f8dc666054",
+      "stdout_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_digest": "ff7ab6f548c13bfbb86c8dc8c2fcc442f853f7faf81e721eb03272c4bb0384fe",
+      "message": ""
+    },
+    {
+      "role": "intermediate_public_pages",
+      "image_id": "sha256:8df1a7db2d6dea99590491ff091b3593d30981ab76fc6c9302aa6387d9e1dabd",
+      "user": "travis",
+      "status": "fail",
+      "exit_code": 1,
+      "duration_seconds": 77.30656050000107,
+      "test_cases": [
+        {
+          "test_id": "asm::default",
+          "status": "failed"
+        },
+        {
+          "test_id": "testexample::default",
+          "status": "passed"
+        },
+        {
+          "test_id": "tubes::default",
+          "status": "passed"
+        },
+        {
+          "test_id": "tubes/ssh::default",
+          "status": "passed"
+        }
+      ],
+      "groups": [
+        {
+          "suite": "asm",
+          "name": "default",
+          "status": "failed",
+          "duration": 0,
+          "examples": 54,
+          "exampleFailures": 2,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "testexample",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 6,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "tubes",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 219,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "tubes/ssh",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 152,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        }
+      ],
+      "limits": {
+        "memory_mb": 8192,
+        "cpus": 2,
+        "pids_limit": 2048,
+        "tmpfs_mb": 4096,
+        "timeout_seconds": 300
+      },
+      "artifact_directory": "../output/deepswe-survey/pwntools-native-public-pages-fixed-2026-10-07/logs/agentless-ml-8d214ba34cfe401ea39a9f2eacd88a1f",
+      "execution_sha256": "5c69331a25752ba1eb0fc3e9bb1d6cd71317cc4bf80b8ca914478b87b29d83b1",
+      "stdout_digest": "a427b5003e1945de0a5967065c4ce5fca9ff37a364a9319ec03184ea466d2559",
+      "stderr_digest": "831da82702d666b89a950835f36f159e33cedf48d37022217d98ffb80972b9e8",
+      "message": ""
+    },
+    {
+      "role": "final_native_preflight",
+      "image_id": "sha256:3edc96947982c955bf4e7161e8f3dbadcf157d1943b27ecab1716ab9ff7560e4",
+      "user": "travis",
+      "status": "pass",
+      "exit_code": 0,
+      "duration_seconds": 5.499579399998765,
+      "test_cases": [
+        {
+          "test_id": "test_native_probe::test_no_privilege_widening",
+          "status": "passed"
+        },
+        {
+          "test_id": "test_native_probe::test_native_tools_present",
+          "status": "passed"
+        },
+        {
+          "test_id": "test_native_probe::test_openssh_loopback_login_and_writable_remote_home",
+          "status": "passed"
+        },
+        {
+          "test_id": "test_native_probe::test_pwntools_loopback_transport",
+          "status": "passed"
+        }
+      ],
+      "groups": [],
+      "limits": {
+        "memory_mb": 8192,
+        "cpus": 2,
+        "pids_limit": 2048,
+        "tmpfs_mb": 4096,
+        "timeout_seconds": 90
+      },
+      "artifact_directory": "../output/deepswe-survey/pwntools-native-preflight-final-2026-10-07/agentless-ml-fdf95265a3374f538d4b8b529c41b5a8",
+      "execution_sha256": "303893fecf6708a1cbff5bff14f3fbce2f3835e0920b3baedfc1ba4f755ffd81",
+      "stdout_digest": "cd52cc2dc52f8d811a0616f04a5870d2444d825215f463e9521496dc0b69ac51",
+      "stderr_digest": "7ca413f071364d98cb07472d18b5414b3fb04e77cbc0c08cfcbafffce3e31fb2",
+      "message": ""
+    },
+    {
+      "role": "final_public_pages",
+      "image_id": "sha256:3edc96947982c955bf4e7161e8f3dbadcf157d1943b27ecab1716ab9ff7560e4",
+      "user": "travis",
+      "status": "fail",
+      "exit_code": 1,
+      "duration_seconds": 80.74579210000229,
+      "test_cases": [
+        {
+          "test_id": "asm::default",
+          "status": "failed"
+        },
+        {
+          "test_id": "testexample::default",
+          "status": "passed"
+        },
+        {
+          "test_id": "tubes::default",
+          "status": "passed"
+        },
+        {
+          "test_id": "tubes/ssh::default",
+          "status": "passed"
+        }
+      ],
+      "groups": [
+        {
+          "suite": "asm",
+          "name": "default",
+          "status": "failed",
+          "duration": 0,
+          "examples": 54,
+          "exampleFailures": 1,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "testexample",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 6,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "tubes",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 219,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "tubes/ssh",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 152,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        }
+      ],
+      "limits": {
+        "memory_mb": 8192,
+        "cpus": 2,
+        "pids_limit": 2048,
+        "tmpfs_mb": 4096,
+        "timeout_seconds": 300
+      },
+      "artifact_directory": "../output/deepswe-survey/pwntools-native-public-pages-final-2026-10-07/logs/agentless-ml-eb4e29dea970468caef1149b8d83fb80",
+      "execution_sha256": "b0ae268ca5f917c028e35373f96b965b6358dcf34f0c059ca60ba6afc7330c60",
+      "stdout_digest": "50c72cc158db19749e2dcad996db68c1c4259c4ff985a1d5e7b01befa4096886",
+      "stderr_digest": "0723d179d50e76c693518c697cadb3cac0c402d345559b4270110e23a6038aa8",
+      "message": ""
+    },
+    {
+      "role": "final_candidate_probe",
+      "image_id": "sha256:3edc96947982c955bf4e7161e8f3dbadcf157d1943b27ecab1716ab9ff7560e4",
+      "user": "travis",
+      "status": "fail",
+      "exit_code": 1,
+      "duration_seconds": 24.137073599995347,
+      "test_cases": [
+        {
+          "test_id": "agentless-candidate-probe::visible",
+          "status": "passed"
+        },
+        {
+          "test_id": "agentless-candidate-probe::deliberate-failure",
+          "status": "failed"
+        },
+        {
+          "test_id": "agentless-candidate-probe::setup-error",
+          "status": "error"
+        },
+        {
+          "test_id": "agentless-candidate-probe::cleanup-error",
+          "status": "error"
+        }
+      ],
+      "groups": [
+        {
+          "suite": "agentless-candidate-probe",
+          "name": "visible",
+          "status": "passed",
+          "duration": 0,
+          "examples": 2,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "agentless-candidate-probe",
+          "name": "deliberate-failure",
+          "status": "failed",
+          "duration": 0,
+          "examples": 1,
+          "exampleFailures": 1,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "agentless-candidate-probe",
+          "name": "setup-error",
+          "status": "other",
+          "duration": 0,
+          "examples": 0,
+          "exampleFailures": 0,
+          "setupFailures": 1,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "agentless-candidate-probe",
+          "name": "cleanup-error",
+          "status": "other",
+          "duration": 0,
+          "examples": 1,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 1
+        }
+      ],
+      "limits": {
+        "memory_mb": 8192,
+        "cpus": 2,
+        "pids_limit": 2048,
+        "tmpfs_mb": 4096,
+        "timeout_seconds": 180
+      },
+      "artifact_directory": "../output/deepswe-survey/pwntools-native-candidate-final-2026-10-07/agentless-ml-daa1616fa62a4dbbb0404790d4da64d4",
+      "execution_sha256": "f56e3db75bf1495364a7064a1466f07c76d61ae308cc8b1deaed05e8f15fe1fd",
+      "stdout_digest": "54667e38252b545cd1cef62f291199e027f826ffc3907730583fb183f382846b",
+      "stderr_digest": "57cc7694ee5c9aa300bc6df2c0d84da9a6d2d067f2cb89368e84af5e3696b5c8",
+      "message": ""
+    }
+  ],
+  "attempt_notes": [
+    "Initial setup failed because OpenSSH reads the passwd account home rather than only the overridden HOME. Fixed by aligning the temporary homes.",
+    "The intermediate selected-page run had two assembly failures (MSP430 and SPARC64). Adding distribution SPARC64 binutils removed one.",
+    "GDB's embedded Python 3.11 could not see benchmark Python 3.12 rpyc; the same RPC versions were installed into GDB's site directory. Import is verified; debugger test success is not claimed."
+  ],
+  "verification": {
+    "full_suite_passed": 617,
+    "full_suite_skipped": 25,
+    "native_tests_with_live_preflight_passed": 7,
+    "candidate_tests_with_native_runner_passed": 8
+  }
+}
