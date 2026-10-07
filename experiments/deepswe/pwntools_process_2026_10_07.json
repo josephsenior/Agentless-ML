@@ -1,0 +1,121 @@
+{
+  "date": "2026-10-07",
+  "framework_parent_commit": "f7689779100ab11267f44e2fdd6f135ad161902b",
+  "task_id": "pwntools-tube-multiplexing",
+  "base_commit": "76894a5404a65d2800b6d0adaf3485ecba275caa",
+  "image_id": "sha256:168f8c6b98131e2e58a4ba9265ac16b658174636cbb2d2de6493a0778c856318",
+  "purpose": "Reproduce and classify three previously failing public examples; passing diagnostic cases confirm failures, not public regression passes.",
+  "public_schedule_rerun": false,
+  "previous_schedule_evidence": "pwntools_riscv_2026_10_07.json",
+  "previous_schedule_passed_groups": 44,
+  "previous_schedule_failed_groups": 10,
+  "model_calls": 0,
+  "held_out_files_read": false,
+  "existing_public_source_or_tests_modified": false,
+  "runner_modified": false,
+  "image_modified": false,
+  "new_exclusions": [],
+  "permissions_changed": false,
+  "canonical_readiness_changed": false,
+  "canonical_ready": 92,
+  "canonical_total": 113,
+  "isolation": {
+    "network": "none",
+    "read_only_root": true,
+    "cap_drop": "ALL",
+    "no_new_privileges": true,
+    "user": "travis (non-root)",
+    "memory_mb": 8192,
+    "cpus": 2,
+    "pids_limit": 2048,
+    "tmpfs_mb": 4096
+  },
+  "conclusions": [
+    {
+      "probe": "aslr",
+      "classification": "Restricted runtime incompatibility",
+      "observed": "personality(ADDR_NO_RANDOMIZE) returns -1/EPERM; maps differ despite aslr=False. Seccomp filtering is active.",
+      "source_behavior": "process._preexec calls personality without checking its return value.",
+      "qualification": "Consistent with Docker's default seccomp restrictions; no unconfined/control-policy run was performed."
+    },
+    {
+      "probe": "relative-path",
+      "classification": "Pinned upstream path-resolution bug",
+      "observed": "Relative cwd plus ./probe fails with FileNotFoundError. Absolute cwd or absolute executable controls pass; plain subprocess reproduces second resolution without QEMU.",
+      "source_behavior": "process._validate joins relative cwd into executable, then Popen resolves that still-relative executable from cwd again."
+    },
+    {
+      "probe": "pid-chain",
+      "classification": "Nonportable public expectation under Docker exec",
+      "observed": "Pwntools ancestry matches psutil exactly; final ancestor has PPid 0 and parent None. PID 1 exists as docker-init but is not an ancestor.",
+      "source_behavior": "parent() returns 0 when no parent is visible; ancestors() stops at that boundary."
+    }
+  ],
+  "checks": {
+    "live_host_passed": 1,
+    "container_reproduction_cases_passed": 3,
+    "focused_unit_tests_passed": 10,
+    "focused_skipped": 4
+  },
+  "execution": {
+    "artifact_path": "../output/deepswe-survey/pwntools-process-diagnosis-2026-10-07/agentless-ml-b1643f007fd947a8b4e4aa09287bd5ce/execution.json",
+    "execution_sha256": "54aed97fb77279f3b208a392a28367861481a276b52488f2dc705fd18b63b0d5",
+    "status": "pass",
+    "exit_code": 0,
+    "duration_seconds": 29.483271799981594,
+    "stdout_sha256": "13696949f7ffbd457f2f0c2f879361701a449cf1324ceb26b02a68db321f39cb",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "test_cases": [
+      {
+        "test_id": "agentless_process_probe::test_aslr_request_is_denied_and_maps_still_vary",
+        "status": "passed"
+      },
+      {
+        "test_id": "agentless_process_probe::test_relative_cwd_is_resolved_twice_without_qemu",
+        "status": "passed"
+      },
+      {
+        "test_id": "agentless_process_probe::test_exec_ancestor_chain_stops_at_namespace_root",
+        "status": "passed"
+      }
+    ],
+    "observations": [
+      {
+        "errno": 1,
+        "isolation": [
+          "CapEff:\t0000000000000000",
+          "NoNewPrivs:\t1",
+          "Seccomp:\t2"
+        ],
+        "maps_equal": false,
+        "probe": "aslr",
+        "result": -1
+      },
+      {
+        "absolute_controls_passed": true,
+        "cwd": "../../agentless-process-bin",
+        "double_resolved": "/agentless-process-bin/probe",
+        "probe": "relative-path",
+        "reproduced_without_qemu": true,
+        "validated_executable": "../../agentless-process-bin/./probe"
+      },
+      {
+        "actual": [
+          25,
+          24,
+          18
+        ],
+        "pid1_in_chain": false,
+        "pid1_name": "docker-init",
+        "probe": "pid-chain",
+        "psutil_chain": [
+          25,
+          24,
+          18
+        ],
+        "terminal_parent_is_none": true,
+        "terminal_ppid": 0
+      }
+    ]
+  }
+}

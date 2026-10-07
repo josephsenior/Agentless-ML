@@ -4,6 +4,8 @@ This adds two verified Debian packages to the MSP430 image. It is not a
 replacement for the published benchmark image. Package versions and archive
 SHA-256 values are recorded in [riscv-packages.json](riscv-packages.json).
 See the [results and remaining failures](../../../docs/deepswe-pwntools-riscv-2026-10-07.md).
+The [process-failure diagnosis](../../../docs/deepswe-pwntools-process-2026-10-07.md)
+explains three remaining examples without modifying this image or schedule.
 APT authenticates repository metadata; the recipe additionally checks the
 downloaded archives before installation.
 
