@@ -1,0 +1,19 @@
+{
+  "condition": "offline-service diagnostic - modified environment",
+  "captured_utc": "2026-10-07T23:39:20Z",
+  "trust": "Public HTTPS capture; hashes pin observed bytes, not publisher signatures",
+  "snapshots": [
+    {
+      "file": "pypi.json",
+      "url": "https://pypi.org/simple/pwntools/",
+      "bytes": 87063,
+      "sha256": "e827f67b5a093b3b4773267f4f80ece47c5dc5bca1c128a4ef0fd081c8adc328"
+    },
+    {
+      "file": "robots.txt",
+      "url": "https://httpbingo.org/robots.txt",
+      "bytes": 30,
+      "sha256": "be76b8ab3a1d8db80cafb0c7a768af6c7b6b4ac28ffef3bf6d641c7ed4cec05a"
+    }
+  ]
+}

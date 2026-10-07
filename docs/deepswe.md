@@ -560,6 +560,11 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   SFTP creation mask. The unchanged filesystem page passes 148/149 examples,
   up from 144/149; its tmpfs block-allocation expectation remains failed.
   This is a selected-page result, not another full schedule or readiness change.
+  A separate [offline HTTPS service diagnostic](deepswe-pwntools-services-2026-10-08.md)
+  serves pinned genuine public data without external networking. The unchanged
+  update page passes all 11 examples through a real cold HTTPS fetch; no update
+  cache is seeded. This is explicitly a modified environment, not a canonical
+  readiness improvement or a new full-schedule result.
   The [repository review](deepswe-repository-review-2026-10-04.md) found that
   all 22 old unsupported-task trees are accepted by the current provider, but
   Linux symlink semantics and submodule requirements still need runtime checks.

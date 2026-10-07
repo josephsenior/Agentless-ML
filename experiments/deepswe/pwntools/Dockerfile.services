@@ -1,0 +1,9 @@
+FROM agentless-ml/pwntools-ssh-aligned:2026-10-08
+USER root
+COPY snapshots /opt/pwntools-services/
+COPY offline-services.py /opt/pwntools-services/offline-services.py
+RUN python -c "import runpy; m=runpy.run_path('/opt/pwntools-services/offline-services.py'); m['load_snapshots'](m['ROOT'])" \
+    && chmod -R a-w /opt/pwntools-services \
+    && mv /opt/pwntools-setup-local-ssh.sh /opt/pwntools-setup-local-ssh-offline.sh
+COPY setup-offline-services.sh /opt/pwntools-setup-local-ssh.sh
+USER travis
