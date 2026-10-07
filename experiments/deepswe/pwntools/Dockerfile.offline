@@ -1,0 +1,18 @@
+# Separate diagnostic image. No benchmark runner or source changes.
+FROM agentless-ml/pwntools-riscv:2026-10-07
+USER root
+WORKDIR /opt/pwntools-offline
+COPY data ./data
+COPY packages ./packages
+COPY SHA256SUMS ./SHA256SUMS
+RUN sha256sum --check --strict SHA256SUMS \
+    && dpkg-query -W -f='${Package}\t${Version}\n' > packages-before.tsv \
+    && dpkg --install packages/libasm1_0.188-2.1_amd64.deb packages/elfutils_0.188-2.1_amd64.deb \
+    && dpkg-query -W -f='${Package}\t${Version}\n' > packages-after.tsv \
+    && sha256sum /usr/bin/eu-* /usr/lib/x86_64-linux-gnu/libasm-0.188.so > tools-sha256.txt \
+    && cp -a data/libc-database /var/lib/libc-database \
+    && chmod -R a-w /var/lib/libc-database data \
+    && mv /opt/pwntools-setup-local-ssh.sh /opt/pwntools-setup-local-ssh-native.sh
+COPY setup-offline-data.sh /opt/pwntools-setup-local-ssh.sh
+WORKDIR /tmp
+USER travis

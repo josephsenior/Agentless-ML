@@ -61,3 +61,7 @@ This keeps the public Docker script's three documented page exclusions
 permission changes. It is not the separate unchanged-suite `--full` mode.
 Raw artifacts accumulate outside Git in unique directories. Canonical
 readiness is not changed by an augmented-image diagnostic.
+
+The next image adds pinned public libc/debug data and merging tools; see
+[OFFLINE.md](OFFLINE.md). Its unchanged public Docker schedule passes the
+libcdb group, while the original RISC-V image remains available unchanged.

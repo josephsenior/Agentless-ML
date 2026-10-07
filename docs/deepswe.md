@@ -541,7 +541,12 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   verifies all required lookup libraries, the complete symbol-query snapshot,
   matching debug files and pinned tool archives. Some original URLs are gone,
   but exact files remain available through provider/publisher fallbacks.
-  No offline image was built and readiness is unchanged.
+  That audit did not build an image. The subsequent
+  [offline-data diagnostic](deepswe-pwntools-offline-2026-10-08.md) supplies
+  those pinned dependencies in a separate image and passes all 42 libcdb
+  examples. The unchanged public Docker schedule improves to 45 passing
+  groups / 9 failing groups, with no new exclusions or permission changes.
+  Canonical readiness remains 92/113.
   The [repository review](deepswe-repository-review-2026-10-04.md) found that
   all 22 old unsupported-task trees are accepted by the current provider, but
   Linux symlink semantics and submodule requirements still need runtime checks.
