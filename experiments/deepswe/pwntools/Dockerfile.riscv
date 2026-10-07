@@ -1,0 +1,28 @@
+# Diagnostic-only additions to the verified MSP430 environment.
+FROM agentless-ml/pwntools-msp430:2026-10-07
+USER root
+WORKDIR /tmp/pwntools-tools-build
+
+# APT authenticates repository metadata; pin and independently check both
+# downloaded archives before installing them. Do not permit package removal.
+RUN mkdir -p /opt/pwntools-riscv \
+    && dpkg-query -W -f='${Package}\t${Version}\n' > /opt/pwntools-riscv/packages-before.tsv \
+    && apt-get update \
+    && apt-cache show binutils-riscv64-linux-gnu=2.40-2 patchelf=0.14.3-1+b1 \
+      > /opt/pwntools-riscv/apt-metadata.txt \
+    && apt-get download binutils-riscv64-linux-gnu=2.40-2 patchelf=0.14.3-1+b1 \
+    && printf '%s  %s\n' \
+      b17d62dc462573702aa3f72919ea24d2b976c843a22a25b881fba8bfbbc92825 \
+      binutils-riscv64-linux-gnu_2.40-2_amd64.deb \
+      0364b90e81faabbb9569076063952c7bcbf07f83d954a2f2602a163d65be60e6 \
+      patchelf_0.14.3-1+b1_amd64.deb | sha256sum --check --strict \
+    && apt-get install -y --no-remove --no-install-recommends \
+      ./binutils-riscv64-linux-gnu_2.40-2_amd64.deb ./patchelf_0.14.3-1+b1_amd64.deb \
+    && dpkg-query -W -f='${Package}\t${Version}\n' > /opt/pwntools-riscv/packages-after.tsv \
+    && sha256sum /usr/bin/riscv64-linux-gnu-* /usr/bin/patchelf \
+      > /opt/pwntools-riscv/binary-sha256.txt \
+    && rm -f ./*.deb \
+    && rm -rf /var/lib/apt/lists/*
+COPY riscv-packages.json /opt/pwntools-riscv/packages.json
+WORKDIR /tmp
+USER travis

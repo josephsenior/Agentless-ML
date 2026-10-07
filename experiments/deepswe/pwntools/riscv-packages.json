@@ -1,0 +1,19 @@
+{
+  "architecture": "amd64",
+  "distribution": "Debian bookworm",
+  "verification": "APT-authenticated package metadata, exact version pins and SHA-256 archive checks before installation; installed binary hashes and functional probes afterward.",
+  "packages": [
+    {
+      "name": "binutils-riscv64-linux-gnu",
+      "version": "2.40-2",
+      "filename": "pool/main/b/binutils/binutils-riscv64-linux-gnu_2.40-2_amd64.deb",
+      "sha256": "b17d62dc462573702aa3f72919ea24d2b976c843a22a25b881fba8bfbbc92825"
+    },
+    {
+      "name": "patchelf",
+      "version": "0.14.3-1+b1",
+      "filename": "pool/main/p/patchelf/patchelf_0.14.3-1+b1_amd64.deb",
+      "sha256": "0364b90e81faabbb9569076063952c7bcbf07f83d954a2f2602a163d65be60e6"
+    }
+  ]
+}

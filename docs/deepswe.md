@@ -525,6 +525,10 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   failing groups, using only its three documented page exclusions and our
   existing container restrictions. These derived-image results leave
   canonical readiness unchanged.
+  The [RISC-V/patchelf follow-up](deepswe-pwntools-riscv-2026-10-07.md) adds
+  two checksum-verified, version-pinned packages without upgrading the parent.
+  The same schedule now has 44 passing and 10 failing groups; ELF and RISC-V
+  shellcraft groups recovered. No exclusions or execution permissions changed.
   The [repository review](deepswe-repository-review-2026-10-04.md) found that
   all 22 old unsupported-task trees are accepted by the current provider, but
   Linux symlink semantics and submodule requirements still need runtime checks.

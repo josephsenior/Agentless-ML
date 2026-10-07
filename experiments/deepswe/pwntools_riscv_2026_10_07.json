@@ -1,0 +1,671 @@
+{
+  "date": "2026-10-07",
+  "framework_parent_commit": "8e416c6a59974fa7e03a255a469fd6c6a5444a91",
+  "corpus_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+  "agent_files_sha256": "a18b40853100a4e7b3daa86449c97174b8e5194130d0dc63022704c7b8413cd9",
+  "task_id": "pwntools-tube-multiplexing",
+  "base_commit": "76894a5404a65d2800b6d0adaf3485ecba275caa",
+  "msp430_parent_image_id": "sha256:0ce9ca7ee932ed675d22d42eee8ef570c6b18cae73ba0370c689e9067cd045a6",
+  "riscv_image_tag": "agentless-ml/pwntools-riscv:2026-10-07",
+  "riscv_image_id": "sha256:168f8c6b98131e2e58a4ba9265ac16b658174636cbb2d2de6493a0778c856318",
+  "package_manifest": "pwntools/riscv-packages.json",
+  "verification": "APT-authenticated metadata, version pins and SHA-256 archive checks before installation; installed executable hash, package-inventory and functional checks after installation.",
+  "installed_new_binary_hashes_verified": 17,
+  "inherited_msp430_binary_hashes_verified": 15,
+  "added_packages": {
+    "binutils-riscv64-linux-gnu": "2.40-2",
+    "patchelf": "0.14.3-1+b1"
+  },
+  "upgraded_packages": [],
+  "removed_packages": [],
+  "python_packages_changed": false,
+  "model_calls": 0,
+  "held_out_files_read": false,
+  "canonical_readiness_changed": false,
+  "canonical_ready": 92,
+  "canonical_total": 113,
+  "complete_unmodified_public_suite": false,
+  "runner": "pwntools-native-doctest",
+  "public_docker_schedule_exclusions": [
+    "gdb.rst",
+    "adb.rst",
+    "protocols.rst"
+  ],
+  "exclusions_scope": "Same documented public Docker schedule as previous MSP430 run. Only fresh disposable workspace pages changed; sealed repository unchanged; no new failure-driven exclusions.",
+  "isolation": {
+    "network": "none; ephemeral loopback SSH only",
+    "read_only_root": true,
+    "cap_drop": "ALL",
+    "no_new_privileges": true,
+    "user": "travis (non-root)",
+    "memory_mb": 8192,
+    "cpus": 2,
+    "pids_limit": 2048,
+    "tmpfs_mb": 4096,
+    "published_ports": [],
+    "host_credentials_mounted": false,
+    "host_socket_mounted": false
+  },
+  "public_docker_summary": {
+    "executed_examples": 3071,
+    "passed_examples": 3007,
+    "example_failures": 64,
+    "passed_groups": 44,
+    "failed_groups": 10,
+    "setup_failures": 0,
+    "cleanup_failures": 0,
+    "completed": true,
+    "timeout": false
+  },
+  "comparison": {
+    "previous_evidence": "pwntools_msp430_2026_10_07.json",
+    "previous_passed_groups": 42,
+    "previous_failed_groups": 12,
+    "previous_example_failures": 75,
+    "recovered_groups": [
+      {
+        "suite": "elf/elf",
+        "examples": 105,
+        "previous_failures": 8,
+        "current_failures": 0
+      },
+      {
+        "suite": "shellcraft/riscv64",
+        "examples": 29,
+        "previous_failures": 3,
+        "current_failures": 0
+      }
+    ],
+    "all_other_group_counts_and_statuses_unchanged": true
+  },
+  "inventory_note": "Each case is a whole document/group. Individual passing examples in failed groups are not independent inventory cases. Derived-image evidence is not canonical readiness.",
+  "framework_tests": {
+    "passed": 620,
+    "skipped": 27
+  },
+  "live_fixture": {
+    "host_tests_passed": 2,
+    "container_cases_passed": 4
+  },
+  "runs": {
+    "public-docker": {
+      "stderr_sha256": "fa8d277707ed417c64856fdff35c972f35044ecfe9db4fd3fc11bd8a690f548d",
+      "exit_code": 1,
+      "status": "fail",
+      "artifact_path": "../output/deepswe-survey/pwntools-riscv-public-docker-2026-10-07/logs/agentless-ml-33589b70dd0b46a38a8d84893fa50ce4/execution.json",
+      "groups": [
+        {
+          "suite": "asm",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 54,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "constants",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 11,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "context",
+          "name": "default",
+          "status": "failed",
+          "duration": 0,
+          "examples": 164,
+          "exampleFailures": 2,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "elf/config",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 5,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "elf/corefile",
+          "name": "default",
+          "status": "failed",
+          "duration": 0,
+          "examples": 107,
+          "exampleFailures": 14,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "elf/elf",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 105,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "encoders",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 51,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "filepointer",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 35,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "filesystem",
+          "name": "default",
+          "status": "failed",
+          "duration": 0,
+          "examples": 149,
+          "exampleFailures": 5,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "flag",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 4,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "fmtstr",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 69,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "globals",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 1,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "intro",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 34,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "libc/glibc",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 5,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "libcdb",
+          "name": "default",
+          "status": "failed",
+          "duration": 0,
+          "examples": 42,
+          "exampleFailures": 21,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "memleak",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 119,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "qemu",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 4,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "regsort",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 28,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "rop/ret2dlresolve",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 20,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "rop/rop",
+          "name": "default",
+          "status": "failed",
+          "duration": 0,
+          "examples": 176,
+          "exampleFailures": 3,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "rop/srop",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 164,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "runner",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 17,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "shellcraft/aarch64",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 63,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "shellcraft/amd64",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 95,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "shellcraft/arm",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 39,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "shellcraft/i386",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 123,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "shellcraft/loongarch64",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 22,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "shellcraft/mips",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 46,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "shellcraft/riscv64",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 29,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "shellcraft/thumb",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 54,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "term/readline",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 1,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "testexample",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 6,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "timeout",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 11,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "tubes",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 219,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "tubes/buffer",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 34,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "tubes/processes",
+          "name": "default",
+          "status": "failed",
+          "duration": 0,
+          "examples": 185,
+          "exampleFailures": 2,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "tubes/sockets",
+          "name": "default",
+          "status": "failed",
+          "duration": 0,
+          "examples": 35,
+          "exampleFailures": 7,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "tubes/ssh",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 152,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "ui",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 26,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "update",
+          "name": "default",
+          "status": "failed",
+          "duration": 0,
+          "examples": 11,
+          "exampleFailures": 5,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "useragents",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 4,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "util/crc",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 134,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "util/cyclic",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 58,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "util/fiddling",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 80,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "util/getdents",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 2,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "util/iters",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 86,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "util/lists",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 17,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "util/misc",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 20,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "util/net",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 2,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "util/packing",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 85,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "util/proc",
+          "name": "default",
+          "status": "failed",
+          "duration": 0,
+          "examples": 18,
+          "exampleFailures": 1,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "util/safeeval",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 11,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "util/sh_string",
+          "name": "default",
+          "status": "passed",
+          "duration": 0,
+          "examples": 33,
+          "exampleFailures": 0,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        },
+        {
+          "suite": "util/web",
+          "name": "default",
+          "status": "failed",
+          "duration": 0,
+          "examples": 6,
+          "exampleFailures": 4,
+          "setupFailures": 0,
+          "cleanupFailures": 0
+        }
+      ],
+      "stdout_sha256": "ce424faf5660a54626921c8ca9da01470e760cafe63c8230291cc81b2ff6d32a",
+      "duration_seconds": 183.82325709998258,
+      "execution_sha256": "d29788e064bddf3f9625ce2a062bc29ed681c77b9a9b54f5eda2eeabbb9121f0",
+      "report_sha256": "0d88345a3d7e9f030bd12804ef76b45f26f0bb66aaf0ad75971010418f23a7eb"
+    },
+    "preflight-final": {
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exit_code": 0,
+      "status": "pass",
+      "artifact_path": "../output/deepswe-survey/pwntools-riscv-preflight-final-2026-10-07/agentless-ml-8731a83926f74b749a8eeac6518bd331/execution.json",
+      "test_cases": [
+        {
+          "test_id": "test_tools_probe::test_versions_and_installed_hashes",
+          "status": "passed"
+        },
+        {
+          "test_id": "test_tools_probe::test_riscv_assembly_linking_and_disassembly",
+          "status": "passed"
+        },
+        {
+          "test_id": "test_tools_probe::test_pwntools_riscv_assembly",
+          "status": "passed"
+        },
+        {
+          "test_id": "test_tools_probe::test_patchelf_rewrites_and_runs_an_executable",
+          "status": "passed"
+        }
+      ],
+      "stdout_sha256": "e1ad1926c1f5c79ade38f8138bbba4be814e526e55d8117083e8c9abdfe58864",
+      "duration_seconds": 3.7450174000114202,
+      "execution_sha256": "0ef932c30569bed156cbb3c8c5ea354d2e1bb49eb3e1d62ac629f61cbdfcb20a"
+    }
+  }
+}
