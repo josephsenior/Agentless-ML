@@ -568,6 +568,12 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   The subsequent [full two-worker attempt](deepswe-numba-full-attempt-2026-10-08.md)
   was interrupted without a recoverable report. Its completion is unknown;
   neither readiness nor a parallel-runtime conclusion was recorded.
+  An explicitly approved fresh full attempt then stopped at the container's
+  unchanged 30-minute cutoff, with at least 1,950 completions, a 4.99-GiB
+  observed memory peak and no recorded OOM events. No complete report was
+  accepted; readiness stays **100/113**. Its raw exit 124 is retained, and the
+  full-attempt review documents the host sampling gap rather than claiming
+  an uninterrupted runtime measurement. No further retry was started.
   The [Pwntools doctest review](deepswe-pwntools-doctest-2026-10-07.md) replaces
   its incorrect pytest invocation with the public Sphinx runner. The published
   image lacks Sphinx; a separately augmented diagnostic also exposed missing

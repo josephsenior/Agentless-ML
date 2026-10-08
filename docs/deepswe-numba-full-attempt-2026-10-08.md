@@ -1,4 +1,4 @@
-# Numba: interrupted full two-worker attempt
+# Numba: full two-worker attempts
 
 The requested full attempt used native `-m 2`, the pinned image and candidate
 source build, and the same 1,800-second command timeout, 8-GiB memory, two CPUs,
@@ -77,7 +77,51 @@ seconds, with a ten-second termination grace. Neither change alters tests or
 their outcomes. The focused command, persistence and recorder suite passed
 **13 tests** before launch.
 
-This fresh attempt is pending, not an accepted baseline. Its resource journal
-is under
+This fresh attempt ended at the container-side time limit, not as an accepted
+baseline. Its resource journal is under
 `../output/deepswe-survey/numba-two-worker-full/logs/agentless-ml-ac2f56c468b6407b987eb13538e416ff/resource-samples.jsonl`.
 There is still no automatic retry, official override change or survey update.
+
+## Fresh attempt result
+
+The native schedule did **not finish before the configured 1,800-second
+container cutoff**. The last progress marker recorded **1,950 completed tests**
+out of the 9,907 parallel entries, with the 702 serial-only entries still
+unreached. This is a completion lower bound, not a count of passing tests.
+No final JUnit report was written or accepted; recorded report cases are zero.
+
+The timeout wrapper returned **124**. The generic Docker recorder preserves
+that as `harness_error` because 124 is not a declared native test-failure exit.
+For this known command it is a time-limit stop, not a newly diagnosed bootstrap
+failure. The raw status and exit code have not been rewritten or promoted to a
+passing inventory. Host execution metadata reports **1,794.4 seconds**; the
+configured host and container deadlines both remained 1,800 seconds.
+
+All 165 resource samples were retained both incrementally and in the final
+attempt JSON. The largest observed kernel memory peak was **5,355,520,000 bytes
+(4.99 GiB)**, below the 8-GiB limit. Recorded memory-event counters showed no
+OOM events or OOM kills. The largest sampled PID/thread count was **167**,
+below the 2,048 cap. Worker recycling allowed later progress after the long
+early batch; it did not make the complete schedule finish within this attempt.
+
+The journal includes one **88.42-second gap** between host sampling offsets.
+The cause was not established. A separate monitoring command's permission
+review also timed out and was retried once; no test attempt was retried. This
+is not a clean uninterrupted timing study, so do not infer an exact intrinsic
+full-suite duration or claim that no possible two-worker run could fit. What
+is established is that this run hit its independent container deadline without
+finishing. The stderr tail reached public dispatcher tests and includes the
+resource-tracker shutdown warning about six semaphore objects. Failures and
+warnings were not suppressed, and no selectors or exclusions were added.
+
+The owned container and temporary candidate clone were cleaned up. The native
+tests were not restarted after the cutoff. The official survey still reports
+**100/113 ready**, with Numba unready under its existing timeout record. Memory
+was not the observed stopping condition; completion under the time cap remains
+unproven. Further retries are parked under the current limits.
+
+Final evidence is under
+`../output/deepswe-survey/numba-two-worker-full/logs/agentless-ml-ac2f56c468b6407b987eb13538e416ff/`:
+`execution.json`, `full-attempt.json`, `resource-samples.jsonl`, `stdout.log`
+and `stderr.log`. These are real outputs from the pinned candidate and image,
+not replayed responses or model-generated test results.

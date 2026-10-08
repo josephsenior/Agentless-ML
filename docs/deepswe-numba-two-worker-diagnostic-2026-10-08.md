@@ -106,6 +106,10 @@ No full attempt was started as part of this repeat.
 A subsequently approved [full attempt](deepswe-numba-full-attempt-2026-10-08.md)
 was interrupted without a recoverable final report. It does not establish
 full-suite completion or a measured 30-minute timeout.
+After a further explicit approval, one fresh full attempt stopped at the
+container-side 30-minute limit with no complete report, at least 1,950
+completions and a 4.99-GiB observed peak. The full-attempt review preserves both
+outcomes and the fresh run's sampling-gap caveat. No further retry was started.
 
 Repeat evidence is under
 `../output/deepswe-survey/numba-two-worker-diagnostic/logs/agentless-ml-0b12e3d4d78b496a9adf895c6fc7a069/`.
