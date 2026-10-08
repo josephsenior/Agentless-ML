@@ -16,6 +16,7 @@ from agentless_ml.adapters.benchmarks.deepswe_execution import (
     _KOOTA_MERGE,
     _PACKAGE_MERGE,
     _NODE_PACKAGE_MERGE,
+    _LANGCHAIN_IMPORT_CHECK,
     deepswe_test_command,
     deepswe_test_plan,
     deepswe_test_runner,
@@ -44,6 +45,70 @@ def test_python_puts_the_checkout_ahead_of_the_images_installed_package():
     assert "export PYTHONPATH=/tmp/work/src:/tmp/work" in stestr
     assert "stestr run --subunit" in stestr
     assert "subunit2junitxml" in stestr
+
+
+@pytest.mark.parametrize("image_copy", [False, True])
+def test_langchain_import_guard_rejects_non_candidate_packages(tmp_path, image_copy):
+    libraries = tmp_path / "libs"
+    import_paths = []
+    for directory, module in (("core", "langchain_core"), ("standard-tests", "langchain_tests")):
+        parent = tmp_path / "image" / directory if image_copy else libraries / directory
+        package_path = parent / module
+        package_path.mkdir(parents=True)
+        (package_path / "__init__.py").write_text("candidate_probe = 42\n", encoding="utf-8")
+        import_paths.append(str(parent))
+    environment = dict(os.environ, PYTHONPATH=os.pathsep.join(import_paths))
+    guard = _LANGCHAIN_IMPORT_CHECK.replace("/tmp/work/libs", libraries.as_posix())
+    result = subprocess.run(
+        [sys.executable, "-c", guard], env=environment, cwd=tmp_path,
+        capture_output=True, text=True, check=False,
+    )
+    assert result.returncode == (1 if image_copy else 0)
+    assert ("refusing non-candidate import" in result.stderr) == image_copy
+
+
+def test_drizzle_delegates_through_the_public_graph_and_requires_every_report(tmp_path):
+    override = load_test_overrides(OVERRIDES)["drizzle-orm-window-function-builders"]
+    plan = deepswe_test_plan("typescript", tmp_path, override)
+    assert plan.runner == "drizzle-turbo" and plan.targets == ()
+    text = plan.command().argv[2]
+    assert "pnpm exec turbo run test --cache=local:w" in text
+    assert "--force" not in text
+    assert "PATH=/root/.local/share/pnpm/.tools/pnpm/10.6.3/bin:$PATH" in text
+    assert '[ "$(pnpm --version)" = "10.6.3" ] || exit 125' in text
+    assert "--cache-dir=/tmp/agentless-turbo --concurrency=2" in text
+    assert "--continue=dependencies-successful --env-mode=loose --no-daemon" in text
+    assert "--continue=always" not in text
+    assert "PRISMA_QUERY_ENGINE_LIBRARY=/tmp/work/node_modules/.pnpm/" in text
+    assert "PRISMA_SCHEMA_ENGINE_BINARY=/tmp/work/node_modules/.pnpm/" in text
+    assert "sha256sum -c - || exit 125" in text
+    assert "PRISMA_ENGINES_CHECKSUM_IGNORE_MISSING" not in text
+    assert "-- --run --reporter=default --reporter=junit" in text
+    assert "--outputFile.junit=.agentless-public-junit.xml" in text
+    assert '"$(readlink -m node_modules/drizzle-orm)" = "/tmp/work/drizzle-orm/dist"' in text
+    for package in (
+        "drizzle-orm", "drizzle-kit", "drizzle-zod", "drizzle-typebox",
+        "drizzle-valibot", "drizzle-arktype", "drizzle-seed", "integration-tests",
+        "eslint-plugin-drizzle",
+    ):
+        assert f"cp -a --no-preserve=ownership /app/{package}/node_modules {package}/node_modules" in text
+        assert f"{package} /tmp/work/{package}/.agentless-public-junit.xml" in text
+    assert "|| exit 125; exit $rc" in text
+    assert "--filter" not in text and "--only" not in text
+    assert "SKIP_EXTERNAL_DB_TESTS" not in text
+    with pytest.raises(ValueError, match="does not support narrowed targets"):
+        deepswe_test_command("drizzle-turbo", ("orm-only",))
+
+
+def test_package_merge_does_not_accept_missing_prerequisite_reports(tmp_path):
+    existing = tmp_path / "orm.xml"
+    existing.write_text('<testsuite><testcase name="passes" /></testsuite>', encoding="utf-8")
+    report = tmp_path / "merged.xml"
+    result = subprocess.run(
+        [sys.executable, "-c", _PACKAGE_MERGE, str(report), "orm", str(existing),
+         "kit", str(tmp_path / "missing.xml")], capture_output=True, check=False,
+    )
+    assert result.returncode != 0 and not report.exists()
 
 
 def test_kea_preserves_the_public_babel_test_environment():
@@ -392,6 +457,7 @@ def test_an_override_can_replace_the_derived_targets(tmp_path):
 def test_the_checked_in_overrides_are_well_formed_and_explained():
     overrides = load_test_overrides(OVERRIDES)
     assert set(overrides) == {
+        "drizzle-orm-window-function-builders",
         "langchain-request-coalescing",
         "pwntools-tube-multiplexing",
         "optique-conditional-option-dependencies",

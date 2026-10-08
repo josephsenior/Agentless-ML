@@ -428,17 +428,20 @@ E.ElementTree(root).write(sys.argv[1], encoding="utf-8", xml_declaration=True)
 """.strip()
 
 
-def _workspace_dependencies(packages: tuple[str, ...]) -> str:
+def _workspace_dependencies(
+    packages: tuple[str, ...], *, preserve_ownership: bool = True
+) -> str:
     # Keep relative workspace dependency links inside the candidate tree.
+    copy = "cp -a" if preserve_ownership else "cp -a --no-preserve=ownership"
     preparation = (
         f"set -e; cd {WORK}; "
-        "if [ -d /app/node_modules ]; then cp -a /app/node_modules node_modules; "
+        f"if [ -d /app/node_modules ]; then {copy} /app/node_modules node_modules; "
         "else mkdir node_modules; fi; "
     )
     for package in dict.fromkeys(packages):
         preparation += (
             f"if [ -d /app/{package}/node_modules ]; then "
-            f"cp -a /app/{package}/node_modules {package}/node_modules; fi; "
+            f"{copy} /app/{package}/node_modules {package}/node_modules; fi; "
         )
     return preparation
 
@@ -488,6 +491,60 @@ VALIBOT_VITEST = _nested_vitest(
     ),
     build_command="(cd library && npm run build)",
 )
+
+
+_DRIZZLE_PACKAGES = (
+    "drizzle-orm", "drizzle-kit", "drizzle-zod", "drizzle-typebox",
+    "drizzle-valibot", "drizzle-arktype", "drizzle-seed", "integration-tests",
+    "eslint-plugin-drizzle",
+)
+
+
+def _drizzle_turbo() -> DeepSWETestCommand:
+    # Let the public Turbo graph run builds and type checks, rather than
+    # bypassing them with nine unrelated Vitest invocations. Package-relative
+    # output files avoid concurrent tasks overwriting the same JUnit report.
+    # Some native dependency files have a different image UID. CAP_CHOWN stays
+    # dropped; retain modes and links but let copied files belong to the runner.
+    preparation = _workspace_dependencies(_DRIZZLE_PACKAGES, preserve_ownership=False)
+    preparation += (
+        f'[ "$(readlink -m node_modules/drizzle-orm)" = "{WORK}/drizzle-orm/dist" ] '
+        "|| exit 125; "
+        "export HOME=/tmp XDG_CACHE_HOME=/tmp/cache CI=1 TURBO_TELEMETRY_DISABLED=1; "
+        "[ -x /root/.local/share/pnpm/.tools/pnpm/10.6.3/bin/pnpm ] || exit 125; "
+        "export PATH=/root/.local/share/pnpm/.tools/pnpm/10.6.3/bin:$PATH; "
+        '[ "$(pnpm --version)" = "10.6.3" ] || exit 125; '
+        f"export PRISMA_QUERY_ENGINE_LIBRARY={WORK}/node_modules/.pnpm/"
+        "@prisma+engines@5.14.0/node_modules/@prisma/engines/"
+        "libquery_engine-debian-openssl-3.0.x.so.node; "
+        f"export PRISMA_SCHEMA_ENGINE_BINARY={WORK}/node_modules/.pnpm/"
+        "@prisma+engines@5.14.0/node_modules/@prisma/engines/"
+        "schema-engine-debian-openssl-3.0.x; "
+        "printf '%s  %s\\n' "
+        "d2208911d61390b094dcb45c1856ff71fec45d8183b7d2e556c849f6a70359c0 "
+        '"$PRISMA_QUERY_ENGINE_LIBRARY" '
+        "029e6bafee7fe617a3addc4f95c73d7b749fcfd4609e3ecdd75c3c7e643d5271 "
+        '"$PRISMA_SCHEMA_ENGINE_BINARY" | sha256sum -c - || exit 125; '
+    )
+    execution = (
+        "set +e; pnpm exec turbo run test --cache=local:w "
+        "--cache-dir=/tmp/agentless-turbo --concurrency=2 "
+        "--continue=dependencies-successful --env-mode=loose --no-daemon "
+        "--no-update-notifier -- --run --reporter=default --reporter=junit "
+        "--outputFile.junit=.agentless-public-junit.xml; rc=$?; "
+        f"python -c '{_PACKAGE_MERGE}' /tmp/report.xml "
+        + " ".join(
+            f"{package} {WORK}/{package}/.agentless-public-junit.xml"
+            for package in _DRIZZLE_PACKAGES
+        )
+        + " || exit 125; exit $rc"
+    )
+    return DeepSWETestCommand(
+        preparation + execution, TestReport(ReportFormat.JUNIT_XML, "/tmp/report.xml")
+    )
+
+
+DRIZZLE_TURBO = _drizzle_turbo()
 
 
 def _optique_node() -> DeepSWETestCommand:
@@ -625,6 +682,7 @@ TEST_COMMANDS = {
     "quill-vitest": QUILL_VITEST,
     "clack-vitest": CLACK_VITEST,
     "valibot-vitest": VALIBOT_VITEST,
+    "drizzle-turbo": DRIZZLE_TURBO,
     "optique-node": OPTIQUE_NODE,
     "deno": DENO,
     "ava": AVA,
@@ -847,6 +905,7 @@ def deepswe_test_command(
         "koota-vitest", "agentrooms-vitest", "quill-vitest", "clack-vitest",
         "valibot-vitest", "optique-node", "pwntools-doctest",
         "langchain-core-pytest",
+        "drizzle-turbo",
     } and targets:
         raise ValueError(f"{runner}'s multi-suite runner does not support narrowed targets")
     try:

@@ -1,4 +1,8 @@
 {
+  "drizzle-orm-window-function-builders": {
+    "runner": "drizzle-turbo",
+    "reason": "The public root script delegates through Turbo to all nine workspace test scripts, with build and test:types prerequisites. Copy relative workspace dependencies without preserving image ownership, verify the candidate ORM link, use the image's cached pnpm 10.6.3 and checksum-verified Prisma engines, and forward Vitest run/JUnit flags through the public graph. Disable cache reads and remote caching; continue independent tasks only when their prerequisites succeeded so test failures do not truncate the inventory. Require all nine namespaced reports; prerequisite failures are never passing partial baselines."
+  },
   "langchain-request-coalescing": {
     "runner": "langchain-core-pytest",
     "reason": "The public libs/core Makefile defaults to tests/unit_tests from that package with pytest-xdist and socket restrictions, not root monorepo collection. Preserve package config and tracing-variable removal, cap auto workers at the runner's two CPUs, and verify core and standard-tests imports resolve to candidate source before testing. This is the core unit schedule, not partner integration suites."

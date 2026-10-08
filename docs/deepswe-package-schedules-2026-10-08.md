@@ -47,3 +47,58 @@ The survey retry took 148.5 seconds; pytest reports 46.01 seconds.
 The focused execution tests passed 82 cases, with four opt-in Docker checks
 skipped. Held-out benchmark tests and solutions were not inspected; no model
 was called.
+
+## Drizzle's delegated graph
+
+The `drizzle-turbo` runner uses the public root Turbo graph, not a hand-picked
+ORM test file or nine independent commands that skip prerequisites. A dry run
+with the pinned Turbo 2.5.3 confirms 27 tasks and all nine test packages:
+ORM, kit, seed, zod, typebox, valibot, arktype, the ESLint plugin and integration
+tests. Candidate builds and type checks remain prerequisites.
+
+Installed dependencies are copied into writable candidate directories with
+their relative workspace links and modes intact. Ownership is not preserved:
+some native files have different image UIDs, and the runner keeps CAP_CHOWN
+dropped. The root ORM dependency must resolve to the candidate's built `dist`.
+The public image's cached pnpm 10.6.3 is selected explicitly and version-checked;
+using the image's default pnpm with a new writable home otherwise tries to
+download that same package manager again.
+
+Prisma's public generation step initially tried to fetch engine checksums even
+though the required binaries are already installed in the pinned image. Its
+supported `PRISMA_QUERY_ENGINE_LIBRARY` and `PRISMA_SCHEMA_ENGINE_BINARY`
+settings now point to the copied binaries. Both are SHA-256 checked before any
+task runs:
+
+- Query engine: `d2208911d61390b094dcb45c1856ff71fec45d8183b7d2e556c849f6a70359c0`.
+- Schema engine: `029e6bafee7fe617a3addc4f95c73d7b749fcfd4609e3ecdd75c3c7e643d5271`.
+
+Turbo's loose environment mode forwards these local tool settings to the child
+tasks. Networking stays disabled; no host Docker socket, service or credential
+is supplied. There is no checksum-ignore setting or substituted image.
+
+The schedule caps concurrent tasks at two, disables remote caching and cache
+reads, and adds Vitest's run/JUnit flags through the existing package scripts.
+Every package writes the same relative report filename in its own directory;
+the merger requires all nine reports and namespaces their IDs. Missing reports
+fail closed. The kit script's own TypeScript check and test environment remain
+in place.
+
+The first complete build reached seven reports, then seed's failing MySQL
+fixtures stopped the root graph: they require `/var/run/docker.sock`, which is
+not exposed. Turbo's default fail-fast policy cancelled ORM and integration
+tests, so that attempt did not establish readiness. The final runner uses
+`--continue=dependencies-successful` to finish unrelated tests, while still
+blocking tasks whose build/type prerequisites failed. This changes failure
+continuation, not the declared test set or expected outputs. It does not use
+`--continue=always` or skip external database tests.
+
+The pinned image remains
+`sha256:c83d567eff0ad65e331e26bd3019e128f4fe1c377e3377938e2511e47679ca9b`
+at base `e8e6edfef5ca69c6188d320388ad440265911057`.
+
+Verification: the package suite passed 666 tests with 31 optional checks skipped.
+After the final command adjustments, execution/adapter/report checks passed
+134 tests with five optional checks skipped. These include rejection of
+non-candidate LangChain imports, complete nine-package dispatch, preserved
+prerequisites and failure on missing reports.
