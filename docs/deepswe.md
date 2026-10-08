@@ -574,6 +574,9 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   accepted; readiness stays **100/113**. Its raw exit 124 is retained, and the
   full-attempt review documents the host sampling gap rather than claiming
   an uninterrupted runtime measurement. No further retry was started.
+  Numba is now explicitly parked at the user's request under the current
+  limits, not excluded from the dataset. Work has moved to
+  [GoReleaser's hidden image caches](deepswe-goreleaser-cache-review-2026-10-08.md).
   The [Pwntools doctest review](deepswe-pwntools-doctest-2026-10-07.md) replaces
   its incorrect pytest invocation with the public Sphinx runner. The published
   image lacks Sphinx; a separately augmented diagnostic also exposed missing

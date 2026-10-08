@@ -120,6 +120,12 @@ tests were not restarted after the cutoff. The official survey still reports
 was not the observed stopping condition; completion under the time cap remains
 unproven. Further retries are parked under the current limits.
 
+The user has explicitly confirmed parking Numba and moving to another unready
+task. Keep its existing survey record, pinned image and test configuration;
+do not increase limits, narrow the schedule or launch another attempt as part
+of the remaining setup work. This is a work-priority decision, not removal
+from the benchmark or a claim that the complete suite can never finish.
+
 Final evidence is under
 `../output/deepswe-survey/numba-two-worker-full/logs/agentless-ml-ac2f56c468b6407b987eb13538e416ff/`:
 `execution.json`, `full-attempt.json`, `resource-samples.jsonl`, `stdout.log`
