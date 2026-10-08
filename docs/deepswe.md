@@ -582,6 +582,11 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   2,907 passed, 46 failed and 47 skipped report IDs. No limits or test exclusions
   changed. This substituted-image inventory is not a canonical readiness
   update; the official count remains **100/113**.
+  [Cliffy's cache inventory](deepswe-cliffy-cache-review-2026-10-08.md) confirms
+  a different problem: eight declared JSR packages have no entries in its
+  published Deno cache. The first saved failure is missing `@std/io` metadata.
+  No dependencies were downloaded, image supplemented or baseline rerun in
+  that inspection; readiness remains unchanged.
   The [Pwntools doctest review](deepswe-pwntools-doctest-2026-10-07.md) replaces
   its incorrect pytest invocation with the public Sphinx runner. The published
   image lacks Sphinx; a separately augmented diagnostic also exposed missing

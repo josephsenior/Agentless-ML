@@ -1,0 +1,39 @@
+{
+  "task_id": "cliffy-config-file-parsing",
+  "base_commit": "132a437c40cffbdfbe474ca808c8debde59e2633",
+  "image_id": "sha256:0a8dd8f1270ec4bb88efadad3021762e1d07274f686276c8a484d26a00bd91b5",
+  "deno_version": "2.0.0",
+  "cache_size_du_sh": "21M",
+  "label": "read_only_public_dependency_cache_inventory",
+  "ignored_jsr_cache_files": 0,
+  "missing_declared_jsr_packages": [
+    "@c4spar/mock-command",
+    "@c4spar/mock-fetch",
+    "@std/async",
+    "@std/cli",
+    "@std/datetime",
+    "@std/http",
+    "@std/io",
+    "@std/semver"
+  ],
+  "cached_version_metadata": {
+    "@std/assert": ["1.0.19"],
+    "@std/encoding": ["1.0.10"],
+    "@std/fmt": ["1.0.10"],
+    "@std/fs": ["1.0.24"],
+    "@std/path": ["1.1.5"],
+    "@std/testing": ["1.0.0", "1.0.19"],
+    "@std/text": ["1.0.19"],
+    "@std/internal": ["1.0.14"]
+  },
+  "complete_dependency_graph_verified": false,
+  "npm_graph_verified": false,
+  "network": "none",
+  "root_read_only": true,
+  "dependency_downloads": false,
+  "image_built": false,
+  "tests_rerun": false,
+  "official_survey_updated": false,
+  "canonical_ready_tasks": 100,
+  "canonical_task_count": 113
+}
