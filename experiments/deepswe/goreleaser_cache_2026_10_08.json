@@ -1,0 +1,39 @@
+{
+  "task_id": "goreleaser-retry-publish-auditing",
+  "base_commit": "399ef141161f212f4e81b5d7497b84633fc712d9",
+  "condition": "substituted_environment_cache_relocation_diagnostic",
+  "parent_image_id": "sha256:778c43a00bb317e8e0b266b212b187be7765a12dbdadde3ba2f4bceba9c40080",
+  "image_id": "sha256:a02ee6ffddb93fa736a2d8d345669d966a3c15db99d4333f151eeb1c08fed085",
+  "go_binary_sha256_before_and_after": "548e61b2d08ae52043be2f1924ed3c1d2b2c41967e360f3e317667f6fa912fc2",
+  "recipe": "experiments/deepswe/goreleaser/Dockerfile.cache",
+  "runner": "go",
+  "targets": ["./..."],
+  "network": "none",
+  "root_read_only": true,
+  "memory_mb": 8192,
+  "cpus": 2,
+  "tmpfs_mb": 4096,
+  "pids_limit": 2048,
+  "timeout_seconds": 1800,
+  "module_check": {
+    "status": "pass",
+    "duration_seconds": 28.049827499999992,
+    "artifact_directory": "../output/deepswe-survey/goreleaser-cache/logs/agentless-ml-23d8067e01b64074a451f705d9160c2f"
+  },
+  "full_attempt": {
+    "status": "fail",
+    "exit_code": 1,
+    "duration_seconds": 303.60881930000005,
+    "report_ids": 3000,
+    "passed": 2907,
+    "failed": 46,
+    "skipped": 47,
+    "artifact_directory": "../output/deepswe-survey/goreleaser-cache/logs/agentless-ml-a6549b840b2d4938bf48313ad64a6e7d"
+  },
+  "official_survey_updated": false,
+  "official_override_changed": false,
+  "canonical_ready_tasks": 100,
+  "canonical_task_count": 113,
+  "automatic_retry": false,
+  "numba_parked": true
+}

@@ -17,7 +17,9 @@ def test_cache_diagnostic_preserves_full_public_plan(monkeypatch):
     assert command.counted_test_ids is None
 
 
-def test_image_only_relocates_existing_environment_caches():
+def test_image_only_relocates_existing_environment_caches(monkeypatch):
+    monkeypatch.syspath_prepend(str(Path(__file__).resolve().parents[1] / "tools"))
+    from run_goreleaser_cache_diagnostic import PARENT
     dockerfile = (Path(__file__).resolve().parents[1] /
                   "experiments/deepswe/goreleaser/Dockerfile.cache").read_text()
     assert "mv /tmp/gomodcache /opt/agentless-go/modules" in dockerfile
@@ -27,3 +29,4 @@ def test_image_only_relocates_existing_environment_caches():
     assert "go mod download" not in dockerfile
     assert "go build" not in dockerfile
     assert "COPY" not in dockerfile
+    assert "@" + PARENT in dockerfile.splitlines()[0]
