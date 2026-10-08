@@ -47,6 +47,32 @@ def test_python_puts_the_checkout_ahead_of_the_images_installed_package():
     assert "subunit2junitxml" in stestr
 
 
+def test_eicrud_prepares_candidate_clients_and_a_real_local_database(tmp_path):
+    override = load_test_overrides(OVERRIDES)["eicrud-keyset-pagination-cursor"]
+    plan = deepswe_test_plan("typescript", tmp_path, override)
+    assert plan.runner == "eicrud-mongo" and plan.targets == ()
+    text = plan.command().argv[2]
+    assert 'ln -s /tmp/work/$directory' in text
+    assert 'readlink -f' in text and '@eicrud|.cache' in text
+    assert '(cd shared && npm run compile) || exit 125' in text
+    assert '(cd cli && npm run compile) || exit 125' in text
+    for export in ('dtos', 'superclient', 'openapi -o-jqs'):
+        assert f'node /tmp/work/cli/commands/index.js export {export} || exit 125' in text
+    assert 'npm run setup:oapi:client || exit 125' in text
+    assert 'npm run build || exit 125' in text
+    assert 'mongod --bind_ip 127.0.0.1 --port 27017 --dbpath /tmp/eicrud-mongo' in text
+    assert 'command({ping:1})' in text
+    assert text.index('export dtos') < text.index('npm run build') < text.index('mongod --bind_ip')
+    assert text.index('local MongoDB ping verified') < text.index('TEST_CRUD_DB=mongo /app/node_modules/.bin/jest')
+    assert 'TEST_CRUD_DB=mongo /app/node_modules/.bin/jest --forceExit --ci --maxWorkers=2' in text
+    assert text.count('--maxWorkers=') == 1
+    assert 'testPathIgnorePatterns' not in text and 'TEST_TIMEOUT' not in text
+    assert 'npm install' not in text and 'cp /app/test' not in text
+    assert plan.command().report == TEST_COMMANDS['jest'].report
+    with pytest.raises(ValueError, match='does not support narrowed targets'):
+        deepswe_test_command('eicrud-mongo', ('test/core/core.security.spec.ts',))
+
+
 def test_igel_changes_directory_before_import_without_changing_pytest(tmp_path):
     override = load_test_overrides(OVERRIDES)["igel-persist-feature-schema"]
     plan = deepswe_test_plan("python", tmp_path, override)
@@ -490,6 +516,7 @@ def test_an_override_can_replace_the_derived_targets(tmp_path):
 def test_the_checked_in_overrides_are_well_formed_and_explained():
     overrides = load_test_overrides(OVERRIDES)
     assert set(overrides) == {
+        "eicrud-keyset-pagination-cursor",
         "skrub-duration-encoding",
         "igel-persist-feature-schema",
         "drizzle-orm-window-function-builders",

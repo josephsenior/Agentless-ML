@@ -546,6 +546,11 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   The report contains 2,859 passing IDs, four failures and 357 skipped or
   expected-failure cases. The latest count is **99/113** (14 tasks not ready);
   only Eicrud and Numba still have `no_passing_tests` records.
+  [Eicrud's offline MongoDB baseline](deepswe-eicrud-baseline-2026-10-08.md)
+  rebuilds its candidate CLI and generated clients and starts the image's
+  existing database under `/tmp`. All 24 public MongoDB suites run: 147 passing
+  and 69 failed report IDs. The latest count is **100/113** (13 tasks not ready);
+  Numba is the only remaining `no_passing_tests` task.
   The [Pwntools doctest review](deepswe-pwntools-doctest-2026-10-07.md) replaces
   its incorrect pytest invocation with the public Sphinx runner. The published
   image lacks Sphinx; a separately augmented diagnostic also exposed missing

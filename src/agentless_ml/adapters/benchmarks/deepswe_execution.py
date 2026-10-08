@@ -30,6 +30,7 @@ from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
 
+from agentless_ml.adapters.benchmarks.deepswe_eicrud import EICRUD_MONGO_SCRIPT
 from agentless_ml.adapters.benchmarks.deepswe_yjs import YJS_PREPARE, YJS_REPORTER
 from agentless_ml.validation.docker import PublicTestCommand
 from agentless_ml.validation.reports import ReportFormat, TestReport
@@ -293,6 +294,8 @@ JEST = DeepSWETestCommand(
     ),
     report=TestReport(ReportFormat.CTRF_JSON, "ctrf/ctrf-report.json"),
 )
+
+EICRUD_MONGO = DeepSWETestCommand(script=EICRUD_MONGO_SCRIPT, report=JEST.report)
 
 # vitest's JUnit reporter is built in; it is also what the benchmark's own
 # verifier reads, according to the vitest task Dockerfiles. `run` disables
@@ -700,6 +703,7 @@ TEST_COMMANDS = {
     "mocha-json": MOCHA_JSON,
     "arktype-mocha": ARKTYPE_MOCHA,
     "jest": JEST,
+    "eicrud-mongo": EICRUD_MONGO,
     "vitest": VITEST,
     "vitest-writable": VITEST_WRITABLE,
     "koota-vitest": KOOTA_VITEST,
@@ -931,7 +935,7 @@ def deepswe_test_command(
     if runner in {
         "koota-vitest", "agentrooms-vitest", "quill-vitest", "clack-vitest",
         "valibot-vitest", "optique-node", "pwntools-doctest",
-        "langchain-core-pytest", "skrub-pytest",
+        "langchain-core-pytest", "skrub-pytest", "eicrud-mongo",
         "drizzle-turbo",
     } and targets:
         raise ValueError(f"{runner}'s multi-suite runner does not support narrowed targets")

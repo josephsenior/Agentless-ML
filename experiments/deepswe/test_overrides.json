@@ -1,4 +1,8 @@
 {
+  "eicrud-keyset-pagination-cursor": {
+    "runner": "eicrud-mongo",
+    "reason": "The public CI prepares generated DTO, superclient and OpenAPI clients, builds, and runs test:mongo against MongoDB 7. Use the pinned image's installed MongoDB with /tmp storage and a verified local ping. Link local packages to candidate source, compile its shared/CLI code and regenerate clients offline before the unchanged MongoDB schedule; cap Jest at two workers. Preserve image, tests, timeouts and Docker protections. This does not run the separate PostgreSQL or microservice schedules."
+  },
   "skrub-duration-encoding": {
     "runner": "skrub-pytest",
     "reason": "The public Pixi test task runs pytest -vsl --cov=skrub --cov-report=xml skrub, separately from user-guide doctests. Use that complete package schedule and the supported SKB_DATA_DIRECTORY=/tmp/skrub_data to avoid creating /root/skrub_data on the read-only image. Keep candidate source first on PYTHONPATH, redirect coverage artifacts to /tmp, and preserve tests, pytest configuration, image and Docker protections."
