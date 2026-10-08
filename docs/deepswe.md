@@ -562,6 +562,9 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   exercised parallel-result recording and worker recycling, with a 1.54-GiB
   observed peak and no OOM events. Host/container timing disagreed; this sample
   does not establish full-suite runtime or change the official baseline.
+  A clean repeat stopped at the intended five-minute cutoff, with at least
+  350 completions, a 1.42-GiB observed peak and no OOM events. It resolved the
+  timing discrepancy for that short window, not full-suite readiness.
   The [Pwntools doctest review](deepswe-pwntools-doctest-2026-10-07.md) replaces
   its incorrect pytest invocation with the public Sphinx runner. The published
   image lacks Sphinx; a separately augmented diagnostic also exposed missing

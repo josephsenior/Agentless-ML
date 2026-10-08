@@ -72,6 +72,43 @@ Before a full retry, obtain a clean short timing sample on an uninterrupted
 host. There is no reason from this sample to increase memory, but there is
 also no evidence yet that the full schedule meets the time limit.
 
+## Clean timing repeat
+
+A second invocation used the exact same tool, image, source revision, native
+schedule and limits. No runner code or benchmark configuration changed.
+This repeat ended at the intended 300-second test-window cutoff with exit
+**124**, rather than hitting the outer 1,800-second host timeout. Recorded
+execution duration was **319.9 seconds** including preparation and cleanup.
+Thirty resource snapshots arrived 10.26 to 10.47 seconds apart. Live container
+process elapsed times agreed with host timing; no large gaps or elapsed-clock
+disagreement were observed during this repeat.
+
+The last progress marker was **350 completed tests**; markers are emitted every
+25 completions, so this is a lower bound, not an exact final inventory. Native
+discovery again reported 9,907 parallel tests and 702 serial-only tests. The
+serial remainder was not reached. The largest observed cgroup memory peak was
+**1,526,124,544 bytes (1.42 GiB)**, and the largest sampled PID/thread count was
+135. The final memory-event counters reported zero OOM events and OOM kills.
+
+The generic execution record labels exit 124 as `harness_error`, since this is
+not a normal test-runner exit. Here it is the deliberate diagnostic cutoff,
+not evidence of a newly broken baseline. Stderr also retains the native
+resource-tracker warning about six semaphore objects during forced shutdown.
+The disposable container and candidate workspace were cleaned up; no partial
+report was accepted and the official survey was not updated.
+
+This repeat resolves the short sample's timing uncertainty. Two workers fit
+the limits for the observed early schedule; it still does not establish later
+memory peaks or full-suite completion within 30 minutes. The next direct check
+would be one full native two-worker attempt with the unchanged 30-minute cap.
+No full attempt was started as part of this repeat.
+
+Repeat evidence is under
+`../output/deepswe-survey/numba-two-worker-diagnostic/logs/agentless-ml-0b12e3d4d78b496a9adf895c6fc7a069/`.
+The same four artifact files listed below preserve its resource samples,
+execution metadata and native output. Only documentation changed afterward;
+the earlier recorder test results above were not rerun for this diagnostic.
+
 ## Evidence and reproduction
 
 Artifacts are under

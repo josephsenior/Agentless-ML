@@ -77,6 +77,9 @@ The subsequent [two-worker diagnostic](deepswe-numba-two-worker-diagnostic-2026-
 adds parallel-result recording and samples the early public schedule. Memory
 stayed below the cap, but host/container timing disagreed, so it does not
 establish full-suite runtime or change readiness. No full retry was started.
+An unchanged short repeat subsequently stopped cleanly at its five-minute
+cutoff, with a 1.42-GiB observed peak and no OOM events. The diagnostic review
+records both runs; neither is a full baseline.
 
 The sealed base is `5781334aa654972fdc749003e7c1e93e6d277110`. The verified
 published image remains
