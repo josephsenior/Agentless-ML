@@ -604,6 +604,12 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   No tests were filtered, no failures hidden and no runtime protections changed.
   This completes the labelled supplemented-image baseline, not a canonical
   survey update; the original-image count stays **100/113**.
+  [KGateway's build-space inspection](deepswe-kgateway-space-review-2026-10-09.md)
+  confirms compiler ENOSPC on our 4-GiB scratch mount. Its Go 1.26.1 toolchain
+  and 2.1-GB module cache are already accessible outside `/tmp`; the image's
+  build cache is only 59 MB and is not seeded by the current runner. No retry
+  or resource change was made. A bounded compile-only space diagnostic is
+  proposed before another full attempt.
   The [Pwntools doctest review](deepswe-pwntools-doctest-2026-10-07.md) replaces
   its incorrect pytest invocation with the public Sphinx runner. The published
   image lacks Sphinx; a separately augmented diagnostic also exposed missing
