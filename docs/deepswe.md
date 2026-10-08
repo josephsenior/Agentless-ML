@@ -598,6 +598,12 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   passed native no-run discovery and type checking for all 119 candidate test
   modules in 21.3 seconds, offline with unchanged Deno and limits. No tests
   executed, and the official count remains **100/113**.
+  Its subsequent approved [full public baseline](deepswe-cliffy-public-baseline-2026-10-09.md)
+  passed in 58.8 seconds with 822 native tests and 76 steps. The raw XML has
+  898 passing entries; existing duplicate-label normalization yields 878 IDs.
+  No tests were filtered, no failures hidden and no runtime protections changed.
+  This completes the labelled supplemented-image baseline, not a canonical
+  survey update; the original-image count stays **100/113**.
   The [Pwntools doctest review](deepswe-pwntools-doctest-2026-10-07.md) replaces
   its incorrect pytest invocation with the public Sphinx runner. The published
   image lacks Sphinx; a separately augmented diagnostic also exposed missing

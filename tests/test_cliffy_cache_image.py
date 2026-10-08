@@ -38,3 +38,13 @@ def test_cache_staging_rejects_changed_saved_bytes(monkeypatch, tmp_path):
             "sha256": hashlib.sha256(b"original").hexdigest()}
     with pytest.raises(ValueError, match="changed"):
         build.checked_blob(item)
+
+
+def test_full_schedule_is_exactly_the_existing_public_command(monkeypatch):
+    monkeypatch.syspath_prepend(str(Path(__file__).resolve().parents[1] / "tools"))
+    from check_cliffy_offline_graph import selected_command
+    from agentless_ml.adapters.benchmarks.deepswe_execution import DENO
+    assert selected_command(True) == DENO.command((), timeout_seconds=1800)
+    assert "--no-run" not in selected_command(True).argv[2]
+    assert selected_command(True).report == DENO.report
+    assert selected_command(False).report is None

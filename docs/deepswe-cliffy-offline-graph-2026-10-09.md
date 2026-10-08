@@ -109,3 +109,9 @@ Graph evidence under `../output/deepswe-survey/cliffy-cache/logs/`:
 Next: one unchanged full public test attempt against this exact derivative,
 offline and under the same limits, recorded separately from canonical readiness.
 Numba remains parked.
+
+The subsequent approved [full public run](deepswe-cliffy-public-baseline-2026-10-09.md)
+passed in 58.8 seconds of host execution: 822 native tests and 76 steps,
+898 raw passing JUnit entries and 878 distinct normalized regression IDs.
+No failures or skips were reported. The duplicate-label count is documented,
+and canonical readiness remains unchanged because this is a substituted image.
