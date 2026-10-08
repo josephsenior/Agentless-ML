@@ -1,4 +1,8 @@
 {
+  "igel-persist-feature-schema": {
+    "runner": "igel-pytest",
+    "reason": "The public tests import Igel before changing to tests/test_igel, but Igel binds model output paths at import time. Start pytest from that directory so saved models and test expectations use the same folder. Keep candidate source first on PYTHONPATH and preserve both unchanged public tests, pytest configuration and the pinned image."
+  },
   "drizzle-orm-window-function-builders": {
     "runner": "drizzle-turbo",
     "reason": "The public root script delegates through Turbo to all nine workspace test scripts, with build and test:types prerequisites. Copy relative workspace dependencies without preserving image ownership, verify the candidate ORM link, use the image's cached pnpm 10.6.3 and checksum-verified Prisma engines, and forward Vitest run/JUnit flags through the public graph. Disable cache reads and remote caching; continue independent tasks only when their prerequisites succeeded so test failures do not truncate the inventory. Require all nine namespaced reports; prerequisite failures are never passing partial baselines."

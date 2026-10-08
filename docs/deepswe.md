@@ -537,6 +537,10 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   One nested macro compilation still fails on temporary-storage exhaustion;
   it remains visible and does not empty the usable inventory. The latest count
   is **97/113** (16 tasks not ready), with no remaining `survey_error` records.
+  [Igel's working-directory correction](deepswe-igel-baseline-2026-10-08.md)
+  starts pytest from `tests/test_igel` before Igel binds its output paths.
+  Both unchanged public tests pass in the pinned image. The latest count is
+  **98/113** (15 tasks not ready), with three `no_passing_tests` records left.
   The [Pwntools doctest review](deepswe-pwntools-doctest-2026-10-07.md) replaces
   its incorrect pytest invocation with the public Sphinx runner. The published
   image lacks Sphinx; a separately augmented diagnostic also exposed missing

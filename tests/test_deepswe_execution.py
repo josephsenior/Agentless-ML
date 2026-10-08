@@ -47,6 +47,21 @@ def test_python_puts_the_checkout_ahead_of_the_images_installed_package():
     assert "subunit2junitxml" in stestr
 
 
+def test_igel_changes_directory_before_import_without_changing_pytest(tmp_path):
+    override = load_test_overrides(OVERRIDES)["igel-persist-feature-schema"]
+    plan = deepswe_test_plan("python", tmp_path, override)
+    assert plan.runner == "igel-pytest" and plan.targets == ()
+    assert plan.override_reason == override["reason"]
+    command = plan.command(timeout_seconds=123)
+    assert command.argv[2] == script("pytest").replace(
+        "cd /tmp/work &&", "cd /tmp/work/tests/test_igel &&", 1,
+    )
+    assert command.report == TEST_COMMANDS["pytest"].report
+    assert command.failure_exit_codes == (1,)
+    assert command.timeout_seconds == 123
+    assert script("pytest").startswith("cd /tmp/work &&")
+
+
 @pytest.mark.parametrize("image_copy", [False, True])
 def test_langchain_import_guard_rejects_non_candidate_packages(tmp_path, image_copy):
     libraries = tmp_path / "libs"
@@ -457,6 +472,7 @@ def test_an_override_can_replace_the_derived_targets(tmp_path):
 def test_the_checked_in_overrides_are_well_formed_and_explained():
     overrides = load_test_overrides(OVERRIDES)
     assert set(overrides) == {
+        "igel-persist-feature-schema",
         "drizzle-orm-window-function-builders",
         "langchain-request-coalescing",
         "pwntools-tube-multiplexing",

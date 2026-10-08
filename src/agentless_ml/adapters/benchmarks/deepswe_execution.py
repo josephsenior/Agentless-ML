@@ -145,6 +145,17 @@ PYTEST = DeepSWETestCommand(
     report=TestReport(ReportFormat.JUNIT_XML, "/tmp/report.xml"),
 )
 
+# The public tests import Igel before changing to tests/test_igel. Igel binds
+# its output paths at import time, so start there before Python loads it.
+# Keep candidate imports, pytest configuration and both public tests unchanged.
+IGEL_PYTEST = DeepSWETestCommand(
+    script=(
+        f"cd {WORK}/tests/test_igel && {_PYTHON_PATH} python -m pytest -p no:cacheprovider "
+        '--continue-on-collection-errors --junitxml=/tmp/report.xml "$@"'
+    ),
+    report=PYTEST.report,
+)
+
 _LANGCHAIN_IMPORT_CHECK = """
 from pathlib import Path
 import langchain_core, langchain_tests
@@ -665,6 +676,7 @@ TEST_COMMANDS = {
     "go": GO,
     "go-module": GO_MODULE,
     "pytest": PYTEST,
+    "igel-pytest": IGEL_PYTEST,
     "langchain-core-pytest": LANGCHAIN_CORE_PYTEST,
     "pwntools-doctest": PWNTOOLS_DOCTEST,
     "pwntools-native-doctest": PWNTOOLS_NATIVE_DOCTEST,
