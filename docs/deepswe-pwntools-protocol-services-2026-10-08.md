@@ -114,7 +114,19 @@ Public report, command/limit metadata, condition record and logs are under
 in the same artifact root. The report records the additional related `tubes`
 group explicitly rather than hiding it in the selected-page count.
 
-Next: run all four supported public pages together against this shared image
-to check the combined condition. The PyPI/download routes passed real
-functional preflight here, but their earlier full-page results were obtained
-with the earlier two-host image and should not be silently carried forward.
+## Combined run and stopping point
+
+All four supported public pages were subsequently run together against the
+exact same shared-service image. The report passes context 164/164, sockets
+35/35, update 11/11, downloads 6/6 and the related tubes page 219/219:
+**435 examples, five passing groups, no example/setup/cleanup failures**.
+Evidence is under
+`../output/deepswe-survey/pwntools-protocol-services-2026-10-08/four-pages/logs/agentless-ml-51d33b3d05fa4fefa363e20d199aa186/`.
+
+Work on Pwntools stops here at the user's request so setup effort can move to
+other tasks. It is not canonical-ready: its published image still lacks the
+required Sphinx dependency and produces no accepted public report. The
+augmented diagnostic has usable passing examples, but full-schedule filesystem,
+process and host-core constraints remain documented in the earlier notes.
+An all-passing suite is not the survey's readiness rule; these substituted-image
+results simply do not qualify as the pinned published-image baseline.
