@@ -17,6 +17,7 @@ from agentless_ml.adapters.benchmarks.deepswe_execution import (
     _PACKAGE_MERGE,
     _NODE_PACKAGE_MERGE,
     _LANGCHAIN_IMPORT_CHECK,
+    _NUMBA_IMPORT_CHECK,
     deepswe_test_command,
     deepswe_test_plan,
     deepswe_test_runner,
@@ -45,6 +46,48 @@ def test_python_puts_the_checkout_ahead_of_the_images_installed_package():
     assert "export PYTHONPATH=/tmp/work/src:/tmp/work" in stestr
     assert "stestr run --subunit" in stestr
     assert "subunit2junitxml" in stestr
+
+
+def test_numba_builds_candidate_extensions_before_import_and_native_runner(tmp_path):
+    override = load_test_overrides(OVERRIDES)["numba-stencil-boundary-modes"]
+    plan = deepswe_test_plan("python", tmp_path, override)
+    assert plan.runner == "numba-runtests" and plan.targets == ()
+    text = plan.command().argv[2]
+    assert "python setup.py build_ext --inplace || exit 125" in text
+    assert text.index("build_ext --inplace") < text.index("refusing non-candidate import")
+    assert text.index("refusing non-candidate import") < text.index("BasicTestRunner.resultclass")
+    assert text.endswith("/tmp/work/runtests.py /tmp/report.xml")
+    assert "python -m pytest" not in text
+    assert "sys.argv = [entry]" in text and "completed or not records" in text
+    assert "/app/numba" not in text and "pip install" not in text
+    assert "_min_llvmlite_version" not in text and "sed " not in text
+    assert plan.command().report == TEST_COMMANDS["pytest"].report
+    assert plan.command().failure_exit_codes == (1,)
+    with pytest.raises(ValueError, match="does not support narrowed targets"):
+        deepswe_test_command("numba-runtests", ("numba.tests.test_stencil",))
+
+
+@pytest.mark.parametrize("image_copy", [False, True])
+def test_numba_import_guard_rejects_non_candidate_code(tmp_path, image_copy):
+    parent = tmp_path / ("image" if image_copy else "candidate")
+    for name in ("numba", "numba.core.typeconv._typeconv", "numba._helperlib",
+                 "numba._dispatcher", "numba._dynfunc", "numba.np.ufunc._internal",
+                 "numba.core.runtime._nrt_python"):
+        pieces = name.split(".")
+        package_path = parent
+        for piece in pieces[:-1] if len(pieces) > 1 else pieces:
+            package_path /= piece
+            package_path.mkdir(parents=True, exist_ok=True)
+            (package_path / "__init__.py").write_text("", encoding="utf-8")
+        if len(pieces) > 1:
+            (package_path / (pieces[-1] + ".py")).write_text("", encoding="utf-8")
+    guard = _NUMBA_IMPORT_CHECK.replace("/tmp/work/numba", (tmp_path / "candidate/numba").as_posix())
+    result = subprocess.run(
+        [sys.executable, "-c", guard], cwd=tmp_path,
+        env=dict(os.environ, PYTHONPATH=str(parent)), capture_output=True, text=True, check=False,
+    )
+    assert result.returncode == (1 if image_copy else 0)
+    assert ("refusing non-candidate import" in result.stderr) == image_copy
 
 
 def test_eicrud_prepares_candidate_clients_and_a_real_local_database(tmp_path):
@@ -516,6 +559,7 @@ def test_an_override_can_replace_the_derived_targets(tmp_path):
 def test_the_checked_in_overrides_are_well_formed_and_explained():
     overrides = load_test_overrides(OVERRIDES)
     assert set(overrides) == {
+        "numba-stencil-boundary-modes",
         "eicrud-keyset-pagination-cursor",
         "skrub-duration-encoding",
         "igel-persist-feature-schema",

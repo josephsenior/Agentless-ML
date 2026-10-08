@@ -31,6 +31,7 @@ from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
 
 from agentless_ml.adapters.benchmarks.deepswe_eicrud import EICRUD_MONGO_SCRIPT
+from agentless_ml.adapters.benchmarks.deepswe_numba import NUMBA_REPORTER
 from agentless_ml.adapters.benchmarks.deepswe_yjs import YJS_PREPARE, YJS_REPORTER
 from agentless_ml.validation.docker import PublicTestCommand
 from agentless_ml.validation.reports import ReportFormat, TestReport
@@ -144,6 +145,32 @@ PYTEST = DeepSWETestCommand(
         '--continue-on-collection-errors --junitxml=/tmp/report.xml "$@"'
     ),
     report=TestReport(ReportFormat.JUNIT_XML, "/tmp/report.xml"),
+)
+
+_NUMBA_IMPORT_CHECK = """
+import importlib
+from pathlib import Path
+root = Path("/tmp/work/numba")
+for name in ("numba", "numba.core.typeconv._typeconv", "numba._helperlib",
+             "numba._dispatcher", "numba._dynfunc", "numba.np.ufunc._internal",
+             "numba.core.runtime._nrt_python"):
+    module = importlib.import_module(name)
+    if not Path(module.__file__).resolve().is_relative_to(root):
+        raise SystemExit("refusing non-candidate import: " + name)
+    print("candidate import verified: " + name)
+""".strip()
+
+# A source checkout has no compiled CPython extensions. Build them from the
+# candidate as documented, then reject imports from the image before testing.
+# Preserve the native runner's loader (including CUDA availability checks).
+NUMBA_RUNTESTS = DeepSWETestCommand(
+    script=(
+        f"cd {WORK} || exit 125; export PYTHONPATH={WORK}/src:{WORK}; "
+        "python setup.py build_ext --inplace || exit 125; "
+        f"python -c '{_NUMBA_IMPORT_CHECK}' || exit 125; "
+        f"python -c '{NUMBA_REPORTER}' {WORK}/runtests.py /tmp/report.xml"
+    ),
+    report=PYTEST.report,
 )
 
 # The public tests import Igel before changing to tests/test_igel. Igel binds
@@ -693,6 +720,7 @@ TEST_COMMANDS = {
     "go": GO,
     "go-module": GO_MODULE,
     "pytest": PYTEST,
+    "numba-runtests": NUMBA_RUNTESTS,
     "igel-pytest": IGEL_PYTEST,
     "skrub-pytest": SKRUB_PYTEST,
     "langchain-core-pytest": LANGCHAIN_CORE_PYTEST,
@@ -935,7 +963,7 @@ def deepswe_test_command(
     if runner in {
         "koota-vitest", "agentrooms-vitest", "quill-vitest", "clack-vitest",
         "valibot-vitest", "optique-node", "pwntools-doctest",
-        "langchain-core-pytest", "skrub-pytest", "eicrud-mongo",
+        "langchain-core-pytest", "skrub-pytest", "eicrud-mongo", "numba-runtests",
         "drizzle-turbo",
     } and targets:
         raise ValueError(f"{runner}'s multi-suite runner does not support narrowed targets")

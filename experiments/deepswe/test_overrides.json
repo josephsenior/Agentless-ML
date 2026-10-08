@@ -1,4 +1,8 @@
 {
+  "numba-stencil-boundary-modes": {
+    "runner": "numba-runtests",
+    "reason": "Build native extensions with the documented python setup.py build_ext --inplace and verify candidate imports. Run the public runtests.py entry point with its default full schedule and native loader, including CUDA availability checks; generic pytest bypasses those hooks. Record real unittest outcomes through the existing BasicTestRunner without changing discovery, ordering or assertions. Do not copy image extensions or patched source; retain installed dependencies, offline execution and Docker limits."
+  },
   "eicrud-keyset-pagination-cursor": {
     "runner": "eicrud-mongo",
     "reason": "The public CI prepares generated DTO, superclient and OpenAPI clients, builds, and runs test:mongo against MongoDB 7. Use the pinned image's installed MongoDB with /tmp storage and a verified local ping. Link local packages to candidate source, compile its shared/CLI code and regenerate clients offline before the unchanged MongoDB schedule; cap Jest at two workers. Preserve image, tests, timeouts and Docker protections. This does not run the separate PostgreSQL or microservice schedules."

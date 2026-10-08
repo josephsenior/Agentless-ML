@@ -551,6 +551,13 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   existing database under `/tmp`. All 24 public MongoDB suites run: 147 passing
   and 69 failed report IDs. The latest count is **100/113** (13 tasks not ready);
   Numba is the only remaining `no_passing_tests` task.
+  [Numba's candidate-build and native-runner review](deepswe-numba-baseline-2026-10-08.md)
+  verifies source-built extensions and candidate imports, then preserves the
+  public runner's hardware-aware discovery. Its full serial schedule times out
+  at the unchanged 30-minute limit without a complete report. Numba remains
+  unready, now classified as `timeout`; the latest count stays **100/113**
+  (13 tasks not ready). No latest `no_passing_tests` records remain, which does
+  not mean every task now has a passing baseline.
   The [Pwntools doctest review](deepswe-pwntools-doctest-2026-10-07.md) replaces
   its incorrect pytest invocation with the public Sphinx runner. The published
   image lacks Sphinx; a separately augmented diagnostic also exposed missing
