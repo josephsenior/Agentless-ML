@@ -528,6 +528,10 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   run yields 3,100 passing IDs and brings the latest count to **95/113**
   (18 tasks not ready). Failed and skipped baseline cases remain visible;
   readiness does not mean either complete suite is all-green.
+  [Mobly's missing-image retry](deepswe-mobly-baseline-2026-10-08.md) then
+  verifies the pinned published image and passes its unchanged public suite:
+  804 passing IDs, two skipped, zero failed. The latest count is **96/113**
+  (17 tasks not ready), with no remaining `no_image` records.
   The [Pwntools doctest review](deepswe-pwntools-doctest-2026-10-07.md) replaces
   its incorrect pytest invocation with the public Sphinx runner. The published
   image lacks Sphinx; a separately augmented diagnostic also exposed missing
