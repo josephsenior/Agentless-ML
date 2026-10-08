@@ -19,9 +19,13 @@ def full_command():
     # Native schedule and build stay identical; only the worker count changes.
     template = replace(NUMBA_RUNTESTS, script=NUMBA_RUNTESTS.script + " -m 2")
     command = template.command((), timeout_seconds=1800)
-    return replace(command, argv=(command.argv[0], command.argv[1],
-                                 "export AGENTLESS_NUMBA_DIAGNOSTIC=1; " + command.argv[2],
-                                 *command.argv[3:]))
+    native = (command.argv[0], command.argv[1],
+              "export AGENTLESS_NUMBA_DIAGNOSTIC=1; " + command.argv[2],
+              *command.argv[3:])
+    # Keep the deadline even if the host supervisor disappears. This covers
+    # build, import checks and tests, not just the test phase.
+    return replace(command, argv=("timeout", "--signal=TERM", "--kill-after=10s",
+                                 "1800s", *native))
 
 
 def main():
@@ -42,7 +46,8 @@ def main():
     evidence = {
         "label": "full_public_schedule_two_worker_attempt", "task_id": TASK,
         "base_commit": BASE, "image_id": runner.image_id, "workers": 2,
-        "timeout_seconds": 1800, "automatic_retry": False,
+        "timeout_seconds": 1800, "container_timeout_seconds": 1800,
+        "automatic_retry": False,
         "official_override_changed": False, "official_survey_updated": False,
         "status": execution.result.status.value, "exit_code": execution.result.exit_code,
         "report_cases": len(execution.result.test_cases),

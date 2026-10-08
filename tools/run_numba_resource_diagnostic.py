@@ -72,14 +72,23 @@ class SampledRunner(DockerTestRunner):
                     ["docker", "exec", name, "/bin/sh", "-c", probe],
                     capture_output=True, text=True, timeout=15, check=False,
                 )
-                self.samples.append({"seconds": round(time.monotonic() - started, 2),
+                self.record_sample(name, {"seconds": round(time.monotonic() - started, 2),
                                      "exit_code": result.returncode,
                                      "stdout": result.stdout, "stderr": result.stderr})
                 print(f"resource sample {self.samples[-1]['seconds']}s", flush=True)
             except subprocess.TimeoutExpired:
-                self.samples.append({"seconds": round(time.monotonic() - started, 2),
+                self.record_sample(name, {"seconds": round(time.monotonic() - started, 2),
                                      "error": "resource probe timeout"})
             self.stop_sampling.wait(10)
+
+    def record_sample(self, name, sample):
+        self.samples.append(sample)
+        # The runner created this owned artifact directory before starting
+        # the container. Do not hold the only copy until the run ends.
+        with (self.artifact_root / name / "resource-samples.jsonl").open(
+            "a", encoding="utf-8", newline="\n",
+        ) as stream:
+            stream.write(json.dumps(sample) + "\n")
 
 
 def main():

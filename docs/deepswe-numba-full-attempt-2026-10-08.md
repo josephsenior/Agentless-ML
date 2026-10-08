@@ -65,3 +65,19 @@ kept running throughout. It has no retry loop and does not modify the survey.
 
 The [short timing repeat](deepswe-numba-two-worker-diagnostic-2026-10-08.md)
 remains the completed timing evidence. It does not establish full-suite runtime.
+
+## Approved fresh attempt
+
+After explicit approval, one fresh attempt was launched with the same native
+schedule, pinned image and resource limits. Before launch, two safeguards were
+added: a container-side `timeout` covering build, import checks and the entire
+test command, and a resource-sample JSONL journal written after every probe.
+The host timeout remains 1,800 seconds; the container deadline is also 1,800
+seconds, with a ten-second termination grace. Neither change alters tests or
+their outcomes. The focused command, persistence and recorder suite passed
+**13 tests** before launch.
+
+This fresh attempt is pending, not an accepted baseline. Its resource journal
+is under
+`../output/deepswe-survey/numba-two-worker-full/logs/agentless-ml-ac2f56c468b6407b987eb13538e416ff/resource-samples.jsonl`.
+There is still no automatic retry, official override change or survey update.
