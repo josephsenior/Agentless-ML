@@ -508,8 +508,11 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   [Arktype and Clack runner review](deepswe-delegated-runners-2026-10-06.md)
   then recovered both delegated scripts, bringing the count to 90/113.
   [Optique and Valibot](deepswe-optique-valibot-runners-2026-10-06.md) recovered
-  the last two missing-runner tasks, bringing the latest count to **92/113**;
-  tasks outside those reviews retain their earlier outcomes.
+  the last two missing-runner tasks, bringing the count to 92/113.
+  The [Meriyah fresh-preparation retry](deepswe-meriyah-baseline-2026-10-08.md)
+  then passed the complete public Vitest schedule in its pinned published image,
+  bringing the latest count to **93/113**, with 20 tasks still not ready.
+  Pwntools is parked; tasks outside these reviews retain their earlier outcomes.
   The [Pwntools doctest review](deepswe-pwntools-doctest-2026-10-07.md) replaces
   its incorrect pytest invocation with the public Sphinx runner. The published
   image lacks Sphinx; a separately augmented diagnostic also exposed missing
