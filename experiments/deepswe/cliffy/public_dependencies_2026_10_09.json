@@ -18,8 +18,8 @@
     },
     {
       "path": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/transitive-verification.json",
-      "sha256": "40324f79c5210f80a6b3d0d1e3fac7d9aa75abc4450569d86fe77fa7c5551a08",
-      "bytes": 224467
+      "sha256": "cc25a6cb91ca0712d63cbc93341d88f12d577c92f55d42cd86535df686eadba9",
+      "bytes": 262032
     },
     {
       "path": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/preserved-cache-verification.json",
@@ -27,8 +27,8 @@
       "bytes": 289849
     }
   ],
-  "package_versions": 28,
-  "verified_files": 956,
+  "package_versions": 29,
+  "verified_files": 1011,
   "records": [
     {
       "package": "@c4spar/mock-command",
@@ -2331,6 +2331,582 @@
           "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--semver/0ccf28b4e94876416933a896fb4ae0779094a6c6678a56e9caad9d292e759f30",
           "publisher_checksum": "sha256-0ccf28b4e94876416933a896fb4ae0779094a6c6678a56e9caad9d292e759f30",
           "publisher_size": 1531,
+          "checksum_verified": true
+        }
+      ]
+    },
+    {
+      "package": "@std/assert",
+      "version": "0.225.3",
+      "external_specifiers": [
+        "jsr:/@std/internal@^1.0.0/format",
+        "jsr:/@std/internal@^1.0.0/styles",
+        "jsr:@std/internal@^1.0.0"
+      ],
+      "group": "additional_graph_dependencies",
+      "package_metadata": {
+        "url": "https://jsr.io/@std/assert/meta.json",
+        "sha256": "8bdc3b3bfb46276227532039d8e494022b7f94c963e4f49b2172335b5e5d86e4",
+        "bytes": 3403,
+        "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/8bdc3b3bfb46276227532039d8e494022b7f94c963e4f49b2172335b5e5d86e4",
+        "checksum_kind": "locally_measured_metadata_pin"
+      },
+      "version_metadata": {
+        "url": "https://jsr.io/@std/assert/0.225.3_meta.json",
+        "sha256": "b3c2847aecf6955b50644cdb9cf072004ea3d1998dd7579fc0acb99dbb23bd4f",
+        "bytes": 30775,
+        "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/b3c2847aecf6955b50644cdb9cf072004ea3d1998dd7579fc0acb99dbb23bd4f",
+        "checksum_kind": "locally_measured_metadata_pin"
+      },
+      "files": [
+        {
+          "path": "/assert.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert.ts",
+          "sha256": "a1eefbe4aabffd198a0747ae909e6950388b30bb7a5b6cff066b137962a1155d",
+          "bytes": 562,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/a1eefbe4aabffd198a0747ae909e6950388b30bb7a5b6cff066b137962a1155d",
+          "publisher_checksum": "sha256-a1eefbe4aabffd198a0747ae909e6950388b30bb7a5b6cff066b137962a1155d",
+          "publisher_size": 562,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_almost_equals.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_almost_equals.ts",
+          "sha256": "8cbeca00b629aff3e0914a2025213ee159b958a48dbef53ce990ea96512576d2",
+          "bytes": 1296,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/8cbeca00b629aff3e0914a2025213ee159b958a48dbef53ce990ea96512576d2",
+          "publisher_checksum": "sha256-8cbeca00b629aff3e0914a2025213ee159b958a48dbef53ce990ea96512576d2",
+          "publisher_size": 1296,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_almost_equals_test.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_almost_equals_test.ts",
+          "sha256": "87b0340975ef7f9bbb89a41470f8aeaf3bd7cc06914ef9410605f90dcdde1fb2",
+          "bytes": 2028,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/87b0340975ef7f9bbb89a41470f8aeaf3bd7cc06914ef9410605f90dcdde1fb2",
+          "publisher_checksum": "sha256-87b0340975ef7f9bbb89a41470f8aeaf3bd7cc06914ef9410605f90dcdde1fb2",
+          "publisher_size": 2028,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_array_includes.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_array_includes.ts",
+          "sha256": "7fd9bc5e9b2bec93d84e48d366272729dc5d765d9aa6a585d1d8822a56d79255",
+          "bytes": 1506,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/7fd9bc5e9b2bec93d84e48d366272729dc5d765d9aa6a585d1d8822a56d79255",
+          "publisher_checksum": "sha256-7fd9bc5e9b2bec93d84e48d366272729dc5d765d9aa6a585d1d8822a56d79255",
+          "publisher_size": 1506,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_array_includes_test.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_array_includes_test.ts",
+          "sha256": "04ecffd0c448c4647c8482eafb3d312be61051475ccf968da0e1e67cb217c3f7",
+          "bytes": 1995,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/04ecffd0c448c4647c8482eafb3d312be61051475ccf968da0e1e67cb217c3f7",
+          "publisher_checksum": "sha256-04ecffd0c448c4647c8482eafb3d312be61051475ccf968da0e1e67cb217c3f7",
+          "publisher_size": 1995,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_equals.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_equals.ts",
+          "sha256": "d876b7d774b9b78d422d2dc7549e2e753ce15aac514688ea6e7f2d2d597d2397",
+          "bytes": 1568,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/d876b7d774b9b78d422d2dc7549e2e753ce15aac514688ea6e7f2d2d597d2397",
+          "publisher_checksum": "sha256-d876b7d774b9b78d422d2dc7549e2e753ce15aac514688ea6e7f2d2d597d2397",
+          "publisher_size": 1568,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_equals_test.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_equals_test.ts",
+          "sha256": "5228c5c47613a802fbb382d7f3fbe0ad620e9feac5f49e03f1343864d2632eb7",
+          "bytes": 4930,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/5228c5c47613a802fbb382d7f3fbe0ad620e9feac5f49e03f1343864d2632eb7",
+          "publisher_checksum": "sha256-5228c5c47613a802fbb382d7f3fbe0ad620e9feac5f49e03f1343864d2632eb7",
+          "publisher_size": 4930,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_exists.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_exists.ts",
+          "sha256": "52c13453207698f5b01e6ed4b3d1ae903242666e886934713c3446321d2ed9e7",
+          "bytes": 762,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/52c13453207698f5b01e6ed4b3d1ae903242666e886934713c3446321d2ed9e7",
+          "publisher_checksum": "sha256-52c13453207698f5b01e6ed4b3d1ae903242666e886934713c3446321d2ed9e7",
+          "publisher_size": 762,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_exists_test.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_exists_test.ts",
+          "sha256": "33ad6fafab5bc914a279f45a180afec82a7c577f527a43a42a74f4194b66dcdc",
+          "bytes": 1128,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/33ad6fafab5bc914a279f45a180afec82a7c577f527a43a42a74f4194b66dcdc",
+          "publisher_checksum": "sha256-33ad6fafab5bc914a279f45a180afec82a7c577f527a43a42a74f4194b66dcdc",
+          "publisher_size": 1128,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_false.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_false.ts",
+          "sha256": "4819840d5fb9b98f7929999d4647493014adae42e5fbf0e7bd5e62b287f14cd3",
+          "bytes": 664,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/4819840d5fb9b98f7929999d4647493014adae42e5fbf0e7bd5e62b287f14cd3",
+          "publisher_checksum": "sha256-4819840d5fb9b98f7929999d4647493014adae42e5fbf0e7bd5e62b287f14cd3",
+          "publisher_size": 664,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_false_test.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_false_test.ts",
+          "sha256": "b095fa0fe0a0d25d7039dbc05df32b8753ae39c464faf4c954a45181843936f1",
+          "bytes": 564,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/b095fa0fe0a0d25d7039dbc05df32b8753ae39c464faf4c954a45181843936f1",
+          "publisher_checksum": "sha256-b095fa0fe0a0d25d7039dbc05df32b8753ae39c464faf4c954a45181843936f1",
+          "publisher_size": 564,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_greater.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_greater.ts",
+          "sha256": "dce2bbfe58a379fc2c6289e00095ac1e32ccaee35694f300ac0c4d6cc9774274",
+          "bytes": 799,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/dce2bbfe58a379fc2c6289e00095ac1e32ccaee35694f300ac0c4d6cc9774274",
+          "publisher_checksum": "sha256-dce2bbfe58a379fc2c6289e00095ac1e32ccaee35694f300ac0c4d6cc9774274",
+          "publisher_size": 799,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_greater_or_equal.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_greater_or_equal.ts",
+          "sha256": "1c3536515b5c3c81585b8f692a67a8b19799fb5f19b0f4c7ec74931850bcaecb",
+          "bytes": 882,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/1c3536515b5c3c81585b8f692a67a8b19799fb5f19b0f4c7ec74931850bcaecb",
+          "publisher_checksum": "sha256-1c3536515b5c3c81585b8f692a67a8b19799fb5f19b0f4c7ec74931850bcaecb",
+          "publisher_size": 882,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_greater_or_equal_test.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_greater_or_equal_test.ts",
+          "sha256": "29c0a3c1bb20436e37e332910c0e24e2c40d21d14af05d3304d3203cffc4993c",
+          "bytes": 470,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/29c0a3c1bb20436e37e332910c0e24e2c40d21d14af05d3304d3203cffc4993c",
+          "publisher_checksum": "sha256-29c0a3c1bb20436e37e332910c0e24e2c40d21d14af05d3304d3203cffc4993c",
+          "publisher_size": 470,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_greater_test.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_greater_test.ts",
+          "sha256": "afffc474cc2e45536905449c7986c1bff504d2ae6f815f77dab71728caa36cd9",
+          "bytes": 467,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/afffc474cc2e45536905449c7986c1bff504d2ae6f815f77dab71728caa36cd9",
+          "publisher_checksum": "sha256-afffc474cc2e45536905449c7986c1bff504d2ae6f815f77dab71728caa36cd9",
+          "publisher_size": 467,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_instance_of.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_instance_of.ts",
+          "sha256": "d860f825c6f1606b5913dc9f8aae10ac648306ba5fa0957fbc0e568f1cd28582",
+          "bytes": 1823,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/d860f825c6f1606b5913dc9f8aae10ac648306ba5fa0957fbc0e568f1cd28582",
+          "publisher_checksum": "sha256-d860f825c6f1606b5913dc9f8aae10ac648306ba5fa0957fbc0e568f1cd28582",
+          "publisher_size": 1823,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_instance_of_test.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_instance_of_test.ts",
+          "sha256": "c2ac2a7a90f80093f6525e9633b5120cce7d0e69cdddd92e41cdd133fabdd560",
+          "bytes": 3673,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/c2ac2a7a90f80093f6525e9633b5120cce7d0e69cdddd92e41cdd133fabdd560",
+          "publisher_checksum": "sha256-c2ac2a7a90f80093f6525e9633b5120cce7d0e69cdddd92e41cdd133fabdd560",
+          "publisher_size": 3673,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_is_error.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_is_error.ts",
+          "sha256": "50c91f9946fa7115449d6432d2f42a17c2cf5abe18269e52833c4352b2e819e8",
+          "bytes": 2062,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/50c91f9946fa7115449d6432d2f42a17c2cf5abe18269e52833c4352b2e819e8",
+          "publisher_checksum": "sha256-50c91f9946fa7115449d6432d2f42a17c2cf5abe18269e52833c4352b2e819e8",
+          "publisher_size": 2062,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_is_error_test.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_is_error_test.ts",
+          "sha256": "9e69e91acd45c4521d4203819a773d4cfedbe9143feefde72ca51b4ad1a8011c",
+          "bytes": 2248,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/9e69e91acd45c4521d4203819a773d4cfedbe9143feefde72ca51b4ad1a8011c",
+          "publisher_checksum": "sha256-9e69e91acd45c4521d4203819a773d4cfedbe9143feefde72ca51b4ad1a8011c",
+          "publisher_size": 2248,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_less.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_less.ts",
+          "sha256": "47861be9eb4cc845b56baee6aa6f0590162d3f1bc3e624e1c7e4e5eaad106422",
+          "bytes": 747,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/47861be9eb4cc845b56baee6aa6f0590162d3f1bc3e624e1c7e4e5eaad106422",
+          "publisher_checksum": "sha256-47861be9eb4cc845b56baee6aa6f0590162d3f1bc3e624e1c7e4e5eaad106422",
+          "publisher_size": 747,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_less_or_equal.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_less_or_equal.ts",
+          "sha256": "19571da7ab2eff89075e3136a44c94c74e1b805edd1ce8e5d11082f5f85ec0c8",
+          "bytes": 861,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/19571da7ab2eff89075e3136a44c94c74e1b805edd1ce8e5d11082f5f85ec0c8",
+          "publisher_checksum": "sha256-19571da7ab2eff89075e3136a44c94c74e1b805edd1ce8e5d11082f5f85ec0c8",
+          "publisher_size": 861,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_less_or_equal_test.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_less_or_equal_test.ts",
+          "sha256": "e517017ff0fe2d44b4d92db930e8c439dcc80b3199835da0179943b3b357015c",
+          "bytes": 283,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/e517017ff0fe2d44b4d92db930e8c439dcc80b3199835da0179943b3b357015c",
+          "publisher_checksum": "sha256-e517017ff0fe2d44b4d92db930e8c439dcc80b3199835da0179943b3b357015c",
+          "publisher_size": 283,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_less_test.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_less_test.ts",
+          "sha256": "ef0c889519b9fc5949035274f54746e573597466902d1fc0b1ba665ac7a19681",
+          "bytes": 270,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/ef0c889519b9fc5949035274f54746e573597466902d1fc0b1ba665ac7a19681",
+          "publisher_checksum": "sha256-ef0c889519b9fc5949035274f54746e573597466902d1fc0b1ba665ac7a19681",
+          "publisher_size": 270,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_match.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_match.ts",
+          "sha256": "f5d5320d40bf0311c4c649384d6e82fff991a922115defc55363b7b456fbe083",
+          "bytes": 755,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/f5d5320d40bf0311c4c649384d6e82fff991a922115defc55363b7b456fbe083",
+          "publisher_checksum": "sha256-f5d5320d40bf0311c4c649384d6e82fff991a922115defc55363b7b456fbe083",
+          "publisher_size": 755,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_match_test.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_match_test.ts",
+          "sha256": "8df324572ca4a04c97d48cafbf7d357dc53425ac405b5dd28d4c1565c5646547",
+          "bytes": 843,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/8df324572ca4a04c97d48cafbf7d357dc53425ac405b5dd28d4c1565c5646547",
+          "publisher_checksum": "sha256-8df324572ca4a04c97d48cafbf7d357dc53425ac405b5dd28d4c1565c5646547",
+          "publisher_size": 843,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_not_equals.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_not_equals.ts",
+          "sha256": "156f96a7e19d187d5b42b930aeeab5dc6bae0e99ce7410b6362822b40ae1b876",
+          "bytes": 949,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/156f96a7e19d187d5b42b930aeeab5dc6bae0e99ce7410b6362822b40ae1b876",
+          "publisher_checksum": "sha256-156f96a7e19d187d5b42b930aeeab5dc6bae0e99ce7410b6362822b40ae1b876",
+          "publisher_size": 949,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_not_equals_test.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_not_equals_test.ts",
+          "sha256": "5437dc932f2fec568d955bcfc7debd69f45344e0a46caea7c7231c3cd0e48d89",
+          "bytes": 920,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/5437dc932f2fec568d955bcfc7debd69f45344e0a46caea7c7231c3cd0e48d89",
+          "publisher_checksum": "sha256-5437dc932f2fec568d955bcfc7debd69f45344e0a46caea7c7231c3cd0e48d89",
+          "publisher_size": 920,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_not_instance_of.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_not_instance_of.ts",
+          "sha256": "1821fc98bcbfeafd07e1057cd0df5cb2f7f0e2888f4894ee92183fa97729409d",
+          "bytes": 866,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/1821fc98bcbfeafd07e1057cd0df5cb2f7f0e2888f4894ee92183fa97729409d",
+          "publisher_checksum": "sha256-1821fc98bcbfeafd07e1057cd0df5cb2f7f0e2888f4894ee92183fa97729409d",
+          "publisher_size": 866,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_not_instance_of_test.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_not_instance_of_test.ts",
+          "sha256": "f06ea56ea29b8efe9dc62d358c5cc685887ac27ff128c825bca46e1cd5ea6196",
+          "bytes": 883,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/f06ea56ea29b8efe9dc62d358c5cc685887ac27ff128c825bca46e1cd5ea6196",
+          "publisher_checksum": "sha256-f06ea56ea29b8efe9dc62d358c5cc685887ac27ff128c825bca46e1cd5ea6196",
+          "publisher_size": 883,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_not_match.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_not_match.ts",
+          "sha256": "385cb472900c5baa5c8224df700864bea6a6fecc4da31e63f6e49259497cf780",
+          "bytes": 786,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/385cb472900c5baa5c8224df700864bea6a6fecc4da31e63f6e49259497cf780",
+          "publisher_checksum": "sha256-385cb472900c5baa5c8224df700864bea6a6fecc4da31e63f6e49259497cf780",
+          "publisher_size": 786,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_not_match_test.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_not_match_test.ts",
+          "sha256": "70425d1a2571b929965d1d163e4093cee06f00af4d27d0133f24382060aad008",
+          "bytes": 827,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/70425d1a2571b929965d1d163e4093cee06f00af4d27d0133f24382060aad008",
+          "publisher_checksum": "sha256-70425d1a2571b929965d1d163e4093cee06f00af4d27d0133f24382060aad008",
+          "publisher_size": 827,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_not_strict_equals.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_not_strict_equals.ts",
+          "sha256": "5228827188797ac1575a52ac8d45caa463c53661752f745064fcfeb03605572e",
+          "bytes": 886,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/5228827188797ac1575a52ac8d45caa463c53661752f745064fcfeb03605572e",
+          "publisher_checksum": "sha256-5228827188797ac1575a52ac8d45caa463c53661752f745064fcfeb03605572e",
+          "publisher_size": 886,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_not_strict_equals_test.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_not_strict_equals_test.ts",
+          "sha256": "153484670e0d06f9fa51d416921cb768871f135806714b316e7ef636fa5cd2d3",
+          "bytes": 815,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/153484670e0d06f9fa51d416921cb768871f135806714b316e7ef636fa5cd2d3",
+          "publisher_checksum": "sha256-153484670e0d06f9fa51d416921cb768871f135806714b316e7ef636fa5cd2d3",
+          "publisher_size": 815,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_object_match.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_object_match.ts",
+          "sha256": "1f7b548849637a5e5de42ef93d0dbb3e1cee6c0f1ab4d2d5e96a84f1f0dd19b7",
+          "bytes": 3700,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/1f7b548849637a5e5de42ef93d0dbb3e1cee6c0f1ab4d2d5e96a84f1f0dd19b7",
+          "publisher_checksum": "sha256-1f7b548849637a5e5de42ef93d0dbb3e1cee6c0f1ab4d2d5e96a84f1f0dd19b7",
+          "publisher_size": 3700,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_object_match_test.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_object_match_test.ts",
+          "sha256": "1090900b6c095bebd21fdc88f7a4de20b8a12922fd5d09608b757cc52a0d7eb6",
+          "bytes": 8805,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/1090900b6c095bebd21fdc88f7a4de20b8a12922fd5d09608b757cc52a0d7eb6",
+          "publisher_checksum": "sha256-1090900b6c095bebd21fdc88f7a4de20b8a12922fd5d09608b757cc52a0d7eb6",
+          "publisher_size": 8805,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_rejects.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_rejects.ts",
+          "sha256": "e2a9f5e052d97cb6dadc0e26c907bc70cfada389fcb6f0e40bf4dfdd24c0ca64",
+          "bytes": 3351,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/e2a9f5e052d97cb6dadc0e26c907bc70cfada389fcb6f0e40bf4dfdd24c0ca64",
+          "publisher_checksum": "sha256-e2a9f5e052d97cb6dadc0e26c907bc70cfada389fcb6f0e40bf4dfdd24c0ca64",
+          "publisher_size": 3351,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_rejects_test.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_rejects_test.ts",
+          "sha256": "72fab6e783efd8c66c2f91f9cf89093951fcf02e6e5d0c7c1fb2804ad0f48655",
+          "bytes": 3339,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/72fab6e783efd8c66c2f91f9cf89093951fcf02e6e5d0c7c1fb2804ad0f48655",
+          "publisher_checksum": "sha256-72fab6e783efd8c66c2f91f9cf89093951fcf02e6e5d0c7c1fb2804ad0f48655",
+          "publisher_size": 3339,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_strict_equals.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_strict_equals.ts",
+          "sha256": "65269386ec1631fc00978273279fddd6b970dddecea16d8cb029ab08bfc3863e",
+          "bytes": 1707,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/65269386ec1631fc00978273279fddd6b970dddecea16d8cb029ab08bfc3863e",
+          "publisher_checksum": "sha256-65269386ec1631fc00978273279fddd6b970dddecea16d8cb029ab08bfc3863e",
+          "publisher_size": 1707,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_strict_equals_test.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_strict_equals_test.ts",
+          "sha256": "e3121a116ba97b7b9181c7fca165a38c5f1b28f95cefb271f2f2449066c8f2e8",
+          "bytes": 1886,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/e3121a116ba97b7b9181c7fca165a38c5f1b28f95cefb271f2f2449066c8f2e8",
+          "publisher_checksum": "sha256-e3121a116ba97b7b9181c7fca165a38c5f1b28f95cefb271f2f2449066c8f2e8",
+          "publisher_size": 1886,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_string_includes.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_string_includes.ts",
+          "sha256": "3e4756a6478dde8526e8fec1dccfcb17ca438623ad97ead0d4177008c72f3503",
+          "bytes": 774,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/3e4756a6478dde8526e8fec1dccfcb17ca438623ad97ead0d4177008c72f3503",
+          "publisher_checksum": "sha256-3e4756a6478dde8526e8fec1dccfcb17ca438623ad97ead0d4177008c72f3503",
+          "publisher_size": 774,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_string_includes_test.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_string_includes_test.ts",
+          "sha256": "d0e6b32a89ecad6418e34398266608487576b1a8ff23147dc73f5b0aeb1d1887",
+          "bytes": 1148,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/d0e6b32a89ecad6418e34398266608487576b1a8ff23147dc73f5b0aeb1d1887",
+          "publisher_checksum": "sha256-d0e6b32a89ecad6418e34398266608487576b1a8ff23147dc73f5b0aeb1d1887",
+          "publisher_size": 1148,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_throws.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_throws.ts",
+          "sha256": "44bb5efd0885416890c1ed9e7ed4a905e0e07bb4b96b024bdc5df3b40e11e4ff",
+          "bytes": 2879,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/44bb5efd0885416890c1ed9e7ed4a905e0e07bb4b96b024bdc5df3b40e11e4ff",
+          "publisher_checksum": "sha256-44bb5efd0885416890c1ed9e7ed4a905e0e07bb4b96b024bdc5df3b40e11e4ff",
+          "publisher_size": 2879,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assert_throws_test.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assert_throws_test.ts",
+          "sha256": "c5e7c19c4aa6a70a0499962b1ef72aed3f6a8ff578bbbf24eb0b6319ac9c8398",
+          "bytes": 3353,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/c5e7c19c4aa6a70a0499962b1ef72aed3f6a8ff578bbbf24eb0b6319ac9c8398",
+          "publisher_checksum": "sha256-c5e7c19c4aa6a70a0499962b1ef72aed3f6a8ff578bbbf24eb0b6319ac9c8398",
+          "publisher_size": 3353,
+          "checksum_verified": true
+        },
+        {
+          "path": "/assertion_error.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/assertion_error.ts",
+          "sha256": "9180309b8d645663d043be3aff0f2028963f2828b8aeeeca9376af1903e2997c",
+          "bytes": 484,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/9180309b8d645663d043be3aff0f2028963f2828b8aeeeca9376af1903e2997c",
+          "publisher_checksum": "sha256-9180309b8d645663d043be3aff0f2028963f2828b8aeeeca9376af1903e2997c",
+          "publisher_size": 484,
+          "checksum_verified": true
+        },
+        {
+          "path": "/deno.json",
+          "url": "https://jsr.io/@std/assert/0.225.3/deno.json",
+          "sha256": "ad89fa3f6983f05f52d783d7ad4d76110720dc9f703c31e78cb61d0c22e72ae8",
+          "bytes": 1431,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/ad89fa3f6983f05f52d783d7ad4d76110720dc9f703c31e78cb61d0c22e72ae8",
+          "publisher_checksum": "sha256-ad89fa3f6983f05f52d783d7ad4d76110720dc9f703c31e78cb61d0c22e72ae8",
+          "publisher_size": 1431,
+          "checksum_verified": true
+        },
+        {
+          "path": "/equal.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/equal.ts",
+          "sha256": "b35c2e257c76892b8f631daa7bd2976e5daff6b36181fadcfd6d5bca4c76c61e",
+          "bytes": 3811,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/b35c2e257c76892b8f631daa7bd2976e5daff6b36181fadcfd6d5bca4c76c61e",
+          "publisher_checksum": "sha256-b35c2e257c76892b8f631daa7bd2976e5daff6b36181fadcfd6d5bca4c76c61e",
+          "publisher_size": 3811,
+          "checksum_verified": true
+        },
+        {
+          "path": "/equal_test.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/equal_test.ts",
+          "sha256": "7f27f03d7bf3835e762c0de06a768131d18d1fb395ca3e6659b864d956e58df3",
+          "bytes": 8655,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/7f27f03d7bf3835e762c0de06a768131d18d1fb395ca3e6659b864d956e58df3",
+          "publisher_checksum": "sha256-7f27f03d7bf3835e762c0de06a768131d18d1fb395ca3e6659b864d956e58df3",
+          "publisher_size": 8655,
+          "checksum_verified": true
+        },
+        {
+          "path": "/fail.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/fail.ts",
+          "sha256": "1e450c41a7bd56b047904d21bb266f94a3db0aa2666bd8244dba0f35939863c4",
+          "bytes": 461,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/1e450c41a7bd56b047904d21bb266f94a3db0aa2666bd8244dba0f35939863c4",
+          "publisher_checksum": "sha256-1e450c41a7bd56b047904d21bb266f94a3db0aa2666bd8244dba0f35939863c4",
+          "publisher_size": 461,
+          "checksum_verified": true
+        },
+        {
+          "path": "/fail_test.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/fail_test.ts",
+          "sha256": "fbea772ad5e6bdd14fc1bbb1179f3c1cc868ad367dc3067bcd195c89b0dee4c1",
+          "bytes": 348,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/fbea772ad5e6bdd14fc1bbb1179f3c1cc868ad367dc3067bcd195c89b0dee4c1",
+          "publisher_checksum": "sha256-fbea772ad5e6bdd14fc1bbb1179f3c1cc868ad367dc3067bcd195c89b0dee4c1",
+          "publisher_size": 348,
+          "checksum_verified": true
+        },
+        {
+          "path": "/mod.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/mod.ts",
+          "sha256": "a4ca9ad2429efad139a262265bfb5c14fbc4237f0caec2bd260ef89856022c4c",
+          "bytes": 1623,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/a4ca9ad2429efad139a262265bfb5c14fbc4237f0caec2bd260ef89856022c4c",
+          "publisher_checksum": "sha256-a4ca9ad2429efad139a262265bfb5c14fbc4237f0caec2bd260ef89856022c4c",
+          "publisher_size": 1623,
+          "checksum_verified": true
+        },
+        {
+          "path": "/shared_test.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/shared_test.ts",
+          "sha256": "24193bd1346fad4eb0ccd021e3f05b648e8c6f2c197146b75a7672a92d78f5bc",
+          "bytes": 566,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/24193bd1346fad4eb0ccd021e3f05b648e8c6f2c197146b75a7672a92d78f5bc",
+          "publisher_checksum": "sha256-24193bd1346fad4eb0ccd021e3f05b648e8c6f2c197146b75a7672a92d78f5bc",
+          "publisher_size": 566,
+          "checksum_verified": true
+        },
+        {
+          "path": "/unimplemented.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/unimplemented.ts",
+          "sha256": "0f4507579b96aa4eb25e4a449ee15e9fb0b1d75fed11ddba26ac6755e77100fb",
+          "bytes": 521,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/0f4507579b96aa4eb25e4a449ee15e9fb0b1d75fed11ddba26ac6755e77100fb",
+          "publisher_checksum": "sha256-0f4507579b96aa4eb25e4a449ee15e9fb0b1d75fed11ddba26ac6755e77100fb",
+          "publisher_size": 521,
+          "checksum_verified": true
+        },
+        {
+          "path": "/unimplemented_test.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/unimplemented_test.ts",
+          "sha256": "c4927ca16244e7168be655e1bf4b37fba7397432abe5c86171587217eb681f59",
+          "bytes": 471,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/c4927ca16244e7168be655e1bf4b37fba7397432abe5c86171587217eb681f59",
+          "publisher_checksum": "sha256-c4927ca16244e7168be655e1bf4b37fba7397432abe5c86171587217eb681f59",
+          "publisher_size": 471,
+          "checksum_verified": true
+        },
+        {
+          "path": "/unreachable.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/unreachable.ts",
+          "sha256": "e13349734a90cf3b364e16c15964b7b7d7d09c08bb07fe04f1c73d8116ba8036",
+          "bytes": 446,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/e13349734a90cf3b364e16c15964b7b7d7d09c08bb07fe04f1c73d8116ba8036",
+          "publisher_checksum": "sha256-e13349734a90cf3b364e16c15964b7b7d7d09c08bb07fe04f1c73d8116ba8036",
+          "publisher_size": 446,
+          "checksum_verified": true
+        },
+        {
+          "path": "/unreachable_test.ts",
+          "url": "https://jsr.io/@std/assert/0.225.3/unreachable_test.ts",
+          "sha256": "58d243825002fddb07bb8bbf3278d56908c6c9247986d3936d221b94ef2df59d",
+          "bytes": 653,
+          "artifact": "output/deepswe-survey/cliffy-public-dependencies-2026-10-09/std--assert/0.225.3/58d243825002fddb07bb8bbf3278d56908c6c9247986d3936d221b94ef2df59d",
+          "publisher_checksum": "sha256-58d243825002fddb07bb8bbf3278d56908c6c9247986d3936d221b94ef2df59d",
+          "publisher_size": 653,
           "checksum_verified": true
         }
       ]

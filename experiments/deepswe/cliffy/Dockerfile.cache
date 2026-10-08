@@ -1,0 +1,7 @@
+FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh72088pg9vkc6peacnkc35yy9832jff-v1.1@sha256:0a8dd8f1270ec4bb88efadad3021762e1d07274f686276c8a484d26a00bd91b5
+LABEL org.agentless-ml.condition="cliffy-verified-cache-supplement"
+COPY seed/ /opt/agentless-cliffy-cache/
+# Add absent entries only. Original cache entries, source and Deno stay intact.
+RUN set -eu; \
+    cp -an /opt/agentless-cliffy-cache/. /deno-cache/remote/https/jsr.io/; \
+    deno --version | grep '^deno 2.0.0 '

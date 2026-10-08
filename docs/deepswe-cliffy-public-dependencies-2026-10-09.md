@@ -98,3 +98,10 @@ tests. No build or test attempt has been started in this verification step.
 Canonical readiness remains **100/113**. Cliffy remains unready; Numba remains
 parked. Any later substituted-image results must stay separate from the
 canonical pinned-image survey.
+
+The approved [image and offline graph follow-up](deepswe-cliffy-offline-graph-2026-10-09.md)
+subsequently added verified assert 0.225.3 after observing the image's actual
+range resolution. The current manifest has 29 version pairs and 1,011 files;
+the 28/956 figures above describe the original audit. The supplemented image
+then passed native no-run checking of all 119 discovered candidate test modules.
+No tests executed and canonical readiness remains unchanged.

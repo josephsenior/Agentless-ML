@@ -25,6 +25,7 @@ PINS = {
     "@std/io": "0.225.3", "@std/semver": "1.0.8",
 }
 TRANSITIVE_PINS = (
+    ("@std/assert", "0.225.3"),
     ("@std/assert", "1.0.2"), ("@std/assert", "0.225.2"),
     ("@std/bytes", "1.0.6"), ("@std/html", "1.0.5"),
     ("@std/media-types", "1.1.0"), ("@std/net", "1.0.6"),

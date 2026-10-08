@@ -592,6 +592,12 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   including missing dependency graphs and the image's existing versions.
   No image was built, tests run or canonical readiness changed. Full offline
   import resolution and Deno 2.0.0 compatibility remain the next checks.
+  The approved [cache-image and offline graph check](deepswe-cliffy-offline-graph-2026-10-09.md)
+  then identified and checksum-verified the image-resolved assert 0.225.3,
+  taking the artifact set to 29 version pairs / 1,011 files. The separate image
+  passed native no-run discovery and type checking for all 119 candidate test
+  modules in 21.3 seconds, offline with unchanged Deno and limits. No tests
+  executed, and the official count remains **100/113**.
   The [Pwntools doctest review](deepswe-pwntools-doctest-2026-10-07.md) replaces
   its incorrect pytest invocation with the public Sphinx runner. The published
   image lacks Sphinx; a separately augmented diagnostic also exposed missing
