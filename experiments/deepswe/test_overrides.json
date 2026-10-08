@@ -1,4 +1,8 @@
 {
+  "langchain-request-coalescing": {
+    "runner": "langchain-core-pytest",
+    "reason": "The public libs/core Makefile defaults to tests/unit_tests from that package with pytest-xdist and socket restrictions, not root monorepo collection. Preserve package config and tracing-variable removal, cap auto workers at the runner's two CPUs, and verify core and standard-tests imports resolve to candidate source before testing. This is the core unit schedule, not partner integration suites."
+  },
   "pwntools-tube-multiplexing": {
     "runner": "pwntools-doctest",
     "reason": "Public TESTING.md runs PWNLIB_NOTERM=1 make -C docs doctest, not pytest. Preserve Sphinx's public config and platform-aware builder; report complete document/groups conservatively, with setup/cleanup errors excluded from passing inventory. The published image lacks Sphinx; dependency-augmented diagnostics must use an explicitly substituted image and do not change canonical readiness."

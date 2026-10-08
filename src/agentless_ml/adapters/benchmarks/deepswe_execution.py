@@ -145,6 +145,33 @@ PYTEST = DeepSWETestCommand(
     report=TestReport(ReportFormat.JUNIT_XML, "/tmp/report.xml"),
 )
 
+_LANGCHAIN_IMPORT_CHECK = """
+from pathlib import Path
+import langchain_core, langchain_tests
+for module, package in ((langchain_core, "core"), (langchain_tests, "standard-tests")):
+    root = Path("/tmp/work/libs") / package
+    if not Path(module.__file__).resolve().is_relative_to(root):
+        raise SystemExit("refusing non-candidate import: " + module.__name__)
+    print("candidate import verified: " + module.__name__)
+""".strip()
+
+# The public core Makefile defaults to the unit suite from libs/core. Naming
+# that directory up front also loads its custom pytest options before collection.
+LANGCHAIN_CORE_PYTEST = DeepSWETestCommand(
+    script=(
+        f"set -e; cd {WORK}/libs/core; "
+        "unset LANGCHAIN_TRACING_V2 LANGCHAIN_API_KEY LANGSMITH_API_KEY "
+        "LANGSMITH_TRACING LANGCHAIN_PROJECT; "
+        f"export PYTHONPATH={WORK}/libs/core:{WORK}/libs/standard-tests; "
+        "export PYTEST_XDIST_AUTO_NUM_WORKERS=2; "
+        f"python -c '{_LANGCHAIN_IMPORT_CHECK}' || exit 125; "
+        "python -m pytest -p no:cacheprovider --continue-on-collection-errors "
+        "-n auto --disable-socket --allow-unix-socket "
+        "--junitxml=/tmp/report.xml tests/unit_tests/"
+    ),
+    report=TestReport(ReportFormat.JUNIT_XML, "/tmp/report.xml"),
+)
+
 # Public TESTING.md invokes Sphinx, not pytest. The published image lacks
 # Sphinx; the same command deliberately fails there rather than installing
 # dependencies at test time or silently substituting another environment.
@@ -581,6 +608,7 @@ TEST_COMMANDS = {
     "go": GO,
     "go-module": GO_MODULE,
     "pytest": PYTEST,
+    "langchain-core-pytest": LANGCHAIN_CORE_PYTEST,
     "pwntools-doctest": PWNTOOLS_DOCTEST,
     "pwntools-native-doctest": PWNTOOLS_NATIVE_DOCTEST,
     "stestr": STESTR,
@@ -818,6 +846,7 @@ def deepswe_test_command(
     if runner in {
         "koota-vitest", "agentrooms-vitest", "quill-vitest", "clack-vitest",
         "valibot-vitest", "optique-node", "pwntools-doctest",
+        "langchain-core-pytest",
     } and targets:
         raise ValueError(f"{runner}'s multi-suite runner does not support narrowed targets")
     try:

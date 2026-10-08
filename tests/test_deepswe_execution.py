@@ -54,6 +54,24 @@ def test_kea_preserves_the_public_babel_test_environment():
     assert deepswe_test_command("kea-jest", ("test/jest/actions.js",)).argv[-1] == "test/jest/actions.js"
 
 
+def test_langchain_uses_the_public_core_package_and_candidate_imports(tmp_path):
+    override = load_test_overrides(OVERRIDES)["langchain-request-coalescing"]
+    plan = deepswe_test_plan("python", tmp_path, override)
+    assert plan.runner == "langchain-core-pytest" and plan.targets == ()
+    text = plan.command().argv[2]
+    assert "cd /tmp/work/libs/core" in text
+    assert "PYTHONPATH=/tmp/work/libs/core:/tmp/work/libs/standard-tests" in text
+    assert "is_relative_to(root)" in text
+    assert text.index("refusing non-candidate import") < text.index("python -m pytest")
+    assert "unset LANGCHAIN_TRACING_V2 LANGCHAIN_API_KEY LANGSMITH_API_KEY" in text
+    assert "PYTEST_XDIST_AUTO_NUM_WORKERS=2" in text
+    assert "-n auto --disable-socket --allow-unix-socket" in text
+    assert "--junitxml=/tmp/report.xml tests/unit_tests/" in text
+    assert "--only-core" not in text and "--only-extended" not in text
+    with pytest.raises(ValueError, match="does not support narrowed targets"):
+        deepswe_test_command("langchain-core-pytest", ("test_subset.py",))
+
+
 def test_sql_formatter_generates_its_candidate_grammar_before_jest():
     text = script("sql-formatter-jest")
     assert "set -e; cd /tmp/work" in text
@@ -374,6 +392,7 @@ def test_an_override_can_replace_the_derived_targets(tmp_path):
 def test_the_checked_in_overrides_are_well_formed_and_explained():
     overrides = load_test_overrides(OVERRIDES)
     assert set(overrides) == {
+        "langchain-request-coalescing",
         "pwntools-tube-multiplexing",
         "optique-conditional-option-dependencies",
         "valibot-recursive-schema-composition",

@@ -518,6 +518,10 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   Drizzle needs its delegated Turbo schedule (`no_runner`); LangChain's
   root-level pytest invocation fails during collection (`harness_error`).
   Neither adds a usable baseline, so readiness remains 93/113.
+  The subsequent [package-level LangChain invocation](deepswe-package-schedules-2026-10-08.md)
+  follows the public core unit schedule and verifies candidate imports. It
+  yields 1,664 passing report IDs, bringing the latest count to **94/113**
+  (19 tasks not ready); its 21 baseline failures remain visible.
   The [Pwntools doctest review](deepswe-pwntools-doctest-2026-10-07.md) replaces
   its incorrect pytest invocation with the public Sphinx runner. The published
   image lacks Sphinx; a separately augmented diagnostic also exposed missing
