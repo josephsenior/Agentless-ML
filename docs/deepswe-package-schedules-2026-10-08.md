@@ -102,3 +102,49 @@ After the final command adjustments, execution/adapter/report checks passed
 134 tests with five optional checks skipped. These include rejection of
 non-candidate LangChain imports, complete nine-package dispatch, preserved
 prerequisites and failure on missing reports.
+
+### Completed Drizzle baseline
+
+The final run completed all nine package reports in the pinned image:
+**3,100 passing, 205 failed and 3,139 skipped IDs** out of 6,444. Drizzle now
+has a usable regression inventory, bringing readiness to **95/113** (18 tasks
+not ready). This is not an all-green suite: kit, seed and integration tests
+retain failures. No failed test or service-dependent fixture was removed.
+
+| Package | Passing IDs | Failed IDs | Skipped IDs |
+|---|---:|---:|---:|
+| ORM | 562 | 0 | 0 |
+| Kit | 823 | 9 | 66 |
+| Seed | 103 | 6 | 15 |
+| Zod | 70 | 0 | 0 |
+| Typebox | 62 | 0 | 0 |
+| Valibot | 62 | 0 | 0 |
+| Arktype | 62 | 0 | 0 |
+| ESLint plugin | 105 | 0 | 0 |
+| Integration tests | 1,251 | 190 | 3,058 |
+
+These counts come from the normalized, namespaced JUnit inventory, not from
+adding console totals. Duplicate test IDs are merged with the worst outcome;
+the reports also represent failing suite/fixture setup. In particular, skips
+following failed database fixtures do not demonstrate those tests passing.
+The full execution retains exit code 1, and all nonpassing outcomes remain
+outside the passing regression inventory.
+
+The integration import stress test starts many Node processes in parallel.
+Observed memory peaked around 7.45 GiB within the unchanged 8-GiB limit and
+then fell; a subsequent cgroup read showed zero OOM kills. No extra memory,
+Docker socket, internet access, mock service or test-source edit was supplied.
+The public service and import-related failures remain available for later
+review; setup recovery does not establish that every failing fixture has the
+same cause.
+
+Evidence is under
+`../output/deepswe-survey/drizzle-orm-window-function-builders/logs/agentless-ml-8d6d0e3ac6b04580b38cfe25c064ce44/`:
+the merged original per-package outcomes, stdout, stderr, command/limit metadata
+and accepted inventory. Turbo reports 21 successful tasks and three failed test
+tasks, with zero cached tasks, in 17m37.498s. The complete survey retry took
+1,102.2 seconds, including workspace preparation and cleanup.
+
+Rerun the command above with task ID `drizzle-orm-window-function-builders`.
+Both setups are now usable; the next inexpensive readiness check is Mobly's
+missing pinned image, rather than expanding Drizzle's service diagnostics.

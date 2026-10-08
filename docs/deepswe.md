@@ -522,6 +522,12 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   follows the public core unit schedule and verifies candidate imports. It
   yields 1,664 passing report IDs, bringing the latest count to **94/113**
   (19 tasks not ready); its 21 baseline failures remain visible.
+  The same [package-schedule follow-up](deepswe-package-schedules-2026-10-08.md)
+  implements Drizzle's public Turbo graph with its build/type prerequisites,
+  pinned offline tools and all nine namespaced package reports. Its completed
+  run yields 3,100 passing IDs and brings the latest count to **95/113**
+  (18 tasks not ready). Failed and skipped baseline cases remain visible;
+  readiness does not mean either complete suite is all-green.
   The [Pwntools doctest review](deepswe-pwntools-doctest-2026-10-07.md) replaces
   its incorrect pytest invocation with the public Sphinx runner. The published
   image lacks Sphinx; a separately augmented diagnostic also exposed missing
