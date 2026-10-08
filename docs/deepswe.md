@@ -541,6 +541,11 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   starts pytest from `tests/test_igel` before Igel binds its output paths.
   Both unchanged public tests pass in the pinned image. The latest count is
   **98/113** (15 tasks not ready), with three `no_passing_tests` records left.
+  [Skrub's public-package baseline](deepswe-skrub-baseline-2026-10-08.md)
+  uses its supported writable data directory and declared package schedule.
+  The report contains 2,859 passing IDs, four failures and 357 skipped or
+  expected-failure cases. The latest count is **99/113** (14 tasks not ready);
+  only Eicrud and Numba still have `no_passing_tests` records.
   The [Pwntools doctest review](deepswe-pwntools-doctest-2026-10-07.md) replaces
   its incorrect pytest invocation with the public Sphinx runner. The published
   image lacks Sphinx; a separately augmented diagnostic also exposed missing

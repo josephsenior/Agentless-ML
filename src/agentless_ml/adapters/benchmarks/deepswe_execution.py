@@ -156,6 +156,20 @@ IGEL_PYTEST = DeepSWETestCommand(
     report=PYTEST.report,
 )
 
+# The public Pixi test task targets skrub, not documentation/build examples.
+# Importing the package creates its data directory; use its supported setting
+# to keep that write on /tmp without making the image filesystem writable.
+SKRUB_PYTEST = DeepSWETestCommand(
+    script=(
+        f"cd {WORK} || exit 125; export SKB_DATA_DIRECTORY=/tmp/skrub_data "
+        f"COVERAGE_FILE=/tmp/.coverage PYTHONPATH={WORK}/src:{WORK}; "
+        "python -m pytest -p no:cacheprovider --continue-on-collection-errors "
+        "-vsl --cov=skrub --cov-report=xml:/tmp/coverage.xml "
+        "--junitxml=/tmp/report.xml skrub"
+    ),
+    report=PYTEST.report,
+)
+
 _LANGCHAIN_IMPORT_CHECK = """
 from pathlib import Path
 import langchain_core, langchain_tests
@@ -677,6 +691,7 @@ TEST_COMMANDS = {
     "go-module": GO_MODULE,
     "pytest": PYTEST,
     "igel-pytest": IGEL_PYTEST,
+    "skrub-pytest": SKRUB_PYTEST,
     "langchain-core-pytest": LANGCHAIN_CORE_PYTEST,
     "pwntools-doctest": PWNTOOLS_DOCTEST,
     "pwntools-native-doctest": PWNTOOLS_NATIVE_DOCTEST,
@@ -916,7 +931,7 @@ def deepswe_test_command(
     if runner in {
         "koota-vitest", "agentrooms-vitest", "quill-vitest", "clack-vitest",
         "valibot-vitest", "optique-node", "pwntools-doctest",
-        "langchain-core-pytest",
+        "langchain-core-pytest", "skrub-pytest",
         "drizzle-turbo",
     } and targets:
         raise ValueError(f"{runner}'s multi-suite runner does not support narrowed targets")

@@ -62,6 +62,24 @@ def test_igel_changes_directory_before_import_without_changing_pytest(tmp_path):
     assert script("pytest").startswith("cd /tmp/work &&")
 
 
+def test_skrub_uses_the_public_package_schedule_and_writable_data_directory(tmp_path):
+    override = load_test_overrides(OVERRIDES)["skrub-duration-encoding"]
+    plan = deepswe_test_plan("python", tmp_path, override)
+    assert plan.runner == "skrub-pytest" and plan.targets == ()
+    text = plan.command().argv[2]
+    assert "SKB_DATA_DIRECTORY=/tmp/skrub_data" in text
+    assert "PYTHONPATH=/tmp/work/src:/tmp/work" in text
+    assert text.index("SKB_DATA_DIRECTORY") < text.index("python -m pytest")
+    assert "COVERAGE_FILE=/tmp/.coverage" in text
+    assert "-vsl --cov=skrub --cov-report=xml:/tmp/coverage.xml" in text
+    assert "--junitxml=/tmp/report.xml skrub" in text
+    assert plan.command().report == TEST_COMMANDS["pytest"].report
+    assert "--ignore" not in text and "-k " not in text
+    assert "SKB_DATA_DIRECTORY" not in script("pytest")
+    with pytest.raises(ValueError, match="does not support narrowed targets"):
+        deepswe_test_command("skrub-pytest", ("skrub/tests/test_one.py",))
+
+
 @pytest.mark.parametrize("image_copy", [False, True])
 def test_langchain_import_guard_rejects_non_candidate_packages(tmp_path, image_copy):
     libraries = tmp_path / "libs"
@@ -472,6 +490,7 @@ def test_an_override_can_replace_the_derived_targets(tmp_path):
 def test_the_checked_in_overrides_are_well_formed_and_explained():
     overrides = load_test_overrides(OVERRIDES)
     assert set(overrides) == {
+        "skrub-duration-encoding",
         "igel-persist-feature-schema",
         "drizzle-orm-window-function-builders",
         "langchain-request-coalescing",

@@ -1,4 +1,8 @@
 {
+  "skrub-duration-encoding": {
+    "runner": "skrub-pytest",
+    "reason": "The public Pixi test task runs pytest -vsl --cov=skrub --cov-report=xml skrub, separately from user-guide doctests. Use that complete package schedule and the supported SKB_DATA_DIRECTORY=/tmp/skrub_data to avoid creating /root/skrub_data on the read-only image. Keep candidate source first on PYTHONPATH, redirect coverage artifacts to /tmp, and preserve tests, pytest configuration, image and Docker protections."
+  },
   "igel-persist-feature-schema": {
     "runner": "igel-pytest",
     "reason": "The public tests import Igel before changing to tests/test_igel, but Igel binds model output paths at import time. Start pytest from that directory so saved models and test expectations use the same folder. Keep candidate source first on PYTHONPATH and preserve both unchanged public tests, pytest configuration and the pinned image."
