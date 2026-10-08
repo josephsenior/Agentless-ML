@@ -565,6 +565,9 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   A clean repeat stopped at the intended five-minute cutoff, with at least
   350 completions, a 1.42-GiB observed peak and no OOM events. It resolved the
   timing discrepancy for that short window, not full-suite readiness.
+  The subsequent [full two-worker attempt](deepswe-numba-full-attempt-2026-10-08.md)
+  was interrupted without a recoverable report. Its completion is unknown;
+  neither readiness nor a parallel-runtime conclusion was recorded.
   The [Pwntools doctest review](deepswe-pwntools-doctest-2026-10-07.md) replaces
   its incorrect pytest invocation with the public Sphinx runner. The published
   image lacks Sphinx; a separately augmented diagnostic also exposed missing

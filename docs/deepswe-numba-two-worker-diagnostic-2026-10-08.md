@@ -103,6 +103,10 @@ memory peaks or full-suite completion within 30 minutes. The next direct check
 would be one full native two-worker attempt with the unchanged 30-minute cap.
 No full attempt was started as part of this repeat.
 
+A subsequently approved [full attempt](deepswe-numba-full-attempt-2026-10-08.md)
+was interrupted without a recoverable final report. It does not establish
+full-suite completion or a measured 30-minute timeout.
+
 Repeat evidence is under
 `../output/deepswe-survey/numba-two-worker-diagnostic/logs/agentless-ml-0b12e3d4d78b496a9adf895c6fc7a069/`.
 The same four artifact files listed below preserve its resource samples,
