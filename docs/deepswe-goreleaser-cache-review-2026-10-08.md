@@ -40,7 +40,7 @@ Copying both complete caches into the existing 4-GiB tmpfs cannot fit. The
 inspection does not establish the size of a sufficient smaller subset or
 whether the full test schedule would complete after cache access is restored.
 
-## Proposed next step, not yet performed
+## Approved separate diagnostic
 
 Use a separately labelled derivative of this exact pinned image to relocate
 its existing caches outside `/tmp`. No dependency download, toolchain upgrade,
@@ -50,10 +50,38 @@ outputs under the existing temporary mount. Confirm that Go can use the
 relocated module cache read-only before attempting the unchanged public
 schedule.
 
-That would be a substituted environment, not the canonical pinned-image
-baseline. Build and execution have not been authorized or started here. Do
-not silently promote its eventual result into the official survey, increase
+The user approved building and running this separate diagnostic. It remains
+a substituted environment, not the canonical pinned-image baseline. Do not
+silently promote its eventual result into the official survey, increase
 limits, downgrade `go.mod`, or replace candidate code with image-built code.
+
+The recipe is `experiments/deepswe/goreleaser/Dockerfile.cache`. It moves the
+existing caches to `/opt/agentless-go`, explicitly selects the image's existing
+Go 1.26.1 binary, disables proxy downloads and automatic toolchain switching,
+and builds with `--network=none --pull=false`. Verify the parent ID above before
+building; the build log also records the resolved parent digest.
+
+```powershell
+docker build --pull=false --network=none -f experiments/deepswe/goreleaser/Dockerfile.cache -t agentless-ml/goreleaser-cache:2026-10-08 experiments/deepswe/goreleaser
+$diagnosticImageId = docker image inspect --format '{{.Id}}' agentless-ml/goreleaser-cache:2026-10-08
+.\.venv\Scripts\python.exe tools/run_goreleaser_cache_diagnostic.py --image-id $diagnosticImageId --check-only
+.\.venv\Scripts\python.exe tools/run_goreleaser_cache_diagnostic.py --image-id $diagnosticImageId
+```
+
+The first command check uses `go list -m all` from a fresh candidate checkout
+with the usual read-only root, offline network and 4-GiB `/tmp` mount. It is
+not a test baseline. Full mode seeds the writable Go build cache from the
+image's existing content-addressed cache, then preserves the current public
+Go plan (`go test -json -count=1 ./...`) and CTRF converter. This is the
+survey's existing full-package plan, not an assertion that it reproduces
+every race/coverage flag in the repository's separate Taskfile recipe.
+Go still compiles candidate source according to its cache keys; test result
+caching remains disabled. The wrapper adds a container-side 1,800-second
+deadline covering preparation, tests and report conversion, as well as the
+unchanged host timeout. It has no automatic retry or official survey write.
+
+Focused verification passed **94 tests**, with four existing opt-in checks
+skipped. No benchmark result is implied by those unit tests.
 
 The original failure artifacts remain under
 `../output/deepswe-survey/goreleaser-retry-publish-auditing/logs/agentless-ml-8d8e12ec5326429abef093a9e2481eff/`.
