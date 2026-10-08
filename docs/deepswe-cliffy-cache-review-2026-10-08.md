@@ -89,3 +89,8 @@ Original failure evidence:
 `../output/deepswe-survey/cliffy-config-file-parsing/logs/agentless-ml-a55f4d94eea3446183c6697dd957f9a1/`.
 The official survey remains **100/113 ready**; Cliffy remains unready and
 Numba remains parked.
+
+The subsequent approved [public-file verification](deepswe-cliffy-public-dependencies-2026-10-09.md)
+checked 28 explicit package/version pairs and all 956 manifest files against
+registry checksums and sizes. It did not build an image or verify the complete
+offline test-import graph; canonical readiness remains unchanged.

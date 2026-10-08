@@ -587,6 +587,11 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   published Deno cache. The first saved failure is missing `@std/io` metadata.
   No dependencies were downloaded, image supplemented or baseline rerun in
   that inspection; readiness remains unchanged.
+  The [public dependency audit](deepswe-cliffy-public-dependencies-2026-10-09.md)
+  subsequently verified 956 files across 28 explicit package/version pairs,
+  including missing dependency graphs and the image's existing versions.
+  No image was built, tests run or canonical readiness changed. Full offline
+  import resolution and Deno 2.0.0 compatibility remain the next checks.
   The [Pwntools doctest review](deepswe-pwntools-doctest-2026-10-07.md) replaces
   its incorrect pytest invocation with the public Sphinx runner. The published
   image lacks Sphinx; a separately augmented diagnostic also exposed missing
