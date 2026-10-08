@@ -513,6 +513,11 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   then passed the complete public Vitest schedule in its pinned published image,
   bringing the latest count to **93/113**, with 20 tasks still not ready.
   Pwntools is parked; tasks outside these reviews retain their earlier outcomes.
+  The [Drizzle and LangChain repository retries](deepswe-repository-retries-2026-10-08.md)
+  clear both old preparation failures and verify their published images.
+  Drizzle needs its delegated Turbo schedule (`no_runner`); LangChain's
+  root-level pytest invocation fails during collection (`harness_error`).
+  Neither adds a usable baseline, so readiness remains 93/113.
   The [Pwntools doctest review](deepswe-pwntools-doctest-2026-10-07.md) replaces
   its incorrect pytest invocation with the public Sphinx runner. The published
   image lacks Sphinx; a separately augmented diagnostic also exposed missing
