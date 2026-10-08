@@ -58,7 +58,8 @@ def test_numba_builds_candidate_extensions_before_import_and_native_runner(tmp_p
     assert text.index("refusing non-candidate import") < text.index("BasicTestRunner.resultclass")
     assert text.endswith("/tmp/work/runtests.py /tmp/report.xml")
     assert "python -m pytest" not in text
-    assert "sys.argv = [entry]" in text and "completed or not records" in text
+    assert "sys.argv = [entry, *sys.argv[3:]]" in text and "completed or not records" in text
+    assert not text.endswith("/tmp/report.xml -m 2")  # baseline stays serial
     assert "/app/numba" not in text and "pip install" not in text
     assert "_min_llvmlite_version" not in text and "sed " not in text
     assert plan.command().report == TEST_COMMANDS["pytest"].report

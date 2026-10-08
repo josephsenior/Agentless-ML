@@ -73,6 +73,11 @@ processes must not be assumed to fit: the serial run already used substantial
 memory. This milestone did not enable parallel test execution, extend the
 timeout, increase memory or narrow the schedule.
 
+The subsequent [two-worker diagnostic](deepswe-numba-two-worker-diagnostic-2026-10-08.md)
+adds parallel-result recording and samples the early public schedule. Memory
+stayed below the cap, but host/container timing disagreed, so it does not
+establish full-suite runtime or change readiness. No full retry was started.
+
 The sealed base is `5781334aa654972fdc749003e7c1e93e6d277110`. The verified
 published image remains
 `sha256:d30747d56f59cb61bb9a4e87ba8dc4df29ccbb471a1a1146f20d5d9d58fa90ac`.

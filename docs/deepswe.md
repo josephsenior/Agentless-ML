@@ -558,6 +558,10 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   unready, now classified as `timeout`; the latest count stays **100/113**
   (13 tasks not ready). No latest `no_passing_tests` records remain, which does
   not mean every task now has a passing baseline.
+  The separate [two-worker resource sample](deepswe-numba-two-worker-diagnostic-2026-10-08.md)
+  exercised parallel-result recording and worker recycling, with a 1.54-GiB
+  observed peak and no OOM events. Host/container timing disagreed; this sample
+  does not establish full-suite runtime or change the official baseline.
   The [Pwntools doctest review](deepswe-pwntools-doctest-2026-10-07.md) replaces
   its incorrect pytest invocation with the public Sphinx runner. The published
   image lacks Sphinx; a separately augmented diagnostic also exposed missing
