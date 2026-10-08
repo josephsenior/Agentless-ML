@@ -153,3 +153,9 @@ offer an unreviewed full-suite mode.
 
 Next: assess separate local TCP/TLS services for the socket/proxy examples.
 They cannot be recovered by adding more static snapshot files alone.
+
+That follow-up is now recorded in the
+[shared HTTP/TLS diagnostic](deepswe-pwntools-protocol-services-2026-10-08.md).
+It preserves this two-host image/profile and adds an explicit three-host
+profile whose unchanged context/socket pages pass. Its results and image
+identity are separate from the historical results in this note.

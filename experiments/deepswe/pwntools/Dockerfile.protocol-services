@@ -1,0 +1,20 @@
+FROM agentless-ml/pwntools-ssh-aligned:2026-10-08 AS service-builder
+USER root
+COPY shared-services.go /tmp/shared-services.go
+RUN GOTOOLCHAIN=local GOPROXY=off GOSUMDB=off GO111MODULE=off GOCACHE=/tmp/go-cache \
+    go build -trimpath -o /tmp/shared-services /tmp/shared-services.go \
+    && go version > /tmp/go-version.txt \
+    && sha256sum /usr/local/go/bin/go /tmp/shared-services \
+       | sed 's|/tmp/shared-services|/opt/pwntools-services/shared-services|' > /tmp/compiler-binary-sha256.txt
+
+FROM agentless-ml/pwntools-ssh-aligned:2026-10-08
+USER root
+COPY snapshots /opt/pwntools-services/
+COPY offline-services.py /opt/pwntools-services/offline-services.py
+COPY --from=service-builder /tmp/shared-services /opt/pwntools-services/shared-services
+COPY --from=service-builder /tmp/go-version.txt /tmp/compiler-binary-sha256.txt /opt/pwntools-services/
+RUN /opt/pwntools-services/shared-services -check-data \
+    && chmod -R a-w /opt/pwntools-services \
+    && mv /opt/pwntools-setup-local-ssh.sh /opt/pwntools-setup-local-ssh-offline.sh
+COPY setup-protocol-services.sh /opt/pwntools-setup-local-ssh.sh
+USER travis

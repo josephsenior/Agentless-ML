@@ -26,23 +26,35 @@ class OfflineServiceRunner(DockerTestRunner):
         return DockerTestRunner._docker(*args, **kwargs)
 
 
+class ProtocolServiceRunner(OfflineServiceRunner):
+    @staticmethod
+    def _docker(*args, **kwargs):
+        if args and args[0] == 'create':
+            args = (args[0], '--add-host=google.com:127.0.0.1', *args[1:])
+        return OfflineServiceRunner._docker(*args, **kwargs)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--image', default='agentless-ml/pwntools-services:2026-10-08')
+    parser.add_argument('--image')
+    parser.add_argument('--protocol-services', action='store_true')
     parser.add_argument('--artifacts', type=Path, required=True)
     parser.add_argument('--targets', nargs='+', default=['source/update.rst'])
     args = parser.parse_args()
-    if any(target not in ('source/update.rst', 'source/util/web.rst') for target in args.targets):
-        parser.error('Only the public update and download pages are supported')
-    runner = OfflineServiceRunner(args.image, args.artifacts / 'logs', memory_mb=8192,
+    allowed = ('source/update.rst', 'source/util/web.rst') + (('source/context.rst', 'source/tubes/sockets.rst') if args.protocol_services else ())
+    if any(target not in allowed for target in args.targets):
+        parser.error('Only the selected public pages supported by this diagnostic profile are allowed')
+    args.image = args.image or ('agentless-ml/pwntools-protocol-services:2026-10-08' if args.protocol_services else 'agentless-ml/pwntools-services:2026-10-08')
+    runner_type = ProtocolServiceRunner if args.protocol_services else OfflineServiceRunner
+    runner = runner_type(args.image, args.artifacts / 'logs', memory_mb=8192,
                                   cpus=2, tmpfs_mb=4096, pids_limit=2048, run_as_image_user=True)
     provider = LocalGitWorkspaceProvider(ROOT.parent / 'benchmarks/deepswe/repos/pwntools-tube-multiplexing',
                                         '76894a5404a65d2800b6d0adaf3485ecba275caa', args.artifacts / 'workspaces')
     with provider.create() as workspace:
         execution = runner.run(workspace.path, deepswe_test_command('pwntools-native-doctest',
                                tuple(args.targets), timeout_seconds=300))
-    record = {'condition': 'offline-service diagnostic - modified environment',
-              'hosts': {host: '127.0.0.1' for host in HOSTS}, 'network': 'none',
+    record = {'condition': ('offline protocol-service diagnostic - modified environment' if args.protocol_services else 'offline-service diagnostic - modified environment'),
+              'hosts': {host: '127.0.0.1' for host in HOSTS + (('google.com',) if args.protocol_services else ())}, 'network': 'none',
               'certificate_trust': 'ephemeral REQUESTS_CA_BUNDLE, no system trust change',
               'image_id': runner.image_id, 'targets': args.targets,
               'status': execution.result.status.value, 'message': execution.message,

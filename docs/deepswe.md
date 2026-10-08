@@ -567,6 +567,11 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   unchanged public download examples through real HTTPS. These are separate
   selected-page runs, explicitly a modified environment, not a canonical
   readiness improvement or a new full-schedule result.
+  The [shared HTTP/TLS follow-up](deepswe-pwntools-protocol-services-2026-10-08.md)
+  passes all 164 context and 35 socket examples using real local connections.
+  Sphinx also includes 219 passing related tube examples: 418 total, with zero
+  setup/cleanup failures. This explicitly labelled three-host condition does
+  not demonstrate live Google access or change canonical readiness.
   The [repository review](deepswe-repository-review-2026-10-04.md) found that
   all 22 old unsupported-task trees are accepted by the current provider, but
   Linux symlink semantics and submodule requirements still need runtime checks.

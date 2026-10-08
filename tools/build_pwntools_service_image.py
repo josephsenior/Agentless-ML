@@ -31,9 +31,11 @@ def verify_pins(records):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--destination', type=Path, required=True)
-    parser.add_argument('--image', default='agentless-ml/pwntools-services:2026-10-08')
+    parser.add_argument('--image')
+    parser.add_argument('--protocol-services', action='store_true', help='shared Go HTTP/TLS diagnostic for three hostnames')
     parser.add_argument('--snapshots', type=Path, help='reuse an existing verified capture without network')
     args = parser.parse_args()
+    args.image = args.image or ('agentless-ml/pwntools-protocol-services:2026-10-08' if args.protocol_services else 'agentless-ml/pwntools-services:2026-10-08')
     parent = subprocess.check_output(['docker', 'image', 'inspect', 'agentless-ml/pwntools-ssh-aligned:2026-10-08', '--format', '{{.Id}}'], text=True).strip()
     if parent != PARENT:
         raise ValueError('SSH-aligned parent differs from reviewed image')
@@ -64,13 +66,17 @@ def main():
         (snapshots / filename).write_bytes(data)
         records.append(record)
     verify_pins(records)
-    manifest = {'condition': 'offline-service diagnostic - modified environment', 'parent_image': parent, 'snapshots': records}
+    condition = 'offline protocol-service diagnostic - modified environment' if args.protocol_services else 'offline-service diagnostic - modified environment'
+    manifest = {'condition': condition, 'parent_image': parent, 'snapshots': records}
     (snapshots / 'manifest.json').write_text(json.dumps(manifest, indent=2) + '\n', encoding='utf-8')
     source = ROOT / 'experiments/deepswe/pwntools'
     for filename in ('offline-services.py', 'setup-offline-services.sh'):
         shutil.copyfile(source / filename, destination / filename)
+    if args.protocol_services:
+        for filename in ('shared-services.go', 'setup-protocol-services.sh'):
+            shutil.copyfile(source / filename, destination / filename)
     # Resolve the parent immutably even if another process changes its tag.
-    recipe = (source / 'Dockerfile.services').read_text().replace(
+    recipe = (source / ('Dockerfile.protocol-services' if args.protocol_services else 'Dockerfile.services')).read_text().replace(
         'FROM agentless-ml/pwntools-ssh-aligned:2026-10-08',
         'FROM agentless-ml/pwntools-ssh-aligned:2026-10-08@' + parent)
     (destination / 'Dockerfile').write_text(recipe, encoding='utf-8')

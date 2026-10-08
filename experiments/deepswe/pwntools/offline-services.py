@@ -61,7 +61,7 @@ def handler(bodies):
     return Handler
 
 
-def check(cert):
+def check(cert, protocol=False):
     import requests
     bodies = load_snapshots(ROOT)
     for (host, path), (filename, _) in ROUTES.items():
@@ -80,6 +80,26 @@ def check(cert):
     response = requests.get('https://httpbingo.org/unsupported', verify=cert, timeout=3)
     if response.status_code != 404:
         raise ValueError('Unsupported path did not fail')
+    if protocol:
+        import errno
+        import socket
+        addresses = {item[4][0] for item in socket.getaddrinfo('google.com', 80, socket.AF_INET, socket.SOCK_STREAM)}
+        if addresses != {'127.0.0.1'}:
+            raise ValueError('Google protocol fixture must resolve only to loopback')
+        for port in (1, 1080):
+            with socket.socket() as client:
+                if client.connect_ex(('127.0.0.1', port)) != errno.ECONNREFUSED:
+                    raise ValueError('Failure-test port is not closed')
+        for port in (80, 443):
+            client = socket.create_connection(('google.com', port), timeout=3)
+            if port == 443:
+                client = ssl.create_default_context(cafile=cert).wrap_socket(client, server_hostname='google.com')
+            with client:
+                client.sendall(b'GET /\r\n\r\n')
+                response = client.recv(1024)
+                if not response.startswith(b'HTTP/1.1 400 Bad Request'):
+                    raise ValueError('Real parser did not reject malformed HTTP request')
+            print(json.dumps({'protocol_preflight_port': port, 'parser_reply': 'HTTP/1.1 400 Bad Request'}), flush=True)
 
 
 def main():
@@ -87,9 +107,10 @@ def main():
     parser.add_argument('--cert', required=True)
     parser.add_argument('--key')
     parser.add_argument('--check', action='store_true')
+    parser.add_argument('--protocol', action='store_true')
     args = parser.parse_args()
     if args.check:
-        check(args.cert)
+        check(args.cert, args.protocol)
         return
     if not args.key:
         parser.error('--key is required for the server')
