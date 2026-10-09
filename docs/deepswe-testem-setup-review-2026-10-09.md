@@ -73,6 +73,10 @@ Read-only-root profile/home requirements and browser sandbox compatibility also
 need checking rather than assuming installation is sufficient.
 
 No image was built, dependency downloaded, test run or survey record changed.
+This describes the initial setup inspection. The subsequently approved
+[dependency audit](deepswe-testem-firefox-verification-2026-10-09.md) verified a
+specific official Firefox archive and 87 Debian packages without building an
+image, installing packages or executing the browser/tests.
 KGateway, Numba and Pwntools remain parked. Canonical readiness remains
 **100/113**. No held-out corpus tests or solutions were read.
 

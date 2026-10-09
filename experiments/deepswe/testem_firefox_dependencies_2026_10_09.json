@@ -1,0 +1,948 @@
+{
+  "label": "verified_browser_and_native_dependency_candidate_not_image_or_baseline",
+  "task_id": "testem-per-launcher-reports",
+  "image_id": "sha256:fce2e9ebe359b36b031e0b772159884795fc8383a047bc50eaa46c20fa06e4f6",
+  "firefox_version": "140.17.0esr",
+  "archive_url": "https://archive.mozilla.org/pub/firefox/releases/140.17.0esr/linux-x86_64/en-US/firefox-140.17.0esr.tar.xz",
+  "archive_bytes": 75743336,
+  "archive_sha512": "fb3cba21b6f9fb8b9730f271d71067741b1b2bd444ed713e8806a8a5f039edef20e60c39c5d9a65f44323f97a36e71f99308a3eb7effcc3f5625d9ebda371639",
+  "archive_sha256": "86d049070ad80b74d8e674793e22d28923b4a7a1da06b4d65402f91c67a10314",
+  "mozilla_primary_fingerprint": "14F26682D0916CDD81E37B6D61B7B526D98F0353",
+  "mozilla_signing_subkey_fingerprint": "827E658608679618CD349F93678E455D76767AA3",
+  "signature_verified": true,
+  "packages": [
+    {
+      "package": "adwaita-icon-theme",
+      "version": "43-1",
+      "architecture": "all",
+      "artifact": "adwaita-icon-theme_43-1_all.deb",
+      "bytes": 5124100,
+      "sha256": "4b67610565d16b604d3efd9908e8e4b5d71873c5d0f9347433df509020f22af7",
+      "repository_filename": "pool/main/a/adwaita-icon-theme/adwaita-icon-theme_43-1_all.deb",
+      "depends": "hicolor-icon-theme, gtk-update-icon-cache"
+    },
+    {
+      "package": "at-spi2-common",
+      "version": "2.46.0-5",
+      "architecture": "all",
+      "artifact": "at-spi2-common_2.46.0-5_all.deb",
+      "bytes": 161668,
+      "sha256": "441bc1c6cefdc01f519310abf55823deb868898480dee09a05aa44e8c83cabc2",
+      "repository_filename": "pool/main/a/at-spi2-core/at-spi2-common_2.46.0-5_all.deb",
+      "depends": ""
+    },
+    {
+      "package": "dbus-bin",
+      "version": "1.14.10-1~deb12u1",
+      "architecture": "amd64",
+      "artifact": "dbus-bin_1.14.10-1~deb12u1_amd64.deb",
+      "bytes": 105356,
+      "sha256": "7273d6f5ddcafa6bc81e319997f60e9b511a92c4414c1d4ecb05cba9e755da57",
+      "repository_filename": "pool/main/d/dbus/dbus-bin_1.14.10-1~deb12u1_amd64.deb",
+      "depends": "libc6 (>= 2.34), libdbus-1-3 (= 1.14.10-1~deb12u1)"
+    },
+    {
+      "package": "dbus-daemon",
+      "version": "1.14.10-1~deb12u1",
+      "architecture": "amd64",
+      "artifact": "dbus-daemon_1.14.10-1~deb12u1_amd64.deb",
+      "bytes": 183656,
+      "sha256": "d35e43de83f7df870196d292a60a56d320c47ce503bc586b30e47a192090302e",
+      "repository_filename": "pool/main/d/dbus/dbus-daemon_1.14.10-1~deb12u1_amd64.deb",
+      "depends": "dbus-bin (= 1.14.10-1~deb12u1), dbus-session-bus-common (>= 1.14.10-1~deb12u1), libapparmor1 (>= 2.8.94), libaudit1 (>= 1:2.2.1), libc6 (>= 2.34), libcap-ng0 (>= 0.7.9), libdbus-1-3 (= 1.14.10-1~deb12u1), libexpat1 (>= 2.1~beta3), libselinux1 (>= 3.1~), libsystemd0"
+    },
+    {
+      "package": "dbus-session-bus-common",
+      "version": "1.14.10-1~deb12u1",
+      "architecture": "all",
+      "artifact": "dbus-session-bus-common_1.14.10-1~deb12u1_all.deb",
+      "bytes": 78232,
+      "sha256": "b19cb8e3581d6b09ff3f46fee23de2813811353228c666c9d1ad885598062e43",
+      "repository_filename": "pool/main/d/dbus/dbus-session-bus-common_1.14.10-1~deb12u1_all.deb",
+      "depends": ""
+    },
+    {
+      "package": "dbus-system-bus-common",
+      "version": "1.14.10-1~deb12u1",
+      "architecture": "all",
+      "artifact": "dbus-system-bus-common_1.14.10-1~deb12u1_all.deb",
+      "bytes": 79344,
+      "sha256": "2111d3d0c98ac68ee973274058447e6fab1c359fec1d4bb195f5fcc5833a19e2",
+      "repository_filename": "pool/main/d/dbus/dbus-system-bus-common_1.14.10-1~deb12u1_all.deb",
+      "depends": "adduser"
+    },
+    {
+      "package": "dbus-user-session",
+      "version": "1.14.10-1~deb12u1",
+      "architecture": "amd64",
+      "artifact": "dbus-user-session_1.14.10-1~deb12u1_amd64.deb",
+      "bytes": 78136,
+      "sha256": "4c3aaad251f876214fadb5580dd5f4925f73838832135e6d1dab981eb963be6b",
+      "repository_filename": "pool/main/d/dbus/dbus-user-session_1.14.10-1~deb12u1_amd64.deb",
+      "depends": "dbus-daemon (= 1.14.10-1~deb12u1) | dbus-broker, dbus-session-bus-common (>= 1.14.10-1~deb12u1), libpam-systemd, systemd"
+    },
+    {
+      "package": "dbus",
+      "version": "1.14.10-1~deb12u1",
+      "architecture": "amd64",
+      "artifact": "dbus_1.14.10-1~deb12u1_amd64.deb",
+      "bytes": 97360,
+      "sha256": "35932ffdc1ae80348e93c1263c504e62cae8a2a1476f1541ef63a9cc0a271ef9",
+      "repository_filename": "pool/main/d/dbus/dbus_1.14.10-1~deb12u1_amd64.deb",
+      "depends": "dbus-bin (= 1.14.10-1~deb12u1), dbus-daemon (= 1.14.10-1~deb12u1), dbus-system-bus-common (>= 1.14.10-1~deb12u1), libc6 (>= 2.34), libdbus-1-3 (= 1.14.10-1~deb12u1), libexpat1 (>= 2.1~beta3), libsystemd0"
+    },
+    {
+      "package": "dconf-gsettings-backend",
+      "version": "0.40.0-4",
+      "architecture": "amd64",
+      "artifact": "dconf-gsettings-backend_0.40.0-4_amd64.deb",
+      "bytes": 27756,
+      "sha256": "790a8ad2a229b378bbda7a0f32d9d8a522c986b08c556210c0514978ad88e356",
+      "repository_filename": "pool/main/d/dconf/dconf-gsettings-backend_0.40.0-4_amd64.deb",
+      "depends": "dconf-service (<< 0.40.0-4.1~), dconf-service (>= 0.40.0-4), libdconf1 (= 0.40.0-4), libc6 (>= 2.14), libglib2.0-0 (>= 2.55.2)"
+    },
+    {
+      "package": "dconf-service",
+      "version": "0.40.0-4",
+      "architecture": "amd64",
+      "artifact": "dconf-service_0.40.0-4_amd64.deb",
+      "bytes": 31620,
+      "sha256": "2650490642fb7e66da94943d381cea277cb811e3a4aadb6386fcd402a8390759",
+      "repository_filename": "pool/main/d/dconf/dconf-service_0.40.0-4_amd64.deb",
+      "depends": "default-dbus-session-bus | dbus-session-bus, libdconf1 (= 0.40.0-4), procps, libc6 (>= 2.34), libglib2.0-0 (>= 2.55.2)"
+    },
+    {
+      "package": "dmsetup",
+      "version": "2:1.02.185-2",
+      "architecture": "amd64",
+      "artifact": "dmsetup_2%3a1.02.185-2_amd64.deb",
+      "bytes": 82040,
+      "sha256": "c73fc490b93c83550ed272de69ec96c5da30d4456b889f9e93c7fd8e53860b85",
+      "repository_filename": "pool/main/l/lvm2/dmsetup_1.02.185-2_amd64.deb",
+      "depends": "libc6 (>= 2.34), libdevmapper1.02.1 (>= 2:1.02.181)"
+    },
+    {
+      "package": "fontconfig",
+      "version": "2.14.1-4",
+      "architecture": "amd64",
+      "artifact": "fontconfig_2.14.1-4_amd64.deb",
+      "bytes": 449212,
+      "sha256": "010e57c24a983eecc39aab8a84219a716c10901e03bacd1927331388656f890f",
+      "repository_filename": "pool/main/f/fontconfig/fontconfig_2.14.1-4_amd64.deb",
+      "depends": "libc6 (>= 2.34), libfontconfig1 (>= 2.13.0), libfreetype6 (>= 2.2.1), fontconfig-config"
+    },
+    {
+      "package": "gtk-update-icon-cache",
+      "version": "3.24.38-2~deb12u3",
+      "architecture": "amd64",
+      "artifact": "gtk-update-icon-cache_3.24.38-2~deb12u3_amd64.deb",
+      "bytes": 44204,
+      "sha256": "6df214515e719d9099f6df89f4581abe34b63ea9237b76e93843e83226b2e9cb",
+      "repository_filename": "pool/main/g/gtk+3.0/gtk-update-icon-cache_3.24.38-2~deb12u3_amd64.deb",
+      "depends": "libc6 (>= 2.34), libgdk-pixbuf-2.0-0 (>= 2.40.0), libglib2.0-0 (>= 2.57.2)"
+    },
+    {
+      "package": "hicolor-icon-theme",
+      "version": "0.17-2",
+      "architecture": "all",
+      "artifact": "hicolor-icon-theme_0.17-2_all.deb",
+      "bytes": 11396,
+      "sha256": "20304d34b85a734ec1e4830badf3a3a70a5dc5f9c1afc0b2230ecd760c81b5e0",
+      "repository_filename": "pool/main/h/hicolor-icon-theme/hicolor-icon-theme_0.17-2_all.deb",
+      "depends": ""
+    },
+    {
+      "package": "libapparmor1",
+      "version": "3.0.8-3",
+      "architecture": "amd64",
+      "artifact": "libapparmor1_3.0.8-3_amd64.deb",
+      "bytes": 41192,
+      "sha256": "4b79f49eafc2017374da9ec206b5495433eadd2b1ea078c3895c99e72825e9d3",
+      "repository_filename": "pool/main/a/apparmor/libapparmor1_3.0.8-3_amd64.deb",
+      "depends": "libc6 (>= 2.34)"
+    },
+    {
+      "package": "libargon2-1",
+      "version": "0~20171227-0.3+deb12u1",
+      "architecture": "amd64",
+      "artifact": "libargon2-1_0~20171227-0.3+deb12u1_amd64.deb",
+      "bytes": 19432,
+      "sha256": "4a8155b06270b88eed34d132acfc8ccc0b85499e1c4bfd7f31f8b199af42b1de",
+      "repository_filename": "pool/main/a/argon2/libargon2-1_0~20171227-0.3+deb12u1_amd64.deb",
+      "depends": "libc6 (>= 2.34)"
+    },
+    {
+      "package": "libasound2-data",
+      "version": "1.2.8-1",
+      "architecture": "all",
+      "artifact": "libasound2-data_1.2.8-1_all.deb",
+      "bytes": 20488,
+      "sha256": "fe0780d2d3674b2977e0acb0d48b448ad72ba1642564b7dc537f55e839984c2d",
+      "repository_filename": "pool/main/a/alsa-lib/libasound2-data_1.2.8-1_all.deb",
+      "depends": ""
+    },
+    {
+      "package": "libasound2",
+      "version": "1.2.8-1+b1",
+      "architecture": "amd64",
+      "artifact": "libasound2_1.2.8-1+b1_amd64.deb",
+      "bytes": 361788,
+      "sha256": "44c77b076a7b11ae99712439022d822245b1994c435da564ebd320bb676faf4c",
+      "repository_filename": "pool/main/a/alsa-lib/libasound2_1.2.8-1+b1_amd64.deb",
+      "depends": "libasound2-data (>= 1.2.8-1), libc6 (>= 2.34)"
+    },
+    {
+      "package": "libatk-bridge2.0-0",
+      "version": "2.46.0-5",
+      "architecture": "amd64",
+      "artifact": "libatk-bridge2.0-0_2.46.0-5_amd64.deb",
+      "bytes": 64592,
+      "sha256": "fbb07714fdd3fdee7b63fd8595053f4fa8021d8e350a5de6281c6ce7cd4f158f",
+      "repository_filename": "pool/main/a/at-spi2-core/libatk-bridge2.0-0_2.46.0-5_amd64.deb",
+      "depends": "libatk1.0-0 (>= 2.33.1), libatspi2.0-0 (>= 2.9.90), libc6 (>= 2.7), libdbus-1-3 (>= 1.9.14), libglib2.0-0 (>= 2.62)"
+    },
+    {
+      "package": "libatk1.0-0",
+      "version": "2.46.0-5",
+      "architecture": "amd64",
+      "artifact": "libatk1.0-0_2.46.0-5_amd64.deb",
+      "bytes": 49628,
+      "sha256": "909dd661e03760a9ba1529bfc772f259cec8431999ee38b7c5521186237cdd98",
+      "repository_filename": "pool/main/a/at-spi2-core/libatk1.0-0_2.46.0-5_amd64.deb",
+      "depends": "libc6 (>= 2.4), libglib2.0-0 (>= 2.62), at-spi2-common"
+    },
+    {
+      "package": "libatspi2.0-0",
+      "version": "2.46.0-5",
+      "architecture": "amd64",
+      "artifact": "libatspi2.0-0_2.46.0-5_amd64.deb",
+      "bytes": 75404,
+      "sha256": "1c0332f3b712a8e5ee56800bbcab83a8f92098874094f2b0bdfd6b7fd45e8b83",
+      "repository_filename": "pool/main/a/at-spi2-core/libatspi2.0-0_2.46.0-5_amd64.deb",
+      "depends": "libc6 (>= 2.7), libdbus-1-3 (>= 1.9.14), libglib2.0-0 (>= 2.62), libx11-6 (>= 2:1.2.99.901), libxi6 (>= 2:1.2.99.4)"
+    },
+    {
+      "package": "libavahi-client3",
+      "version": "0.8-10+deb12u1",
+      "architecture": "amd64",
+      "artifact": "libavahi-client3_0.8-10+deb12u1_amd64.deb",
+      "bytes": 45756,
+      "sha256": "a99d635f07a49cfbd24de151155c4f815a5adf867855e7ba13ecc3b25ffa52b9",
+      "repository_filename": "pool/main/a/avahi/libavahi-client3_0.8-10+deb12u1_amd64.deb",
+      "depends": "libavahi-common3 (= 0.8-10+deb12u1), libc6 (>= 2.34), libdbus-1-3 (>= 1.9.14)"
+    },
+    {
+      "package": "libavahi-common-data",
+      "version": "0.8-10+deb12u1",
+      "architecture": "amd64",
+      "artifact": "libavahi-common-data_0.8-10+deb12u1_amd64.deb",
+      "bytes": 107164,
+      "sha256": "b21e33c3797c834e9a9ce0f1085e6d3f721db496d550505ab2f364d52097fe6f",
+      "repository_filename": "pool/main/a/avahi/libavahi-common-data_0.8-10+deb12u1_amd64.deb",
+      "depends": ""
+    },
+    {
+      "package": "libavahi-common3",
+      "version": "0.8-10+deb12u1",
+      "architecture": "amd64",
+      "artifact": "libavahi-common3_0.8-10+deb12u1_amd64.deb",
+      "bytes": 42112,
+      "sha256": "0c12791afe1be09d8362161244d7a51e82a67a55f3909f4c29ee3dd424c3a5f1",
+      "repository_filename": "pool/main/a/avahi/libavahi-common3_0.8-10+deb12u1_amd64.deb",
+      "depends": "libc6 (>= 2.34), libavahi-common-data (= 0.8-10+deb12u1)"
+    },
+    {
+      "package": "libcairo-gobject2",
+      "version": "1.16.0-7",
+      "architecture": "amd64",
+      "artifact": "libcairo-gobject2_1.16.0-7_amd64.deb",
+      "bytes": 111752,
+      "sha256": "5898b4c1093ff40bade7acb92affc4a5b5b76a1737cd41cfa2a09cdc2d864d4c",
+      "repository_filename": "pool/main/c/cairo/libcairo-gobject2_1.16.0-7_amd64.deb",
+      "depends": "libcairo2 (= 1.16.0-7), libglib2.0-0 (>= 2.14.0)"
+    },
+    {
+      "package": "libcairo2",
+      "version": "1.16.0-7",
+      "architecture": "amd64",
+      "artifact": "libcairo2_1.16.0-7_amd64.deb",
+      "bytes": 574676,
+      "sha256": "927fa059f8b5791d0cd744d4e3a8c57fa872ef849ce14434dc2222ac8a076a69",
+      "repository_filename": "pool/main/c/cairo/libcairo2_1.16.0-7_amd64.deb",
+      "depends": "libc6 (>= 2.35), libfontconfig1 (>= 2.12.6), libfreetype6 (>= 2.9.1), libpixman-1-0 (>= 0.30.0), libpng16-16 (>= 1.6.2-1), libx11-6, libxcb-render0, libxcb-shm0, libxcb1 (>= 1.6), libxext6, libxrender1, zlib1g (>= 1:1.1.4)"
+    },
+    {
+      "package": "libcolord2",
+      "version": "1.4.6-2.2",
+      "architecture": "amd64",
+      "artifact": "libcolord2_1.4.6-2.2_amd64.deb",
+      "bytes": 136572,
+      "sha256": "6e5a48b72ae316301103d642c8881cc06205cb4b5f54c25c467b2847048d268f",
+      "repository_filename": "pool/main/c/colord/libcolord2_1.4.6-2.2_amd64.deb",
+      "depends": "libc6 (>= 2.29), libglib2.0-0 (>= 2.58), liblcms2-2 (>= 2.6), libudev1 (>= 196)"
+    },
+    {
+      "package": "libcryptsetup12",
+      "version": "2:2.6.1-4~deb12u2",
+      "architecture": "amd64",
+      "artifact": "libcryptsetup12_2%3a2.6.1-4~deb12u2_amd64.deb",
+      "bytes": 223344,
+      "sha256": "b9a607c219be5ef04bc0fcfaec3752d9a1ba07df8d3bb2aed9bf348f90d1b6cc",
+      "repository_filename": "pool/main/c/cryptsetup/libcryptsetup12_2.6.1-4~deb12u2_amd64.deb",
+      "depends": "libargon2-1 (>= 0~20171227), libblkid1 (>= 2.24.2), libc6 (>= 2.34), libdevmapper1.02.1 (>= 2:1.02.97), libjson-c5 (>= 0.15), libssl3 (>= 3.0.0), libuuid1 (>= 2.16)"
+    },
+    {
+      "package": "libcups2",
+      "version": "2.4.2-3+deb12u9",
+      "architecture": "amd64",
+      "artifact": "libcups2_2.4.2-3+deb12u9_amd64.deb",
+      "bytes": 245180,
+      "sha256": "8dbfd3b7cd81166a2d79bb7e3898b0203fec05c7e927f60e207122a1e36b95c8",
+      "repository_filename": "pool/main/c/cups/libcups2_2.4.2-3+deb12u9_amd64.deb",
+      "depends": "libavahi-client3 (>= 0.6.16), libavahi-common3 (>= 0.6.16), libc6 (>= 2.36), libgnutls30 (>= 3.7.5), libgssapi-krb5-2 (>= 1.17), zlib1g (>= 1:1.2.0)"
+    },
+    {
+      "package": "libdatrie1",
+      "version": "0.2.13-2+b1",
+      "architecture": "amd64",
+      "artifact": "libdatrie1_0.2.13-2+b1_amd64.deb",
+      "bytes": 43320,
+      "sha256": "f021f193384929989b2dfd19f606a8cebe54b5f209fe387fc40683e810e01ebe",
+      "repository_filename": "pool/main/libd/libdatrie/libdatrie1_0.2.13-2+b1_amd64.deb",
+      "depends": "libc6 (>= 2.14)"
+    },
+    {
+      "package": "libdbus-1-3",
+      "version": "1.14.10-1~deb12u1",
+      "architecture": "amd64",
+      "artifact": "libdbus-1-3_1.14.10-1~deb12u1_amd64.deb",
+      "bytes": 201240,
+      "sha256": "18ee0ce5fab9f7b671e87da1e9fa18660e36e04a3402f24bdb8635e0ba1d35f6",
+      "repository_filename": "pool/main/d/dbus/libdbus-1-3_1.14.10-1~deb12u1_amd64.deb",
+      "depends": "libc6 (>= 2.34), libsystemd0"
+    },
+    {
+      "package": "libdbus-glib-1-2",
+      "version": "0.112-3",
+      "architecture": "amd64",
+      "artifact": "libdbus-glib-1-2_0.112-3_amd64.deb",
+      "bytes": 58816,
+      "sha256": "1cddce2ec5231fcfc12eb9daaa5a99bcdbe69373bff5362d9e38e54153d552fd",
+      "repository_filename": "pool/main/d/dbus-glib/libdbus-glib-1-2_0.112-3_amd64.deb",
+      "depends": "libc6 (>= 2.14), libdbus-1-3 (>= 1.9.14), libglib2.0-0 (>= 2.31.8)"
+    },
+    {
+      "package": "libdconf1",
+      "version": "0.40.0-4",
+      "architecture": "amd64",
+      "artifact": "libdconf1_0.40.0-4_amd64.deb",
+      "bytes": 40908,
+      "sha256": "d438bb2e3b5afaee2a90bb3fb541dcd2e47eefbc43994b5d0461c18648741e36",
+      "repository_filename": "pool/main/d/dconf/libdconf1_0.40.0-4_amd64.deb",
+      "depends": "libc6 (>= 2.14), libglib2.0-0 (>= 2.55.2)"
+    },
+    {
+      "package": "libdeflate0",
+      "version": "1.14-1",
+      "architecture": "amd64",
+      "artifact": "libdeflate0_1.14-1_amd64.deb",
+      "bytes": 61416,
+      "sha256": "3d4b39f94317b64a860db8a7a8b581b555124cd461fe07ec0d347edbdb9f6683",
+      "repository_filename": "pool/main/libd/libdeflate/libdeflate0_1.14-1_amd64.deb",
+      "depends": "libc6 (>= 2.14)"
+    },
+    {
+      "package": "libdevmapper1.02.1",
+      "version": "2:1.02.185-2",
+      "architecture": "amd64",
+      "artifact": "libdevmapper1.02.1_2%3a1.02.185-2_amd64.deb",
+      "bytes": 132796,
+      "sha256": "aaa78ca236055fedccf637eacf7bda02bf1980b2db668dccd202b04d0d2cfe04",
+      "repository_filename": "pool/main/l/lvm2/libdevmapper1.02.1_1.02.185-2_amd64.deb",
+      "depends": "libc6 (>= 2.33), libselinux1 (>= 3.1~), libudev1 (>= 183), dmsetup (>= 2:1.02.185-2~)"
+    },
+    {
+      "package": "libepoxy0",
+      "version": "1.5.10-1",
+      "architecture": "amd64",
+      "artifact": "libepoxy0_1.5.10-1_amd64.deb",
+      "bytes": 189092,
+      "sha256": "050cbedc9c2a5cce976151c720a3817f2103a01e6ac255bdd6f2c6a7509b04c3",
+      "repository_filename": "pool/main/libe/libepoxy/libepoxy0_1.5.10-1_amd64.deb",
+      "depends": "libc6 (>= 2.7)"
+    },
+    {
+      "package": "libfdisk1",
+      "version": "2.38.1-5+deb12u3",
+      "architecture": "amd64",
+      "artifact": "libfdisk1_2.38.1-5+deb12u3_amd64.deb",
+      "bytes": 193624,
+      "sha256": "8af145cff6ca72529f63e0bf6d9c68c8512387e67f64e66d00e36f72bed99160",
+      "repository_filename": "pool/main/u/util-linux/libfdisk1_2.38.1-5+deb12u3_amd64.deb",
+      "depends": "libblkid1 (>= 2.24.2), libc6 (>= 2.33), libuuid1 (>= 2.16)"
+    },
+    {
+      "package": "libfribidi0",
+      "version": "1.0.8-2.1",
+      "architecture": "amd64",
+      "artifact": "libfribidi0_1.0.8-2.1_amd64.deb",
+      "bytes": 64952,
+      "sha256": "87fce56627aab7b2968501d370aa3ed6d1c792119efa765e71a690bdfe570e62",
+      "repository_filename": "pool/main/f/fribidi/libfribidi0_1.0.8-2.1_amd64.deb",
+      "depends": "libc6 (>= 2.3.4)"
+    },
+    {
+      "package": "libgdk-pixbuf-2.0-0",
+      "version": "2.42.10+dfsg-1+deb12u4",
+      "architecture": "amd64",
+      "artifact": "libgdk-pixbuf-2.0-0_2.42.10+dfsg-1+deb12u4_amd64.deb",
+      "bytes": 138972,
+      "sha256": "19673127f2530deb7cf637c688a4e16384e6887627296e16b8169038928cadc3",
+      "repository_filename": "pool/main/g/gdk-pixbuf/libgdk-pixbuf-2.0-0_2.42.10+dfsg-1+deb12u4_amd64.deb",
+      "depends": "libgdk-pixbuf2.0-common (>= 2.42.10+dfsg-1+deb12u4), shared-mime-info, libc6 (>= 2.34), libglib2.0-0 (>= 2.59.0), libjpeg62-turbo (>= 1.3.1), libpng16-16 (>= 1.6.2-1), libtiff6 (>= 4.0.3)"
+    },
+    {
+      "package": "libgdk-pixbuf2.0-common",
+      "version": "2.42.10+dfsg-1+deb12u4",
+      "architecture": "all",
+      "artifact": "libgdk-pixbuf2.0-common_2.42.10+dfsg-1+deb12u4_all.deb",
+      "bytes": 306756,
+      "sha256": "0f3df073ca7eed5564ea3faceff819d94932d924c56474f1e42799a8017a2d30",
+      "repository_filename": "pool/main/g/gdk-pixbuf/libgdk-pixbuf2.0-common_2.42.10+dfsg-1+deb12u4_all.deb",
+      "depends": ""
+    },
+    {
+      "package": "libglib2.0-0",
+      "version": "2.74.6-2+deb12u9",
+      "architecture": "amd64",
+      "artifact": "libglib2.0-0_2.74.6-2+deb12u9_amd64.deb",
+      "bytes": 1403216,
+      "sha256": "7ff85197685d89e150e342b29a59aab1beee400050ba7da73de81cd999ffee5a",
+      "repository_filename": "pool/main/g/glib2.0/libglib2.0-0_2.74.6-2+deb12u9_amd64.deb",
+      "depends": "libc6 (>= 2.34), libffi8 (>= 3.4), libmount1 (>= 2.35.2-7~), libpcre2-8-0 (>= 10.22), libselinux1 (>= 3.1~), zlib1g (>= 1:1.2.2)"
+    },
+    {
+      "package": "libgraphite2-3",
+      "version": "1.3.14-1+deb12u1",
+      "architecture": "amd64",
+      "artifact": "libgraphite2-3_1.3.14-1+deb12u1_amd64.deb",
+      "bytes": 74564,
+      "sha256": "c19a7f6ba9298db7eef041ae27b08985f2c02009e418063f8bccdb5bc5e858dc",
+      "repository_filename": "pool/main/g/graphite2/libgraphite2-3_1.3.14-1+deb12u1_amd64.deb",
+      "depends": "libc6 (>= 2.14)"
+    },
+    {
+      "package": "libgtk-3-0",
+      "version": "3.24.38-2~deb12u3",
+      "architecture": "amd64",
+      "artifact": "libgtk-3-0_3.24.38-2~deb12u3_amd64.deb",
+      "bytes": 2846524,
+      "sha256": "0ff7375c98b5a8d6aafc6096b21d9f7bae4ecb581d31fce5d37be18f55b489a2",
+      "repository_filename": "pool/main/g/gtk+3.0/libgtk-3-0_3.24.38-2~deb12u3_amd64.deb",
+      "depends": "adwaita-icon-theme, hicolor-icon-theme, shared-mime-info, libatk-bridge2.0-0 (>= 2.15.1), libatk1.0-0 (>= 2.35.1), libc6 (>= 2.34), libcairo-gobject2 (>= 1.14.0), libcairo2 (>= 1.14.0), libcolord2 (>= 0.1.10), libcups2 (>= 1.7.0), libepoxy0 (>= 1.4.3), libfontconfig1 (>= 2.12.6), libfribidi0 (>= 0.19.7), libgdk-pixbuf-2.0-0 (>= 2.40.0), libglib2.0-0 (>= 2.59.0), libharfbuzz0b (>= 2.2.0), libpango-1.0-0 (>= 1.45.5), libpangocairo-1.0-0 (>= 1.44.0), libpangoft2-1.0-0 (>= 1.44.0), libwayland-client0 (>= 1.20.0), libwayland-cursor0 (>= 1.14.91), libwayland-egl1 (>= 1.15.0), libx11-6 (>= 2:1.4.99.1), libxcomposite1 (>= 1:0.4.5), libxcursor1 (>> 1.1.2), libxdamage1 (>= 1:1.1), libxext6, libxfixes3, libxi6 (>= 2:1.2.99.4), libxinerama1 (>= 2:1.1.4), libxkbcommon0 (>= 0.5.0), libxrandr2 (>= 2:1.5.0), libgtk-3-common (>= 3.24.38-2~deb12u3)"
+    },
+    {
+      "package": "libgtk-3-common",
+      "version": "3.24.38-2~deb12u3",
+      "architecture": "all",
+      "artifact": "libgtk-3-common_3.24.38-2~deb12u3_all.deb",
+      "bytes": 3895056,
+      "sha256": "f2642d127d85440acbfc2ed404d3932d8b2fbe8a576ead7f93f35ac1fa999c92",
+      "repository_filename": "pool/main/g/gtk+3.0/libgtk-3-common_3.24.38-2~deb12u3_all.deb",
+      "depends": "dconf-gsettings-backend | gsettings-backend"
+    },
+    {
+      "package": "libharfbuzz0b",
+      "version": "6.0.0+dfsg-3",
+      "architecture": "amd64",
+      "artifact": "libharfbuzz0b_6.0.0+dfsg-3_amd64.deb",
+      "bytes": 1945396,
+      "sha256": "bfce132b7ee67b9c2d2166075b1936a25c8cc6866b6a049f99b8e94baa916e71",
+      "repository_filename": "pool/main/h/harfbuzz/libharfbuzz0b_6.0.0+dfsg-3_amd64.deb",
+      "depends": "libc6 (>= 2.34), libfreetype6 (>= 2.11.0), libglib2.0-0 (>= 2.31.8), libgraphite2-3 (>= 1.2.2)"
+    },
+    {
+      "package": "libice6",
+      "version": "2:1.0.10-1",
+      "architecture": "amd64",
+      "artifact": "libice6_2%3a1.0.10-1_amd64.deb",
+      "bytes": 58540,
+      "sha256": "452796e565c9d42386bd59990000ae9c37d85e142e00ee2b14df0787e2bbf970",
+      "repository_filename": "pool/main/libi/libice/libice6_1.0.10-1_amd64.deb",
+      "depends": "libbsd0 (>= 0.2.0), libc6 (>= 2.14), x11-common"
+    },
+    {
+      "package": "libicu72",
+      "version": "72.1-3+deb12u1",
+      "architecture": "amd64",
+      "artifact": "libicu72_72.1-3+deb12u1_amd64.deb",
+      "bytes": 9376124,
+      "sha256": "f7f6f99c6d7b025914df2447fc93e11d22c44c0c8bdd8b6f36691c9e7ddcef88",
+      "repository_filename": "pool/main/i/icu/libicu72_72.1-3+deb12u1_amd64.deb",
+      "depends": "libc6 (>= 2.34), libgcc-s1 (>= 3.0), libstdc++6 (>= 12)"
+    },
+    {
+      "package": "libip4tc2",
+      "version": "1.8.9-2",
+      "architecture": "amd64",
+      "artifact": "libip4tc2_1.8.9-2_amd64.deb",
+      "bytes": 19016,
+      "sha256": "f2c48b367f9ec13f9aa577e7ccf81b371ce5d5fe22dddf9d7aa99f1e0bb7cfc4",
+      "repository_filename": "pool/main/i/iptables/libip4tc2_1.8.9-2_amd64.deb",
+      "depends": "libc6 (>= 2.28)"
+    },
+    {
+      "package": "libjbig0",
+      "version": "2.1-6.1",
+      "architecture": "amd64",
+      "artifact": "libjbig0_2.1-6.1_amd64.deb",
+      "bytes": 31704,
+      "sha256": "6b07c77b700a615642888a82ba92a7e7c429d04b9c8669c62b2263f15c4c4059",
+      "repository_filename": "pool/main/j/jbigkit/libjbig0_2.1-6.1_amd64.deb",
+      "depends": "libc6 (>= 2.4)"
+    },
+    {
+      "package": "libjpeg62-turbo",
+      "version": "1:2.1.5-2",
+      "architecture": "amd64",
+      "artifact": "libjpeg62-turbo_1%3a2.1.5-2_amd64.deb",
+      "bytes": 166332,
+      "sha256": "95ec30140789a342add8f8371ed018924de51b539056522b66f207b25cba9cad",
+      "repository_filename": "pool/main/libj/libjpeg-turbo/libjpeg62-turbo_2.1.5-2_amd64.deb",
+      "depends": "libc6 (>= 2.14)"
+    },
+    {
+      "package": "libjson-c5",
+      "version": "0.16-2",
+      "architecture": "amd64",
+      "artifact": "libjson-c5_0.16-2_amd64.deb",
+      "bytes": 44120,
+      "sha256": "d0e1ed8637d1c26b9720f6057d6355f18378bba5cc2553e459d1632783c00d70",
+      "repository_filename": "pool/main/j/json-c/libjson-c5_0.16-2_amd64.deb",
+      "depends": "libc6 (>= 2.33)"
+    },
+    {
+      "package": "libkmod2",
+      "version": "30+20221128-1",
+      "architecture": "amd64",
+      "artifact": "libkmod2_30+20221128-1_amd64.deb",
+      "bytes": 57892,
+      "sha256": "af63bbbfc15fbd1f254b15c393b3b95b18b18cc81348fc1b4f1c9c34b4d672d7",
+      "repository_filename": "pool/main/k/kmod/libkmod2_30+20221128-1_amd64.deb",
+      "depends": "libc6 (>= 2.33), liblzma5 (>= 5.1.1alpha+20120614), libssl3 (>= 3.0.0), libzstd1 (>= 1.5.2)"
+    },
+    {
+      "package": "liblcms2-2",
+      "version": "2.14-2+deb12u1",
+      "architecture": "amd64",
+      "artifact": "liblcms2-2_2.14-2+deb12u1_amd64.deb",
+      "bytes": 153540,
+      "sha256": "333efe13d165b8a98194d95e72fd10b502ebbee4dc2eb43fc2ab83e2b53e5f17",
+      "repository_filename": "pool/main/l/lcms2/liblcms2-2_2.14-2+deb12u1_amd64.deb",
+      "depends": "libc6 (>= 2.29)"
+    },
+    {
+      "package": "liblerc4",
+      "version": "4.0.0+ds-2",
+      "architecture": "amd64",
+      "artifact": "liblerc4_4.0.0+ds-2_amd64.deb",
+      "bytes": 170368,
+      "sha256": "771f5c47ca69f24ca61e4be0c98c5912b182ce442f921697d17a472f3ded5c9c",
+      "repository_filename": "pool/main/l/lerc/liblerc4_4.0.0+ds-2_amd64.deb",
+      "depends": "libc6 (>= 2.29), libgcc-s1 (>= 3.0), libstdc++6 (>= 11)"
+    },
+    {
+      "package": "libpam-systemd",
+      "version": "252.39-1~deb12u2",
+      "architecture": "amd64",
+      "artifact": "libpam-systemd_252.39-1~deb12u2_amd64.deb",
+      "bytes": 225520,
+      "sha256": "5629028998971da269a165cdbeb1c7606e9c37e58030217ae93f55233388be32",
+      "repository_filename": "pool/main/s/systemd/libpam-systemd_252.39-1~deb12u2_amd64.deb",
+      "depends": "libc6 (>= 2.34), libcap2 (>= 1:2.10), libpam0g (>= 0.99.7.1), systemd (= 252.39-1~deb12u2), libpam-runtime, default-dbus-system-bus | dbus-system-bus, systemd-sysv"
+    },
+    {
+      "package": "libpango-1.0-0",
+      "version": "1.50.12+ds-1",
+      "architecture": "amd64",
+      "artifact": "libpango-1.0-0_1.50.12+ds-1_amd64.deb",
+      "bytes": 211788,
+      "sha256": "851720de07441ae6bb6a7f51fc0f2edb4db7aa6f25b5bf1bf7b72dcab8947b7f",
+      "repository_filename": "pool/main/p/pango1.0/libpango-1.0-0_1.50.12+ds-1_amd64.deb",
+      "depends": "fontconfig (>= 2.13.0), libc6 (>= 2.14), libfribidi0 (>= 1.0.6), libglib2.0-0 (>= 2.67.3), libharfbuzz0b (>= 5.1.0), libthai0 (>= 0.1.25)"
+    },
+    {
+      "package": "libpangocairo-1.0-0",
+      "version": "1.50.12+ds-1",
+      "architecture": "amd64",
+      "artifact": "libpangocairo-1.0-0_1.50.12+ds-1_amd64.deb",
+      "bytes": 34184,
+      "sha256": "96695f9cdd3bf346e3555cf0aa158e23a36114d6dec203b00ab4e93f1b77aab9",
+      "repository_filename": "pool/main/p/pango1.0/libpangocairo-1.0-0_1.50.12+ds-1_amd64.deb",
+      "depends": "libc6 (>= 2.4), libcairo2 (>= 1.12.10), libfontconfig1 (>= 2.13.0), libglib2.0-0 (>= 2.62.0), libharfbuzz0b (>= 2.6.0), libpango-1.0-0 (= 1.50.12+ds-1), libpangoft2-1.0-0 (= 1.50.12+ds-1)"
+    },
+    {
+      "package": "libpangoft2-1.0-0",
+      "version": "1.50.12+ds-1",
+      "architecture": "amd64",
+      "artifact": "libpangoft2-1.0-0_1.50.12+ds-1_amd64.deb",
+      "bytes": 47384,
+      "sha256": "78da3f494109f6e7a39c4626aaae7571c600c5854cecda0bc0c902224986a63b",
+      "repository_filename": "pool/main/p/pango1.0/libpangoft2-1.0-0_1.50.12+ds-1_amd64.deb",
+      "depends": "libc6 (>= 2.14), libfontconfig1 (>= 2.13.0), libfreetype6 (>= 2.2.1), libglib2.0-0 (>= 2.67.3), libharfbuzz0b (>= 5.1.0), libpango-1.0-0 (= 1.50.12+ds-1)"
+    },
+    {
+      "package": "libpixman-1-0",
+      "version": "0.42.2-1",
+      "architecture": "amd64",
+      "artifact": "libpixman-1-0_0.42.2-1_amd64.deb",
+      "bytes": 545588,
+      "sha256": "9ed75ef81b6b1eba9e1357f8b0ce01d31112b0e07b2b685bee2cf627a8932892",
+      "repository_filename": "pool/main/p/pixman/libpixman-1-0_0.42.2-1_amd64.deb",
+      "depends": "libc6 (>= 2.29)"
+    },
+    {
+      "package": "libsm6",
+      "version": "2:1.2.3-1",
+      "architecture": "amd64",
+      "artifact": "libsm6_2%3a1.2.3-1_amd64.deb",
+      "bytes": 35108,
+      "sha256": "22a420890489023346f30fecef14ea900a0788e7bf959ef826aabb83944fccfb",
+      "repository_filename": "pool/main/libs/libsm/libsm6_1.2.3-1_amd64.deb",
+      "depends": "libc6 (>= 2.14), libice6 (>= 1:1.0.0), libuuid1 (>= 2.16)"
+    },
+    {
+      "package": "libsystemd-shared",
+      "version": "252.39-1~deb12u2",
+      "architecture": "amd64",
+      "artifact": "libsystemd-shared_252.39-1~deb12u2_amd64.deb",
+      "bytes": 1696184,
+      "sha256": "01458465c816b9eb63b92241869ddb46f332b8f498cf7a5979b84ec293cfdfda",
+      "repository_filename": "pool/main/s/systemd/libsystemd-shared_252.39-1~deb12u2_amd64.deb",
+      "depends": "libacl1 (>= 2.2.23), libapparmor1 (>= 2.13), libaudit1 (>= 1:2.2.1), libblkid1 (>= 2.24), libc6 (>= 2.36), libcap2 (>= 1:2.10), libcrypt1 (>= 1:4.4.0), libgcrypt20 (>= 1.10.0), libip4tc2 (>= 1.8.3), libkmod2 (>= 15), liblz4-1 (>= 0.0~r130), liblzma5 (>= 5.1.1alpha+20120614), libmount1 (>= 2.30), libpam0g (>= 0.99.7.1), libseccomp2 (>= 2.4.1), libselinux1 (>= 3.1~), libssl3 (>= 3.0.0), libzstd1 (>= 1.5.2)"
+    },
+    {
+      "package": "libsystemd0",
+      "version": "252.39-1~deb12u2",
+      "architecture": "amd64",
+      "artifact": "libsystemd0_252.39-1~deb12u2_amd64.deb",
+      "bytes": 332372,
+      "sha256": "013c07514a9e4933b2d5c098018695a6aa42d085dbc483ce2c094a954c8a1b0a",
+      "repository_filename": "pool/main/s/systemd/libsystemd0_252.39-1~deb12u2_amd64.deb",
+      "depends": "libc6 (>= 2.34), libcap2 (>= 1:2.10), libgcrypt20 (>= 1.10.0), liblz4-1 (>= 0.0~r122), liblzma5 (>= 5.1.1alpha+20120614), libzstd1 (>= 1.5.2)"
+    },
+    {
+      "package": "libthai-data",
+      "version": "0.1.29-1",
+      "architecture": "all",
+      "artifact": "libthai-data_0.1.29-1_all.deb",
+      "bytes": 176200,
+      "sha256": "eed65a75269411e47d7b393d82bc30471da5c499e9f311abbfd8c54ca1a42d9e",
+      "repository_filename": "pool/main/libt/libthai/libthai-data_0.1.29-1_all.deb",
+      "depends": ""
+    },
+    {
+      "package": "libthai0",
+      "version": "0.1.29-1",
+      "architecture": "amd64",
+      "artifact": "libthai0_0.1.29-1_amd64.deb",
+      "bytes": 57468,
+      "sha256": "37cd66bef851ea0e4af807797ba3ad14d43226f7c4954c1d0a19478e11815bae",
+      "repository_filename": "pool/main/libt/libthai/libthai0_0.1.29-1_amd64.deb",
+      "depends": "libthai-data (>= 0.1.10), libc6 (>= 2.14), libdatrie1 (>= 0.2.0)"
+    },
+    {
+      "package": "libtiff6",
+      "version": "4.5.0-6+deb12u4",
+      "architecture": "amd64",
+      "artifact": "libtiff6_4.5.0-6+deb12u4_amd64.deb",
+      "bytes": 316172,
+      "sha256": "255cd1d9f204355c366638ee21756234a8d43c03a3de18a5af6cdd94765b5053",
+      "repository_filename": "pool/main/t/tiff/libtiff6_4.5.0-6+deb12u4_amd64.deb",
+      "depends": "libc6 (>= 2.33), libdeflate0 (>= 1.0), libjbig0 (>= 2.0), libjpeg62-turbo (>= 1.3.1), liblerc4 (>= 3.0), liblzma5 (>= 5.1.1alpha+20120614), libwebp7 (>= 1.2.4), libzstd1 (>= 1.5.2), zlib1g (>= 1:1.1.4)"
+    },
+    {
+      "package": "libudev1",
+      "version": "252.39-1~deb12u2",
+      "architecture": "amd64",
+      "artifact": "libudev1_252.39-1~deb12u2_amd64.deb",
+      "bytes": 108880,
+      "sha256": "6f7e08f11c4809d2e5998c775f7b423ab5ec2ce0309494b4a2615037052245e2",
+      "repository_filename": "pool/main/s/systemd/libudev1_252.39-1~deb12u2_amd64.deb",
+      "depends": "libc6 (>= 2.34)"
+    },
+    {
+      "package": "libwayland-client0",
+      "version": "1.21.0-1",
+      "architecture": "amd64",
+      "artifact": "libwayland-client0_1.21.0-1_amd64.deb",
+      "bytes": 28320,
+      "sha256": "1f002d028b8b79eec9847c636d8886d10dfe8c884cc2bebe18086b1391c5a28d",
+      "repository_filename": "pool/main/w/wayland/libwayland-client0_1.21.0-1_amd64.deb",
+      "depends": "libc6 (>= 2.28), libffi8 (>= 3.4)"
+    },
+    {
+      "package": "libwayland-cursor0",
+      "version": "1.21.0-1",
+      "architecture": "amd64",
+      "artifact": "libwayland-cursor0_1.21.0-1_amd64.deb",
+      "bytes": 14376,
+      "sha256": "0b684467ec795024fcaae99ea4384959cc4052b2da5adec38c9b76dfed9bcf41",
+      "repository_filename": "pool/main/w/wayland/libwayland-cursor0_1.21.0-1_amd64.deb",
+      "depends": "libc6 (>= 2.28), libwayland-client0 (>= 1.20.0)"
+    },
+    {
+      "package": "libwayland-egl1",
+      "version": "1.21.0-1",
+      "architecture": "amd64",
+      "artifact": "libwayland-egl1_1.21.0-1_amd64.deb",
+      "bytes": 8640,
+      "sha256": "cb4225f0e15e00a3570d4cbc288c87ff477d73e741c3f1c5a6d47cf350d45378",
+      "repository_filename": "pool/main/w/wayland/libwayland-egl1_1.21.0-1_amd64.deb",
+      "depends": "libc6 (>= 2.2.5)"
+    },
+    {
+      "package": "libwebp7",
+      "version": "1.2.4-0.2+deb12u1",
+      "architecture": "amd64",
+      "artifact": "libwebp7_1.2.4-0.2+deb12u1_amd64.deb",
+      "bytes": 285512,
+      "sha256": "7259b7ce46444694ce536360ad53acb68eb3b47a7ff81d7b1b8a3939b2ac9918",
+      "repository_filename": "pool/main/libw/libwebp/libwebp7_1.2.4-0.2+deb12u1_amd64.deb",
+      "depends": "libc6 (>= 2.34)"
+    },
+    {
+      "package": "libx11-xcb1",
+      "version": "2:1.8.4-2+deb12u2",
+      "architecture": "amd64",
+      "artifact": "libx11-xcb1_2%3a1.8.4-2+deb12u2_amd64.deb",
+      "bytes": 192356,
+      "sha256": "f5da45e1d881a793250a96613f28c471a248877f1a0f18a5c90e2a620a76c898",
+      "repository_filename": "pool/main/libx/libx11/libx11-xcb1_1.8.4-2+deb12u2_amd64.deb",
+      "depends": "libx11-6 (= 2:1.8.4-2+deb12u2)"
+    },
+    {
+      "package": "libxcb-render0",
+      "version": "1.15-1",
+      "architecture": "amd64",
+      "artifact": "libxcb-render0_1.15-1_amd64.deb",
+      "bytes": 115012,
+      "sha256": "29c32cc76be9393f409378be79a0f534b9f07dea06ae52fa80a7f27e298de239",
+      "repository_filename": "pool/main/libx/libxcb/libxcb-render0_1.15-1_amd64.deb",
+      "depends": "libc6 (>= 2.14), libxcb1 (>= 1.8)"
+    },
+    {
+      "package": "libxcb-shm0",
+      "version": "1.15-1",
+      "architecture": "amd64",
+      "artifact": "libxcb-shm0_1.15-1_amd64.deb",
+      "bytes": 105472,
+      "sha256": "c1afcef29dc78b95c475159b181b28b1dedaf1d5aa06efd2fa6d90c73bfbe0e5",
+      "repository_filename": "pool/main/libx/libxcb/libxcb-shm0_1.15-1_amd64.deb",
+      "depends": "libc6 (>= 2.4), libxcb1 (>= 1.12)"
+    },
+    {
+      "package": "libxcomposite1",
+      "version": "1:0.4.5-1",
+      "architecture": "amd64",
+      "artifact": "libxcomposite1_1%3a0.4.5-1_amd64.deb",
+      "bytes": 16608,
+      "sha256": "4c26ebf519d2ebc22fc1416dee45e12c4c4ef68aa9b2ed890356830df42b652a",
+      "repository_filename": "pool/main/libx/libxcomposite/libxcomposite1_0.4.5-1_amd64.deb",
+      "depends": "libc6 (>= 2.4), libx11-6 (>= 2:1.4.99.1)"
+    },
+    {
+      "package": "libxcursor1",
+      "version": "1:1.2.1-1",
+      "architecture": "amd64",
+      "artifact": "libxcursor1_1%3a1.2.1-1_amd64.deb",
+      "bytes": 40904,
+      "sha256": "49e167048661be4c614fff81429e9eaef38e54ef1d2150a5d2a8c53919217529",
+      "repository_filename": "pool/main/libx/libxcursor/libxcursor1_1.2.1-1_amd64.deb",
+      "depends": "libc6 (>= 2.4), libx11-6 (>= 2:1.4.99.1), libxfixes3, libxrender1"
+    },
+    {
+      "package": "libxdamage1",
+      "version": "1:1.1.6-1",
+      "architecture": "amd64",
+      "artifact": "libxdamage1_1%3a1.1.6-1_amd64.deb",
+      "bytes": 15144,
+      "sha256": "fcdf7e4c29b307ba8711c864e1e646d76315a8f55121198143653e56592fa8a7",
+      "repository_filename": "pool/main/libx/libxdamage/libxdamage1_1.1.6-1_amd64.deb",
+      "depends": "libc6 (>= 2.4), libx11-6 (>= 2:1.4.99.1)"
+    },
+    {
+      "package": "libxfixes3",
+      "version": "1:6.0.0-2",
+      "architecture": "amd64",
+      "artifact": "libxfixes3_1%3a6.0.0-2_amd64.deb",
+      "bytes": 22684,
+      "sha256": "1cd616396ff2ecae77e6e8b5b7695d414f0146de2d147837a2a02165f99e1a2c",
+      "repository_filename": "pool/main/libx/libxfixes/libxfixes3_6.0.0-2_amd64.deb",
+      "depends": "libc6 (>= 2.14), libx11-6 (>= 2:1.6.0)"
+    },
+    {
+      "package": "libxi6",
+      "version": "2:1.8-1+b1",
+      "architecture": "amd64",
+      "artifact": "libxi6_2%3a1.8-1+b1_amd64.deb",
+      "bytes": 84208,
+      "sha256": "6c2fb5f241b311788990122c6e693915867cd8ed9d6da2e3524aec7ed3cdb4c0",
+      "repository_filename": "pool/main/libx/libxi/libxi6_1.8-1+b1_amd64.deb",
+      "depends": "libc6 (>= 2.14), libx11-6 (>= 2:1.6.0), libxext6"
+    },
+    {
+      "package": "libxinerama1",
+      "version": "2:1.1.4-3",
+      "architecture": "amd64",
+      "artifact": "libxinerama1_2%3a1.1.4-3_amd64.deb",
+      "bytes": 17820,
+      "sha256": "8dde8f74d2fc001f306fb1295a86850145e93191d35c983c7f52eb21b0a7f8cb",
+      "repository_filename": "pool/main/libx/libxinerama/libxinerama1_1.1.4-3_amd64.deb",
+      "depends": "libc6 (>= 2.4), libx11-6 (>= 2:1.6.0), libxext6"
+    },
+    {
+      "package": "libxkbcommon0",
+      "version": "1.5.0-1",
+      "architecture": "amd64",
+      "artifact": "libxkbcommon0_1.5.0-1_amd64.deb",
+      "bytes": 106108,
+      "sha256": "e3fe045b9a33a101de1c5a912a4a10928db055c3f68930f47eccbb44d7c7d54e",
+      "repository_filename": "pool/main/libx/libxkbcommon/libxkbcommon0_1.5.0-1_amd64.deb",
+      "depends": "xkb-data, libc6 (>= 2.33)"
+    },
+    {
+      "package": "libxml2",
+      "version": "2.9.14+dfsg-1.3~deb12u6",
+      "architecture": "amd64",
+      "artifact": "libxml2_2.9.14+dfsg-1.3~deb12u6_amd64.deb",
+      "bytes": 688760,
+      "sha256": "4460e39dda10a815881374217cde08474747cfa018358cd8612c14b390eff53b",
+      "repository_filename": "pool/main/libx/libxml2/libxml2_2.9.14+dfsg-1.3~deb12u6_amd64.deb",
+      "depends": "libc6 (>= 2.34), libicu72 (>= 72.1~rc-1~), liblzma5 (>= 5.1.1alpha+20120614), zlib1g (>= 1:1.2.3.3)"
+    },
+    {
+      "package": "libxrandr2",
+      "version": "2:1.5.2-2+b1",
+      "architecture": "amd64",
+      "artifact": "libxrandr2_2%3a1.5.2-2+b1_amd64.deb",
+      "bytes": 39240,
+      "sha256": "e2e10b672085ddf1d294cd689ed21bde5899325fd13626c2614b7d7b2d49a808",
+      "repository_filename": "pool/main/libx/libxrandr/libxrandr2_1.5.2-2+b1_amd64.deb",
+      "depends": "libc6 (>= 2.14), libx11-6 (>= 2:1.6.0), libxext6, libxrender1"
+    },
+    {
+      "package": "libxt6",
+      "version": "1:1.2.1-1.1",
+      "architecture": "amd64",
+      "artifact": "libxt6_1%3a1.2.1-1.1_amd64.deb",
+      "bytes": 186140,
+      "sha256": "f736fe003286af34935460662f52d32267703d6a1931580ca01641aedf00e8dd",
+      "repository_filename": "pool/main/libx/libxt/libxt6_1.2.1-1.1_amd64.deb",
+      "depends": "libc6 (>= 2.33), libice6 (>= 1:1.0.0), libsm6, libx11-6"
+    },
+    {
+      "package": "shared-mime-info",
+      "version": "2.2-1",
+      "architecture": "amd64",
+      "artifact": "shared-mime-info_2.2-1_amd64.deb",
+      "bytes": 728896,
+      "sha256": "dd026add873483566faefebbd8779a1e5e14ab2e44682ebfe238c3828a2b936b",
+      "repository_filename": "pool/main/s/shared-mime-info/shared-mime-info_2.2-1_amd64.deb",
+      "depends": "libc6 (>= 2.33), libglib2.0-0 (>= 2.35.9), libxml2 (>= 2.7.4)"
+    },
+    {
+      "package": "systemd-sysv",
+      "version": "252.39-1~deb12u2",
+      "architecture": "amd64",
+      "artifact": "systemd-sysv_252.39-1~deb12u2_amd64.deb",
+      "bytes": 42884,
+      "sha256": "e3dc84316cfdf7e3feefe4eaf507758d2630ea131e1834e1f07525b3e537db2d",
+      "repository_filename": "pool/main/s/systemd/systemd-sysv_252.39-1~deb12u2_amd64.deb",
+      "depends": ""
+    },
+    {
+      "package": "systemd",
+      "version": "252.39-1~deb12u2",
+      "architecture": "amd64",
+      "artifact": "systemd_252.39-1~deb12u2_amd64.deb",
+      "bytes": 3043940,
+      "sha256": "286f879c537bfba92e59d580c075ad20ab49020244c79634656850a306dd462b",
+      "repository_filename": "pool/main/s/systemd/systemd_252.39-1~deb12u2_amd64.deb",
+      "depends": "libacl1 (>= 2.2.23), libaudit1 (>= 1:2.2.1), libblkid1 (>= 2.24.2), libcryptsetup12 (>= 2:2.4), libfdisk1 (>= 2.33), libkmod2 (>= 15), libp11-kit0 (>= 0.23.18.1), libseccomp2 (>= 2.3.1), libsystemd-shared (= 252.39-1~deb12u2), libsystemd0 (= 252.39-1~deb12u2), mount"
+    },
+    {
+      "package": "xkb-data",
+      "version": "2.35.1-1",
+      "architecture": "all",
+      "artifact": "xkb-data_2.35.1-1_all.deb",
+      "bytes": 763516,
+      "sha256": "28a79c61b785f403da93af58c39aed13c022032935e3e54362c6707169cfe982",
+      "repository_filename": "pool/main/x/xkeyboard-config/xkb-data_2.35.1-1_all.deb",
+      "depends": ""
+    }
+  ],
+  "elf_missing_before": [
+    "libX11-xcb.so.1",
+    "libXcomposite.so.1",
+    "libXcursor.so.1",
+    "libXdamage.so.1",
+    "libXfixes.so.3",
+    "libXi.so.6",
+    "libXrandr.so.2",
+    "libasound.so.2",
+    "libatk-1.0.so.0",
+    "libcairo-gobject.so.2",
+    "libcairo.so.2",
+    "libdbus-1.so.3",
+    "libgdk-3.so.0",
+    "libgdk_pixbuf-2.0.so.0",
+    "libgio-2.0.so.0",
+    "libglib-2.0.so.0",
+    "libgobject-2.0.so.0",
+    "libgtk-3.so.0",
+    "libpango-1.0.so.0",
+    "libpangocairo-1.0.so.0",
+    "libxcb-shm.so.0"
+  ],
+  "image_built": false,
+  "browser_executed": false,
+  "tests_run": false,
+  "runtime_compatibility_verified": false,
+  "official_survey_updated": false,
+  "elf_missing_after_package_payloads": [],
+  "package_payloads_inspected_offline": true,
+  "debian_inrelease_signatures_verified_offline": true,
+  "metadata_artifacts": [
+    {
+      "artifact": "apt-lists/deb.debian.org_debian-security_dists_bookworm-security_InRelease",
+      "sha256": "2bd798862c6ff3a5fab5b0798735135cb141d06e0e765fc37cb14a339977226e",
+      "bytes": 34770
+    },
+    {
+      "artifact": "apt-lists/deb.debian.org_debian-security_dists_bookworm-security_main_binary-amd64_Packages.lz4",
+      "sha256": "79cf9e5220aaebb5e1abf5275743a06e07a81c6317a56aeb476cf2a0f34b54d0",
+      "bytes": 699776
+    },
+    {
+      "artifact": "apt-lists/deb.debian.org_debian_dists_bookworm-updates_InRelease",
+      "sha256": "224dbe2378c22baef39bc81b81ddf0a22330727d07ebba260617f53bfb17bb37",
+      "bytes": 55403
+    },
+    {
+      "artifact": "apt-lists/deb.debian.org_debian_dists_bookworm-updates_main_binary-amd64_Packages.lz4",
+      "sha256": "8ae7b65cb4858ac692572b6989be68da6505ae90fe4a3b4e0bf842d266209e53",
+      "bytes": 11648
+    },
+    {
+      "artifact": "apt-lists/deb.debian.org_debian_dists_bookworm_InRelease",
+      "sha256": "77737fa4b34f2693e982cc9ee35736816c35a7778fc2d326cc1bbf5b301fe1aa",
+      "bytes": 151075
+    },
+    {
+      "artifact": "apt-lists/deb.debian.org_debian_dists_bookworm_main_binary-amd64_Packages.lz4",
+      "sha256": "38163a87d0269f1af22bdddc092bf8e6c605f981642a09561e60565358f15e07",
+      "bytes": 18840233
+    }
+  ]
+}

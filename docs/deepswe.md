@@ -628,6 +628,12 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   found no discoverable Firefox in its pinned image, despite the public CI
   installing it and public Mocha tests requiring Headless Firefox. No retry or
   image change was made; the saved timeout's precise cause remains unproven.
+  Its subsequent [pre-build verification](deepswe-testem-firefox-verification-2026-10-09.md)
+  authenticated Firefox ESR 140.17.0 and 87 Debian package archives. Extracted
+  payloads cover all 21 missing ELF dependency names; runtime compatibility is
+  untested. APT proposes two existing-library upgrades as well as 85 new packages,
+  so this is not an implicitly approved minimal image recipe. No image was built
+  and no browser or tests ran; canonical readiness is unchanged.
   The [Pwntools doctest review](deepswe-pwntools-doctest-2026-10-07.md) replaces
   its incorrect pytest invocation with the public Sphinx runner. The published
   image lacks Sphinx; a separately augmented diagnostic also exposed missing
