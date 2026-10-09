@@ -1,0 +1,172 @@
+{
+  "condition": "modified environment: offline public-asset delivery",
+  "preflight": {
+    "image_id": "sha256:96b08a03e607416b109f7d86186d1cdfe92755483eada98693e67ff5f2feba00",
+    "container_name": "agentless-ml-testem-qunit-preflight-459bac98fc4b468d851cadf22cc996de",
+    "official_survey_updated": false,
+    "benchmark_tests_run": false,
+    "host_exit_code": 0,
+    "stderr": "",
+    "preflight": {
+      "condition": "modified environment: offline public-asset delivery",
+      "checks": [
+        {
+          "case": "GET /qunit/qunit-1.20.0.js",
+          "passed": true,
+          "status": 200,
+          "bytes": 112454,
+          "sha256": "576c7117981fae223d412e94e53a176c124f5e3a4dc321b9d56d58ae680015c0",
+          "content_type": "application/javascript"
+        },
+        {
+          "case": "HEAD /qunit/qunit-1.20.0.js",
+          "passed": true,
+          "status": 200,
+          "body_bytes": 0
+        },
+        {
+          "case": "GET /qunit/qunit-1.20.0.css",
+          "passed": true,
+          "status": 200,
+          "bytes": 5349,
+          "sha256": "98abc5dc3d67eb3a1f50eb861c7f888a9a5b43edaa8f29689c50d1841fb915fb",
+          "content_type": "text/css"
+        },
+        {
+          "case": "HEAD /qunit/qunit-1.20.0.css",
+          "passed": true,
+          "status": 200,
+          "body_bytes": 0
+        },
+        {
+          "case": "GET code.jquery.com/missing",
+          "status": 404,
+          "passed": true
+        },
+        {
+          "case": "GET code.jquery.com/favicon.ico",
+          "status": 404,
+          "passed": true
+        },
+        {
+          "case": "GET unexpected.invalid/qunit/qunit-1.20.0.js",
+          "status": 404,
+          "passed": true
+        },
+        {
+          "case": "GET code.jquery.com/qunit/qunit-1.20.0.js?extra=1",
+          "status": 404,
+          "passed": true
+        },
+        {
+          "case": "POST code.jquery.com/qunit/qunit-1.20.0.js",
+          "status": 501,
+          "passed": true
+        }
+      ],
+      "service_log": "{\"condition\": \"modified environment: offline public-asset delivery\", \"listen\": \"127.0.0.1:80\", \"routes\": [\"/qunit/qunit-1.20.0.js\", \"/qunit/qunit-1.20.0.css\"]}\n{\"event\": \"http_log\", \"message\": \"\\\"GET /qunit/qunit-1.20.0.js HTTP/1.1\\\" 200 -\"}\n{\"event\": \"pinned_asset_response\", \"method\": \"GET\", \"host\": \"code.jquery.com\", \"path\": \"/qunit/qunit-1.20.0.js\", \"sha256\": \"576c7117981fae223d412e94e53a176c124f5e3a4dc321b9d56d58ae680015c0\", \"bytes\": 112454, \"body_bytes_sent\": 112454}\n{\"event\": \"http_log\", \"message\": \"\\\"HEAD /qunit/qunit-1.20.0.js HTTP/1.1\\\" 200 -\"}\n{\"event\": \"pinned_asset_response\", \"method\": \"HEAD\", \"host\": \"code.jquery.com:80\", \"path\": \"/qunit/qunit-1.20.0.js\", \"sha256\": \"576c7117981fae223d412e94e53a176c124f5e3a4dc321b9d56d58ae680015c0\", \"bytes\": 112454, \"body_bytes_sent\": 0}\n{\"event\": \"http_log\", \"message\": \"\\\"GET /qunit/qunit-1.20.0.css HTTP/1.1\\\" 200 -\"}\n{\"event\": \"pinned_asset_response\", \"method\": \"GET\", \"host\": \"code.jquery.com\", \"path\": \"/qunit/qunit-1.20.0.css\", \"sha256\": \"98abc5dc3d67eb3a1f50eb861c7f888a9a5b43edaa8f29689c50d1841fb915fb\", \"bytes\": 5349, \"body_bytes_sent\": 5349}\n{\"event\": \"http_log\", \"message\": \"\\\"HEAD /qunit/qunit-1.20.0.css HTTP/1.1\\\" 200 -\"}\n{\"event\": \"pinned_asset_response\", \"method\": \"HEAD\", \"host\": \"code.jquery.com:80\", \"path\": \"/qunit/qunit-1.20.0.css\", \"sha256\": \"98abc5dc3d67eb3a1f50eb861c7f888a9a5b43edaa8f29689c50d1841fb915fb\", \"bytes\": 5349, \"body_bytes_sent\": 0}\n{\"event\": \"http_log\", \"message\": \"code 404, message Not Found\"}\n{\"event\": \"http_log\", \"message\": \"\\\"GET /missing HTTP/1.1\\\" 404 -\"}\n{\"event\": \"http_log\", \"message\": \"code 404, message Not Found\"}\n{\"event\": \"http_log\", \"message\": \"\\\"GET /favicon.ico HTTP/1.1\\\" 404 -\"}\n{\"event\": \"http_log\", \"message\": \"code 404, message Not Found\"}\n{\"event\": \"http_log\", \"message\": \"\\\"GET /qunit/qunit-1.20.0.js HTTP/1.1\\\" 404 -\"}\n{\"event\": \"http_log\", \"message\": \"code 404, message Not Found\"}\n{\"event\": \"http_log\", \"message\": \"\\\"GET /qunit/qunit-1.20.0.js?extra=1 HTTP/1.1\\\" 404 -\"}\n{\"event\": \"http_log\", \"message\": \"code 501, message Unsupported method ('POST')\"}\n{\"event\": \"http_log\", \"message\": \"\\\"POST /qunit/qunit-1.20.0.js HTTP/1.1\\\" 501 -\"}\n",
+      "all_checks_passed": true,
+      "tests_run": false,
+      "home": "/tmp/testem-firefox-home"
+    },
+    "docker_protections": {
+      "NetworkMode": "none",
+      "ReadonlyRootfs": true,
+      "CapDrop": [
+        "ALL"
+      ],
+      "SecurityOpt": [
+        "no-new-privileges"
+      ],
+      "Memory": 8589934592,
+      "MemorySwap": 8589934592,
+      "NanoCpus": 2000000000,
+      "PidsLimit": 2048,
+      "Tmpfs": {
+        "/tmp": "rw,exec,nosuid,nodev,size=4096m,mode=1777"
+      },
+      "Privileged": false,
+      "ExtraHosts": [
+        "code.jquery.com:127.0.0.1"
+      ],
+      "PortBindings": {}
+    },
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-10-09T20:43:09.986940809Z",
+      "FinishedAt": "2026-10-09T20:43:10.393155872Z"
+    },
+    "owned_container_removed": true
+  },
+  "build": {
+    "condition": "modified environment: offline public-asset delivery",
+    "parent_image_id": "sha256:290cd40e1e05814859e3a0430b7bcbea77d92b8fcdd5161fd6ef1c1fc14e969d",
+    "image_id": "sha256:96b08a03e607416b109f7d86186d1cdfe92755483eada98693e67ff5f2feba00",
+    "tag": "agentless-ml/testem-offline-qunit:2026-10-09",
+    "network_during_build": "none",
+    "manifest_sha256": "88f4d90c5463682f0b94e71a356e412e9469d4246c77fdf53684387d5cb7b9ed",
+    "assets": [
+      {
+        "version": "1.20.0",
+        "cdn": {
+          "url": "https://code.jquery.com/qunit/qunit-1.20.0.js",
+          "status": 200,
+          "content_type": "application/javascript; charset=utf-8",
+          "file": "qunit-1.20.0.js",
+          "bytes": 112454,
+          "sha256": "576c7117981fae223d412e94e53a176c124f5e3a4dc321b9d56d58ae680015c0"
+        },
+        "upstream": {
+          "url": "https://raw.githubusercontent.com/qunitjs/qunit/e943ac9e80d7d46d929fea6ea3135473335650a3/qunit/qunit.js",
+          "status": 200,
+          "content_type": "text/plain; charset=utf-8",
+          "file": "upstream-qunit.js",
+          "bytes": 112454,
+          "sha256": "576c7117981fae223d412e94e53a176c124f5e3a4dc321b9d56d58ae680015c0"
+        },
+        "exact_byte_match": true,
+        "computed_sri": "sha256-V2xxF5gfriI9QS6U5ToXbBJPXjpNwyG51W1YrmgAFcA=",
+        "publisher_sri": "sha256-V2xxF5gfriI9QS6U5ToXbBJPXjpNwyG51W1YrmgAFcA=",
+        "publisher_sri_verified": true,
+        "css_urls": []
+      },
+      {
+        "version": "1.20.0",
+        "cdn": {
+          "url": "https://code.jquery.com/qunit/qunit-1.20.0.css",
+          "status": 200,
+          "content_type": "text/css",
+          "file": "qunit-1.20.0.css",
+          "bytes": 5349,
+          "sha256": "98abc5dc3d67eb3a1f50eb861c7f888a9a5b43edaa8f29689c50d1841fb915fb"
+        },
+        "upstream": {
+          "url": "https://raw.githubusercontent.com/qunitjs/qunit/e943ac9e80d7d46d929fea6ea3135473335650a3/qunit/qunit.css",
+          "status": 200,
+          "content_type": "text/plain; charset=utf-8",
+          "file": "upstream-qunit.css",
+          "bytes": 5349,
+          "sha256": "98abc5dc3d67eb3a1f50eb861c7f888a9a5b43edaa8f29689c50d1841fb915fb"
+        },
+        "exact_byte_match": true,
+        "computed_sri": "sha256-mKvF3D1n6zofUOuGHH+IippbQ+2qjylonFDRhB+5Ffs=",
+        "publisher_sri": null,
+        "publisher_sri_verified": false,
+        "css_urls": []
+      }
+    ],
+    "benchmark_tests_run": false,
+    "official_survey_updated": false
+  },
+  "benchmark_tests_run": false,
+  "official_survey_updated": false,
+  "browser_launched": false
+}

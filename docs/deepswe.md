@@ -671,7 +671,10 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   [asset assessment](deepswe-testem-offline-assets-assessment-2026-10-09.md)
   verified the exact two files, including publisher JS SRI and upstream byte
   equality, and assessed a labelled loopback-only delivery condition. No service
-  image was built or benchmark test started; canonical readiness is unchanged.
+  image was built or benchmark test started during that assessment. The approved
+  [separate image and HTTP preflight](deepswe-testem-offline-assets-preflight-2026-10-09.md)
+  then passed all nine native delivery/rejection checks offline under unchanged
+  protections. No browser/public-test retry or canonical readiness update followed.
   The [Pwntools doctest review](deepswe-pwntools-doctest-2026-10-07.md) replaces
   its incorrect pytest invocation with the public Sphinx runner. The published
   image lacks Sphinx; a separately augmented diagnostic also exposed missing

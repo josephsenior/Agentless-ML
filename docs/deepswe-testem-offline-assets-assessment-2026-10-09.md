@@ -94,6 +94,6 @@ identified public source and upstream public framework files were used.
 Canonical readiness remains 100/113. A successful future diagnostic would not
 by itself justify relabelling the original-image survey.
 
-Next, build the separate pinned-asset image and verify its two HTTP responses
-offline under the same protections. Only after that preflight should the same
-unchanged public test be requested. Neither step has started.
+The subsequent [build and HTTP preflight](deepswe-testem-offline-assets-preflight-2026-10-09.md)
+completed under the same protections. Both pinned files were delivered and all
+nine native checks passed. No public-test retry or full-suite run has started.
