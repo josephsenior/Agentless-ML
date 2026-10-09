@@ -1,0 +1,216 @@
+{
+  "official_survey_updated": false,
+  "label": "targeted_firefox_connection_diagnosis_not_benchmark_fix",
+  "individual_variable_isolated": false,
+  "observer_events": [
+    {
+      "time": 1791575904495,
+      "event": "observer_loaded",
+      "node": "v24.12.0",
+      "home": "/root"
+    },
+    {
+      "time": 1791575905029,
+      "event": "firefox_spawn",
+      "executable": "firefox",
+      "args": [
+        "-profile",
+        "--headless",
+        "/tmp/testem-29881481518578-WE9NqH",
+        "http://localhost:46033/29881481518578"
+      ],
+      "cwd": "/tmp/work",
+      "home": "/root",
+      "pid": 610
+    },
+    {
+      "time": 1791575905032,
+      "event": "firefox_stderr",
+      "pid": 610,
+      "text": "[610] Sandbox: CanCreateUserNamespace() clone() failure: EPERM\n"
+    },
+    {
+      "time": 1791575905054,
+      "event": "firefox_stderr",
+      "pid": 610,
+      "text": "*** You are running in headless mode.\n"
+    },
+    {
+      "time": 1791575905155,
+      "event": "firefox_stdout",
+      "pid": 610,
+      "text": "[GFX1-]: glxtest: libpci missing\n[GFX1-]: glxtest: libGL.so.1 missing\n[GFX1-]: No GPUs detected via PCI\n\n"
+    },
+    {
+      "time": 1791575905176,
+      "event": "firefox_stderr",
+      "pid": 610,
+      "text": "Fontconfig error: No writable cache directories\n"
+    },
+    {
+      "time": 1791575905253,
+      "event": "firefox_stdout",
+      "pid": 610,
+      "text": "[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt\n"
+    },
+    {
+      "time": 1791575934037,
+      "event": "firefox_exit",
+      "pid": 610,
+      "code": null,
+      "signal": "SIGTERM"
+    }
+  ],
+  "assessment": "Combined writable HOME/XDG paths enable synthetic page requests and JS for both argument orders; no public-test environment fix applied",
+  "public_test": {
+    "label": "targeted_public_test_with_launch_http_observer_not_full_baseline",
+    "image_id": "sha256:290cd40e1e05814859e3a0430b7bcbea77d92b8fcdd5161fd6ef1c1fc14e969d",
+    "base_commit": "158f61ea91c9613d2011c41ee9be40ada1d7a307",
+    "public_test_filter": "^ci mode app multiple launchers returns successfully with passed and skipped tests$",
+    "status": "fail",
+    "exit_code": 1,
+    "duration_seconds": 37.23399999999674,
+    "cases": [
+      {
+        "id": "ci mode app multiple launchers::returns successfully with passed and skipped tests",
+        "status": "failed"
+      }
+    ],
+    "artifacts": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\output\\deepswe-survey\\testem-firefox\\diagnostics\\agentless-ml-6645c6c80f1541248a6c4280e3d0bd8c",
+    "official_survey_updated": false,
+    "test_source_modified": false,
+    "browser_arguments_modified": false
+  },
+  "full_suite_rerun": false,
+  "synthetic_controls": {
+    "image_id": "sha256:290cd40e1e05814859e3a0430b7bcbea77d92b8fcdd5161fd6ef1c1fc14e969d",
+    "container_name": "agentless-ml-testem-controls-035194417b764b83963c504ea97c35cf",
+    "official_survey_updated": false,
+    "host_exit_code": 0,
+    "host_stderr": "",
+    "probe": {
+      "label": "synthetic_loopback_argument_home_controls_not_benchmark",
+      "cases": [
+        {
+          "case": "testem-image-home",
+          "args": [
+            "firefox",
+            "-profile",
+            "--headless",
+            "/tmp/testem-image-home/profile",
+            "http://127.0.0.1:36449/page?case=testem-image-home"
+          ],
+          "home": "/root",
+          "requests": [],
+          "javascript_beacon": false,
+          "natural_exit_code": null,
+          "stdout": "[GFX1-]: glxtest: libpci missing\n[GFX1-]: glxtest: libGL.so.1 missing\n[GFX1-]: No GPUs detected via PCI\n\n[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt\n",
+          "stderr": "[9] Sandbox: CanCreateUserNamespace() clone() failure: EPERM\n*** You are running in headless mode.\nFontconfig error: No writable cache directories\n"
+        },
+        {
+          "case": "conventional-image-home",
+          "args": [
+            "firefox",
+            "--headless",
+            "-profile",
+            "/tmp/conventional-image-home/profile",
+            "http://127.0.0.1:36449/page?case=conventional-image-home"
+          ],
+          "home": "/root",
+          "requests": [],
+          "javascript_beacon": false,
+          "natural_exit_code": null,
+          "stdout": "[GFX1-]: glxtest: libpci missing\n[GFX1-]: glxtest: libGL.so.1 missing\n[GFX1-]: No GPUs detected via PCI\n\n[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt\n",
+          "stderr": "[68] Sandbox: CanCreateUserNamespace() clone() failure: EPERM\n*** You are running in headless mode.\nFontconfig error: No writable cache directories\n"
+        },
+        {
+          "case": "testem-writable-home",
+          "args": [
+            "firefox",
+            "-profile",
+            "--headless",
+            "/tmp/testem-writable-home/profile",
+            "http://127.0.0.1:36449/page?case=testem-writable-home"
+          ],
+          "home": "/tmp/testem-writable-home/home",
+          "requests": [
+            {
+              "path": "/page?case=testem-writable-home",
+              "user_agent": "Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0",
+              "time": 1791576071.1085432
+            },
+            {
+              "path": "/beacon",
+              "user_agent": "Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0",
+              "time": 1791576071.3587215
+            }
+          ],
+          "javascript_beacon": true,
+          "natural_exit_code": null,
+          "stdout": "[GFX1-]: glxtest: libpci missing\n[GFX1-]: glxtest: libGL.so.1 missing\n[GFX1-]: No GPUs detected via PCI\n\n[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt\n",
+          "stderr": "[129] Sandbox: CanCreateUserNamespace() clone() failure: EPERM\n*** You are running in headless mode.\n"
+        },
+        {
+          "case": "conventional-writable-home",
+          "args": [
+            "firefox",
+            "--headless",
+            "-profile",
+            "/tmp/conventional-writable-home/profile",
+            "http://127.0.0.1:36449/page?case=conventional-writable-home"
+          ],
+          "home": "/tmp/conventional-writable-home/home",
+          "requests": [
+            {
+              "path": "/page?case=conventional-writable-home",
+              "user_agent": "Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0",
+              "time": 1791576072.7177615
+            },
+            {
+              "path": "/beacon",
+              "user_agent": "Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0",
+              "time": 1791576072.9580526
+            }
+          ],
+          "javascript_beacon": true,
+          "natural_exit_code": null,
+          "stdout": "[GFX1-]: glxtest: libpci missing\n[GFX1-]: glxtest: libGL.so.1 missing\n[GFX1-]: No GPUs detected via PCI\n\n[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt\n",
+          "stderr": "[333] Sandbox: CanCreateUserNamespace() clone() failure: EPERM\n*** You are running in headless mode.\n"
+        }
+      ],
+      "tests_run": false
+    },
+    "protections": {
+      "NetworkMode": "none",
+      "ReadonlyRootfs": true,
+      "CapDrop": [
+        "ALL"
+      ],
+      "SecurityOpt": [
+        "no-new-privileges"
+      ],
+      "Memory": 8589934592,
+      "MemorySwap": 8589934592,
+      "NanoCpus": 2000000000,
+      "PidsLimit": 2048,
+      "Tmpfs": {
+        "/tmp": "rw,exec,nosuid,nodev,size=4096m,mode=1777"
+      },
+      "Privileged": false
+    },
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-10-09T20:00:41.896012289Z",
+      "FinishedAt": "2026-10-09T20:01:13.457428122Z"
+    },
+    "owned_container_removed": true
+  }
+}

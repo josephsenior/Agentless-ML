@@ -657,6 +657,10 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   in 370.937 seconds: 489 passed, three skipped, eight failed after normalization.
   Browser-result/timeouts and report-file failures remain; the separate image
   has a completed failing baseline, not a canonical readiness update.
+  A [targeted Firefox trace](deepswe-testem-firefox-connection-2026-10-09.md)
+  then observed no server requests in one existing public test. Synthetic
+  connection controls succeeded with writable home/cache paths under either
+  argument order, but not with the image home. No benchmark fix was applied.
   The [Pwntools doctest review](deepswe-pwntools-doctest-2026-10-07.md) replaces
   its incorrect pytest invocation with the public Sphinx runner. The published
   image lacks Sphinx; a separately augmented diagnostic also exposed missing

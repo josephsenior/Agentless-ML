@@ -58,9 +58,11 @@ preserves both raw and normalized counts and the exact command.
 
 ## Next step
 
-Inspect Testem's public Firefox launch/profile handling and browser connection
-logs in a narrowly labelled diagnostic. Do not change tests, exclude browser
-cases, loosen Docker protections or rerun the whole suite blindly.
+The subsequent [targeted connection diagnostic](deepswe-testem-firefox-connection-2026-10-09.md)
+observed no HTTP requests from Firefox in one unchanged failing public test.
+Synthetic controls connected only with writable home/cache paths, for either
+argument order. This identifies a concrete environment difference, not a fix
+or proof that all eight failures share one cause. No full repeat followed.
 
 This is a **completed but failing baseline in the separate Firefox condition**,
 not a passing baseline or an update to the original-image survey. Canonical
