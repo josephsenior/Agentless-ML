@@ -1,4 +1,8 @@
 {
+  "tomlkit-toml-table-converters": {
+    "runner": "tomlkit-pytest",
+    "reason": "The public CI initializes tests/toml-test, and test_toml_tests.py reads its TOML 1.1 fixture index during collection. Verify the image submodule at the exact pinned commit and SHA-256 manifest, then supply only the public index and referenced TOML/JSON data to the empty candidate submodule directory. Verify candidate tomlkit imports and preserve the default full pytest schedule, tests, image and offline Docker protections; do not fetch submodules or copy image implementation code."
+  },
   "adaptix-name-mapping-aliases": {
     "runner": "adaptix-pytest",
     "reason": "The public requirements install tests/tests_helpers as an editable package. Prepend that candidate package directory to PYTHONPATH alongside candidate src and root, and reject image-resolved Adaptix/helper imports before the unchanged default pytest schedule. Opt into python-repr-address-v1 report IDs to remove process addresses from function/object reprs, refusing collisions between distinct raw IDs. Keep raw XML, assertions, schedule, image and Docker protections unchanged; do not initialize the performance-data submodule."

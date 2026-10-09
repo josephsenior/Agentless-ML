@@ -489,12 +489,20 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
 
 ## What is not implemented
 
-Current readiness is **104/113**, with nine tasks remaining after
-[Adaptix's candidate-helper and stable-ID checks](deepswe-adaptix-stable-ids-2026-10-10.md).
-Of those ready tasks, 101 use their published pinned images; Testem, Cliffy
+Current readiness is **105/113**, with eight tasks remaining after
+[Tomlkit's verified public-fixture setup](deepswe-tomlkit-public-fixtures-2026-10-10.md).
+Of those ready tasks, 102 use their published pinned images; Testem, Cliffy
 and GoReleaser use explicitly labelled, verified modified environments. The original corpus
 pins and held-out scorer are unchanged. The chronology below retains earlier
 counts as historical checkpoints.
+
+Tomlkit's normal public schedule needs the `tests/toml-test` submodule data.
+Its runner now verifies the exact submodule revision and complete tracked-file
+manifest in the original image, then supplies only the fixture index and its
+referenced TOML/JSON files inside the temporary candidate checkout. The fresh
+unchanged baseline passed all 964 cases, including all 680 conformance cases.
+No source code, test code or Git metadata is copied from the image, and no
+submodule fetch or modified image is needed.
 
 Adaptix's submodule refusal was stale: the current workspace provider leaves
 its performance-data submodule uninitialized and the normal public schedule

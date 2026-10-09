@@ -192,6 +192,19 @@ for name in ("numba", "numba.core.typeconv._typeconv", "numba._helperlib",
     print("candidate import verified: " + name)
 """.strip()
 
+# Tomlkit's normal public tests require data from the pinned Git submodule.
+# Provision only verified indexed data, not image tests or implementation code.
+_TOMLKIT_FIXTURE_SETUP = Path(__file__).with_name("deepswe_tomlkit.py").read_text(encoding="utf-8")
+TOMLKIT_PYTEST = DeepSWETestCommand(
+    script=(
+        f"cd {WORK} || exit 125; export PYTHONPATH={WORK}/src:{WORK}; "
+        f"python -c {shlex.quote(_TOMLKIT_FIXTURE_SETUP)} || exit 125; "
+        "python -m pytest -p no:cacheprovider "
+        '--continue-on-collection-errors --junitxml=/tmp/report.xml "$@"'
+    ),
+    report=PYTEST.report,
+)
+
 # A source checkout has no compiled CPython extensions. Build them from the
 # candidate as documented, then reject imports from the image before testing.
 # Preserve the native runner's loader (including CUDA availability checks).
@@ -753,6 +766,7 @@ TEST_COMMANDS = {
     "go-module": GO_MODULE,
     "pytest": PYTEST,
     "adaptix-pytest": ADAPTIX_PYTEST,
+    "tomlkit-pytest": TOMLKIT_PYTEST,
     "numba-runtests": NUMBA_RUNTESTS,
     "igel-pytest": IGEL_PYTEST,
     "skrub-pytest": SKRUB_PYTEST,
