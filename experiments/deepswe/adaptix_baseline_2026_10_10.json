@@ -1,0 +1,61 @@
+{
+  "condition": "unchanged official public baseline; submodule left uninitialized",
+  "task_id": "adaptix-name-mapping-aliases",
+  "base_commit": "a691069fcadf9131e5f7a5a130a022dc678f3e1d",
+  "image_id": "sha256:528654670f3c591e6491fc6fa01a0b8905bc8dee1b0557c5e76231bcc206f8fe",
+  "submodule": {
+    "path": "benchmarks/release_data",
+    "commit": "8e124e34a312ba44419dcfbf656f873b5281541b",
+    "initialized": false
+  },
+  "previous_status": "unsupported_repository",
+  "status": "ready",
+  "validation_status": "fail",
+  "exit_code": 1,
+  "tests": 2854,
+  "passed": 2824,
+  "failed_test_cases": 0,
+  "collection_errors": 2,
+  "skipped": 28,
+  "error_ids": [
+    "tests.tests_helpers.tests_helpers.misc",
+    "tests.tests_helpers.tests_helpers.model_spec"
+  ],
+  "caveat": "tests_helpers modules resolve to /app rather than candidate /tmp/work; candidate-helper provenance is not resolved",
+  "duration_seconds": 27.4194051999948,
+  "survey_seconds": 30.1,
+  "previous_ready": 103,
+  "ready": 104,
+  "total": 113,
+  "published_image_ready": 101,
+  "registered_environment_ready": 3,
+  "latest_status_counts": {
+    "ready": 104,
+    "unsupported_repository": 4,
+    "harness_error": 2,
+    "out_of_memory": 2,
+    "timeout": 1
+  },
+  "artifacts": "../output/deepswe-survey/runs/adaptix-name-mapping-aliases/logs/agentless-ml-7a20dadc1df74871a22f10a72ea7e364",
+  "artifact_sha256": {
+    "execution.json": "af600e6eb77bb7181d002c632badafdc5d3415ce3974f1c6197eb40ba51ea3fc",
+    "report.xml": "8f3def9b6837215f52b93774b5c9d23ff32d5249be122ac5b06a3f08c4f62335",
+    "stdout.log": "402d15ada78e851c17418364ab7b80ce2909ee9244cc0544c3cce70fca651f93",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "docker_protections_source": "live docker inspect; original-image survey record field remains null",
+  "observed_docker_protections": {
+    "NetworkMode": "none",
+    "ReadonlyRootfs": true,
+    "CapDrop": ["ALL"],
+    "SecurityOpt": ["no-new-privileges"],
+    "Memory": 8589934592,
+    "MemorySwap": 8589934592,
+    "NanoCpus": 2000000000,
+    "PidsLimit": 2048,
+    "Tmpfs": {"/tmp": "rw,exec,nosuid,nodev,size=4096m,mode=1777"},
+    "Privileged": false,
+    "ExtraHosts": null,
+    "PortBindings": {}
+  }
+}
