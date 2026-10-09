@@ -82,3 +82,8 @@ KGateway, Numba and Pwntools remain parked.
 Next, verify the exact public QUnit 2.9.2 JS/CSS and assess adding them alongside
 the existing 1.20.0 assets in another explicitly labelled image. Then check the
 unchanged todo test before requesting another full schedule. No retry started.
+
+Follow-up: the [exact 2.9.2 verification and single todo check](deepswe-testem-qunit-todo-2026-10-10.md)
+completed in a separate four-asset image. The unchanged todo test passed;
+no further full schedule has started. The result above remains the historical
+full-schedule outcome in the 1.20-only image.

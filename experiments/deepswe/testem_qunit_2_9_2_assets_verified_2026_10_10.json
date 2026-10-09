@@ -1,0 +1,76 @@
+{
+  "label": "verified_public_qunit_assets_offline_delivery_assessment_only",
+  "captured_utc": "2026-10-09T22:19:49.105988+00:00",
+  "upstream_commit": "0f727f13fb09ccefd9fa83cfe85424e938604aad",
+  "publisher_index": {
+    "url": "https://releases.jquery.com/qunit/",
+    "status": 200,
+    "content_type": "text/html; charset=UTF-8",
+    "file": "publisher-index.html",
+    "bytes": 44874,
+    "sha256": "9b27852580ab2bfd817d7c9c966e629e6703a4e5b1af260a3efa4a5d01194b5c"
+  },
+  "upstream_tag": {
+    "url": "https://api.github.com/repos/qunitjs/qunit/git/ref/tags/2.9.2",
+    "status": 200,
+    "content_type": "application/json; charset=utf-8",
+    "file": "upstream-tag.json",
+    "bytes": 329,
+    "sha256": "b47c12cbd6e71927b75562a365b6e52ea044f0b46a417dbde01bdb90dbb572b2"
+  },
+  "assets": [
+    {
+      "version": "2.9.2",
+      "cdn": {
+        "url": "https://code.jquery.com/qunit/qunit-2.9.2.js",
+        "status": 200,
+        "content_type": "application/javascript; charset=utf-8",
+        "file": "qunit-2.9.2.js",
+        "bytes": 188837,
+        "sha256": "110e6bbfa90f14f29051863e3f81fa7e6fe57bec8544b5406ffff63df06cc1f1"
+      },
+      "upstream": {
+        "url": "https://raw.githubusercontent.com/qunitjs/qunit/0f727f13fb09ccefd9fa83cfe85424e938604aad/qunit/qunit.js",
+        "status": 200,
+        "content_type": "text/plain; charset=utf-8",
+        "file": "upstream-qunit.js",
+        "bytes": 188837,
+        "sha256": "110e6bbfa90f14f29051863e3f81fa7e6fe57bec8544b5406ffff63df06cc1f1"
+      },
+      "exact_byte_match": true,
+      "computed_sri": "sha256-EQ5rv6kPFPKQUYY+P4H6fm/le+yFRLVAb//2PfBswfE=",
+      "publisher_sri": "sha256-EQ5rv6kPFPKQUYY+P4H6fm/le+yFRLVAb//2PfBswfE=",
+      "publisher_sri_verified": true,
+      "css_urls": []
+    },
+    {
+      "version": "2.9.2",
+      "cdn": {
+        "url": "https://code.jquery.com/qunit/qunit-2.9.2.css",
+        "status": 200,
+        "content_type": "text/css",
+        "file": "qunit-2.9.2.css",
+        "bytes": 7875,
+        "sha256": "b687a939ee43f9d757814386b228e78729999dae5b6a4274830442ff76cad5bd"
+      },
+      "upstream": {
+        "url": "https://raw.githubusercontent.com/qunitjs/qunit/0f727f13fb09ccefd9fa83cfe85424e938604aad/qunit/qunit.css",
+        "status": 200,
+        "content_type": "text/plain; charset=utf-8",
+        "file": "upstream-qunit.css",
+        "bytes": 7875,
+        "sha256": "b687a939ee43f9d757814386b228e78729999dae5b6a4274830442ff76cad5bd"
+      },
+      "exact_byte_match": true,
+      "computed_sri": "sha256-toepOe5D+ddXgUOGsijnhymZna5bakJ0gwRC/3bK1b0=",
+      "publisher_sri": null,
+      "publisher_sri_verified": false,
+      "css_urls": []
+    }
+  ],
+  "trust": "HTTPS publisher SRI for JavaScript plus exact upstream commit byte comparison for both assets; not a signed release audit",
+  "image_built": false,
+  "service_started": false,
+  "benchmark_tests_run": false,
+  "official_survey_updated": false
+}

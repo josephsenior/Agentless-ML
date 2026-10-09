@@ -70,7 +70,7 @@ def main():
     options = parser.parse_args()
     assets = load_assets()
     if options.check_files:
-        print('Exactly two pinned public assets verified; no service started')
+        print(str(len(assets)) + ' pinned public assets verified; no service started')
         return
     with make_server(assets) as server:
         print(json.dumps({'condition': 'modified environment: offline public-asset delivery',

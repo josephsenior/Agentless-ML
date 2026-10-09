@@ -1,0 +1,4 @@
+FROM agentless-ml/testem-offline-qunit:2026-10-09
+COPY offline-qunit-base.py offline-qunit.py qunit-2.9.2.js qunit-2.9.2.css /opt/testem-offline-qunit/
+RUN python3 /opt/testem-offline-qunit/offline-qunit.py --check-files \
+    && chmod -R a-w /opt/testem-offline-qunit

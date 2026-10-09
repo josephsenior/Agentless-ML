@@ -1,6 +1,7 @@
 """Verify exact public framework assets; never build an image or run tests."""
 
 import base64
+import argparse
 import hashlib
 import json
 import re
@@ -50,27 +51,35 @@ def verify_asset(data, reference, *, sri=None):
 
 
 def main():
+    global OUT, COMMIT, PUBLISHER_SRI
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--version', choices=('1.20.0', '2.9.2'), default='1.20.0')
+    version = parser.parse_args().version
+    if version == '2.9.2':
+        OUT = ROOT.parent / 'output/deepswe-survey/testem-qunit-2.9.2-audit-2026-10-10'
+        COMMIT = '0f727f13fb09ccefd9fa83cfe85424e938604aad'
+        PUBLISHER_SRI = 'sha256-EQ5rv6kPFPKQUYY+P4H6fm/le+yFRLVAb//2PfBswfE='
     OUT.mkdir(parents=True, exist_ok=False)
     index, index_record = fetch(INDEX, 'publisher-index.html')
     links = Links(); links.feed(index.decode())
-    tag, tag_record = fetch('https://api.github.com/repos/qunitjs/qunit/git/ref/tags/1.20.0', 'upstream-tag.json')
+    tag, tag_record = fetch('https://api.github.com/repos/qunitjs/qunit/git/ref/tags/' + version, 'upstream-tag.json')
     obj = json.loads(tag)['object']
     if obj != {'sha': COMMIT, 'type': 'commit',
                'url': 'https://api.github.com/repos/qunitjs/qunit/git/commits/' + COMMIT}:
         raise ValueError('Release tag no longer resolves to the reviewed commit')
     records = []
     for suffix in ('js', 'css'):
-        url = 'https://code.jquery.com/qunit/qunit-1.20.0.' + suffix
+        url = 'https://code.jquery.com/qunit/qunit-' + version + '.' + suffix
         if url not in links.links:
             raise ValueError('Exact asset absent from publisher index')
         sri = PUBLISHER_SRI if suffix == 'js' else None
         if suffix == 'js' and links.links[url] != [PUBLISHER_SRI]:
             raise ValueError('Publisher script SRI changed or is ambiguous')
-        data, cdn = fetch(url, 'qunit-1.20.0.' + suffix)
+        data, cdn = fetch(url, 'qunit-' + version + '.' + suffix)
         source, upstream = fetch('https://raw.githubusercontent.com/qunitjs/qunit/' + COMMIT + '/qunit/qunit.' + suffix,
                                  'upstream-qunit.' + suffix)
         actual_sri = verify_asset(data, source, sri=sri)
-        records.append({'version': '1.20.0', 'cdn': cdn, 'upstream': upstream,
+        records.append({'version': version, 'cdn': cdn, 'upstream': upstream,
                         'exact_byte_match': True, 'computed_sri': actual_sri,
                         'publisher_sri': sri, 'publisher_sri_verified': sri is not None,
                         'css_urls': re.findall(r'url\((.*?)\)', data.decode()) if suffix == 'css' else []})

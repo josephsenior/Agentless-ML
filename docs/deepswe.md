@@ -679,7 +679,11 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   passes and one declared skip. The approved [full schedule](deepswe-testem-offline-full-schedule-2026-10-09.md)
   then completed in 48.282 seconds with 496 passed, three skipped and one failed
   after normalization. The remaining todo fixture requests QUnit 2.9.2 assets
-  outside the two-file allowlist. No canonical readiness update or further retry.
+  outside the two-file allowlist. The subsequent
+  [2.9.2 verification and targeted todo check](deepswe-testem-qunit-todo-2026-10-10.md)
+  added the exact assets alongside 1.20.0 in another separate image. All 13
+  delivery checks passed, and the unchanged todo test passed in 18.093 seconds.
+  No full-suite retry or canonical readiness update followed.
   The [Pwntools doctest review](deepswe-pwntools-doctest-2026-10-07.md) replaces
   its incorrect pytest invocation with the public Sphinx runner. The published
   image lacks Sphinx; a separately augmented diagnostic also exposed missing

@@ -1,0 +1,328 @@
+{
+  "condition": "modified environment: offline public-asset delivery",
+  "canonical_readiness": "100/113",
+  "full_suite_retry_started": false,
+  "verified_manifest": "experiments/deepswe/testem_qunit_2_9_2_assets_verified_2026_10_10.json",
+  "build": {
+    "condition": "modified environment: offline public-asset delivery",
+    "parent_image_id": "sha256:96b08a03e607416b109f7d86186d1cdfe92755483eada98693e67ff5f2feba00",
+    "image_id": "sha256:e12cec1885154964e390345726e5ae53955831965fc1340f1cd5b9f11220328f",
+    "tag": "agentless-ml/testem-offline-qunit-todo:2026-10-10",
+    "network_during_build": "none",
+    "manifest_sha256": "7ad88bb7854a6af9c8358920d80221f86ded91badebc78f4d76ef746fc3c7efc",
+    "assets": [
+      {
+        "version": "2.9.2",
+        "cdn": {
+          "url": "https://code.jquery.com/qunit/qunit-2.9.2.js",
+          "status": 200,
+          "content_type": "application/javascript; charset=utf-8",
+          "file": "qunit-2.9.2.js",
+          "bytes": 188837,
+          "sha256": "110e6bbfa90f14f29051863e3f81fa7e6fe57bec8544b5406ffff63df06cc1f1"
+        },
+        "upstream": {
+          "url": "https://raw.githubusercontent.com/qunitjs/qunit/0f727f13fb09ccefd9fa83cfe85424e938604aad/qunit/qunit.js",
+          "status": 200,
+          "content_type": "text/plain; charset=utf-8",
+          "file": "upstream-qunit.js",
+          "bytes": 188837,
+          "sha256": "110e6bbfa90f14f29051863e3f81fa7e6fe57bec8544b5406ffff63df06cc1f1"
+        },
+        "exact_byte_match": true,
+        "computed_sri": "sha256-EQ5rv6kPFPKQUYY+P4H6fm/le+yFRLVAb//2PfBswfE=",
+        "publisher_sri": "sha256-EQ5rv6kPFPKQUYY+P4H6fm/le+yFRLVAb//2PfBswfE=",
+        "publisher_sri_verified": true,
+        "css_urls": []
+      },
+      {
+        "version": "2.9.2",
+        "cdn": {
+          "url": "https://code.jquery.com/qunit/qunit-2.9.2.css",
+          "status": 200,
+          "content_type": "text/css",
+          "file": "qunit-2.9.2.css",
+          "bytes": 7875,
+          "sha256": "b687a939ee43f9d757814386b228e78729999dae5b6a4274830442ff76cad5bd"
+        },
+        "upstream": {
+          "url": "https://raw.githubusercontent.com/qunitjs/qunit/0f727f13fb09ccefd9fa83cfe85424e938604aad/qunit/qunit.css",
+          "status": 200,
+          "content_type": "text/plain; charset=utf-8",
+          "file": "upstream-qunit.css",
+          "bytes": 7875,
+          "sha256": "b687a939ee43f9d757814386b228e78729999dae5b6a4274830442ff76cad5bd"
+        },
+        "exact_byte_match": true,
+        "computed_sri": "sha256-toepOe5D+ddXgUOGsijnhymZna5bakJ0gwRC/3bK1b0=",
+        "publisher_sri": null,
+        "publisher_sri_verified": false,
+        "css_urls": []
+      }
+    ],
+    "benchmark_tests_run": false,
+    "official_survey_updated": false
+  },
+  "preflight": {
+    "image_id": "sha256:e12cec1885154964e390345726e5ae53955831965fc1340f1cd5b9f11220328f",
+    "host_exit_code": 0,
+    "checks": [
+      {
+        "case": "GET /qunit/qunit-1.20.0.js",
+        "passed": true,
+        "status": 200,
+        "bytes": 112454,
+        "sha256": "576c7117981fae223d412e94e53a176c124f5e3a4dc321b9d56d58ae680015c0",
+        "content_type": "application/javascript"
+      },
+      {
+        "case": "HEAD /qunit/qunit-1.20.0.js",
+        "passed": true,
+        "status": 200,
+        "body_bytes": 0
+      },
+      {
+        "case": "GET /qunit/qunit-1.20.0.css",
+        "passed": true,
+        "status": 200,
+        "bytes": 5349,
+        "sha256": "98abc5dc3d67eb3a1f50eb861c7f888a9a5b43edaa8f29689c50d1841fb915fb",
+        "content_type": "text/css"
+      },
+      {
+        "case": "HEAD /qunit/qunit-1.20.0.css",
+        "passed": true,
+        "status": 200,
+        "body_bytes": 0
+      },
+      {
+        "case": "GET /qunit/qunit-2.9.2.js",
+        "passed": true,
+        "status": 200,
+        "bytes": 188837,
+        "sha256": "110e6bbfa90f14f29051863e3f81fa7e6fe57bec8544b5406ffff63df06cc1f1",
+        "content_type": "application/javascript"
+      },
+      {
+        "case": "HEAD /qunit/qunit-2.9.2.js",
+        "passed": true,
+        "status": 200,
+        "body_bytes": 0
+      },
+      {
+        "case": "GET /qunit/qunit-2.9.2.css",
+        "passed": true,
+        "status": 200,
+        "bytes": 7875,
+        "sha256": "b687a939ee43f9d757814386b228e78729999dae5b6a4274830442ff76cad5bd",
+        "content_type": "text/css"
+      },
+      {
+        "case": "HEAD /qunit/qunit-2.9.2.css",
+        "passed": true,
+        "status": 200,
+        "body_bytes": 0
+      },
+      {
+        "case": "GET code.jquery.com/missing",
+        "status": 404,
+        "passed": true
+      },
+      {
+        "case": "GET code.jquery.com/favicon.ico",
+        "status": 404,
+        "passed": true
+      },
+      {
+        "case": "GET unexpected.invalid/qunit/qunit-1.20.0.js",
+        "status": 404,
+        "passed": true
+      },
+      {
+        "case": "GET code.jquery.com/qunit/qunit-1.20.0.js?extra=1",
+        "status": 404,
+        "passed": true
+      },
+      {
+        "case": "POST code.jquery.com/qunit/qunit-1.20.0.js",
+        "status": 501,
+        "passed": true
+      }
+    ],
+    "docker_protections": {
+      "NetworkMode": "none",
+      "ReadonlyRootfs": true,
+      "CapDrop": [
+        "ALL"
+      ],
+      "SecurityOpt": [
+        "no-new-privileges"
+      ],
+      "Memory": 8589934592,
+      "MemorySwap": 8589934592,
+      "NanoCpus": 2000000000,
+      "PidsLimit": 2048,
+      "Tmpfs": {
+        "/tmp": "rw,exec,nosuid,nodev,size=4096m,mode=1777"
+      },
+      "Privileged": false,
+      "ExtraHosts": [
+        "code.jquery.com:127.0.0.1"
+      ],
+      "PortBindings": {}
+    },
+    "owned_container_removed": true
+  },
+  "result": {
+    "condition": "modified environment: offline public-asset delivery",
+    "image_id": "sha256:e12cec1885154964e390345726e5ae53955831965fc1340f1cd5b9f11220328f",
+    "base_commit": "158f61ea91c9613d2011c41ee9be40ada1d7a307",
+    "public_test_filter": "^ci mode app handles todos correctly$",
+    "status": "pass",
+    "exit_code": 0,
+    "duration_seconds": 18.09299999999348,
+    "counts": {
+      "passed": 1
+    },
+    "report_cases": 1,
+    "message": "",
+    "artifacts": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\output\\deepswe-survey\\testem-offline-qunit-todo\\public-test-logs\\agentless-ml-a8e2f24662c74ba2bb608515f44ae8c1",
+    "docker_protections": {
+      "NetworkMode": "none",
+      "ReadonlyRootfs": true,
+      "CapDrop": [
+        "ALL"
+      ],
+      "SecurityOpt": [
+        "no-new-privileges"
+      ],
+      "Memory": 8589934592,
+      "MemorySwap": 8589934592,
+      "NanoCpus": 2000000000,
+      "PidsLimit": 2048,
+      "Tmpfs": {
+        "/tmp": "rw,exec,nosuid,nodev,size=4096m,mode=1777"
+      },
+      "Privileged": false,
+      "ExtraHosts": [
+        "code.jquery.com:127.0.0.1"
+      ],
+      "PortBindings": {}
+    },
+    "environment_overrides": {
+      "HOME": "/tmp/testem-firefox-home"
+    },
+    "public_test_source_modified": false,
+    "browser_arguments_modified": false,
+    "full_suite_run": false,
+    "official_survey_updated": false,
+    "diagnostic_prototype_observer": true,
+    "cases": [
+      {
+        "id": "ci mode app::handles todos correctly",
+        "status": "passed"
+      }
+    ]
+  },
+  "observed_reporter_results": [
+    {
+      "event": "reporter_result",
+      "name": "failing todo",
+      "assertion_passed": false,
+      "todo": true,
+      "error_message": "should be true",
+      "total": 1,
+      "passed": 0,
+      "skipped": 0,
+      "todo_count": 1
+    },
+    {
+      "event": "reporter_result",
+      "name": "passing todo",
+      "assertion_passed": true,
+      "todo": true,
+      "error_message": "expected todo to not pass",
+      "total": 2,
+      "passed": 0,
+      "skipped": 0,
+      "todo_count": 1
+    }
+  ],
+  "observed_reporter_decision": [
+    {
+      "time": 1791584511544,
+      "event": "reporter_has_passed",
+      "returned": false,
+      "total": 2,
+      "passed": 0,
+      "skipped": 0,
+      "todo": 1
+    }
+  ],
+  "observed_asset_delivery": [
+    {
+      "event": "pinned_asset_response",
+      "method": "GET",
+      "host": "code.jquery.com",
+      "path": "/qunit/qunit-1.20.0.js",
+      "sha256": "576c7117981fae223d412e94e53a176c124f5e3a4dc321b9d56d58ae680015c0",
+      "bytes": 112454,
+      "body_bytes_sent": 112454
+    },
+    {
+      "event": "pinned_asset_response",
+      "method": "GET",
+      "host": "code.jquery.com",
+      "path": "/qunit/qunit-1.20.0.js",
+      "sha256": "576c7117981fae223d412e94e53a176c124f5e3a4dc321b9d56d58ae680015c0",
+      "bytes": 112454,
+      "body_bytes_sent": 112454
+    },
+    {
+      "event": "pinned_asset_response",
+      "method": "GET",
+      "host": "code.jquery.com",
+      "path": "/qunit/qunit-1.20.0.css",
+      "sha256": "98abc5dc3d67eb3a1f50eb861c7f888a9a5b43edaa8f29689c50d1841fb915fb",
+      "bytes": 5349,
+      "body_bytes_sent": 5349
+    },
+    {
+      "event": "pinned_asset_response",
+      "method": "GET",
+      "host": "code.jquery.com",
+      "path": "/qunit/qunit-2.9.2.js",
+      "sha256": "110e6bbfa90f14f29051863e3f81fa7e6fe57bec8544b5406ffff63df06cc1f1",
+      "bytes": 188837,
+      "body_bytes_sent": 188837
+    },
+    {
+      "event": "pinned_asset_response",
+      "method": "GET",
+      "host": "code.jquery.com",
+      "path": "/qunit/qunit-2.9.2.css",
+      "sha256": "b687a939ee43f9d757814386b228e78729999dae5b6a4274830442ff76cad5bd",
+      "bytes": 7875,
+      "body_bytes_sent": 7875
+    },
+    {
+      "event": "pinned_asset_response",
+      "method": "GET",
+      "host": "code.jquery.com",
+      "path": "/qunit/qunit-2.9.2.css",
+      "sha256": "b687a939ee43f9d757814386b228e78729999dae5b6a4274830442ff76cad5bd",
+      "bytes": 7875,
+      "body_bytes_sent": 7875
+    },
+    {
+      "event": "pinned_asset_response",
+      "method": "GET",
+      "host": "code.jquery.com",
+      "path": "/qunit/qunit-2.9.2.js",
+      "sha256": "110e6bbfa90f14f29051863e3f81fa7e6fe57bec8544b5406ffff63df06cc1f1",
+      "bytes": 188837,
+      "body_bytes_sent": 188837
+    }
+  ],
+  "focused_host_tests_passed": 13
+}
