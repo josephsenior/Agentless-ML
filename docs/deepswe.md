@@ -652,7 +652,11 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   no sandbox-disable flag or protection relaxation was used. This is not a full
   public baseline. The subsequent [full public attempt](deepswe-testem-public-baseline-2026-10-09.md)
   ended in timeout without a report after an observed host/tool interruption.
-  It is not a clean runtime measurement or a readiness change. No repeat has started.
+  It is not a clean runtime measurement or a readiness change. The approved
+  [uninterrupted repeat](deepswe-testem-public-repeat-2026-10-09.md) then completed
+  in 370.937 seconds: 489 passed, three skipped, eight failed after normalization.
+  Browser-result/timeouts and report-file failures remain; the separate image
+  has a completed failing baseline, not a canonical readiness update.
   The [Pwntools doctest review](deepswe-pwntools-doctest-2026-10-07.md) replaces
   its incorrect pytest invocation with the public Sphinx runner. The published
   image lacks Sphinx; a separately augmented diagnostic also exposed missing

@@ -86,8 +86,11 @@ The unchanged full public schedule was subsequently attempted against this exact
 image with the published 1,800-second cap. It ended in timeout after an observed
 host/tool interruption and produced no usable report. See the
 [full attempt record](deepswe-testem-public-baseline-2026-10-09.md): this is not a
-clean timing result or a completed baseline. No repeat has started. Canonical
-readiness remains **100/113** and the original-image timeout record is unchanged.
+clean timing result or a completed baseline. The later
+[uninterrupted repeat](deepswe-testem-public-repeat-2026-10-09.md) finished in
+370.937 seconds with 489 passed, three skipped and eight failed after
+normalization. Canonical readiness remains **100/113** and the original-image
+timeout record is unchanged.
 
 Raw evidence is in `../output/deepswe-survey/testem-firefox/`: `build.json`,
 `inventory.json`, `startup.json`, `startup.png`, build/startup logs, the two failed

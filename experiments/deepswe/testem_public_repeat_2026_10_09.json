@@ -1,0 +1,92 @@
+{
+  "label": "full_public_schedule_separate_verified_firefox_environment",
+  "task_id": "testem-per-launcher-reports",
+  "base_commit": "158f61ea91c9613d2011c41ee9be40ada1d7a307",
+  "image_id": "sha256:290cd40e1e05814859e3a0430b7bcbea77d92b8fcdd5161fd6ef1c1fc14e969d",
+  "command": [
+    "sh",
+    "-c",
+    "cd /tmp/work && mkdir -p /tmp/work/node_modules && for entry in /app/node_modules/* /app/node_modules/.[!.]*; do case \"${entry##*/}\" in .vite|.vite-temp|.cache) ;; *) [ -e \"$entry\" ] && ln -s \"$entry\" /tmp/work/node_modules/ ;; esac; done; NODE_PATH=/app/node_modules /app/node_modules/.bin/mocha --reporter xunit --reporter-option output=/tmp/report.xml \"$@\"",
+    "deepswe-tests",
+    "tests/*_tests.js",
+    "tests/**/*_tests.js"
+  ],
+  "timeout_seconds": 1800,
+  "status": "fail",
+  "exit_code": 9,
+  "duration_seconds": 370.93700000000536,
+  "counts": {
+    "passed": 489,
+    "skipped": 3,
+    "failed": 8
+  },
+  "report_cases": 500,
+  "message": "",
+  "artifacts": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\output\\deepswe-survey\\testem-firefox\\logs\\agentless-ml-b478d9a3df54423aa2c3e367d8ad2899",
+  "official_survey_updated": false,
+  "host_interruption_observed": false,
+  "schedule_completed": true,
+  "passing_baseline": false,
+  "identical_to_prior_command": true,
+  "further_attempt_started": false,
+  "raw_testcase_counts": {
+    "passed": 492,
+    "total": 504,
+    "failed": 9,
+    "skipped": 3
+  },
+  "raw_suite_header": {
+    "time": "355.041",
+    "failures": "0",
+    "tests": "502",
+    "errors": "9",
+    "skipped": "1"
+  },
+  "raw_failures": [
+    {
+      "message": "2 total test: expected 1 to equal 2",
+      "name": "handles todos correctly",
+      "classname": "ci mode app"
+    },
+    {
+      "message": "expected 1 to equal +0",
+      "name": "runs two browser instances in parallel with different test pages",
+      "classname": "ci mode app"
+    },
+    {
+      "message": "Launchers should include some version of Firefox",
+      "name": "runs them tests on node, nodetap, and browser",
+      "classname": "ci mode app multiple launchers"
+    },
+    {
+      "message": "expected 1 to equal +0",
+      "name": "returns successfully with passed and skipped tests",
+      "classname": "ci mode app multiple launchers"
+    },
+    {
+      "message": "expected 1 to equal +0",
+      "name": "forwards console messages to the reporter",
+      "classname": "ci mode app multiple launchers"
+    },
+    {
+      "message": "Timeout of 90000ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves. (/tmp/work/tests/ci/dev_tests.js)",
+      "name": "keeps runner association across page reloads",
+      "classname": "dev mode app in interactive mode"
+    },
+    {
+      "message": "Timeout of 30000ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves. (/tmp/work/tests/ci/report_file_tests.js)",
+      "name": "allows passing in report_file from config",
+      "classname": "report file output"
+    },
+    {
+      "message": "expected '/tmp/tmp-580-Df9WOSJEKziq/test-report…' to equal '/tmp/tmp-580-8kRU6IfRqDkc/test-report…'",
+      "name": "\"after each\" hook for \"writes out results to the file\"",
+      "classname": "report file output"
+    },
+    {
+      "message": "expected '/tmp/tmp-580-Df9WOSJEKziq/test-report…' to equal '/tmp/tmp-580-8kRU6IfRqDkc/test-report…'",
+      "name": "\"after each\" hook for \"writes out results to the file\"",
+      "classname": "report file output"
+    }
+  ]
+}

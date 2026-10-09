@@ -55,10 +55,11 @@ Testem is still unready; canonical readiness stays 100/113. This separately
 supplemented image did not update the original-image survey. No held-out tests
 or solutions were read. KGateway, Numba and Pwntools remain parked.
 
-The next useful step is one explicitly approved repeat of the same schedule on
-an uninterrupted host, with the same cap and protections. That repeat has not
-started. If it still stalls, inspect public Firefox launch/cleanup behavior
-before making any further environment changes.
+The approved [uninterrupted repeat](deepswe-testem-public-repeat-2026-10-09.md)
+subsequently completed in 370.937 seconds with a usable failing report: 489
+passed, three skipped and eight failed after normalization. The interrupted
+attempt above remains a separate, inconclusive timing record. No further run
+has started; inspect public Firefox launch/connection behavior next.
 
 Host-side checks for the wrapper, image helpers and shared execution commands:
 96 passed, four opt-in checks skipped. Global Python's unrelated libtmux pytest
