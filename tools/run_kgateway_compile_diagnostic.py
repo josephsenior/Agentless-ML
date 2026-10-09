@@ -1,12 +1,15 @@
 """One compile-only diagnostic; opt in to the full 30-minute attempt."""
 
 import argparse
+import ctypes
 import json
+import os
 import subprocess
 import tempfile
 import threading
 import time
 from pathlib import Path
+from contextlib import contextmanager
 
 from agentless_ml.validation import DockerTestRunner, PublicTestCommand
 from agentless_ml.workspace import LocalGitWorkspaceProvider, verify_sealed_repository
@@ -72,11 +75,41 @@ class CompileSampledRunner(SampledRunner):
             self.stop_sampling.wait(10)
 
 
+@contextmanager
+def keep_host_awake(enabled, set_state=None):
+    """Prevent automatic Windows sleep for this thread, without changing power settings."""
+    if not enabled:
+        yield
+        return
+    if set_state is None:
+        if os.name != "nt":
+            raise RuntimeError("--keep-awake requires Windows")
+        set_state = ctypes.windll.kernel32.SetThreadExecutionState
+        set_state.argtypes = [ctypes.c_uint]
+        set_state.restype = ctypes.c_uint
+    if not set_state(0x80000001):  # ES_CONTINUOUS | ES_SYSTEM_REQUIRED
+        raise RuntimeError("Windows rejected the temporary keep-awake request")
+    print("Temporary Windows system keep-awake request active", flush=True)
+    try:
+        yield
+    finally:
+        if not set_state(0x80000000):  # release this thread's requirement
+            raise RuntimeError("Windows failed to release the keep-awake request")
+        print("Temporary Windows keep-awake request released", flush=True)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--full", action="store_true",
                         help="One full compile-only attempt under the existing 1800-second cap")
+    parser.add_argument("--keep-awake", action="store_true",
+                        help="Temporarily prevent automatic Windows system sleep during this attempt")
     args = parser.parse_args()
+    with keep_host_awake(args.keep_awake):
+        run_attempt(args)
+
+
+def run_attempt(args):
     repository = ROOT.parent / "benchmarks/deepswe/repos" / TASK
     verify_sealed_repository(repository, BASE)
     runner = CompileSampledRunner()
@@ -93,6 +126,7 @@ def main():
         "task_id": TASK, "base_commit": BASE, "image_id": runner.image_id,
         "build_workers": 1, "compile_window_seconds": None if args.full else 300,
         "full_compile_attempt": args.full, "outer_timeout_seconds": 1800,
+        "temporary_windows_keep_awake": args.keep_awake,
         "memory_mb": 8192, "cpus": 2, "tmpfs_mb": 4096, "pids_limit": 2048,
         "full_package_target": "./...", "cache_seeded": False,
         "tests_executed": False, "accepted_regression_inventory": False,

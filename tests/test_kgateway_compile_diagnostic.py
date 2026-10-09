@@ -1,4 +1,5 @@
 from pathlib import Path
+import pytest
 
 
 def test_compile_window_has_no_execution_or_package_filter(monkeypatch):
@@ -42,3 +43,24 @@ def test_sampler_uses_unchanged_limits_without_numba_initialization(monkeypatch,
     assert captured["tmpfs_mb"] == 4096
     assert captured["cpus"] == 2
     assert captured["pids_limit"] == 2048
+
+
+def test_keep_awake_released_on_exception(monkeypatch):
+    monkeypatch.syspath_prepend(str(Path(__file__).resolve().parents[1] / "tools"))
+    from run_kgateway_compile_diagnostic import keep_host_awake
+    calls = []
+    def set_state(flags):
+        calls.append(flags)
+        return 0x80000000
+    with pytest.raises(ValueError):
+        with keep_host_awake(True, set_state):
+            raise ValueError("attempt failed")
+    assert calls == [0x80000001, 0x80000000]
+
+
+def test_keep_awake_rejection_prevents_attempt(monkeypatch):
+    monkeypatch.syspath_prepend(str(Path(__file__).resolve().parents[1] / "tools"))
+    from run_kgateway_compile_diagnostic import keep_host_awake
+    with pytest.raises(RuntimeError, match="rejected"):
+        with keep_host_awake(True, lambda flags: 0):
+            pytest.fail("must not start")

@@ -617,6 +617,12 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   encountered a 77-minute monitoring gap consistent with host suspension and
   was stopped. It provides no usable uninterrupted full-build timing result;
   no automatic repeat or readiness change was made.
+  A separately approved [keep-awake repeat](deepswe-kgateway-awake-compile-2026-10-09.md)
+  ended with build failures after 317.9 seconds and no long sampling gap.
+  Scratch reached 98% in the last probe, with no observed OOM. The exact compiler
+  error was not retained; this is consistent with the prior space blocker,
+  not direct new ENOSPC evidence. One build worker did not yield a successful
+  compile, and canonical readiness remains unchanged.
   The [Pwntools doctest review](deepswe-pwntools-doctest-2026-10-07.md) replaces
   its incorrect pytest invocation with the public Sphinx runner. The published
   image lacks Sphinx; a separately augmented diagnostic also exposed missing
