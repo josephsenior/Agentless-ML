@@ -103,3 +103,7 @@ Raw downloaded artifacts, signatures, APT logs and before/after ELF results are
 outside Git at `../output/deepswe-survey/testem-firefox-audit-2026-10-09/`.
 The committed manifest pins the artifacts; it does not bundle executables.
 Canonical readiness remains **100/113**, and no retry was started.
+
+Follow-up: the [upgrade review](deepswe-testem-upgrade-review-2026-10-09.md)
+identified a valid no-upgrade 71-package alternative. Keep this original
+87-package audit as evidence, not as the recommended future install list.
