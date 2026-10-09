@@ -1,7 +1,7 @@
-"""Build/preflight the labelled four-asset image, or run only the unchanged todo test.
+"""Build/preflight the labelled four-asset image, or run unchanged public tests.
 
-Reuses the existing protected runners. No full-schedule option is exposed here;
-the old image, records and default runner remain separate.
+Reuses the existing protected runners. Full execution is a separate opt-in
+action; the old image, records and default runner remain separate.
 """
 
 import argparse
@@ -42,7 +42,7 @@ def stage(context):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('action', choices=('build', 'preflight', 'test'))
+    parser.add_argument('action', choices=('build', 'preflight', 'test', 'full'))
     action = parser.parse_args().action
     if action == 'build':
         build.PARENT = PARENT
@@ -60,8 +60,9 @@ def main():
         diagnostic.TEST = public.TEST = TEST
         public.RESULTS = RESULTS
         public.IMAGE = IMAGE
-        # The shared runner parses argv too. Never forward a full-suite switch.
-        sys.argv = [sys.argv[0]]
+        public.PRIOR_SINGLE = ROOT / 'experiments/deepswe/testem_qunit_todo_public_test_2026_10_10.json'
+        # Only the explicit full action forwards the shared full-suite switch.
+        sys.argv = [sys.argv[0], '--full'] if action == 'full' else [sys.argv[0]]
         public.main()
     return 0
 

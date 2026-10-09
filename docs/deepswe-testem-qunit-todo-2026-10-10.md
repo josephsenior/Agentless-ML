@@ -71,7 +71,8 @@ python tools/testem_qunit_todo.py test
 
 Capture directories and image tags intentionally refuse overwrite during
 verification/build. Existing captures and pinned images can be used for the
-later commands. This entry point exposes no full-suite option.
+later commands. At this checkpoint the entry point exposed no full-suite
+option; the later approved full run added a separate explicit `full` action.
 
 The [compact evidence](../experiments/deepswe/testem_qunit_todo_public_test_2026_10_10.json)
 contains build identity, preflight checks, inspected protections, reporter
@@ -85,3 +86,7 @@ Next: request one unchanged full public schedule in this four-asset condition.
 A passing targeted test does not yet establish that the full schedule passes.
 No further retry or canonical survey update was started. KGateway, Numba and
 Pwntools remain parked.
+
+Follow-up: the approved [full public schedule](deepswe-testem-four-asset-full-schedule-2026-10-10.md)
+passed with 497 passed, three skipped and zero failures. This targeted record
+remains the earlier single-test checkpoint; canonical readiness is unchanged.

@@ -67,3 +67,31 @@ def test_todo_command_preserves_original_contract():
     assert wrapped.failure_exit_codes == original.failure_exit_codes
     assert 125 not in wrapped.failure_exit_codes
     compile(wrapped.argv[2], '<todo-supervisor>', 'exec')
+
+
+def test_full_command_uses_both_unchanged_globs_without_observer():
+    full = public.selected_command(full=True)
+    original = public.full_public_command()
+    assert original.argv[3:] == ('deepswe-tests', 'tests/*_tests.js', 'tests/**/*_tests.js')
+    assert repr(list(original.argv[3:]))[1:-1] in full.argv[2]
+    assert original.argv[2] in full.argv[2]
+    assert '--grep' not in full.argv[2]
+    assert '--require' not in full.argv[2]
+    assert 'firefox-observer' not in full.argv[2]
+    assert full.timeout_seconds == original.timeout_seconds == 1800
+    assert full.report == original.report
+    assert full.failure_exit_codes == original.failure_exit_codes
+    compile(full.argv[2], '<full-supervisor>', 'exec')
+
+
+def test_full_action_checks_the_successful_todo_record(monkeypatch):
+    monkeypatch.setattr(sys, 'argv', ['testem_qunit_todo.py', 'full'])
+    # Restore every shared module setting after the dispatch-only check.
+    with patch.object(diagnostic, 'TEST'), patch.object(public, 'TEST'), \
+            patch.object(public, 'RESULTS'), patch.object(public, 'IMAGE'), \
+            patch.object(public, 'PRIOR_SINGLE'), patch.object(public, 'main') as run:
+        assert todo.main() == 0
+        run.assert_called_once_with()
+        assert sys.argv == ['testem_qunit_todo.py', '--full']
+        assert public.IMAGE == todo.IMAGE
+        assert public.PRIOR_SINGLE.name == 'testem_qunit_todo_public_test_2026_10_10.json'

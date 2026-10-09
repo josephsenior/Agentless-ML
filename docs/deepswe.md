@@ -683,7 +683,11 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   [2.9.2 verification and targeted todo check](deepswe-testem-qunit-todo-2026-10-10.md)
   added the exact assets alongside 1.20.0 in another separate image. All 13
   delivery checks passed, and the unchanged todo test passed in 18.093 seconds.
-  No full-suite retry or canonical readiness update followed.
+  The subsequently approved
+  [four-asset full schedule](deepswe-testem-four-asset-full-schedule-2026-10-10.md)
+  passed in 61.734 seconds: 497 passed, three skipped and zero failed after
+  normalization. No canonical configuration or readiness update followed;
+  this remains a separately labelled environment.
   The [Pwntools doctest review](deepswe-pwntools-doctest-2026-10-07.md) replaces
   its incorrect pytest invocation with the public Sphinx runner. The published
   image lacks Sphinx; a separately augmented diagnostic also exposed missing

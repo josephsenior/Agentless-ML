@@ -16,6 +16,7 @@ from run_testem_firefox_baseline import ROOT, BASE, TASK
 from run_testem_firefox_baseline import selected_command as full_public_command
 
 IMAGE = 'sha256:96b08a03e607416b109f7d86186d1cdfe92755483eada98693e67ff5f2feba00'
+PRIOR_SINGLE = ROOT / 'experiments/deepswe/testem_qunit_public_test_2026_10_09.json'
 SUPERVISOR = r'''
 import hashlib,http.client,json,os,pathlib,runpy,signal,subprocess,sys,time
 module=runpy.run_path('/opt/testem-offline-qunit/offline-qunit.py')
@@ -107,7 +108,7 @@ def main():
             or not preflight.get('preflight', {}).get('all_checks_passed')):
         raise ValueError('Requires the exact built image and successful delivery preflight')
     if options.full:
-        prior = json.loads((ROOT / 'experiments/deepswe/testem_qunit_public_test_2026_10_09.json').read_text())['result']
+        prior = json.loads(PRIOR_SINGLE.read_text())['result']
         if prior['image_id'] != IMAGE or prior['status'] != 'pass':
             raise ValueError('Requires the successful single public test in this exact image')
     repository = ROOT.parent / 'benchmarks/deepswe/repos' / TASK
