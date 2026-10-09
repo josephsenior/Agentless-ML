@@ -1,6 +1,9 @@
 import hashlib
+import importlib.util
 import runpy
+import sys
 from pathlib import Path
+from unittest.mock import patch
 
 import pytest
 
@@ -33,3 +36,28 @@ def test_asset_integrity_fails_closed():
 def test_missing_assets_prevent_startup(tmp_path):
     with pytest.raises(FileNotFoundError):
         service()['load_assets'](tmp_path)
+
+
+def test_public_wrapper_preserves_one_real_test_and_failure_codes():
+    tools = ROOT / 'tools'
+    sys.path.insert(0, str(tools))
+    try:
+        spec = importlib.util.spec_from_file_location('testem_asset_public', tools / 'run_testem_qunit_public_test.py')
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        original = module.diagnostic_command('home-only')
+        wrapped = module.selected_command()
+        assert wrapped.timeout_seconds == original.timeout_seconds == 1800
+        assert wrapped.failure_exit_codes == original.failure_exit_codes
+        assert 125 not in wrapped.failure_exit_codes
+        assert wrapped.report == original.report
+        assert repr(list(original.argv)) in wrapped.argv[2]
+        assert "test=subprocess.Popen(" in wrapped.argv[2]
+        compile(wrapped.argv[2], '<supervisor>', 'exec')
+        with patch.object(module.DockerTestRunner, '_docker') as docker:
+            runner = object.__new__(module.OfflineAssetRunner)
+            runner._docker('create', '--network=none', '--cap-drop=ALL')
+            assert docker.call_args.args == ('create', '--add-host=code.jquery.com:127.0.0.1',
+                                             '--network=none', '--cap-drop=ALL')
+    finally:
+        sys.path.pop(0)

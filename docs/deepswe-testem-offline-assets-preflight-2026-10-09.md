@@ -65,7 +65,6 @@ Raw build/preflight records are under
 [committed record](../experiments/deepswe/testem_qunit_delivery_preflight_2026_10_09.json)
 keeps the exact image IDs, actual HTTP checks and inspected protections.
 
-Next, run the same unchanged public test once against this separately labelled
-condition, using HOME-only and the owned loopback service. Require successful
-asset preflight before test execution and preserve the test's true exit/report.
-No public-test retry or full-suite run has started.
+The subsequent [single unchanged public test](deepswe-testem-offline-public-test-2026-10-09.md)
+passed with exit code 0. Its browser fixture reported two passes and one declared
+skip; the original reporter returned true. No full-suite retry has started.
