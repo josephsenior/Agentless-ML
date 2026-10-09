@@ -623,6 +623,11 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   error was not retained; this is consistent with the prior space blocker,
   not direct new ENOSPC evidence. One build worker did not yield a successful
   compile, and canonical readiness remains unchanged.
+  KGateway is now explicitly parked under these limits (work priority only).
+  The next [Testem setup inspection](deepswe-testem-setup-review-2026-10-09.md)
+  found no discoverable Firefox in its pinned image, despite the public CI
+  installing it and public Mocha tests requiring Headless Firefox. No retry or
+  image change was made; the saved timeout's precise cause remains unproven.
   The [Pwntools doctest review](deepswe-pwntools-doctest-2026-10-07.md) replaces
   its incorrect pytest invocation with the public Sphinx runner. The published
   image lacks Sphinx; a separately augmented diagnostic also exposed missing

@@ -53,6 +53,10 @@ assessed and explicitly approved separately. Another attempt should also retain
 diagnostic errors outside the constrained mount, rather than relying entirely
 on files that may stop growing when scratch fills.
 
+The user subsequently confirmed parking KGateway under these limits. No further
+KGateway run is planned; parking changes work priority, not dataset membership
+or the canonical survey record. The next inspection is Testem.
+
 Raw artifacts:
 `../output/deepswe-survey/kgateway-compile-diagnostic/logs/agentless-ml-f3b8b542de6349d785d5279b7840c168/`.
 No held-out tests or solutions were read. Five focused host unit tests passed
