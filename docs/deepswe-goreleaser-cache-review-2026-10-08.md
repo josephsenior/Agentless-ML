@@ -137,3 +137,9 @@ and corpus pin remain unchanged at **100/113 ready**. Numba remains parked.
 The original failure artifacts remain under
 `../output/deepswe-survey/goreleaser-retry-publish-auditing/logs/agentless-ml-8d8e12ec5326429abef093a9e2481eff/`.
 Readiness remains **100/113**.
+
+Follow-up: the approved [registration and official refresh](deepswe-goreleaser-registered-readiness-2026-10-10.md)
+reproduced the same 2,907 passed, 46 failed and 47 skipped ID sets. GoReleaser
+is now ready in the explicitly registered cache environment, bringing overall
+readiness to 103/113. The native result is still FAIL/exit 1, and the earlier
+diagnostic and published image pin remain unchanged.

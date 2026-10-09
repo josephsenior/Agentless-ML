@@ -1,0 +1,207 @@
+{
+  "condition": "official readiness survey with explicitly registered GoReleaser cache relocation and seeding",
+  "previous_ready": 102,
+  "ready": 103,
+  "total": 113,
+  "registered_environment_ready": 3,
+  "published_image_ready": 100,
+  "latest_status_counts": {
+    "harness_error": 2,
+    "out_of_memory": 2,
+    "ready": 103,
+    "timeout": 1,
+    "unsupported_repository": 5
+  },
+  "remaining_tasks": [
+    {
+      "task_id": "adaptix-name-mapping-aliases",
+      "status": "unsupported_repository"
+    },
+    {
+      "task_id": "helm-array-merge-strategies",
+      "status": "unsupported_repository"
+    },
+    {
+      "task_id": "helm-unified-manifest-stream",
+      "status": "unsupported_repository"
+    },
+    {
+      "task_id": "kgateway-consistent-hash-policy",
+      "status": "harness_error"
+    },
+    {
+      "task_id": "numba-stencil-boundary-modes",
+      "status": "timeout"
+    },
+    {
+      "task_id": "pebble-durability-wait-apis",
+      "status": "out_of_memory"
+    },
+    {
+      "task_id": "pwntools-tube-multiplexing",
+      "status": "harness_error"
+    },
+    {
+      "task_id": "tomlkit-toml-table-converters",
+      "status": "unsupported_repository"
+    },
+    {
+      "task_id": "wasmi-trap-coredumps",
+      "status": "unsupported_repository"
+    },
+    {
+      "task_id": "wazero-multi-module-snapshots",
+      "status": "out_of_memory"
+    }
+  ],
+  "previous_goreleaser_record": {
+    "task_id": "goreleaser-retry-publish-auditing",
+    "language": "go",
+    "base_commit": "399ef141161f212f4e81b5d7497b84633fc712d9",
+    "status": "harness_error",
+    "runner": "go",
+    "targets": [
+      "./..."
+    ],
+    "override": null,
+    "exit_code": 125,
+    "tests": 0,
+    "passed": 0,
+    "failed": 0,
+    "skipped": 0,
+    "image_id": "sha256:778c43a00bb317e8e0b266b212b187be7765a12dbdadde3ba2f4bceba9c40080",
+    "message": "",
+    "artifacts": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\output\\deepswe-survey\\goreleaser-retry-publish-auditing\\logs\\agentless-ml-8d8e12ec5326429abef093a9e2481eff",
+    "seconds": 28.2
+  },
+  "survey_record": {
+    "task_id": "goreleaser-retry-publish-auditing",
+    "language": "go",
+    "base_commit": "399ef141161f212f4e81b5d7497b84633fc712d9",
+    "environment": {
+      "profile": "goreleaser-relocated-cache-v1",
+      "condition": "modified environment: relocated Go caches with writable build seed",
+      "base_commit": "399ef141161f212f4e81b5d7497b84633fc712d9",
+      "published_image_id": "sha256:778c43a00bb317e8e0b266b212b187be7765a12dbdadde3ba2f4bceba9c40080",
+      "image": "sha256:a02ee6ffddb93fa736a2d8d345669d966a3c15db99d4333f151eeb1c08fed085",
+      "image_id": "sha256:a02ee6ffddb93fa736a2d8d345669d966a3c15db99d4333f151eeb1c08fed085",
+      "verification": "goreleaser_cache_2026_10_08.json",
+      "reason": "The runner's temporary mount hides the published image's preloaded Go caches. Register the verified derivative that relocates only those caches, uses its existing checksum-matched Go 1.26.1 binary and seeds writable /tmp/go-build before the unchanged full-package Go command. Preserve the report, disabled test-result caching, offline execution, deadlines and Docker limits. GOPROXY=off, GOTOOLCHAIN=local, PATH and GOMODCACHE differ explicitly from the published image and may affect subprocess tests. The reviewed baseline has 2907 passing, 46 failed and 47 skipped report IDs: a usable inventory, not an all-green baseline; failures remain undiagnosed and visible."
+    },
+    "status": "ready",
+    "runner": "go",
+    "targets": [
+      "./..."
+    ],
+    "override": null,
+    "exit_code": 1,
+    "tests": 3000,
+    "passed": 2907,
+    "failed": 46,
+    "skipped": 47,
+    "image_id": "sha256:a02ee6ffddb93fa736a2d8d345669d966a3c15db99d4333f151eeb1c08fed085",
+    "docker_protections": {
+      "NetworkMode": "none",
+      "ReadonlyRootfs": true,
+      "CapDrop": [
+        "ALL"
+      ],
+      "SecurityOpt": [
+        "no-new-privileges"
+      ],
+      "Memory": 8589934592,
+      "MemorySwap": 8589934592,
+      "NanoCpus": 2000000000,
+      "PidsLimit": 2048,
+      "Tmpfs": {
+        "/tmp": "rw,exec,nosuid,nodev,size=4096m,mode=1777"
+      },
+      "Privileged": false,
+      "ExtraHosts": null,
+      "PortBindings": {}
+    },
+    "message": "",
+    "artifacts": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\output\\deepswe-survey\\runs\\goreleaser-retry-publish-auditing\\logs\\agentless-ml-5aeb357246214211b1b1600383db90f1",
+    "seconds": 411.9
+  },
+  "native_validation_status": "fail",
+  "execution_duration_seconds": 404.95337670001027,
+  "raw_testcase_counts": {
+    "failed": 46,
+    "passed": 2907,
+    "skipped": 47
+  },
+  "compared_with_verified_diagnostic": {
+    "passed": {
+      "previous_unique_ids": 2907,
+      "fresh_unique_ids": 2907,
+      "identical_ids": true
+    },
+    "failed": {
+      "previous_unique_ids": 46,
+      "fresh_unique_ids": 46,
+      "identical_ids": true
+    },
+    "skipped": {
+      "previous_unique_ids": 47,
+      "fresh_unique_ids": 47,
+      "identical_ids": true
+    }
+  },
+  "failed_ids": [
+    "github.com/goreleaser/goreleaser/v2/cmd::TestCheckConfig",
+    "github.com/goreleaser/goreleaser/v2/cmd::TestCheckConfigNoArgs",
+    "github.com/goreleaser/goreleaser/v2/cmd::TestHealthcheckMissingTool",
+    "github.com/goreleaser/goreleaser/v2/cmd::TestHealthcheckQuier",
+    "github.com/goreleaser/goreleaser/v2/cmd::TestHealthcheckSystem",
+    "github.com/goreleaser/goreleaser/v2/cmd::TestInitExampleConfigsAreNotDeprecated",
+    "github.com/goreleaser/goreleaser/v2/cmd::TestRootCmdExitCode",
+    "github.com/goreleaser/goreleaser/v2/internal/builders/bun::TestBuild",
+    "github.com/goreleaser/goreleaser/v2/internal/builders/golang::TestRunPipeWithProxiedRepo",
+    "github.com/goreleaser/goreleaser/v2/internal/builders/poetry::TestBuild",
+    "github.com/goreleaser/goreleaser/v2/internal/builders/poetry::TestBuildSpecificModes",
+    "github.com/goreleaser/goreleaser/v2/internal/builders/uv::TestBuild",
+    "github.com/goreleaser/goreleaser/v2/internal/builders/uv::TestBuildSpecificModes",
+    "github.com/goreleaser/goreleaser/v2/internal/git::TestGit",
+    "github.com/goreleaser/goreleaser/v2/internal/git::TestRelativeRemote",
+    "github.com/goreleaser/goreleaser/v2/internal/git::TestRepo",
+    "github.com/goreleaser/goreleaser/v2/internal/git::TestRepoNameWithDifferentRemote",
+    "github.com/goreleaser/goreleaser/v2/internal/pipe/changelog::TestAuthors",
+    "github.com/goreleaser/goreleaser/v2/internal/pipe/changelog::TestGetChangeloger",
+    "github.com/goreleaser/goreleaser/v2/internal/pipe/changelog::TestGetChangeloger/gitea",
+    "github.com/goreleaser/goreleaser/v2/internal/pipe/changelog::TestGetChangeloger/github",
+    "github.com/goreleaser/goreleaser/v2/internal/pipe/changelog::TestGetChangeloger/github-native",
+    "github.com/goreleaser/goreleaser/v2/internal/pipe/changelog::TestGetChangeloger/gitlab",
+    "github.com/goreleaser/goreleaser/v2/internal/pipe/changelog::TestIssue5595",
+    "github.com/goreleaser/goreleaser/v2/internal/pipe/changelog::TestIssue5595/abbrev-sha",
+    "github.com/goreleaser/goreleaser/v2/internal/pipe/changelog::TestIssue5595/no-sha",
+    "github.com/goreleaser/goreleaser/v2/internal/pipe/changelog::TestTemplatedChangelogProvidedViaFlag",
+    "github.com/goreleaser/goreleaser/v2/internal/pipe/changelog::TestTemplatedChangelogProvidedViaFlagResultIsEmpty",
+    "github.com/goreleaser/goreleaser/v2/internal/pipe/defaults::TestGiteaTemplateDownloadURL",
+    "github.com/goreleaser/goreleaser/v2/internal/pipe/git::TestShallowClone",
+    "github.com/goreleaser/goreleaser/v2/internal/pipe/gomod::TestGoModProxy",
+    "github.com/goreleaser/goreleaser/v2/internal/pipe/gomod::TestGoModProxy/goreleaser_with_main.go",
+    "github.com/goreleaser/goreleaser/v2/internal/pipe/gomod::TestGoModProxy/no_go.sum",
+    "github.com/goreleaser/goreleaser/v2/internal/pipe/gomod::TestGoModProxy/testmod",
+    "github.com/goreleaser/goreleaser/v2/internal/pipe/gomod::TestRunGoWork",
+    "github.com/goreleaser/goreleaser/v2/internal/pipe/ko::TestPublishPipeError",
+    "github.com/goreleaser/goreleaser/v2/internal/pipe/ko::TestPublishPipeError/invalid_build",
+    "github.com/goreleaser/goreleaser/v2/internal/pipe/ko::TestPublishPipeError/publish_fail",
+    "github.com/goreleaser/goreleaser/v2/internal/pipe/milestone::TestDefaultWithNameTemplate",
+    "github.com/goreleaser/goreleaser/v2/internal/pipe/milestone::TestDefaultWithoutNameTemplate",
+    "github.com/goreleaser/goreleaser/v2/internal/pipe/release::TestSetupGitea",
+    "github.com/goreleaser/goreleaser/v2/internal/pipe/release::TestSetupGitea/no_repo",
+    "github.com/goreleaser/goreleaser/v2/internal/pipe/release::TestSetupGitHub",
+    "github.com/goreleaser/goreleaser/v2/internal/pipe/release::TestSetupGitHub/no_repo",
+    "github.com/goreleaser/goreleaser/v2/internal/pipe/release::TestSetupGitLab",
+    "github.com/goreleaser/goreleaser/v2/internal/pipe/release::TestSetupGitLab/no_repo"
+  ],
+  "focused_host_checks_passed": 50,
+  "report_sha256": "9aad121463e022a302aa1aed0d0b44f198f5fcc3054db130478bbd3108379ea4",
+  "survey_file": "../output/deepswe-survey/survey.jsonl",
+  "corpus_pin_modified": false,
+  "readiness_rule_changed": false,
+  "failures_reinterpreted_as_passes": false,
+  "held_out_tests_or_solution_used": false,
+  "further_retry_started": false
+}

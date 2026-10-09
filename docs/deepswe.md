@@ -489,10 +489,10 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
 
 ## What is not implemented
 
-Current readiness is **102/113**, with 11 tasks remaining after
-[Cliffy's registered-cache refresh](deepswe-cliffy-registered-readiness-2026-10-10.md).
-Of those ready tasks, 100 use their published pinned images; Testem and Cliffy
-use explicitly labelled, verified modified environments. The original corpus
+Current readiness is **103/113**, with ten tasks remaining after
+[GoReleaser's registered-cache refresh](deepswe-goreleaser-registered-readiness-2026-10-10.md).
+Of those ready tasks, 100 use their published pinned images; Testem, Cliffy
+and GoReleaser use explicitly labelled, verified modified environments. The original corpus
 pins and held-out scorer are unchanged. The chronology below retains earlier
 counts as historical checkpoints.
 
@@ -589,6 +589,12 @@ counts as historical checkpoints.
   2,907 passed, 46 failed and 47 skipped report IDs. No limits or test exclusions
   changed. This substituted-image inventory is not a canonical readiness
   update; the official count remains **100/113**.
+  The later approved [cache registration and official refresh](deepswe-goreleaser-registered-readiness-2026-10-10.md)
+  retained the exact image and cache-seeding setup and reproduced all passing,
+  failed and skipped ID sets in a fresh full attempt. GoReleaser is now ready
+  with 2,907 passed, 46 failed and 47 skipped; the native result remains FAIL,
+  exit 1. Overall readiness is **103/113**, including three labelled modified
+  environments. No failures were hidden or reclassified as passing.
   [Cliffy's cache inventory](deepswe-cliffy-cache-review-2026-10-08.md) confirms
   a different problem: eight declared JSR packages have no entries in its
   published Deno cache. The first saved failure is missing `@std/io` metadata.

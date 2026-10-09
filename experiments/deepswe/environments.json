@@ -18,5 +18,15 @@
     "image_id": "sha256:9e49eb0e15b12e2fbded70acbcb9a4f0948bbdbc731539299e0e99bd68ff27c9",
     "verification": "cliffy_public_baseline_2026_10_09.json",
     "reason": "The published Deno cache lacks required public JSR dependencies. Register the separately checksum-verified cache image after its offline import graph and unchanged full public schedule passed. Keep Deno 2.0.0, original cache entries, candidate source, default full discovery, cached-only execution, report normalization and Docker limits unchanged. Added package indexes expose only reviewed verified versions; this curated cache is an explicit modified environment, not published-image parity. No service, hostname mapping or command wrapper is required."
+  },
+  "goreleaser-retry-publish-auditing": {
+    "profile": "goreleaser-relocated-cache-v1",
+    "condition": "modified environment: relocated Go caches with writable build seed",
+    "base_commit": "399ef141161f212f4e81b5d7497b84633fc712d9",
+    "published_image_id": "sha256:778c43a00bb317e8e0b266b212b187be7765a12dbdadde3ba2f4bceba9c40080",
+    "image": "sha256:a02ee6ffddb93fa736a2d8d345669d966a3c15db99d4333f151eeb1c08fed085",
+    "image_id": "sha256:a02ee6ffddb93fa736a2d8d345669d966a3c15db99d4333f151eeb1c08fed085",
+    "verification": "goreleaser_cache_2026_10_08.json",
+    "reason": "The runner's temporary mount hides the published image's preloaded Go caches. Register the verified derivative that relocates only those caches, uses its existing checksum-matched Go 1.26.1 binary and seeds writable /tmp/go-build before the unchanged full-package Go command. Preserve the report, disabled test-result caching, offline execution, deadlines and Docker limits. GOPROXY=off, GOTOOLCHAIN=local, PATH and GOMODCACHE differ explicitly from the published image and may affect subprocess tests. The reviewed baseline has 2907 passing, 46 failed and 47 skipped report IDs: a usable inventory, not an all-green baseline; failures remain undiagnosed and visible."
   }
 }

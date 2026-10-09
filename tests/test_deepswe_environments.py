@@ -10,7 +10,7 @@ from unittest.mock import patch
 
 import pytest
 
-from agentless_ml.adapters.benchmarks.deepswe_execution import MOCHA, DENO
+from agentless_ml.adapters.benchmarks.deepswe_execution import MOCHA, DENO, GO, DeepSWETestPlan
 from agentless_ml.schemas import Benchmark, TaskSpec
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -159,4 +159,56 @@ def test_cliffy_registration_refuses_mismatched_evidence(tmp_path, change):
     registry = tmp_path / 'environments.json'
     registry.write_text(json.dumps({runtime.CLIFFY: entry}))
     with pytest.raises(ValueError, match='Cliffy registration requires'):
+        runtime.load_environments(registry)
+
+
+def test_goreleaser_registration_keeps_verified_cache_setup_and_failures(monkeypatch):
+    monkeypatch.syspath_prepend(str(ROOT / 'tools'))
+    from run_goreleaser_cache_diagnostic import diagnostic_command
+    entry = runtime.load_environments()[runtime.GORELEASER]
+    task = replace(published(), instance_id=runtime.GORELEASER, language='go',
+        base_commit=entry['base_commit'], container_digest=entry['published_image_id'])
+    assert runtime.environment_for(task, runtime.load_environments()) == entry
+    assert runtime.runtime_task(task, entry).container_digest == entry['image_id']
+    native = GO.command(('./...',), timeout_seconds=1800)
+    selected = runtime.runtime_command(native, entry)
+    assert selected == diagnostic_command(DeepSWETestPlan('go', ('./...',)))
+    assert selected.report == native.report
+    assert selected.failure_exit_codes == native.failure_exit_codes == (1,)
+    assert selected.counted_test_ids is None
+    assert selected.argv[-1] == './...'
+    assert 'go test -json -count=1' in selected.argv[6]
+    assert 'cp -a /opt/agentless-go/build-seed/. /tmp/go-build/' in selected.argv[6]
+    evidence = json.loads((runtime.REGISTRY.parent / entry['verification']).read_text())
+    assert evidence['full_attempt']['status'] == 'fail'
+    assert evidence['full_attempt']['failed'] == 46
+    assert evidence['full_attempt']['skipped'] == 47
+
+
+def test_goreleaser_wrapper_preserves_custom_timeout_and_targets():
+    entry = runtime.load_environments()[runtime.GORELEASER]
+    native = GO.command(('./internal/git',), timeout_seconds=90)
+    command = runtime.runtime_command(native, entry)
+    assert command.timeout_seconds == 90
+    assert command.argv[3] == '90s'
+    assert command.argv[-1] == './internal/git'
+    assert command.report == native.report
+
+
+@pytest.mark.parametrize('change', ['image', 'parent', 'base', 'module', 'timeout', 'report', 'empty', 'targets'])
+def test_goreleaser_registration_rejects_unusable_or_mismatched_evidence(tmp_path, change):
+    entry = runtime.load_environments()[runtime.GORELEASER]
+    evidence = json.loads((runtime.REGISTRY.parent / entry['verification']).read_text())
+    if change == 'image': evidence['image_id'] = 'sha256:' + '0' * 64
+    elif change == 'parent': evidence['parent_image_id'] = 'sha256:' + '0' * 64
+    elif change == 'base': evidence['base_commit'] = '0' * 40
+    elif change == 'module': evidence['module_check']['status'] = 'fail'
+    elif change == 'timeout': evidence['full_attempt']['status'] = 'timeout'
+    elif change == 'report': evidence['full_attempt']['report_ids'] = 1
+    elif change == 'empty': evidence['full_attempt']['passed'] = 0
+    elif change == 'targets': evidence['targets'] = ['./internal/git']
+    (tmp_path / entry['verification']).write_text(json.dumps(evidence))
+    registry = tmp_path / 'environments.json'
+    registry.write_text(json.dumps({runtime.GORELEASER: entry}))
+    with pytest.raises(ValueError, match='GoReleaser registration requires'):
         runtime.load_environments(registry)

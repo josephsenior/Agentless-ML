@@ -37,7 +37,11 @@ CHECK = (
 
 
 def diagnostic_command(plan):
-    native = plan.command(timeout_seconds=1800)
+    return cache_command(plan.command(timeout_seconds=1800))
+
+
+def cache_command(native):
+    """Reuse the verified seed/deadline setup without replacing caller targets."""
     # Go's content-addressed cache is a seed, not a substitute for candidate
     # source. Retain writable cache outputs and rebuild when source keys differ.
     prefix = (
@@ -46,7 +50,7 @@ def diagnostic_command(plan):
     )
     argv = (native.argv[0], native.argv[1], prefix + native.argv[2], *native.argv[3:])
     return replace(native, argv=("timeout", "--signal=TERM", "--kill-after=10s",
-                                 "1800s", *argv))
+                                 f"{native.timeout_seconds:g}s", *argv))
 
 
 def main():

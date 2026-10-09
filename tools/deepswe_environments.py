@@ -1,6 +1,7 @@
 """Explicit, verified runtime registrations; never overwrite published task pins.
 
-Supported profiles are Testem's four-file service and Cliffy's image-only cache.
+Profiles cover Testem's public-file service, Cliffy's cache supplement and
+GoReleaser's cache relocation/seeding.
 A registry entry cannot inject shell commands, hostname mappings, resource
 changes or arbitrary evidence paths. Explicit --image diagnostics bypass registrations.
 """
@@ -13,15 +14,19 @@ from pathlib import Path
 
 from agentless_ml.validation import DockerTestRunner
 from run_testem_qunit_public_test import OfflineAssetRunner, SUPERVISOR
+from run_goreleaser_cache_diagnostic import cache_command
 
 REGISTRY = Path(__file__).resolve().parents[1] / 'experiments/deepswe/environments.json'
 TASK = 'testem-per-launcher-reports'
 CONDITION = 'modified environment: offline public-asset delivery'
 CLIFFY = 'cliffy-config-file-parsing'
+GORELEASER = 'goreleaser-retry-publish-auditing'
 PROFILES = {
     TASK: ('testem-offline-qunit-v1', CONDITION, 'testem_qunit_todo_full_schedule_2026_10_10.json'),
     CLIFFY: ('cliffy-verified-cache-v1', 'modified environment: verified offline dependency cache',
              'cliffy_public_baseline_2026_10_09.json'),
+    GORELEASER: ('goreleaser-relocated-cache-v1', 'modified environment: relocated Go caches with writable build seed',
+                'goreleaser_cache_2026_10_08.json'),
 }
 KEYS = {'profile', 'condition', 'base_commit', 'published_image_id',
         'image', 'image_id', 'verification', 'reason'}
@@ -48,6 +53,9 @@ def load_environments(path=REGISTRY):
         evidence = json.loads((path.parent / entry['verification']).read_text(encoding='utf-8'))
         if task_id == CLIFFY:
             _verify_cliffy(entry, evidence, path.parent)
+            continue
+        if task_id == GORELEASER:
+            _verify_goreleaser(entry, evidence)
             continue
         result = evidence['result']
         if (result['image_id'] != entry['image_id'] or result['base_commit'] != entry['base_commit']
@@ -87,6 +95,26 @@ def environment_for(task, entries):
     return entry
 
 
+def _verify_goreleaser(entry, evidence):
+    result = evidence['full_attempt']
+    # Readiness needs a usable passing inventory, not an all-green baseline.
+    # Preserve the recorded FAIL/exit 1 and all failed/skipped cases as such.
+    if (evidence['task_id'] != GORELEASER or evidence['image_id'] != entry['image_id']
+            or evidence['parent_image_id'] != entry['published_image_id']
+            or evidence['base_commit'] != entry['base_commit']
+            or evidence['condition'] != 'substituted_environment_cache_relocation_diagnostic'
+            or evidence['runner'] != 'go' or evidence['targets'] != ['./...']
+            or evidence['module_check']['status'] != 'pass'
+            or (result['status'], result['exit_code']) not in (('pass', 0), ('fail', 1))
+            or result['passed'] < 1 or result['failed'] < 0 or result['skipped'] < 0
+            or result['report_ids'] != result['passed'] + result['failed'] + result['skipped']
+            or evidence['network'] != 'none' or not evidence['root_read_only']
+            or evidence['memory_mb'] != 8192 or evidence['cpus'] != 2
+            or evidence['tmpfs_mb'] != 4096 or evidence['pids_limit'] != 2048
+            or evidence['timeout_seconds'] != 1800 or evidence['automatic_retry']):
+        raise ValueError('GoReleaser registration requires the matching completed report-bearing baseline and module check')
+
+
 def runtime_task(task, environment):
     if environment is None:
         return task
@@ -96,6 +124,8 @@ def runtime_task(task, environment):
 def runtime_command(command, environment):
     if environment is None or environment['profile'] == 'cliffy-verified-cache-v1':
         return command
+    if environment['profile'] == 'goreleaser-relocated-cache-v1':
+        return cache_command(command)
     # Keep caller-provided targets, report, timeout and failure codes intact.
     # As with the verified full run, only the writable HOME prefix and owned
     # public-file service surround the original Mocha command.
