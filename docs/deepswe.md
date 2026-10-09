@@ -490,7 +490,7 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
 ## What is not implemented
 
 Current readiness is **104/113**, with nine tasks remaining after
-[Adaptix's unchanged baseline refresh](deepswe-adaptix-baseline-2026-10-10.md).
+[Adaptix's baseline and candidate-helper fix](deepswe-adaptix-helper-imports-2026-10-10.md).
 Of those ready tasks, 101 use their published pinned images; Testem, Cliffy
 and GoReleaser use explicitly labelled, verified modified environments. The original corpus
 pins and held-out scorer are unchanged. The chronology below retains earlier
@@ -498,10 +498,10 @@ counts as historical checkpoints.
 
 Adaptix's submodule refusal was stale: the current workspace provider leaves
 its performance-data submodule uninitialized and the normal public schedule
-runs without it. The refresh produced 2,824 passes, 28 skips and two collection
-errors, retaining exit 1. The errors expose image-installed `tests_helpers`
-shadowing candidate helpers; survey eligibility is not a claim that this
-candidate-import issue is resolved.
+runs without it. A task-specific import-path fix now selects candidate helpers
+and verifies their origins before pytest. The fresh run passed with 2,824 passes,
+28 skips, no collection errors and exit 0. Some parametrized IDs contain process
+addresses; their cross-run stability remains a separate validation concern.
 
 - **Runner and environment gaps.** The [4 October review](deepswe-runner-review-2026-10-04.md)
   recovered four of the six missing-runner tasks. The subsequent

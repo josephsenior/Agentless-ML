@@ -1,0 +1,43 @@
+{
+  "condition": "official baseline with candidate helper import path and fail-closed origin preflight",
+  "task_id": "adaptix-name-mapping-aliases",
+  "base_commit": "a691069fcadf9131e5f7a5a130a022dc678f3e1d",
+  "image_id": "sha256:528654670f3c591e6491fc6fa01a0b8905bc8dee1b0557c5e76231bcc206f8fe",
+  "runner": "adaptix-pytest",
+  "status": "ready",
+  "validation_status": "pass",
+  "exit_code": 0,
+  "tests": 2852,
+  "passed": 2824,
+  "failed": 0,
+  "collection_errors": 0,
+  "skipped": 28,
+  "duration_seconds": 20.5962568000105,
+  "survey_seconds": 23.3,
+  "ready": 104,
+  "total": 113,
+  "submodule_initialized": false,
+  "verified_imports": {
+    "adaptix": "/tmp/work/src/adaptix/__init__.py",
+    "tests_helpers": "/tmp/work/tests/tests_helpers/tests_helpers/__init__.py",
+    "tests_helpers.misc": "/tmp/work/tests/tests_helpers/tests_helpers/misc.py",
+    "tests_helpers.model_spec": "/tmp/work/tests/tests_helpers/tests_helpers/model_spec.py"
+  },
+  "comparison_to_previous_attempt": {
+    "exact_matching_passed_ids": 2750,
+    "address_varying_passed_ids_per_run": 74,
+    "address_normalized_unique_passed_ids_per_run": 2824,
+    "address_normalized_passed_sets_equal": true,
+    "exact_skipped_sets_equal": true,
+    "production_reports_modified": false,
+    "remaining_caveat": "Process addresses in public parametrization IDs need separate stable regression-matching assessment"
+  },
+  "host_checks": {"passed": 96, "skipped": 4},
+  "artifacts": "../output/deepswe-survey/runs/adaptix-name-mapping-aliases/logs/agentless-ml-a631aefe3e48498f9cd9c923ec2cb570",
+  "artifact_sha256": {
+    "execution.json": "80d6a4b2bb2bd8d78c2c11acc2bce22998e75e66f3f66d2c1df683935b8f9633",
+    "report.xml": "aa18f1e0efc1bd44775cf45d64a7407ecd21e7774784b756bf85d419795a9bd7",
+    "stdout.log": "b59f76e6130b9d20b7abc5ea50569cea9f23381e36e8e89354228fe69b41cb1d",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

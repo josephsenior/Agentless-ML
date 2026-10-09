@@ -147,6 +147,34 @@ PYTEST = DeepSWETestCommand(
     report=TestReport(ReportFormat.JUNIT_XML, "/tmp/report.xml"),
 )
 
+# Adaptix installs its nested test-helper package in editable mode as well as
+# src/adaptix. Both must follow the candidate, not the image's /app checkout.
+_ADAPTIX_IMPORT_CHECK = """
+import importlib
+from pathlib import Path
+for name, directory in (
+    ("adaptix", "/tmp/work/src/adaptix"),
+    ("tests_helpers", "/tmp/work/tests/tests_helpers/tests_helpers"),
+    ("tests_helpers.misc", "/tmp/work/tests/tests_helpers/tests_helpers"),
+    ("tests_helpers.model_spec", "/tmp/work/tests/tests_helpers/tests_helpers"),
+):
+    module = importlib.import_module(name)
+    if not Path(module.__file__).resolve().is_relative_to(Path(directory).resolve()):
+        raise SystemExit("refusing non-candidate import: " + name)
+    print("candidate import verified: " + name + " -> " + module.__file__)
+""".strip()
+
+ADAPTIX_PYTEST = DeepSWETestCommand(
+    script=(
+        f"cd {WORK} || exit 125; "
+        f"export PYTHONPATH={WORK}/tests/tests_helpers:{WORK}/src:{WORK}; "
+        f"python -c '{_ADAPTIX_IMPORT_CHECK}' || exit 125; "
+        "python -m pytest -p no:cacheprovider "
+        '--continue-on-collection-errors --junitxml=/tmp/report.xml "$@"'
+    ),
+    report=PYTEST.report,
+)
+
 _NUMBA_IMPORT_CHECK = """
 import importlib
 from pathlib import Path
@@ -720,6 +748,7 @@ TEST_COMMANDS = {
     "go": GO,
     "go-module": GO_MODULE,
     "pytest": PYTEST,
+    "adaptix-pytest": ADAPTIX_PYTEST,
     "numba-runtests": NUMBA_RUNTESTS,
     "igel-pytest": IGEL_PYTEST,
     "skrub-pytest": SKRUB_PYTEST,

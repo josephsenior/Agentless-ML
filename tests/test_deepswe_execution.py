@@ -18,6 +18,7 @@ from agentless_ml.adapters.benchmarks.deepswe_execution import (
     _NODE_PACKAGE_MERGE,
     _LANGCHAIN_IMPORT_CHECK,
     _NUMBA_IMPORT_CHECK,
+    _ADAPTIX_IMPORT_CHECK,
     deepswe_test_command,
     deepswe_test_plan,
     deepswe_test_runner,
@@ -115,6 +116,49 @@ def test_eicrud_prepares_candidate_clients_and_a_real_local_database(tmp_path):
     assert plan.command().report == TEST_COMMANDS['jest'].report
     with pytest.raises(ValueError, match='does not support narrowed targets'):
         deepswe_test_command('eicrud-mongo', ('test/core/core.security.spec.ts',))
+
+
+def test_adaptix_uses_candidate_helpers_without_changing_pytest(tmp_path):
+    override = load_test_overrides(OVERRIDES)["adaptix-name-mapping-aliases"]
+    plan = deepswe_test_plan("python", tmp_path, override)
+    assert plan.runner == "adaptix-pytest" and plan.targets == ()
+    command = plan.command(timeout_seconds=123)
+    text = command.argv[2]
+    assert "export PYTHONPATH=/tmp/work/tests/tests_helpers:/tmp/work/src:/tmp/work;" in text
+    assert text.split("python -m pytest", 1)[1] == script("pytest").split("python -m pytest", 1)[1]
+    assert text.index("refusing non-candidate import") < text.index("python -m pytest")
+    assert "|| exit 125" in text
+    assert command.report == TEST_COMMANDS["pytest"].report
+    assert command.failure_exit_codes == (1,) and command.timeout_seconds == 123
+    assert deepswe_test_command("adaptix-pytest", ("tests/test_one.py",)).argv[4:] == ("tests/test_one.py",)
+    assert "tests_helpers" not in script("pytest")
+    assert "submodule" not in text and "pip install" not in text
+
+
+@pytest.mark.parametrize("image_package", [None, "adaptix", "tests_helpers"])
+def test_adaptix_import_guard_rejects_image_source_and_helpers(tmp_path, image_package):
+    candidate = tmp_path / "candidate"
+    paths = []
+    for name, directory in (("adaptix", "src"), ("tests_helpers", "tests/tests_helpers")):
+        parent = tmp_path / "image" / directory if image_package == name else candidate / directory
+        package_path = parent / name
+        package_path.mkdir(parents=True)
+        (package_path / "__init__.py").write_text("", encoding="utf-8")
+        if name == "tests_helpers":
+            for module in ("misc", "model_spec"):
+                (package_path / (module + ".py")).write_text("", encoding="utf-8")
+        paths.append(str(parent))
+    guard = _ADAPTIX_IMPORT_CHECK.replace("/tmp/work", candidate.as_posix())
+    result = subprocess.run(
+        [sys.executable, "-c", guard], cwd=tmp_path,
+        env=dict(os.environ, PYTHONPATH=os.pathsep.join(paths)),
+        capture_output=True, text=True, check=False,
+    )
+    assert result.returncode == (1 if image_package else 0)
+    if image_package:
+        assert "refusing non-candidate import: " + image_package in result.stderr
+    else:
+        assert "candidate import verified: tests_helpers.model_spec" in result.stdout
 
 
 def test_igel_changes_directory_before_import_without_changing_pytest(tmp_path):
@@ -560,6 +604,7 @@ def test_an_override_can_replace_the_derived_targets(tmp_path):
 def test_the_checked_in_overrides_are_well_formed_and_explained():
     overrides = load_test_overrides(OVERRIDES)
     assert set(overrides) == {
+        "adaptix-name-mapping-aliases",
         "numba-stencil-boundary-modes",
         "eicrud-keyset-pagination-cursor",
         "skrub-duration-encoding",

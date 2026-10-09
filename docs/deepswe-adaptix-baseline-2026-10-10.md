@@ -1,5 +1,9 @@
 # Adaptix: unchanged public baseline
 
+This is the first, unchanged attempt. The subsequent
+[candidate-helper fix and fresh baseline](deepswe-adaptix-helper-imports-2026-10-10.md)
+resolved both collection errors, retaining all 2,824 passes and 28 skips.
+
 Adaptix now supplies a passing regression inventory: **2,824 passed, 28 skipped
 and two collection errors**, across 2,854 report IDs. The actual result is
 **FAIL, exit 1**, not an all-green suite. The official survey marks it ready

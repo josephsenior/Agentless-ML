@@ -1,4 +1,8 @@
 {
+  "adaptix-name-mapping-aliases": {
+    "runner": "adaptix-pytest",
+    "reason": "The public requirements install tests/tests_helpers as an editable package. Prepend that candidate package directory to PYTHONPATH alongside candidate src and root, and reject image-resolved Adaptix/helper imports before the unchanged default pytest schedule. Do not initialize the performance-data submodule, install dependencies, suppress collection errors or alter tests, image or Docker protections."
+  },
   "numba-stencil-boundary-modes": {
     "runner": "numba-runtests",
     "reason": "Build native extensions with the documented python setup.py build_ext --inplace and verify candidate imports. Run the public runtests.py entry point with its default full schedule and native loader, including CUDA availability checks; generic pytest bypasses those hooks. Record real unittest outcomes through the existing BasicTestRunner without changing discovery, ordering or assertions. Do not copy image extensions or patched source; retain installed dependencies, offline execution and Docker limits."
