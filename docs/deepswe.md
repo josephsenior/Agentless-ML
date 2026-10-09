@@ -613,6 +613,10 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   used one build worker and reached its cutoff without a space error; highest
   sampled scratch use was 1.88 GiB. Compilation was incomplete, so this is not
   proof the full graph fits, a baseline, or a readiness change.
+  The approved [full compile attempt](deepswe-kgateway-full-compile-2026-10-09.md)
+  encountered a 77-minute monitoring gap consistent with host suspension and
+  was stopped. It provides no usable uninterrupted full-build timing result;
+  no automatic repeat or readiness change was made.
   The [Pwntools doctest review](deepswe-pwntools-doctest-2026-10-07.md) replaces
   its incorrect pytest invocation with the public Sphinx runner. The published
   image lacks Sphinx; a separately augmented diagnostic also exposed missing

@@ -16,6 +16,19 @@ def test_compile_window_has_no_execution_or_package_filter(monkeypatch):
     assert command.timeout_seconds == 1800
 
 
+def test_full_compile_uses_existing_outer_cap_without_short_cutoff(monkeypatch):
+    monkeypatch.syspath_prepend(str(Path(__file__).resolve().parents[1] / "tools"))
+    from run_kgateway_compile_diagnostic import diagnostic_command
+    command = diagnostic_command(full=True)
+    script = command.argv[2]
+    assert "go test -c -p 1 -o /dev/null ./..." in script
+    assert "timeout --" not in script
+    assert "300s" not in script
+    assert "-run" not in script and "-exec" not in script
+    assert command.timeout_seconds == 1800
+    assert command.report is None and command.counted_test_ids is None
+
+
 def test_sampler_uses_unchanged_limits_without_numba_initialization(monkeypatch, tmp_path):
     monkeypatch.syspath_prepend(str(Path(__file__).resolve().parents[1] / "tools"))
     import run_kgateway_compile_diagnostic as diagnostic
