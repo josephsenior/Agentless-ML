@@ -489,10 +489,10 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
 
 ## What is not implemented
 
-Current readiness is **101/113**, with 12 tasks remaining after
-[Testem's registered-environment refresh](deepswe-testem-registered-readiness-2026-10-10.md).
-Of those ready tasks, 100 use their published pinned images and Testem uses
-an explicitly labelled, verified modified environment. The original corpus
+Current readiness is **102/113**, with 11 tasks remaining after
+[Cliffy's registered-cache refresh](deepswe-cliffy-registered-readiness-2026-10-10.md).
+Of those ready tasks, 100 use their published pinned images; Testem and Cliffy
+use explicitly labelled, verified modified environments. The original corpus
 pins and held-out scorer are unchanged. The chronology below retains earlier
 counts as historical checkpoints.
 
@@ -611,6 +611,11 @@ counts as historical checkpoints.
   No tests were filtered, no failures hidden and no runtime protections changed.
   This completes the labelled supplemented-image baseline, not a canonical
   survey update; the original-image count stays **100/113**.
+  The later approved [cache registration and official refresh](deepswe-cliffy-registered-readiness-2026-10-10.md)
+  rechecked all 1,067 saved artifacts and marked Cliffy ready after another
+  unchanged full run passed with 878 normalized IDs. Overall readiness is now
+  **102/113**, including two explicitly registered modified environments;
+  original-image readiness remains 100/113.
   [KGateway's build-space inspection](deepswe-kgateway-space-review-2026-10-09.md)
   confirms compiler ENOSPC on our 4-GiB scratch mount. Its Go 1.26.1 toolchain
   and 2.1-GB module cache are already accessible outside `/tmp`; the image's

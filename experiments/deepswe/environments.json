@@ -8,5 +8,15 @@
     "image_id": "sha256:e12cec1885154964e390345726e5ae53955831965fc1340f1cd5b9f11220328f",
     "verification": "testem_qunit_todo_full_schedule_2026_10_10.json",
     "reason": "The published image lacks a working Firefox setup and the public fixtures require exact QUnit 1.20.0 and 2.9.2 CDN assets. Register the separately verified Firefox/four-asset image, HOME-only writable path and loopback-only public-file service after its unchanged full public schedule passed. Keep the original corpus image pin, both public test globs, assertions, report contract and Docker limits unchanged. This is a labelled modified environment, not published-image parity or benchmark scoring."
+  },
+  "cliffy-config-file-parsing": {
+    "profile": "cliffy-verified-cache-v1",
+    "condition": "modified environment: verified offline dependency cache",
+    "base_commit": "132a437c40cffbdfbe474ca808c8debde59e2633",
+    "published_image_id": "sha256:0a8dd8f1270ec4bb88efadad3021762e1d07274f686276c8a484d26a00bd91b5",
+    "image": "sha256:9e49eb0e15b12e2fbded70acbcb9a4f0948bbdbc731539299e0e99bd68ff27c9",
+    "image_id": "sha256:9e49eb0e15b12e2fbded70acbcb9a4f0948bbdbc731539299e0e99bd68ff27c9",
+    "verification": "cliffy_public_baseline_2026_10_09.json",
+    "reason": "The published Deno cache lacks required public JSR dependencies. Register the separately checksum-verified cache image after its offline import graph and unchanged full public schedule passed. Keep Deno 2.0.0, original cache entries, candidate source, default full discovery, cached-only execution, report normalization and Docker limits unchanged. Added package indexes expose only reviewed verified versions; this curated cache is an explicit modified environment, not published-image parity. No service, hostname mapping or command wrapper is required."
   }
 }

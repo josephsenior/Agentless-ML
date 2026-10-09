@@ -80,3 +80,8 @@ Cliffy's setup blocker is resolved for this labelled environment. Its image
 substitution and curated dependency availability must remain explicit in any
 later experimental protocol; the published image and corpus pin have not been
 replaced. Next setup review: KGateway's temporary build-space failure.
+
+Follow-up: the approved [registration and official survey refresh](deepswe-cliffy-registered-readiness-2026-10-10.md)
+completed after rechecking the pinned image and dependency artifacts. Cliffy
+is now ready in its explicitly labelled cache environment; overall readiness
+is 102/113. This earlier diagnostic record and original corpus pin are unchanged.

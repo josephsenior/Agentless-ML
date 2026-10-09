@@ -1,0 +1,154 @@
+{
+  "condition": "official readiness survey with explicitly registered modified Cliffy cache environment",
+  "previous_ready": 101,
+  "ready": 102,
+  "total": 113,
+  "registered_environment_ready": 2,
+  "published_image_ready": 100,
+  "latest_status_counts": {
+    "harness_error": 3,
+    "out_of_memory": 2,
+    "ready": 102,
+    "timeout": 1,
+    "unsupported_repository": 5
+  },
+  "remaining_tasks": [
+    {
+      "task_id": "adaptix-name-mapping-aliases",
+      "status": "unsupported_repository"
+    },
+    {
+      "task_id": "goreleaser-retry-publish-auditing",
+      "status": "harness_error"
+    },
+    {
+      "task_id": "helm-array-merge-strategies",
+      "status": "unsupported_repository"
+    },
+    {
+      "task_id": "helm-unified-manifest-stream",
+      "status": "unsupported_repository"
+    },
+    {
+      "task_id": "kgateway-consistent-hash-policy",
+      "status": "harness_error"
+    },
+    {
+      "task_id": "numba-stencil-boundary-modes",
+      "status": "timeout"
+    },
+    {
+      "task_id": "pebble-durability-wait-apis",
+      "status": "out_of_memory"
+    },
+    {
+      "task_id": "pwntools-tube-multiplexing",
+      "status": "harness_error"
+    },
+    {
+      "task_id": "tomlkit-toml-table-converters",
+      "status": "unsupported_repository"
+    },
+    {
+      "task_id": "wasmi-trap-coredumps",
+      "status": "unsupported_repository"
+    },
+    {
+      "task_id": "wazero-multi-module-snapshots",
+      "status": "out_of_memory"
+    }
+  ],
+  "registration_review": {
+    "manifest_sha256": "2ca1b8999c367e7fd581e189fb7f2713b85404c866c120ae971a735c58d72be6",
+    "version_records": 29,
+    "verified_source_files": 1011,
+    "saved_artifacts_rehashed": 1067,
+    "saved_bytes_rehashed": 4994584,
+    "parent_layers_retained": true,
+    "image_environment_and_user_unchanged": true,
+    "source_or_deno_binary_changed": false,
+    "rebuild_or_download": false,
+    "version_selection_is_not_historical_resolution": true,
+    "package_indexes_curated_to_verified_versions": true
+  },
+  "previous_cliffy_record": {
+    "task_id": "cliffy-config-file-parsing",
+    "language": "typescript",
+    "base_commit": "132a437c40cffbdfbe474ca808c8debde59e2633",
+    "status": "harness_error",
+    "runner": "deno",
+    "targets": [],
+    "override": "deno.json declares deno test with subprocess, environment, read and local write permissions. Use its built-in JUnit reporter and the published dependency cache, copied to writable temporary storage; cached-only preserves offline execution.",
+    "exit_code": 1,
+    "tests": 0,
+    "passed": 0,
+    "failed": 0,
+    "skipped": 0,
+    "image_id": "sha256:0a8dd8f1270ec4bb88efadad3021762e1d07274f686276c8a484d26a00bd91b5",
+    "message": "declared test report was not written: /tmp/report.xml",
+    "artifacts": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\output\\deepswe-survey\\cliffy-config-file-parsing\\logs\\agentless-ml-a55f4d94eea3446183c6697dd957f9a1",
+    "seconds": 14.0
+  },
+  "survey_record": {
+    "task_id": "cliffy-config-file-parsing",
+    "language": "typescript",
+    "base_commit": "132a437c40cffbdfbe474ca808c8debde59e2633",
+    "environment": {
+      "profile": "cliffy-verified-cache-v1",
+      "condition": "modified environment: verified offline dependency cache",
+      "base_commit": "132a437c40cffbdfbe474ca808c8debde59e2633",
+      "published_image_id": "sha256:0a8dd8f1270ec4bb88efadad3021762e1d07274f686276c8a484d26a00bd91b5",
+      "image": "sha256:9e49eb0e15b12e2fbded70acbcb9a4f0948bbdbc731539299e0e99bd68ff27c9",
+      "image_id": "sha256:9e49eb0e15b12e2fbded70acbcb9a4f0948bbdbc731539299e0e99bd68ff27c9",
+      "verification": "cliffy_public_baseline_2026_10_09.json",
+      "reason": "The published Deno cache lacks required public JSR dependencies. Register the separately checksum-verified cache image after its offline import graph and unchanged full public schedule passed. Keep Deno 2.0.0, original cache entries, candidate source, default full discovery, cached-only execution, report normalization and Docker limits unchanged. Added package indexes expose only reviewed verified versions; this curated cache is an explicit modified environment, not published-image parity. No service, hostname mapping or command wrapper is required."
+    },
+    "status": "ready",
+    "runner": "deno",
+    "targets": [],
+    "override": "deno.json declares deno test with subprocess, environment, read and local write permissions. Use its built-in JUnit reporter and the published dependency cache, copied to writable temporary storage; cached-only preserves offline execution.",
+    "exit_code": 0,
+    "tests": 878,
+    "passed": 878,
+    "failed": 0,
+    "skipped": 0,
+    "image_id": "sha256:9e49eb0e15b12e2fbded70acbcb9a4f0948bbdbc731539299e0e99bd68ff27c9",
+    "docker_protections": {
+      "NetworkMode": "none",
+      "ReadonlyRootfs": true,
+      "CapDrop": [
+        "ALL"
+      ],
+      "SecurityOpt": [
+        "no-new-privileges"
+      ],
+      "Memory": 8589934592,
+      "MemorySwap": 8589934592,
+      "NanoCpus": 2000000000,
+      "PidsLimit": 2048,
+      "Tmpfs": {
+        "/tmp": "rw,exec,nosuid,nodev,size=4096m,mode=1777"
+      },
+      "Privileged": false,
+      "ExtraHosts": null,
+      "PortBindings": {}
+    },
+    "message": "",
+    "artifacts": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\output\\deepswe-survey\\runs\\cliffy-config-file-parsing\\logs\\agentless-ml-29a5344124f546cfba12aa6d0a3a8b65",
+    "seconds": 68.5
+  },
+  "execution_duration_seconds": 65.09295750000456,
+  "raw_testcase_counts": {
+    "total": 898,
+    "passed": 898,
+    "skipped": 0,
+    "failed": 0
+  },
+  "focused_host_checks_passed": 51,
+  "report_sha256": "54846fef6b5fc2d4babd806d703a53bdd2643451f5a7387c75f4d92f84f07951",
+  "survey_file": "../output/deepswe-survey/survey.jsonl",
+  "corpus_pin_modified": false,
+  "public_command_modified": false,
+  "held_out_tests_or_solution_used": false,
+  "further_retry_started": false
+}
