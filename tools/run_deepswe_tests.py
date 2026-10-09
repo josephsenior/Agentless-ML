@@ -12,8 +12,9 @@ from `experiments/deepswe/test_overrides.json`; arguments after `--` replace
 that plan's targets. This runs the unpatched checkout: it is the baseline a
 regression schedule is built from. No model is called.
 
-By default the task's published image is used, and refused unless its ID matches
-the digest pinned in `corpus_pin.json`. `--image` substitutes another image.
+By default the published image is used unless environments.json registers a
+verified, explicitly labelled alternative. Both paths enforce immutable image
+pins. `--image` is a separate diagnostic substitution and bypasses registration.
 """
 
 from __future__ import annotations
@@ -32,8 +33,10 @@ from agentless_ml.adapters.benchmarks import (
     deepswe_test_plan,
     load_test_overrides,
 )
-from agentless_ml.validation import DockerTestRunner
 from agentless_ml.workspace import LocalGitWorkspaceProvider
+from deepswe_environments import (
+    environment_for, load_environments, runtime_task, runtime_command, runtime_runner,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 PIN = ROOT / "experiments" / "deepswe" / "corpus_pin.json"
@@ -65,6 +68,8 @@ def main() -> int:
     )
     overrides = load_test_overrides(PIN.parent / "test_overrides.json")
     override = overrides.get(task.instance_id)
+    environment = None if arguments.image else environment_for(task, load_environments())
+    selected_task = runtime_task(task, environment)
 
     artifacts = arguments.artifacts / task.instance_id
     shutil.rmtree(artifacts, ignore_errors=True)
@@ -75,21 +80,22 @@ def main() -> int:
     )
     # The image's own user owns the toolchain caches under /root that these
     # suites need; every other container restriction stays in place.
-    runner = DockerTestRunner(
-        arguments.image or task.container_image,
+    runner = runtime_runner(
+        arguments.image or selected_task.container_image,
         artifacts / "logs",
+        environment,
         memory_mb=task.memory_megabytes,
         cpus=2,
         tmpfs_mb=override.get("tmpfs_mb", 4096) if override else 4096,
         pids_limit=2048,
         run_as_image_user=True,
     )
-    if not arguments.image and runner.image_id != task.container_digest:
+    if not arguments.image and runner.image_id != selected_task.container_digest:
         raise SystemExit(
             f"{task.container_image} is {runner.image_id}, "
-            f"not the pinned {task.container_digest}"
+            f"not the pinned {selected_task.container_digest}"
         )
-    source = "substituted" if arguments.image else "published, matches pin"
+    source = environment['condition'] if environment else ("substituted" if arguments.image else "published, matches pin")
     with provider.create() as workspace:
         plan = deepswe_test_plan(task.language, workspace.path, override)
         # Targets on the command line replace the task's derived plan.
@@ -97,10 +103,14 @@ def main() -> int:
         command = deepswe_test_command(
             plan.runner, targets, timeout_seconds=arguments.timeout_seconds
         )
+        command = runtime_command(command, environment)
         print(f"{task.instance_id} [{task.language}, {plan.runner}] at {task.base_commit[:12]}")
         print(f"targets {list(targets)}")
         print(f"image {runner.image_reference} ({runner.image_id[:19]}, {source}) as {runner.user}")
         execution = runner.run(workspace.path, command)
+    if environment is not None:
+        (Path(execution.artifact_directory) / 'environment.json').write_text(
+            json.dumps(environment, indent=2) + '\n', encoding='utf-8')
     result = execution.result
     counts = Counter(case.status.value for case in result.test_cases)
     print(

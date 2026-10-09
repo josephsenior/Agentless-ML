@@ -10,11 +10,11 @@ failures among the tests that remain. No model is called.
         --experiment actionlint_action_pinning \\
         --workspace-root ../runs/workspaces --artifact-root ../runs/artifacts
 
-By default the task runs in its published image, which must already be pulled,
-and the controller refuses it unless its ID matches the digest pinned in
-``corpus_pin.json``. ``--image`` substitutes another image, such as a local
-build; the task is then rewritten to that reference and its ID, and the
-substitution is printed and kept in the run's ``task.json``.
+By default the published image is used unless environments.json registers a
+verified, explicitly labelled alternative. Both paths enforce immutable pins.
+``--image`` is a separate diagnostic substitution and bypasses registration.
+Actual image IDs are kept in task.json; registered setup provenance is also
+written to environment.json and printed in the run summary.
 """
 
 from __future__ import annotations
@@ -33,9 +33,12 @@ from agentless_ml.adapters.benchmarks import (
     deepswe_test_plan,
     load_test_overrides,
 )
-from agentless_ml.validation import DockerTestRunner, RegressionTest
+from agentless_ml.validation import RegressionTest
 from agentless_ml.workflow import FixedWorkflowController, RecordedStageResponses
 from agentless_ml.workspace import LocalGitWorkspaceProvider
+from deepswe_environments import (
+    environment_for, load_environments, runtime_task, runtime_command, runtime_runner,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 EXPERIMENTS = ROOT / "experiments" / "deepswe"
@@ -94,10 +97,13 @@ def main() -> None:
     )
     overrides = load_test_overrides(EXPERIMENTS / "test_overrides.json")
     override = overrides.get(published.instance_id)
+    environment = None if args.image else environment_for(published, load_environments())
+    selected_task = runtime_task(published, environment)
 
-    runner = DockerTestRunner(
-        args.image or published.container_image,
+    runner = runtime_runner(
+        args.image or selected_task.container_image,
         args.artifact_root / "unused-default-executions",
+        environment,
         memory_mb=published.memory_megabytes,
         cpus=2,
         tmpfs_mb=override.get("tmpfs_mb", 4096) if override else 4096,
@@ -111,7 +117,7 @@ def main() -> None:
             container_digest=runner.image_id,
         )
         if args.image
-        else published
+        else selected_task
     )
     suite = spec.get("suite", {})
     source_repository = args.repositories / task.instance_id
@@ -126,11 +132,11 @@ def main() -> None:
     regression_tests = (
         RegressionTest(
             suite.get("test_id", "suite"),
-            deepswe_test_command(
+            runtime_command(deepswe_test_command(
                 test_runner,
                 targets,
                 timeout_seconds=suite.get("timeout_seconds", 1800),
-            ),
+            ), environment),
         ),
     )
 
@@ -148,6 +154,9 @@ def main() -> None:
     ).run(_responses(experiment))
 
     directory = Path(result.artifact_directory)
+    if environment is not None:
+        (directory / 'environment.json').write_text(
+            json.dumps(environment, indent=2) + '\n', encoding='utf-8')
     selection = json.loads((directory / "regression-selection.json").read_text(encoding="utf-8"))
     print(
         json.dumps(
@@ -159,7 +168,8 @@ def main() -> None:
                     "image_id": runner.image_id,
                     "published": published.container_image,
                     "pinned_digest": published.container_digest,
-                    "substituted": bool(args.image),
+                    "substituted": bool(args.image or environment),
+                    "registered_environment": environment,
                 },
                 "test_runner": test_runner,
                 "baseline_passing": len(selection["passing_ids"]),

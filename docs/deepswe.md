@@ -489,6 +489,13 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
 
 ## What is not implemented
 
+Current readiness is **101/113**, with 12 tasks remaining after
+[Testem's registered-environment refresh](deepswe-testem-registered-readiness-2026-10-10.md).
+Of those ready tasks, 100 use their published pinned images and Testem uses
+an explicitly labelled, verified modified environment. The original corpus
+pins and held-out scorer are unchanged. The chronology below retains earlier
+counts as historical checkpoints.
+
 - **Runner and environment gaps.** The [4 October review](deepswe-runner-review-2026-10-04.md)
   recovered four of the six missing-runner tasks. The subsequent
   [Yjs reporting check](deepswe-yjs-reporting-2026-10-04.md) recovered a fifth,
@@ -686,8 +693,11 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   The subsequently approved
   [four-asset full schedule](deepswe-testem-four-asset-full-schedule-2026-10-10.md)
   passed in 61.734 seconds: 497 passed, three skipped and zero failed after
-  normalization. No canonical configuration or readiness update followed;
-  this remains a separately labelled environment.
+  normalization. The subsequent
+  [registration and official survey refresh](deepswe-testem-registered-readiness-2026-10-10.md)
+  reran the full schedule successfully through the shared tools and marked
+  Testem ready, bringing overall readiness to **101/113**. Its environment
+  stays explicitly labelled as modified; the published image pin is unchanged.
   The [Pwntools doctest review](deepswe-pwntools-doctest-2026-10-07.md) replaces
   its incorrect pytest invocation with the public Sphinx runner. The published
   image lacks Sphinx; a separately augmented diagnostic also exposed missing

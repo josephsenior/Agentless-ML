@@ -1,0 +1,12 @@
+{
+  "testem-per-launcher-reports": {
+    "profile": "testem-offline-qunit-v1",
+    "condition": "modified environment: offline public-asset delivery",
+    "base_commit": "158f61ea91c9613d2011c41ee9be40ada1d7a307",
+    "published_image_id": "sha256:fce2e9ebe359b36b031e0b772159884795fc8383a047bc50eaa46c20fa06e4f6",
+    "image": "sha256:e12cec1885154964e390345726e5ae53955831965fc1340f1cd5b9f11220328f",
+    "image_id": "sha256:e12cec1885154964e390345726e5ae53955831965fc1340f1cd5b9f11220328f",
+    "verification": "testem_qunit_todo_full_schedule_2026_10_10.json",
+    "reason": "The published image lacks a working Firefox setup and the public fixtures require exact QUnit 1.20.0 and 2.9.2 CDN assets. Register the separately verified Firefox/four-asset image, HOME-only writable path and loopback-only public-file service after its unchanged full public schedule passed. Keep the original corpus image pin, both public test globs, assertions, report contract and Docker limits unchanged. This is a labelled modified environment, not published-image parity or benchmark scoring."
+  }
+}

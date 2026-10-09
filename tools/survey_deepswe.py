@@ -1,7 +1,7 @@
 """Check, task by task, that each DeepSWE task's own test suite runs.
 
-Before any workflow run, every task needs a sealed repository, its pinned
-published image, a test plan (runner and targets) and a baseline run of that
+Before any workflow run, every task needs a sealed repository, a pinned
+published or explicitly registered image, a test plan and a baseline run of that
 plan on the unpatched checkout that yields at least one passing test: those
 passing tests are the regression inventory. This tool does exactly that for
 many tasks and records the outcome of each, so the tasks that need attention
@@ -15,6 +15,9 @@ already has a result is skipped, so an interrupted survey resumes; ``--rerun``
 runs the selected tasks again, and the latest line for a task wins. Images are
 pulled only with ``--pull``, since all 113 amount to many gigabytes. Held-out
 ``tests/`` and ``solution/`` are never read.
+
+Verified modified environments are listed separately in environments.json;
+their provenance is recorded on each result, without changing corpus_pin.json.
 
 Outcomes:
   ready              the suite ran and at least one test passed
@@ -47,12 +50,14 @@ from agentless_ml.adapters.benchmarks import (
     load_test_overrides,
 )
 from agentless_ml.schemas import TestCaseStatus, TaskSpec, ValidationStatus
-from agentless_ml.validation import DockerTestRunner
 from agentless_ml.workspace import (
     LocalGitWorkspaceProvider,
     WorkspaceError,
     prepare_sealed_repository,
     verify_sealed_repository,
+)
+from deepswe_environments import (
+    environment_for, load_environments, runtime_task, runtime_command, runtime_runner,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -84,7 +89,7 @@ def _ensure_image(task: TaskSpec, pull: bool) -> tuple[str | None, str]:
     return image_id, ""
 
 
-def _survey(task, args, overrides) -> dict:
+def _survey(task, args, overrides, environments=None) -> dict:
     record = {"task_id": task.instance_id, "language": task.language,
               "base_commit": task.base_commit}
     started = time.monotonic()
@@ -102,7 +107,10 @@ def _survey(task, args, overrides) -> dict:
     except WorkspaceError as error:
         return done("repository_failed", message=str(error)[:500])
 
-    image_id, problem = _ensure_image(task, args.pull)
+    environment = environment_for(task, environments or {})
+    if environment is not None:
+        record['environment'] = environment
+    image_id, problem = _ensure_image(runtime_task(task, environment), args.pull)
     if image_id is None:
         status, _, message = problem.partition(": ")
         return done(status, message=message)
@@ -128,16 +136,18 @@ def _survey(task, args, overrides) -> dict:
             plan = deepswe_test_plan(task.language, workspace.path, override)
         except (ValueError, OSError) as error:
             return done("no_runner", message=str(error)[:500])
-        runner = DockerTestRunner(
-            task.container_image,
+        runner = runtime_runner(
+            image_id,
             artifacts / "logs",
+            environment,
             memory_mb=task.memory_megabytes,
             cpus=2,
             tmpfs_mb=override.get("tmpfs_mb", args.tmpfs_mb) if override else args.tmpfs_mb,
             pids_limit=2048,
             run_as_image_user=True,
         )
-        execution = runner.run(workspace.path, plan.command(timeout_seconds=args.timeout_seconds))
+        execution = runner.run(workspace.path, runtime_command(
+            plan.command(timeout_seconds=args.timeout_seconds), environment))
 
     result = execution.result
     counts = Counter(case.status.value for case in result.test_cases)
@@ -157,6 +167,10 @@ def _survey(task, args, overrides) -> dict:
         failed=counts.get(TestCaseStatus.FAILED.value, 0) + counts.get(TestCaseStatus.ERROR.value, 0),
         skipped=counts.get(TestCaseStatus.SKIPPED.value, 0),
         image_id=image_id,
+        docker_protections={key: runner.observed_host_config[key] for key in (
+            'NetworkMode', 'ReadonlyRootfs', 'CapDrop', 'SecurityOpt', 'Memory',
+            'MemorySwap', 'NanoCpus', 'PidsLimit', 'Tmpfs', 'Privileged',
+            'ExtraHosts', 'PortBindings')} if environment and runner.observed_host_config else None,
         message=execution.message[:500],
         artifacts=execution.artifact_directory,
     )
@@ -191,6 +205,7 @@ def main() -> int:
 
     pin = json.loads((EXPERIMENTS / "corpus_pin.json").read_text(encoding="utf-8"))
     overrides = load_test_overrides(EXPERIMENTS / "test_overrides.json")
+    environments = load_environments(EXPERIMENTS / 'environments.json')
     tasks = DeepSWEDataset(
         args.tasks_root,
         DeepSWEDatasetPin(pin["revision"], pin["agent_files_sha256"], pin["task_count"]),
@@ -209,7 +224,7 @@ def main() -> int:
             print(f"stopping: {free_gb:.0f} GB free, below --min-free-gb {args.min_free_gb:g}")
             break
         try:
-            record = _survey(task, args, overrides)
+            record = _survey(task, args, overrides, environments)
         except Exception as error:  # noqa: BLE001 - one task must not end a batch
             record = {
                 "task_id": task.instance_id,

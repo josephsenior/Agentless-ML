@@ -1,0 +1,156 @@
+{
+  "condition": "official readiness survey with explicitly registered modified Testem environment",
+  "previous_ready": 100,
+  "ready": 101,
+  "total": 113,
+  "registered_environment_ready": 1,
+  "published_image_ready": 100,
+  "latest_status_counts": {
+    "harness_error": 4,
+    "out_of_memory": 2,
+    "ready": 101,
+    "timeout": 1,
+    "unsupported_repository": 5
+  },
+  "remaining_tasks": [
+    {
+      "task_id": "adaptix-name-mapping-aliases",
+      "status": "unsupported_repository"
+    },
+    {
+      "task_id": "cliffy-config-file-parsing",
+      "status": "harness_error"
+    },
+    {
+      "task_id": "goreleaser-retry-publish-auditing",
+      "status": "harness_error"
+    },
+    {
+      "task_id": "helm-array-merge-strategies",
+      "status": "unsupported_repository"
+    },
+    {
+      "task_id": "helm-unified-manifest-stream",
+      "status": "unsupported_repository"
+    },
+    {
+      "task_id": "kgateway-consistent-hash-policy",
+      "status": "harness_error"
+    },
+    {
+      "task_id": "numba-stencil-boundary-modes",
+      "status": "timeout"
+    },
+    {
+      "task_id": "pebble-durability-wait-apis",
+      "status": "out_of_memory"
+    },
+    {
+      "task_id": "pwntools-tube-multiplexing",
+      "status": "harness_error"
+    },
+    {
+      "task_id": "tomlkit-toml-table-converters",
+      "status": "unsupported_repository"
+    },
+    {
+      "task_id": "wasmi-trap-coredumps",
+      "status": "unsupported_repository"
+    },
+    {
+      "task_id": "wazero-multi-module-snapshots",
+      "status": "out_of_memory"
+    }
+  ],
+  "previous_testem_record": {
+    "task_id": "testem-per-launcher-reports",
+    "language": "javascript",
+    "base_commit": "158f61ea91c9613d2011c41ee9be40ada1d7a307",
+    "status": "timeout",
+    "runner": "mocha",
+    "targets": [
+      "tests/*_tests.js",
+      "tests/**/*_tests.js"
+    ],
+    "override": null,
+    "exit_code": null,
+    "tests": 0,
+    "passed": 0,
+    "failed": 0,
+    "skipped": 0,
+    "image_id": "sha256:fce2e9ebe359b36b031e0b772159884795fc8383a047bc50eaa46c20fa06e4f6",
+    "message": "",
+    "artifacts": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\output\\deepswe-survey\\runs\\testem-per-launcher-reports\\logs\\agentless-ml-1c55a17278694982b307012a3f499008",
+    "seconds": 4964.4
+  },
+  "survey_record": {
+    "task_id": "testem-per-launcher-reports",
+    "language": "javascript",
+    "base_commit": "158f61ea91c9613d2011c41ee9be40ada1d7a307",
+    "environment": {
+      "profile": "testem-offline-qunit-v1",
+      "condition": "modified environment: offline public-asset delivery",
+      "base_commit": "158f61ea91c9613d2011c41ee9be40ada1d7a307",
+      "published_image_id": "sha256:fce2e9ebe359b36b031e0b772159884795fc8383a047bc50eaa46c20fa06e4f6",
+      "image": "sha256:e12cec1885154964e390345726e5ae53955831965fc1340f1cd5b9f11220328f",
+      "image_id": "sha256:e12cec1885154964e390345726e5ae53955831965fc1340f1cd5b9f11220328f",
+      "verification": "testem_qunit_todo_full_schedule_2026_10_10.json",
+      "reason": "The published image lacks a working Firefox setup and the public fixtures require exact QUnit 1.20.0 and 2.9.2 CDN assets. Register the separately verified Firefox/four-asset image, HOME-only writable path and loopback-only public-file service after its unchanged full public schedule passed. Keep the original corpus image pin, both public test globs, assertions, report contract and Docker limits unchanged. This is a labelled modified environment, not published-image parity or benchmark scoring."
+    },
+    "status": "ready",
+    "runner": "mocha",
+    "targets": [
+      "tests/*_tests.js",
+      "tests/**/*_tests.js"
+    ],
+    "override": null,
+    "exit_code": 0,
+    "tests": 500,
+    "passed": 497,
+    "failed": 0,
+    "skipped": 3,
+    "image_id": "sha256:e12cec1885154964e390345726e5ae53955831965fc1340f1cd5b9f11220328f",
+    "docker_protections": {
+      "NetworkMode": "none",
+      "ReadonlyRootfs": true,
+      "CapDrop": [
+        "ALL"
+      ],
+      "SecurityOpt": [
+        "no-new-privileges"
+      ],
+      "Memory": 8589934592,
+      "MemorySwap": 8589934592,
+      "NanoCpus": 2000000000,
+      "PidsLimit": 2048,
+      "Tmpfs": {
+        "/tmp": "rw,exec,nosuid,nodev,size=4096m,mode=1777"
+      },
+      "Privileged": false,
+      "ExtraHosts": [
+        "code.jquery.com:127.0.0.1"
+      ],
+      "PortBindings": {}
+    },
+    "message": "",
+    "artifacts": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\output\\deepswe-survey\\runs\\testem-per-launcher-reports\\logs\\agentless-ml-b8158d835b1a40b58c2f28f57a8cc1c5",
+    "seconds": 76.4
+  },
+  "execution_duration_seconds": 70.13999999999942,
+  "raw_testcase_counts": {
+    "total": 503,
+    "passed": 500,
+    "skipped": 3,
+    "failed": 0
+  },
+  "focused_host_checks": {
+    "passed": 119,
+    "skipped": 4,
+    "note": "Four opt-in delegated-runner candidate checks were not enabled."
+  },
+  "report_sha256": "25c7138a365337d3cfdd930552ca855cf6ad22386c3cac3cd1000b9f836c26c6",
+  "survey_file": "../output/deepswe-survey/survey.jsonl",
+  "corpus_pin_modified": false,
+  "held_out_tests_or_solution_used": false,
+  "further_retry_started": false
+}

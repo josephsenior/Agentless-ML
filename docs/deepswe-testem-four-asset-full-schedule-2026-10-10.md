@@ -64,3 +64,8 @@ KGateway, Numba and Pwntools remain parked.
 Next: review registering this verified setup for Testem, then refresh its
 official readiness survey. This run establishes that the full public baseline
 passes in this environment; it does not silently promote the diagnostic image.
+
+Follow-up: the approved [registration and official refresh](deepswe-testem-registered-readiness-2026-10-10.md)
+completed with another passing full baseline. The official count is now 101/113,
+including Testem's explicitly registered modified environment. This earlier
+diagnostic record and the original published-image pin remain unchanged.
