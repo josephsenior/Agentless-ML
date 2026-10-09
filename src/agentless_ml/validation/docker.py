@@ -433,7 +433,10 @@ class DockerTestRunner:
                 try:
                     if report_bytes is None:
                         raise ReportError(f"declared test report was not written: {report_path}")
-                    test_cases = parse_report(report_bytes, command.report.format)
+                    test_cases = parse_report(
+                        report_bytes, command.report.format,
+                        id_policy=command.report.id_policy,
+                    )
                 except ReportError as exc:
                     message = f"{message} {exc}".strip()[:2000]
                     test_cases = ()
@@ -517,6 +520,7 @@ class DockerTestRunner:
             if command.report is None
             else {
                 "format": command.report.format.value,
+                "id_policy": command.report.id_policy,
                 "path": command.report.path,
                 "artifact": report_artifact,
                 "test_cases": len(test_cases),

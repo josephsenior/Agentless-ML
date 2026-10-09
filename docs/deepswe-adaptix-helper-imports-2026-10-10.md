@@ -46,6 +46,10 @@ successful candidate imports, and rejection of image source or image helpers.
 
 ## Test-ID caveat
 
+The later [stable-ID change](deepswe-adaptix-stable-ids-2026-10-10.md) addresses
+this concern with an opt-in policy and another unchanged public baseline. The
+paragraph below records what was known at this earlier checkpoint.
+
 The skip IDs are exactly unchanged. Seventy-four passing IDs differ between
 attempts because public parametrization embeds hexadecimal process addresses;
 the other 2,750 passing IDs are identical. Replacing addresses for comparison

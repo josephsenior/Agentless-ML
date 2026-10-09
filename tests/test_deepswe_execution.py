@@ -128,7 +128,10 @@ def test_adaptix_uses_candidate_helpers_without_changing_pytest(tmp_path):
     assert text.split("python -m pytest", 1)[1] == script("pytest").split("python -m pytest", 1)[1]
     assert text.index("refusing non-candidate import") < text.index("python -m pytest")
     assert "|| exit 125" in text
-    assert command.report == TEST_COMMANDS["pytest"].report
+    assert command.report.format == TEST_COMMANDS["pytest"].report.format
+    assert command.report.path == TEST_COMMANDS["pytest"].report.path
+    assert command.report.id_policy == "python-repr-address-v1"
+    assert TEST_COMMANDS["pytest"].report.id_policy is None
     assert command.failure_exit_codes == (1,) and command.timeout_seconds == 123
     assert deepswe_test_command("adaptix-pytest", ("tests/test_one.py",)).argv[4:] == ("tests/test_one.py",)
     assert "tests_helpers" not in script("pytest")

@@ -1,4 +1,5 @@
 import json
+from xml.etree import ElementTree
 
 import pytest
 
@@ -68,6 +69,82 @@ def test_pytest_junit_ids_and_statuses():
         ("tests.test_log::test_setup", E),
         ("tests.test_log::test_windows_only", S),
     ]
+
+
+def repr_report(*entries):
+    root = ElementTree.Element("testsuite")
+    for name, status in entries:
+        case = ElementTree.SubElement(root, "testcase", classname="suite", name=name)
+        if status != P:
+            ElementTree.SubElement(case, {F: "failure", E: "error", S: "skipped"}[status])
+    return ElementTree.tostring(root)
+
+
+def stable_repr_cases(data):
+    return parse_report(data, ReportFormat.JUNIT_XML, id_policy="python-repr-address-v1")
+
+
+def test_python_repr_policy_matches_across_processes_and_counts_real_regressions():
+    def report(address, status=P):
+        return repr_report(
+            (f"test[<function <lambda> at {address}>-<pkg.Provider object at {address}>]", status),
+            ("test[hex=0x1234]", P),
+        )
+    baseline = stable_repr_cases(report("0x123abc"))
+    candidate_cases = stable_repr_cases(report("0x456def"))
+    assert baseline == candidate_cases
+    counted = tuple(case.test_id for case in baseline)
+    assert "{address}" in counted[0] and "0x1234" in counted[1]
+    assert result(statuses(candidate_cases), counted=counted, status=ValidationStatus.PASS).failure_count() == 0
+    broken = stable_repr_cases(report("0x789abc", F))
+    assert result(statuses(broken), counted=counted).failure_count() == 1
+    missing = stable_repr_cases(repr_report(("test[hex=0x1234]", P)))
+    assert result(statuses(missing), counted=counted).failure_count() == 1
+
+
+def test_repr_policy_is_opt_in_and_preserves_non_address_hex_and_named_cases():
+    data = repr_report(
+        ("test[<function first at 0x123abc>]", P),
+        ("test[<function second at 0x456def>]", F),
+        ("test[<pkg.First object at 0x123abc>]", S),
+        ("test[<pkg.Second object at 0x456def>]", E),
+        ("test[hex=0x123abc-text at 0x456def]", P),
+    )
+    default = parse_report(data, ReportFormat.JUNIT_XML)
+    normalized = stable_repr_cases(data)
+    assert len(default) == len(normalized) == 5
+    assert default[0].test_id.endswith("<function first at 0x123abc>]")
+    assert normalized[0].test_id.endswith("<function first at {address}>]")
+    assert normalized[-1] == default[-1]
+    assert [case.status for case in normalized] == [P, F, S, E, P]
+
+
+@pytest.mark.parametrize("second", ["0x456def", "{address}"])
+def test_repr_normalization_refuses_distinct_cases_with_the_same_key(second):
+    data = repr_report(
+        ("test[<function <lambda> at 0x123abc>]", P),
+        (f"test[<function <lambda> at {second}>]", F),
+    )
+    with pytest.raises(ReportError, match="normalization collision"):
+        stable_repr_cases(data)
+
+
+def test_repr_policy_retains_exact_raw_reruns_worst_outcome():
+    name = "test[<function f at 0x123abc>]"
+    assert statuses(stable_repr_cases(repr_report((name, P), (name, F)))) == [
+        ("suite::test[<function f at {address}>]", F),
+    ]
+
+
+@pytest.mark.parametrize("policy,format", [
+    ("unknown", ReportFormat.JUNIT_XML),
+    ("python-repr-address-v1", ReportFormat.CTRF_JSON),
+])
+def test_report_id_policy_rejects_unknown_or_incompatible_settings(policy, format):
+    with pytest.raises(ValueError, match="unsupported test ID policy"):
+        TestReport(format, "/tmp/report.xml", id_policy=policy)
+    with pytest.raises(ValueError, match="unsupported test ID policy"):
+        parse_report(PYTEST_JUNIT, format, id_policy=policy)
 
 
 def test_nextest_junit():

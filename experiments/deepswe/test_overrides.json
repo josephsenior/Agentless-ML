@@ -1,7 +1,7 @@
 {
   "adaptix-name-mapping-aliases": {
     "runner": "adaptix-pytest",
-    "reason": "The public requirements install tests/tests_helpers as an editable package. Prepend that candidate package directory to PYTHONPATH alongside candidate src and root, and reject image-resolved Adaptix/helper imports before the unchanged default pytest schedule. Do not initialize the performance-data submodule, install dependencies, suppress collection errors or alter tests, image or Docker protections."
+    "reason": "The public requirements install tests/tests_helpers as an editable package. Prepend that candidate package directory to PYTHONPATH alongside candidate src and root, and reject image-resolved Adaptix/helper imports before the unchanged default pytest schedule. Opt into python-repr-address-v1 report IDs to remove process addresses from function/object reprs, refusing collisions between distinct raw IDs. Keep raw XML, assertions, schedule, image and Docker protections unchanged; do not initialize the performance-data submodule."
   },
   "numba-stencil-boundary-modes": {
     "runner": "numba-runtests",

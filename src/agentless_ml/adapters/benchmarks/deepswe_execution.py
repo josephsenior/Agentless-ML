@@ -34,7 +34,9 @@ from agentless_ml.adapters.benchmarks.deepswe_eicrud import EICRUD_MONGO_SCRIPT
 from agentless_ml.adapters.benchmarks.deepswe_numba import NUMBA_REPORTER
 from agentless_ml.adapters.benchmarks.deepswe_yjs import YJS_PREPARE, YJS_REPORTER
 from agentless_ml.validation.docker import PublicTestCommand
-from agentless_ml.validation.reports import ReportFormat, TestReport
+from agentless_ml.validation.reports import (
+    PYTHON_REPR_ADDRESS_POLICY, ReportFormat, TestReport,
+)
 
 WORK = "/tmp/work"
 
@@ -172,7 +174,9 @@ ADAPTIX_PYTEST = DeepSWETestCommand(
         "python -m pytest -p no:cacheprovider "
         '--continue-on-collection-errors --junitxml=/tmp/report.xml "$@"'
     ),
-    report=PYTEST.report,
+    report=TestReport(
+        ReportFormat.JUNIT_XML, "/tmp/report.xml", id_policy=PYTHON_REPR_ADDRESS_POLICY,
+    ),
 )
 
 _NUMBA_IMPORT_CHECK = """

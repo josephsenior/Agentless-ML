@@ -212,6 +212,45 @@ def test_declared_report_becomes_per_test_evidence(
 PASSES_ONLY = JUNIT.replace(b"<failure message=\"boom\"/>", b"")
 
 
+def test_report_id_policy_is_applied_and_raw_artifact_preserved(tmp_path, monkeypatch):
+    from agentless_ml.validation import ReportFormat, TestReport
+
+    raw = b'<testsuite><testcase classname="suite" name="test[&lt;function f at 0x123abc&gt;]"/></testsuite>'
+    command = PublicTestCommand(
+        ("pytest",), report=TestReport(
+            ReportFormat.JUNIT_XML, "report.xml", id_policy="python-repr-address-v1",
+        ), counted_test_ids=("suite::test[<function f at {address}>]",),
+    )
+    execution, _ = run_fake(
+        tmp_path, monkeypatch, command, exit_code=0, files={"/tmp/work/report.xml": raw},
+    )
+    assert execution.result.status.value == "pass"
+    assert execution.result.failure_count() == 0
+    assert execution.result.test_cases[0].test_id == command.counted_test_ids[0]
+    directory = Path(execution.artifact_directory)
+    assert (directory / "report.xml").read_bytes() == raw
+    record = json.loads((directory / "execution.json").read_text())
+    assert record["report"]["id_policy"] == "python-repr-address-v1"
+
+
+def test_report_id_collision_refuses_partial_evidence(tmp_path, monkeypatch):
+    from agentless_ml.validation import ReportFormat, TestReport
+
+    raw = b'<testsuite><testcase name="test[&lt;function f at 0x123abc&gt;]"/><testcase name="test[&lt;function f at 0x456def&gt;]"/></testsuite>'
+    command = PublicTestCommand(
+        ("pytest",), report=TestReport(
+            ReportFormat.JUNIT_XML, "report.xml", id_policy="python-repr-address-v1",
+        ),
+    )
+    execution, _ = run_fake(
+        tmp_path, monkeypatch, command, exit_code=0, files={"/tmp/work/report.xml": raw},
+    )
+    assert execution.result.status.value == "harness_error"
+    assert execution.result.test_cases == ()
+    assert "normalization collision" in execution.message
+    assert Path(execution.artifact_directory, "report.xml").read_bytes() == raw
+
+
 @pytest.mark.parametrize(
     "exit_code,files,expected,cases,failures,message",
     [

@@ -14,6 +14,7 @@ raises ``ReportError`` instead of producing partial evidence.
 from __future__ import annotations
 
 import json
+import re
 from dataclasses import dataclass
 from enum import StrEnum
 from pathlib import PurePosixPath
@@ -22,6 +23,12 @@ from xml.etree import ElementTree
 from agentless_ml.schemas import TestCaseResult, TestCaseStatus
 
 MAX_REPORT_BYTES = 32 * 1024 * 1024
+
+PYTHON_REPR_ADDRESS_POLICY = "python-repr-address-v1"
+_PYTHON_REPR_ADDRESS = re.compile(
+    r"(<(?:function [\w.<>]+|[\w.]+ object) at )0x[0-9a-fA-F]+(?=>)"
+)
+
 
 _SEVERITY = {
     TestCaseStatus.SKIPPED: 0,
@@ -41,21 +48,33 @@ class ReportFormat(StrEnum):
     MOCHA_JSON = "mocha-json"
 
 
+def _validate_id_policy(policy: str | None, report_format: ReportFormat) -> None:
+    if policy is not None and (
+        policy != PYTHON_REPR_ADDRESS_POLICY or report_format is not ReportFormat.JUNIT_XML
+    ):
+        raise ValueError("unsupported test ID policy for report format")
+
+
 @dataclass(frozen=True, slots=True)
 class TestReport:
     """Where a trusted command writes its report, and in which format.
 
     A relative ``path`` is inside the source copy; an absolute one must be under
     ``/tmp``, the only writable location in the container.
+
+    ``id_policy`` is opt-in matching metadata, not a change to the raw report.
+    The Python-repr policy masks process addresses and refuses ID collisions.
     """
 
     __test__ = False
 
     format: ReportFormat
     path: str
+    id_policy: str | None = None
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "format", ReportFormat(self.format))
+        _validate_id_policy(self.id_policy, self.format)
         pure = PurePosixPath(self.path)
         if (
             not self.path
@@ -71,8 +90,11 @@ class TestReport:
         return str(pure if pure.is_absolute() else PurePosixPath("/tmp/work") / pure)
 
 
-def parse_report(data: bytes, report_format: ReportFormat) -> tuple[TestCaseResult, ...]:
+def parse_report(
+    data: bytes, report_format: ReportFormat, *, id_policy: str | None = None,
+) -> tuple[TestCaseResult, ...]:
     """Parse report bytes into unique test outcomes, in report order."""
+    _validate_id_policy(id_policy, report_format)
     if len(data) > MAX_REPORT_BYTES:
         raise ReportError(f"test report exceeds {MAX_REPORT_BYTES} bytes")
     if report_format is ReportFormat.JUNIT_XML:
@@ -87,7 +109,17 @@ def parse_report(data: bytes, report_format: ReportFormat) -> tuple[TestCaseResu
         raise ReportError("test report contains no test cases")
     # The same test can appear twice (reruns, duplicated suites); keep the worst.
     merged: dict[str, TestCaseStatus] = {}
-    for test_id, status in cases:
+    raw_ids: dict[str, str] = {}
+    for raw_id, status in cases:
+        test_id = (
+            _PYTHON_REPR_ADDRESS.sub(r"\g<1>{address}", raw_id)
+            if id_policy == PYTHON_REPR_ADDRESS_POLICY else raw_id
+        )
+        # Never collapse two distinct parametrizations merely because their
+        # reprs differ only by addresses. Exact-raw-ID reruns still keep worst.
+        if test_id in raw_ids and raw_ids[test_id] != raw_id:
+            raise ReportError("test ID normalization collision: " + test_id)
+        raw_ids[test_id] = raw_id
         previous = merged.get(test_id)
         if previous is None or _SEVERITY[status] > _SEVERITY[previous]:
             merged[test_id] = status
