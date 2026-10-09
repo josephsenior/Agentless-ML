@@ -100,3 +100,8 @@ built or tests run. Canonical readiness remains **100/113**; KGateway stays park
 Raw simulations, installed versions, payload/script inspection and changelog
 excerpts are in
 `../output/deepswe-survey/testem-firefox-audit-2026-10-09/upgrade-review.json`.
+
+Follow-up: the [approved archive and coverage check](deepswe-testem-no-upgrade-verification-2026-10-09.md)
+has now verified `dbus-x11` and all 71 selected archives. Static inspection of
+143 ELF files found no missing library names, with the original system libraries
+preserved. No image or runtime test has been started.

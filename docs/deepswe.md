@@ -640,6 +640,11 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   and no removals. Seventy archives are already verified; the new `dbus-x11`
   archive and revised static dependency coverage remain to be checked before
   any build. No installation, download, browser execution or test retry occurred.
+  The subsequent approved [revised-set verification](deepswe-testem-no-upgrade-verification-2026-10-09.md)
+  acquired and verified the one new `dbus-x11` archive, rehashed all 71 selected
+  packages and checked 143 ELF files offline. No missing library names were
+  found; `libudev1` and `libsystemd0` remain unchanged. This is static coverage,
+  not a browser startup result, image build, test retry or readiness change.
   The [Pwntools doctest review](deepswe-pwntools-doctest-2026-10-07.md) replaces
   its incorrect pytest invocation with the public Sphinx runner. The published
   image lacks Sphinx; a separately augmented diagnostic also exposed missing
