@@ -1,0 +1,15 @@
+FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7322qjz1xfjspavxy0kamf9h83277p-v1.1@sha256:fce2e9ebe359b36b031e0b772159884795fc8383a047bc50eaa46c20fa06e4f6
+LABEL org.agentless-ml.condition="testem-verified-firefox-no-upgrade"
+COPY seed /opt/agentless-firefox-seed
+RUN set -eu; \
+    grep -q '^exit 101' /usr/sbin/policy-rc.d; \
+    test -z "$(dpkg --audit)"; \
+    DEBIAN_FRONTEND=noninteractive dpkg --unpack /opt/agentless-firefox-seed/debs/*.deb; \
+    DEBIAN_FRONTEND=noninteractive dpkg --configure --pending; \
+    test -z "$(dpkg --audit)"; \
+    test "$(dpkg-query -W -f='${Version}' libudev1)" = '252.39-1~deb12u1'; \
+    test "$(dpkg-query -W -f='${Version}' libsystemd0)" = '252.39-1~deb12u1'; \
+    test ! -e /opt/firefox; mkdir /opt/firefox; \
+    tar -xJf /opt/agentless-firefox-seed/firefox-140.17.0esr.tar.xz --no-same-owner --strip-components=1 -C /opt/firefox; \
+    test ! -e /usr/local/bin/firefox; ln -s /opt/firefox/firefox /usr/local/bin/firefox; \
+    rm -r /opt/agentless-firefox-seed

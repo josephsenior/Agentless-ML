@@ -1,0 +1,98 @@
+{
+  "label": "separate_firefox_image_offline_startup_not_baseline",
+  "build": {
+    "label": "separate_verified_firefox_no_upgrade_environment",
+    "parent_image_id": "sha256:fce2e9ebe359b36b031e0b772159884795fc8383a047bc50eaa46c20fa06e4f6",
+    "image_id": "sha256:290cd40e1e05814859e3a0430b7bcbea77d92b8fcdd5161fd6ef1c1fc14e969d",
+    "tag": "agentless-ml/testem-firefox:2026-10-09",
+    "manifest_sha256": "c5335c22c073629a5593c853ab493086b5436fda945209fe86f75a928c850b31",
+    "selected_packages": 71,
+    "preserved_versions": {
+      "libudev1": "252.39-1~deb12u1",
+      "libsystemd0": "252.39-1~deb12u1"
+    },
+    "network_during_build": "none",
+    "services_denied_by_existing_policy_rc_d": true,
+    "tests_run": false,
+    "official_survey_updated": false
+  },
+  "startup": {
+    "label": "offline_headless_startup_not_public_tests",
+    "image_id": "sha256:290cd40e1e05814859e3a0430b7bcbea77d92b8fcdd5161fd6ef1c1fc14e969d",
+    "container_name": "agentless-ml-testem-startup-f9eaf865b1e64d1abe2d56c8afbe4cb9",
+    "tests_run": false,
+    "official_survey_updated": false,
+    "host_exit_code": 0,
+    "browser": {
+      "label": "offline_headless_startup_not_public_tests",
+      "version_exit_code": 0,
+      "version_stdout": "Mozilla Firefox 140.17.0esr\n",
+      "version_stderr": "[8] Sandbox: CanCreateUserNamespace() clone() failure: EPERM\n",
+      "command": [
+        "firefox",
+        "--headless",
+        "--no-remote",
+        "--profile",
+        "/tmp/firefox-startup/profile",
+        "--window-size",
+        "640,480",
+        "--screenshot",
+        "/tmp/firefox-startup/startup.png",
+        "file:///tmp/firefox-startup/startup.html"
+      ],
+      "exit_code": 0,
+      "stdout": "[GFX1-]: glxtest: libpci missing\n[GFX1-]: glxtest: libGL.so.1 missing\n[GFX1-]: No GPUs detected via PCI\n\n",
+      "stderr": "[11] Sandbox: CanCreateUserNamespace() clone() failure: EPERM\n*** You are running in headless mode.\n",
+      "png_bytes": 25756,
+      "png_sha256": "c29a9e597945167289355efbb735af97ee8697b3b4c612a721d6515c4e3de5ab",
+      "png_dimensions": [
+        640,
+        480
+      ],
+      "preserved_library_versions": "libsystemd0:amd64\t252.39-1~deb12u1\nlibudev1:amd64\t252.39-1~deb12u1\n",
+      "browser_sandbox_disable_requested": false,
+      "tests_run": false
+    },
+    "screenshot_exported": true,
+    "docker_protections": {
+      "NetworkMode": "none",
+      "ReadonlyRootfs": true,
+      "CapDrop": [
+        "ALL"
+      ],
+      "SecurityOpt": [
+        "no-new-privileges"
+      ],
+      "Memory": 8589934592,
+      "MemorySwap": 8589934592,
+      "NanoCpus": 2000000000,
+      "PidsLimit": 2048,
+      "Tmpfs": {
+        "/tmp": "rw,exec,nosuid,nodev,size=4096m,mode=1777"
+      },
+      "Privileged": false
+    },
+    "container_state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-10-09T18:33:50.321881138Z",
+      "FinishedAt": "2026-10-09T18:33:51.516005308Z"
+    },
+    "owned_container_removed": true
+  },
+  "inventory_verified_exact_additions": 71,
+  "existing_package_version_changes": 0,
+  "screenshot_visually_verified": true,
+  "public_tests_run": false,
+  "official_survey_updated": false,
+  "canonical_ready_tasks": 100,
+  "canonical_task_count": 113,
+  "artifacts": "../output/deepswe-survey/testem-firefox"
+}

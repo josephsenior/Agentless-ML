@@ -79,3 +79,8 @@ Raw evidence is under
 `../output/deepswe-survey/testem-firefox-audit-2026-10-09/`:
 `no-upgrade-verification.json`, `no-upgrade-elf-coverage.json`,
 `no-upgrade-selection.json`, and `no-upgrade-debian-signatures.json`.
+
+Follow-up: the [approved separate image](deepswe-testem-firefox-startup-2026-10-09.md)
+built and passed offline headless page rendering. Inventory confirms the exact
+71 additions and no existing package-version changes. The public schedule
+remains unrun in this supplemented environment.

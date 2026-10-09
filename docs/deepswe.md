@@ -645,6 +645,12 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   packages and checked 143 ELF files offline. No missing library names were
   found; `libudev1` and `libsystemd0` remain unchanged. This is static coverage,
   not a browser startup result, image build, test retry or readiness change.
+  The approved [separate image and startup check](deepswe-testem-firefox-startup-2026-10-09.md)
+  then added exactly the verified 71 packages without changing existing package
+  versions. Headless Firefox rendered a local page offline with JavaScript under
+  the original Docker protections. Namespace/GPU-probe warnings are retained;
+  no sandbox-disable flag or protection relaxation was used. This is not a full
+  public baseline; no readiness change or test retry has started.
   The [Pwntools doctest review](deepswe-pwntools-doctest-2026-10-07.md) replaces
   its incorrect pytest invocation with the public Sphinx runner. The published
   image lacks Sphinx; a separately augmented diagnostic also exposed missing
