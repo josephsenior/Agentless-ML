@@ -1,0 +1,364 @@
+{
+  "public_test_passed": false,
+  "native_controls": {
+    "image_id": "sha256:290cd40e1e05814859e3a0430b7bcbea77d92b8fcdd5161fd6ef1c1fc14e969d",
+    "container_name": "agentless-ml-testem-controls-99f8ba19ca2e4a0083c700408a1ca705",
+    "official_survey_updated": false,
+    "minimal_path_controls": true,
+    "host_exit_code": 0,
+    "host_stderr": "",
+    "probe": {
+      "label": "synthetic_loopback_argument_home_controls_not_benchmark",
+      "cases": [
+        {
+          "case": "image-home",
+          "args": [
+            "firefox",
+            "-profile",
+            "--headless",
+            "/tmp/image-home/profile",
+            "http://127.0.0.1:34011/page?case=image-home"
+          ],
+          "home": "/root",
+          "path_overrides": {},
+          "path_environment": {
+            "HOME": "/root",
+            "XDG_CACHE_HOME": null,
+            "XDG_CONFIG_HOME": null
+          },
+          "requests": [],
+          "javascript_beacon": false,
+          "natural_exit_code": null,
+          "stdout": "[GFX1-]: glxtest: libpci missing\n[GFX1-]: glxtest: libGL.so.1 missing\n[GFX1-]: No GPUs detected via PCI\n\n[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt\n",
+          "stderr": "[9] Sandbox: CanCreateUserNamespace() clone() failure: EPERM\n*** You are running in headless mode.\nFontconfig error: No writable cache directories\n"
+        },
+        {
+          "case": "cache-only",
+          "args": [
+            "firefox",
+            "-profile",
+            "--headless",
+            "/tmp/cache-only/profile",
+            "http://127.0.0.1:34011/page?case=cache-only"
+          ],
+          "home": "/root",
+          "path_overrides": {
+            "XDG_CACHE_HOME": "/tmp/cache-only/cache"
+          },
+          "path_environment": {
+            "HOME": "/root",
+            "XDG_CACHE_HOME": "/tmp/cache-only/cache",
+            "XDG_CONFIG_HOME": null
+          },
+          "requests": [],
+          "javascript_beacon": false,
+          "natural_exit_code": null,
+          "stdout": "[GFX1-]: glxtest: libpci missing\n[GFX1-]: glxtest: libGL.so.1 missing\n[GFX1-]: No GPUs detected via PCI\n\n[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt\n",
+          "stderr": "[70] Sandbox: CanCreateUserNamespace() clone() failure: EPERM\n*** You are running in headless mode.\n"
+        },
+        {
+          "case": "config-only",
+          "args": [
+            "firefox",
+            "-profile",
+            "--headless",
+            "/tmp/config-only/profile",
+            "http://127.0.0.1:34011/page?case=config-only"
+          ],
+          "home": "/root",
+          "path_overrides": {
+            "XDG_CONFIG_HOME": "/tmp/config-only/config"
+          },
+          "path_environment": {
+            "HOME": "/root",
+            "XDG_CACHE_HOME": null,
+            "XDG_CONFIG_HOME": "/tmp/config-only/config"
+          },
+          "requests": [],
+          "javascript_beacon": false,
+          "natural_exit_code": null,
+          "stdout": "[GFX1-]: glxtest: libpci missing\n[GFX1-]: glxtest: libGL.so.1 missing\n[GFX1-]: No GPUs detected via PCI\n\n[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt\n",
+          "stderr": "[130] Sandbox: CanCreateUserNamespace() clone() failure: EPERM\n*** You are running in headless mode.\nFontconfig error: No writable cache directories\n"
+        },
+        {
+          "case": "home-only",
+          "args": [
+            "firefox",
+            "-profile",
+            "--headless",
+            "/tmp/home-only/profile",
+            "http://127.0.0.1:34011/page?case=home-only"
+          ],
+          "home": "/tmp/home-only/home",
+          "path_overrides": {
+            "HOME": "/tmp/home-only/home"
+          },
+          "path_environment": {
+            "HOME": "/tmp/home-only/home",
+            "XDG_CACHE_HOME": null,
+            "XDG_CONFIG_HOME": null
+          },
+          "requests": [
+            {
+              "path": "/page?case=home-only",
+              "user_agent": "Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0",
+              "time": 1791576267.9607372
+            },
+            {
+              "path": "/beacon",
+              "user_agent": "Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0",
+              "time": 1791576268.4572716
+            }
+          ],
+          "javascript_beacon": true,
+          "natural_exit_code": null,
+          "stdout": "[GFX1-]: glxtest: libpci missing\n[GFX1-]: glxtest: libGL.so.1 missing\n[GFX1-]: No GPUs detected via PCI\n\n[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt\n",
+          "stderr": "[192] Sandbox: CanCreateUserNamespace() clone() failure: EPERM\n*** You are running in headless mode.\n"
+        }
+      ],
+      "tests_run": false
+    },
+    "protections": {
+      "NetworkMode": "none",
+      "ReadonlyRootfs": true,
+      "CapDrop": [
+        "ALL"
+      ],
+      "SecurityOpt": [
+        "no-new-privileges"
+      ],
+      "Memory": 8589934592,
+      "MemorySwap": 8589934592,
+      "NanoCpus": 2000000000,
+      "PidsLimit": 2048,
+      "Tmpfs": {
+        "/tmp": "rw,exec,nosuid,nodev,size=4096m,mode=1777"
+      },
+      "Privileged": false
+    },
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-10-09T20:03:43.896385527Z",
+      "FinishedAt": "2026-10-09T20:04:28.994460325Z"
+    },
+    "owned_container_removed": true
+  },
+  "public_test": {
+    "label": "targeted_public_test_with_launch_http_observer_not_full_baseline",
+    "image_id": "sha256:290cd40e1e05814859e3a0430b7bcbea77d92b8fcdd5161fd6ef1c1fc14e969d",
+    "base_commit": "158f61ea91c9613d2011c41ee9be40ada1d7a307",
+    "public_test_filter": "^ci mode app multiple launchers returns successfully with passed and skipped tests$",
+    "status": "fail",
+    "exit_code": 1,
+    "duration_seconds": 22.5,
+    "cases": [
+      {
+        "id": "ci mode app multiple launchers::returns successfully with passed and skipped tests",
+        "status": "failed"
+      }
+    ],
+    "artifacts": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\output\\deepswe-survey\\testem-firefox\\diagnostics\\agentless-ml-f2af3251cd874d87be7a25f2b8ea70b6",
+    "official_survey_updated": false,
+    "test_source_modified": false,
+    "browser_arguments_modified": false,
+    "path_setting": "home-only",
+    "environment_overrides": {
+      "HOME": "/tmp/testem-firefox-home"
+    },
+    "shared_benchmark_configuration_modified": false
+  },
+  "full_suite_rerun": false,
+  "connection_verified": true,
+  "official_survey_updated": false,
+  "canonical_readiness": "100/113",
+  "label": "single_variable_home_connection_verified_public_test_still_fails",
+  "observer_events": [
+    {
+      "time": 1791576301890,
+      "event": "observer_loaded",
+      "node": "v24.12.0",
+      "home": "/tmp/testem-firefox-home"
+    },
+    {
+      "time": 1791576302469,
+      "event": "firefox_spawn",
+      "executable": "firefox",
+      "args": [
+        "-profile",
+        "--headless",
+        "/tmp/testem-30314824907300-1yZ1s8",
+        "http://localhost:43363/30314824907300"
+      ],
+      "cwd": "/tmp/work",
+      "home": "/tmp/testem-firefox-home",
+      "pid": 611
+    },
+    {
+      "time": 1791576302471,
+      "event": "firefox_stderr",
+      "pid": 611,
+      "text": "[611] Sandbox: CanCreateUserNamespace() clone() failure: EPERM\n"
+    },
+    {
+      "time": 1791576302496,
+      "event": "firefox_stderr",
+      "pid": 611,
+      "text": "*** You are running in headless mode.\n"
+    },
+    {
+      "time": 1791576302683,
+      "event": "firefox_stdout",
+      "pid": 611,
+      "text": "[GFX1-]: glxtest: libpci missing\n[GFX1-]: glxtest: libGL.so.1 missing\n[GFX1-]: No GPUs detected via PCI\n\n"
+    },
+    {
+      "time": 1791576303259,
+      "event": "firefox_stdout",
+      "pid": 611,
+      "text": "[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt\n"
+    },
+    {
+      "time": 1791576303423,
+      "event": "http_request",
+      "method": "GET",
+      "url": "/30314824907300",
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0",
+      "port": 43363
+    },
+    {
+      "time": 1791576303701,
+      "event": "http_request",
+      "method": "GET",
+      "url": "/testem.js",
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0",
+      "port": 43363
+    },
+    {
+      "time": 1791576303706,
+      "event": "http_request",
+      "method": "GET",
+      "url": "/hello.js",
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0",
+      "port": 43363
+    },
+    {
+      "time": 1791576303708,
+      "event": "http_request",
+      "method": "GET",
+      "url": "/tests.js",
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0",
+      "port": 43363
+    },
+    {
+      "time": 1791576303746,
+      "event": "http_request",
+      "method": "GET",
+      "url": "/testem/connection.html",
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0",
+      "port": 43363
+    },
+    {
+      "time": 1791576303766,
+      "event": "http_request",
+      "method": "GET",
+      "url": "/favicon.ico",
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0",
+      "port": 43363
+    },
+    {
+      "time": 1791576303788,
+      "event": "http_request",
+      "method": "GET",
+      "url": "/socket.io/socket.io.js",
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0",
+      "port": 43363
+    },
+    {
+      "time": 1791576303792,
+      "event": "http_request",
+      "method": "GET",
+      "url": "/testem/testem_connection.js",
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0",
+      "port": 43363
+    },
+    {
+      "time": 1791576303953,
+      "event": "http_request",
+      "method": "GET",
+      "url": "/socket.io/?EIO=4&transport=polling&t=e9vct2gv",
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0",
+      "port": 43363
+    },
+    {
+      "time": 1791576303973,
+      "event": "http_request",
+      "method": "POST",
+      "url": "/socket.io/?EIO=4&transport=polling&t=e9vfl0ib&sid=flCA7QLcCicvtxzAAAAA",
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0",
+      "port": 43363
+    },
+    {
+      "time": 1791576304027,
+      "event": "http_request",
+      "method": "GET",
+      "url": "/socket.io/?EIO=4&transport=polling&t=e9vfoey0&sid=flCA7QLcCicvtxzAAAAA",
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0",
+      "port": 43363
+    },
+    {
+      "time": 1791576304030,
+      "event": "http_upgrade",
+      "method": "GET",
+      "url": "/socket.io/?EIO=4&transport=websocket&sid=flCA7QLcCicvtxzAAAAA",
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0",
+      "port": 43363
+    },
+    {
+      "time": 1791576304040,
+      "event": "http_request",
+      "method": "POST",
+      "url": "/socket.io/?EIO=4&transport=polling&t=e9vhc71c&sid=flCA7QLcCicvtxzAAAAA",
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0",
+      "port": 43363
+    },
+    {
+      "time": 1791576304045,
+      "event": "http_request",
+      "method": "GET",
+      "url": "/socket.io/?EIO=4&transport=polling&t=e9vhbitc&sid=flCA7QLcCicvtxzAAAAA",
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0",
+      "port": 43363
+    },
+    {
+      "time": 1791576304052,
+      "event": "http_request",
+      "method": "POST",
+      "url": "/socket.io/?EIO=4&transport=polling&t=e9vhpnkb&sid=flCA7QLcCicvtxzAAAAA",
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0",
+      "port": 43363
+    },
+    {
+      "time": 1791576304071,
+      "event": "firefox_stderr",
+      "pid": 611,
+      "text": "Exiting due to channel error.\nExiting due to channel error.\n"
+    },
+    {
+      "time": 1791576304076,
+      "event": "firefox_exit",
+      "pid": 611,
+      "code": null,
+      "signal": "SIGTERM"
+    }
+  ],
+  "exact_internal_directory_isolated": false,
+  "minimal_among_tested_overrides": "HOME"
+}

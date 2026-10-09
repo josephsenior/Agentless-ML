@@ -661,6 +661,10 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   then observed no server requests in one existing public test. Synthetic
   connection controls succeeded with writable home/cache paths under either
   argument order, but not with the image home. No benchmark fix was applied.
+  The [minimal-path follow-up](deepswe-testem-minimal-home-2026-10-09.md) found
+  HOME alone sufficient, unlike cache-only or config-only. The same public
+  test connected and completed its browser run with HOME alone, but still
+  failed its exit-status assertion. No shared configuration or readiness change.
   The [Pwntools doctest review](deepswe-pwntools-doctest-2026-10-07.md) replaces
   its incorrect pytest invocation with the public Sphinx runner. The published
   image lacks Sphinx; a separately augmented diagnostic also exposed missing

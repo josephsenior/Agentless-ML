@@ -94,8 +94,8 @@ configuration or shared validation command was changed. No further run started.
 
 ## Next step
 
-Assess the smallest writable home/cache setting, then verify it against this
-same unchanged public test in an explicitly labelled environment-control run.
-Only after a real Testem connection succeeds should we repeat the full schedule.
-Keep the original result and all Docker protections; do not suppress assertions
-or remove browser tests.
+The [single-variable follow-up](deepswe-testem-minimal-home-2026-10-09.md)
+found HOME alone sufficient; the two XDG-only controls did not connect. The same
+unchanged public test connected to Testem with HOME alone but still failed its
+expected-zero-exit assertion. Inspect the browser-reported failures next,
+without changing tests or Docker protections. No full repeat has followed.

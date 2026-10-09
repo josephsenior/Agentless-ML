@@ -14,7 +14,8 @@ cp.spawn = function (...args) {
     const options = args[2] || {};
     const env = options.env || process.env;
     record({event: 'firefox_spawn', executable: args[0], args: args[1],
-      cwd: options.cwd || process.cwd(), home: env.HOME, pid: child.pid});
+      cwd: options.cwd || process.cwd(), home: env.HOME,
+      xdgCacheHome: env.XDG_CACHE_HOME, xdgConfigHome: env.XDG_CONFIG_HOME, pid: child.pid});
     for (const stream of ['stdout', 'stderr']) {
       if (child[stream]) child[stream].on('data', data =>
         record({event: 'firefox_' + stream, pid: child.pid, text: String(data)}));

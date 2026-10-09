@@ -1,5 +1,6 @@
 """Synthetic localhost controls, not benchmark tests or an environment fix."""
 
+import argparse
 import json
 import subprocess
 import uuid
@@ -19,12 +20,11 @@ class Handler(http.server.BaseHTTPRequestHandler):
 server=http.server.ThreadingHTTPServer(('127.0.0.1',0),Handler)
 threading.Thread(target=server.serve_forever,daemon=True).start()
 results=[]
-for order,writable in [('testem',False),('conventional',False),('testem',True),('conventional',True)]:
- label=order+('-writable-home' if writable else '-image-home')
+for label,order,settings in CONTROL_CASES:
  root=pathlib.Path('/tmp')/label;root.mkdir();profile=root/'profile';profile.mkdir()
  env=os.environ.copy()
- if writable:
-  home=root/'home';home.mkdir();env.update(HOME=str(home),XDG_CACHE_HOME=str(home/'cache'),XDG_CONFIG_HOME=str(home/'config'))
+ for key,relative in settings.items():
+  directory=root/relative;directory.mkdir(parents=True,exist_ok=True);env[key]=str(directory)
  url='http://127.0.0.1:%s/page?case=%s'%(server.server_port,label)
  args=['firefox','-profile','--headless',str(profile),url] if order=='testem' else ['firefox','--headless','-profile',str(profile),url]
  out=open(root/'stdout','w');err=open(root/'stderr','w');start=len(requests)
@@ -37,17 +37,35 @@ for order,writable in [('testem',False),('conventional',False),('testem',True),(
  try:process.wait(timeout=3)
  except subprocess.TimeoutExpired:os.killpg(process.pid,signal.SIGKILL);process.wait(timeout=3)
  out.close();err.close()
- results.append({'case':label,'args':args,'home':env.get('HOME'),'requests':observed,'javascript_beacon':any(r['path']=='/beacon' for r in observed),'natural_exit_code':natural_exit,'stdout':(root/'stdout').read_text(),'stderr':(root/'stderr').read_text()})
+ results.append({'case':label,'args':args,'home':env.get('HOME'),'path_overrides':{key:env[key] for key in settings},'path_environment':{key:env.get(key) for key in ('HOME','XDG_CACHE_HOME','XDG_CONFIG_HOME')},'requests':observed,'javascript_beacon':any(r['path']=='/beacon' for r in observed),'natural_exit_code':natural_exit,'stdout':(root/'stdout').read_text(),'stderr':(root/'stderr').read_text()})
 server.shutdown()
 print(json.dumps({'label':'synthetic_loopback_argument_home_controls_not_benchmark','cases':results,'tests_run':False},indent=2))
 '''
 
 
+def control_cases(minimal=False):
+    if minimal:
+        return [('image-home', 'testem', {}),
+                ('cache-only', 'testem', {'XDG_CACHE_HOME': 'cache'}),
+                ('config-only', 'testem', {'XDG_CONFIG_HOME': 'config'}),
+                ('home-only', 'testem', {'HOME': 'home'})]
+    writable = {'HOME': 'home', 'XDG_CACHE_HOME': 'home/cache', 'XDG_CONFIG_HOME': 'home/config'}
+    return [(order + ('-writable-home' if enabled else '-image-home'), order,
+             writable if enabled else {})
+            for order, enabled in [('testem', False), ('conventional', False),
+                                   ('testem', True), ('conventional', True)]]
+
+
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--minimal', action='store_true', help='Isolate HOME and each XDG path separately')
+    options = parser.parse_args()
     name = 'agentless-ml-testem-controls-' + uuid.uuid4().hex
     args = docker_args(IMAGE, name)
-    args[-1] = PROBE
-    record = {'image_id': IMAGE, 'container_name': name, 'official_survey_updated': False}
+    cases = control_cases(options.minimal)
+    args[-1] = PROBE.replace('CONTROL_CASES', repr(cases))
+    record = {'image_id': IMAGE, 'container_name': name, 'official_survey_updated': False,
+              'minimal_path_controls': options.minimal}
     try:
         result = subprocess.run(args, capture_output=True, text=True, timeout=120)
         record.update(host_exit_code=result.returncode, host_stderr=result.stderr)
