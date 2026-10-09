@@ -87,6 +87,7 @@ shared runner or canonical benchmark configuration was changed. No full suite
 was rerun; canonical readiness remains 100/113. No held-out tests or solutions
 were read. Six focused host-side checks passed.
 
-Next, inspect the browser-reported results responsible for `reporter.hasPassed()`
-being false in this same test, retaining HOME-only as an explicitly labelled
-control. Do not rerun the full suite until that failure is understood.
+The [reporter follow-up](deepswe-testem-qunit-failure-2026-10-09.md) captured the
+actual failed result: `QUnit is not defined`. The public template loads QUnit
+1.20.0 from an external CDN, unavailable inside the offline container. No asset
+delivery fix was implemented and no full-suite retry started.

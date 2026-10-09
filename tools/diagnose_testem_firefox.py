@@ -60,7 +60,8 @@ def main():
         'test_source_modified': False, 'browser_arguments_modified': False,
         'path_setting': options.path_setting,
         'environment_overrides': dict([PATH_SETTINGS[options.path_setting]]) if options.path_setting else {},
-        'shared_benchmark_configuration_modified': False}
+        'shared_benchmark_configuration_modified': False,
+        'observer_modes': ['firefox_process', 'http', 'reporter_results', 'reporter_has_passed']}
     (Path(execution.artifact_directory) / 'diagnostic.json').write_text(json.dumps(evidence, indent=2) + '\n')
     print(json.dumps(evidence, indent=2), flush=True)
 

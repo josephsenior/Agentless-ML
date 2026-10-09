@@ -1,0 +1,94 @@
+{
+  "public_template": "views/qunitrunner.mustache",
+  "external_dns_or_http_failure_captured": false,
+  "assessment": "Browser reports missing QUnit; pinned public template depends on external CDN in offline condition",
+  "official_survey_updated": false,
+  "assets_acquired": false,
+  "diagnostic": {
+    "label": "targeted_public_test_with_launch_http_observer_not_full_baseline",
+    "image_id": "sha256:290cd40e1e05814859e3a0430b7bcbea77d92b8fcdd5161fd6ef1c1fc14e969d",
+    "base_commit": "158f61ea91c9613d2011c41ee9be40ada1d7a307",
+    "public_test_filter": "^ci mode app multiple launchers returns successfully with passed and skipped tests$",
+    "status": "fail",
+    "exit_code": 1,
+    "duration_seconds": 11.922000000005937,
+    "cases": [
+      {
+        "id": "ci mode app multiple launchers::returns successfully with passed and skipped tests",
+        "status": "failed"
+      }
+    ],
+    "artifacts": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\output\\deepswe-survey\\testem-firefox\\diagnostics\\agentless-ml-7e9cec56ab3e437bbd90d26f36994652",
+    "official_survey_updated": false,
+    "test_source_modified": false,
+    "browser_arguments_modified": false,
+    "path_setting": "home-only",
+    "environment_overrides": {
+      "HOME": "/tmp/testem-firefox-home"
+    },
+    "shared_benchmark_configuration_modified": false,
+    "observer_modes": [
+      "firefox_process",
+      "http",
+      "reporter_results",
+      "reporter_has_passed"
+    ]
+  },
+  "reporter_and_launch_events": [
+    {
+      "time": 1791576519812,
+      "event": "firefox_spawn",
+      "executable": "firefox",
+      "args": [
+        "-profile",
+        "--headless",
+        "/tmp/testem-30551923543469-8yww7e",
+        "http://localhost:38281/30551923543469"
+      ],
+      "cwd": "/tmp/work",
+      "home": "/tmp/testem-firefox-home",
+      "pid": 611
+    },
+    {
+      "time": 1791576521538,
+      "event": "reporter_result",
+      "launcher": "Firefox 140.0",
+      "result": {
+        "passed": false,
+        "name": "Global error: ReferenceError: QUnit is not defined at http://localhost:38281/tests.js, line 4\n",
+        "logs": [
+          {
+            "type": "error",
+            "text": "ReferenceError: QUnit is not defined at http://localhost:38281/tests.js, line 4\n",
+            "testContext": {}
+          }
+        ],
+        "launcherId": "30551923543469",
+        "failed": 1,
+        "originalResultObj": {
+          "failed": 1,
+          "name": "Global error: ReferenceError: QUnit is not defined at http://localhost:38281/tests.js, line 4\n",
+          "logs": [],
+          "error": {}
+        }
+      },
+      "total": 1,
+      "passed": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    {
+      "time": 1791576521587,
+      "event": "reporter_has_passed",
+      "returned": false,
+      "total": 1,
+      "passed": 0,
+      "skipped": 0,
+      "todo": 0
+    }
+  ],
+  "label": "targeted_home_only_browser_reporter_failure_not_full_baseline",
+  "public_framework_js": "//code.jquery.com/qunit/qunit-1.20.0.js",
+  "full_suite_retry_started": false,
+  "public_framework_css": "//code.jquery.com/qunit/qunit-1.20.0.css"
+}

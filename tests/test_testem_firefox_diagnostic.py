@@ -1,6 +1,10 @@
 import importlib.util
 import sys
+import shutil
+import subprocess
 from pathlib import Path
+
+import pytest
 
 
 def test_observer_command_preserves_public_browser_test_and_report():
@@ -52,3 +56,49 @@ def test_minimal_native_controls_change_one_path_each():
         compile(module.PROBE.replace('CONTROL_CASES', repr(cases)), '<probe>', 'exec')
     finally:
         sys.path.pop(0)
+
+
+def test_reporter_observer_preserves_inputs_counters_and_failure_decision():
+    node = shutil.which('node')
+    if node is None:
+        pytest.skip('Node is required for the diagnostic observer contract check')
+    observer = Path(__file__).resolve().parents[1] / 'tools/testem_firefox_observer.cjs'
+    script = r'''
+const assert = require('assert/strict');
+const vm = require('vm');
+const fs = require('fs');
+const events = [];
+const sentinel = {};
+let seen;
+class Reporter {
+  constructor() { this.total=0; this.passed=0; this.skipped=0; this.todo=0; }
+  report(name,result) { seen={receiver:this,name,result}; this.total++; if(result.passed)this.passed++; return sentinel; }
+  hasPassed() { return this.total <= this.passed+this.skipped+this.todo; }
+}
+class Server { emit() { return 'unchanged'; } }
+const modules = {
+  fs: {appendFileSync(path,text) {events.push(JSON.parse(text));}},
+  child_process: {spawn() { throw new Error('No child process should run in this unit check'); }},
+  http: {Server},
+  '/candidate/lib/utils/reporter': Reporter
+};
+vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),{
+  require(name) {assert.ok(name in modules); return modules[name];},
+  process:{cwd:()=>'/candidate',env:{HOME:'/tmp/home'},version:process.version}
+});
+const reporter=new Reporter();
+const result={passed:false,name:'Global error: QUnit is not defined'};
+assert.equal(reporter.report('Firefox',result),sentinel);
+assert.equal(seen.receiver,reporter);
+assert.equal(seen.name,'Firefox');
+assert.equal(seen.result,result);
+assert.equal(reporter.hasPassed(),false);
+assert.equal(reporter.total,1);
+assert.equal(reporter.passed,0);
+assert.equal(result.passed,false);
+assert.equal(events.find(e=>e.event==='reporter_result').result.name,result.name);
+assert.equal(events.find(e=>e.event==='reporter_has_passed').returned,false);
+'''
+    completed = subprocess.run([node, '-e', script, str(observer)],
+                               capture_output=True, text=True, timeout=15)
+    assert completed.returncode == 0, completed.stderr

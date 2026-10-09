@@ -34,4 +34,22 @@ http.Server.prototype.emit = function (event, ...args) {
   }
   return Reflect.apply(emit, this, [event, ...args]);
 };
-record({event: 'observer_loaded', node: process.version, home: process.env.HOME});
+// Observe the real reporter's inputs and decisions. Always call the original
+// method, retain its return value and never rewrite a reported result.
+const Reporter = require(process.cwd() + '/lib/utils/reporter');
+const report = Reporter.prototype.report;
+Reporter.prototype.report = function (...args) {
+  const returned = Reflect.apply(report, this, args);
+  record({event: 'reporter_result', launcher: args[0], result: args[1],
+    total: this.total, passed: this.passed, skipped: this.skipped, todo: this.todo});
+  return returned;
+};
+const hasPassed = Reporter.prototype.hasPassed;
+Reporter.prototype.hasPassed = function (...args) {
+  const returned = Reflect.apply(hasPassed, this, args);
+  record({event: 'reporter_has_passed', returned,
+    total: this.total, passed: this.passed, skipped: this.skipped, todo: this.todo});
+  return returned;
+};
+record({event: 'observer_loaded', node: process.version, home: process.env.HOME,
+  observed: ['firefox_process', 'http', 'reporter_results', 'reporter_has_passed']});

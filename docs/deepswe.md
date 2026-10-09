@@ -665,6 +665,9 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   HOME alone sufficient, unlike cache-only or config-only. The same public
   test connected and completed its browser run with HOME alone, but still
   failed its exit-status assertion. No shared configuration or readiness change.
+  The [reporter trace](deepswe-testem-qunit-failure-2026-10-09.md) captured
+  `QUnit is not defined`: the public QUnit template loads version 1.20.0 from
+  an external CDN unavailable offline. No asset replacement or full retry started.
   The [Pwntools doctest review](deepswe-pwntools-doctest-2026-10-07.md) replaces
   its incorrect pytest invocation with the public Sphinx runner. The published
   image lacks Sphinx; a separately augmented diagnostic also exposed missing
