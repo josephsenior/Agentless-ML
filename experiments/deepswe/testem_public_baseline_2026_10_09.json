@@ -1,0 +1,28 @@
+{
+  "label": "full_public_schedule_separate_verified_firefox_environment",
+  "task_id": "testem-per-launcher-reports",
+  "base_commit": "158f61ea91c9613d2011c41ee9be40ada1d7a307",
+  "image_id": "sha256:290cd40e1e05814859e3a0430b7bcbea77d92b8fcdd5161fd6ef1c1fc14e969d",
+  "command": [
+    "sh",
+    "-c",
+    "cd /tmp/work && mkdir -p /tmp/work/node_modules && for entry in /app/node_modules/* /app/node_modules/.[!.]*; do case \"${entry##*/}\" in .vite|.vite-temp|.cache) ;; *) [ -e \"$entry\" ] && ln -s \"$entry\" /tmp/work/node_modules/ ;; esac; done; NODE_PATH=/app/node_modules /app/node_modules/.bin/mocha --reporter xunit --reporter-option output=/tmp/report.xml \"$@\"",
+    "deepswe-tests",
+    "tests/*_tests.js",
+    "tests/**/*_tests.js"
+  ],
+  "timeout_seconds": 1800,
+  "status": "timeout",
+  "exit_code": null,
+  "duration_seconds": 4026.8910000000033,
+  "counts": {},
+  "report_cases": 0,
+  "message": "",
+  "artifacts": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\output\\deepswe-survey\\testem-firefox\\logs\\agentless-ml-bbb2422a90a746ab933ebb2a152c9ad6",
+  "official_survey_updated": false,
+  "timing_assessment": "inconclusive_host_tool_interruption_observed",
+  "host_wait_requested_seconds": 50,
+  "host_wait_observed_seconds": 3694.7943348,
+  "completed_baseline": false,
+  "repeat_started": false
+}

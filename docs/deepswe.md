@@ -650,7 +650,9 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   versions. Headless Firefox rendered a local page offline with JavaScript under
   the original Docker protections. Namespace/GPU-probe warnings are retained;
   no sandbox-disable flag or protection relaxation was used. This is not a full
-  public baseline; no readiness change or test retry has started.
+  public baseline. The subsequent [full public attempt](deepswe-testem-public-baseline-2026-10-09.md)
+  ended in timeout without a report after an observed host/tool interruption.
+  It is not a clean runtime measurement or a readiness change. No repeat has started.
   The [Pwntools doctest review](deepswe-pwntools-doctest-2026-10-07.md) replaces
   its incorrect pytest invocation with the public Sphinx runner. The published
   image lacks Sphinx; a separately augmented diagnostic also exposed missing

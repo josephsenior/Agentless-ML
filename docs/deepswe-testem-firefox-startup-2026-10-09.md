@@ -80,13 +80,14 @@ PNG through the command response before exit, verifies its hash and size, and
 then saves it. One further startup invocation passed with the same PNG hash.
 Both owned containers were removed. No public test was run in either invocation.
 
-## Next step
+## Follow-up
 
-Run the unchanged full public Testem schedule against this exact labelled image,
-with the normal resource protections and the published 1,800-second cap. That
-will check real launch/cleanup behavior and test reporting; rendering one page
-does not prove the suite finishes. It has not been started. Canonical readiness
-remains **100/113** and the original-image timeout record is unchanged.
+The unchanged full public schedule was subsequently attempted against this exact
+image with the published 1,800-second cap. It ended in timeout after an observed
+host/tool interruption and produced no usable report. See the
+[full attempt record](deepswe-testem-public-baseline-2026-10-09.md): this is not a
+clean timing result or a completed baseline. No repeat has started. Canonical
+readiness remains **100/113** and the original-image timeout record is unchanged.
 
 Raw evidence is in `../output/deepswe-survey/testem-firefox/`: `build.json`,
 `inventory.json`, `startup.json`, `startup.png`, build/startup logs, the two failed
