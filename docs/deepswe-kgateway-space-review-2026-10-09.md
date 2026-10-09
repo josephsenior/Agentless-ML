@@ -99,7 +99,11 @@ tests whether reducing concurrent build work can fit without increasing space
 or excluding packages. Use an actual compile-only command: merely selecting
 zero test names can still execute initialization and `TestMain`.
 
-This is a proposed diagnostic, not a demonstrated fix. It has not been started.
+At the time of this inspection, this was a proposed diagnostic, not a
+demonstrated fix, and had not been started.
+The subsequently approved [five-minute check](deepswe-kgateway-compile-diagnostic-2026-10-09.md)
+has now reached its cutoff with 1.88 GiB highest sampled scratch use, without
+finishing compilation. It does not establish that the full build fits.
 If retained build artifacts alone exceed the mount, concurrency reduction will
 not solve that total-space problem. Resource changes or a deliberately warmed
 separate environment would need their own explicit assessment and approval.

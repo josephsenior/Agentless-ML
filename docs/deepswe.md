@@ -608,8 +608,11 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   confirms compiler ENOSPC on our 4-GiB scratch mount. Its Go 1.26.1 toolchain
   and 2.1-GB module cache are already accessible outside `/tmp`; the image's
   build cache is only 59 MB and is not seeded by the current runner. No retry
-  or resource change was made. A bounded compile-only space diagnostic is
-  proposed before another full attempt.
+  or resource change was made during that inspection. The subsequently approved
+  [five-minute compile-only check](deepswe-kgateway-compile-diagnostic-2026-10-09.md)
+  used one build worker and reached its cutoff without a space error; highest
+  sampled scratch use was 1.88 GiB. Compilation was incomplete, so this is not
+  proof the full graph fits, a baseline, or a readiness change.
   The [Pwntools doctest review](deepswe-pwntools-doctest-2026-10-07.md) replaces
   its incorrect pytest invocation with the public Sphinx runner. The published
   image lacks Sphinx; a separately augmented diagnostic also exposed missing
