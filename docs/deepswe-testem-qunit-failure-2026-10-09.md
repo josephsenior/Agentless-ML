@@ -78,7 +78,7 @@ intact.
 
 ## Next step
 
-Verify the public QUnit 1.20.0 assets and assess a separately labelled offline
-asset-delivery diagnostic that preserves the test content and Docker protections.
-Do not enable unrestricted internet, upgrade the framework, suppress the global
-error or report a passing baseline without actually running the unchanged test.
+The [asset-verification assessment](deepswe-testem-offline-assets-assessment-2026-10-09.md)
+verified the exact JS/CSS against upstream release bytes, plus the publisher's
+JavaScript SRI. It proposes a strictly allowlisted loopback service retaining
+network=none. No service image, listener or benchmark retry has started.
