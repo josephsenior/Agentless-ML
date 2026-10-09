@@ -57,6 +57,7 @@ No full-suite retry started, no shared benchmark configuration changed, and no
 held-out tests or solutions were read. Canonical readiness remains 100/113.
 This does not prove recovery of the other full-suite failures or live-CDN access.
 
-Next, run the unchanged full public schedule once in the same labelled condition,
-retaining the 1,800-second cap and protections, to identify remaining failures.
-That run has not started.
+The subsequent [unchanged full schedule](deepswe-testem-offline-full-schedule-2026-10-09.md)
+completed in 48.282 seconds: 496 passed, three skipped and one failed after
+normalization. The remaining todo fixture requests unsupported QUnit 2.9.2
+assets. No additional assets or test retry followed.

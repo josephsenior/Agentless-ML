@@ -54,6 +54,18 @@ def test_public_wrapper_preserves_one_real_test_and_failure_codes():
         assert repr(list(original.argv)) in wrapped.argv[2]
         assert "test=subprocess.Popen(" in wrapped.argv[2]
         compile(wrapped.argv[2], '<supervisor>', 'exec')
+        full = module.selected_command(full=True)
+        public = module.full_public_command()
+        full_script = full.argv[2]
+        assert repr(list(public.argv[3:]))[1:-1] in full_script
+        assert public.argv[2] in full_script
+        assert '--grep' not in full_script
+        assert '--require' not in full_script
+        assert full.timeout_seconds == public.timeout_seconds == 1800
+        assert full.report == public.report
+        assert full.failure_exit_codes == public.failure_exit_codes
+        assert 'export HOME=/tmp/testem-firefox-home' in full_script
+        compile(full_script, '<full-supervisor>', 'exec')
         with patch.object(module.DockerTestRunner, '_docker') as docker:
             runner = object.__new__(module.OfflineAssetRunner)
             runner._docker('create', '--network=none', '--cap-drop=ALL')

@@ -1,7 +1,9 @@
-"""One unchanged public test in the labelled offline-asset condition."""
+"""Opt-in public Testem execution in the labelled offline-asset condition."""
 
+import argparse
 import json
 import tempfile
+from collections import Counter
 from dataclasses import replace
 from pathlib import Path
 
@@ -11,6 +13,7 @@ from build_testem_qunit_image import RESULTS
 from diagnose_testem_firefox import diagnostic_command, TEST
 from run_kgateway_compile_diagnostic import keep_host_awake
 from run_testem_firefox_baseline import ROOT, BASE, TASK
+from run_testem_firefox_baseline import selected_command as full_public_command
 
 IMAGE = 'sha256:96b08a03e607416b109f7d86186d1cdfe92755483eada98693e67ff5f2feba00'
 SUPERVISOR = r'''
@@ -65,8 +68,16 @@ sys.exit(rc if rc>=0 else 125)
 '''
 
 
-def selected_command():
-    command = diagnostic_command('home-only')
+def selected_command(full=False):
+    if full:
+        command = full_public_command()
+        # The full schedule uses the shared Mocha command, without a test filter
+        # or diagnostic prototype wrappers. Only the proven HOME setting changes.
+        command = replace(command, argv=(command.argv[0], command.argv[1],
+            'mkdir -p /tmp/testem-firefox-home && export HOME=/tmp/testem-firefox-home && ' + command.argv[2],
+            *command.argv[3:]))
+    else:
+        command = diagnostic_command('home-only')
     script = SUPERVISOR.replace('PUBLIC_TEST_ARGV', repr(list(command.argv)))
     return replace(command, argv=('python3', '-c', script))
 
@@ -86,12 +97,19 @@ class OfflineAssetRunner(DockerTestRunner):
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--full', action='store_true', help='Run both unchanged public globs, without a grep filter')
+    options = parser.parse_args()
     build = json.loads((RESULTS / 'build.json').read_text())
     preflight = json.loads((RESULTS / 'preflight.json').read_text())
     if (build['image_id'] != IMAGE or preflight['image_id'] != IMAGE
             or preflight.get('host_exit_code') != 0
             or not preflight.get('preflight', {}).get('all_checks_passed')):
         raise ValueError('Requires the exact built image and successful delivery preflight')
+    if options.full:
+        prior = json.loads((ROOT / 'experiments/deepswe/testem_qunit_public_test_2026_10_09.json').read_text())['result']
+        if prior['image_id'] != IMAGE or prior['status'] != 'pass':
+            raise ValueError('Requires the successful single public test in this exact image')
     repository = ROOT.parent / 'benchmarks/deepswe/repos' / TASK
     verify_sealed_repository(repository, BASE)
     provider = LocalGitWorkspaceProvider(repository, BASE,
@@ -99,21 +117,26 @@ def main():
     runner = OfflineAssetRunner(IMAGE, RESULTS / 'public-test-logs', memory_mb=8192,
         cpus=2, tmpfs_mb=4096, pids_limit=2048, run_as_image_user=True)
     with keep_host_awake(True), provider.create() as workspace:
-        execution = runner.run(workspace.path, selected_command())
+        execution = runner.run(workspace.path, selected_command(options.full))
     host = runner.observed_host_config
     evidence = {'condition': 'modified environment: offline public-asset delivery',
-        'image_id': IMAGE, 'base_commit': BASE, 'public_test_filter': TEST,
+        'image_id': IMAGE, 'base_commit': BASE, 'public_test_filter': None if options.full else TEST,
         'status': execution.result.status.value, 'exit_code': execution.result.exit_code,
         'duration_seconds': execution.result.duration_seconds,
-        'cases': [{'id': case.test_id, 'status': case.status.value} for case in execution.result.test_cases],
+        'counts': dict(Counter(case.status.value for case in execution.result.test_cases)),
+        'report_cases': len(execution.result.test_cases),
         'message': execution.message, 'artifacts': str(execution.artifact_directory),
         'docker_protections': {key: host[key] for key in ('NetworkMode', 'ReadonlyRootfs',
             'CapDrop', 'SecurityOpt', 'Memory', 'MemorySwap', 'NanoCpus', 'PidsLimit',
             'Tmpfs', 'Privileged', 'ExtraHosts', 'PortBindings')} if host else None,
         'environment_overrides': {'HOME': '/tmp/testem-firefox-home'},
         'public_test_source_modified': False, 'browser_arguments_modified': False,
-        'full_suite_run': False, 'official_survey_updated': False}
-    (Path(execution.artifact_directory) / 'offline-public-test.json').write_text(json.dumps(evidence, indent=2) + '\n')
+        'full_suite_run': options.full, 'official_survey_updated': False,
+        'diagnostic_prototype_observer': not options.full}
+    if not options.full:
+        evidence['cases'] = [{'id': case.test_id, 'status': case.status.value} for case in execution.result.test_cases]
+    filename = 'offline-full-schedule.json' if options.full else 'offline-public-test.json'
+    (Path(execution.artifact_directory) / filename).write_text(json.dumps(evidence, indent=2) + '\n')
     print(json.dumps(evidence, indent=2), flush=True)
 
 

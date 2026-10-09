@@ -676,8 +676,10 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
   then passed all nine native delivery/rejection checks offline under unchanged
   protections. The subsequent [single unchanged public test](deepswe-testem-offline-public-test-2026-10-09.md)
   passed in the labelled setup with exit code 0: its browser fixture had two
-  passes and one declared skip. No full-suite retry or canonical readiness
-  update followed.
+  passes and one declared skip. The approved [full schedule](deepswe-testem-offline-full-schedule-2026-10-09.md)
+  then completed in 48.282 seconds with 496 passed, three skipped and one failed
+  after normalization. The remaining todo fixture requests QUnit 2.9.2 assets
+  outside the two-file allowlist. No canonical readiness update or further retry.
   The [Pwntools doctest review](deepswe-pwntools-doctest-2026-10-07.md) replaces
   its incorrect pytest invocation with the public Sphinx runner. The published
   image lacks Sphinx; a separately augmented diagnostic also exposed missing
