@@ -1,4 +1,8 @@
 {
+  "wasmi-trap-coredumps": {
+    "runner": "wasmi-cargo-nextest",
+    "reason": "The normal workspace test build embeds WAST fixtures from two public submodules. Verify both exact image revisions and complete source manifests, then copy only the pinned 212 spec and 140 Wasmi fixture files into empty candidate submodule directories. Keep candidate Rust source, workspace selection, nextest flags, reports, original image and offline Docker limits unchanged. Do not fetch submodules or copy benchmark data, image Rust code or compiled artifacts."
+  },
   "tomlkit-toml-table-converters": {
     "runner": "tomlkit-pytest",
     "reason": "The public CI initializes tests/toml-test, and test_toml_tests.py reads its TOML 1.1 fixture index during collection. Verify the image submodule at the exact pinned commit and SHA-256 manifest, then supply only the public index and referenced TOML/JSON data to the empty candidate submodule directory. Verify candidate tomlkit imports and preserve the default full pytest schedule, tests, image and offline Docker protections; do not fetch submodules or copy image implementation code."

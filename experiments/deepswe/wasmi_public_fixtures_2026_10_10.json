@@ -1,0 +1,75 @@
+{
+  "condition": "original pinned image; only verified public WAST fixtures supplied inside candidate container",
+  "task_id": "wasmi-trap-coredumps",
+  "base_commit": "e1f76e285b9ad68a952b7cf5297bbb7ab91e6028",
+  "image_id": "sha256:1bec57bc662b5c33289f88cb28cae2c4df07cb33cd96aff7840c77e2b0a96c10",
+  "submodules": {
+    "spec": {
+      "commit": "d76759e746f3564a03f6106ae19679742f2a1831",
+      "tree": "b4526ad5a05ac94f64c0d7bc9cc756357d00a156",
+      "source_manifest_sha256": "75c7fc839f3a694b535a23c811e83e835e4cb3f67488c6f2c5926b775081549b",
+      "copied_manifest_sha256": "e5eb4065eac513103263493470e4d461e21c12cb3b6e7d495b094b686cb418f2",
+      "verified_source_files": 452,
+      "copied_files": 212,
+      "copied_bytes": 10929985
+    },
+    "wasmi": {
+      "commit": "60701c2664b235ec07ca0231c32a1764dbce4f23",
+      "tree": "342c6af109c0b181ea5994f28eecaaeb763e00f5",
+      "source_manifest_sha256": "7f87901db978e30a31cbddaeb530ae4045a2950aebbd2cac4dc2651dba0eb68f",
+      "copied_manifest_sha256": "d3af85605031a2847619b9f3f3619d0e2e8da58918784351e10f8b1ab5851461",
+      "verified_source_files": 257,
+      "copied_files": 140,
+      "copied_bytes": 1439057
+    }
+  },
+  "copied_files": 352,
+  "copied_bytes": 12369042,
+  "host_submodules_initialized": false,
+  "benchmark_inputs_copied": false,
+  "image_source_or_compiled_artifacts_copied": false,
+  "runner": "wasmi-cargo-nextest",
+  "previous_status": "unsupported_repository",
+  "status": "ready",
+  "validation_status": "pass",
+  "exit_code": 0,
+  "tests": 791,
+  "passed": 791,
+  "failed": 0,
+  "skipped": 0,
+  "passed_by_package": {"wasmi": 111, "wasmi_cli": 10, "wasmi_collections": 13, "wasmi_core": 21, "wasmi_ir": 1, "wasmi_wasi": 2, "wasmi_wast": 633},
+  "duration_seconds": 108.577311200002,
+  "survey_seconds": 112.9,
+  "previous_ready": 105,
+  "ready": 106,
+  "total": 113,
+  "published_image_ready": 103,
+  "registered_environment_ready": 3,
+  "latest_status_counts": {"ready": 106, "unsupported_repository": 2, "harness_error": 2, "out_of_memory": 2, "timeout": 1},
+  "remaining_tasks": {
+    "helm-array-merge-strategies": "unsupported_repository",
+    "helm-unified-manifest-stream": "unsupported_repository",
+    "kgateway-consistent-hash-policy": "harness_error",
+    "numba-stencil-boundary-modes": "timeout",
+    "pebble-durability-wait-apis": "out_of_memory",
+    "pwntools-tube-multiplexing": "harness_error",
+    "wazero-multi-module-snapshots": "out_of_memory"
+  },
+  "host_checks_two_groups": {"passed": 159, "skipped": 5},
+  "temporary_windows_keep_awake_released": true,
+  "docker_protections_source": "live docker inspect; original-image survey field remains null",
+  "observed_docker_protections": {
+    "NetworkMode": "none", "ReadonlyRootfs": true, "CapDrop": ["ALL"],
+    "SecurityOpt": ["no-new-privileges"], "Memory": 8589934592,
+    "MemorySwap": 8589934592, "NanoCpus": 2000000000, "PidsLimit": 2048,
+    "Tmpfs": {"/tmp": "rw,exec,nosuid,nodev,size=4096m,mode=1777"},
+    "Privileged": false, "ExtraHosts": null, "PortBindings": {}
+  },
+  "artifacts": "../output/deepswe-survey/runs/wasmi-trap-coredumps/logs/agentless-ml-a2fb333e4cb64efead4877d5485b43f6",
+  "artifact_sha256": {
+    "execution.json": "3d909c2b4851c615af8244527a0b65442428de2d6c513865fc7f9b472117ec0e",
+    "report.xml": "8b521ae95e67b8f85b953ba8695830dfe5e88068593952b642ef923374e6347b",
+    "stderr.log": "a43ea3c247a7a8c61ca16d2571ab6aaed43cf18fadbd7da4c33d98395cd40801",
+    "stdout.log": "fa7e500c282c566fcba6c663c7382357ab7add85cf0432d25d14820a4a7cb6be"
+  }
+}

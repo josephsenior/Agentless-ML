@@ -489,6 +489,17 @@ PEST_CARGO_NEXTEST = DeepSWETestCommand(
     failure_exit_codes=CARGO_NEXTEST.failure_exit_codes,
 )
 
+_WASMI_FIXTURE_SETUP = Path(__file__).with_name("deepswe_wasmi.py").read_text(encoding="utf-8")
+WASMI_CARGO_NEXTEST = DeepSWETestCommand(
+    script=(
+        _CARGO_SETUP
+        + f"python -c {shlex.quote(_WASMI_FIXTURE_SETUP)} || exit 125; "
+        + _CARGO_NEXTEST_RUN
+    ),
+    report=CARGO_NEXTEST.report,
+    failure_exit_codes=CARGO_NEXTEST.failure_exit_codes,
+)
+
 _PACKAGE_MERGE = (
     'import sys,xml.etree.ElementTree as E; root=E.Element("testsuites"); '
     'reports=[(name,E.parse(path).getroot()) for name,path in '
@@ -784,6 +795,7 @@ TEST_COMMANDS = {
     "koota-vitest": KOOTA_VITEST,
     "cargo-nextest": CARGO_NEXTEST,
     "pest-cargo-nextest": PEST_CARGO_NEXTEST,
+    "wasmi-cargo-nextest": WASMI_CARGO_NEXTEST,
     "agentrooms-vitest": AGENTROOMS_VITEST,
     "quill-vitest": QUILL_VITEST,
     "clack-vitest": CLACK_VITEST,

@@ -489,12 +489,18 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
 
 ## What is not implemented
 
-Current readiness is **105/113**, with eight tasks remaining after
-[Tomlkit's verified public-fixture setup](deepswe-tomlkit-public-fixtures-2026-10-10.md).
-Of those ready tasks, 102 use their published pinned images; Testem, Cliffy
+Current readiness is **106/113**, with seven tasks remaining after
+[Wasmi's verified public-fixture setup](deepswe-wasmi-public-fixtures-2026-10-10.md).
+Of those ready tasks, 103 use their published pinned images; Testem, Cliffy
 and GoReleaser use explicitly labelled, verified modified environments. The original corpus
 pins and held-out scorer are unchanged. The chronology below retains earlier
 counts as historical checkpoints.
+
+Wasmi's normal workspace test build embeds public fixtures from two submodules.
+Its setup now verifies both pinned image submodules and supplies only 352 pinned
+WAST files to the temporary candidate directories. The existing nextest baseline
+passed all 791 tests, including 633 in `wasmi_wast`. The benchmark-only submodule
+stays empty; no image Rust source or compiled artifacts are copied.
 
 Tomlkit's normal public schedule needs the `tests/toml-test` submodule data.
 Its runner now verifies the exact submodule revision and complete tracked-file
