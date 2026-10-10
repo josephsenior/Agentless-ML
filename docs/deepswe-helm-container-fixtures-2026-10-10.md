@@ -50,9 +50,13 @@ Seventeen checks were skipped because they require opt-in Docker integration or
 Windows native-symlink privileges. The two short pinned-image diagnostics above
 ran separately and passed.
 
-Readiness remains **106/113**. Neither Helm baseline was run in this step, and
+At this diagnostic checkpoint, readiness remained **106/113**. Neither Helm baseline was run in this step, and
 the official survey was not refreshed. The next step is an unchanged public
 baseline for each task using this setup, followed by its official survey update.
+
+The later approved [unchanged public baselines](deepswe-helm-public-baselines-2026-10-10.md)
+have now completed, bringing official readiness to 108/113. The results above
+remain diagnostic-only records of the earlier checkpoint.
 
 Pinned image IDs, artifact locations and hashes are recorded in
 [`helm_container_fixtures_2026_10_10.json`](../experiments/deepswe/helm_container_fixtures_2026_10_10.json).

@@ -1,0 +1,85 @@
+{
+  "condition": "unchanged Helm public baselines using original pinned images and helm-container-fixtures-v1",
+  "base_commit": "42f78ba60edf531d5161e00d9819a7c34d976343",
+  "runner": "go",
+  "targets": [
+    "./..."
+  ],
+  "override": null,
+  "public_tests_changed": false,
+  "automatic_retry": false,
+  "readiness_before": "106/113",
+  "readiness_after": "108/113",
+  "survey": "../output/deepswe-survey/survey.jsonl",
+  "observed_host_config": {
+    "NetworkMode": "none",
+    "ReadonlyRootfs": true,
+    "CapDrop": [
+      "ALL"
+    ],
+    "SecurityOpt": [
+      "no-new-privileges"
+    ],
+    "Memory": 8589934592,
+    "MemorySwap": 8589934592,
+    "NanoCpus": 2000000000,
+    "PidsLimit": 2048,
+    "Tmpfs": {
+      "/tmp": "rw,exec,nosuid,nodev,size=4096m,mode=1777"
+    },
+    "Privileged": false,
+    "ExtraHosts": null,
+    "PortBindings": {},
+    "Binds": null
+  },
+  "timeout_seconds": 1800,
+  "fixture_tests_passed_in_both_runs": 6,
+  "failed_test_id_sets_match": true,
+  "matching_limitation": "Four passing TestSave child IDs embed random /tmp/TestSave<digits>/001 paths. These remain unnormalized; stabilize before candidate regression matching.",
+  "runs": [
+    {
+      "task_id": "helm-array-merge-strategies",
+      "image_id": "sha256:d8b573f9e37303fb1aeb03efbfbecb84be8ea2dabaefb34f09b66bb6f6c13721",
+      "container": "agentless-ml-2a3d618ad27b4cc38d9b372410824f36",
+      "execution_seconds": 304.21382040000753,
+      "survey_seconds": 310.1,
+      "sha256": {
+        "execution.json": "16977fe6291dffb2392999e3136504d244e251a2d86cd95e23d751f9e7517caa",
+        "report.json": "6ee1c1bf86dadc09dfaf7289e7fa56514f53312fdb48fa7049aa09f55e5abb11",
+        "stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "status": "ready",
+      "validation_status": "fail",
+      "exit_code": 1,
+      "tests": 2307,
+      "passed": 2239,
+      "failed": 58,
+      "skipped": 10,
+      "workspace_setup_profile": "helm-container-fixtures-v1",
+      "artifacts": "../output/deepswe-survey/survey/helm-array-merge-strategies/logs/agentless-ml-2a3d618ad27b4cc38d9b372410824f36"
+    },
+    {
+      "task_id": "helm-unified-manifest-stream",
+      "image_id": "sha256:b6915c6766cbfd2a26301adcb79bcb49a0c84bbff4039920378c9ff854c48d2c",
+      "container": "agentless-ml-c2d7a241045e48319255834b0b215185",
+      "execution_seconds": 280.63619520000066,
+      "survey_seconds": 285.8,
+      "sha256": {
+        "execution.json": "41d1206654d526c0687b5bd568646d755ee7c6a48ff9aac5ed2cb3c6f32be4d2",
+        "report.json": "40ddf232e0de5e980671a2d5bfb403133128599403f18f653c2b596af479492b",
+        "stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "status": "ready",
+      "validation_status": "fail",
+      "exit_code": 1,
+      "tests": 2307,
+      "passed": 2239,
+      "failed": 58,
+      "skipped": 10,
+      "workspace_setup_profile": "helm-container-fixtures-v1",
+      "artifacts": "../output/deepswe-survey/survey/helm-unified-manifest-stream/logs/agentless-ml-c2d7a241045e48319255834b0b215185"
+    }
+  ]
+}

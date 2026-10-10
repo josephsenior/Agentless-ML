@@ -489,9 +489,9 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
 
 ## What is not implemented
 
-Current readiness is **106/113**, with seven tasks remaining after
-[Wasmi's verified public-fixture setup](deepswe-wasmi-public-fixtures-2026-10-10.md).
-Of those ready tasks, 103 use their published pinned images; Testem, Cliffy
+Current readiness is **108/113**, with five tasks remaining after
+[both Helm public baselines](deepswe-helm-public-baselines-2026-10-10.md).
+Of those ready tasks, 105 use their published pinned images; Testem, Cliffy
 and GoReleaser use explicitly labelled, verified modified environments. The original corpus
 pins and held-out scorer are unchanged. The chronology below retains earlier
 counts as historical checkpoints.
@@ -499,8 +499,11 @@ counts as historical checkpoints.
 Both Helm tasks now have an exact-pin, container-only setup for their four
 special public fixture links. The [short link-behavior diagnostics](deepswe-helm-container-fixtures-2026-10-10.md)
 passed in both original images, with general unsafe-link rejection and Docker
-protections unchanged. Neither public baseline has run with this setup yet;
-readiness and the official survey remain unchanged.
+protections unchanged. Both unchanged public baselines then completed with
+2,239 passes, 58 failures and 10 skips each, bringing official readiness to
+108/113. All fixture-related tests passed. Four passing child IDs contain random
+temporary-directory names and still need stabilization before candidate
+regression matching; ready does not mean an all-green suite or stable IDs.
 
 Wasmi's normal workspace test build embeds public fixtures from two submodules.
 Its setup now verifies both pinned image submodules and supplies only 352 pinned
