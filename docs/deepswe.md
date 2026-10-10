@@ -507,6 +507,12 @@ random temporary-directory names now have an opt-in
 replaying both raw reports without changing outcomes. Ready still does not mean
 an all-green suite.
 
+Pebble's [short single-worker compile diagnostic](deepswe-pebble-valblk-compile-2026-10-10.md)
+successfully compiled the previously killed `sstable/valblk` test binary, with
+about 688 MiB peak cgroup memory and no OOM events or observed Docker cutoff.
+This isolated-package check is not a baseline or proof that the full schedule
+fits; Pebble remains unready and overall readiness remains 108/113.
+
 Wasmi's normal workspace test build embeds public fixtures from two submodules.
 Its setup now verifies both pinned image submodules and supplies only 352 pinned
 WAST files to the temporary candidate directories. The existing nextest baseline

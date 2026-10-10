@@ -1,0 +1,75 @@
+{
+  "condition": "single-package compile-only diagnostic, not a baseline",
+  "task_id": "pebble-durability-wait-apis",
+  "base_commit": "1454d2bc0f378d7f34766afafee68a77e7b85995",
+  "image_id": "sha256:b063f2d927a8b3d71db24c4ec198a0d05644d3ecbe96289d8b2b2bdbecaa72bd",
+  "package": "./sstable/valblk",
+  "build_workers": 1,
+  "compile_window_seconds": 300,
+  "outer_timeout_seconds": 1800,
+  "status": "pass",
+  "exit_code": 0,
+  "duration_seconds": 114.47504149997258,
+  "duration_includes_snapshot_and_setup": true,
+  "tests_executed": false,
+  "cache_seeded": false,
+  "automatic_retry": false,
+  "official_survey_updated": false,
+  "readiness": "108/113",
+  "memory_peak_bytes": 721887232,
+  "oom_events": 0,
+  "oom_kill_events": 0,
+  "final_docker_state": {
+    "Status": "running",
+    "Running": true,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 61397,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-10-10T12:18:46.260900592Z",
+    "FinishedAt": "0001-01-01T00:00:00Z"
+  },
+  "observed_host_config": {
+    "NetworkMode": "none",
+    "ReadonlyRootfs": true,
+    "CapDrop": [
+      "ALL"
+    ],
+    "SecurityOpt": [
+      "no-new-privileges"
+    ],
+    "Memory": 8589934592,
+    "MemorySwap": 8589934592,
+    "NanoCpus": 2000000000,
+    "PidsLimit": 2048,
+    "Tmpfs": {
+      "/tmp": "rw,exec,nosuid,nodev,size=4096m,mode=1777"
+    },
+    "Privileged": false,
+    "ExtraHosts": null,
+    "PortBindings": {},
+    "Binds": null
+  },
+  "sampling": {
+    "count": 8,
+    "largest_utc_gap_seconds": 10.330786,
+    "startup_probe_exit_code": 1,
+    "startup_probe_explanation": "Snapshot extraction/command files were not yet present. Docker exec responded; cgroup counters were readable. Later probes and final probe succeeded. The reused scratch sampler also checks unused /tmp/compile-work, which is absent in this diagnostic.",
+    "docker_connection_errors_observed": 0
+  },
+  "artifacts": "../output/deepswe-survey/pebble-valblk-compile-diagnostic/logs/agentless-ml-fcd04ecef4cc4c65baf3f657302d7832",
+  "sha256": {
+    "stdout.log": "426b9000fd48f84a61db59aa790ff6789cb660ea5a914475ec3e34d826d2a92b",
+    "execution.json": "c22617ed0088a7afa01374d5c971500d705e0a74288ceaad86fa7edf6ae22955",
+    "resource-samples.jsonl": "f35ba7607d07b2b1b2a51c64737fc8bc27107ac864bb13bb75428e160d793738",
+    "compile-diagnostic.json": "a0a8548c5dc357e2e9ad39bea89fd330e02c6ac7b7a8817a631cecb09cba8f6d",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "host_tests": {
+    "passed": 8
+  },
+  "interpretation": "The isolated package compiles under the original limits with one build worker. This is not evidence that the entire public schedule fits, or proof of why the earlier full workload OOMed."
+}
