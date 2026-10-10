@@ -52,6 +52,55 @@ def test_unregistered_tasks_are_unchanged():
     assert runtime.runtime_command(command, None) is command
 
 
+def helm_task(task_id=None):
+    task_id = task_id or next(iter(runtime.HELM_IMAGES))
+    return replace(published(), instance_id=task_id, language="go",
+                   base_commit=runtime.HELM_BASE,
+                   container_image=runtime.HELM_IMAGES[task_id],
+                   container_digest=runtime.HELM_IMAGES[task_id])
+
+
+@pytest.mark.parametrize("task_id", list(runtime.HELM_IMAGES))
+def test_helm_runner_is_bound_to_each_exact_task_image_and_base(tmp_path, task_id):
+    task = helm_task(task_id)
+    def init(runner, image, artifacts, **limits):
+        runner.image_id = image
+    with patch.object(runtime.DockerTestRunner, "__init__", init):
+        runner = runtime.runtime_runner(task.container_image, tmp_path, None, task=task)
+        assert isinstance(runner, runtime.HelmFixtureRunner)
+        for changed in (replace(task, base_commit="a" * 40),
+                        replace(task, container_digest="sha256:" + "a" * 64)):
+            with pytest.raises(ValueError, match="exact task"):
+                runtime.runtime_runner(task.container_image, tmp_path, None, task=changed)
+        with pytest.raises(ValueError, match="original pinned image"):
+            runtime.runtime_runner("sha256:" + "a" * 64, tmp_path, None, task=task)
+        with pytest.raises(ValueError, match="substituted environment"):
+            runtime.runtime_runner(task.container_image, tmp_path, {}, task=task)
+        with pytest.raises(ValueError, match="exact task"):
+            runtime.HelmFixtureRunner(task.container_image, tmp_path,
+                                      task=replace(task, instance_id="other"))
+
+
+def test_missing_helm_task_context_keeps_normal_rejection(tmp_path):
+    with patch.object(runtime, "DockerTestRunner") as normal:
+        runtime.runtime_runner(next(iter(runtime.HELM_IMAGES.values())), tmp_path, None)
+        normal.assert_called_once()
+
+
+def test_helm_preparation_uses_only_fixed_container_script_and_verifies_output(tmp_path):
+    import subprocess
+    runner = object.__new__(runtime.HelmFixtureRunner)
+    expected = {"profile": "helm-container-fixtures-v1", "links": runtime.HELM_SPECIAL_LINKS}
+    with patch.object(runner, "_docker", return_value=subprocess.CompletedProcess([], 0, json.dumps(expected).encode(), b"")) as docker:
+        runner._prepare_workspace("owned-container")
+        docker.assert_called_once_with("exec", "owned-container", "python", "-c", runtime.HELM_SETUP, timeout=30)
+        assert runner.workspace_setup == expected
+    for output in (b"not JSON", b"{}"):
+        with patch.object(runner, "_docker", return_value=subprocess.CompletedProcess([], 0, output, b"")):
+            with pytest.raises(runtime.DockerError):
+                runner._prepare_workspace("owned-container")
+
+
 def test_registered_full_command_is_identical_to_verified_full_command():
     environment = runtime.load_environments()[runtime.TASK]
     command = MOCHA.command(('tests/*_tests.js', 'tests/**/*_tests.js'), timeout_seconds=1800)

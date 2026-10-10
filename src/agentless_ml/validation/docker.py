@@ -147,7 +147,7 @@ def _validate_snapshot_links(links: dict[str, str]) -> None:
                 resolved.append(part)
 
 
-def _snapshot(source: Path, target: Path) -> None:
+def _snapshot(source: Path, target: Path, *, _defer_helm_fixtures: bool = False) -> None:
     """Archive candidate files and unchanged, checkout-contained Git links.
 
     Windows Git link placeholders become tar symlink entries. Host links are
@@ -155,7 +155,15 @@ def _snapshot(source: Path, target: Path) -> None:
     Links are emitted last so extraction cannot write files through them.
     """
     links, executable = _snapshot_git_metadata(source)
-    _validate_snapshot_links(links)
+    deferred = {}
+    if _defer_helm_fixtures:
+        from .helm_fixtures import ALL_LINKS, BASE, SPECIAL_LINKS
+        head = _require_git(source, "rev-parse", "HEAD", timeout=30).decode().strip()
+        if head != BASE or links != ALL_LINKS:
+            raise DockerError("Helm fixture policy requires the exact pinned base and complete link map")
+        deferred = SPECIAL_LINKS
+    archive_links = {name: destination for name, destination in links.items() if name not in deferred}
+    _validate_snapshot_links(archive_links)
     entries: list[Path] = []
     found = set()
 
@@ -204,7 +212,7 @@ def _snapshot(source: Path, target: Path) -> None:
                     archive.addfile(info, stream)
             else:
                 archive.addfile(info)
-        for name, destination in sorted(links.items()):
+        for name, destination in sorted(archive_links.items()):
             info = tarfile.TarInfo(name)
             info.type = tarfile.SYMTYPE
             info.linkname = destination
@@ -297,6 +305,13 @@ class DockerTestRunner:
         )
         return result.stdout if result.returncode == 0 else b""
 
+    def _snapshot_source(self, source: Path, target: Path) -> None:
+        """Archive with general unsafe-link rejection unless a scoped runner overrides."""
+        _snapshot(source, target)
+
+    def _prepare_workspace(self, container_name: str) -> None:
+        """Optional trusted, container-only setup after safe snapshot extraction."""
+
     def run(
         self,
         source: Path,
@@ -332,7 +347,7 @@ class DockerTestRunner:
         try:
             with tempfile.TemporaryDirectory(prefix="agentless-snapshot-") as temporary:
                 snapshot = Path(temporary) / "source.tar"
-                _snapshot(source, snapshot)
+                self._snapshot_source(source, snapshot)
                 attempted_create = True
                 # The container itself only waits. The command runs through
                 # `docker exec`, so files it writes to the memory-only /tmp (its
@@ -385,6 +400,7 @@ class DockerTestRunner:
                         "mkdir /tmp/work && tar --no-same-owner -xf - -C /tmp/work",
                         stdin=stream,
                     )
+                self._prepare_workspace(name)
             try:
                 # The shell script is fixed. User command arguments are passed as
                 # positional arguments, never interpolated into shell code.
@@ -503,6 +519,8 @@ class DockerTestRunner:
         )
         execution = TestExecution(result, self.image_id, name, str(artifacts), message)
         record = asdict(execution)
+        if getattr(self, "workspace_setup", None) is not None:
+            record["workspace_setup"] = self.workspace_setup
         record["limits"] = {
             "memory_mb": self.memory_mb,
             "cpus": self.cpus,

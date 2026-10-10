@@ -84,6 +84,7 @@ def main() -> int:
         arguments.image or selected_task.container_image,
         artifacts / "logs",
         environment,
+        task=None if arguments.image else task,
         memory_mb=task.memory_megabytes,
         cpus=2,
         tmpfs_mb=override.get("tmpfs_mb", 4096) if override else 4096,

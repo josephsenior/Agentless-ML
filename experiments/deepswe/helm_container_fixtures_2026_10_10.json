@@ -1,0 +1,36 @@
+{
+  "condition": "container-only Helm link-behavior diagnostic; no public tests",
+  "profile": "helm-container-fixtures-v1",
+  "base_commit": "42f78ba60edf531d5161e00d9819a7c34d976343",
+  "public_tests_run": false,
+  "readiness_changed": false,
+  "readiness": "106/113",
+  "runs": [
+    {
+      "task_id": "helm-array-merge-strategies",
+      "image_id": "sha256:d8b573f9e37303fb1aeb03efbfbecb84be8ea2dabaefb34f09b66bb6f6c13721",
+      "exit_code": 0,
+      "elapsed_seconds": 36.89081370001077,
+      "artifacts": "../output/deepswe-helm-fixture-diagnostic/helm-array-merge-strategies/agentless-ml-986a1ff77a594affbad26fc0594de6f6",
+      "sha256": {
+        "diagnostic.json": "6ecce47a22f3d251191db85777a72d907254d6afbe12e164f37544b30a971a1c",
+        "execution.json": "8498ee9d34ba6cd405e97cdbbcc94c5663f7a62994a093530d2326b1f48e4051",
+        "stdout.log": "a6ed6f033524e39f604bb9035718c828ca4a6584875cdb028f8d067291294058",
+        "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "task_id": "helm-unified-manifest-stream",
+      "image_id": "sha256:b6915c6766cbfd2a26301adcb79bcb49a0c84bbff4039920378c9ff854c48d2c",
+      "exit_code": 0,
+      "elapsed_seconds": 19.285778499994194,
+      "artifacts": "../output/deepswe-helm-fixture-diagnostic/helm-unified-manifest-stream/agentless-ml-8d494380ff4e4273a2da3cbf2212f306",
+      "sha256": {
+        "diagnostic.json": "dcab1610de9cee5c150d0fc2a84ba6de251f2bb1e3a8e9680a7c73377bdcc1c7",
+        "execution.json": "1ec065fb0dedb281ce5c9159406e23cac956dc0ad59a386f442c5e1b0bc3067e",
+        "stdout.log": "a6ed6f033524e39f604bb9035718c828ca4a6584875cdb028f8d067291294058",
+        "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ]
+}

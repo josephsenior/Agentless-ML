@@ -104,6 +104,7 @@ def main() -> None:
         args.image or selected_task.container_image,
         args.artifact_root / "unused-default-executions",
         environment,
+        task=None if args.image else published,
         memory_mb=published.memory_megabytes,
         cpus=2,
         tmpfs_mb=override.get("tmpfs_mb", 4096) if override else 4096,

@@ -81,6 +81,48 @@ def test_parent_components_are_resolved_after_directory_links(tmp_path):
     _snapshot(source, tmp_path / "source.tar")
 
 
+def test_scoped_helm_archive_omits_special_links_without_following_them(tmp_path, monkeypatch):
+    from agentless_ml.validation import helm_fixtures
+    source = repository(tmp_path, helm_fixtures.ALL_LINKS)
+    head = git(source, "rev-parse", "HEAD").decode().strip()
+    monkeypatch.setattr(helm_fixtures, "BASE", head)
+    target = tmp_path / "source.tar"
+    with pytest.raises(DockerError, match="unsupported snapshot link"):
+        _snapshot(source, target)
+    _snapshot(source, target, _defer_helm_fixtures=True)
+    with tarfile.open(target) as archive:
+        names = archive.getnames()
+        assert all(name not in names for name in helm_fixtures.SPECIAL_LINKS)
+        safe = "internal/third_party/dep/fs/testdata/symlinks/file-symlink"
+        assert archive.getmember(safe).issym()
+        assert archive.getmember(safe).linkname == "../test.file"
+        assert archive.extractfile("dir/value.txt").read() == b"candidate data\n"
+    for name, text in helm_fixtures.SPECIAL_LINKS.items():
+        assert (source / name).read_text() == text
+
+
+@pytest.mark.parametrize("change", ["base", "missing", "target", "additional", "placeholder"])
+def test_helm_exception_refuses_any_scope_change(tmp_path, monkeypatch, change):
+    from agentless_ml.validation import helm_fixtures
+    links = dict(helm_fixtures.ALL_LINKS)
+    name = next(iter(helm_fixtures.SPECIAL_LINKS))
+    if change == "missing":
+        links.pop(name)
+    elif change == "target":
+        links[name] = "/etc/passwd"
+    elif change == "additional":
+        links["alias"] = name
+    source = repository(tmp_path, links)
+    if change != "base":
+        monkeypatch.setattr(helm_fixtures, "BASE", git(source, "rev-parse", "HEAD").decode().strip())
+    if change == "placeholder":
+        (source / name).write_text("/etc/passwd")
+    target = tmp_path / "source.tar"
+    with pytest.raises(DockerError):
+        _snapshot(source, target, _defer_helm_fixtures=True)
+    assert not target.exists()
+
+
 @pytest.mark.parametrize("change", ["changed", "missing", "directory", "binary"])
 def test_tracked_link_cannot_be_silently_changed_or_removed(tmp_path, change):
     source = repository(tmp_path, {"link": "dir/value.txt"})

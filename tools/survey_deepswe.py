@@ -140,6 +140,7 @@ def _survey(task, args, overrides, environments=None) -> dict:
             image_id,
             artifacts / "logs",
             environment,
+            task=task,
             memory_mb=task.memory_megabytes,
             cpus=2,
             tmpfs_mb=override.get("tmpfs_mb", args.tmpfs_mb) if override else args.tmpfs_mb,

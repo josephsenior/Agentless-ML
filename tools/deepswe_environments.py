@@ -13,6 +13,11 @@ from dataclasses import replace
 from pathlib import Path
 
 from agentless_ml.validation import DockerTestRunner
+from agentless_ml.validation.docker import DockerError, _snapshot
+from agentless_ml.validation.helm_fixtures import (
+    BASE as HELM_BASE, IMAGES as HELM_IMAGES,
+    SPECIAL_LINKS as HELM_SPECIAL_LINKS, CONTAINER_SETUP as HELM_SETUP,
+)
 from run_testem_qunit_public_test import OfflineAssetRunner, SUPERVISOR
 from run_goreleaser_cache_diagnostic import cache_command
 
@@ -151,7 +156,39 @@ class RegisteredImageRunner(DockerTestRunner):
         return result
 
 
-def runtime_runner(image, artifacts, environment, **limits):
+class HelmFixtureRunner(RegisteredImageRunner):
+    """Defer four exact Helm links, then recreate them only inside pinned Docker."""
+
+    def __init__(self, image, artifacts, *, task, **limits):
+        if (task.instance_id not in HELM_IMAGES or task.base_commit != HELM_BASE
+                or task.container_digest != HELM_IMAGES[task.instance_id]):
+            raise ValueError("Helm fixture setup requires the exact task, base and image pins")
+        self.workspace_setup = None
+        super().__init__(image, artifacts, **limits)
+        if self.image_id != HELM_IMAGES[task.instance_id]:
+            raise ValueError("Helm fixture setup requires its task's original pinned image")
+
+    def _snapshot_source(self, source, target):
+        self.workspace_setup = None
+        _snapshot(source, target, _defer_helm_fixtures=True)
+
+    def _prepare_workspace(self, container_name):
+        self.workspace_setup = None
+        result = self._docker("exec", container_name, "python", "-c", HELM_SETUP, timeout=30)
+        try:
+            record = json.loads(result.stdout)
+        except (ValueError, UnicodeError) as error:
+            raise DockerError("invalid Helm container fixture verification output") from error
+        if record != {"profile": "helm-container-fixtures-v1", "links": HELM_SPECIAL_LINKS}:
+            raise DockerError("Helm container fixture verification did not match the fixed policy")
+        self.workspace_setup = record
+
+
+def runtime_runner(image, artifacts, environment, *, task=None, **limits):
+    if task is not None and task.instance_id in HELM_IMAGES:
+        if environment is not None:
+            raise ValueError("Helm fixture setup cannot be combined with a substituted environment")
+        return HelmFixtureRunner(image, artifacts, task=task, **limits)
     runner_type = DockerTestRunner
     if environment is not None:
         runner_type = OfflineAssetRunner if environment['profile'] == 'testem-offline-qunit-v1' else RegisteredImageRunner

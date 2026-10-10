@@ -496,6 +496,12 @@ and GoReleaser use explicitly labelled, verified modified environments. The orig
 pins and held-out scorer are unchanged. The chronology below retains earlier
 counts as historical checkpoints.
 
+Both Helm tasks now have an exact-pin, container-only setup for their four
+special public fixture links. The [short link-behavior diagnostics](deepswe-helm-container-fixtures-2026-10-10.md)
+passed in both original images, with general unsafe-link rejection and Docker
+protections unchanged. Neither public baseline has run with this setup yet;
+readiness and the official survey remain unchanged.
+
 Wasmi's normal workspace test build embeds public fixtures from two submodules.
 Its setup now verifies both pinned image submodules and supplies only 352 pinned
 WAST files to the temporary candidate directories. The existing nextest baseline
