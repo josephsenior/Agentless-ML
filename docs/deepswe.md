@@ -1,5 +1,11 @@
 # DeepSWE integration
 
+Pebble's [upstream CI-mode diagnostic](deepswe-pebble-ci-mode-2026-10-10.md)
+verified three documented memory skips, then completed the full public schedule
+with 14,251 passing, 10 failing lint results and 18 skips. Peak memory was
+1.90 GiB, with no OOM. This is diagnostic evidence, not a registered setup;
+official readiness remains **108/113**.
+
 DeepSWE provides 113 tasks across Go (35), Python (34), TypeScript (34),
 JavaScript (5) and Rust (5), pinned at `datacurve-ai/deep-swe`
 `0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea`. These counts use the three

@@ -29,8 +29,8 @@ def diagnostic_command(plan):
 
 
 class FullScheduleRunner(PebbleCompileRunner):
-    def __init__(self):
-        super().__init__(artifact_root=ARTIFACTS / "logs")
+    def __init__(self, *, artifact_root=None):
+        super().__init__(artifact_root=artifact_root or ARTIFACTS / "logs")
         self.go_event_tail = b""
 
     def _docker(self, *args, **kwargs):

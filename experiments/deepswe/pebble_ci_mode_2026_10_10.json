@@ -1,0 +1,161 @@
+{
+  "condition": "upstream CI=1 public validation; diagnostic only",
+  "task_id": "pebble-durability-wait-apis",
+  "base_commit": "1454d2bc0f378d7f34766afafee68a77e7b85995",
+  "image_id": "sha256:b063f2d927a8b3d71db24c4ec198a0d05644d3ecbe96289d8b2b2bdbecaa72bd",
+  "package_workers": 1,
+  "timeout_seconds": 1800,
+  "official_survey_updated": false,
+  "readiness": "108/113",
+  "automatic_retry": false,
+  "full_schedule_targets": [
+    "./..."
+  ],
+  "full_schedule_filter": null,
+  "full_schedule_memory_peak_bytes": 2040250368,
+  "full_schedule_memory_events": {
+    "max": 0,
+    "oom": 0,
+    "oom_kill": 0,
+    "oom_group_kill": 0
+  },
+  "full_schedule_three_skips_retained": true,
+  "failed_suite": "github.com/cockroachdb/pebble/internal/lint",
+  "failed_names": [
+    "TestLint/TestGCAssert",
+    "TestLint/TestStaticcheck",
+    "TestLint/TestRoachVet",
+    "TestLint/TestCrlfmt",
+    "TestLint/TestPanicFmtSprintf",
+    "TestLint/TestSetFinalizer",
+    "TestLint/TestOSIsErr",
+    "TestLint/TestFmtErrorf",
+    "TestLint/TestRawAtomics",
+    "TestLint"
+  ],
+  "host_tests_passed": 15,
+  "phases": {
+    "full-schedule": {
+      "three_upstream_skips_verified": null,
+      "final_state": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 83290,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-10T12:43:40.929912301Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "observed_host_config": {
+        "NetworkMode": "none",
+        "ReadonlyRootfs": true,
+        "CapDrop": [
+          "ALL"
+        ],
+        "SecurityOpt": [
+          "no-new-privileges"
+        ],
+        "Memory": 8589934592,
+        "MemorySwap": 8589934592,
+        "NanoCpus": 2000000000,
+        "PidsLimit": 2048,
+        "Tmpfs": {
+          "/tmp": "rw,exec,nosuid,nodev,size=4096m,mode=1777"
+        },
+        "Privileged": false,
+        "ExtraHosts": null,
+        "PortBindings": {},
+        "Binds": null
+      },
+      "tests": 14279,
+      "artifacts": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\output\\deepswe-survey\\pebble-ci-mode-diagnostic\\full-schedule\\logs\\agentless-ml-9c1b7c4bd3f84a03a8c99e47a5e528fa",
+      "final_probe": {
+        "exit_code": 0,
+        "stdout": "FILE:memory.current\n1194762240\nFILE:memory.peak\n2040250368\nFILE:memory.events\nlow 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nFILE:cpu.stat\nusage_usec 557270621\nuser_usec 476943215\nsystem_usec 80327406\nnr_periods 3928\nnr_throttled 1094\nthrottled_usec 124635517\nnr_bursts 0\nburst_usec 0\nFILE:pids.current\n5\nSCRATCH_DF_BYTES\nFilesystem      1B-blocks       Used  Available Use% Mounted on\ntmpfs          4294967296 1144090624 3150876672  27% /tmp\nPROCESSES\n  PID  PPID   RSS COMMAND\n    1     0   640 /sbin/docker-init -- /bin/sh -c while :; do sleep 1; done\n    7     1  1536 /bin/sh -c while :; do sleep 1; done\n12585     0  1408 /bin/sh -c for f in memory.current memory.peak memory.events cpu.stat pids.current; do echo \"FILE:$f\"; cat \"/sys/fs/cgroup/$f\"; done; echo SCRATCH_DF_BYTES; df -B1 /tmp; echo PROCESSES; ps -eo pid,ppid,rss,args\n12591     7  1536 sleep 1\n12598 12585  4224 ps -eo pid,ppid,rss,args\n",
+        "stderr": ""
+      },
+      "duration_seconds": 415.16963220000616,
+      "sha256": {
+        "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "execution.json": "c4f840e0472d8f51fa7394b8150b53b5642ace3a9c189954e47cbb1b378849aa",
+        "report.json": "a9a4f175be19818c4547ddb3d33b1dccbffe273b5b65109831d493a5d10b3c03",
+        "ci-diagnostic.json": "3c53c041a62ca065073e6d1587f3bfe088358c7e4a8b23bbc83bfe51616064ce",
+        "go-events-tail.jsonl": "d09c872e7fb8da8a51658ca9cbefb85be2a35a7a5dfae348bcac27e1befb4b1d",
+        "stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "resource-samples.jsonl": "8ed73c09040a518d96b0b15b0d48ab076b1d30bce01f6b0d6a3662d913f9eeee"
+      },
+      "exit_code": 1,
+      "status": "fail",
+      "counts": {
+        "passed": 14251,
+        "failed": 10,
+        "skipped": 18
+      },
+      "samples": 39
+    },
+    "verify-skips": {
+      "three_upstream_skips_verified": true,
+      "final_state": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 78842,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-10T12:41:57.234047625Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "observed_host_config": {
+        "NetworkMode": "none",
+        "ReadonlyRootfs": true,
+        "CapDrop": [
+          "ALL"
+        ],
+        "SecurityOpt": [
+          "no-new-privileges"
+        ],
+        "Memory": 8589934592,
+        "MemorySwap": 8589934592,
+        "NanoCpus": 2000000000,
+        "PidsLimit": 2048,
+        "Tmpfs": {
+          "/tmp": "rw,exec,nosuid,nodev,size=4096m,mode=1777"
+        },
+        "Privileged": false,
+        "ExtraHosts": null,
+        "PortBindings": {},
+        "Binds": null
+      },
+      "tests": 3,
+      "artifacts": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\output\\deepswe-survey\\pebble-ci-mode-diagnostic\\verify-skips\\logs\\agentless-ml-34112e468f584f94aac2de292dfb3ddc",
+      "final_probe": {
+        "exit_code": 0,
+        "stdout": "FILE:memory.current\n259706880\nFILE:memory.peak\n657530880\nFILE:memory.events\nlow 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nFILE:cpu.stat\nusage_usec 99533627\nuser_usec 86675891\nsystem_usec 12857736\nnr_periods 792\nnr_throttled 8\nthrottled_usec 12115\nnr_bursts 0\nburst_usec 0\nFILE:pids.current\n5\nSCRATCH_DF_BYTES\nFilesystem      1B-blocks      Used  Available Use% Mounted on\ntmpfs          4294967296 241856512 4053110784   6% /tmp\nPROCESSES\n  PID  PPID   RSS COMMAND\n    1     0   640 /sbin/docker-init -- /bin/sh -c while :; do sleep 1; done\n    7     1  1408 /bin/sh -c while :; do sleep 1; done\n 4146     7  1536 sleep 1\n 4161     0  1536 /bin/sh -c for f in memory.current memory.peak memory.events cpu.stat pids.current; do echo \"FILE:$f\"; cat \"/sys/fs/cgroup/$f\"; done; echo SCRATCH_DF_BYTES; df -B1 /tmp; echo PROCESSES; ps -eo pid,ppid,rss,args\n 4173  4161  4224 ps -eo pid,ppid,rss,args\n",
+        "stderr": ""
+      },
+      "duration_seconds": 102.53678320001927,
+      "sha256": {
+        "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "execution.json": "3a5f39676348e207ef2755ef380c15cc5d3faf902a3ee4630aaf10f5908514d2",
+        "report.json": "2f2efab8e49b6526780ea299a412abb958cc42a1003b4f8f9746fad577224dd9",
+        "ci-diagnostic.json": "d08e8b57baf8ae878452b9fa66de557cd35bba25242abcc65f93450b1440aa9f",
+        "go-events-tail.jsonl": "006f6afb9460d319e52e47b97ca8383c3966d133ca6a059bb0c328adf41d7963",
+        "stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "resource-samples.jsonl": "11e9b2e5a1b57b75327393c66253cfd11d8393775545be740e4b732c84480d9d"
+      },
+      "exit_code": 0,
+      "status": "pass",
+      "counts": {
+        "skipped": 3
+      },
+      "samples": 9
+    }
+  }
+}
