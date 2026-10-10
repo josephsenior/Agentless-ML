@@ -1,0 +1,84 @@
+{
+  "condition": "full public schedule with one package worker; diagnostic only",
+  "task_id": "pebble-durability-wait-apis",
+  "base_commit": "1454d2bc0f378d7f34766afafee68a77e7b85995",
+  "image_id": "sha256:b063f2d927a8b3d71db24c4ec198a0d05644d3ecbe96289d8b2b2bdbecaa72bd",
+  "runner": "go",
+  "targets": [
+    "./..."
+  ],
+  "package_workers": 1,
+  "timeout_seconds": 1800,
+  "cache_seeded": false,
+  "official_survey_updated": false,
+  "automatic_retry": false,
+  "status": "out_of_memory",
+  "exit_code": 1,
+  "duration_seconds": 386.6071177999838,
+  "counts": {},
+  "message": "",
+  "artifacts": "../output/deepswe-survey/pebble-full-single-worker-diagnostic/logs/agentless-ml-6aa35a5283f24dd9b86855818e085938",
+  "observed_host_config": {
+    "NetworkMode": "none",
+    "ReadonlyRootfs": true,
+    "CapDrop": [
+      "ALL"
+    ],
+    "SecurityOpt": [
+      "no-new-privileges"
+    ],
+    "Memory": 8589934592,
+    "MemorySwap": 8589934592,
+    "NanoCpus": 2000000000,
+    "PidsLimit": 2048,
+    "Tmpfs": {
+      "/tmp": "rw,exec,nosuid,nodev,size=4096m,mode=1777"
+    },
+    "Privileged": false,
+    "ExtraHosts": null,
+    "PortBindings": {},
+    "Binds": null
+  },
+  "final_state": {
+    "Status": "running",
+    "Running": true,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": true,
+    "Dead": false,
+    "Pid": 65660,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-10-10T12:24:36.440960013Z",
+    "FinishedAt": "0001-01-01T00:00:00Z"
+  },
+  "sampling_summary": {
+    "nonzero_probe_responses": 1,
+    "probe_timeouts": 0,
+    "largest_utc_gap_seconds": 10.557263,
+    "count": 36
+  },
+  "sha256": {
+    "go-events-tail.jsonl": "d5e443cec34fc9f3ddca1ad8c68af32fe22eac7fae71b429dc549defbfcc3680",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "full-schedule-diagnostic.json": "5ddc04d8e1918142d3807f8a9740e05a47b76cd72a3924186af08dd87b540f36",
+    "execution.json": "12844872568f7dd344eb8bd0913510bc0761999af98f0b4ee8497d42edc37e7d",
+    "stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "resource-samples.jsonl": "5faff2c9854bb94fde7226de7627e5ff511976c685239972af5a626c1280cf19"
+  },
+  "duration_includes_snapshot_and_setup": true,
+  "accepted_test_cases": 0,
+  "public_tests_executed": true,
+  "readiness": "108/113",
+  "memory_peak_bytes": 8589934592,
+  "memory_events": {
+    "max": 114,
+    "oom": 1,
+    "oom_kill": 1,
+    "oom_group_kill": 0
+  },
+  "host_tests": {
+    "passed": 11
+  },
+  "evidence_limitations": "The 1 MiB Go event tail does not identify the OOM victim. No report was accepted or copied by the runner after Docker reported OOMKilled. Zero accepted cases does not mean zero tests ran. Initial sampler response 1 reflects not-yet-created log/cache files; the reused probe checks unused /tmp/compile-work."
+}

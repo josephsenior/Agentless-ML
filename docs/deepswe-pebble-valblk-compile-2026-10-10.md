@@ -52,7 +52,10 @@ the cause of the earlier recorded OOM.
 
 The next useful check would be one explicitly labelled full-public-schedule
 diagnostic with `-p 1`, retaining all targets and the existing 30-minute cap.
-It has **not** started, and no permanent test override was added.
+At this checkpoint it had not started, and no permanent test override was added.
+The later approved [full-schedule diagnostic](deepswe-pebble-full-single-worker-2026-10-10.md)
+has now completed with a measured OOM, despite one package worker. The isolated
+compilation result above remains valid but does not establish full-run readiness.
 
 ## Limits and evidence
 

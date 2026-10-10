@@ -512,6 +512,10 @@ successfully compiled the previously killed `sstable/valblk` test binary, with
 about 688 MiB peak cgroup memory and no OOM events or observed Docker cutoff.
 This isolated-package check is not a baseline or proof that the full schedule
 fits; Pebble remains unready and overall readiness remains 108/113.
+The later approved [full-schedule single-worker diagnostic](deepswe-pebble-full-single-worker-2026-10-10.md)
+still OOMed: 8 GiB peak, one cgroup kill and Docker `OOMKilled=true`. This confirms
+a memory kill in that attempt, rather than merely a connection cutoff. No
+accepted inventory or official survey update resulted.
 
 Wasmi's normal workspace test build embeds public fixtures from two submodules.
 Its setup now verifies both pinned image submodules and supplies only 352 pinned

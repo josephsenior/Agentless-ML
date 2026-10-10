@@ -35,9 +35,9 @@ def diagnostic_command():
 
 
 class PebbleCompileRunner(CompileSampledRunner):
-    def __init__(self):
+    def __init__(self, *, artifact_root=None):
         # Reuse sampling only. Neither parked task's initializer or attempt runs.
-        DockerTestRunner.__init__(self, IMAGE, ARTIFACTS / "logs", memory_mb=8192,
+        DockerTestRunner.__init__(self, IMAGE, artifact_root or ARTIFACTS / "logs", memory_mb=8192,
                                  cpus=2, pids_limit=2048, tmpfs_mb=4096,
                                  run_as_image_user=True)
         if self.image_id != IMAGE:
