@@ -27,9 +27,11 @@ Comparing the reports also exposed four passing `TestSave` child IDs containing
 random temporary-directory names: two each in `internal/chart/v3/util` and
 `pkg/chart/v2/util`. Their `outDir=/tmp/TestSave<digits>/001` names vary across
 runs. The survey's readiness definition does not check cross-run ID stability.
-These four IDs still need a narrow normalization policy before these inventories
-are used for candidate regression matching. No IDs or reports were rewritten
-in this step.
+At this checkpoint, these four IDs needed a narrow normalization policy before
+candidate regression matching. No IDs or reports were rewritten
+in this baseline step. The later approved
+[stable-ID policy and report replay](deepswe-helm-stable-test-ids-2026-10-10.md)
+now address these four cases without changing tests or raw evidence.
 
 ## Protections and records
 

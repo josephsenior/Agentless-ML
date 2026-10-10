@@ -35,7 +35,7 @@ from agentless_ml.adapters.benchmarks.deepswe_numba import NUMBA_REPORTER
 from agentless_ml.adapters.benchmarks.deepswe_yjs import YJS_PREPARE, YJS_REPORTER
 from agentless_ml.validation.docker import PublicTestCommand
 from agentless_ml.validation.reports import (
-    PYTHON_REPR_ADDRESS_POLICY, ReportFormat, TestReport,
+    HELM_SAVE_TEMPDIR_POLICY, PYTHON_REPR_ADDRESS_POLICY, ReportFormat, TestReport,
 )
 
 WORK = "/tmp/work"
@@ -131,6 +131,14 @@ GO = DeepSWETestCommand(
 GO_MODULE = DeepSWETestCommand(
     script=_go_script("module"),
     report=TestReport(ReportFormat.CTRF_JSON, "/tmp/ctrf.json"),
+)
+
+# Same command and raw CTRF as ordinary Go; only matching metadata differs.
+HELM_GO = DeepSWETestCommand(
+    script=GO.script,
+    report=TestReport(
+        ReportFormat.CTRF_JSON, "/tmp/ctrf.json", id_policy=HELM_SAVE_TEMPDIR_POLICY,
+    ),
 )
 
 # pytest writes JUnit XML itself. `-p no:cacheprovider` keeps it from writing a
@@ -774,6 +782,7 @@ YJS_LIB0 = DeepSWETestCommand(
 
 TEST_COMMANDS = {
     "go": GO,
+    "helm-go": HELM_GO,
     "go-module": GO_MODULE,
     "pytest": PYTEST,
     "adaptix-pytest": ADAPTIX_PYTEST,
@@ -913,7 +922,7 @@ def deepswe_test_targets(runner: str, checkout: Path) -> tuple[str, ...]:
     ``mocha tests/*_tests.js tests/**/*_tests.js`` gives the two globs — minus
     reporter and watch flags, which would replace the report this command reads.
     """
-    if runner in ("go", "go-module"):
+    if runner in ("go", "go-module", "helm-go"):
         return _go_targets(Path(checkout))
     if runner not in {"mocha", "mocha-json"}:
         return ()

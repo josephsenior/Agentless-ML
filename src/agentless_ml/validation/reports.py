@@ -25,6 +25,11 @@ from agentless_ml.schemas import TestCaseResult, TestCaseStatus
 MAX_REPORT_BYTES = 32 * 1024 * 1024
 
 PYTHON_REPR_ADDRESS_POLICY = "python-repr-address-v1"
+HELM_SAVE_TEMPDIR_POLICY = "helm-save-tempdir-v1"
+_HELM_SAVE_TEMPDIR = re.compile(
+    r"\A(helm\.sh/helm/v4/(?:internal/chart/v3|pkg/chart/v2)/util::"
+    r"TestSave/outDir=/tmp/TestSave)[0-9]+(/001(?:/newdir)?)\Z"
+)
 _PYTHON_REPR_ADDRESS = re.compile(
     r"(<(?:function [\w.<>]+|[\w.]+ object) at )0x[0-9a-fA-F]+(?=>)"
 )
@@ -49,9 +54,11 @@ class ReportFormat(StrEnum):
 
 
 def _validate_id_policy(policy: str | None, report_format: ReportFormat) -> None:
-    if policy is not None and (
-        policy != PYTHON_REPR_ADDRESS_POLICY or report_format is not ReportFormat.JUNIT_XML
-    ):
+    formats = {
+        PYTHON_REPR_ADDRESS_POLICY: ReportFormat.JUNIT_XML,
+        HELM_SAVE_TEMPDIR_POLICY: ReportFormat.CTRF_JSON,
+    }
+    if policy is not None and formats.get(policy) is not report_format:
         raise ValueError("unsupported test ID policy for report format")
 
 
@@ -63,7 +70,8 @@ class TestReport:
     ``/tmp``, the only writable location in the container.
 
     ``id_policy`` is opt-in matching metadata, not a change to the raw report.
-    The Python-repr policy masks process addresses and refuses ID collisions.
+    Policies mask Python repr addresses or four Helm temporary-path IDs.
+    Distinct raw IDs that collide after normalization are refused.
     """
 
     __test__ = False
@@ -115,8 +123,10 @@ def parse_report(
             _PYTHON_REPR_ADDRESS.sub(r"\g<1>{address}", raw_id)
             if id_policy == PYTHON_REPR_ADDRESS_POLICY else raw_id
         )
-        # Never collapse two distinct parametrizations merely because their
-        # reprs differ only by addresses. Exact-raw-ID reruns still keep worst.
+        if id_policy == HELM_SAVE_TEMPDIR_POLICY:
+            test_id = _HELM_SAVE_TEMPDIR.sub(r"\g<1>{random}\g<2>", raw_id)
+        # Never collapse distinct parametrizations after masking dynamic text.
+        # Exact-raw-ID reruns still keep their worst outcome.
         if test_id in raw_ids and raw_ids[test_id] != raw_id:
             raise ReportError("test ID normalization collision: " + test_id)
         raw_ids[test_id] = raw_id

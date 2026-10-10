@@ -1,4 +1,12 @@
 {
+  "helm-array-merge-strategies": {
+    "runner": "helm-go",
+    "reason": "Keep the ordinary Go script and full package schedule unchanged. Opt into helm-save-tempdir-v1 matching IDs for the four TestSave outDir subtests in the v2/v3 util packages, masking only the random digits in /tmp/TestSave<digits>/001 and preserving /newdir. Refuse normalization collisions; keep raw CTRF, outcomes, candidate source, image and Docker protections unchanged."
+  },
+  "helm-unified-manifest-stream": {
+    "runner": "helm-go",
+    "reason": "Keep the ordinary Go script and full package schedule unchanged. Opt into helm-save-tempdir-v1 matching IDs for the four TestSave outDir subtests in the v2/v3 util packages, masking only the random digits in /tmp/TestSave<digits>/001 and preserving /newdir. Refuse normalization collisions; keep raw CTRF, outcomes, candidate source, image and Docker protections unchanged."
+  },
   "wasmi-trap-coredumps": {
     "runner": "wasmi-cargo-nextest",
     "reason": "The normal workspace test build embeds WAST fixtures from two public submodules. Verify both exact image revisions and complete source manifests, then copy only the pinned 212 spec and 140 Wasmi fixture files into empty candidate submodule directories. Keep candidate Rust source, workspace selection, nextest flags, reports, original image and offline Docker limits unchanged. Do not fetch submodules or copy benchmark data, image Rust code or compiled artifacts."

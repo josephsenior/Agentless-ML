@@ -1,0 +1,68 @@
+{
+  "condition": "host replay of two unchanged saved Helm public CTRF reports; no new baseline",
+  "id_policy": "helm-save-tempdir-v1",
+  "host_tests": {
+    "passed": 276,
+    "skipped": 13
+  },
+  "runs": [
+    {
+      "task_id": "helm-array-merge-strategies",
+      "report": "../output/deepswe-survey/survey/helm-array-merge-strategies/logs/agentless-ml-2a3d618ad27b4cc38d9b372410824f36/report.json",
+      "report_sha256": "6ee1c1bf86dadc09dfaf7289e7fa56514f53312fdb48fa7049aa09f55e5abb11",
+      "tests": 2307,
+      "changed_ids": [
+        {
+          "raw": "helm.sh/helm/v4/internal/chart/v3/util::TestSave/outDir=/tmp/TestSave3394569620/001",
+          "stable": "helm.sh/helm/v4/internal/chart/v3/util::TestSave/outDir=/tmp/TestSave{random}/001"
+        },
+        {
+          "raw": "helm.sh/helm/v4/internal/chart/v3/util::TestSave/outDir=/tmp/TestSave3394569620/001/newdir",
+          "stable": "helm.sh/helm/v4/internal/chart/v3/util::TestSave/outDir=/tmp/TestSave{random}/001/newdir"
+        },
+        {
+          "raw": "helm.sh/helm/v4/pkg/chart/v2/util::TestSave/outDir=/tmp/TestSave3656372988/001",
+          "stable": "helm.sh/helm/v4/pkg/chart/v2/util::TestSave/outDir=/tmp/TestSave{random}/001"
+        },
+        {
+          "raw": "helm.sh/helm/v4/pkg/chart/v2/util::TestSave/outDir=/tmp/TestSave3656372988/001/newdir",
+          "stable": "helm.sh/helm/v4/pkg/chart/v2/util::TestSave/outDir=/tmp/TestSave{random}/001/newdir"
+        }
+      ]
+    },
+    {
+      "task_id": "helm-unified-manifest-stream",
+      "report": "../output/deepswe-survey/survey/helm-unified-manifest-stream/logs/agentless-ml-c2d7a241045e48319255834b0b215185/report.json",
+      "report_sha256": "40ddf232e0de5e980671a2d5bfb403133128599403f18f653c2b596af479492b",
+      "tests": 2307,
+      "changed_ids": [
+        {
+          "raw": "helm.sh/helm/v4/internal/chart/v3/util::TestSave/outDir=/tmp/TestSave4061284248/001",
+          "stable": "helm.sh/helm/v4/internal/chart/v3/util::TestSave/outDir=/tmp/TestSave{random}/001"
+        },
+        {
+          "raw": "helm.sh/helm/v4/internal/chart/v3/util::TestSave/outDir=/tmp/TestSave4061284248/001/newdir",
+          "stable": "helm.sh/helm/v4/internal/chart/v3/util::TestSave/outDir=/tmp/TestSave{random}/001/newdir"
+        },
+        {
+          "raw": "helm.sh/helm/v4/pkg/chart/v2/util::TestSave/outDir=/tmp/TestSave1957359644/001",
+          "stable": "helm.sh/helm/v4/pkg/chart/v2/util::TestSave/outDir=/tmp/TestSave{random}/001"
+        },
+        {
+          "raw": "helm.sh/helm/v4/pkg/chart/v2/util::TestSave/outDir=/tmp/TestSave1957359644/001/newdir",
+          "stable": "helm.sh/helm/v4/pkg/chart/v2/util::TestSave/outDir=/tmp/TestSave{random}/001/newdir"
+        }
+      ]
+    }
+  ],
+  "normalized_inventories_and_statuses_match": true,
+  "counted_passing_ids": 2239,
+  "regression_checks": {
+    "unchanged": 0,
+    "one_missing": 1,
+    "one_failed": 1
+  },
+  "readiness": "108/113",
+  "public_tests_rerun": false,
+  "raw_reports_changed": false
+}

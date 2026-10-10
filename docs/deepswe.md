@@ -501,9 +501,11 @@ special public fixture links. The [short link-behavior diagnostics](deepswe-helm
 passed in both original images, with general unsafe-link rejection and Docker
 protections unchanged. Both unchanged public baselines then completed with
 2,239 passes, 58 failures and 10 skips each, bringing official readiness to
-108/113. All fixture-related tests passed. Four passing child IDs contain random
-temporary-directory names and still need stabilization before candidate
-regression matching; ready does not mean an all-green suite or stable IDs.
+108/113. All fixture-related tests passed. The four passing child IDs containing
+random temporary-directory names now have an opt-in
+[stable matching policy](deepswe-helm-stable-test-ids-2026-10-10.md), verified by
+replaying both raw reports without changing outcomes. Ready still does not mean
+an all-green suite.
 
 Wasmi's normal workspace test build embeds public fixtures from two submodules.
 Its setup now verifies both pinned image submodules and supplies only 352 pinned
