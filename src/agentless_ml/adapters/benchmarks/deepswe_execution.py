@@ -133,6 +133,19 @@ GO_MODULE = DeepSWETestCommand(
     report=TestReport(ReportFormat.CTRF_JSON, "/tmp/ctrf.json"),
 )
 
+# Pebble's public row-block overflow tests explicitly skip in CI because they
+# allocate multi-GiB buffers. Keep every package and real skip/failure outcome;
+# serialize package builds without changing test-internal concurrency.
+PEBBLE_GO_CI = DeepSWETestCommand(
+    script="export CI=1; " + GO.script.replace(
+        'go test -json -count=1 "$@"',
+        'go test -json -count=1 -p 1 "$@"',
+        1,
+    ),
+    report=GO.report,
+    failure_exit_codes=GO.failure_exit_codes,
+)
+
 # Same command and raw CTRF as ordinary Go; only matching metadata differs.
 HELM_GO = DeepSWETestCommand(
     script=GO.script,
@@ -781,6 +794,7 @@ YJS_LIB0 = DeepSWETestCommand(
 )
 
 TEST_COMMANDS = {
+    "pebble-go-ci": PEBBLE_GO_CI,
     "go": GO,
     "helm-go": HELM_GO,
     "go-module": GO_MODULE,
@@ -922,7 +936,7 @@ def deepswe_test_targets(runner: str, checkout: Path) -> tuple[str, ...]:
     ``mocha tests/*_tests.js tests/**/*_tests.js`` gives the two globs — minus
     reporter and watch flags, which would replace the report this command reads.
     """
-    if runner in ("go", "go-module", "helm-go"):
+    if runner in ("go", "go-module", "helm-go", "pebble-go-ci"):
         return _go_targets(Path(checkout))
     if runner not in {"mocha", "mocha-json"}:
         return ()

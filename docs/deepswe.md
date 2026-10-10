@@ -1,10 +1,10 @@
 # DeepSWE integration
 
-Pebble's [upstream CI-mode diagnostic](deepswe-pebble-ci-mode-2026-10-10.md)
-verified three documented memory skips, then completed the full public schedule
-with 14,251 passing, 10 failing lint results and 18 skips. Peak memory was
-1.90 GiB, with no OOM. This is diagnostic evidence, not a registered setup;
-official readiness remains **108/113**.
+Pebble's [registered public CI setup](deepswe-pebble-registered-ci-2026-10-10.md)
+completed its official full-schedule refresh with 14,245 passes, 10 lint
+failures and 18 skips, bringing readiness to **109/113**. Baseline and candidate
+commands share the same upstream CI skips and single-worker build setup.
+Randomized subtest IDs still need review before per-ID candidate ranking.
 
 DeepSWE provides 113 tasks across Go (35), Python (34), TypeScript (34),
 JavaScript (5) and Rust (5), pinned at `datacurve-ai/deep-swe`
@@ -495,9 +495,9 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
 
 ## What is not implemented
 
-Current readiness is **108/113**, with five tasks remaining after
-[both Helm public baselines](deepswe-helm-public-baselines-2026-10-10.md).
-Of those ready tasks, 105 use their published pinned images; Testem, Cliffy
+Current readiness is **109/113**, with four tasks remaining after
+[Pebble's official CI-mode refresh](deepswe-pebble-registered-ci-2026-10-10.md).
+Of those ready tasks, 106 use their published pinned images; Testem, Cliffy
 and GoReleaser use explicitly labelled, verified modified environments. The original corpus
 pins and held-out scorer are unchanged. The chronology below retains earlier
 counts as historical checkpoints.
@@ -517,7 +517,7 @@ Pebble's [short single-worker compile diagnostic](deepswe-pebble-valblk-compile-
 successfully compiled the previously killed `sstable/valblk` test binary, with
 about 688 MiB peak cgroup memory and no OOM events or observed Docker cutoff.
 This isolated-package check is not a baseline or proof that the full schedule
-fits; Pebble remains unready and overall readiness remains 108/113.
+fits; at that checkpoint Pebble remained unready and readiness was 108/113.
 The later approved [full-schedule single-worker diagnostic](deepswe-pebble-full-single-worker-2026-10-10.md)
 still OOMed: 8 GiB peak, one cgroup kill and Docker `OOMKilled=true`. This confirms
 a memory kill in that attempt, rather than merely a connection cutoff. No

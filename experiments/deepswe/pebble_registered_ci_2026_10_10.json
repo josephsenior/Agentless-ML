@@ -1,0 +1,41 @@
+{
+  "sha256": {
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "execution.json": "c0b59001811dc06dee6558bea38296971912e96ab089d356eca32c384206a03e",
+    "report.json": "dc64644937af5c2e7ba6a392f258c6051d51d93ba79378144a24a6e677387bb4"
+  },
+  "survey_record": {
+    "task_id": "pebble-durability-wait-apis",
+    "language": "go",
+    "base_commit": "1454d2bc0f378d7f34766afafee68a77e7b85995",
+    "status": "ready",
+    "runner": "pebble-go-ci",
+    "targets": [
+      "./..."
+    ],
+    "override": "Use upstream CI=1 so the three huge-memory public row-block overflow tests report their documented skips, and -p 1 to limit package build concurrency. Verified in the two-phase 2026-10-10 diagnostic. Preserve the complete ./... schedule, candidate compilation, cold writable cache, raw CTRF, real lint failures, original pinned image, 1800-second cap and Docker protections. Apply the same public plan to baseline and candidates; do not change the held-out scorer or count skips as passes.",
+    "exit_code": 1,
+    "tests": 14273,
+    "passed": 14245,
+    "failed": 10,
+    "skipped": 18,
+    "image_id": "sha256:b063f2d927a8b3d71db24c4ec198a0d05644d3ecbe96289d8b2b2bdbecaa72bd",
+    "docker_protections": null,
+    "message": "",
+    "artifacts": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\output\\deepswe-survey\\survey\\pebble-durability-wait-apis\\logs\\agentless-ml-06d4c0a1b35f44f98cb5fa1bef8550ae",
+    "seconds": 387.3
+  },
+  "official_readiness": "109/113",
+  "original_image_ready_tasks": 106,
+  "modified_image_ready_tasks": 3,
+  "host_tests": {
+    "passed": 166,
+    "skipped": 5
+  },
+  "same_public_setup_for_baseline_and_candidates": true,
+  "three_memory_skips_retained": true,
+  "observed_memory_peak_lower_bound_bytes": 2322468864,
+  "observation_note": "Last live probe before completion; not a saved final peak. All memory.events were zero at that probe. Official status was fail, not OOM or timeout.",
+  "matching_caveat": "Reports from the diagnostic and official refresh have changing randomized subtest IDs, including crash k values and seeds. Survey readiness is not proof of stable cross-run regression matching; assess this before candidate validation."
+}

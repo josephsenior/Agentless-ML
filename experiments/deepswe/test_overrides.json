@@ -1,4 +1,8 @@
 {
+  "pebble-durability-wait-apis": {
+    "runner": "pebble-go-ci",
+    "reason": "Use upstream CI=1 so the three huge-memory public row-block overflow tests report their documented skips, and -p 1 to limit package build concurrency. Verified in the two-phase 2026-10-10 diagnostic. Preserve the complete ./... schedule, candidate compilation, cold writable cache, raw CTRF, real lint failures, original pinned image, 1800-second cap and Docker protections. Apply the same public plan to baseline and candidates; do not change the held-out scorer or count skips as passes."
+  },
   "helm-array-merge-strategies": {
     "runner": "helm-go",
     "reason": "Keep the ordinary Go script and full package schedule unchanged. Opt into helm-save-tempdir-v1 matching IDs for the four TestSave outDir subtests in the v2/v3 util packages, masking only the random digits in /tmp/TestSave<digits>/001 and preserving /newdir. Refuse normalization collisions; keep raw CTRF, outcomes, candidate source, image and Docker protections unchanged."

@@ -1,5 +1,9 @@
 # Pebble: upstream CI-mode diagnostic
 
+Follow-up: the setup was subsequently registered and the
+[official survey refresh](deepswe-pebble-registered-ci-2026-10-10.md) reached
+109/113 ready. The diagnostic results below remain unchanged.
+
 The three huge-memory row-block tests really do skip under `CI=1`, with
 the upstream reason "Skipping test: requires too much memory for CI".
 After that verification, one full public schedule completed without an OOM.
