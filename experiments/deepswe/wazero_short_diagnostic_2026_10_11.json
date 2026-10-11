@@ -1,0 +1,133 @@
+{
+  "outcome_changes_vs_16g": [
+    {
+      "before": null,
+      "id": "github.com/tetratelabs/wazero/api::TestEncodeDecodeExternRef/c00017e000",
+      "after": "passed"
+    },
+    {
+      "before": "passed",
+      "id": "github.com/tetratelabs/wazero/internal/integration_test/engine::TestEngineCompiler/huge_binary",
+      "after": "skipped"
+    },
+    {
+      "before": "passed",
+      "id": "github.com/tetratelabs/wazero/internal/integration_test/engine::TestEngineInterpreter/huge_binary",
+      "after": "skipped"
+    },
+    {
+      "before": "passed",
+      "id": "github.com/tetratelabs/wazero/internal/integration_test/engine::TestMemoryLeak",
+      "after": "skipped"
+    },
+    {
+      "before": "passed",
+      "id": "github.com/tetratelabs/wazero/internal/integration_test/fuzzcases::Test733/interpreter/store_higher_offset",
+      "after": "skipped"
+    },
+    {
+      "before": "passed",
+      "id": "github.com/tetratelabs/wazero/internal/integration_test/fuzzcases::Test733/compiler/store_higher_offset",
+      "after": "skipped"
+    }
+  ],
+  "sample_count": 20,
+  "largest_sample_utc_gap_seconds": 54.135769,
+  "sha256": {
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "execution.json": "06946df14e4cf3f95aebd8dfd97fab095a28ee9aab46b7d1bdbbf31687419ee0",
+    "go-events-tail.jsonl": "f5fa68b4131a7f3e3c21cb03978fe4dd11f6771136cc05e7ebd39cc819cadab7",
+    "report.json": "ae333b37e238565257121082da475672fb6d73b14d7757e7ec3740548ec841ba",
+    "resource-samples.jsonl": "a2cce94eb8f1c0d0dd4009aebed6d30fd7192ac1a716fd71ae2fadf5186922cf",
+    "short-diagnostic.json": "40a9ddb5fc78d5130539ec5d31cf8dff81eb9daa5cf5b7cc182010018dac6719"
+  },
+  "diagnostic": {
+    "condition": "Wazero short-mode diagnostic, NOT a full baseline",
+    "task_id": "wazero-multi-module-snapshots",
+    "base_commit": "3ec1e028c8cbda984a71bf72321008723ebdcb51",
+    "image_id": "sha256:919deb52eb7b2bf568155881aac94349d93c711c5edddeced559138bfbd3c66f",
+    "short_mode": true,
+    "targets": [
+      "./..."
+    ],
+    "package_workers": 1,
+    "parallel_tests": 1,
+    "timeout_seconds": 1800,
+    "memory_mb": 8192,
+    "cpus": 2,
+    "tmpfs_mb": 4096,
+    "pids_limit": 2048,
+    "cache_seeded": false,
+    "automatic_retry": false,
+    "full_baseline": false,
+    "accepted_regression_inventory": false,
+    "official_survey_updated": false,
+    "readiness": "109/113",
+    "status": "pass",
+    "exit_code": 0,
+    "duration_seconds": 415.6831967999897,
+    "tests": 155967,
+    "counts": {
+      "passed": 155923,
+      "skipped": 44
+    },
+    "message": "",
+    "artifacts": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\output\\deepswe-diagnostics\\wazero-short-8g\\logs\\agentless-ml-d9440f239a414d7f9b22d9ed7ac83928",
+    "observed_host_config": {
+      "NetworkMode": "none",
+      "ReadonlyRootfs": true,
+      "CapDrop": [
+        "ALL"
+      ],
+      "SecurityOpt": [
+        "no-new-privileges"
+      ],
+      "Memory": 8589934592,
+      "MemorySwap": 8589934592,
+      "NanoCpus": 2000000000,
+      "PidsLimit": 2048,
+      "Tmpfs": {
+        "/tmp": "rw,exec,nosuid,nodev,size=4096m,mode=1777"
+      },
+      "Privileged": false,
+      "ExtraHosts": null,
+      "PortBindings": {},
+      "Binds": null
+    },
+    "final_state": {
+      "Status": "running",
+      "Running": true,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 557,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-10-11T12:43:49.275593247Z",
+      "FinishedAt": "0001-01-01T00:00:00Z"
+    },
+    "final_probe": {
+      "exit_code": 0,
+      "stdout": "FILE:memory.current\n783261696\nFILE:memory.peak\n1431605248\nFILE:memory.events\nlow 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nFILE:cpu.stat\nusage_usec 262267121\nuser_usec 213538042\nsystem_usec 48729078\nnr_periods 1946\nnr_throttled 253\nthrottled_usec 19104954\nnr_bursts 0\nburst_usec 0\nFILE:pids.current\n5\nSCRATCH_DF_BYTES\nFilesystem      1B-blocks      Used  Available Use% Mounted on\ntmpfs          4294967296 606822400 3688144896  15% /tmp\nPROCESSES\n  PID  PPID   RSS COMMAND\n    1     0   640 /sbin/docker-init -- /bin/sh -c while :; do sleep 1; done\n    7     1  1024 /bin/sh -c while :; do sleep 1; done\n 6124     7  1536 sleep 1\n 6125     0  1536 /bin/sh -c for f in memory.current memory.peak memory.events cpu.stat pids.current; do echo \"FILE:$f\"; cat \"/sys/fs/cgroup/$f\"; done; echo SCRATCH_DF_BYTES; df -B1 /tmp; echo PROCESSES; ps -eo pid,ppid,rss,args\n 6137  6125  4224 ps -eo pid,ppid,rss,args\n",
+      "stderr": ""
+    }
+  },
+  "date": "2026-10-11",
+  "host_tests_passed": 12,
+  "memory_peak_bytes": 1431605248,
+  "memory_events": {
+    "max": 0,
+    "oom": 0,
+    "oom_kill": 0,
+    "oom_group_kill": 0
+  },
+  "startup_note": "First launch stopped at image inspection because Docker was not running. No container or test command started. Docker Desktop was started with existing settings; one diagnostic test attempt then ran.",
+  "source_guard_summary": {
+    "skipped_branches": 3,
+    "reduced_workload_branches": 7
+  },
+  "scope": "All ./... targets in the existing root-module plan, not every nested schedule in upstream make test.",
+  "matching_caveat": "TestEncodeDecodeExternRef has a changing pointer-like child ID; not normalized or claimed reliable for candidate regression matching."
+}

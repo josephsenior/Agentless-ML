@@ -1,5 +1,10 @@
 # DeepSWE integration
 
+Wazero's separate [short-mode diagnostic](wazero-short-diagnostic-2026-10-11.md)
+passed under its original 8 GiB limit, with 155,923 passes and 44 skips.
+This reduced-coverage result is not a full baseline or an official readiness
+update; the total remains **109/113**.
+
 Pebble's [registered public CI setup](deepswe-pebble-registered-ci-2026-10-10.md)
 completed its official full-schedule refresh with 14,245 passes, 10 lint
 failures and 18 skips, bringing readiness to **109/113**. Baseline and candidate
