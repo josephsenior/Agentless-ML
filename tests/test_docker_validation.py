@@ -90,6 +90,36 @@ def run_fake(tmp_path, monkeypatch, command, run_as_image_user=False, **state):
     return runner.run(source, command), calls
 
 
+@pytest.mark.parametrize("reported,exit_code,expected", [
+    ("failed", 1, ValidationStatus.FAIL),
+    ("other", 1, ValidationStatus.HARNESS_ERROR),
+    ("other", 2, ValidationStatus.HARNESS_ERROR),
+    ("passed", 0, ValidationStatus.PASS),
+    ("skipped", 0, ValidationStatus.HARNESS_ERROR),
+])
+def test_reproduction_reports_are_checked_before_saving_execution(
+    tmp_path, monkeypatch, reported, exit_code, expected,
+):
+    from agentless_ml.schemas import ValidationKind
+    from agentless_ml.validation import ReportFormat, TestReport
+    report = json.dumps({"results": {"tests": [
+        {"suite": "reproduction", "name": "issue", "status": reported},
+    ]}}).encode()
+    execution, _ = run_fake(
+        tmp_path, monkeypatch,
+        PublicTestCommand(("trusted-test",), kind=ValidationKind.REPRODUCTION,
+                          failure_exit_codes=(1, 2),
+                          report=TestReport(ReportFormat.CTRF_JSON, "/tmp/repro.json")),
+        exit_code=exit_code, files={"/tmp/repro.json": report},
+    )
+    assert execution.result.status is expected
+    directory = Path(execution.artifact_directory)
+    assert (directory / "report.json").read_bytes() == report
+    saved = json.loads((directory / "execution.json").read_text())
+    assert saved["result"]["status"] == expected.value
+    assert "status_before_reproduction_check" in saved
+
+
 @pytest.mark.parametrize(
     "exit_code,oom,running,timed_out,expected",
     [

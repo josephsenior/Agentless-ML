@@ -6,12 +6,13 @@ from agentless_ml.validation.reproduction import (
     parse_reproduction_source,
     reproduction_file,
     select_reproduction_source,
+    python_reproduction_command,
 )
 
 
 def spec(path="reproduce.py"):
     return ReproductionSpec(
-        path, PublicTestCommand(("python", path), kind=ValidationKind.REPRODUCTION)
+        path, python_reproduction_command(path)
     )
 
 

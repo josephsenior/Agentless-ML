@@ -7,7 +7,10 @@ from pathlib import Path
 import pytest
 
 from agentless_ml.localization import parse_file_locations
-from agentless_ml.schemas import Benchmark, TaskSpec, ValidationResult, ValidationStatus
+from agentless_ml.schemas import (
+    Benchmark, TaskSpec, TestCaseResult, TestCaseStatus, ValidationResult, ValidationStatus,
+)
+from agentless_ml.validation.reproduction import python_reproduction_command
 from agentless_ml.validation import (
     DockerTestRunner,
     PublicTestCommand,
@@ -577,6 +580,11 @@ class ReproductionRunner:
                 duration_seconds=0,
                 kind=command.kind,
                 exit_code=0 if status == ValidationStatus.PASS else 1,
+                test_cases=(TestCaseResult(
+                    "generated-reproduction::standalone",
+                    TestCaseStatus.PASSED if status == ValidationStatus.PASS
+                    else TestCaseStatus.FAILED,
+                ),) if command.report else (),
             ),
             self.image_id,
             "fixture",
@@ -598,9 +606,7 @@ def reproduction_controller(tmp_path, source, runner):
         public_commands=(PublicTestCommand(("regression",)),),
         reproduction_spec=ReproductionSpec(
             "reproduce.py",
-            PublicTestCommand(
-                ("python", "reproduce.py"), kind=ValidationKind.REPRODUCTION
-            ),
+            python_reproduction_command("reproduce.py"),
         ),
         implementation_revision="fixture",
         harness_revision="fixture",
@@ -654,6 +660,11 @@ class MultiReproductionRunner(ReproductionRunner):
                 duration_seconds=0,
                 kind=command.kind,
                 exit_code=0 if status == ValidationStatus.PASS else 1,
+                test_cases=(TestCaseResult(
+                    "generated-reproduction::standalone",
+                    TestCaseStatus.PASSED if status == ValidationStatus.PASS
+                    else TestCaseStatus.FAILED,
+                ),),
             ),
             self.image_id,
             "fixture",
@@ -715,6 +726,51 @@ def test_reproduction_sampling_failure_retains_evidence(
 def test_cannot_mix_reproduction_input_formats():
     with pytest.raises(ValueError, match="mix"):
         replace(reproduction_responses(), reproduction_samples=("source",))
+
+
+@pytest.mark.parametrize("samples", [False, True])
+@pytest.mark.parametrize("case_status", [None, TestCaseStatus.ERROR, TestCaseStatus.SKIPPED])
+def test_exit_one_cannot_verify_missing_or_unclean_reproduction_evidence(
+    tmp_path, source, samples, case_status,
+):
+    class AmbiguousRunner(ReproductionRunner):
+        def run(self, *args, **kwargs):
+            execution = super().run(*args, **kwargs)
+            cases = () if case_status is None else (
+                TestCaseResult("generated-reproduction::standalone", case_status),
+            )
+            return replace(execution, result=replace(
+                execution.result, test_cases=cases,
+            ))
+    runner = AmbiguousRunner()
+    bundle = reproduction_responses()
+    if samples:
+        bundle = replace(bundle, reproduction_test=None,
+                         reproduction_samples=(bundle.reproduction_test,))
+    with pytest.raises(WorkflowError, match="infrastructure|must fail"):
+        reproduction_controller(tmp_path, source, runner).run(bundle)
+    assert len(runner.calls) == 1
+    directory = next((tmp_path / "runs").iterdir())
+    assert not (directory / "executions").exists()
+
+
+def test_candidate_pass_with_setup_error_is_not_reproduction_success(tmp_path, source):
+    class InvalidCandidateRunner(ReproductionRunner):
+        def run(self, *args, **kwargs):
+            execution = super().run(*args, **kwargs)
+            if "reproduction-baseline" not in str(kwargs.get("artifact_root")):
+                if execution.result.kind.value == "reproduction":
+                    return replace(execution, result=replace(
+                        execution.result, status=ValidationStatus.PASS, exit_code=0,
+                        test_cases=(TestCaseResult("setup", TestCaseStatus.ERROR),),
+                    ))
+            return execution
+    with pytest.raises(WorkflowError, match="infrastructure failures"):
+        reproduction_controller(tmp_path, source, InvalidCandidateRunner()).run(
+            reproduction_responses(),
+        )
+    directory = next((tmp_path / "runs").iterdir())
+    assert not (directory / "prediction.json").exists()
 
 
 @pytest.mark.parametrize(

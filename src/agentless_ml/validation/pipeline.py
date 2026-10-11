@@ -12,6 +12,7 @@ from agentless_ml.workspace.base import WorkspaceProvider
 
 from .docker import DockerTestRunner, PublicTestCommand
 from .reproduction import ReproductionSpec, reproduction_file
+from .reproduction_evidence import check_reproduction_result
 
 
 def validate_candidate(
@@ -54,7 +55,9 @@ def validate_candidate(
                         execution = runner.run(
                             workspace.path, command, artifact_root=artifact_root
                         )
-                    evidence.append(execution.result)
+                    evidence.append(check_reproduction_result(
+                        execution.result, report_declared=command.report is not None,
+                    ))
                     Path(execution.artifact_directory, "candidate.json").write_text(
                         json.dumps(
                             {

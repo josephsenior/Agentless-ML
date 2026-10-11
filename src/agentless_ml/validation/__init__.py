@@ -4,7 +4,7 @@ from .docker import DockerTestRunner, PublicTestCommand, TestExecution
 from .pipeline import validate_candidate
 from .regression import RegressionTest
 from .reports import ReportError, ReportFormat, TestReport, parse_report
-from .reproduction import ReproductionSpec
+from .reproduction import ReproductionSpec, python_reproduction_command
 
 __all__ = [
     "DockerTestRunner",
@@ -16,5 +16,6 @@ __all__ = [
     "TestExecution",
     "TestReport",
     "parse_report",
+    "python_reproduction_command",
     "validate_candidate",
 ]

@@ -74,6 +74,25 @@ framework report parser must distinguish assertion failures from import, build
 and setup failures; an exit code alone cannot always do that. The prompt asks
 for correct failure handling, but that request is not a technical guarantee.
 
+The [structured-evidence validation update](reproduction-validation-2026-10-11.md)
+now requires generated reproduction commands to declare a report. Exit-only
+commands are rejected, not treated as verified reproduction. A baseline must
+report at least one failed test and no errors or skips; a candidate success
+must have a nonempty all-passing report. Missing, mixed-error or contradictory
+evidence becomes a harness error. The same check runs in the controller and
+candidate pipeline as well as the Docker recorder.
+
+`python_reproduction_command(path)` supplies a trusted standalone Python
+adapter: it reports `AssertionError` as failure and other uncaught exceptions
+(including import/syntax/runtime errors and explicit `SystemExit`) as errors.
+The factory is not a host sandbox; generated source still runs only in Docker.
+Other language adapters must provide equally meaningful classification.
+
+This is a deliberate compatibility tightening. The older recorded V2 Go,
+JavaScript and TypeScript slice helper still has exit-only reproduction
+commands and now refuses to run them. Those scripts need reporting adapters
+before replay; historical smoke-task evidence has not been rewritten.
+
 Failing on the original revision is necessary, not sufficient: a test can fail
 for the wrong reason or encode the wrong expected behavior. This milestone does
 not prove semantic validity, detect flakiness, normalize semantically equivalent

@@ -67,6 +67,7 @@ from agentless_ml.validation.reproduction import (
     select_reproduction_source,
 )
 from agentless_ml.workspace import LocalGitWorkspaceProvider
+from agentless_ml.validation.reproduction_evidence import check_reproduction_result
 
 
 class WorkflowError(RuntimeError):
@@ -271,11 +272,16 @@ class FixedWorkflowController:
                     sample_directory / "baseline.json",
                     {
                         "result": asdict(execution.result),
+                        "checked_result": asdict(check_reproduction_result(
+                            execution.result, report_declared=spec.command.report is not None,
+                        )),
                         "workspace": asdict(workspace.provenance),
                         "artifact_directory": execution.artifact_directory,
                     },
                 )
-            status = execution.result.status
+            status = check_reproduction_result(
+                execution.result, report_declared=spec.command.report is not None,
+            ).status
             attempts.append({"sample_index": index, "status": status.value})
             _write_json(directory / "reproduction-attempts.json", attempts)
             if status == ValidationStatus.FAIL:
@@ -375,13 +381,19 @@ class FixedWorkflowController:
                             directory / "reproduction-baseline.json",
                             {
                                 "result": asdict(execution.result),
+                                "checked_result": asdict(check_reproduction_result(
+                                    execution.result,
+                                    report_declared=spec.command.report is not None,
+                                )),
                                 "workspace": asdict(workspace.provenance),
                                 "artifact_directory": execution.artifact_directory,
                             },
                         )
                 except ValueError as exc:
                     raise WorkflowError(str(exc)) from exc
-                if execution.result.status != ValidationStatus.FAIL:
+                if check_reproduction_result(
+                    execution.result, report_declared=spec.command.report is not None,
+                ).status != ValidationStatus.FAIL:
                     raise WorkflowError(
                         "generated reproduction must fail on the original revision without infrastructure errors"
                     )

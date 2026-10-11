@@ -27,6 +27,7 @@ from agentless_ml.workspace.local_git import _require_git, _safe_path
 from agentless_ml.workspace.records import WorkspaceError
 
 from .reports import MAX_REPORT_BYTES, ReportError, TestReport, parse_report
+from .reproduction_evidence import check_reproduction_result
 
 LOG_TAIL_BYTES = 1024 * 1024
 
@@ -517,8 +518,14 @@ class DockerTestRunner:
             test_cases=test_cases,
             counted_test_ids=command.counted_test_ids,
         )
+        reported_status = result.status
+        result = check_reproduction_result(result, report_declared=command.report is not None)
+        if result.status is not reported_status:
+            message = (message + " Reproduction report lacks clean test evidence.").strip()
         execution = TestExecution(result, self.image_id, name, str(artifacts), message)
         record = asdict(execution)
+        if command.kind is ValidationKind.REPRODUCTION:
+            record["status_before_reproduction_check"] = reported_status.value
         if getattr(self, "workspace_setup", None) is not None:
             record["workspace_setup"] = self.workspace_setup
         record["limits"] = {

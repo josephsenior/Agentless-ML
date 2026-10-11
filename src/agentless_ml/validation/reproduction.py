@@ -9,6 +9,52 @@ from pathlib import Path, PurePosixPath
 from agentless_ml.schemas import ValidationKind
 
 from .docker import PublicTestCommand
+from .reports import ReportFormat, TestReport
+
+
+# Controller-owned standalone Python adapter. Only AssertionError is a test
+# failure; import/syntax/runtime/setup errors and SystemExit are report errors.
+# This is not a sandbox: production execution still belongs inside Docker.
+_PYTHON_REPRODUCTION_RUNNER = """
+import json
+import runpy
+import sys
+import traceback
+from pathlib import Path
+
+source, report = sys.argv[1:]
+sys.path.insert(0, str(Path(source).resolve().parent))
+status, code = "passed", 0
+try:
+    runpy.run_path(source, run_name="__main__")
+except AssertionError:
+    status, code = "failed", 1
+    traceback.print_exc()
+except BaseException:
+    status, code = "other", 2
+    traceback.print_exc()
+Path(report).write_text(json.dumps({"results": {"tests": [
+    {"suite": "generated-reproduction", "name": "standalone", "status": status}
+]}}), encoding="utf-8")
+sys.exit(code)
+"""
+
+
+def python_reproduction_command(
+    path: str, *, timeout_seconds: float = 60,
+) -> PublicTestCommand:
+    """Trusted execution/reporting for one standalone Python assertion script."""
+    command = PublicTestCommand(
+        ("python", "-c", _PYTHON_REPRODUCTION_RUNNER, path, "/tmp/reproduction.json"),
+        kind=ValidationKind.REPRODUCTION, timeout_seconds=timeout_seconds,
+        # Both exits carry a report. The reproduction evidence check turns the
+        # exit-2 ERROR into a harness error after preserving its raw report.
+        failure_exit_codes=(1, 2),
+        report=TestReport(ReportFormat.CTRF_JSON, "/tmp/reproduction.json"),
+    )
+    # Reuse the same path boundary as source installation.
+    ReproductionSpec(path, command)
+    return command
 
 
 def select_reproduction_source(verified: dict[int, str]) -> tuple[int, int]:
@@ -53,6 +99,13 @@ class ReproductionSpec:
             )
         if self.command.kind != ValidationKind.REPRODUCTION:
             raise ValueError("reproduction command must have reproduction kind")
+        if self.command.report is None:
+            raise ValueError(
+                "reproduction command requires a structured report that distinguishes "
+                "test failures from setup errors; exit-only commands are not eligible"
+            )
+        if self.command.counted_test_ids is not None:
+            raise ValueError("reproduction must validate its complete declared report")
 
 
 def render_reproduction_prompt(
