@@ -1,0 +1,15 @@
+{
+  "task_id": "fd-deterministic-multi-key-sorting",
+  "base_commit": "227883606023d62275fb48701aeac90f2b604143",
+  "purpose": "Issue-derived recorded reproduction and partial path-sorting repair; not a full multi-key solution or benchmark score.",
+  "coverage": "Repeatable --sort path, global ordering beyond 1000 entries with a zero buffering deadline, and limiting after sorting on lowercase ASCII paths.",
+  "not_implemented": "Other sort keys, reverse/grouping/natural/random modifiers, case-folded comparisons, and full task semantics.",
+  "regression_scope": "Reproduction-only controller slice; no separate public regression suite or held-out verifier.",
+  "reproduction_path": "tests/agentless_path_sort.rs",
+  "test_name": "issue_path_sort",
+  "timeout_seconds": 600,
+  "memory_mb": 4096,
+  "tmpfs_mb": 4096,
+  "cpus": 1,
+  "pids_limit": 2048
+}

@@ -98,3 +98,8 @@ The [real fd repository diagnostic](fd-rust-reproduction-diagnostic.md) also
 passes: the reporter sees a passing public CLI check on the pinned base and a
 failing check after a deliberately broken candidate-source change. This proves
 real-repository compilation/discovery, not task-solving or failing-baseline eligibility.
+
+An [issue-derived fd reproduction](fd-issue-derived-reproduction.md) now fails
+on the pinned base and passes after a recorded partial path-sorting repair.
+That real-task controller slice also exports its prediction, but does not claim
+the full multi-key sorting task is solved or public regression coverage.

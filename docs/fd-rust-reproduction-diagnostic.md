@@ -30,8 +30,9 @@ bytes and CTRF reports are retained.
 The negative control is explicitly a seeded regression, not a proposed repair.
 The check passes on the original revision, so it is **not eligible** as a generated
 issue reproduction. An issue-derived Rust check that fails on an actual task's
-base revision and passes after repair remains a separate, stronger verification
-step. The [complete recorded controller slice](recorded-rust-controller-slice.md)
+base revision and passes after repair is a separate, stronger verification
+step; the [partial path-sorting slice](fd-issue-derived-reproduction.md) now
+establishes it for a bounded part of this task. The [complete recorded controller slice](recorded-rust-controller-slice.md)
 already exercises that eligibility/selection sequence on an authored crate.
 
 Only the sealed base checkout, its public source/tests and the agent-visible

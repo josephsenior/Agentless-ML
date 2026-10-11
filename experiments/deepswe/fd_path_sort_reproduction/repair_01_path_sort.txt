@@ -1,0 +1,66 @@
+Partial repair for the public issue's path-sorting slice only. Other keys and modifiers remain unsupported.
+
+```rust
+### src/cli.rs
+<<<<<<< SEARCH
+    pub max_buffer_time: Option<Duration>,
+=======
+    pub max_buffer_time: Option<Duration>,
+
+    /// Sort all results by path before printing or applying the result limit.
+    #[arg(long, value_name = "field", value_parser = ["path"], action = ArgAction::Append, conflicts_with = "execs")]
+    pub sort: Vec<String>,
+>>>>>>> REPLACE
+### src/config.rs
+<<<<<<< SEARCH
+    pub max_buffer_time: Option<Duration>,
+=======
+    pub max_buffer_time: Option<Duration>,
+
+    /// Collect the complete search before sorting by path.
+    pub sort_path: bool,
+>>>>>>> REPLACE
+### src/main.rs
+<<<<<<< SEARCH
+        max_buffer_time: opts.max_buffer_time,
+=======
+        max_buffer_time: opts.max_buffer_time,
+        sort_path: !opts.sort.is_empty(),
+>>>>>>> REPLACE
+### src/walk.rs
+<<<<<<< SEARCH
+    fn recv(&self) -> Result<Batch, RecvTimeoutError> {
+        match self.mode {
+=======
+    fn recv(&self) -> Result<Batch, RecvTimeoutError> {
+        if self.config.sort_path {
+            return Ok(self.rx.recv()?);
+        }
+        match self.mode {
+>>>>>>> REPLACE
+<<<<<<< SEARCH
+                                    if self.buffer.len() > MAX_BUFFER_LENGTH {
+=======
+                                    if !self.config.sort_path && self.buffer.len() > MAX_BUFFER_LENGTH {
+>>>>>>> REPLACE
+<<<<<<< SEARCH
+                            if let Some(max_results) = self.config.max_results
+                                && self.num_results >= max_results
+=======
+                            if !self.config.sort_path
+                                && let Some(max_results) = self.config.max_results
+                                && self.num_results >= max_results
+>>>>>>> REPLACE
+<<<<<<< SEARCH
+            self.buffer.sort();
+            self.stream()?;
+=======
+            self.buffer.sort();
+            if self.config.sort_path {
+                if let Some(max_results) = self.config.max_results {
+                    self.buffer.truncate(max_results);
+                }
+            }
+            self.stream()?;
+>>>>>>> REPLACE
+```

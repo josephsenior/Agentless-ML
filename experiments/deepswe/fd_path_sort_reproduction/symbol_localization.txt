@@ -1,0 +1,13 @@
+```
+src/cli.rs
+line: 545
+src/config.rs
+line: 71
+src/main.rs
+line: 267
+src/walk.rs
+line: 184
+line: 211
+line: 221
+line: 284
+```

@@ -1,0 +1,34 @@
+```rust
+#[test]
+fn issue_path_sort() {
+    // Setup uses only public files and the binary built from this workspace.
+    let root = tempfile::tempdir().expect("create public input directory");
+    let expected: Vec<String> = (0..1205).map(|n| format!("file{n:04}.txt")).collect();
+    for name in expected.iter().rev() {
+        std::fs::write(root.path().join(name), b"public input").expect("write public input");
+    }
+    let binary = env!("CARGO_BIN_EXE_fd");
+    let version = std::process::Command::new(binary).arg("--version")
+        .output().expect("run candidate-built fd");
+    assert!(version.status.success(), "fd preflight failed: {:?}", version);
+    for _ in 0..2 {
+        for limit in [None, Some(3)] {
+            let mut command = std::process::Command::new(binary);
+            command.current_dir(root.path()).args([
+                "--color", "never", "--type", "f", "--threads", "1",
+                "--max-buffer-time", "0", "--sort", "path", "--sort", "path",
+            ]);
+            if let Some(count) = limit {
+                command.args(["--max-results", &count.to_string()]);
+            }
+            let output = command.arg(".").output().expect("run fd path-sort command");
+            // CLI acceptance is behavior requested by the public issue, not setup.
+            assert!(output.status.success(), "--sort path must be accepted: {:?}", output);
+            let stdout = String::from_utf8(output.stdout).expect("UTF-8 public output");
+            let actual: Vec<_> = stdout.lines().map(|s| s.trim_start_matches("./")).collect();
+            let wanted: Vec<_> = expected.iter().take(limit.unwrap_or(expected.len())).map(String::as_str).collect();
+            assert_eq!(actual, wanted, "sort globally before applying the result limit");
+        }
+    }
+}
+```

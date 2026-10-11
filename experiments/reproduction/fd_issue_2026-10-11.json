@@ -1,0 +1,31 @@
+{
+  "scope": "issue-derived reproduction with partial path-sorting repair, not a full task solution",
+  "task_id": "fd-deterministic-multi-key-sorting",
+  "base_commit": "227883606023d62275fb48701aeac90f2b604143",
+  "container_digest": "sha256:31c4201bbe4b79457ab34494b84767d417926e1cf9e8e24ac7d44d9a8e4bc538",
+  "implementation_revision": "3b40568e8af39f9a60bc846437b888e630778d6f+dirty",
+  "run_id": "run-43edeceeded64781ba8eec67c1300aa1",
+  "artifact_directory": "artifacts/fd-path-sort-reproduction-20261011/runs/run-43edeceeded64781ba8eec67c1300aa1",
+  "prediction_file": "prediction.json",
+  "baseline_status": "fail",
+  "baseline_reason": "requested --sort option absent on pinned base",
+  "candidate_status": "pass",
+  "selected_candidate_id": "repair-1",
+  "selection_reason": "reproduction_passed_then_normalized_majority",
+  "malformed_repair_rejected": true,
+  "reproduction_source_sha256": "ad9d28ff518a2260f87e9891e2f25bfdb146e954b67abe684af155d4fb5a0d30",
+  "final_patch_sha256": "b32a7ef0b8bec81c8359e59a0f93484cb49d019b5390e3f5c98c5a6d2bf232e5",
+  "report_sha256": {
+    "reproduction-baseline/agentless-ml-eed297786ee1415ea1ace5ba1516e472/report.json": "635e4f5cb66ffc8b696acbcda38245d3c380093937864cd50da6c82e5a79370c",
+    "executions/repair-1/agentless-ml-9db4eeefbc094c2abe2c9619e2426401/report.json": "2ad0c1ac7376c70bdb6f5a8ecab21fec9ec431ce5e93a07ba3bc4eb0c4da9fa8"
+  },
+  "wall_time_seconds": 244.34766020000097,
+  "model_calls": 0,
+  "related_tests": {"passed": 117, "skipped": 12},
+  "docker_controller_run_separately_via_cli": true,
+  "public_regression_suite_run": false,
+  "held_out_verifier_run": false,
+  "source_unchanged": true,
+  "candidate_workspaces_cleaned": true,
+  "deepswe_readiness_unchanged": "109/113"
+}
