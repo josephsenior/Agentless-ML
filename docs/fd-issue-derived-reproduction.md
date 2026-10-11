@@ -150,6 +150,58 @@ control. The tool exits nonzero for a failing suite while retaining its report.
 The related local checks now have 122 passes and 12 opt-in skips; the two real
 Docker suite runs were performed separately, not counted as pytest passes.
 
-Next: exercise reproduction and baseline-passing public regression checks
-together in one recorded Rust controller run, retaining the shared failure
-as baseline evidence rather than changing fd's public tests.
+## Both checks in one controller run
+
+The combined run also completed on 11 October. It uses the controller's existing
+regression inventory and reproduction specification together; no framework
+implementation change was needed. The recorded localization, reproduction
+source and repair responses are unchanged. The regression-exclusion response
+is empty: no baseline-passing test was manually removed.
+
+| Check | Observed result | Time, including fresh build |
+| --- | --- | --- |
+| Base reproduction | Fail: requested `--sort` option absent | 183.0 s |
+| Base public suite | 240 passed, `test_exec_nulls` failed | 216.4 s |
+| Repair public suite | Same 240 passed and same failure | 181.9 s |
+| Repair reproduction | Pass | 166.7 s |
+
+The controller froze all 240 baseline-passing IDs before candidate validation.
+The repair preserved every one. Both public commands still ran all 241 tests
+without filters, and both raw results remain `FAIL`. The shared failure is kept
+in the reports, not turned into a passing test. The generated reproduction
+appears only in its own checks, not in either public-suite inventory.
+
+The malformed repair was rejected before execution. The valid partial repair
+was selected through `best_regression_then_reproduction_passed_then_normalized_majority`
+and exported. Its prediction is byte-for-byte identical to the earlier
+reproduction-only export. Only one valid repair was supplied, so this checks
+integration and selection execution, not comparative ranking performance.
+
+The run took 752.7 seconds across four isolated Docker checks, each under the
+unchanged 600-second cap and resource protections. There were no retries, model
+calls or held-out tests. The source remains sealed, temporary workspaces are
+cleaned, and the repair still does not implement the full multi-key request.
+DeepSWE readiness remains 109/113.
+
+The [combined evidence](../experiments/reproduction/fd_combined_validation_2026-10-11.json)
+records the run ID, selection, limits and four report hashes. Local artifacts
+are under `artifacts/fd-combined-validation-20261011`. The related fixture,
+Rust/controller, regression-selection and report-parser checks passed 179 tests,
+with 12 opt-in tests skipped; the real Docker controller run was separate.
+
+Use the existing reproduction tool with the combined option and a fresh output:
+
+```powershell
+$env:PYTHONPATH='src'
+.venv/Scripts/python.exe tools/run_fd_path_sort_reproduction.py --with-public-regressions --output artifacts/fd-combined-new --tasks-root ../benchmarks/deepswe/corpus/tasks --repositories ../benchmarks/deepswe/repos
+```
+
+`--audit-existing` also understands combined runs and verifies their saved
+reports without launching Docker. It checks that raw JUnit agrees with the
+saved outcomes, both complete public inventories are present, counted IDs match
+the baseline passes, no manual exclusions were introduced, and the exported
+patch matches the original repair. Audit tests cover newly failed or skipped
+tests, missing tests, changed reports and incorrectly counted IDs.
+
+Next: verify multiple-reproduction-sample selection on a real Rust task,
+using recorded samples and the existing controller rather than a model call.

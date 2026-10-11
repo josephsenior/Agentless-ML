@@ -2,10 +2,12 @@
 
 import json
 import base64
+from dataclasses import asdict
 import hashlib
 import os
 from pathlib import Path
 import runpy
+from xml.etree import ElementTree
 
 import pytest
 
@@ -45,6 +47,76 @@ def test_fd_partial_repair_is_source_only_and_scoped():
     assert '!self.config.sort_path' in repair
     with pytest.raises(ValueError):
         parse_search_replace_edits((EXPERIMENT / 'repair_00_malformed.txt').read_text())
+
+
+def test_combined_fd_run_keeps_the_same_recorded_inputs():
+    tool = runpy.run_path(str(ROOT / 'tools/run_fd_path_sort_reproduction.py'))
+    original = asdict(tool['responses']())
+    combined = asdict(tool['responses'](with_public_regressions=True))
+    assert original.pop('regression_exclusions') is None
+    assert combined.pop('regression_exclusions') == ''
+    assert original == combined
+
+
+@pytest.mark.parametrize('mutation', [None, 'new-failure', 'new-skip', 'counted-failing-base',
+                                      'omitted-passing-id', 'raw-report-mismatch', 'missing-test'])
+def test_combined_fd_audit_preserves_full_reports_and_frozen_passing_ids(tmp_path, mutation):
+    # Synthetic reports exercise evidence checks, not fd behavior or Docker.
+    tool = runpy.run_path(str(ROOT / 'tools/run_fd_path_sort_reproduction.py'))
+    from agentless_ml.validation import ReportFormat, parse_report
+
+    directory = tmp_path / 'run'
+    baseline_dir = directory / 'regression-baseline/0/execution'
+    candidate_dir = directory / 'executions/repair-1/public'
+    baseline_dir.mkdir(parents=True)
+    candidate_dir.mkdir(parents=True)
+
+    def report(path, candidate=False):
+        suite = ElementTree.Element('testsuite')
+        for index in range(241):
+            if candidate and mutation == 'missing-test' and index == 0:
+                continue
+            case = ElementTree.SubElement(suite, 'testcase', classname='fd-find::tests',
+                                          name='test_exec_nulls' if index == 240 else f'public_{index}')
+            if index == 240 or (candidate and mutation == 'new-failure' and index == 0):
+                ElementTree.SubElement(case, 'failure')
+            elif candidate and mutation == 'new-skip' and index == 0:
+                ElementTree.SubElement(case, 'skipped')
+        raw = ElementTree.tostring(suite)
+        path.write_bytes(raw)
+        return [asdict(case) for case in parse_report(raw, ReportFormat.JUNIT_XML)]
+
+    before = report(baseline_dir / 'report.xml')
+    after = report(candidate_dir / 'report.xml', candidate=True)
+    passing = [case['test_id'] for case in before if case['status'] == 'passed']
+    selected = passing.copy()
+    if mutation == 'counted-failing-base':
+        selected.append('fd-find::tests::test_exec_nulls')
+    elif mutation == 'omitted-passing-id':
+        selected.pop()
+    elif mutation == 'raw-report-mismatch':
+        after[0]['status'] = 'skipped'
+    base = {'kind': 'regression', 'status': 'fail', 'command': ['unchanged-public-suite'],
+            'duration_seconds': 0, 'test_cases': before}
+    candidate = {**base, 'test_cases': after, 'counted_test_ids': selected}
+
+    def write(path, value):
+        path.write_text(json.dumps(value), encoding='utf-8')
+
+    write(directory / 'regression-baseline.json', [{'result': base, 'artifact_directory': str(baseline_dir)}])
+    write(directory / 'regression-selection.json', {'response': '', 'excluded_ids': [],
+          'passing_ids': passing, 'selected_ids': selected})
+    write(candidate_dir / 'execution.json', {'result': candidate, 'artifact_directory': str(candidate_dir)})
+    if mutation not in {None, 'new-failure', 'new-skip'}:
+        with pytest.raises(AssertionError):
+            tool['audit_regressions'](directory, candidate)
+    else:
+        result = tool['audit_regressions'](directory, candidate)
+        assert result['counted_baseline_passing'] == 240
+        assert result['baseline_nonpassing_ids'] == ['fd-find::tests::test_exec_nulls']
+        assert result['candidate_raw_status'] == 'fail'
+        assert result['new_regressions'] == ([] if mutation is None else ['fd-find::tests::public_0'])
+        assert result['same_test_ids_and_outcomes'] == (mutation is None)
 
 
 @pytest.mark.parametrize('mutation', [None, 'wrong-baseline-reason', 'candidate-report-failed', 'changed-source'])

@@ -101,5 +101,8 @@ real-repository compilation/discovery, not task-solving or failing-baseline elig
 
 An [issue-derived fd reproduction](fd-issue-derived-reproduction.md) now fails
 on the pinned base and passes after a recorded partial path-sorting repair.
-That real-task controller slice also exports its prediction, but does not claim
-the full multi-key sorting task is solved or public regression coverage.
+That real-task controller slice now combines reproduction and the existing
+public regression suite through final prediction export. It preserves all 240
+baseline-passing tests; both full public runs retain the same one failure out
+of 241 tests. This is not a clean full-suite pass or a solution of the complete
+multi-key sorting task.
