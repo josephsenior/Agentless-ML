@@ -74,3 +74,7 @@ were run. DeepSWE readiness remains 109/113.
 The [three recorded slices have now been replayed end to end](multilingual-reproduction-replay-2026-10-11.md)
 under this reporting contract. Their new artifacts and committed summary remain
 separate from the historical runs.
+
+The remaining language now has a [Rust reporting adapter](rust-reproduction-reporting.md),
+using the images' existing Cargo-nextest installation with explicit limits around
+panic classification and early successful exits.

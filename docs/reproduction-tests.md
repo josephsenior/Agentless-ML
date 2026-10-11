@@ -92,6 +92,11 @@ The three recorded V2 smoke configurations use these factories rather than
 exit-only commands. Historical smoke-task evidence has not been rewritten;
 migrating a command is not a new benchmark result.
 
+Rust also has a [Cargo-nextest integration-test adapter](rust-reproduction-reporting.md).
+It rejects build errors and abnormal test outcomes and retains the original
+JUnit report. Rust panics and explicit successful exits have important limits
+documented there; a structured report is still not proof of a valid issue check.
+
 Failing on the original revision is necessary, not sufficient: a test can fail
 for the wrong reason or encode the wrong expected behavior. This milestone does
 not prove semantic validity, detect flakiness, normalize semantically equivalent
