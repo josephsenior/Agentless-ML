@@ -43,7 +43,7 @@ The recorded SEARCH/REPLACE response changes four production files:
 
 Without an explicit sort request, the new flag is false and the old branching
 conditions are retained. That source-level observation is not a substitute for
-running the public regression suite.
+running the public regression suite. The follow-up below records that check.
 
 This is deliberately **not a full repair of the benchmark task**. Only the path
 key is accepted. Other keys, reverse/grouping/natural/random modifiers,
@@ -65,7 +65,7 @@ CTRF report and raw nextest JUnit bytes. The source repository stays sealed at
 `227883606023d62275fb48701aeac90f2b604143`; generated tests are absent from the
 export and original checkout, and candidate workspaces are cleaned.
 
-This is a reproduction-only recorded slice: there is no separate public
+This was a reproduction-only recorded slice: there was no separate public
 regression schedule, held-out verifier or official score. Passing this test does
 not establish that the whole task is solved. DeepSWE readiness stays 109/113.
 
@@ -104,5 +104,52 @@ That run includes the saved-evidence audit tests and an isolated pinned-source
 edit check. The actual two-execution Docker controller run described above was
 performed separately through the CLI, not counted as a passing pytest Docker test.
 
-Next: check the exported partial repair against fd's existing public regression
-suite before treating it as anything beyond this reproduction-validation result.
+## Public regression follow-up
+
+The exported repair was checked separately against fd's existing full public
+nextest schedule on the same day. No generated reproduction test was added to
+this checkout. The exact patch hash was checked against the earlier export;
+only the same four production files changed.
+
+The repair ran all 241 tests: **240 passed and one failed**, in 127.2 seconds.
+The failure was `fd-find::tests::test_exec_nulls`: its `--print0 --exec printf`
+command produced concatenated output with misplaced NUL separators.
+
+An older fd workflow had all 241 tests passing, so a fresh unpatched control
+was run with this diagnostic's exact command, image and limits. That control
+also had **240 passes and the same failure**, in 132.1 seconds. All test IDs
+and outcomes match; all 240 baseline-passing tests still pass after the repair.
+There is no added regression in this comparison. Both raw suite results remain
+`FAIL`—the shared failure is recorded, not filtered out or relabelled as a pass.
+Why this setup differs from the historical 241-pass run has not been established.
+
+Both runs used the existing whole-suite `cargo-nextest` command without target
+filters or an override. The plan was derived from the pristine pinned checkout
+before applying the export. They kept the same offline protections, 4 GiB
+memory/scratch, one CPU, 2,048-process limit and 600-second cap. Both rebuilt
+from source; neither was retried. No model or held-out verifier was called.
+The original source remains sealed and both temporary workspaces were cleaned.
+Readiness stays 109/113; this is still a partial repair, not a full task solution.
+
+The [regression evidence](../experiments/reproduction/fd_public_regression_2026-10-11.json)
+records both outcomes, the matched comparison and hashes of the local reports.
+Full local artifacts are in `artifacts/fd-exported-regression-20261011` and
+`artifacts/fd-exported-regression-base-20261011`. The historical reproduction
+evidence above is unchanged; its `public_regression_suite_run: false` describes
+that earlier controller run, not this later check.
+
+To repeat against the same saved export, choose a new output directory:
+
+```powershell
+$env:PYTHONPATH='src'
+.venv/Scripts/python.exe tools/run_fd_exported_regression.py --prediction artifacts/fd-path-sort-reproduction-20261011/runs/run-43edeceeded64781ba8eec67c1300aa1/prediction.json --output artifacts/fd-public-new --tasks-root ../benchmarks/deepswe/corpus/tasks --repositories ../benchmarks/deepswe/repos
+```
+
+Add `--baseline` and use another fresh output directory for the unpatched
+control. The tool exits nonzero for a failing suite while retaining its report.
+The related local checks now have 122 passes and 12 opt-in skips; the two real
+Docker suite runs were performed separately, not counted as pytest passes.
+
+Next: exercise reproduction and baseline-passing public regression checks
+together in one recorded Rust controller run, retaining the shared failure
+as baseline evidence rather than changing fd's public tests.
