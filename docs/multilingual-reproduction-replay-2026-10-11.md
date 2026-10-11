@@ -32,8 +32,9 @@ These wall times are workflow evidence, not a controlled performance comparison.
 The [committed replay summary](../experiments/swe_bench_pro/reporting_replay_2026-10-11.json)
 records the run IDs, revisions, image IDs, patch digests, candidate outcomes and
 reproduction report hashes. Every reproduction report was nonempty and contained
-only passed or failed cases. Go's raw JSONL events were present in all three
-retained reproduction reports.
+only passed or failed cases. Go's report embeds the raw JSONL test events. The
+JavaScript and TypeScript reports contain normalized CTRF results; their stdout
+and stderr remain in the execution logs.
 
 Raw reports, stdout/stderr, controller records and predictions remain locally
 under artifacts/reproduction-replay-20261011, in separate language/run directories
