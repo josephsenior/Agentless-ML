@@ -4,7 +4,9 @@ Pebble's [registered public CI setup](deepswe-pebble-registered-ci-2026-10-10.md
 completed its official full-schedule refresh with 14,245 passes, 10 lint
 failures and 18 skips, bringing readiness to **109/113**. Baseline and candidate
 commands share the same upstream CI skips and single-worker build setup.
-Randomized subtest IDs still need review before per-ID candidate ranking.
+The [Pebble-only parent matching policy](deepswe-pebble-parent-matching-2026-10-11.md)
+now makes the six randomized families stable across saved-report replay while
+preserving raw children and propagating nonpassing outcomes.
 
 DeepSWE provides 113 tasks across Go (35), Python (34), TypeScript (34),
 JavaScript (5) and Rust (5), pinned at `datacurve-ai/deep-swe`

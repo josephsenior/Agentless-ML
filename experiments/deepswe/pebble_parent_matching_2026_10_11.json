@@ -1,0 +1,47 @@
+{
+  "policy": "pebble-random-parent-v1",
+  "families": [
+    "github.com/cockroachdb/pebble::TestDBCompactionCrash",
+    "github.com/cockroachdb/pebble/sstable::TestIterator_RandomErrors",
+    "github.com/cockroachdb/pebble/sstable/colblk::TestBitmapRandom",
+    "github.com/cockroachdb/pebble/sstable/colblk::TestBlockWriterRandomized",
+    "github.com/cockroachdb/pebble/sstable/colblk::TestUintsRandomized",
+    "github.com/cockroachdb/pebble/sstable/valblk::TestLittleEndianGetPut"
+  ],
+  "reports": [
+    {
+      "path": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\output\\deepswe-survey\\pebble-ci-mode-diagnostic\\full-schedule\\logs\\agentless-ml-9c1b7c4bd3f84a03a8c99e47a5e528fa\\report.json",
+      "sha256": "a9a4f175be19818c4547ddb3d33b1dccbffe273b5b65109831d493a5d10b3c03",
+      "raw_results": 14279,
+      "matching_units": 13640,
+      "counts": {
+        "passed": 13612,
+        "failed": 10,
+        "skipped": 18
+      }
+    },
+    {
+      "path": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\output\\deepswe-survey\\survey\\pebble-durability-wait-apis\\logs\\agentless-ml-06d4c0a1b35f44f98cb5fa1bef8550ae\\report.json",
+      "sha256": "dc64644937af5c2e7ba6a392f258c6051d51d93ba79378144a24a6e677387bb4",
+      "raw_results": 14273,
+      "matching_units": 13640,
+      "counts": {
+        "passed": 13612,
+        "failed": 10,
+        "skipped": 18
+      }
+    }
+  ],
+  "baseline_passing_units": 13612,
+  "cross_report_regressions": 0,
+  "matching_id_symmetric_difference": 0,
+  "raw_reports_modified": false,
+  "docker_or_public_tests_run": false,
+  "official_survey_updated": false,
+  "readiness": "109/113",
+  "host_tests": {
+    "passed": 206,
+    "skipped": 4
+  },
+  "date": "2026-10-11"
+}

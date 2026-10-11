@@ -26,6 +26,15 @@ MAX_REPORT_BYTES = 32 * 1024 * 1024
 
 PYTHON_REPR_ADDRESS_POLICY = "python-repr-address-v1"
 HELM_SAVE_TEMPDIR_POLICY = "helm-save-tempdir-v1"
+PEBBLE_RANDOM_PARENT_POLICY = "pebble-random-parent-v1"
+PEBBLE_RANDOM_PARENTS = (
+    "github.com/cockroachdb/pebble::TestDBCompactionCrash",
+    "github.com/cockroachdb/pebble/sstable::TestIterator_RandomErrors",
+    "github.com/cockroachdb/pebble/sstable/colblk::TestBitmapRandom",
+    "github.com/cockroachdb/pebble/sstable/colblk::TestBlockWriterRandomized",
+    "github.com/cockroachdb/pebble/sstable/colblk::TestUintsRandomized",
+    "github.com/cockroachdb/pebble/sstable/valblk::TestLittleEndianGetPut",
+)
 _HELM_SAVE_TEMPDIR = re.compile(
     r"\A(helm\.sh/helm/v4/(?:internal/chart/v3|pkg/chart/v2)/util::"
     r"TestSave/outDir=/tmp/TestSave)[0-9]+(/001(?:/newdir)?)\Z"
@@ -57,6 +66,7 @@ def _validate_id_policy(policy: str | None, report_format: ReportFormat) -> None
     formats = {
         PYTHON_REPR_ADDRESS_POLICY: ReportFormat.JUNIT_XML,
         HELM_SAVE_TEMPDIR_POLICY: ReportFormat.CTRF_JSON,
+        PEBBLE_RANDOM_PARENT_POLICY: ReportFormat.CTRF_JSON,
     }
     if policy is not None and formats.get(policy) is not report_format:
         raise ValueError("unsupported test ID policy for report format")
@@ -70,8 +80,10 @@ class TestReport:
     ``/tmp``, the only writable location in the container.
 
     ``id_policy`` is opt-in matching metadata, not a change to the raw report.
-    Policies mask Python repr addresses or four Helm temporary-path IDs.
-    Distinct raw IDs that collide after normalization are refused.
+    Policies mask Python repr addresses or four Helm temporary-path IDs, or
+    group six Pebble randomized families by explicit parent outcome.
+    Distinct raw IDs that collide after text normalization are refused; Pebble
+    instead explicitly aggregates allowlisted families into matching units.
     """
 
     __test__ = False
@@ -115,6 +127,8 @@ def parse_report(
         raise ReportError(f"unsupported report format: {report_format}")
     if not cases:
         raise ReportError("test report contains no test cases")
+    if id_policy == PEBBLE_RANDOM_PARENT_POLICY:
+        cases = _pebble_parent_cases(cases)
     # The same test can appear twice (reruns, duplicated suites); keep the worst.
     merged: dict[str, TestCaseStatus] = {}
     raw_ids: dict[str, str] = {}
@@ -134,6 +148,48 @@ def parse_report(
         if previous is None or _SEVERITY[status] > _SEVERITY[previous]:
             merged[test_id] = status
     return tuple(TestCaseResult(test_id, status) for test_id, status in merged.items())
+
+
+def _pebble_parent_cases(
+    cases: list[tuple[str, TestCaseStatus]],
+) -> list[tuple[str, TestCaseStatus]]:
+    """Matching units only; Docker retains the original CTRF bytes separately.
+
+    This is an explicit family aggregation, not text masking. A passing child
+    cannot stand in for an absent/skipped parent, and a passing parent cannot
+    hide a failing descendant. Unrelated IDs retain ordinary parsing semantics.
+    """
+    groups: dict[str, list[tuple[str, TestCaseStatus]]] = {}
+    ordered: list[tuple[str, TestCaseStatus] | str] = []
+    for test_id, status in cases:
+        parent = next((root for root in PEBBLE_RANDOM_PARENTS
+                       if test_id == root or test_id.startswith(root + "/")), None)
+        if parent is None:
+            ordered.append((test_id, status))
+        else:
+            if parent not in groups:
+                groups[parent] = []
+                ordered.append(parent)
+            groups[parent].append((test_id, status))
+    result = []
+    for item in ordered:
+        if not isinstance(item, str):
+            result.append(item)
+            continue
+        group = groups[item]
+        statuses = {status for _, status in group}
+        if (not any(test_id == item for test_id, _ in group)
+                or not any(test_id != item for test_id, _ in group)
+                or TestCaseStatus.ERROR in statuses):
+            status = TestCaseStatus.ERROR
+        elif TestCaseStatus.FAILED in statuses:
+            status = TestCaseStatus.FAILED
+        elif TestCaseStatus.SKIPPED in statuses:
+            status = TestCaseStatus.SKIPPED
+        else:
+            status = TestCaseStatus.PASSED
+        result.append((item, status))
+    return result
 
 
 def _test_id(*parts: object) -> str:

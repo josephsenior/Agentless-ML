@@ -21,7 +21,10 @@ def test_registered_pebble_plan_changes_only_ci_and_build_workers(tmp_path):
     assert command.argv[2] == "export CI=1; " + ordinary.argv[2].replace(
         'go test -json -count=1 "$@"', 'go test -json -count=1 -p 1 "$@"', 1,
     )
-    assert command.report == ordinary.report
+    assert command.report.format == ordinary.report.format
+    assert command.report.path == ordinary.report.path
+    assert command.report.id_policy == "pebble-random-parent-v1"
+    assert ordinary.report.id_policy is None
     assert command.failure_exit_codes == ordinary.failure_exit_codes == (1,)
     assert command.timeout_seconds == ordinary.timeout_seconds == 1800
     assert "CI=1" not in ordinary.argv[2]

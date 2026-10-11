@@ -35,7 +35,8 @@ from agentless_ml.adapters.benchmarks.deepswe_numba import NUMBA_REPORTER
 from agentless_ml.adapters.benchmarks.deepswe_yjs import YJS_PREPARE, YJS_REPORTER
 from agentless_ml.validation.docker import PublicTestCommand
 from agentless_ml.validation.reports import (
-    HELM_SAVE_TEMPDIR_POLICY, PYTHON_REPR_ADDRESS_POLICY, ReportFormat, TestReport,
+    HELM_SAVE_TEMPDIR_POLICY, PEBBLE_RANDOM_PARENT_POLICY,
+    PYTHON_REPR_ADDRESS_POLICY, ReportFormat, TestReport,
 )
 
 WORK = "/tmp/work"
@@ -142,7 +143,9 @@ PEBBLE_GO_CI = DeepSWETestCommand(
         'go test -json -count=1 -p 1 "$@"',
         1,
     ),
-    report=GO.report,
+    report=TestReport(
+        GO.report.format, GO.report.path, id_policy=PEBBLE_RANDOM_PARENT_POLICY,
+    ),
     failure_exit_codes=GO.failure_exit_codes,
 )
 

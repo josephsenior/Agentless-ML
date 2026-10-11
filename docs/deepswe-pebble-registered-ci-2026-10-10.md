@@ -1,5 +1,9 @@
 # Pebble: registered public CI setup
 
+Follow-up: the six changing test families now use a
+[stable parent matching policy](deepswe-pebble-parent-matching-2026-10-11.md).
+The historical survey counts below are raw results, not grouped matching units.
+
 Pebble's official survey refresh is **ready**, bringing the total to **109/113**.
 The full public schedule returned **14,245 passes, 10 failures and 18 skips**
 in 387.3 seconds including setup. All three upstream huge-memory row-block tests

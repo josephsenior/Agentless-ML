@@ -1,7 +1,7 @@
 {
   "pebble-durability-wait-apis": {
     "runner": "pebble-go-ci",
-    "reason": "Use upstream CI=1 so the three huge-memory public row-block overflow tests report their documented skips, and -p 1 to limit package build concurrency. Verified in the two-phase 2026-10-10 diagnostic. Preserve the complete ./... schedule, candidate compilation, cold writable cache, raw CTRF, real lint failures, original pinned image, 1800-second cap and Docker protections. Apply the same public plan to baseline and candidates; do not change the held-out scorer or count skips as passes."
+    "reason": "Use upstream CI=1 so the three huge-memory public row-block overflow tests report their documented skips, and -p 1 to limit package build concurrency. Verified in the two-phase 2026-10-10 diagnostic. Opt into pebble-random-parent-v1 for the six reviewed randomized families: require an explicit passing parent and passing descendants, propagate child failures, and count missing/skipped parents as regressions. Preserve every raw child in CTRF and keep unrelated IDs unchanged. Preserve the complete ./... schedule, candidate compilation, cold writable cache, real lint failures, original pinned image, 1800-second cap and Docker protections. Apply the same public plan to baseline and candidates; do not change the held-out scorer or count skips as passes."
   },
   "helm-array-merge-strategies": {
     "runner": "helm-go",
