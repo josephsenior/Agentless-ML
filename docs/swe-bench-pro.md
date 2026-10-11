@@ -63,8 +63,12 @@ test run or a model result. The [saved run summary](../experiments/swe_bench_pro
 records the task and artifact hashes; the runner is
 `tools/run_swe_bench_pro_v2_python_reproduction.py`.
 
-The selected patch has not yet been replayed through this task's separate V2
-post-selection verifier. That is the next check for this Python task.
+After selection, the patch was replayed through this task's separate V2
+post-selection verifier using the network mode declared in the pinned task
+manifest. The local verifier reported
+`resolved` (reward 1), with all 10 required tests passing. This is a local
+post-selection result, not an official Harbor/Modal score; the task is recorded
+in the [Python replay evidence](../experiments/swe_bench_pro/python_reproduction_replay_2026-10-11.json).
 
 ## First Go task through V2
 

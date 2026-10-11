@@ -1,7 +1,7 @@
 {
   "date": "2026-10-11",
   "scope": "Recorded Python reproduction workflow on one pinned SWE-bench Pro V2 task; not a model result or benchmark score.",
-  "condition": "Recorded/manual responses; no model calls; post-selection verifier not run.",
+  "condition": "Recorded/manual responses; no model calls; selected patch scored after selection with the pinned local V2 verifier.",
   "implementation_revision": "63bf49d40032b8f7fcadab8e40565234cf95dfde",
   "benchmark_revision": "66f92766bba642462d4bbe5479e83f91f9211862",
   "run_id": "run-584188c0b7994f80a367062120f9476d",
@@ -31,5 +31,15 @@
     "repair-2": "3e6bf1c9d0a3742c786976e5aa32d5cbb70363960170052a8c5922969c886e24"
   },
   "wall_time_seconds": 86.63219299999992,
-  "held_out_verifier_run": false
+  "post_selection_verifier": {
+    "status": "resolved",
+    "reward": 1,
+    "verifier_exit_code": 0,
+    "required_tests": 10,
+    "passed_tests": 10,
+    "network_mode": "public (as declared by the pinned task)",
+    "artifact_directory": "artifacts/python-qutebrowser-v2-post-selection-score-20261011/instance_qutebrowser__qutebrowser-0833b5f6f140d04200ec91605f88704dd18e2970-v059c6fdc75567943479b23ebca7c07b5e9a7f34c/agentless-ml-v2-verifier-5c6f7c3525b442d8b54e04311fc2a1b0"
+  },
+  "official_harbor_score": false,
+  "held_out_verifier_run": true
 }
