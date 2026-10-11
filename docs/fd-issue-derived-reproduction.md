@@ -203,7 +203,8 @@ the baseline passes, no manual exclusions were introduced, and the exported
 patch matches the original repair. Audit tests cover newly failed or skipped
 tests, missing tests, changed reports and incorrectly counted IDs.
 
-The [multiple-sample fd checkpoint](fd-rust-sample-selection.md) now verifies
-eligibility and exact-source majority on the same real task. Its later stages
-were interrupted; a complete pooled replay remains unverified. These results
-are separate from the completed single-reproduction run above.
+The [multiple-sample fd replay](fd-rust-sample-selection.md) now verifies
+eligibility and exact-source majority on the same real task, followed by public
+regression checks, repair validation and final export. Its first interrupted
+checkpoint and fresh completed replay are documented separately from this
+single-reproduction run.
