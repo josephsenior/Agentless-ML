@@ -106,3 +106,9 @@ public regression suite through final prediction export. It preserves all 240
 baseline-passing tests; both full public runs retain the same one failure out
 of 241 tests. This is not a clean full-suite pass or a solution of the complete
 multi-key sorting task.
+
+The [multiple-sample fd checkpoint](fd-rust-sample-selection.md) verifies
+parse-error and passing-sample exclusion, then exact-source majority over three
+eligible inputs. It uses recorded controls, including one intentional duplicate.
+Selection completed, but that new run did not finish its later regression,
+repair-validation or export stages.

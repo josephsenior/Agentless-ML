@@ -6,6 +6,7 @@ import argparse
 import base64
 from collections import Counter
 from dataclasses import asdict
+from datetime import datetime
 import hashlib
 import json
 from pathlib import Path
@@ -25,21 +26,32 @@ from agentless_ml.workspace import LocalGitWorkspaceProvider, verify_sealed_repo
 
 ROOT = Path(__file__).resolve().parents[1]
 EXPERIMENT = ROOT / 'experiments/deepswe/fd_path_sort_reproduction'
+SAMPLE_EXPERIMENT = ROOT / 'experiments/deepswe/fd_reproduction_samples/experiment.json'
 
 
-def responses(*, with_public_regressions: bool = False) -> RecordedStageResponses:
+def sample_responses() -> tuple[str, ...]:
+    manifest = json.loads(SAMPLE_EXPERIMENT.read_bytes())
+    return tuple((ROOT / entry['response_file']).read_text(encoding='utf-8')
+                 for entry in manifest['inputs'])
+
+
+def responses(*, with_public_regressions: bool = False,
+              multiple_reproduction_samples: bool = False) -> RecordedStageResponses:
     return RecordedStageResponses(
         file_localization=(EXPERIMENT / 'file_localization.txt').read_text(encoding='utf-8'),
         symbol_localization=(EXPERIMENT / 'symbol_localization.txt').read_text(encoding='utf-8'),
         repairs=tuple(p.read_text(encoding='utf-8') for p in sorted(EXPERIMENT.glob('repair_*.txt'))),
-        reproduction_test=(EXPERIMENT / 'reproduction_test.txt').read_text(encoding='utf-8'),
+        reproduction_test=None if multiple_reproduction_samples else (
+            EXPERIMENT / 'reproduction_test.txt').read_text(encoding='utf-8'),
+        reproduction_samples=sample_responses() if multiple_reproduction_samples else (),
         regression_exclusions='' if with_public_regressions else None,
         source='manually recorded from public instruction and sealed base source; partial path-sorting repair',
     )
 
 
 def run_slice(output: Path, tasks_root: Path, repositories: Path,
-              *, with_public_regressions: bool = False) -> dict:
+              *, with_public_regressions: bool = False,
+              multiple_reproduction_samples: bool = False) -> dict:
     output = output.resolve()
     output.mkdir(parents=True, exist_ok=False)
     spec = json.loads((EXPERIMENT / 'experiment.json').read_bytes())
@@ -64,7 +76,8 @@ def run_slice(output: Path, tasks_root: Path, repositories: Path,
         (output / 'public-regression-plan.json').write_text(json.dumps({
             'plan': asdict(plan), 'command': asdict(command), 'recorded_exclusions': '',
         }, indent=2) + '\n', encoding='utf-8')
-        print('Combined run: reproduction baseline, full public baseline, '
+        print('Combined run: ' + ('four sample baselines, ' if multiple_reproduction_samples
+                                 else 'reproduction baseline, ') + 'full public baseline, '
               'candidate full public suite, candidate reproduction. No manual exclusions.', flush=True)
     revision = subprocess.run(['git', 'rev-parse', 'HEAD'], cwd=ROOT, check=True,
                               capture_output=True, text=True).stdout.strip()
@@ -79,7 +92,8 @@ def run_slice(output: Path, tasks_root: Path, repositories: Path,
             spec['reproduction_path'], test_name=spec['test_name'], timeout_seconds=spec['timeout_seconds'])),
         implementation_revision=revision, harness_revision=pin['revision'],
         model_name='recorded/manual-fd-path-sort-partial',
-    ).run(responses(with_public_regressions=with_public_regressions))
+    ).run(responses(with_public_regressions=with_public_regressions,
+                    multiple_reproduction_samples=multiple_reproduction_samples))
     assert result.prediction.selected_candidate_id == 'repair-1' and result.run.model_calls == 0
     return audit_existing(output, repositories)
 
@@ -123,6 +137,119 @@ def audit_regressions(directory: Path, regression: dict) -> dict:
     }
 
 
+def audit_sample_pool(directory: Path, *, require_candidate_validation: bool = True
+                      ) -> tuple[dict, dict, dict[Path, str]]:
+    """Verify eligibility, exact-source majority and selection before repair checks."""
+    manifest = json.loads(SAMPLE_EXPERIMENT.read_bytes())
+    samples = sample_responses()
+    attempts = json.loads((directory / 'reproduction-attempts.json').read_bytes())
+    selection_path = directory / 'reproduction-selection.json'
+    selection = json.loads(selection_path.read_bytes())
+    assert [entry['sample_index'] for entry in attempts] == list(range(len(samples)))
+    assert [entry['status'] for entry in attempts] == [e['expected_status'] for e in manifest['inputs']]
+    assert selection['eligible_sample_indices'] == manifest['expected_eligible_indices']
+    assert selection['selected_sample_index'] == manifest['expected_selected_index']
+    assert selection['vote_count'] == manifest['expected_vote_count']
+    assert selection['voting_key'] == manifest['voting_key']
+    eligible = {}
+    baselines = {}
+    report_outcomes = {}
+    for index, attempt in enumerate(attempts):
+        sample_directory = directory / 'reproduction-samples' / str(index)
+        if attempt['status'] == 'parse_error':
+            assert not (sample_directory / 'source.json').exists()
+            assert not (sample_directory / 'reproduction-baseline').exists()
+            continue
+        source = parse_reproduction_source(samples[index], 'rust')
+        frozen = json.loads((sample_directory / 'source.json').read_bytes())
+        assert frozen['source'] == source
+        assert frozen['source_sha256'] == hashlib.sha256(source.encode()).hexdigest()
+        baseline = json.loads((sample_directory / 'baseline.json').read_bytes())
+        assert baseline['checked_result']['status'] == attempt['status']
+        assert baseline['checked_result']['kind'] == 'reproduction'
+        baselines[index] = baseline
+        report_outcomes[Path(baseline['artifact_directory']) / 'report.json'] = (
+            'failed' if attempt['status'] == 'fail' else 'passed')
+        if attempt['status'] == 'fail':
+            eligible[index] = source
+    counts = Counter(eligible.values())
+    winner = max(eligible, key=lambda index: (counts[eligible[index]], -index))
+    assert winner == selection['selected_sample_index']
+    assert counts[eligible[winner]] == selection['vote_count']
+    frozen = json.loads((directory / 'reproduction-source.json').read_bytes())
+    assert frozen['source'] == eligible[winner]
+    assert frozen['source_sha256'] == selection['source_sha256']
+    selected_at = selection_path.stat().st_mtime
+    # A provenance sanity check in addition to the controller's fixed code order.
+    candidate_records = list((directory / 'executions').rglob('candidate.json'))
+    if require_candidate_validation:
+        assert candidate_records
+    for path in candidate_records:
+        candidate = json.loads(path.read_bytes())
+        assert selected_at <= datetime.fromisoformat(candidate['workspace']['created_at']).timestamp()
+    return ({**selection, 'attempt_statuses': [a['status'] for a in attempts],
+             'selection_before_candidate_validation': True if candidate_records else None,
+             'candidate_validation_observed': bool(candidate_records),
+             'intentional_duplicate_control': True}, baselines[winner], report_outcomes)
+
+
+def audit_reproduction_report(report: Path, spec: dict, expected: str):
+    data = json.loads(report.read_bytes())
+    cases = data['results']['tests']
+    assert len(cases) == 1 and cases[0]['name'] == spec['test_name']
+    assert cases[0]['status'] == expected
+    document = ElementTree.fromstring(base64.b64decode(data['rust_junit_base64'], validate=True))
+    (entry,) = list(document.iter('testcase'))
+    assert entry.attrib['name'] == spec['test_name']
+    assert entry.find('error') is None and entry.find('skipped') is None
+    assert (entry.find('failure') is not None) == (expected == 'failed')
+    return entry
+
+
+def audit_selection_checkpoint(output: Path, repositories: Path) -> dict:
+    """Audit completed sample selection only; never imply an interrupted run exported."""
+    output = output.resolve()
+    (directory,) = (output / 'runs').iterdir()
+    assert not (directory / 'prediction.json').exists(), 'use the complete-run audit for a saved prediction'
+    sample_summary, _, report_outcomes = audit_sample_pool(directory, require_candidate_validation=False)
+    assert sample_summary['candidate_validation_observed'] is False
+    spec = json.loads((EXPERIMENT / 'experiment.json').read_bytes())
+    pin = json.loads((ROOT / 'experiments/deepswe/corpus_pin.json').read_bytes())
+    image = pin['container_digests'][spec['task_id']]
+    records = []
+    for report, expected in report_outcomes.items():
+        entry = audit_reproduction_report(report, spec, expected)
+        if expected == 'failed':
+            detail = ''.join(entry.itertext())
+            assert '--sort' in detail and 'unexpected argument' in detail
+        execution = json.loads((report.parent / 'execution.json').read_bytes())
+        assert execution['image_id'] == image
+        assert execution['result']['status'] == ('fail' if expected == 'failed' else 'pass')
+        for key in ('memory_mb', 'cpus', 'tmpfs_mb', 'pids_limit', 'timeout_seconds'):
+            assert execution['limits'][key] == spec[key]
+        records.append({'report': report.relative_to(directory).as_posix(),
+                        'status': execution['result']['status'],
+                        'duration_seconds': execution['result']['duration_seconds']})
+    assert len(records) == 4
+    verify_sealed_repository(repositories / spec['task_id'], spec['base_commit'])
+    summary = {
+        'scope': 'verified real Rust sample-selection checkpoint; full controller run incomplete',
+        'artifact_directory': str(directory), 'task_id': spec['task_id'],
+        'base_commit': spec['base_commit'], 'container_digest': image,
+        'sample_selection': sample_summary, 'completed_sample_executions': records,
+        'report_sha256': {p.relative_to(directory).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
+                          for p in report_outcomes},
+        'model_calls': 0, 'source_unchanged': True,
+        'prediction_exported': False, 'candidate_validation_completed': False,
+        'public_regression_completed': False,
+        'retained_workspace_directories': [p.name for p in (output / 'workspaces').iterdir()],
+        'held_out_verifier_run': False, 'deepswe_readiness_unchanged': '109/113',
+    }
+    (output / 'selection-checkpoint-summary.json').write_text(
+        json.dumps(summary, indent=2) + '\n', encoding='utf-8')
+    return summary
+
+
 def audit_existing(output: Path, repositories: Path) -> dict:
     """Audit saved evidence without rerunning Docker or changing candidates."""
     output = output.resolve()
@@ -137,7 +264,13 @@ def audit_existing(output: Path, repositories: Path) -> dict:
     assert task['container_digest'] == pin['container_digests'][spec['task_id']]
     assert run['container_digest'] == task['container_digest'] and run['model_calls'] == 0
     source = repositories / task['instance_id']
-    baseline = json.loads((directory / 'reproduction-baseline.json').read_bytes())
+    multiple_samples = (directory / 'reproduction-selection.json').exists()
+    sample_summary = None
+    report_outcomes = {}
+    if multiple_samples:
+        sample_summary, baseline, report_outcomes = audit_sample_pool(directory)
+    else:
+        baseline = json.loads((directory / 'reproduction-baseline.json').read_bytes())
     assert baseline['checked_result']['status'] == 'fail'
     assert [a['status'] for a in attempts] == ['repair_error', 'validated']
     candidate = attempts[1]['candidate']
@@ -162,18 +295,13 @@ def audit_existing(output: Path, repositories: Path) -> dict:
     failure_text = ''.join(case.itertext())
     assert '--sort' in failure_text and 'unexpected argument' in failure_text
     reports = list(directory.rglob('report.json'))
-    assert len(reports) == 2
+    assert len(reports) == (len(report_outcomes) + 1 if multiple_samples else 2)
     for report in reports:
-        data = json.loads(report.read_bytes())
-        expected = 'failed' if report == baseline_report else 'passed'
-        cases = data['results']['tests']
-        assert len(cases) == 1 and cases[0]['name'] == spec['test_name']
-        assert cases[0]['status'] == expected
-        document = ElementTree.fromstring(base64.b64decode(data['rust_junit_base64'], validate=True))
-        (entry,) = list(document.iter('testcase'))
-        assert entry.attrib['name'] == spec['test_name']
-        assert entry.find('error') is None and entry.find('skipped') is None
-        assert (entry.find('failure') is not None) == (expected == 'failed')
+        expected = (report_outcomes.get(report, 'passed') if multiple_samples else
+                    'failed' if report == baseline_report else 'passed')
+        entry = audit_reproduction_report(report, spec, expected)
+        if multiple_samples and expected == 'failed':
+            assert '--sort' in ''.join(entry.itertext()) and 'unexpected argument' in ''.join(entry.itertext())
     prediction = json.loads((directory / 'prediction.json').read_bytes())
     assert prediction['instance_id'] == task['instance_id']
     assert prediction['selected_candidate_id'] == 'repair-1'
@@ -213,12 +341,14 @@ def audit_existing(output: Path, repositories: Path) -> dict:
         summary.update({
             'regression_scope': 'combined recorded controller run with the unchanged full public suite',
             'public_regression': regression_summary, 'selection_reason': selection['reason'],
-            'docker_executions': 4, 'held_out_verifier_run': False,
+            'docker_executions': len(reports) + len(public_reports), 'held_out_verifier_run': False,
             'deepswe_readiness_unchanged': '109/113',
         })
         summary['report_sha256'].update({
             p.relative_to(directory).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
             for p in public_reports})
+    if multiple_samples:
+        summary['sample_selection'] = sample_summary
     (output / 'summary.json').write_text(json.dumps(summary, indent=2) + '\n', encoding='utf-8')
     return summary
 
@@ -231,8 +361,16 @@ if __name__ == '__main__':
     parser.add_argument('--audit-existing', action='store_true', help='audit saved export without any Docker run')
     parser.add_argument('--with-public-regressions', action='store_true',
                         help='also run and count the existing public suite via the regression inventory')
+    parser.add_argument('--multiple-reproduction-samples', action='store_true',
+                        help='use the recorded sample pool with eligibility and exact-source voting controls')
+    parser.add_argument('--audit-selection-only', action='store_true',
+                        help='audit a completed selection checkpoint without claiming validation/export or running Docker')
     args = parser.parse_args()
-    summary = (audit_existing(args.output, args.repositories) if args.audit_existing
+    if args.audit_existing and args.audit_selection_only:
+        parser.error('choose either complete-run audit or selection-only audit')
+    summary = (audit_selection_checkpoint(args.output, args.repositories) if args.audit_selection_only else
+               audit_existing(args.output, args.repositories) if args.audit_existing
                else run_slice(args.output, args.tasks_root, args.repositories,
-                              with_public_regressions=args.with_public_regressions))
+                              with_public_regressions=args.with_public_regressions,
+                              multiple_reproduction_samples=args.multiple_reproduction_samples))
     print(json.dumps(summary, indent=2))

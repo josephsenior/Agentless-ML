@@ -1,0 +1,1 @@
+Deliberately malformed response: no fenced Rust source block.

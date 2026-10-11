@@ -203,5 +203,7 @@ the baseline passes, no manual exclusions were introduced, and the exported
 patch matches the original repair. Audit tests cover newly failed or skipped
 tests, missing tests, changed reports and incorrectly counted IDs.
 
-Next: verify multiple-reproduction-sample selection on a real Rust task,
-using recorded samples and the existing controller rather than a model call.
+The [multiple-sample fd checkpoint](fd-rust-sample-selection.md) now verifies
+eligibility and exact-source majority on the same real task. Its later stages
+were interrupted; a complete pooled replay remains unverified. These results
+are separate from the completed single-reproduction run above.

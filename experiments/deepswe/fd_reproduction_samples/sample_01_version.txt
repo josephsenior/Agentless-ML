@@ -1,0 +1,10 @@
+```rust
+#[test]
+fn issue_path_sort() {
+    // A public sanity check, deliberately not a reproduction of the sorting issue.
+    let output = std::process::Command::new(env!("CARGO_BIN_EXE_fd"))
+        .arg("--version").output().expect("run candidate-built fd");
+    assert!(output.status.success(), "fd version check failed: {:?}", output);
+    assert!(String::from_utf8(output.stdout).expect("UTF-8 version").starts_with("fd "));
+}
+```

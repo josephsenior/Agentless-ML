@@ -1,0 +1,15 @@
+{
+  "purpose": "Recorded sample-selection controls on the real pinned fd task, not independent model draws or a measure of model quality.",
+  "inputs": [
+    {"response_file": "experiments/deepswe/fd_reproduction_samples/sample_00_malformed.txt", "role": "parse-error control", "expected_status": "parse_error"},
+    {"response_file": "experiments/deepswe/fd_reproduction_samples/sample_01_version.txt", "role": "public check already passing on the base; ineligible", "expected_status": "pass"},
+    {"response_file": "experiments/deepswe/fd_reproduction_samples/sample_02_sort_acceptance.txt", "role": "distinct issue-derived minority source, eligible before the majority", "expected_status": "fail"},
+    {"response_file": "experiments/deepswe/fd_path_sort_reproduction/reproduction_test.txt", "role": "issue-derived global path-sort reproduction", "expected_status": "fail"},
+    {"response_file": "experiments/deepswe/fd_path_sort_reproduction/reproduction_test.txt", "role": "intentional exact-source duplicate of sample 3 for the voting control", "expected_status": "fail"}
+  ],
+  "expected_eligible_indices": [2, 3, 4],
+  "expected_selected_index": 3,
+  "expected_vote_count": 2,
+  "voting_key": "exact-source-v1",
+  "task_and_limits": "experiments/deepswe/fd_path_sort_reproduction/experiment.json"
+}
