@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import argparse
 from dataclasses import replace
-from datetime import UTC, datetime
 import hashlib
 import json
 from pathlib import Path
@@ -104,6 +103,53 @@ def _responses() -> RecordedStageResponses:
     ), spec
 
 
+def _summarize_run(run_directory: Path, *, source_repository: Path) -> dict:
+    run_record = json.loads((run_directory / "run.json").read_bytes())
+    baseline = json.loads((run_directory / "reproduction-baseline.json").read_bytes())
+    public_baseline = json.loads((run_directory / "regression-baseline.json").read_bytes())
+    attempts = json.loads((run_directory / "attempts.json").read_bytes())
+    selection = json.loads((run_directory / "selection.json").read_bytes())
+    prediction_path = run_directory / "prediction.json"
+    report_paths = sorted(run_directory.rglob("report.json")) + sorted(run_directory.rglob("report.xml"))
+    summary = {
+        "scope": SPEC["purpose"],
+        "run_id": run_record["run_id"],
+        "started_at": run_record["started_at"],
+        "artifact_directory": str(run_directory),
+        "source_repository": str(source_repository),
+        "task_id": run_record["instance_id"],
+        "base_commit": SPEC["base_commit"],
+        "container_digest": run_record["container_digest"],
+        "implementation_revision": run_record["implementation_revision"],
+        "reproduction_source_sha256": json.loads(
+            (run_directory / "reproduction-source.json").read_bytes()
+        )["source_sha256"],
+        "baseline_reproduction_status": baseline["checked_result"]["status"],
+        "public_regression_status": public_baseline[0]["result"]["status"],
+        "attempts": [
+            {"candidate_id": attempt["candidate_id"], "status": attempt["status"]}
+            for attempt in attempts
+        ],
+        "selected_candidate_id": selection["selected_candidate_id"],
+        "candidate_outcomes": {
+            attempt["candidate_id"]: [
+                f"{evidence['kind']}:{evidence['status']}"
+                for evidence in (attempt.get("candidate") or {}).get("validation", [])
+            ]
+            for attempt in attempts if attempt.get("candidate") is not None
+        },
+        "prediction_sha256": hashlib.sha256(prediction_path.read_bytes()).hexdigest(),
+        "report_sha256": {
+            path.relative_to(run_directory).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
+            for path in report_paths
+        },
+        "model_calls": run_record["model_calls"],
+        "wall_time_seconds": run_record["wall_time_seconds"],
+        "held_out_verifier_run": False,
+    }
+    return summary
+
+
 def run(*, v1_parquet: Path, v2_tasks: Path, source_repository: Path,
         workspace_root: Path, artifact_root: Path) -> dict:
     task, pin = _load_task(v1_parquet, v2_tasks)
@@ -142,55 +188,32 @@ def run(*, v1_parquet: Path, v2_tasks: Path, source_repository: Path,
         model_name="recorded/manual-python-v2-reproduction",
     ).run(responses)
 
-    (run_directory,) = (output / "runs").iterdir()
-    baseline = json.loads((run_directory / "reproduction-baseline.json").read_bytes())
-    public_baseline = json.loads((run_directory / "regression-baseline.json").read_bytes())
-    prediction_path = run_directory / "prediction.json"
-    report_paths = sorted(run_directory.rglob("report.json")) + sorted(run_directory.rglob("report.xml"))
-    summary = {
-        "scope": SPEC["purpose"],
-        "run_id": result.run.run_id,
-        "started_at": result.run.started_at.astimezone(UTC).isoformat(),
-        "artifact_directory": str(run_directory),
-        "source_repository": str(source_repository),
-        "task_id": task.instance_id,
-        "base_commit": task.base_commit,
-        "container_digest": task.container_digest,
-        "implementation_revision": result.run.implementation_revision,
-        "reproduction_source_sha256": json.loads(
-            (run_directory / "reproduction-source.json").read_bytes()
-        )["source_sha256"],
-        "baseline_reproduction_status": baseline["checked_result"]["status"],
-        "public_regression_status": public_baseline[0]["result"]["status"],
-        "attempts": [
-            {"candidate_id": attempt.candidate_id, "status": attempt.status}
-            for attempt in result.attempts
-        ],
-        "selected_candidate_id": result.prediction.selected_candidate_id,
-        "candidate_outcomes": {
-            attempt.candidate_id: [evidence.status.value for evidence in attempt.candidate.validation]
-            for attempt in result.attempts if attempt.candidate is not None
-        },
-        "prediction_sha256": hashlib.sha256(prediction_path.read_bytes()).hexdigest(),
-        "report_sha256": {
-            path.relative_to(run_directory).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
-            for path in report_paths
-        },
-        "model_calls": result.run.model_calls,
-        "wall_time_seconds": result.run.wall_time_seconds,
-        "held_out_verifier_run": False,
-    }
-    (output / "summary.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
+    run_directory = Path(result.artifact_directory)
+    summary = _summarize_run(run_directory, source_repository=source_repository)
     print(json.dumps(summary, indent=2))
     return summary
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--v1-parquet", type=Path, required=True)
-    parser.add_argument("--v2-tasks", type=Path, required=True)
+    parser.add_argument("--audit-existing", type=Path, help="summarize one saved run directory without running Docker")
+    parser.add_argument("--v1-parquet", type=Path)
+    parser.add_argument("--v2-tasks", type=Path)
     parser.add_argument("--source-repository", type=Path, required=True)
-    parser.add_argument("--workspace-root", type=Path, required=True)
+    parser.add_argument("--workspace-root", type=Path)
     parser.add_argument("--artifact-root", type=Path, required=True)
     args = parser.parse_args()
-    run(**vars(args))
+    if args.audit_existing is not None:
+        summary = _summarize_run(args.audit_existing.resolve(strict=True), source_repository=args.source_repository.resolve(strict=True))
+        print(json.dumps(summary, indent=2))
+    else:
+        missing = [name for name in ("v1_parquet", "v2_tasks", "workspace_root") if getattr(args, name) is None]
+        if missing:
+            parser.error("normal replay requires --v1-parquet, --v2-tasks, and --workspace-root")
+        run(
+            v1_parquet=args.v1_parquet,
+            v2_tasks=args.v2_tasks,
+            source_repository=args.source_repository,
+            workspace_root=args.workspace_root,
+            artifact_root=args.artifact_root,
+        )
