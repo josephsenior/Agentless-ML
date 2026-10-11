@@ -93,3 +93,8 @@ changes were involved. DeepSWE readiness remains 109/113.
 The [complete recorded Rust controller slice](recorded-rust-controller-slice.md)
 now passes too: failing reproduction baseline, candidate validation, selection
 and final prediction export. It is an authored fixture, not a benchmark solve.
+
+The [real fd repository diagnostic](fd-rust-reproduction-diagnostic.md) also
+passes: the reporter sees a passing public CLI check on the pinned base and a
+failing check after a deliberately broken candidate-source change. This proves
+real-repository compilation/discovery, not task-solving or failing-baseline eligibility.

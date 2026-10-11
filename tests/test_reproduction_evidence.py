@@ -83,6 +83,15 @@ def test_exit_only_generated_spec_is_refused():
     ("this is not valid python !", "error", 2),
     ("import sys; sys.exit(0)", "error", 2),
     ("import sys; sys.exit(1)", "error", 2),
+    ("import threading\ndef worker(): raise RuntimeError('setup')\nt = threading.Thread(target=worker)\nt.start()\nt.join()", "error", 2),
+    ("import threading\ndef worker(): assert False\nt = threading.Thread(target=worker)\nt.start()\nt.join()", "error", 2),
+    ("import threading, time\ndef worker():\n time.sleep(.1)\n raise RuntimeError('late daemon error')\nthreading.Thread(target=worker, daemon=True).start()", "error", 2),
+    ("import threading\ndef worker(): raise RuntimeError('setup')\nt = threading.Thread(target=worker)\nt.start()\nt.join()\nassert False", "error", 2),
+    ("import threading\nt = threading.Thread(target=lambda: None)\nt.start()", "passed", 0),
+    ("import asyncio\nasync def main():\n async def worker(): raise RuntimeError('task')\n asyncio.create_task(worker())\n await asyncio.sleep(.05)\nasyncio.run(main())", "error", 2),
+    ("import asyncio\nasync def main():\n loop = asyncio.get_running_loop()\n loop.set_exception_handler(lambda *args: None)\n def callback(): raise RuntimeError('callback')\n loop.call_soon(callback)\n await asyncio.sleep(.05)\nasyncio.run(main())", "error", 2),
+    ("import gc\nclass Broken:\n def __del__(self): raise RuntimeError('cleanup')\nx = Broken()\ndel x\ngc.collect()", "error", 2),
+    ("class Broken:\n def __del__(self): raise RuntimeError('cyclic cleanup')\nx = Broken()\nx.self = x\ndel x", "error", 2),
 ])
 def test_trusted_python_adapter_classifies_authored_fixtures(tmp_path, source, status, code):
     # Controlled authored fixtures only. Generated source must run in Docker.

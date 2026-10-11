@@ -85,7 +85,12 @@ candidate pipeline as well as the Docker recorder.
 `python_reproduction_command(path)` supplies a trusted standalone Python
 adapter: it reports `AssertionError` as failure and other uncaught exceptions
 (including import/syntax/runtime errors and explicit `SystemExit`) as errors.
-The factory is not a host sandbox; generated source still runs only in Docker.
+It also records reported thread, asyncio and unraisable background errors,
+and waits for script-created threads before publishing a result. Background
+errors are harness errors even if the main thread's assertion failed.
+The [Python background-error fix and Docker slices](python-background-reproduction.md)
+describe the checks and limits. The factory is not a host sandbox; generated
+source still runs only in Docker.
 
 Go, JavaScript and TypeScript now have [trusted reporting adapters](multilingual-reproduction-reporting.md).
 The three recorded V2 smoke configurations use these factories rather than

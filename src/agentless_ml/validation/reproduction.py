@@ -17,14 +17,38 @@ from .reports import ReportFormat, TestReport
 # This is not a sandbox: production execution still belongs inside Docker.
 _PYTHON_REPRODUCTION_RUNNER = """
 import json
+import asyncio
+import gc
 import runpy
 import sys
+import threading
 import traceback
 from pathlib import Path
 
 source, report = sys.argv[1:]
 sys.path.insert(0, str(Path(source).resolve().parent))
 status, code = "passed", 0
+background_errors = []
+original_thread_hook = threading.excepthook
+original_unraisable_hook = sys.unraisablehook
+original_loop_handler = asyncio.BaseEventLoop.call_exception_handler
+
+def thread_error(args):
+    background_errors.append('thread')
+    original_thread_hook(args)
+
+def unraisable_error(args):
+    background_errors.append('unraisable')
+    original_unraisable_hook(args)
+
+def loop_error(loop, context):
+    background_errors.append('asyncio')
+    original_loop_handler(loop, context)
+
+threading.excepthook = thread_error
+sys.unraisablehook = unraisable_error
+asyncio.BaseEventLoop.call_exception_handler = loop_error
+existing_threads = set(threading.enumerate())
 try:
     runpy.run_path(source, run_name="__main__")
 except AssertionError:
@@ -33,9 +57,21 @@ except AssertionError:
 except BaseException:
     status, code = "other", 2
     traceback.print_exc()
+# Do not publish success while a script-created thread is still running, even
+# when it is a daemon. The Docker command timeout bounds a nonterminating join.
+while True:
+    gc.collect()
+    pending = [thread for thread in threading.enumerate()
+               if thread not in existing_threads and thread.is_alive()]
+    if not pending:
+        break
+    for thread in pending:
+        thread.join()
+if background_errors:
+    status, code = "other", 2
 Path(report).write_text(json.dumps({"results": {"tests": [
     {"suite": "generated-reproduction", "name": "standalone", "status": status}
-]}}), encoding="utf-8")
+]}, "background_errors": background_errors}), encoding="utf-8")
 sys.exit(code)
 """
 
