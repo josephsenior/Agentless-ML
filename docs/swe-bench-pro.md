@@ -51,6 +51,21 @@ the README, add `--experiment qutebrowser_network_error`, and pass
 now. Broader metadata loading is complete, but official post-selection patch
 replay through Harbor is not yet integrated.
 
+### Python reproduction replay
+
+On 11 October 2026, the Python reproduction adapter also completed a recorded
+controller run on this pinned qutebrowser V2 task. The issue-derived
+reproduction failed on the base. The selected recorded repair passed that check
+and a compile-only regression command; the weaker repair compiled but still
+failed the reproduction. The malformed response was rejected. This closes the
+real-task reproduction smoke gap for Python, but it is not a full repository
+test run or a model result. The [saved run summary](../experiments/swe_bench_pro/python_reproduction_replay_2026-10-11.json)
+records the task and artifact hashes; the runner is
+`tools/run_swe_bench_pro_v2_python_reproduction.py`.
+
+The selected patch has not yet been replayed through this task's separate V2
+post-selection verifier. That is the next check for this Python task.
+
 ## First Go task through V2
 
 The Go, JavaScript and TypeScript slices below were [replayed on 11 October 2026](multilingual-reproduction-replay-2026-10-11.md)

@@ -40,14 +40,28 @@ Raw reports, stdout/stderr, controller records and predictions remain locally
 under artifacts/reproduction-replay-20261011, in separate language/run directories
 listed in that summary. They are ignored by Git; historical runs were not replaced.
 
-The existing language runners accept the same five path arguments described in
-[SWE-bench Pro integration](swe-bench-pro.md). Use fresh workspace and artifact
-roots when repeating these checks.
+The Python qutebrowser replay was completed later the same day. It used the same
+pinned V2 corpus and image, but a different task and a later implementation
+revision. Its saved evidence is in
+[`python_reproduction_replay_2026-10-11.json`](../experiments/swe_bench_pro/python_reproduction_replay_2026-10-11.json).
+The baseline reproduction failed, the compile-only regression check passed,
+`repair-1` passed compilation but failed reproduction, and `repair-2` passed
+both and was selected. This check made zero model calls and did not run the V2
+verifier. Its full recorded run is under
+`artifacts/python-qutebrowser-v2-reproduction-20261011/controller-pinned/`.
 
-This verifies the reporting migration in the real recorded workflow, including
-baseline eligibility, regression filtering, candidate reproduction and selection.
-It does not establish model repair quality, semantic validity on other tasks,
-full repository-suite coverage or an official V2 score. DeepSWE readiness remains
-109/113.
+Together these give real-task reproduction coverage for Python, Go, JavaScript
+and TypeScript in SWE-bench Pro V2. Rust has a separate real-task DeepSWE
+reproduction-and-regression run ([record](../experiments/reproduction/fd_combined_validation_2026-10-11.json)).
+These are still manually recorded workflow checks, not model-generated results;
+the language rows also differ in task, regression breadth and implementation
+revision, so they are not a controlled comparison.
+
+These runs verify baseline eligibility, regression filtering, candidate
+reproduction and selection in real task images. They do not establish model
+repair quality, generalization to other tasks, full repository-suite coverage or
+an official V2 score. The next coverage step is to score the selected Python
+V2 patch with the isolated post-selection verifier, then move on to live-model
+and broader benchmark evaluation. DeepSWE readiness remains 109/113.
 
 Next: add Rust reproduction reporting to cover the remaining supported language.

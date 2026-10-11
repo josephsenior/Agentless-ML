@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-11",
+  "scope": "Recorded Python reproduction workflow on one pinned SWE-bench Pro V2 task; not a model result or benchmark score.",
+  "condition": "Recorded/manual responses; no model calls; post-selection verifier not run.",
+  "implementation_revision": "63bf49d40032b8f7fcadab8e40565234cf95dfde",
+  "benchmark_revision": "66f92766bba642462d4bbe5479e83f91f9211862",
+  "run_id": "run-584188c0b7994f80a367062120f9476d",
+  "artifact_directory": "artifacts/python-qutebrowser-v2-reproduction-20261011/controller-pinned/run-584188c0b7994f80a367062120f9476d",
+  "task_id": "instance_qutebrowser__qutebrowser-0833b5f6f140d04200ec91605f88704dd18e2970-v059c6fdc75567943479b23ebca7c07b5e9a7f34c",
+  "base_commit": "def864adc8b19bdbc506919270d8ff1408b4faac",
+  "container_digest": "sha256:d664721bb9fc5d0a9019f9ef46f14e567c46ed8e53371b0f0c7ab26db2e779d8",
+  "infrastructure_status": "ok",
+  "model_calls": 0,
+  "baseline_reproduction": "fail",
+  "regression_check": {
+    "command": "python -m compileall -q qutebrowser/browser/webkit/network/networkreply.py",
+    "status": "pass",
+    "scope_note": "Compile check only; not the repository test suite."
+  },
+  "attempt_statuses": ["repair_error", "validated", "validated"],
+  "candidate_outcomes": {
+    "repair-1": {"regression": "pass", "reproduction": "fail"},
+    "repair-2": {"regression": "pass", "reproduction": "pass"}
+  },
+  "selected_candidate_id": "repair-2",
+  "final_patch_sha256": "9902dff3acfd3414835ee1f25aa0139bc2320b8a5d5fd1823bbe056916cc58f0",
+  "reproduction_source_sha256": "ee7b9032ff5614e213665c40a1f6b60dac30c7ec0e4f99a211f117fee9739d36",
+  "reproduction_report_sha256": {
+    "baseline": "6540a0cd1527e9ee72c2c675b2a64b99a941ee924e6bc805af9f57e4d8724d31",
+    "repair-1": "6540a0cd1527e9ee72c2c675b2a64b99a941ee924e6bc805af9f57e4d8724d31",
+    "repair-2": "3e6bf1c9d0a3742c786976e5aa32d5cbb70363960170052a8c5922969c886e24"
+  },
+  "wall_time_seconds": 86.63219299999992,
+  "held_out_verifier_run": false
+}
