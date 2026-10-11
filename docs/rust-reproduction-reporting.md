@@ -90,5 +90,6 @@ were run separately and passed.
 No Wasmi benchmark tests, held-out verifier, model calls, tool downloads or host
 changes were involved. DeepSWE readiness remains 109/113.
 
-Next: exercise this adapter through a complete recorded Rust controller slice,
-including baseline eligibility, candidate selection and final prediction export.
+The [complete recorded Rust controller slice](recorded-rust-controller-slice.md)
+now passes too: failing reproduction baseline, candidate validation, selection
+and final prediction export. It is an authored fixture, not a benchmark solve.

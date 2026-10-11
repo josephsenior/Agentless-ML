@@ -1,0 +1,24 @@
+{
+  "scope": "authored controlled fixture; not a benchmark solve or readiness result",
+  "run_id": "run-166c8149c8e848519479ed9285d9e276",
+  "artifact_directory": "artifacts/rust-controller-20261011-verified/runs/run-166c8149c8e848519479ed9285d9e276",
+  "prediction_file": "prediction.json",
+  "container_digest": "sha256:1bec57bc662b5c33289f88cb28cae2c4df07cb33cd96aff7840c77e2b0a96c10",
+  "implementation_revision": "f12a99fd4555175d44198da60b30d5c1e6b52561+dirty",
+  "model_calls": 0,
+  "regression_baseline": "pass",
+  "reproduction_baseline": "fail",
+  "attempt_statuses": ["repair_error", "validated", "validated"],
+  "candidate_outcomes": {
+    "repair-1": {"regression": "pass", "reproduction": "fail"},
+    "repair-2": {"regression": "pass", "reproduction": "pass"}
+  },
+  "selected_candidate_id": "repair-2",
+  "selection_reason": "best_regression_then_reproduction_passed_then_normalized_majority",
+  "retained_raw_junit_reports": 6,
+  "wall_time_seconds": 28.92395489999035,
+  "final_patch_sha256": "5b5d49f4ff57cf1a37e15dad7bd23e962d66b931a7272fb5da2253615d90654a",
+  "source_unchanged": true,
+  "candidate_workspaces_cleaned": true,
+  "reproduction_in_final_patch": false
+}
