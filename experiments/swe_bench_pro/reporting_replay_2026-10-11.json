@@ -1,0 +1,236 @@
+{
+  "date": "2026-10-11",
+  "condition": "recorded engineering smoke replays, not model-generated benchmark scores",
+  "implementation_revision": "5e80f8c77c39a9c8d209692c65807421bdbd011c",
+  "benchmark_revision": "66f92766bba642462d4bbe5479e83f91f9211862",
+  "model_calls": 0,
+  "held_out_verifier_run": false,
+  "retries": 0,
+  "limits": {
+    "memory_mb": 4096,
+    "cpus": 1,
+    "tmpfs_mb": 4096,
+    "pids_limit": 2048,
+    "go_timeout_seconds": 600,
+    "node_timeout_seconds": 60
+  },
+  "scheduling": "JavaScript first; Go and TypeScript overlapped after checking available host memory",
+  "runs": [
+    {
+      "language": "go",
+      "run_id": "run-6d962c8bc73f4c7b9fbce7dfede2c234",
+      "instance_id": "instance_future-architect__vuls-fe8d252c51114e922e6836055ef86a15f79ad042",
+      "started_at": "2026-10-11T15:34:00.67608+02:00",
+      "wall_time_seconds": 1059.7090442999906,
+      "base_commit": "0cdc7a3af55e323b86d4e76e17fdc90112b42a63",
+      "container_digest": "sha256:0961d389ef0bcdd51da0df664b631a83938427ab3d485ecbe23996033eb73f28",
+      "infrastructure_status": "ok",
+      "model_calls": 0,
+      "selected_candidate_id": "repair-2",
+      "final_patch_sha256": "f1a5012d37a7832aabbad70ff4e52fc739e5b3b5aaed13fa1f5d25ae28b68935",
+      "attempt_statuses": [
+        "repair_error",
+        "validated",
+        "validated"
+      ],
+      "candidates": [
+        {
+          "candidate_id": "repair-1",
+          "regression": "pass",
+          "reproduction": "fail"
+        },
+        {
+          "candidate_id": "repair-2",
+          "regression": "pass",
+          "reproduction": "pass"
+        }
+      ],
+      "reproduction_reports": [
+        {
+          "stage": "repair-1",
+          "status": "fail",
+          "exit_code": 1,
+          "test_cases": [
+            {
+              "test_id": "./scanner::TestDebianMissingKernelVersion",
+              "status": "failed"
+            }
+          ],
+          "report_sha256": "aaf7b7c6dcab32faa16e2ab71fb6a2c88ace22b2a4de7b9243ceb57794e85c3a",
+          "raw_go_events_retained": true
+        },
+        {
+          "stage": "repair-2",
+          "status": "pass",
+          "exit_code": 0,
+          "test_cases": [
+            {
+              "test_id": "./scanner::TestDebianMissingKernelVersion",
+              "status": "passed"
+            }
+          ],
+          "report_sha256": "66d9d6205ad5e4c9f780eb9743aa008a2f4e0248d921be42ec10c9f3f0b7406a",
+          "raw_go_events_retained": true
+        },
+        {
+          "stage": "reproduction-baseline",
+          "status": "fail",
+          "exit_code": 1,
+          "test_cases": [
+            {
+              "test_id": "./scanner::TestDebianMissingKernelVersion",
+              "status": "failed"
+            }
+          ],
+          "report_sha256": "a21b14ad1ece3cc8b09bbd8b268ee12203b76ccaeabaf26a8bcc2bc7ae03aaa0",
+          "raw_go_events_retained": true
+        }
+      ],
+      "artifact_directory": "artifacts/reproduction-replay-20261011/go/run-6d962c8bc73f4c7b9fbce7dfede2c234"
+    },
+    {
+      "language": "javascript",
+      "run_id": "run-53206267ee7c4da69ae3f6168b8af0f0",
+      "instance_id": "instance_NodeBB__NodeBB-f9ce92df988db7c1ae55d9ef96d247d27478bc70-vf2cf3cbd463b7ad942381f1c6d077626485a1e9e",
+      "started_at": "2026-10-11T15:27:33.496853+02:00",
+      "wall_time_seconds": 362.0730129000003,
+      "base_commit": "61d17c95e573f91ab5c65d25218451e9afd07d77",
+      "container_digest": "sha256:cc8c9217344bf50df0a4276abad046538bb20e5c2f2815a1b2e201871c5cf364",
+      "infrastructure_status": "ok",
+      "model_calls": 0,
+      "selected_candidate_id": "repair-2",
+      "final_patch_sha256": "919b005ba7e8ce113394ceeccc0ec534907cd5b8fc0c2773640bc65905039083",
+      "attempt_statuses": [
+        "repair_error",
+        "validated",
+        "validated"
+      ],
+      "candidates": [
+        {
+          "candidate_id": "repair-1",
+          "regression": "pass",
+          "reproduction": "fail"
+        },
+        {
+          "candidate_id": "repair-2",
+          "regression": "pass",
+          "reproduction": "pass"
+        }
+      ],
+      "reproduction_reports": [
+        {
+          "stage": "repair-1",
+          "status": "fail",
+          "exit_code": 1,
+          "test_cases": [
+            {
+              "test_id": "generated-reproduction::standalone",
+              "status": "failed"
+            }
+          ],
+          "report_sha256": "d13c88195767f81cf120878ddf97466da401927634fc8a7e38a31d6c0edd9295",
+          "raw_go_events_retained": false
+        },
+        {
+          "stage": "repair-2",
+          "status": "pass",
+          "exit_code": 0,
+          "test_cases": [
+            {
+              "test_id": "generated-reproduction::standalone",
+              "status": "passed"
+            }
+          ],
+          "report_sha256": "7c250ad08c332768b7048f24207ea13ebe570638040061c1994d93e4c021cd58",
+          "raw_go_events_retained": false
+        },
+        {
+          "stage": "reproduction-baseline",
+          "status": "fail",
+          "exit_code": 1,
+          "test_cases": [
+            {
+              "test_id": "generated-reproduction::standalone",
+              "status": "failed"
+            }
+          ],
+          "report_sha256": "d13c88195767f81cf120878ddf97466da401927634fc8a7e38a31d6c0edd9295",
+          "raw_go_events_retained": false
+        }
+      ],
+      "artifact_directory": "artifacts/reproduction-replay-20261011/javascript/run-53206267ee7c4da69ae3f6168b8af0f0"
+    },
+    {
+      "language": "typescript",
+      "run_id": "run-a0c8f50c98e74517be9665fac488f309",
+      "instance_id": "instance_tutao__tutanota-de49d486feef842101506adf040a0f00ded59519-v10a26bfb45a064b93f4fc044a0254925037b88f1",
+      "started_at": "2026-10-11T15:40:33.575693+02:00",
+      "wall_time_seconds": 162.69837800000096,
+      "base_commit": "cf4bcf0b4c5ecc970715c4ca59e57cfa2c4246af",
+      "container_digest": "sha256:f0c1d1561d3fe50a845212497843831b6b1fc9535c88751edc3cb6fda8a425b4",
+      "infrastructure_status": "ok",
+      "model_calls": 0,
+      "selected_candidate_id": "repair-2",
+      "final_patch_sha256": "6ee0fcf5aad1b2b7501a57132f95d8d660c81e9c5fa3fa834d93b06599ae6122",
+      "attempt_statuses": [
+        "repair_error",
+        "validated",
+        "validated"
+      ],
+      "candidates": [
+        {
+          "candidate_id": "repair-1",
+          "regression": "pass",
+          "reproduction": "fail"
+        },
+        {
+          "candidate_id": "repair-2",
+          "regression": "pass",
+          "reproduction": "pass"
+        }
+      ],
+      "reproduction_reports": [
+        {
+          "stage": "repair-1",
+          "status": "fail",
+          "exit_code": 1,
+          "test_cases": [
+            {
+              "test_id": "generated-reproduction::standalone",
+              "status": "failed"
+            }
+          ],
+          "report_sha256": "d13c88195767f81cf120878ddf97466da401927634fc8a7e38a31d6c0edd9295",
+          "raw_go_events_retained": false
+        },
+        {
+          "stage": "repair-2",
+          "status": "pass",
+          "exit_code": 0,
+          "test_cases": [
+            {
+              "test_id": "generated-reproduction::standalone",
+              "status": "passed"
+            }
+          ],
+          "report_sha256": "7c250ad08c332768b7048f24207ea13ebe570638040061c1994d93e4c021cd58",
+          "raw_go_events_retained": false
+        },
+        {
+          "stage": "reproduction-baseline",
+          "status": "fail",
+          "exit_code": 1,
+          "test_cases": [
+            {
+              "test_id": "generated-reproduction::standalone",
+              "status": "failed"
+            }
+          ],
+          "report_sha256": "d13c88195767f81cf120878ddf97466da401927634fc8a7e38a31d6c0edd9295",
+          "raw_go_events_retained": false
+        }
+      ],
+      "artifact_directory": "artifacts/reproduction-replay-20261011/typescript/run-a0c8f50c98e74517be9665fac488f309"
+    }
+  ]
+}

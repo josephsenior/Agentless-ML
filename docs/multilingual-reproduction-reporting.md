@@ -71,5 +71,6 @@ all 11 pinned-image authored-fixture checks passed, followed by a passing Go
 raw-event retention recheck. No live model, benchmark schedule or held-out tests
 were run. DeepSWE readiness remains 109/113.
 
-Next is replaying the three migrated recorded slices under this reporting
-contract, keeping their outcomes separate from the historical runs.
+The [three recorded slices have now been replayed end to end](multilingual-reproduction-replay-2026-10-11.md)
+under this reporting contract. Their new artifacts and committed summary remain
+separate from the historical runs.

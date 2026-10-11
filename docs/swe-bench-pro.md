@@ -53,6 +53,11 @@ replay through Harbor is not yet integrated.
 
 ## First Go task through V2
 
+The Go, JavaScript and TypeScript slices below were [replayed on 11 October 2026](multilingual-reproduction-replay-2026-10-11.md)
+after migration to structured reproduction reporting. All selected repair-2
+with zero model calls. No held-out verifier was rerun; the historical scoring
+observations below remain separate from these new workflow checks.
+
 The recorded Go slice is
 `instance_future-architect__vuls-fe8d252c51114e922e6836055ef86a15f79ad042`.
 Its instruction asks Vuls to accept a Debian HTTP scan without the optional
