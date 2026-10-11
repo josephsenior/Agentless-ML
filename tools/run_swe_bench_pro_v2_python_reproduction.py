@@ -25,7 +25,6 @@ from agentless_ml.validation import (
     python_reproduction_command,
 )
 from agentless_ml.workflow import FixedWorkflowController, RecordedStageResponses
-from agentless_ml.workspace import prepare_sealed_repository, verify_sealed_repository
 
 ROOT = Path(__file__).resolve().parents[1]
 EXPERIMENT = ROOT / "experiments/swe_bench_pro/qutebrowser_network_error"
@@ -114,11 +113,6 @@ def run(*, v1_parquet: Path, v2_tasks: Path, source_repository: Path,
     output = artifact_root.resolve()
     output.parent.mkdir(parents=True, exist_ok=True)
     output.mkdir(parents=True, exist_ok=False)
-    sealed_source = output.parent / "sealed-source"
-    prepare_sealed_repository(
-        str(source_repository), task.base_commit, sealed_source, timeout_seconds=300
-    )
-    verify_sealed_repository(sealed_source, task.base_commit)
     command = PublicTestCommand(
         tuple(SPEC["regression_argv"]),
         kind=ValidationKind.REGRESSION,
@@ -136,7 +130,7 @@ def run(*, v1_parquet: Path, v2_tasks: Path, source_repository: Path,
     responses, reproduction = _responses()
     result = FixedWorkflowController(
         task=task,
-        source_repository=sealed_source,
+        source_repository=source_repository,
         workspace_root=workspace_root,
         artifact_root=output,
         runner=runner,
@@ -158,7 +152,7 @@ def run(*, v1_parquet: Path, v2_tasks: Path, source_repository: Path,
         "run_id": result.run.run_id,
         "started_at": result.run.started_at.astimezone(UTC).isoformat(),
         "artifact_directory": str(run_directory),
-        "sealed_source_repository": str(sealed_source),
+        "source_repository": str(source_repository),
         "task_id": task.instance_id,
         "base_commit": task.base_commit,
         "container_digest": task.container_digest,
