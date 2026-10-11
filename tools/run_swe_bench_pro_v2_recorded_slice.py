@@ -17,17 +17,32 @@ from agentless_ml.adapters.benchmarks import (
     SWEbenchProV2Dataset,
     SWEbenchProV2DatasetPin,
 )
-from agentless_ml.schemas import ValidationKind
 from agentless_ml.validation import (
     DockerTestRunner,
     PublicTestCommand,
     RegressionTest,
     ReproductionSpec,
+    go_reproduction_command,
+    javascript_reproduction_command,
+    typescript_reproduction_command,
 )
 from agentless_ml.workflow import FixedWorkflowController, RecordedStageResponses
 
 ROOT = Path(__file__).resolve().parents[1]
 PIN = ROOT / "experiments" / "swe_bench_pro" / "v2_corpus_pin.json"
+
+
+def reproduction_spec(spec: dict, language: str) -> ReproductionSpec:
+    config = spec["reproduction"]
+    factories = {
+        "go": go_reproduction_command,
+        "javascript": javascript_reproduction_command,
+        "typescript": typescript_reproduction_command,
+    }
+    options = {key: config[key] for key in ("test_name", "node_path") if key in config}
+    return ReproductionSpec(config["path"], factories[language](
+        config["path"], timeout_seconds=config["timeout_seconds"], **options,
+    ))
 
 
 def _revision() -> str:
@@ -134,14 +149,7 @@ def main(experiment_name: str, expected_language: str) -> None:
             timeout_seconds=spec["regression"]["timeout_seconds"],
         ),
     )
-    reproduction = ReproductionSpec(
-        spec["reproduction"]["path"],
-        PublicTestCommand(
-            tuple(spec["reproduction"]["argv"]),
-            kind=ValidationKind.REPRODUCTION,
-            timeout_seconds=spec["reproduction"]["timeout_seconds"],
-        ),
-    )
+    reproduction = reproduction_spec(spec, expected_language)
     result = FixedWorkflowController(
         task=task,
         source_repository=args.source_repository,

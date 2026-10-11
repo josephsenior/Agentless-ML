@@ -9,7 +9,6 @@
   },
   "reproduction": {
     "path": "test/agentless_v2_upload_path.js",
-    "argv": ["node", "test/agentless_v2_upload_path.js"],
     "timeout_seconds": 60
   }
 }

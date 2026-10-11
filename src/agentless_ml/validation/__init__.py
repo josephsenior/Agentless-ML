@@ -5,6 +5,9 @@ from .pipeline import validate_candidate
 from .regression import RegressionTest
 from .reports import ReportError, ReportFormat, TestReport, parse_report
 from .reproduction import ReproductionSpec, python_reproduction_command
+from .multilingual_reproduction import (
+    go_reproduction_command, javascript_reproduction_command, typescript_reproduction_command,
+)
 
 __all__ = [
     "DockerTestRunner",
@@ -17,5 +20,8 @@ __all__ = [
     "TestReport",
     "parse_report",
     "python_reproduction_command",
+    "go_reproduction_command",
+    "javascript_reproduction_command",
+    "typescript_reproduction_command",
     "validate_candidate",
 ]

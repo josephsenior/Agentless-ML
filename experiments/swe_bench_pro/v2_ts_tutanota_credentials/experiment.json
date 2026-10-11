@@ -9,7 +9,7 @@
   },
   "reproduction": {
     "path": "test/agentless_v2_credentials_reproduction.cjs",
-    "argv": ["env", "NODE_PATH=/app/node_modules", "node", "test/agentless_v2_credentials_reproduction.cjs"],
+    "node_path": "/app/node_modules",
     "timeout_seconds": 60
   }
 }

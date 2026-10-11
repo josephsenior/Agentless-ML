@@ -86,12 +86,11 @@ candidate pipeline as well as the Docker recorder.
 adapter: it reports `AssertionError` as failure and other uncaught exceptions
 (including import/syntax/runtime errors and explicit `SystemExit`) as errors.
 The factory is not a host sandbox; generated source still runs only in Docker.
-Other language adapters must provide equally meaningful classification.
 
-This is a deliberate compatibility tightening. The older recorded V2 Go,
-JavaScript and TypeScript slice helper still has exit-only reproduction
-commands and now refuses to run them. Those scripts need reporting adapters
-before replay; historical smoke-task evidence has not been rewritten.
+Go, JavaScript and TypeScript now have [trusted reporting adapters](multilingual-reproduction-reporting.md).
+The three recorded V2 smoke configurations use these factories rather than
+exit-only commands. Historical smoke-task evidence has not been rewritten;
+migrating a command is not a new benchmark result.
 
 Failing on the original revision is necessary, not sufficient: a test can fail
 for the wrong reason or encode the wrong expected behavior. This milestone does

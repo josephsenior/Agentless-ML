@@ -60,6 +60,10 @@ those trusted reporting adapters is the next implementation task; historical
 results remain engineering evidence from the earlier contract, not new results
 under this stricter one.
 
+Follow-up: the [multilingual reporting update](multilingual-reproduction-reporting.md)
+has now migrated those three commands. The paragraph above records the boundary
+at this initial checkpoint; it is no longer a current replay blocker.
+
 ## Checks
 
 Focused tests cover clean assertion failure/success, missing reports, mixed

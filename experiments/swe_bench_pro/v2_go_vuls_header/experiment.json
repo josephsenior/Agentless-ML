@@ -9,7 +9,7 @@
   },
   "reproduction": {
     "path": "scanner/agentless_v2_reproduction_test.go",
-    "argv": ["env", "GOCACHE=/tmp/go-build", "GOPROXY=off", "go", "test", "./scanner", "-run", "^TestDebianMissingKernelVersion$", "-count=1"],
+    "test_name": "TestDebianMissingKernelVersion",
     "timeout_seconds": 600
   }
 }

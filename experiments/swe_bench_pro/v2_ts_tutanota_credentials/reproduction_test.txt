@@ -35,7 +35,7 @@ function load(relativePath) {
 		compilerOptions: {module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020},
 	})
 	const errors = (compiled.diagnostics || []).filter(d => d.category === ts.DiagnosticCategory.Error)
-	assert.equal(errors.length, 0, `TypeScript syntax errors in ${relativePath}`)
+	if (errors.length) throw new SyntaxError(`TypeScript syntax errors in ${relativePath}`)
 	const module = {exports: {}}
 	const requireStub = name => {
 		if (name.includes("KeyPermanentlyInvalidatedError")) return {KeyPermanentlyInvalidatedError}
@@ -74,5 +74,5 @@ async function main() {
 	console.log("public credential-decryption reproduction passed")
 }
 
-main().catch(error => { console.error(error); process.exitCode = 1 })
+main()
 ```
