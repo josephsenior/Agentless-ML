@@ -44,6 +44,10 @@ timing measurements. This does not isolate a BLAS speedup or establish that
 the complete 10,609-entry schedule fits in 30 minutes. Later phases and
 memory peaks remain unmeasured under this condition.
 
+The subsequent [batch review](deepswe-numba-batch-review-2026-10-12.md) maps
+the saved worker lifetimes to native test groups. Groups 101–200 and 301–400
+were the slower observed groups; exact per-test timings were not recorded.
+
 The container, anonymous volume and temporary candidate workspace were cleaned
 up. The survey was not updated; public-baseline readiness remains **112/113**,
 with Numba unready. No full attempt or automatic retry was started.
