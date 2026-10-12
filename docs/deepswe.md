@@ -698,6 +698,11 @@ outcomes match across the previous and fresh processes; raw XML stays unchanged.
   not direct new ENOSPC evidence. One build worker did not yield a successful
   compile, and canonical readiness remains unchanged.
   KGateway is now explicitly parked under these limits (work priority only).
+  After work resumed, the [full public schedule with 8-GiB scratch](deepswe-kgateway-8gib-tmpfs-full-2026-10-12.md)
+  completed with 1,017 passes and 40 visible failures. The 8-GiB `/tmp` stays
+  within the task's declared 20-GiB storage; the other limits and full schedule
+  were unchanged. KGateway is now ready under that labeled scratch setting,
+  bringing readiness to **111/113**.
   The next [Testem setup inspection](deepswe-testem-setup-review-2026-10-09.md)
   found no discoverable Firefox in its pinned image, despite the public CI
   installing it and public Mocha tests requiring Headless Firefox. No retry or

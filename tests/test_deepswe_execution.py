@@ -69,6 +69,15 @@ def test_numba_builds_candidate_extensions_before_import_and_native_runner(tmp_p
         deepswe_test_command("numba-runtests", ("numba.tests.test_stencil",))
 
 
+def test_kgateway_uses_public_full_go_schedule_with_explicit_scratch_allowance(tmp_path):
+    override = load_test_overrides(OVERRIDES)["kgateway-consistent-hash-policy"]
+    plan = deepswe_test_plan("go", tmp_path, override)
+    assert plan.runner == "go" and plan.targets == ("./...",)
+    assert "tmpfs_mb" in override and override["tmpfs_mb"] == 8192
+    assert "Modified scratch setting" in plan.override_reason
+    assert "complete ./... public Go schedule" in plan.override_reason
+
+
 @pytest.mark.parametrize("image_copy", [False, True])
 def test_numba_import_guard_rejects_non_candidate_code(tmp_path, image_copy):
     parent = tmp_path / ("image" if image_copy else "candidate")
@@ -614,6 +623,7 @@ def test_the_checked_in_overrides_are_well_formed_and_explained():
         "tomlkit-toml-table-converters",
         "adaptix-name-mapping-aliases",
         "numba-stencil-boundary-modes",
+        "kgateway-consistent-hash-policy",
         "eicrud-keyset-pagination-cursor",
         "skrub-duration-encoding",
         "igel-persist-feature-schema",

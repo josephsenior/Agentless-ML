@@ -1,0 +1,29 @@
+{
+  "task_id": "kgateway-consistent-hash-policy",
+  "base_commit": "7abc5278782e3280fec8292b39807ec1b537eaf4",
+  "condition": "complete_public_schedule_with_modified_8_gib_tmpfs_allowance",
+  "image_id": "sha256:a4f7250f435dd05fa354c8ea5f54e3d0228678f5203887d98863c5da7ceaf1b9",
+  "runner": "go",
+  "targets": ["./..."],
+  "network": "none",
+  "memory_mb": 8192,
+  "cpus": 2,
+  "tmpfs_mb": 8192,
+  "pids_limit": 2048,
+  "timeout_seconds": 1800,
+  "task_declared_storage_mb": 20480,
+  "public_test_source_modified": false,
+  "full_attempt": {
+    "status": "fail",
+    "exit_code": 1,
+    "duration_seconds": 658.4,
+    "full_suite_run": true,
+    "report_ids": 1057,
+    "passed": 1017,
+    "failed": 40,
+    "skipped": 0,
+    "report_sha256": "1f633060b00236c5dfe71cec30ea78195184796b18ce25c53343aa71b3438797",
+    "execution_sha256": "27c50e919fe609c063971d3a28717a92b18b3342fee7334842bd624d6bb2ff5a"
+  },
+  "artifacts": "../output/deepswe-survey/survey/kgateway-consistent-hash-policy/logs/agentless-ml-d493179835d846c986c648cd89f54db1"
+}

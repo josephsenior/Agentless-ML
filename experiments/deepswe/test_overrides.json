@@ -3,6 +3,10 @@
     "runner": "pebble-go-ci",
     "reason": "Use upstream CI=1 so the three huge-memory public row-block overflow tests report their documented skips, and -p 1 to limit package build concurrency. Verified in the two-phase 2026-10-10 diagnostic. Opt into pebble-random-parent-v1 for the six reviewed randomized families: require an explicit passing parent and passing descendants, propagate child failures, and count missing/skipped parents as regressions. Preserve every raw child in CTRF and keep unrelated IDs unchanged. Preserve the complete ./... schedule, candidate compilation, cold writable cache, real lint failures, original pinned image, 1800-second cap and Docker protections. Apply the same public plan to baseline and candidates; do not change the held-out scorer or count skips as passes."
   },
+  "kgateway-consistent-hash-policy": {
+    "tmpfs_mb": 8192,
+    "reason": "Modified scratch setting: raise only the disposable /tmp tmpfs from 4 GiB to 8 GiB, still below the task's declared 20-GiB storage allowance. The previous full compile had explicit ENOSPC; one-worker compilation sampled 3.92 GiB used before stopping. Keep the pinned image, complete ./... public Go schedule, 8-GiB memory, two CPUs, network-none, 2048 PID cap, report and 30-minute timeout unchanged."
+  },
   "helm-array-merge-strategies": {
     "runner": "helm-go",
     "reason": "Keep the ordinary Go script and full package schedule unchanged. Opt into helm-save-tempdir-v1 matching IDs for the four TestSave outDir subtests in the v2/v3 util packages, masking only the random digits in /tmp/TestSave<digits>/001 and preserving /newdir. Refuse normalization collisions; keep raw CTRF, outcomes, candidate source, image and Docker protections unchanged."
