@@ -1,7 +1,7 @@
 """Explicit, verified runtime registrations; never overwrite published task pins.
 
-Profiles cover Testem's public-file service, Cliffy's cache supplement and
-GoReleaser's cache relocation/seeding.
+Profiles cover Testem's public-file service, Cliffy's cache supplement,
+GoReleaser's cache relocation/seeding, and Pwntools' offline protocol fixtures.
 A registry entry cannot inject shell commands, hostname mappings, resource
 changes or arbitrary evidence paths. Explicit --image diagnostics bypass registrations.
 """
@@ -20,18 +20,22 @@ from agentless_ml.validation.helm_fixtures import (
 )
 from run_testem_qunit_public_test import OfflineAssetRunner, SUPERVISOR
 from run_goreleaser_cache_diagnostic import cache_command
+from run_pwntools_service_tests import ProtocolServiceRunner
 
 REGISTRY = Path(__file__).resolve().parents[1] / 'experiments/deepswe/environments.json'
 TASK = 'testem-per-launcher-reports'
 CONDITION = 'modified environment: offline public-asset delivery'
 CLIFFY = 'cliffy-config-file-parsing'
 GORELEASER = 'goreleaser-retry-publish-auditing'
+PWNTOOLS = 'pwntools-tube-multiplexing'
 PROFILES = {
     TASK: ('testem-offline-qunit-v1', CONDITION, 'testem_qunit_todo_full_schedule_2026_10_10.json'),
     CLIFFY: ('cliffy-verified-cache-v1', 'modified environment: verified offline dependency cache',
              'cliffy_public_baseline_2026_10_09.json'),
     GORELEASER: ('goreleaser-relocated-cache-v1', 'modified environment: relocated Go caches with writable build seed',
                 'goreleaser_cache_2026_10_08.json'),
+    PWNTOOLS: ('pwntools-protocol-services-v1', 'modified environment: offline protocol services',
+               'pwntools/pwntools_protocol_services_full_2026_10_12.json'),
 }
 KEYS = {'profile', 'condition', 'base_commit', 'published_image_id',
         'image', 'image_id', 'verification', 'reason'}
@@ -61,6 +65,9 @@ def load_environments(path=REGISTRY):
             continue
         if task_id == GORELEASER:
             _verify_goreleaser(entry, evidence)
+            continue
+        if task_id == PWNTOOLS:
+            _verify_pwntools(entry, evidence)
             continue
         result = evidence['result']
         if (result['image_id'] != entry['image_id'] or result['base_commit'] != entry['base_commit']
@@ -120,6 +127,31 @@ def _verify_goreleaser(entry, evidence):
         raise ValueError('GoReleaser registration requires the matching completed report-bearing baseline and module check')
 
 
+def _verify_pwntools(entry, evidence):
+    result = evidence['full_attempt']
+    if (evidence['task_id'] != PWNTOOLS or evidence['image_id'] != entry['image_id']
+            or evidence['parent_image_id'] != entry['published_image_id']
+            or evidence['base_commit'] != entry['base_commit']
+            or evidence['condition'] != 'full_public_schedule_substituted_offline_protocol_services_environment'
+            or evidence['runner'] != 'pwntools-native-doctest' or evidence['targets'] != []
+            or (result['status'], result['exit_code']) != ('fail', 1)
+            or not result['full_suite_run'] or result['public_test_filter'] is not None
+            or result['public_test_source_modified'] or result['passed'] < 1
+            or result['failed'] < 0 or result['skipped'] < 0
+            or result['report_ids'] != result['passed'] + result['failed'] + result['skipped']
+            or result['report_sha256'] != evidence['report_sha256']
+            or result['execution_sha256'] != evidence['execution_sha256']
+            or evidence['network'] != 'none' or evidence['extra_hosts'] != {
+                'pypi.org': '127.0.0.1', 'httpbingo.org': '127.0.0.1',
+                'google.com': '127.0.0.1'}
+            or not evidence['root_read_only'] or not evidence['all_capabilities_dropped']
+            or not evidence['no_new_privileges'] or evidence['memory_mb'] != 8192
+            or evidence['cpus'] != 2 or evidence['tmpfs_mb'] != 4096
+            or evidence['pids_limit'] != 2048 or evidence['timeout_seconds'] != 1800
+            or evidence['container_user'] != 'travis'):
+        raise ValueError('Pwntools registration requires matching full public report, offline fixtures and unchanged protections')
+
+
 def runtime_task(task, environment):
     if environment is None:
         return task
@@ -131,6 +163,15 @@ def runtime_command(command, environment):
         return command
     if environment['profile'] == 'goreleaser-relocated-cache-v1':
         return cache_command(command)
+    if environment['profile'] == 'pwntools-protocol-services-v1':
+        # The registered image replaces the existing setup script; keep the
+        # unfiltered public command, report contract and timeout untouched.
+        if (len(command.argv) != 4 or command.argv[:2] != ('sh', '-c')
+                or '. /opt/pwntools-setup-local-ssh.sh' not in command.argv[2]
+                or '/tmp/agentless-pwntools-doctest.py' not in command.argv[2]
+                or command.argv[3] != 'deepswe-tests'):
+            raise ValueError('Pwntools registration requires its complete public doctest command')
+        return command
     # Keep caller-provided targets, report, timeout and failure codes intact.
     # As with the verified full run, only the writable HOME prefix and owned
     # public-file service surround the original Mocha command.
@@ -151,6 +192,20 @@ class RegisteredImageRunner(DockerTestRunner):
 
     def _docker(self, *args, **kwargs):
         result = DockerTestRunner._docker(*args, **kwargs)
+        if args and args[0] == 'inspect':
+            self.observed_host_config = json.loads(result.stdout)[0]['HostConfig']
+        return result
+
+
+class RegisteredProtocolServiceRunner(ProtocolServiceRunner):
+    """Protocol fixtures plus the same observed-protection record as survey runners."""
+
+    def __init__(self, *args, **kwargs):
+        self.observed_host_config = None
+        super().__init__(*args, **kwargs)
+
+    def _docker(self, *args, **kwargs):
+        result = ProtocolServiceRunner._docker(*args, **kwargs)
         if args and args[0] == 'inspect':
             self.observed_host_config = json.loads(result.stdout)[0]['HostConfig']
         return result
@@ -191,7 +246,10 @@ def runtime_runner(image, artifacts, environment, *, task=None, **limits):
         return HelmFixtureRunner(image, artifacts, task=task, **limits)
     runner_type = DockerTestRunner
     if environment is not None:
-        runner_type = OfflineAssetRunner if environment['profile'] == 'testem-offline-qunit-v1' else RegisteredImageRunner
+        runner_type = {
+            'testem-offline-qunit-v1': OfflineAssetRunner,
+            'pwntools-protocol-services-v1': RegisteredProtocolServiceRunner,
+        }.get(environment['profile'], RegisteredImageRunner)
     runner = runner_type(image, artifacts, **limits)
     if environment is not None and runner.image_id != environment['image_id']:
         raise ValueError('Registered runtime image does not match its verified immutable ID')

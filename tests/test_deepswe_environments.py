@@ -11,6 +11,7 @@ from unittest.mock import patch
 import pytest
 
 from agentless_ml.adapters.benchmarks.deepswe_execution import MOCHA, DENO, GO, DeepSWETestPlan
+from agentless_ml.adapters.benchmarks import deepswe_test_command
 from agentless_ml.schemas import Benchmark, TaskSpec
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -260,4 +261,67 @@ def test_goreleaser_registration_rejects_unusable_or_mismatched_evidence(tmp_pat
     registry = tmp_path / 'environments.json'
     registry.write_text(json.dumps({runtime.GORELEASER: entry}))
     with pytest.raises(ValueError, match='GoReleaser registration requires'):
+        runtime.load_environments(registry)
+
+
+def test_pwntools_full_schedule_registration_keeps_modified_environment_explicit(tmp_path):
+    entry = runtime.load_environments()[runtime.PWNTOOLS]
+    assert entry['condition'] == 'modified environment: offline protocol services'
+    task = replace(published(), instance_id=runtime.PWNTOOLS, language='python',
+                   base_commit=entry['base_commit'], container_digest=entry['published_image_id'])
+    assert runtime.runtime_task(task, entry).container_digest == entry['image_id']
+
+    command = deepswe_test_command('pwntools-native-doctest', timeout_seconds=1800)
+    assert runtime.runtime_command(command, entry) == command
+    assert command.argv[-1] == 'deepswe-tests'
+    assert command.report.path == '/tmp/ctrf.json'
+
+    evidence = json.loads((runtime.REGISTRY.parent / entry['verification']).read_text())
+    assert evidence['full_attempt']['passed'] == 49
+    assert evidence['full_attempt']['failed'] == 6
+    assert evidence['full_attempt']['skipped'] == 0
+    assert evidence['full_attempt']['report_ids'] == 55
+    assert evidence['extra_hosts'] == {
+        'pypi.org': '127.0.0.1', 'httpbingo.org': '127.0.0.1',
+        'google.com': '127.0.0.1'}
+
+    def init(runner, image, *_args, **_kwargs):
+        runner.user, runner.image_id = 'travis', image
+    with patch.object(runtime.DockerTestRunner, '__init__', init):
+        runner = runtime.runtime_runner(entry['image'], tmp_path, entry)
+    assert isinstance(runner, runtime.RegisteredProtocolServiceRunner)
+
+    calls = []
+    with patch.object(runtime.DockerTestRunner, '_docker',
+                      staticmethod(lambda *args, **kwargs: calls.append((args, kwargs)))):
+        runtime.ProtocolServiceRunner._docker('create', '--network=none', entry['image'])
+    assert calls[0][0] == (
+        'create', '--add-host=pypi.org:127.0.0.1',
+        '--add-host=httpbingo.org:127.0.0.1', '--add-host=google.com:127.0.0.1',
+        '--network=none', entry['image'])
+
+    observed = {'NetworkMode': 'none', 'ReadonlyRootfs': True}
+    completed = __import__('subprocess').CompletedProcess([], 0, json.dumps([{'HostConfig': observed}]), '')
+    with patch.object(runtime.ProtocolServiceRunner, '_docker', staticmethod(lambda *a, **k: completed)):
+        runner._docker('inspect', 'container')
+    assert runner.observed_host_config == observed
+
+
+@pytest.mark.parametrize('change', ['image', 'base', 'status', 'empty', 'incomplete', 'network', 'limits'])
+def test_pwntools_registration_rejects_mismatched_full_run_evidence(tmp_path, change):
+    entry = runtime.load_environments()[runtime.PWNTOOLS]
+    evidence = json.loads((runtime.REGISTRY.parent / entry['verification']).read_text())
+    if change == 'image': evidence['image_id'] = 'sha256:' + '0' * 64
+    elif change == 'base': evidence['base_commit'] = '0' * 40
+    elif change == 'status': evidence['full_attempt']['status'] = 'timeout'
+    elif change == 'empty': evidence['full_attempt']['passed'] = 0
+    elif change == 'incomplete': evidence['full_attempt']['report_ids'] = 54
+    elif change == 'network': evidence['network'] = 'bridge'
+    elif change == 'limits': evidence['memory_mb'] = 16384
+    evidence_path = tmp_path / entry['verification']
+    evidence_path.parent.mkdir(parents=True, exist_ok=True)
+    evidence_path.write_text(json.dumps(evidence))
+    registry = tmp_path / 'environments.json'
+    registry.write_text(json.dumps({runtime.PWNTOOLS: entry}))
+    with pytest.raises(ValueError, match='Pwntools registration requires'):
         runtime.load_environments(registry)

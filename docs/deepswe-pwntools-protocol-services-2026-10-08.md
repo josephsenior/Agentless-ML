@@ -123,10 +123,22 @@ exact same shared-service image. The report passes context 164/164, sockets
 Evidence is under
 `../output/deepswe-survey/pwntools-protocol-services-2026-10-08/four-pages/logs/agentless-ml-51d33b3d05fa4fefa363e20d199aa186/`.
 
-Work on Pwntools stops here at the user's request so setup effort can move to
-other tasks. It is not canonical-ready: its published image still lacks the
-required Sphinx dependency and produces no accepted public report. The
-augmented diagnostic has usable passing examples, but full-schedule filesystem,
-process and host-core constraints remain documented in the earlier notes.
-An all-passing suite is not the survey's readiness rule; these substituted-image
-results simply do not qualify as the pinned published-image baseline.
+## Full public schedule follow-up (2026-10-12)
+
+The complete, unchanged public Sphinx doctest schedule was run once against the
+same protocol-services image, offline, at the original 8-GiB/two-CPU/4-GiB
+tmpfs/2048-PID limits and 30-minute cap. It completed in 1127.3 seconds and
+reported 55 document groups: **49 passed, 6 failed, 0 skipped**. The complete
+report and runner record are retained under
+`../output/deepswe-survey/survey/pwntools-tube-multiplexing/logs/agentless-ml-8a619ad0881547a0a50958e7febe40c0/`.
+All six failing groups remain visible: `elf/corefile`, `filesystem`, `gdb`,
+`rop/rop`, `tubes/processes` and `util/proc`. In particular, debugger/core
+behavior is not claimed as solved by this run.
+
+The survey profile `pwntools-protocol-services-v1` registers this exact image
+as an explicitly modified environment. The full-run evidence and report hashes
+are pinned in
+`experiments/deepswe/pwntools/pwntools_protocol_services_full_2026_10_12.json`.
+This yields a usable regression inventory under the survey's readiness rule;
+it does not claim published-image parity or an all-green baseline. The pinned
+published image remains unchanged.
