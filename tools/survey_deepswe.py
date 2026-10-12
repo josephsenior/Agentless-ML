@@ -144,6 +144,8 @@ def _survey(task, args, overrides, environments=None) -> dict:
             memory_mb=task.memory_megabytes,
             cpus=2,
             tmpfs_mb=override.get("tmpfs_mb", args.tmpfs_mb) if override else args.tmpfs_mb,
+            scratch_mode=override.get("scratch_mode", "tmpfs") if override else "tmpfs",
+            swap_policy=override.get("swap_policy", "disabled") if override else "disabled",
             pids_limit=2048,
             run_as_image_user=True,
         )

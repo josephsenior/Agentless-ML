@@ -78,6 +78,15 @@ def test_kgateway_uses_public_full_go_schedule_with_explicit_scratch_allowance(t
     assert "complete ./... public Go schedule" in plan.override_reason
 
 
+def test_numba_and_wazero_use_pier_aligned_scratch_and_swap():
+    overrides = load_test_overrides(OVERRIDES)
+    for task_id in ("numba-stencil-boundary-modes", "wazero-multi-module-snapshots"):
+        assert overrides[task_id]["scratch_mode"] == "volume"
+        assert overrides[task_id]["swap_policy"] == "docker-default"
+        assert "8-GiB RAM" in overrides[task_id]["reason"]
+        assert "30-minute timeout" in overrides[task_id]["reason"]
+
+
 @pytest.mark.parametrize("image_copy", [False, True])
 def test_numba_import_guard_rejects_non_candidate_code(tmp_path, image_copy):
     parent = tmp_path / ("image" if image_copy else "candidate")
@@ -623,6 +632,7 @@ def test_the_checked_in_overrides_are_well_formed_and_explained():
         "tomlkit-toml-table-converters",
         "adaptix-name-mapping-aliases",
         "numba-stencil-boundary-modes",
+        "wazero-multi-module-snapshots",
         "kgateway-consistent-hash-policy",
         "eicrud-keyset-pagination-cursor",
         "skrub-duration-encoding",
@@ -915,6 +925,8 @@ def test_delegated_runner_detects_candidate_workspace_source(
         ({"reason": "why", "runner": []}, "unknown runner"),
         ({"reason": "why", "tmpfs_mb": 0}, "positive integer"),
         ({"reason": "why", "tmpfs_mb": "8192"}, "positive integer"),
+        ({"reason": "why", "scratch_mode": "tmpfs-full"}, "unknown scratch_mode"),
+        ({"reason": "why", "swap_policy": "unlimited"}, "unknown swap_policy"),
     ],
 )
 def test_malformed_overrides_are_refused(tmp_path, entry, message):

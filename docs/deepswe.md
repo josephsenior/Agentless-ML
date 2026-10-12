@@ -850,7 +850,14 @@ outcomes match across the previous and fresh processes; raw XML stays unchanged.
   The subsequent [8-GiB retries](wazero-8g-retries-2026-10-06.md) also ended in
   OOM with serial execution and earlier garbage collection. The serial run
   identified the public `TestEngineInterpreter/huge_binary` stress test as an
-  OOM victim; Wazero remains resource-blocked for the full public schedule.
+  OOM victim under that earlier runner setup.
+  The [2026-10-12 scratch/swap review](deepswe-scratch-swap-2026-10-12.md)
+  replaces the RAM-backed checkout with disposable disk scratch and restores
+  Docker-default swap for Wazero and Numba. Wazero's unchanged full public
+  schedule completes under 8 GiB, two CPUs and 30 minutes: 155,928 passed,
+  zero failed and 39 expected upstream skips. Numba builds and imports from
+  candidate source but still times out without a complete report. Latest
+  public-baseline readiness is **112/113**, with only Numba unready.
 - **Workflow and scoring over many tasks.** The survey establishes each task's
   regression inventory, but running the workflow needs repair responses, and
   only actionlint has recorded ones; without a model there is nothing to run for

@@ -988,7 +988,8 @@ def load_test_overrides(path: Path) -> dict[str, dict[str, object]]:
     overrides: dict[str, dict[str, object]] = {}
     for task_id, entry in raw.items():
         if not isinstance(entry, dict) or set(entry) - {
-            "reason", "arguments", "targets", "runner", "tmpfs_mb"
+            "reason", "arguments", "targets", "runner", "tmpfs_mb",
+            "scratch_mode", "swap_policy",
         }:
             raise ValueError(f"override for {task_id} has unknown keys")
         if not isinstance(entry.get("reason"), str) or not entry["reason"].strip():
@@ -1005,8 +1006,16 @@ def load_test_overrides(path: Path) -> dict[str, dict[str, object]]:
             type(entry["tmpfs_mb"]) is not int or entry["tmpfs_mb"] <= 0
         ):
             raise ValueError(f"override for {task_id}: tmpfs_mb must be a positive integer")
+        if "scratch_mode" in entry and entry["scratch_mode"] not in ("tmpfs", "volume"):
+            raise ValueError(f"override for {task_id}: unknown scratch_mode")
+        if "swap_policy" in entry and entry["swap_policy"] not in (
+            "disabled", "docker-default"
+        ):
+            raise ValueError(f"override for {task_id}: unknown swap_policy")
         if not entry.get("arguments") and not any(
-            key in entry for key in ("targets", "runner", "tmpfs_mb")
+            key in entry for key in (
+                "targets", "runner", "tmpfs_mb", "scratch_mode", "swap_policy"
+            )
         ):
             raise ValueError(f"override for {task_id} changes nothing")
         overrides[task_id] = entry

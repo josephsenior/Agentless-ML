@@ -247,12 +247,18 @@ class DockerTestRunner:
         cpus: float = 1,
         pids_limit: int = 128,
         tmpfs_mb: int = 256,
+        scratch_mode: str = "tmpfs",
+        swap_policy: str = "disabled",
         run_as_image_user: bool = False,
     ):
         if not image or image.startswith("-"):
             raise ValueError("image must be a local image reference")
         if any(type(v) is not int or v <= 0 for v in (memory_mb, pids_limit, tmpfs_mb)):
             raise ValueError("resource limits must be positive integers")
+        if scratch_mode not in ("tmpfs", "volume"):
+            raise ValueError("scratch_mode must be 'tmpfs' or 'volume'")
+        if swap_policy not in ("disabled", "docker-default"):
+            raise ValueError("swap_policy must be 'disabled' or 'docker-default'")
         if not math.isfinite(cpus) or cpus <= 0:
             raise ValueError("cpus must be finite and positive")
         metadata = json.loads(self._docker("image", "inspect", image).stdout)[0]
@@ -263,6 +269,7 @@ class DockerTestRunner:
         self.artifact_root = Path(artifact_root).resolve()
         self.memory_mb, self.cpus = memory_mb, cpus
         self.pids_limit, self.tmpfs_mb = pids_limit, tmpfs_mb
+        self.scratch_mode, self.swap_policy = scratch_mode, swap_policy
         self.run_as_image_user = run_as_image_user
         # An image with no configured user runs as root.
         self.user = (
@@ -351,12 +358,22 @@ class DockerTestRunner:
                 self._snapshot_source(source, snapshot)
                 attempted_create = True
                 # The container itself only waits. The command runs through
-                # `docker exec`, so files it writes to the memory-only /tmp (its
-                # output and report) can be read before the container is removed.
+                # `docker exec`, so files written under /tmp can be read before
+                # the container and its disposable scratch volume are removed.
                 identity = (
                     ()
                     if self.run_as_image_user
                     else (f"--user={UNPRIVILEGED_USER}", "--env=HOME=/tmp")
+                )
+                scratch_args = (
+                    ["--tmpfs", f"/tmp:rw,exec,nosuid,nodev,size={self.tmpfs_mb}m,mode=1777"]
+                    if self.scratch_mode == "tmpfs"
+                    else ["--mount", "type=volume,destination=/tmp"]
+                )
+                swap_args = (
+                    [f"--memory-swap={self.memory_mb}m"]
+                    if self.swap_policy == "disabled"
+                    else []
                 )
                 self._docker(
                     "create",
@@ -371,15 +388,12 @@ class DockerTestRunner:
                     "--security-opt=no-new-privileges",
                     *identity,
                     f"--memory={self.memory_mb}m",
-                    f"--memory-swap={self.memory_mb}m",
+                    *swap_args,
                     f"--cpus={self.cpus}",
                     f"--pids-limit={self.pids_limit}",
                     "--init",
-                    # `exec`: compiled test binaries (Go test binaries, Rust cargo
-                    # tests) are built under /tmp and must be able to run. Docker
-                    # mounts tmpfs noexec unless told otherwise.
-                    "--tmpfs",
-                    f"/tmp:rw,exec,nosuid,nodev,size={self.tmpfs_mb}m,mode=1777",
+                    # Compiled test binaries must be executable from scratch.
+                    *scratch_args,
                     "--log-driver=json-file",
                     "--log-opt=max-size=1m",
                     "--log-opt=max-file=1",
@@ -532,7 +546,9 @@ class DockerTestRunner:
             "memory_mb": self.memory_mb,
             "cpus": self.cpus,
             "pids_limit": self.pids_limit,
-            "tmpfs_mb": self.tmpfs_mb,
+            "scratch_mode": self.scratch_mode,
+            "scratch_mb": self.tmpfs_mb if self.scratch_mode == "tmpfs" else None,
+            "swap_policy": self.swap_policy,
             "timeout_seconds": command.timeout_seconds,
         }
         record["failure_exit_codes"] = command.failure_exit_codes

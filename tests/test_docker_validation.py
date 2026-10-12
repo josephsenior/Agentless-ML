@@ -153,6 +153,7 @@ def test_execution_outcomes_and_cleanup(
     assert "--env=HOME=/tmp" in create
     assert "sha256:fixed" in create
     assert not any(arg.startswith("--mount") or arg == "-v" for arg in create)
+    assert "--memory-swap=512m" in create
     tmpfs = create[create.index("--tmpfs") + 1]
     assert tmpfs.startswith("/tmp:") and ",exec," in tmpfs and "noexec" not in tmpfs
     # The command reaches the container only as positional exec arguments.
@@ -168,6 +169,28 @@ def test_execution_outcomes_and_cleanup(
     assert record["user"] == {"run_as_image_user": False, "user": "65534:65534"}
     # Output is still collected after a timeout: it explains what was running.
     assert Path(execution.artifact_directory, "stdout.log").read_bytes() == b"test evidence\n"
+
+
+def test_disk_backed_scratch_and_docker_default_swap(tmp_path, monkeypatch):
+    calls = []
+    monkeypatch.setattr(DockerTestRunner, "_docker", staticmethod(fake_docker(calls)))
+    source = tmp_path / "source"
+    source.mkdir()
+    runner = DockerTestRunner(
+        "python:local", tmp_path / "logs", memory_mb=8192, cpus=2,
+        tmpfs_mb=4096, scratch_mode="volume", swap_policy="docker-default",
+    )
+    execution = runner.run(source, PublicTestCommand(("true",)))
+    create = next(call for call in calls if call[0] == "create")
+    assert execution.result.status is ValidationStatus.PASS
+    assert "--memory=8192m" in create and "--cpus=2" in create
+    assert "--mount" in create and "type=volume,destination=/tmp" in create
+    assert "--tmpfs" not in create and not any(arg.startswith("--memory-swap=") for arg in create)
+    assert calls[-1][:3] == ("rm", "--force", "--volumes")
+    record = json.loads(Path(execution.artifact_directory, "execution.json").read_text())
+    assert record["limits"]["scratch_mode"] == "volume"
+    assert record["limits"]["scratch_mb"] is None
+    assert record["limits"]["swap_policy"] == "docker-default"
 
 
 @pytest.mark.parametrize("image_user,expected_user", [("", "root"), ("node", "node")])

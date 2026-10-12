@@ -108,6 +108,8 @@ def main() -> None:
         memory_mb=published.memory_megabytes,
         cpus=2,
         tmpfs_mb=override.get("tmpfs_mb", 4096) if override else 4096,
+        scratch_mode=override.get("scratch_mode", "tmpfs") if override else "tmpfs",
+        swap_policy=override.get("swap_policy", "disabled") if override else "disabled",
         pids_limit=2048,
         run_as_image_user=True,
     )
