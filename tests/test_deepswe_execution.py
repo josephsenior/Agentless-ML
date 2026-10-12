@@ -54,6 +54,8 @@ def test_numba_builds_candidate_extensions_before_import_and_native_runner(tmp_p
     plan = deepswe_test_plan("python", tmp_path, override)
     assert plan.runner == "numba-runtests" and plan.targets == ()
     text = plan.command().argv[2]
+    assert text.index("export OPENBLAS_NUM_THREADS=1;") < text.index("python setup.py")
+    assert "export NUMBA_NUM_THREADS=" not in text
     assert "python setup.py build_ext --inplace || exit 125" in text
     assert text.index("build_ext --inplace") < text.index("refusing non-candidate import")
     assert text.index("refusing non-candidate import") < text.index("BasicTestRunner.resultclass")

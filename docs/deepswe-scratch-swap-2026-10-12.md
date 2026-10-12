@@ -68,6 +68,10 @@ test report. No further full retry was started.
 The latest survey has **112/113 ready**, with Numba the only remaining task.
 That count describes usable public regression inventories, not repair scores.
 
+The subsequent [thread inspection](deepswe-numba-threads-2026-10-12.md) records
+the requested BLAS-only cap and discovery checks. That change was made after
+this timed-out attempt; there has been no new full baseline with the cap.
+
 The focused Docker, DeepSWE execution, environment and Numba recorder checks
 passed: **203 passed, 12 skipped**. The skipped checks require explicit local
 Docker or pinned-repository integration opt-ins. The three public execution

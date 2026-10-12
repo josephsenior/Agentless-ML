@@ -31,7 +31,7 @@
     "runner": "numba-runtests",
     "scratch_mode": "volume",
     "swap_policy": "docker-default",
-    "reason": "Build native extensions with the documented python setup.py build_ext --inplace and verify candidate imports. Run the public runtests.py entry point with its default full schedule and native loader, including CUDA availability checks; generic pytest bypasses those hooks. Record real unittest outcomes through the existing BasicTestRunner without changing discovery, ordering or assertions. Use disposable disk-backed /tmp scratch and leave swap at the Docker default, matching Pier's Docker resource mapping. Keep the declared 8-GiB RAM, two CPUs, 30-minute timeout, image, dependencies, offline network and test schedule unchanged."
+    "reason": "Build native extensions with the documented python setup.py build_ext --inplace and verify candidate imports. Run the public runtests.py entry point with its default full schedule and native loader, including CUDA availability checks; generic pytest bypasses those hooks. Record real unittest outcomes through the existing BasicTestRunner without changing discovery, ordering or assertions. Set OPENBLAS_NUM_THREADS=1 before Python starts to limit the image's NumPy/SciPy BLAS pools; retain Numba's own thread maximum because lowering it removes generated public cases. Discovery verified the same 10609 IDs with this BLAS setting; full-suite completion remains unproven. Use disposable disk-backed /tmp scratch and leave swap at the Docker default, matching Pier's Docker resource mapping. Keep the declared 8-GiB RAM, two CPUs, 30-minute timeout, image, dependencies, offline network and test schedule unchanged."
   },
   "wazero-multi-module-snapshots": {
     "scratch_mode": "volume",

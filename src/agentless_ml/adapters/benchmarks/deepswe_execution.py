@@ -235,6 +235,9 @@ TOMLKIT_PYTEST = DeepSWETestCommand(
 NUMBA_RUNTESTS = DeepSWETestCommand(
     script=(
         f"cd {WORK} || exit 125; export PYTHONPATH={WORK}/src:{WORK}; "
+        # BLAS sees all 16 host CPUs despite the two-CPU quota. Keep Numba's
+        # own thread maximum: lowering it removes generated public test cases.
+        "export OPENBLAS_NUM_THREADS=1; "
         "python setup.py build_ext --inplace || exit 125; "
         f"python -c '{_NUMBA_IMPORT_CHECK}' || exit 125; "
         f"python -c '{NUMBA_REPORTER}' {WORK}/runtests.py /tmp/report.xml"
