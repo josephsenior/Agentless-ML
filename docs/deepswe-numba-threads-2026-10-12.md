@@ -54,8 +54,9 @@ run used the old BLAS defaults. No speed improvement or full-suite completion
 has been measured for the new setting; Numba remains unready and the latest
 public-baseline count stays **112/113**.
 
-The next useful measurement is a short timing diagnostic with the BLAS cap
-before considering another full attempt. Use an explicit worker count for
+The subsequent [short timing diagnostic](deepswe-numba-blas-diagnostic-2026-10-12.md)
+reached at least 425 completions before its deliberate cutoff, without a full
+report or readiness change. Use an explicit worker count for
 any parallel diagnostic: bare `-m` defaults to the visible CPU count, which
 would select 16 workers despite the two-CPU quota. The upstream CI also uses
 sharding and excludes long-running tests; those exclusions are not adopted

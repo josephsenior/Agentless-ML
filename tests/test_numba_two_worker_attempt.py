@@ -18,8 +18,32 @@ def test_full_attempt_has_native_report_without_short_cutoff(monkeypatch):
     assert "timeout --signal" not in text
     assert "numba.tests." not in text
     assert "build_ext --inplace" in text
+    assert "export OPENBLAS_NUM_THREADS=1;" in text
     assert "refusing non-candidate import" in text
     assert command.failure_exit_codes == (1,)
+
+
+def test_short_diagnostic_matches_registered_resource_settings(monkeypatch):
+    monkeypatch.syspath_prepend(str(Path(__file__).resolve().parents[1] / "tools"))
+    import run_numba_resource_diagnostic as diagnostic
+    from agentless_ml.validation import DockerTestRunner
+
+    received = {}
+
+    def capture(self, *args, **kwargs):
+        received.update(kwargs)
+
+    monkeypatch.setattr(DockerTestRunner, "__init__", capture)
+    diagnostic.SampledRunner()
+    assert received["memory_mb"] == 8192 and received["cpus"] == 2
+    assert received["scratch_mode"] == "volume"
+    assert received["swap_policy"] == "docker-default"
+    command = diagnostic.diagnostic_command()
+    text = command.argv[2]
+    assert text.index("export OPENBLAS_NUM_THREADS=1;") < text.index("python setup.py")
+    assert "export NUMBA_NUM_THREADS=" not in text
+    assert "300s" in text and text.endswith("/tmp/diagnostic-report.xml -m 2")
+    assert command.timeout_seconds == 1800 and command.report is None
 
 
 def test_samples_are_saved_before_the_run_finishes(tmp_path, monkeypatch):

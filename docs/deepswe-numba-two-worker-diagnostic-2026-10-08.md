@@ -1,5 +1,10 @@
 # Numba: two-worker resource sample
 
+This page records the earlier tmpfs/no-swap condition. The helper now uses
+the registered disk scratch, Docker-default swap and one OpenBLAS thread;
+see the [2026-10-12 sample](deepswe-numba-blas-diagnostic-2026-10-12.md) for
+its evidence. Re-running the helper no longer reproduces the old condition.
+
 This is a resource diagnostic, not a baseline. Numba is still not ready and
 the official survey remains at 100/113. No full parallel retry was started.
 

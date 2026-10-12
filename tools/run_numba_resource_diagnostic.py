@@ -3,6 +3,7 @@
 Uses the existing pinned image and candidate build, without changing the
 official override. The command retains the 1800-second outer limit; an inner
 300-second window deliberately stops test execution and discards partial results.
+Uses the registered disk-backed scratch, Docker-default swap and BLAS cap.
 """
 
 from __future__ import annotations
@@ -30,6 +31,7 @@ ARTIFACTS = ROOT.parent / "output/deepswe-survey/numba-two-worker-diagnostic"
 def diagnostic_command() -> PublicTestCommand:
     script = (
         "cd /tmp/work || exit 125; export PYTHONPATH=/tmp/work/src:/tmp/work; "
+        "export OPENBLAS_NUM_THREADS=1; "
         "command -v timeout || exit 125; "
         "python setup.py build_ext --inplace || exit 125; "
         f"python -c {shlex.quote(_NUMBA_IMPORT_CHECK)} || exit 125; "
@@ -45,7 +47,8 @@ def diagnostic_command() -> PublicTestCommand:
 class SampledRunner(DockerTestRunner):
     def __init__(self):
         super().__init__(IMAGE, ARTIFACTS / "logs", memory_mb=8192, cpus=2,
-                         pids_limit=2048, tmpfs_mb=4096, run_as_image_user=True)
+                         pids_limit=2048, tmpfs_mb=4096, scratch_mode="volume",
+                         swap_policy="docker-default", run_as_image_user=True)
         self.samples = []
         self.stop_sampling = threading.Event()
         self.sampler = None
@@ -59,9 +62,9 @@ class SampledRunner(DockerTestRunner):
 
     def sample(self, name):
         started = time.monotonic()
-        # cgroup totals include both workers, the parent and charged tmpfs.
+        # cgroup totals include both workers, the parent and charged page cache.
         probe = (
-            'for f in memory.current memory.peak memory.events cpu.stat pids.current; '
+            'for f in memory.current memory.peak memory.events memory.swap.current cpu.stat pids.current; '
             'do echo "FILE:$f"; cat "/sys/fs/cgroup/$f"; done; '
             'echo PROCESSES; ps -eo pid,ppid,rss,args; '
             'echo PROGRESS; tail -n 4 /tmp/agentless-stdout'
@@ -109,6 +112,8 @@ def main():
         "label": "resource_diagnostic_only_not_baseline", "task_id": TASK,
         "base_commit": BASE, "image_id": runner.image_id, "workers": 2,
         "test_window_seconds": 300, "outer_timeout_seconds": 1800,
+        "scratch_mode": runner.scratch_mode, "swap_policy": runner.swap_policy,
+        "environment": {"OPENBLAS_NUM_THREADS": "1"},
         "schedule": "native full public schedule; deliberately time-bounded, no selectors",
         "accepted_regression_inventory": False,
         "status": execution.result.status.value, "exit_code": execution.result.exit_code,
