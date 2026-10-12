@@ -83,3 +83,7 @@ such instrumentation or further test attempt was added by this review.
 
 The [short diagnostic evidence](deepswe-numba-blas-diagnostic-2026-10-12.md)
 identifies the original journal and logs used for these observations.
+
+Follow-up: the [per-test timing diagnostic](deepswe-numba-per-test-diagnostic-2026-10-13.md)
+has now recorded individual calls in one further five-minute window. The
+measurements above still refer only to the earlier, uninstrumented sample.

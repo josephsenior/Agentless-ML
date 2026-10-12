@@ -20,6 +20,7 @@ from agentless_ml.adapters.benchmarks.deepswe_execution import _NUMBA_IMPORT_CHE
 from agentless_ml.adapters.benchmarks.deepswe_numba import NUMBA_REPORTER
 from agentless_ml.validation import DockerTestRunner, PublicTestCommand
 from agentless_ml.workspace import LocalGitWorkspaceProvider, verify_sealed_repository
+from numba_test_timing import COLLECT_TIMINGS, TIMING_HELPER, summarize_timings
 
 ROOT = Path(__file__).resolve().parents[1]
 TASK = "numba-stencil-boundary-modes"
@@ -29,15 +30,19 @@ ARTIFACTS = ROOT.parent / "output/deepswe-survey/numba-two-worker-diagnostic"
 
 
 def diagnostic_command() -> PublicTestCommand:
+    install = "from pathlib import Path; Path('/tmp/numba_diagnostic_timing.py').write_text(" + repr(TIMING_HELPER) + ")"
+    reporter = "import numba_diagnostic_timing; numba_diagnostic_timing.install();\n" + NUMBA_REPORTER
     script = (
         "cd /tmp/work || exit 125; export PYTHONPATH=/tmp/work/src:/tmp/work; "
         "export OPENBLAS_NUM_THREADS=1; "
         "command -v timeout || exit 125; "
         "python setup.py build_ext --inplace || exit 125; "
         f"python -c {shlex.quote(_NUMBA_IMPORT_CHECK)} || exit 125; "
+        f"python -c {shlex.quote(install)} || exit 125; "
+        "export PYTHONPATH=/tmp:/tmp/work/src:/tmp/work; "
         "echo NUMBA_RESOURCE_DIAGNOSTIC_ONLY_300_SECONDS; "
         "AGENTLESS_NUMBA_DIAGNOSTIC=1 timeout --signal=TERM --kill-after=10s 300s "
-        f"python -u -c {shlex.quote(NUMBA_REPORTER)} "
+        f"python -u -c {shlex.quote(reporter)} "
         "/tmp/work/runtests.py /tmp/diagnostic-report.xml -m 2"
     )
     # Even a complete early finish does not become a regression inventory.
@@ -54,11 +59,31 @@ class SampledRunner(DockerTestRunner):
         self.sampler = None
 
     def _docker(self, *args, **kwargs):
+        if args[0] == "rm":
+            self.stop_sampling.set()
+            if self.sampler:
+                self.sampler.join(timeout=20)
+            self.capture_timings(args[-1])
         result = super()._docker(*args, **kwargs)
         if args[0] == "start":
             self.sampler = threading.Thread(target=self.sample, args=(args[1],), daemon=True)
             self.sampler.start()
         return result
+
+    def capture_timings(self, name):
+        target = self.artifact_root / name / "test-timings.json"
+        try:
+            result = super()._docker("exec", name, "python", "-c", COLLECT_TIMINGS)
+            if result.returncode:
+                raise RuntimeError(result.stderr.decode(errors="replace"))
+            snapshot = json.loads(result.stdout)
+            target.write_text(json.dumps(snapshot, indent=2) + "\n", encoding="utf-8")
+            summary = summarize_timings(snapshot)
+        except (RuntimeError, ValueError, OSError) as error:
+            summary = {"capture_error": str(error), "accepted_regression_inventory": False}
+        (target.parent / "test-timing-summary.json").write_text(
+            json.dumps(summary, indent=2) + "\n", encoding="utf-8",
+        )
 
     def sample(self, name):
         started = time.monotonic()
