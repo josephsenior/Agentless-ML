@@ -2,8 +2,10 @@
 
 Wazero's separate [short-mode diagnostic](wazero-short-diagnostic-2026-10-11.md)
 passed under its original 8 GiB limit, with 155,923 passes and 44 skips.
-This reduced-coverage result is not a full baseline or an official readiness
-update; the total remains **109/113**.
+This reduced-coverage result was not a full baseline or an official readiness
+update. The later full schedule completed; current readiness is **112/113**,
+with Numba still blocked by its timeout. See the
+[scratch/swap review](deepswe-scratch-swap-2026-10-12.md).
 
 Pebble's [registered public CI setup](deepswe-pebble-registered-ci-2026-10-10.md)
 completed its official full-schedule refresh with 14,245 passes, 10 lint
@@ -502,10 +504,9 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
 
 ## What is not implemented
 
-Current readiness is **109/113**, with four tasks remaining after
-[Pebble's official CI-mode refresh](deepswe-pebble-registered-ci-2026-10-10.md).
-Of those ready tasks, 106 use their published pinned images; Testem, Cliffy
-and GoReleaser use explicitly labelled, verified modified environments. The original corpus
+Current public-baseline readiness is **112/113**, with only Numba remaining.
+Of those ready tasks, 108 use their published pinned images; Testem, Cliffy,
+GoReleaser and Pwntools use explicitly labelled, verified modified environments. The original corpus
 pins and held-out scorer are unchanged. The chronology below retains earlier
 counts as historical checkpoints.
 
@@ -860,9 +861,11 @@ outcomes match across the previous and fresh processes; raw XML stays unchanged.
   public-baseline readiness is **112/113**, with only Numba unready.
 - **Workflow and scoring over many tasks.** The survey establishes each task's
   regression inventory, but running the workflow needs repair responses, and
-  only actionlint has recorded ones; without a model there is nothing to run for
-  the other tasks. The scorer likewise scores one patch at a time. No DeepSWE
-  task has a reproduction specification.
+  actionlint and fd have recorded workflow evidence. The fd task also has an
+  issue-derived reproduction and a completed multiple-sample replay with public
+  regression checks and final export. These are hand-written development inputs,
+  not model-generated benchmark results. Live sampling and broader workflow
+  coverage remain unfinished; the scorer handles one selected patch at a time.
 
 ## Evidence
 

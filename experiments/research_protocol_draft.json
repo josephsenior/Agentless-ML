@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "condition": "agentless-ml-generalized-v1-proposal",
+  "status": "draft_for_review",
+  "approved": false,
+  "enforced_by_runtime": false,
+  "purpose": "Concrete proposal for discussion and later implementation; not authorization to launch or report a research experiment.",
+  "benchmarks": {
+    "deepswe": {"pin": "deepswe/corpus_pin.json", "tasks": 113, "languages": ["python", "go", "javascript", "typescript", "rust"]},
+    "swe_bench_pro_v2": {"pin": "swe_bench_pro/v2_corpus_pin.json", "tasks": 642, "languages": ["python", "go", "javascript", "typescript"]}
+  },
+  "eligibility_proposal": {
+    "require_pinned_image_and_base": true,
+    "require_sealed_repository": true,
+    "require_complete_reviewed_public_schedule_and_passing_inventory": true,
+    "syntax_smokes_eligible_for_research": false,
+    "baseline_failures": "retain all outcomes; protect baseline-passing IDs with a frozen schedule",
+    "modified_environments": "same registered environment for both systems; report separately from published images",
+    "development_and_verifier_control_tasks": "exclude from the research holdout; complete explicit denylist before freeze",
+    "numba": "currently ineligible: complete public baseline exceeds limits"
+  },
+  "implemented_method_to_declare": {
+    "fixed_stages": true,
+    "model_tool_loop": false,
+    "repair_feedback_to_model": false,
+    "atomic_multi_file_edits": true,
+    "new_regular_text_files": true,
+    "deletion_rename_mode_changes": false,
+    "python_patch_voting": "AST-based with documented parity exceptions",
+    "other_language_patch_voting": "comment-stripped textual diff",
+    "reproduction_voting": "exact extracted source, majority then first appearance",
+    "reproduction_evidence": "structured report, clean failure on base, unchanged selected source for candidates",
+    "candidate_selection": ["minimum regression failures", "prefer reproduction passes if any", "normalized patch majority", "first appearance"],
+    "candidate_infrastructure_failures": "ineligible; retained separately",
+    "reproduction_sample_infrastructure_failures": "stop run",
+    "build_breaking_patch": "fails every counted regression test when recognized by the trusted runner"
+  },
+  "sampling_proposal": {
+    "file_localization_samples": 1,
+    "symbol_localization_samples": 1,
+    "edit_localization_samples": 2,
+    "repair_samples_per_edit_sample": 4,
+    "reproduction_samples": 4,
+    "regression_exclusion_samples": 1,
+    "maximum_planned_model_calls": 17,
+    "resampling_after_errors": false
+  },
+  "shared_budget_proposal": {
+    "max_model_calls_per_task": 17,
+    "max_cumulative_input_tokens": 200000,
+    "max_cumulative_output_tokens": 40000,
+    "max_input_tokens_per_call": 32000,
+    "max_output_tokens_per_call": 4096,
+    "reasoning_tokens": "include in output budget; verify provider accounting before freeze",
+    "wall_time": "pin per-task cap from benchmark metadata; account for generation and validation, with provisioning outside it",
+    "command_timeout": "minimum of reviewed command cap and remaining task time",
+    "retries": 0,
+    "enforcement": "not implemented; mandatory before live research runs"
+  },
+  "scoring_proposal": {
+    "selection_then_verification": true,
+    "final_predictions_per_task": 1,
+    "same_verifier_and_resources_for_both_conditions": true,
+    "main_denominator": "all tasks frozen as eligible before results; retain unsolved and system failures",
+    "infrastructure_failures": "show separate counts; never silently drop tasks or treat failures as solved",
+    "official_swe_bench_pro_v2_claim": "requires official Harbor protocol replay; local smoke verifier results are labelled local"
+  },
+  "grinta_match_proposal": {
+    "same_model_and_revision": true,
+    "same_initial_task_and_repository": true,
+    "same_visible_public_tests": true,
+    "same_edit_operation_capabilities": true,
+    "same_container_profile_and_task_budget": true,
+    "adaptive_tools_and_feedback": "Grinta may use its adaptive loop; this is the intended experimental difference",
+    "status": "Grinta configuration and enforcement have not been inspected or agreed"
+  },
+  "required_decisions_before_freeze": [
+    "Professor Zhang reviews the declared method and comparison target",
+    "Choose exact model, model revision, provider, sampling temperatures and seeds",
+    "Approve or revise sample counts and cumulative budgets after engineering calibration",
+    "Pin eligible task list, development/verifier exposure denylist, selection seed and language strata",
+    "Confirm modified-environment policy and the common resources with Grinta",
+    "Implement and test budget enforcement, then validate official scoring protocol"
+  ]
+}

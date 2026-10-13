@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "purpose": "Reviewed public checks from the existing development tasks; none is a full-suite readiness declaration.",
+  "plans": [
+    {
+      "instance_id": "instance_qutebrowser__qutebrowser-0833b5f6f140d04200ec91605f88704dd18e2970-v059c6fdc75567943479b23ebca7c07b5e9a7f34c",
+      "source": "qutebrowser_network_error/python_reproduction_experiment.json",
+      "scope": "syntax_only"
+    },
+    {
+      "instance_id": "instance_future-architect__vuls-fe8d252c51114e922e6836055ef86a15f79ad042",
+      "source": "v2_go_vuls_header/experiment.json",
+      "scope": "selected_public_test"
+    },
+    {
+      "instance_id": "instance_NodeBB__NodeBB-f9ce92df988db7c1ae55d9ef96d247d27478bc70-vf2cf3cbd463b7ad942381f1c6d077626485a1e9e",
+      "source": "v2_js_nodebb_upload_path/experiment.json",
+      "scope": "syntax_only"
+    },
+    {
+      "instance_id": "instance_tutao__tutanota-de49d486feef842101506adf040a0f00ded59519-v10a26bfb45a064b93f4fc044a0254925037b88f1",
+      "source": "v2_ts_tutanota_credentials/experiment.json",
+      "scope": "syntax_only"
+    }
+  ]
+}

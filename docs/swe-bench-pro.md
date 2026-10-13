@@ -25,6 +25,12 @@ This is metadata loading, not 642 executable runs. Only the smoke tasks below
 have pinned and checked images. Each additional task needs its image ID and
 base checkout checked before execution.
 
+The [V2 provisioning survey](swe-bench-pro-v2-readiness.md) now records these
+checks explicitly and preserves the difference between syntax smoke checks,
+selected public tests and complete public-suite readiness. The
+[experimental configuration draft](experimental-configuration.md) states the
+proposed eligibility rule and comparison settings.
+
 ## First V2 smoke task
 
 The `qutebrowser_network_error` instance survived the V1-to-V2 review. Its V2

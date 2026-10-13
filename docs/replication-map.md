@@ -6,6 +6,10 @@ and what we have actually checked. The reference is Agentless v1.5.0, commit
 So far, we have compared specific Python outputs and run the controller with saved
 responses. We have not reproduced the published benchmark results.
 
+The [experimental configuration](experimental-configuration.md) collects the
+implemented method differences and proposes explicit sampling, eligibility and
+scoring rules. It is a review draft, not an agreed or runtime-enforced protocol.
+
 ## Mapping the implementation
 
 | Area | Published reference | Current Agentless-ML behavior | Evidence and limit |
@@ -19,8 +23,8 @@ responses. We have not reproduced the published benchmark results.
 | Selection | Regression filtering, reproduction preference with fallback, then voting | Same intended ordering and first-appearance tie-break. A patch that breaks the build counts as failing every counted regression test, as upstream's grading of absent tests does; timeouts, out-of-memory kills and Docker errors are excluded instead, where upstream would count them as failures too ([details](public-validation.md#a-patch-that-breaks-the-build)) | [Selection tests](../tests/test_patch_and_selection.py) test local policy. They are not an upstream differential test of all edge cases. |
 | Tests used for selection | Regression-test selection and reproduction-test generation, followed by execution | Recorded regression exclusions and reproduction samples; baseline-eligible tests vote by exact source to select one for candidate checks | [Regression selection](regression-selection.md), [reproduction tests](reproduction-tests.md) and [validation note](public-validation.md). Commands can declare JUnit XML or CTRF JSON reports so a command's baseline run records which individual tests passed, and the model excludes by test name rather than by whole command ([per-test results](public-validation.md#per-test-results-from-reports)). Automatic test discovery, live generation and upstream normalization/marker-protocol parity remain unfinished. |
 | Docker execution | Existing Docker/SWE-bench test infrastructure | Local `DockerTestRunner` executes commands in disposable containers | [Runner tests](../tests/test_docker_validation.py). This reimplements an execution mechanism; it introduces no new Agentless stage. |
-| Benchmark integration | Original SWE-bench task and harness conventions | Projected SWE-bench Pro input records and three recorded Python smoke tasks; answer-free DeepSWE task projection for all 113 pinned tasks ([DeepSWE note](deepswe.md)) | [Dataset tests](../tests/test_swe_bench_pro_dataset.py), [smoke inputs](../experiments/swe_bench_pro/python_smoke_set.json). [DeepSWE adapter tests](../tests/test_deepswe_adapter.py). Task repositories are cloned sealed at their base commit, so no later commit, including the real fix, is in the clone the workflow reads ([sealed repositories](workspaces.md#sealed-source-repositories), [tests](../tests/test_sealed_repository.py)). All 113 published task images are pinned by registry digest ([pinned images](deepswe.md#pinned-published-images)). Seven tasks covering all five languages and six test runners have been run in their published images with per-test results ([running a task's tests](deepswe.md#running-a-tasks-tests)), and the fixed workflow has run end to end on one of them with a 1732-test regression inventory and recorded responses ([running the workflow](deepswe.md#running-the-workflow-on-a-task)). A post-selection scorer runs DeepSWE's own verifier on the selected patch; on seven tasks it scores the empty patch unresolved and the reference solution resolved ([scoring](deepswe.md#scoring-a-selected-patch)). Scoring many tasks in one run, SWE-bench Pro scoring and the remaining JavaScript/TypeScript runners remain unfinished. |
-| Language support | Python-specific implementation | Python keeps a parity implementation; Go, JavaScript, TypeScript and Rust are descriptions read by one Tree-sitter structure engine, and every language supplies prompt vocabulary instead of the renderers branching on its name | [ADR 0003](adr/0003-language-engine.md), the [structure corpus](../tests/test_structure_corpus.py) (real files at pinned commits), [Go](go-adapter.md), [JavaScript/TypeScript](javascript-typescript.md) and [Rust support](rust-adapter.md). Real multilingual benchmark coverage remains untested. |
+| Benchmark integration | Original SWE-bench task and harness conventions | Answer-free metadata for 113 DeepSWE and 642 SWE-bench Pro V2 tasks; sealed candidate repositories and separate post-selection scoring | [DeepSWE](deepswe.md) has 112 usable public baselines, including four supplemented-image profiles; Numba remains timed out. Recorded development workflows cover actionlint and fd. [V2](swe-bench-pro.md) has recorded Python, Go, JavaScript and TypeScript workflows, but their public checks are narrower than full suites. The [new V2 inventory](swe-bench-pro-v2-readiness.md) tracks that distinction. Local post-selection scorers have selected-task evidence; broad V2 provisioning, live-model experiments and official Harbor replay remain outstanding. |
+| Language support | Python-specific implementation | Python keeps a parity implementation; Go, JavaScript, TypeScript and Rust are descriptions read by one Tree-sitter structure engine, and every language supplies prompt vocabulary instead of the renderers branching on its name | [ADR 0003](adr/0003-language-engine.md), the [structure corpus](../tests/test_structure_corpus.py) (real files at pinned commits), [Go](go-adapter.md), [JavaScript/TypeScript](javascript-typescript.md) and [Rust support](rust-adapter.md). Recorded real-task workflows across the two benchmarks cover all five languages; broad live-model coverage remains untested. |
 
 The relevant upstream sources are
 [repair.py](https://github.com/OpenAutoCoder/Agentless/blob/b150f28465a77a81a7f4776384957a4271f5bd69/agentless/repair/repair.py),
@@ -84,9 +88,10 @@ per candidate. See [workspaces](workspaces.md).
 The runner gave the recorded controller a way to execute tests and collect outcomes.
 Upstream Agentless already performs Docker-backed patch validation. Reusing its
 runner would require adapting its SWE-bench-specific inputs; the current generic
-runner instead accepts an image and commands. That convenience has limits: it
-counts command outcomes, not individual failed tests, and its filesystem and
-resource restrictions can affect execution. Using an official image alone does
+runner instead accepts an image and commands. Commands with supported reports
+retain individual test results; exit-only commands retain command-level outcomes
+and cannot establish a per-test regression inventory. Filesystem and resource
+restrictions can affect execution. Using an official image alone does
 not reproduce an official harness. Full benchmark integration must check these
 differences and reuse the official execution/scoring mechanisms where appropriate.
 
