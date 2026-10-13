@@ -1,0 +1,27 @@
+{
+  "purpose": "NodeBB public Redis CI setup diagnostic only",
+  "implementation_parent": "3dfc670bba1697c589c889dc71a61a4ef176cef3",
+  "tool_sha256": "d21c3d81eb10dabbd0b268b974c28e366a89557e5891bc578a71766e64126c76",
+  "task_id": "instance_NodeBB__NodeBB-f9ce92df988db7c1ae55d9ef96d247d27478bc70-vf2cf3cbd463b7ad942381f1c6d077626485a1e9e",
+  "base_commit": "61d17c95e573f91ab5c65d25218451e9afd07d77",
+  "image_id": "sha256:cc8c9217344bf50df0a4276abad046538bb20e5c2f2815a1b2e201871c5cf364",
+  "base_tree": "ec0c5f805488b1511b7e89ae774e11f92d8f73dc",
+  "status": "pass",
+  "duration_seconds": 145.95720710000023,
+  "exit_code": 0,
+  "redis_version": [
+    "Redis server v=6.0.16 sha=00000000:0 malloc=jemalloc-5.2.1 bits=64 build=57c1107034279515"
+  ],
+  "setup_confirmation": [
+    "{\"setup_complete\":true,\"source_root\":\"/tmp/work\",\"database\":\"redis\",\"test_database\":1}"
+  ],
+  "artifacts": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\output\\swe-bench-pro-v2-readiness\\2026-10-13-nodebb-setup\\executions\\agentless-ml-47e2007758294529a957710fc808351e",
+  "setup_record_sha256": "f2c1a830da6878f9e320b2091f380e1ad1f62d7769e656883bfc4fcdd57afa9a",
+  "stdout_sha256": "c7fd32821c6ebd3a09a16193094e6c616e579231a2e149acfbfc23f7f9defde8",
+  "stderr_sha256": "d98dd66de3aa520798d5810a5c3837c15f3bef994d1762c86b242391d6d3c1e6",
+  "tests_run": false,
+  "full_suite_ready": false,
+  "model_calls": 0,
+  "verifier_run": false,
+  "focused_tests_passed": 69
+}

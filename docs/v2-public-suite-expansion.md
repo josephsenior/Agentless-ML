@@ -81,8 +81,17 @@ Public files reviewed (SHA-256):
 - `install/package.json`: `4e246dfe3ae3c08bea90ac1075f7a07a9f7a68b1f49e20aa3411f2329c523651`
 - `.mocharc.yml`: `5e170cc2b39f763c43f923bf13b99d91a86a85ae62d9024f133a5689b322b74d`
 
-NodeBB's full test setup is reviewed, not yet implemented or executed. Start
-with its bounded offline setup and report-completeness check before registering
-a full-suite result. Other Vuls or NodeBB tasks require their own base/image
-checks; a successful run on one revision does not provision every task in that
-repository automatically.
+The Redis setup was then implemented in `tools/check_v2_nodebb_setup.py` and
+passed one bounded offline diagnostic on 13 October. The pinned image's Redis
+ran with disposable storage under `/tmp`, no host ports and separate databases
+0/1. Public `node app --setup=... --ci=...` generated configuration and built
+assets from candidate source. Setup and validation completed in 145.96 seconds
+including runner preparation, under a 300-second command cap. See the
+[setup evidence](../experiments/swe_bench_pro/v2_nodebb_setup_2026-10-13.json).
+The combined focused checks now total 69 passing tests.
+
+This is setup evidence only: **NodeBB tests have not run**, and no full-suite
+readiness entry was registered. Next, retain individual Mocha results and check
+early termination before running its complete Redis-backed public schedule.
+Other Vuls or NodeBB tasks still require their own base/image checks; success
+on one revision does not provision every task in that repository automatically.
