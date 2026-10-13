@@ -114,3 +114,7 @@ All 19 focused timing, diagnostic and Numba-reporting tests passed. They check
 spawned-worker instrumentation, preservation of native returns and exceptions,
 a flushed start surviving actual process termination, unfinished-call handling,
 capture before removal, and cleanup after capture failure.
+
+Follow-up: the [compilation-event diagnostic](deepswe-numba-compilation-diagnostic-2026-10-13.md)
+separates compilation intervals, repeated attempts and source-level recurrences
+in one further short sample. The numbers above remain those of this earlier run.

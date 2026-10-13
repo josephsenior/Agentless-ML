@@ -19,8 +19,9 @@ from pathlib import Path
 from agentless_ml.adapters.benchmarks.deepswe_execution import _NUMBA_IMPORT_CHECK
 from agentless_ml.adapters.benchmarks.deepswe_numba import NUMBA_REPORTER
 from agentless_ml.validation import DockerTestRunner, PublicTestCommand
+from agentless_ml.validation.docker import DockerError
 from agentless_ml.workspace import LocalGitWorkspaceProvider, verify_sealed_repository
-from numba_test_timing import COLLECT_TIMINGS, TIMING_HELPER, summarize_timings
+from numba_test_timing import COLLECT_TIMINGS, TIMING_HELPER, summarize_timings, summarize_compilations
 
 ROOT = Path(__file__).resolve().parents[1]
 TASK = "numba-stencil-boundary-modes"
@@ -41,7 +42,8 @@ def diagnostic_command() -> PublicTestCommand:
         f"python -c {shlex.quote(install)} || exit 125; "
         "export PYTHONPATH=/tmp:/tmp/work/src:/tmp/work; "
         "echo NUMBA_RESOURCE_DIAGNOSTIC_ONLY_300_SECONDS; "
-        "AGENTLESS_NUMBA_DIAGNOSTIC=1 timeout --signal=TERM --kill-after=10s 300s "
+        "AGENTLESS_NUMBA_DIAGNOSTIC=1 AGENTLESS_NUMBA_COMPILE_TIMING=1 "
+        "timeout --signal=TERM --kill-after=10s 300s "
         f"python -u -c {shlex.quote(reporter)} "
         "/tmp/work/runtests.py /tmp/diagnostic-report.xml -m 2"
     )
@@ -79,7 +81,10 @@ class SampledRunner(DockerTestRunner):
             snapshot = json.loads(result.stdout)
             target.write_text(json.dumps(snapshot, indent=2) + "\n", encoding="utf-8")
             summary = summarize_timings(snapshot)
-        except (RuntimeError, ValueError, OSError) as error:
+            (target.parent / "compilation-summary.json").write_text(
+                json.dumps(summarize_compilations(snapshot), indent=2) + "\n", encoding="utf-8",
+            )
+        except (DockerError, RuntimeError, ValueError, OSError, subprocess.TimeoutExpired) as error:
             summary = {"capture_error": str(error), "accepted_regression_inventory": False}
         (target.parent / "test-timing-summary.json").write_text(
             json.dumps(summary, indent=2) + "\n", encoding="utf-8",
@@ -139,6 +144,7 @@ def main():
         "test_window_seconds": 300, "outer_timeout_seconds": 1800,
         "scratch_mode": runner.scratch_mode, "swap_policy": runner.swap_policy,
         "environment": {"OPENBLAS_NUM_THREADS": "1"},
+        "instrumentation": "per-test timing and native numba:compile events",
         "schedule": "native full public schedule; deliberately time-bounded, no selectors",
         "accepted_regression_inventory": False,
         "status": execution.result.status.value, "exit_code": execution.result.exit_code,
