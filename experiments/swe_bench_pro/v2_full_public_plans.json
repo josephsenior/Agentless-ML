@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "purpose": "Reviewed complete public CI test targets; registration is a plan, not evidence of a passing or complete run.",
+  "plans": [
+    {
+      "instance_id": "instance_future-architect__vuls-fe8d252c51114e922e6836055ef86a15f79ad042",
+      "source": "v2_go_vuls_header/public_suite.json",
+      "scope": "full_public_suite"
+    }
+  ]
+}

@@ -1,5 +1,8 @@
 # SWE-bench Pro V2 provisioning survey
 
+The [repository-by-repository expansion](v2-public-suite-expansion.md) records
+the complete public targets being reviewed beyond the original four smoke plans.
+
 `tools/survey_swe_bench_pro_v2.py` inventories all 642 pinned V2 tasks. It uses
 the existing answer-free loader and a reviewed public-plan registry. Execution
 requires explicit task IDs, so an inventory command cannot accidentally start

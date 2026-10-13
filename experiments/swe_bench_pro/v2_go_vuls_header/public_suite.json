@@ -1,0 +1,16 @@
+{
+  "instance_id": "instance_future-architect__vuls-fe8d252c51114e922e6836055ef86a15f79ad042",
+  "image_id": "sha256:0961d389ef0bcdd51da0df664b631a83938427ab3d485ecbe23996033eb73f28",
+  "base_commit": "0cdc7a3af55e323b86d4e76e17fdc90112b42a63",
+  "runner": "go-public-suite-v1",
+  "reviewed_public_sources": {
+    "GNUmakefile": "cf18a8e71605b8f4949f2e7ec09c6387a45a16c25b4a5af1e93c12c812dcbd69",
+    ".github/workflows/test.yml": "160a793c62628cac656665af933d55cc7cd7af205100d87e761956d142bc5498"
+  },
+  "scope_note": "Complete make test target used by public CI. Separate make diff/diff-redis integration workflows are not this target and need external services and old/new comparison binaries.",
+  "regression": {
+    "argv": ["go", "test", "-cover", "-v", "./..."],
+    "timeout_seconds": 1800,
+    "report": {"format": "ctrf-json", "path": "/tmp/ctrf.json"}
+  }
+}

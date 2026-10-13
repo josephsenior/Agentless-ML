@@ -1,0 +1,68 @@
+{
+  "purpose": "Complete Vuls public make test target in the pinned V2 image, not held-out scoring or the separate integration comparison targets",
+  "implementation_parent": "f7179749eec990c965b0817e63a10d06dbbf4bfb",
+  "implementation_files_sha256": {
+    "tools/v2_go_public.py": "ab38eeef983b313a4d8fcaafdf6e3cdcde27a8b23fb82c897330e0221ec45f66",
+    "tools/survey_swe_bench_pro_v2.py": "82952123227f5138635672f1b61c9e5a81ffe0aac9fb46364b34f45da130e539",
+    "src/agentless_ml/adapters/benchmarks/go_json_to_ctrf.go": "f2e69b9295b212ba2a3539941809e4feaa905646511c78e3589fa74dfa3d1dda"
+  },
+  "summary": {
+    "generated_at": "2026-10-13T23:27:06.766206+02:00",
+    "benchmark_revision": "66f92766bba642462d4bbe5479e83f91f9211862",
+    "corpus_pin_sha256": "78f4b9b062075be7c2767f941c5e652ed0f4ca5ea4e1f31325ac047d6b41d93d",
+    "plans_sha256": "d8147af66d50cfc75a82b53c8ae814071cabfaf4a4bb47555722a3800ca882d5",
+    "tasks": 642,
+    "statuses": {
+      "needs_public_plan": 641,
+      "public_suite_ready": 1
+    },
+    "model_calls": 0,
+    "verifier_run": false,
+    "official_score": false
+  },
+  "task_id": "instance_future-architect__vuls-fe8d252c51114e922e6836055ef86a15f79ad042",
+  "image_id": "sha256:0961d389ef0bcdd51da0df664b631a83938427ab3d485ecbe23996033eb73f28",
+  "base_commit": "0cdc7a3af55e323b86d4e76e17fdc90112b42a63",
+  "base_tree": "f3af6d2707dbbf1d0336224f15b0976bfd2ee371",
+  "go_version": "go1.24.3 linux/amd64",
+  "status": "public_suite_ready",
+  "execution_status": "pass",
+  "duration_seconds": 430.6675460000006,
+  "test_counts": [
+    {
+      "status": "passed",
+      "count": 298
+    }
+  ],
+  "package_audit": {
+    "complete": true,
+    "expected_packages": 25,
+    "terminal_packages": 25,
+    "package_outcomes": {
+      "pass": 23,
+      "skip": 2
+    },
+    "missing_packages": [],
+    "unexpected_packages": [],
+    "failed_packages_without_test_failure": [],
+    "unfinished_tests": []
+  },
+  "limits": {
+    "command_timeout_seconds": 1800,
+    "network": "none",
+    "swap": "disabled",
+    "tmpfs_mb": 4096,
+    "memory_mb": 4096,
+    "cpus": 1
+  },
+  "artifacts": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\output\\swe-bench-pro-v2-readiness\\2026-10-13-vuls-full\\executions\\instance_future-architect__vuls-fe8d252c51114e922e6836055ef86a15f79ad042\\agentless-ml-8b26849949154126be9a34e6f8c6d848",
+  "artifact_sha256": {
+    "execution.json": "d554b06d90892ac8a2ec2bb68534544fffed13d4a4685c54c18132ae04495c09",
+    "report.json": "1c71987b5225b956f5929dd191307d6d62347a03cf75c98943a57b095413378b",
+    "go-events.jsonl": "08e9d546262e0d5ab11ff520761183b06c788b9c8e4fd5608f820c612849dfe8",
+    "go-packages.txt": "7998ef47246dce43649673936f72d7ad656bc05bea18ded03e76ad0860cddbe6",
+    "package-audit.json": "c648e668e91109991c1c840df1705c7c95a71f0ed9eb734c00008b0d4cc30c96"
+  },
+  "survey_sha256": "8f1eb4742a87cb507f9e00e1c5ada83d1892b508a07b806b345ff0b3f6c8fdce",
+  "focused_tests_passed": 68
+}

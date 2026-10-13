@@ -23,6 +23,7 @@ from agentless_ml.adapters.benchmarks import (
 from agentless_ml.validation import DockerTestRunner, PublicTestCommand
 from agentless_ml.validation.reports import TestReport
 from agentless_ml.workspace import LocalGitWorkspaceProvider, verify_sealed_repository
+from v2_go_public import GoPublicSuiteRunner, public_command
 
 ROOT = Path(__file__).resolve().parents[1]
 EXPERIMENTS = ROOT / 'experiments/swe_bench_pro'
@@ -54,14 +55,21 @@ def load_plans(path: Path) -> dict:
             'argv': spec['regression_argv'],
             'timeout_seconds': spec['regression_timeout_seconds'],
         }
+        runner_kind = spec.get('runner', 'declared-command')
+        if runner_kind not in ('declared-command', 'go-public-suite-v1'):
+            raise ValueError('unknown public-plan runner')
         report = TestReport(**regression['report']) if regression.get('report') else None
         if scope == 'full_public_suite' and report is None:
             raise ValueError('full public-suite readiness requires individual test results')
         command = PublicTestCommand(tuple(regression['argv']),
                                     timeout_seconds=regression['timeout_seconds'], report=report)
+        if runner_kind == 'go-public-suite-v1':
+            if regression['argv'] != ['go', 'test', '-cover', '-v', './...']:
+                raise ValueError('Go public runner requires the reviewed complete target')
+            command = public_command(regression['timeout_seconds'])
         plans[task_id] = dict(entry, image_id=image, base_commit=spec['base_commit'],
                              source_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),
-                             command=command)
+                             command=command, runner_kind=runner_kind)
     return plans
 
 
@@ -106,7 +114,8 @@ def survey_task(task, plan, *, selected, engine_error, repositories, workspace_r
         return dict(record, status='docker_unavailable', message=engine_error)
     stage = 'image'
     try:
-        runner = DockerTestRunner(plan['image_id'], artifacts / task.instance_id,
+        runner_type = GoPublicSuiteRunner if plan.get('runner_kind') == 'go-public-suite-v1' else DockerTestRunner
+        runner = runner_type(plan['image_id'], artifacts / task.instance_id,
                                   memory_mb=task.memory_megabytes, cpus=1,
                                   tmpfs_mb=4096, pids_limit=2048, run_as_image_user=True)
         if runner.image_id != plan['image_id']:
@@ -125,6 +134,10 @@ def survey_task(task, plan, *, selected, engine_error, repositories, workspace_r
             execution = runner.run(workspace.path, plan['command'])
             record.update(public_check_executed=True, artifacts=execution.artifact_directory,
                           result=asdict(execution.result), message=execution.message)
+            if isinstance(runner, GoPublicSuiteRunner):
+                record['package_audit'] = runner.package_audit
+                if not runner.package_audit['complete'] and execution.result.status.value in ('pass', 'fail'):
+                    return dict(record, status='public_suite_incomplete')
         return dict(record, status=readiness_status(plan['scope'], execution.result))
     except (OSError, RuntimeError, ValueError, subprocess.SubprocessError) as error:
         return dict(record, status=f'{stage}_blocked', message=str(error)[:2000])
