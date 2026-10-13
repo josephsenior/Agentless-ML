@@ -69,6 +69,46 @@ Local evidence is in
 and the adjacent `survey.jsonl` (relative to the repository root). Earlier
 recorded workflow runs remain historical evidence, not fresh survey executions.
 
-Next, restore Docker, prepare the four sealed task checkouts and execute their
-reviewed plans. Broader readiness still requires reviewing full public schedules
-and provisioning tasks beyond those four development checks.
+The subsequent replay below clears this Docker blocker for the four configured
+checks. Broader readiness still requires reviewing full public schedules and
+provisioning tasks beyond those four development checks.
+
+## Source preparation for the Docker replay
+
+After Docker was started on 13 October, all four pinned images were available
+locally. The existing development sources were partial clones. Attempting to
+seal a separate qutebrowser copy failed during Git repacking because an object
+was missing; the temporary failed copy was removed by the preparation helper.
+The original development repositories were left unchanged.
+
+For this replay, new sources were fetched from the four public upstream
+repositories at exactly the configured base commits with `--depth=1 --no-tags`.
+Each was then cloned and sealed under
+`../benchmarks/swe-bench-pro-v2/repos/<instance_id>`. The sealed checkouts have
+the complete base source tree, no remote, and no later commits. They are shallow:
+earlier commit history is absent. This preparation is sufficient to attempt the
+four source-based smoke commands; it does not establish equivalence for future
+history-dependent public suites. The adjacent `.sealed.json` records preserve
+base tree IDs and preparation provenance.
+
+## Completed offline replay
+
+All four unchanged checks passed in fresh candidate workspaces on 13 October:
+qutebrowser's Python compilation check, Vuls's selected
+`TestSplitAptCachePolicy`, NodeBB's JavaScript syntax check and Tutanota's two
+TypeScript module parse checks. Each record confirms the pinned image/base,
+sealed repository, workspace creation and actual public-command execution.
+The existing one-CPU, task-memory, scratch, timeout and offline protections
+were unchanged. No model calls or held-out verifier runs occurred.
+
+The resulting inventory is **4 `smoke_checked`, 638 `needs_public_plan`**.
+None of these four plans establishes full public-suite readiness. See the
+[checked-in evidence and artifact hashes](../experiments/swe_bench_pro/v2_provisioning_replay_2026-10-13.json).
+The full local journal and execution artifacts are under
+`../output/swe-bench-pro-v2-readiness/2026-10-13-docker/`.
+The 28 focused survey, sealing, adapter and scoring-boundary tests also passed.
+
+Next, review a complete public schedule for one repository, including its test
+setup and individual-result reporting, and verify it on the unchanged base.
+Then expand by repository; passing syntax checks alone does not change research
+eligibility.

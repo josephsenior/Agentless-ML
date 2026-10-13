@@ -92,8 +92,9 @@ when claiming an official V2 result.
 
 ## Work before freezing
 
-1. Restore Docker, run the V2 survey on the reviewed plans, and prepare sealed
-   repositories where needed. Expand full public schedules by repository.
+1. Expand complete V2 public schedules by repository. The four reviewed smoke
+   plans now pass with sealed sources in the [fresh Docker survey](swe-bench-pro-v2-readiness.md#completed-offline-replay);
+   they still do not satisfy the proposed full-suite eligibility rule.
 2. Agree the declared method and comparison requirements with Professor Zhang.
 3. Select a model, implement complete budget accounting, and calibrate the
    proposed sample counts on development tasks.

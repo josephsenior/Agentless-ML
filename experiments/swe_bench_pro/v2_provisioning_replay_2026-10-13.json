@@ -1,0 +1,122 @@
+{
+  "purpose": "Four-task offline provisioning smoke replay; not full public-suite readiness or a benchmark score",
+  "implementation_revision": "90f3955714081a841d9e25aa4f4a7e4db4202488",
+  "summary": {
+    "generated_at": "2026-10-13T23:13:33.271487+02:00",
+    "benchmark_revision": "66f92766bba642462d4bbe5479e83f91f9211862",
+    "corpus_pin_sha256": "78f4b9b062075be7c2767f941c5e652ed0f4ca5ea4e1f31325ac047d6b41d93d",
+    "plans_sha256": "0d94d493fc9db521c811d19f99df8cf69a46226a610c228d1d7624c954eee782",
+    "tasks": 642,
+    "statuses": {
+      "needs_public_plan": 638,
+      "smoke_checked": 4
+    },
+    "model_calls": 0,
+    "verifier_run": false,
+    "official_score": false
+  },
+  "survey_sha256": "a4e64602543bfcd84a3abbba9aa4937263bc5c7bf0353a0f1f9401d61082de07",
+  "local_artifacts": "../output/swe-bench-pro-v2-readiness/2026-10-13-docker",
+  "source_preparation": "Fresh depth-one fetches of exact public base commits, then sealed clones; no earlier or later history; original partial development clones unchanged",
+  "test_checks": "28 focused survey, sealed-repository, adapter and scoring-boundary tests passed",
+  "checks": [
+    {
+      "task_id": "instance_NodeBB__NodeBB-f9ce92df988db7c1ae55d9ef96d247d27478bc70-vf2cf3cbd463b7ad942381f1c6d077626485a1e9e",
+      "language": "javascript",
+      "scope": "syntax_only",
+      "status": "smoke_checked",
+      "image_id": "sha256:cc8c9217344bf50df0a4276abad046538bb20e5c2f2815a1b2e201871c5cf364",
+      "base_commit": "61d17c95e573f91ab5c65d25218451e9afd07d77",
+      "base_tree": "ec0c5f805488b1511b7e89ae774e11f92d8f73dc",
+      "image_checked": true,
+      "workspace_checked": true,
+      "public_check_executed": true,
+      "plan_source": "v2_js_nodebb_upload_path/experiment.json",
+      "plan_source_sha256": "a8a68596f0105ad52ec1dbe2a81c4ba859f0f2c9e666a5fabfafa170d3e82295",
+      "command": [
+        "node",
+        "--check",
+        "src/controllers/admin/uploads.js"
+      ],
+      "duration_seconds": 105.02512919999936,
+      "exit_code": 0,
+      "execution_sha256": "c937911dc6c0e7582008bca8a468e3947623afeb442bd965652ccf894212bcf1"
+    },
+    {
+      "task_id": "instance_future-architect__vuls-fe8d252c51114e922e6836055ef86a15f79ad042",
+      "language": "go",
+      "scope": "selected_public_test",
+      "status": "smoke_checked",
+      "image_id": "sha256:0961d389ef0bcdd51da0df664b631a83938427ab3d485ecbe23996033eb73f28",
+      "base_commit": "0cdc7a3af55e323b86d4e76e17fdc90112b42a63",
+      "base_tree": "f3af6d2707dbbf1d0336224f15b0976bfd2ee371",
+      "image_checked": true,
+      "workspace_checked": true,
+      "public_check_executed": true,
+      "plan_source": "v2_go_vuls_header/experiment.json",
+      "plan_source_sha256": "eff46656227fa40566e180a5d925f20767934eafe3830a638e56a7724396871f",
+      "command": [
+        "env",
+        "GOCACHE=/tmp/go-build",
+        "GOPROXY=off",
+        "go",
+        "test",
+        "./scanner",
+        "-run",
+        "^TestSplitAptCachePolicy$",
+        "-count=1"
+      ],
+      "duration_seconds": 158.93676069999856,
+      "exit_code": 0,
+      "execution_sha256": "ca1d88f1e06a0de1c3688a69fe7a3ae350954dc24234c0de44ea3a16b797c63c"
+    },
+    {
+      "task_id": "instance_qutebrowser__qutebrowser-0833b5f6f140d04200ec91605f88704dd18e2970-v059c6fdc75567943479b23ebca7c07b5e9a7f34c",
+      "language": "python",
+      "scope": "syntax_only",
+      "status": "smoke_checked",
+      "image_id": "sha256:d664721bb9fc5d0a9019f9ef46f14e567c46ed8e53371b0f0c7ab26db2e779d8",
+      "base_commit": "def864adc8b19bdbc506919270d8ff1408b4faac",
+      "base_tree": "61603df3fb387fdd396b7f48ebc8e74fff858d84",
+      "image_checked": true,
+      "workspace_checked": true,
+      "public_check_executed": true,
+      "plan_source": "qutebrowser_network_error/python_reproduction_experiment.json",
+      "plan_source_sha256": "052c7bdbedd1288b9e4900d5ae615b8dae6be5db6432b1cc3831189dd152749f",
+      "command": [
+        "python",
+        "-m",
+        "compileall",
+        "-q",
+        "qutebrowser/browser/webkit/network/networkreply.py"
+      ],
+      "duration_seconds": 23.87811359999978,
+      "exit_code": 0,
+      "execution_sha256": "4768ce3e50cf520d766d83e7b19c2f1d162fffca3f1a955ab3a6b6b1bfe97ae5"
+    },
+    {
+      "task_id": "instance_tutao__tutanota-de49d486feef842101506adf040a0f00ded59519-v10a26bfb45a064b93f4fc044a0254925037b88f1",
+      "language": "typescript",
+      "scope": "syntax_only",
+      "status": "smoke_checked",
+      "image_id": "sha256:f0c1d1561d3fe50a845212497843831b6b1fc9535c88751edc3cb6fda8a425b4",
+      "base_commit": "cf4bcf0b4c5ecc970715c4ca59e57cfa2c4246af",
+      "base_tree": "52b7994ea899f8234bb433ee027e06528bfa8be4",
+      "image_checked": true,
+      "workspace_checked": true,
+      "public_check_executed": true,
+      "plan_source": "v2_ts_tutanota_credentials/experiment.json",
+      "plan_source_sha256": "9aff8b6241be170dd2f8dc58759c0159e0b365a8f759e5a10f60a3e13cc728ca",
+      "command": [
+        "env",
+        "NODE_PATH=/app/node_modules",
+        "node",
+        "-e",
+        "const ts=require('typescript'),fs=require('fs'); for(const p of ['src/api/worker/facades/DeviceEncryptionFacade.ts','src/misc/credentials/NativeCredentialsEncryption.ts']) { const r=ts.transpileModule(fs.readFileSync(p,'utf8'),{fileName:p,reportDiagnostics:true,compilerOptions:{module:ts.ModuleKind.CommonJS}}); if((r.diagnostics||[]).some(d=>d.category===ts.DiagnosticCategory.Error)) process.exitCode=1; }"
+      ],
+      "duration_seconds": 49.695424400000775,
+      "exit_code": 0,
+      "execution_sha256": "bf92f3da70574f6aa2f00fd0b2030a49d7ebaf1736df661c82a5adbb41865b10"
+    }
+  ]
+}
