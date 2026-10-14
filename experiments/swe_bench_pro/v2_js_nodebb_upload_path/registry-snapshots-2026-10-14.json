@@ -1,0 +1,130 @@
+{
+  "condition": "Assessment of verified public data for a NodeBB offline registry diagnostic",
+  "task_id": "instance_NodeBB__NodeBB-f9ce92df988db7c1ae55d9ef96d247d27478bc70-vf2cf3cbd463b7ad942381f1c6d077626485a1e9e",
+  "base_commit": "61d17c95e573f91ab5c65d25218451e9afd07d77",
+  "assessment": {
+    "condition": "Public NodeBB registry data assessment",
+    "snapshots_verified": true,
+    "records": [
+      {
+        "kind": "compatible",
+        "url": "https://packages.nodebb.org/api/v1/plugins?version=4.1.0",
+        "final_url": "https://packages.nodebb.org/api/v1/plugins?version=4.1.0",
+        "status": 200,
+        "captured_at": "2026-10-14T10:46:53.81063+02:00",
+        "headers": {
+          "Date": "Wed, 14 Oct 2026 08:46:53 GMT",
+          "ETag": "W/\"dce4-zDjKJ9RJNZ6XsBBy2RGgeu7ODfk\"",
+          "Last-Modified": null,
+          "Content-Type": "application/json; charset=utf-8"
+        },
+        "bytes": 56548,
+        "entries": 215,
+        "sha256": "3310d3a52b5a246389a8f27c64fdaef19294638a264a5aa2204c9c6760854a31",
+        "file": "compatible.json"
+      },
+      {
+        "kind": "all",
+        "url": "https://packages.nodebb.org/api/v1/plugins",
+        "final_url": "https://packages.nodebb.org/api/v1/plugins",
+        "status": 200,
+        "captured_at": "2026-10-14T10:46:55.730553+02:00",
+        "headers": {
+          "Date": "Wed, 14 Oct 2026 08:46:54 GMT",
+          "ETag": "W/\"6990c-JOecGjoV7SHO6NmEgx0dOtb62Vc\"",
+          "Last-Modified": null,
+          "Content-Type": "application/json; charset=utf-8"
+        },
+        "bytes": 432396,
+        "entries": 1793,
+        "sha256": "fa718847f135735ffb258b47edb3dbd29c7d0b3b7724a6e8256866ee60f3b3bc",
+        "file": "all.json"
+      },
+      {
+        "kind": "trending",
+        "url": "https://packages.nodebb.org/api/v1/analytics/top/week",
+        "final_url": "https://packages.nodebb.org/api/v1/analytics/top/week",
+        "status": 200,
+        "captured_at": "2026-10-14T10:46:56.538692+02:00",
+        "headers": {
+          "Date": "Wed, 14 Oct 2026 08:46:56 GMT",
+          "ETag": "W/\"201-nO2XBTXR9L8fepzB2faCyD3uzSs\"",
+          "Last-Modified": null,
+          "Content-Type": "application/json; charset=utf-8"
+        },
+        "bytes": 513,
+        "entries": 10,
+        "sha256": "724bfee8581d4b28b620ac5f871e7b1ec0fa7b4f21bcd1087a1e08bdd7f6b3c7",
+        "file": "trending.json"
+      },
+      {
+        "kind": "markdown",
+        "url": "https://packages.nodebb.org/api/v1/plugins/nodebb-plugin-markdown",
+        "final_url": "https://packages.nodebb.org/api/v1/plugins/nodebb-plugin-markdown",
+        "status": 200,
+        "captured_at": "2026-10-14T10:46:57.215941+02:00",
+        "headers": {
+          "Date": "Wed, 14 Oct 2026 08:46:56 GMT",
+          "ETag": "W/\"8f3-DuM3cBr6dVC+XdC3vUdTq7Ai3Y8\"",
+          "Last-Modified": null,
+          "Content-Type": "application/json; charset=utf-8"
+        },
+        "bytes": 2291,
+        "entries": 1,
+        "sha256": "12bd2745178920898cbb084f282410744a8a6c120c5bb6a9a212fb7d646397d8",
+        "file": "markdown.json"
+      }
+    ],
+    "historical_snapshot": false,
+    "upstream_published_checksums": false,
+    "service_built": false,
+    "tests_run": false,
+    "baseline_ready": false
+  },
+  "local_snapshot_directory": "../output/swe-bench-pro-v2-readiness/2026-10-14-nodebb-registry-assessment-v2",
+  "assessment_sha256": "2ff4ed043f258190d2802598df78a845ac7d1885f7c1ad9a0324d63674d70543",
+  "capture_tool_sha256": "80d3467a4dc7d44f41d41ca9dac60f06c86c02773329c44527ced463d6e4a714",
+  "reviewed_source_sha256": {
+    "src/plugins/index.js": "e236479b459883ea89a59a133791dadfbeb8d5b157a1cd517289134f42166e07",
+    "src/controllers/admin/plugins.js": "a702c30c5489bfbeda0d440e436ba442b490e884282de16f5e18def8eea07e8d",
+    "test/mocks/databasemock.js": "8f86799204bd3e8f1c4c4dbaefa4930b2c1dfa7e65c96ccc0daa45f3b2ee74ac",
+    "test/plugins.js": "2f8ebbcd419e0eb1a3368646fff585476ba8944d0dbeac57ae262fec563b3759",
+    "src/plugins/usage.js": "3461149b11e532d9b70e2be2cc05451ee55ef866bbc26ecaa46fa4651e74194a"
+  },
+  "consistency": {
+    "duplicate_full_names": [],
+    "markdown_detail_matches_full": true,
+    "markdown_latest": "13.2.13",
+    "trending_missing_from_full": [],
+    "compatible_missing_from_full": []
+  },
+  "proposed_service": {
+    "unknown_routes": "Return explicit failure and record request; no fallback success",
+    "bind": "127.0.0.1",
+    "label": "NodeBB registry snapshot diagnostic, captured 2026-10-14",
+    "verify_hashes_before_start": true,
+    "first_followup": "Build labelled supplemented setup, verify exact route bytes and unknown-route failures, then run the unchanged admin plugins page test before a full retry",
+    "serve_original_bytes": true,
+    "existing_test_configuration": "preserve",
+    "host_ports": "none",
+    "config": {
+      "registry": "http://127.0.0.1:8766"
+    },
+    "telemetry_post": "Unsupported; do not simulate acknowledgement",
+    "outbound_network": "none",
+    "allowed_methods": [
+      "GET",
+      "HEAD"
+    ],
+    "exact_routes": [
+      "/api/v1/plugins?version=4.1.0",
+      "/api/v1/plugins",
+      "/api/v1/analytics/top/week",
+      "/api/v1/plugins/nodebb-plugin-markdown"
+    ]
+  },
+  "decision": "Feasible for the reviewed registry routes; complete test-suite readiness remains unproven",
+  "service_built": false,
+  "tests_run": false,
+  "baseline_ready": false
+}

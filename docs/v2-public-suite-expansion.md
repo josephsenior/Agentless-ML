@@ -150,5 +150,10 @@ public `registry` setting for these requests. Review the actual data and service
 contract before another full attempt; neither fabricated successful responses
 nor disabling the failing test would establish the same baseline.
 
+The [registry data assessment](nodebb-registry-assessment.md) now pins all four
+reviewed public responses and specifies a local service contract. They are
+consistent current snapshots, not historical task data. The service has not
+been built or used for a retry.
+
 Other Vuls or NodeBB tasks still require their own base/image checks; success
 on one revision does not provision every task in that repository automatically.
