@@ -90,8 +90,65 @@ including runner preparation, under a 300-second command cap. See the
 [setup evidence](../experiments/swe_bench_pro/v2_nodebb_setup_2026-10-13.json).
 The combined focused checks now total 69 passing tests.
 
-This is setup evidence only: **NodeBB tests have not run**, and no full-suite
-readiness entry was registered. Next, retain individual Mocha results and check
-early termination before running its complete Redis-backed public schedule.
+## NodeBB individual reporting and early termination
+
+The Redis plan now runs the complete public `npm test` command after the same
+candidate-source setup. NYC coverage and `.mocharc.yml` remain active. The
+command changes the Mocha reporter and its output location; the public timeout,
+file selection and `bail` setting remain as declared by the repository. The
+overall command cap is 1,800 seconds under the existing one-CPU, 4-GiB memory,
+4-GiB scratch and offline container profile.
+
+`tools/nodebb_mocha_reporter.cjs` extends the installed Mocha JSON reporter. It
+retains the unmodified JSON report as `mocha-raw.json` and writes a second report
+with separate identities for repeated test names. Each identity consists of
+the defining file, full title and occurrence number in registration order.
+The derived report preserves `rawFullTitle`; the original report is also kept.
+This avoids the shared parser's normal merging of exact-name reruns collapsing
+NodeBB's distinct parameterized cases. The occurrence number depends on test
+registration order and does not establish semantic identity if that order changes.
+
+The reporter inventories loaded tests and observes additions to every suite.
+That matters here: NodeBB's async API suite registers tests after Mocha starts.
+At the end, the completion audit compares all registered identities with ended
+tests and reported outcomes, checks counts, and records hook failures or aborts.
+An ordinary end event after `bail` cannot establish complete coverage.
+
+`tools/check_nodebb_mocha_reporting.py` verifies the actual installed Mocha on
+five small fixtures: complete pass/pending coverage, early failure with bail,
+failed setup hook, repeated names, and late registration. All five passed on
+14 October; the 82 focused Python checks passed as well. Neither fixture
+verification nor registration of a full-suite plan is a public baseline result.
+
+The first public attempt on 14 October stopped at the admin plugins page:
+`GET /api/admin/extend/plugins` returned HTTP 500 after requests to
+`packages.nodebb.org` failed in the offline container. Raw Mocha totals were
+296 passes and one failure. Its original reporter merged repeated display names
+into 11 passing matching IDs and one failed ID; this exposed the identity issue
+fixed above. The original attempt is retained under
+`../output/swe-bench-pro-v2-readiness/2026-10-14-nodebb-full/`.
+
+A fresh attempt with the final reporter reached the same failing assertion.
+It preserved **296 passing cases and one failed case separately**. The final
+inventory contained 4,506 registered tests: 2,011 present initially and 2,495
+added after execution started. Only 297 ended; 4,209 did not run. The individual
+report and completion counts agree. Both reports retain the underlying failure
+and test identities; the original raw JSON remains available too.
+
+The second attempt's host recorder was interrupted after test execution, so
+its command exit code was not captured. `tools/recover_nodebb_public_run.py`
+recovered the completed reports before its exact owned container and temporary
+workspace were removed. The recovery records that interruption and cannot
+promote a run to readiness. See the
+[attempt evidence and hashes](../experiments/swe_bench_pro/v2_nodebb_public_attempt_2026-10-14.json).
+NodeBB remains **not ready** for the complete public baseline. Vuls's earlier
+full-target result is unaffected.
+
+Next, assess whether the required public plugin-registry responses can be
+verified and delivered through a labelled offline service. NodeBB exposes a
+public `registry` setting for these requests. Review the actual data and service
+contract before another full attempt; neither fabricated successful responses
+nor disabling the failing test would establish the same baseline.
+
 Other Vuls or NodeBB tasks still require their own base/image checks; success
 on one revision does not provision every task in that repository automatically.

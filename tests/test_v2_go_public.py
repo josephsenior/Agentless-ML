@@ -62,8 +62,7 @@ def test_command_keeps_public_target_and_reports_offline(module):
 def test_reviewed_manifest_is_full_target(module):
     import survey_swe_bench_pro_v2 as survey
     plans = survey.load_plans(survey.EXPERIMENTS / 'v2_full_public_plans.json')
-    assert len(plans) == 1
-    plan = next(iter(plans.values()))
+    plan = next(plan for plan in plans.values() if plan['runner_kind'] == 'go-public-suite-v1')
     assert plan['scope'] == 'full_public_suite'
     assert plan['runner_kind'] == 'go-public-suite-v1'
     assert plan['command'].argv[-1] == './...'

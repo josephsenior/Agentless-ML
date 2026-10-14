@@ -1,0 +1,17 @@
+{
+  "instance_id": "instance_NodeBB__NodeBB-f9ce92df988db7c1ae55d9ef96d247d27478bc70-vf2cf3cbd463b7ad942381f1c6d077626485a1e9e",
+  "image_id": "sha256:cc8c9217344bf50df0a4276abad046538bb20e5c2f2815a1b2e201871c5cf364",
+  "base_commit": "61d17c95e573f91ab5c65d25218451e9afd07d77",
+  "runner": "nodebb-redis-public-v1",
+  "reviewed_public_sources": {
+    ".github/workflows/test.yaml": "e955029107b24a04208ea780fc903e49ef8cd3ed725ac3d9667b289ce02c4838",
+    "install/package.json": "4e246dfe3ae3c08bea90ac1075f7a07a9f7a68b1f49e20aa3411f2329c523651",
+    ".mocharc.yml": "5e170cc2b39f763c43f923bf13b99d91a86a85ae62d9024f133a5689b322b74d"
+  },
+  "scope_note": "Complete npm test target for the Redis CI variant using the pinned image's Node 18.20.8 and Redis 6.0.16. Public CI specifies Redis 7.4.2; this is the image's available service, not a recreation of the full Node/database matrix. Bail remains enabled; early termination cannot establish complete baseline coverage.",
+  "regression": {
+    "argv": ["npm", "test"],
+    "timeout_seconds": 1800,
+    "report": {"format": "mocha-json", "path": "/tmp/nodebb-report.json"}
+  }
+}

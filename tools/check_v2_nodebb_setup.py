@@ -22,8 +22,8 @@ SETUP = {
 CI = {'host': '127.0.0.1', 'database': 1, 'port': 6379}
 
 
-def setup_command():
-    script = (
+def setup_script():
+    return (
         'set -e; cd /tmp/work; '
         'export TEST_ENV=production npm_config_offline=true npm_config_cache=/tmp/npm-cache; '
         'cp install/package.json package.json; '
@@ -43,7 +43,10 @@ def setup_command():
             "database:c.database,test_database:c.test_database.database}));"
         )
     )
-    return PublicTestCommand(('sh', '-c', script), timeout_seconds=300)
+
+
+def setup_command():
+    return PublicTestCommand(('sh', '-c', setup_script()), timeout_seconds=300)
 
 
 def main():

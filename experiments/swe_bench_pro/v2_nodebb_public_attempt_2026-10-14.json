@@ -1,0 +1,158 @@
+{
+  "purpose": "NodeBB full Redis public schedule with individual results and early-stop detection",
+  "date": "2026-10-14",
+  "task_id": "instance_NodeBB__NodeBB-f9ce92df988db7c1ae55d9ef96d247d27478bc70-vf2cf3cbd463b7ad942381f1c6d077626485a1e9e",
+  "image_id": "sha256:cc8c9217344bf50df0a4276abad046538bb20e5c2f2815a1b2e201871c5cf364",
+  "base_commit": "61d17c95e573f91ab5c65d25218451e9afd07d77",
+  "implementation_parent": "562a7e50f26f188e1a68559cdc7fc51f2c6aef63",
+  "implementation_sha256": {
+    "tools/v2_nodebb_public.py": "fc09b7e632b6b65b478c36788111821c760d353889025ba67747b78dc2b2a710",
+    "tools/nodebb_mocha_reporter.cjs": "3d0f3aa7043ef0a2c74332d44f687889382443f5c9331129f203659667c488f7",
+    "tools/check_v2_nodebb_setup.py": "b17d40f70bc5a945356bba252df2206219c5e4bda83f566c38478d6de0ea49d1",
+    "tools/survey_swe_bench_pro_v2.py": "fc2e65cec19dd482455c7eb0188b7356e3876b2b2ff0a244ad50cc88aafbafdb",
+    "tools/recover_nodebb_public_run.py": "9a942b706d9672f0bb1dc56adfb170227aac292d333ee42bbbf173e4b678a22b"
+  },
+  "baseline_ready": false,
+  "model_calls": 0,
+  "verifier_run": false,
+  "limits": {
+    "tmpfs_mb": 4096,
+    "command_timeout_seconds": 1800,
+    "cpus": 1,
+    "swap": "disabled",
+    "memory_mb": 4096,
+    "network": "none"
+  },
+  "first_attempt": {
+    "raw_mocha_stats": {
+      "suites": 0,
+      "tests": 297,
+      "passes": 296,
+      "pending": 0,
+      "failures": 1,
+      "start": "2026-10-14T08:24:51.117Z",
+      "end": "2026-10-14T08:25:12.06Z",
+      "duration": 20943
+    },
+    "survey_sha256": "c6b332885525a1c378205eab9444bd6a63aaae65e55a14d72a1b274974bb8dee",
+    "merged_matching_ids": 12,
+    "status": "public_suite_incomplete",
+    "duration_seconds": 250.2758171000023,
+    "execution_sha256": "4849c7003ac4a1886657755a047450070e9e60f869edbc2600b62a52d54d9c8a",
+    "artifacts": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\output\\swe-bench-pro-v2-readiness\\2026-10-14-nodebb-full\\executions\\instance_NodeBB__NodeBB-f9ce92df988db7c1ae55d9ef96d247d27478bc70-vf2cf3cbd463b7ad942381f1c6d077626485a1e9e\\agentless-ml-26841c6cd038406a882ba80627932e71",
+    "exit_code": 1,
+    "completion_audit": {
+      "complete": false,
+      "reason": "duplicate test IDs; matching would be ambiguous"
+    }
+  },
+  "final_reporter_attempt": {
+    "raw_mocha_stats": {
+      "suites": 0,
+      "tests": 297,
+      "passes": 296,
+      "pending": 0,
+      "failures": 1,
+      "start": "2026-10-14T08:34:09.244Z",
+      "end": "2026-10-14T08:34:29.43Z",
+      "duration": 20186
+    },
+    "host_recorder_interrupted": true,
+    "readiness": "not_ready",
+    "completion": {
+      "missing_tests": 4209,
+      "planned_tests": 4506,
+      "ended_tests": 297,
+      "report_matches": true,
+      "counts_match": true,
+      "complete": false,
+      "initial_planned_tests": 2011,
+      "hook_failures": [],
+      "dynamically_added": 2495
+    },
+    "recovery_sha256": "01a63ef5c75cba1839757b34a5dd6042215467cd520bd6c6685f9461d03ba87c",
+    "command_exit_code": null,
+    "owned_container_and_workspace_removed": true,
+    "artifacts": "../output/swe-bench-pro-v2-readiness/2026-10-14-nodebb-full-v2-recovered",
+    "individual_counts": {
+      "passed": 296,
+      "failed": 1
+    },
+    "failure": [
+      {
+        "title": "response status code should match one of the schema defined responses",
+        "fullTitle": "response status code should match one of the schema defined responses [occurrence 42]",
+        "file": "/tmp/work/test/utils.js",
+        "duration": 90,
+        "currentRetry": 0,
+        "err": {
+          "stack": "AssertionError [ERR_ASSERTION]: GET /api/admin/extend/plugins sent back unexpected HTTP status code: 500\n    at Context.<anonymous> (test/api.js:528:6)\n    at process.processImmediate (node:internal/timers:476:21)\n    at process.callbackTrampoline (node:internal/async_hooks:128:17)",
+          "message": "GET /api/admin/extend/plugins sent back unexpected HTTP status code: 500",
+          "generatedMessage": false,
+          "name": "AssertionError",
+          "code": "ERR_ASSERTION",
+          "actual": "false",
+          "expected": "true",
+          "operator": "=="
+        },
+        "rawFullTitle": "response status code should match one of the schema defined responses"
+      }
+    ],
+    "artifact_sha256": {
+      "mocha-completion.json": "4890e2fece50b4fb478d8cd874466b0de1ae3bb883c1f21a894ba148c1e8cf7a",
+      "mocha-individual.json": "67c41afb9501e7e587adfd81e27e44bec92bdf6d3b0dd1d2fb09f3f90e4e0f1a",
+      "mocha-raw.json": "88c5403c3d8ca325b571981f5e765c926e2b62ce4ca3fda16301628377e60078",
+      "stdout.log": "258080f877b7515305a5a9c65f5935018ee5aef2bb3a46efe29d6220d4712525",
+      "stderr.log": "d708470ac06daa1db1f40b72f2b896752042e6ddbff4e6024c138aa2117540e4"
+    }
+  },
+  "reporter_verification": {
+    "modes": [
+      {
+        "verified": true,
+        "counts": {
+          "passed": 3,
+          "skipped": 1
+        },
+        "mode": "complete"
+      },
+      {
+        "verified": true,
+        "counts": {
+          "passed": 1,
+          "failed": 1,
+          "skipped": 1
+        },
+        "mode": "bail"
+      },
+      {
+        "verified": true,
+        "counts": {
+          "failed": 1
+        },
+        "mode": "hook"
+      },
+      {
+        "verified": true,
+        "counts": {
+          "passed": 5,
+          "skipped": 1
+        },
+        "mode": "duplicate"
+      },
+      {
+        "verified": true,
+        "counts": {
+          "passed": 4,
+          "skipped": 1
+        },
+        "mode": "dynamic"
+      }
+    ],
+    "artifacts": "../output/swe-bench-pro-v2-readiness/2026-10-14-nodebb-reporter-check-v2/verification.json",
+    "artifact_sha256": "643755c3a292b966376df95250ec586b84cfd4a870cba5bb5dbf6fdad18751e1"
+  },
+  "focused_tests_passed": 82,
+  "blocker": "GET /api/admin/extend/plugins returned HTTP 500 after public packages.nodebb.org registry requests failed offline; existing bail stopped remaining tests",
+  "next_step": "Assess verified public plugin-registry data for a labelled offline service using the supported registry setting before another full attempt"
+}
