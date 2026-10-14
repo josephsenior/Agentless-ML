@@ -10,10 +10,10 @@ LIMIT = 32 * 1024 * 1024
 REPORTER = Path(__file__).with_name('nodebb_mocha_reporter.cjs')
 
 
-def public_command(timeout_seconds):
+def public_command(timeout_seconds, *, offline=True):
     reporter = REPORTER.read_text(encoding='utf-8')
     script = (
-        setup_script() + '; '
+        setup_script(offline=offline) + '; '
         'cat > /tmp/nodebb-reporter.cjs <<\'NODEBB_COMPLETION_REPORTER\'\n'
         + reporter + '\nNODEBB_COMPLETION_REPORTER\n'
         'export PATH=/tmp/work/node_modules/.bin:$PATH; '

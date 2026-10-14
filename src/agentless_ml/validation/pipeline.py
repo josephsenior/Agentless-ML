@@ -31,6 +31,9 @@ def validate_candidate(
     """
     if not commands:
         raise ValueError("at least one public test command is required")
+    if (getattr(runner, "network_mode", "none") != "none"
+            or getattr(runner, "execution_phase", "agent") != "agent"):
+        raise ValueError("candidate selection requires an offline agent-phase runner")
     evidence = []
     try:
         with provider.create() as workspace:

@@ -55,6 +55,13 @@ is treated as an experimental condition.
 
 ## Task eligibility and comparison
 
+Network policy is phase-specific, not synonymous with Agentless tool access.
+See the [policy review](network-policy.md): V2 keeps the agent phase offline
+but permits normal setup/verifier networking. Connected unchanged-base
+diagnostics must not silently supply selection baselines for offline candidate
+runs. Matching selection conditions still need to be agreed; no network-enabled
+candidate condition is introduced by this review.
+
 Freeze the eligible task list before looking at model outcomes. Require a
 pinned base/image, a sealed repository, a reviewed complete public schedule
 and a baseline passing-test inventory. Existing baseline failures remain

@@ -22,10 +22,10 @@ SETUP = {
 CI = {'host': '127.0.0.1', 'database': 1, 'port': 6379}
 
 
-def setup_script():
+def setup_script(*, offline=True):
     return (
         'set -e; cd /tmp/work; '
-        'export TEST_ENV=production npm_config_offline=true npm_config_cache=/tmp/npm-cache; '
+        f'export TEST_ENV=production npm_config_offline={str(offline).lower()} npm_config_cache=/tmp/npm-cache; '
         'cp install/package.json package.json; '
         + _NODE_MODULES +
         'redis-server --version; '

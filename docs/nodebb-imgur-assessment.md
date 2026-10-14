@@ -1,5 +1,9 @@
 # Imgur package assessment
 
+Status: cache-supplement work is paused following the
+[phase-specific network policy review](network-policy.md). The verified inputs
+below remain evidence; they are not a requirement to build another image.
+
 On 14 October 2026, the public NodeBB test was blocked at an offline npm
 install, not at an Imgur assertion. This assessment checks the public inputs
 needed for that operation. It does not build an image or change readiness.
@@ -50,7 +54,7 @@ to the read-only image. Extra root metadata, writable paths or lifecycle
 requirements may therefore be needed even though these plugin trees verify.
 No full-root transaction has been attempted by this assessment.
 
-The next step is to assess cache coverage and writable dependency layout for
+The previously proposed next step was to assess cache coverage and writable dependency layout for
 that exact Linux/root transaction, then build a separately labelled supplement
 from reviewed public pins. Keep the original tests, offline network policy and
 resource limits. A successful isolated resolution is not a passing baseline.

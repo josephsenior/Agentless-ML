@@ -97,11 +97,18 @@ NodeBB therefore remains **not ready** for a complete public baseline. See the
 for the failure, counts, configuration and artifact hashes. Both attempts
 completed normal container and workspace cleanup.
 
+Update: further snapshot/cache work is paused. The
+[network policy review](network-policy.md) separates offline agent execution
+from connected trusted setup and unchanged-base diagnostics. The previous
+service and runs below remain labelled historical evidence, not a required
+setup for every future run.
+
 The [Imgur assessment](nodebb-imgur-assessment.md) now verifies the old install
 and current upgrade targets: 56 unique packages across both isolated trees,
 plus the public NodeBB detail response. That response agrees with the earlier
 full-list snapshot and the public test's expected registry fields. Merely
 caching those tarballs still does not prove the full NodeBB-root
-`npm install --save`, upgrade and uninstall transactions can finish. Assess
-root cache coverage and writable dependency layout before building a separate
-supplement. No cache image or further retry has been started.
+`npm install --save`, upgrade and uninstall transactions can finish. The former
+next step was to assess root cache coverage and writable dependency layout;
+that cache work is now paused in favour of the phase-specific network review.
+No cache image or further full-suite retry has been started.

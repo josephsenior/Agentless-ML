@@ -79,6 +79,32 @@ def fake_docker(calls, *, exit_code=0, oom=False, running=True, timed_out=False,
     return docker
 
 
+@pytest.mark.parametrize('phase,network', [('agent', 'bridge'), ('unknown', 'none'), ('setup', 'host')])
+def test_network_policy_rejects_unsafe_or_unknown_modes(tmp_path, phase, network):
+    # Policy rejection happens before Docker inspection.
+    with pytest.raises(ValueError):
+        DockerTestRunner('local', tmp_path, execution_phase=phase, network_mode=network)
+
+
+def test_connected_baseline_keeps_isolation_and_records_phase(tmp_path, monkeypatch):
+    calls = []
+    monkeypatch.setattr(DockerTestRunner, '_docker', staticmethod(fake_docker(calls)))
+    source = tmp_path / 'source'
+    source.mkdir()
+    runner = DockerTestRunner('local', tmp_path / 'logs',
+                              execution_phase='trusted-baseline', network_mode='bridge')
+    execution = runner.run(source, PublicTestCommand(('true',)))
+    create = next(call for call in calls if call[0] == 'create')
+    for flag in ('--network=bridge', '--read-only', '--cap-drop=ALL',
+                 '--security-opt=no-new-privileges', '--memory=512m', '--memory-swap=512m'):
+        assert flag in create
+    assert '--publish' not in create and '-v' not in create
+    record = json.loads(Path(execution.artifact_directory, 'execution.json').read_text())
+    assert record['network_policy'] == {'execution_phase': 'trusted-baseline', 'docker_network': 'bridge'}
+    with pytest.raises(ValueError, match='offline agent-phase'):
+        validate_candidate(None, None, runner, [PublicTestCommand(('true',))])
+
+
 def run_fake(tmp_path, monkeypatch, command, run_as_image_user=False, **state):
     calls = []
     monkeypatch.setattr(DockerTestRunner, "_docker", staticmethod(fake_docker(calls, **state)))

@@ -1,0 +1,49 @@
+{
+  "condition": "NodeBB live-network unchanged-base connectivity diagnostic",
+  "base_commit": "61d17c95e573f91ab5c65d25218451e9afd07d77",
+  "image_id": "sha256:cc8c9217344bf50df0a4276abad046538bb20e5c2f2815a1b2e201871c5cf364",
+  "task_toml_sha256": "34eeb52a87d513adbdbf6996612ced8027707cb3efb293c39022f2009c8d52b2",
+  "pinned_task_network_policy": {
+    "agent": "no-network",
+    "environment": "public",
+    "verifier": "public"
+  },
+  "execution_phase": "trusted-baseline",
+  "docker_network": "bridge",
+  "hostname_allowlist": false,
+  "status": "pass",
+  "exit_code": 0,
+  "elapsed_including_runner_preparation_seconds": 124.65671269999984,
+  "limits": {
+    "memory_mb": 4096,
+    "cpus": 1,
+    "pids_limit": 2048,
+    "scratch_mode": "tmpfs",
+    "scratch_mb": 4096,
+    "swap_policy": "disabled",
+    "command_timeout_seconds": 60
+  },
+  "responses": [
+    {
+      "url": "https://registry.npmjs.org/nodebb-plugin-imgur",
+      "status": 200,
+      "bytes": 84672,
+      "latest": "5.0.0"
+    },
+    {
+      "url": "https://packages.nodebb.org/api/v1/plugins/nodebb-plugin-imgur",
+      "status": 200,
+      "bytes": 677,
+      "latest": "5.0.0"
+    }
+  ],
+  "stdout_sha256": "36e222bed46a6ee5233abcd5ecd63ee383d0bad254c130a8e98fba8b722fab01",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "artifact_directory": "../output/swe-bench-pro-v2-readiness/2026-10-14-nodebb-network-probe/executions/agentless-ml-c9ab37ca14854047ba678eb16d80d7dd",
+  "tests_run": false,
+  "verifier_run": false,
+  "model_calls": 0,
+  "cache_supplement_built": false,
+  "candidate_selection_eligible": false,
+  "readiness_changed": false
+}

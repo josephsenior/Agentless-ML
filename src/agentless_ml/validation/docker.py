@@ -233,9 +233,13 @@ class DockerTestRunner:
     Commands run as UID/GID 65534 with ``HOME=/tmp`` by default. Benchmark images
     are built as root and keep toolchains and pre-downloaded dependencies in
     ``/root`` (for example Go's module cache), which 65534 cannot read, and the
-    container has no network to fetch them again. ``run_as_image_user=True`` runs
+    default agent-phase container has no network to fetch them again. ``run_as_image_user=True`` runs
     commands as the image's own user with its own ``HOME`` instead; every other
     restriction still applies.
+
+    Connected setup/baseline/final-verification runs require an explicit phase
+    and ``network_mode='bridge'``. Bridge means normal egress, not an allowlist;
+    callers must establish trusted inputs and keep agent selection offline.
     """
 
     def __init__(
@@ -250,7 +254,15 @@ class DockerTestRunner:
         scratch_mode: str = "tmpfs",
         swap_policy: str = "disabled",
         run_as_image_user: bool = False,
+        execution_phase: str = "agent",
+        network_mode: str = "none",
     ):
+        if execution_phase not in ("agent", "setup", "trusted-baseline", "final-verification"):
+            raise ValueError("unsupported execution phase")
+        if network_mode not in ("none", "bridge"):
+            raise ValueError("network_mode must be 'none' or 'bridge'")
+        if execution_phase == "agent" and network_mode != "none":
+            raise ValueError("agent-side validation must remain offline")
         if not image or image.startswith("-"):
             raise ValueError("image must be a local image reference")
         if any(type(v) is not int or v <= 0 for v in (memory_mb, pids_limit, tmpfs_mb)):
@@ -271,6 +283,7 @@ class DockerTestRunner:
         self.pids_limit, self.tmpfs_mb = pids_limit, tmpfs_mb
         self.scratch_mode, self.swap_policy = scratch_mode, swap_policy
         self.run_as_image_user = run_as_image_user
+        self.execution_phase, self.network_mode = execution_phase, network_mode
         # An image with no configured user runs as root.
         self.user = (
             (metadata["Config"].get("User") or "root")
@@ -382,7 +395,7 @@ class DockerTestRunner:
                     "--label",
                     "agentless-ml.public-test=true",
                     "--pull=never",
-                    "--network=none",
+                    f"--network={self.network_mode}",
                     "--read-only",
                     "--cap-drop=ALL",
                     "--security-opt=no-new-privileges",
@@ -538,6 +551,10 @@ class DockerTestRunner:
             message = (message + " Reproduction report lacks clean test evidence.").strip()
         execution = TestExecution(result, self.image_id, name, str(artifacts), message)
         record = asdict(execution)
+        record["network_policy"] = {
+            "execution_phase": self.execution_phase,
+            "docker_network": self.network_mode,
+        }
         if command.kind is ValidationKind.REPRODUCTION:
             record["status_before_reproduction_check"] = reported_status.value
         if getattr(self, "workspace_setup", None) is not None:
