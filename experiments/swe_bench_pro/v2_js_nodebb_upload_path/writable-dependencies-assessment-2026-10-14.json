@@ -1,0 +1,52 @@
+{
+  "condition": "Offline writable dependency-copy diagnostic only",
+  "image_id": "sha256:cc8c9217344bf50df0a4276abad046538bb20e5c2f2815a1b2e201871c5cf364",
+  "helper_sha256": "4930cd71740873ddbba68526a45abc466e9844ed244d6833a04cd053a8b2422a",
+  "source": "/app/node_modules",
+  "disposable_target": "/tmp/dependency-assessment/node_modules",
+  "copy_operation": "cp -a --no-preserve=ownership",
+  "inventory": {
+    "files": 45745,
+    "links": 88,
+    "regular_file_bytes": 534971324,
+    "external_links": [],
+    "sha256": "95b4510ad2d980a537a388c88c25447565fe2fd7b0b25b6fc225ce33a990a2ab"
+  },
+  "copy_matches_source": true,
+  "restored_copy_matches_source": true,
+  "source_unchanged": true,
+  "bin_rename_passed": true,
+  "package_manifest_rename_passed": true,
+  "package_file_write_passed": true,
+  "copy_contains_hidden_lock": true,
+  "native_node_files": 3,
+  "hidden_lock_version": 3,
+  "hidden_lock_package_entries": 1394,
+  "memory_peak_bytes": 884748288,
+  "memory_max_bytes": 4294967296,
+  "scratch_used_kib": 640144,
+  "scratch_available_kib": 3554160,
+  "elapsed_seconds": 6.794,
+  "protections": {
+    "network": "none",
+    "read_only_root": true,
+    "cap_drop": "ALL",
+    "no_new_privileges": true,
+    "cpus": 1,
+    "memory_mb": 4096,
+    "memory_swap_mb": 4096,
+    "tmpfs_mb": 4096,
+    "pids_limit": 128
+  },
+  "initial_attempt": {
+    "copy_operation": "cp -a",
+    "result": "Ownership restoration denied with dropped capabilities; repeated errors exceeded child-process output buffer.",
+    "container_removed": true
+  },
+  "container_removed": true,
+  "npm_install_run": false,
+  "public_tests_run": false,
+  "image_built": false,
+  "registered_setup_changed": false,
+  "readiness_changed": false
+}

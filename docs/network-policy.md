@@ -91,8 +91,9 @@ candidate selection. See the [full-run evidence](../experiments/swe_bench_pro/v2
 for the exact failure and report hashes. Normal container/workspace cleanup
 completed. No retry, verifier, image build or model call followed.
 
-Next: assess a writable dependency layout inside the disposable workspace,
-starting with `.bin`, while keeping the image root read-only and resource
-limits unchanged. Review whether npm also needs to modify linked package
-directories before attempting another full suite. This is not cache-supplement
-work and does not call for editing public tests.
+The [writable-dependency assessment](nodebb-writable-dependencies.md) now shows
+that a complete private dependency copy fits the same CPU/memory/scratch ceilings
+and supports both executable and package-directory writes without altering the
+image. This is a copy-only diagnostic, not a successful npm transaction or a
+full-suite retry. Next, introduce it in the separate connected baseline setup
+and check the normal plugin lifecycle; keep public tests unchanged.
