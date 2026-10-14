@@ -1,5 +1,10 @@
 # SWE-bench Pro V2 provisioning survey
 
+Current engineering direction: [batch inventory and bounded cross-repository
+pilot](batch-v2-provisioning.md). NodeBB is parked with its complete, labelled
+diagnostic evidence; its three existing failures remain recorded. No further
+NodeBB run or official/default readiness promotion is planned here.
+
 The [repository-by-repository expansion](v2-public-suite-expansion.md) records
 the complete public targets being reviewed beyond the original four smoke plans.
 

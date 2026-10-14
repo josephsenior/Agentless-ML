@@ -1,0 +1,66 @@
+{
+  "condition": "Bounded local-image provisioning pilot; no full public suites",
+  "corpus_tasks": 642,
+  "corpus_repositories": 11,
+  "corpus_pin_sha256": "78f4b9b062075be7c2767f941c5e652ed0f4ca5ea4e1f31325ac047d6b41d93d",
+  "helper_sha256": "26c311f0164b32081a222fbaad720698a5f5b6dea7a9bfaeb8e99a8a53de3088",
+  "matching_local_image_tasks": 4,
+  "repository_counts": {
+    "ansible/ansible": 82,
+    "element-hq/element-web": 52,
+    "flipt-io/flipt": 78,
+    "future-architect/vuls": 58,
+    "gravitational/teleport": 68,
+    "internetarchive/openlibrary": 82,
+    "navidrome/navidrome": 52,
+    "NodeBB/NodeBB": 38,
+    "protonmail/webclients": 55,
+    "qutebrowser/qutebrowser": 73,
+    "tutao/tutanota": 4
+  },
+  "pilot_size": 5,
+  "selection": "One task per repository, prefer language coverage and available reviewed smokes; availability-biased engineering sample, not a research sample.",
+  "statuses": {"smoke_checked": 3, "needs_local_image": 2},
+  "pilot": [
+    {
+      "repository": "future-architect/vuls",
+      "task_id": "instance_future-architect__vuls-fe8d252c51114e922e6836055ef86a15f79ad042",
+      "language": "go", "workspace_probe": "pass", "smoke": "pass",
+      "smoke_scope": "selected_public_test", "smoke_seconds": 198.8888472000035
+    },
+    {
+      "repository": "qutebrowser/qutebrowser",
+      "task_id": "instance_qutebrowser__qutebrowser-0833b5f6f140d04200ec91605f88704dd18e2970-v059c6fdc75567943479b23ebca7c07b5e9a7f34c",
+      "language": "python", "workspace_probe": "pass", "smoke": "pass",
+      "smoke_scope": "syntax_only", "smoke_seconds": 26.179583999997703
+    },
+    {
+      "repository": "tutao/tutanota",
+      "task_id": "instance_tutao__tutanota-de49d486feef842101506adf040a0f00ded59519-v10a26bfb45a064b93f4fc044a0254925037b88f1",
+      "language": "typescript", "workspace_probe": "pass", "smoke": "pass",
+      "smoke_scope": "syntax_only", "smoke_seconds": 51.187185099995986
+    },
+    {
+      "repository": "element-hq/element-web",
+      "task_id": "instance_element-hq__element-web-1077729a19c0ce902e713cf6fab42c91fb7907f1-vnan",
+      "language": "javascript", "status": "needs_local_image", "runtime_executed": false
+    },
+    {
+      "repository": "ansible/ansible",
+      "task_id": "instance_ansible__ansible-0ea40e09d1b35bcb69ff4d9cecf3d0defa4b36e8-v30a923fb5c164d6cd18280c02422f75e611e8fb2",
+      "language": "python", "status": "needs_local_image", "runtime_executed": false
+    }
+  ],
+  "parked_repository": "NodeBB/NodeBB",
+  "parked_evidence": "v2_js_nodebb_upload_path/no-bail-diagnostic-2026-10-14.json",
+  "parked_evidence_scope": "One pinned task, not all 38 NodeBB revisions.",
+  "artifact_directory": "../output/swe-bench-pro-v2-readiness/2026-10-14-batch-pilot",
+  "artifact_sha256": {
+    "inventory.json": "08f2bb044acfd8432276367d0e478c16f1791ee50aed5ba0f7a9b479401a161a",
+    "pilot.jsonl": "9955fb8c66c69017684c5a688a84320de1d66e4dbbb3f9fe1b59b3f6a537162f",
+    "summary.json": "8269d9bb733f9b2a7377d07298cebd1e061a4bd0ae315dfb9c09f87d8650a103"
+  },
+  "images_pulled": 0, "full_suites_run": 0, "nodebb_runs": 0,
+  "official_readiness_changed": false, "model_calls": 0, "verifier_run": false,
+  "limitation": "Only three already-provisioned development tasks executed. Two new repositories need local images before runtime assessment. No result generalizes to all revisions."
+}
