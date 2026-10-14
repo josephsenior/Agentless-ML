@@ -97,9 +97,11 @@ NodeBB therefore remains **not ready** for a complete public baseline. See the
 for the failure, counts, configuration and artifact hashes. Both attempts
 completed normal container and workspace cleanup.
 
-Next, verify the Imgur plugin's public npm metadata, exact tarball and transitive
-installation requirements before assessing a separate cache supplement. The
-same install path subsequently calls `Plugins.get(id)`, so the public NodeBB
-detail response for `nodebb-plugin-imgur` also needs review. Merely caching the
-top-level tarball does not prove the unchanged `npm install --save` transaction
-can finish. No cache image or further retry has been started.
+The [Imgur assessment](nodebb-imgur-assessment.md) now verifies the old install
+and current upgrade targets: 56 unique packages across both isolated trees,
+plus the public NodeBB detail response. That response agrees with the earlier
+full-list snapshot and the public test's expected registry fields. Merely
+caching those tarballs still does not prove the full NodeBB-root
+`npm install --save`, upgrade and uninstall transactions can finish. Assess
+root cache coverage and writable dependency layout before building a separate
+supplement. No cache image or further retry has been started.
