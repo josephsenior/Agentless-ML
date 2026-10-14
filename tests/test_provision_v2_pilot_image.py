@@ -17,8 +17,17 @@ def test_manifest_bytes_must_match_public_digest(module):
     assert module.verified_manifest(raw + b'\n', descriptor)[0] == raw
     with pytest.raises(ValueError, match='digest'):
         module.verified_manifest(raw + b'changed', descriptor)
-    with pytest.raises(ValueError, match='leaf'):
+    with pytest.raises(ValueError, match='size'):
         module.verified_manifest(raw, {**descriptor, 'size': 0})
+
+
+def test_index_selection_ignores_attestations_and_rejects_ambiguity(module):
+    image = dict(digest='sha256:' + 'a' * 64, platform={'os': 'linux', 'architecture': 'amd64'})
+    attestation = dict(digest='sha256:' + 'b' * 64, platform={'os': 'unknown', 'architecture': 'unknown'})
+    assert module.select_linux_amd64({'manifests': [image, attestation]}) == image
+    for entries in ([], [attestation], [image, image]):
+        with pytest.raises(ValueError, match='exactly one'):
+            module.select_linux_amd64({'manifests': entries})
 
 
 def test_legacy_and_containerd_identity_are_both_verified(module):

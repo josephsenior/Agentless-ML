@@ -176,3 +176,36 @@ or model call ran; NodeBB remains parked.
 Next: provision the selected Ansible image and reuse the same cheap workspace
 probe. Element Web does not need more manual debugging based on this smoke;
 expand repository coverage before considering broader tests here.
+
+## Ansible provisioning follow-up
+
+The selected Ansible image was provisioned on 15 October 2026. Its selected
+Linux/amd64 manifest contains 18 layers totalling 745,700,455 compressed bytes
+(746 MB / 711 MiB). Host free space was about 189 GiB before the pull, well above
+the helper's 20-GiB minimum. Only that one image was pulled; no cleanup ran.
+
+The public tag points to an OCI index containing one Linux/amd64 image and an
+unknown-platform attestation. The original leaf-only helper stopped before any
+download. It now verifies the index's exact bytes against its public digest,
+selects exactly one supported Linux/amd64 descriptor, and verifies that child
+manifest's bytes against the digest recorded in the index. Missing or ambiguous
+platform choices are rejected, not guessed. The pull and local-image check use
+the child digest; both parent and child digests remain in the evidence. This
+extends the common provisioning helper, not Ansible's code or tests.
+
+The same cheap workspace probe passed in **4.23 seconds**. Image HEAD matches
+`f7234968d241d7171aadb1e873a67510753f3163`; committed source extracts into
+disposable Linux scratch, the workspace accepts writes and no Git directory is
+copied. The extracted workspace uses 27,984 KiB. Existing read-only roots,
+offline probing, capability dropping, task-memory/one-CPU/4-GiB scratch and
+120-second probe bounds were retained. The container was removed normally;
+the verified image remains installed and tagged for batch discovery.
+
+See the [Ansible provisioning evidence](../experiments/swe_bench_pro/v2_ansible_provisioning_2026-10-15.json)
+for exact identities, sizes, attempt history and report hashes. Eight focused
+provisioning/batch checks passed. No dependencies were installed, no public
+tests or full suites ran, and official readiness is unchanged. Ansible is now
+`workspace_probe_passed_needs_public_plan`; NodeBB remains parked.
+
+Next: select one bounded Ansible public unit-test check from its pinned
+configuration. Do not expand directly to its full integration matrix.

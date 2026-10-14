@@ -14,16 +14,33 @@ from agentless_ml.adapters.benchmarks import (
 from batch_v2_provisioning import ROOT, is_parked, pilot_task
 
 
-def verified_manifest(raw, descriptor):
+def verified_document(raw, descriptor):
     # Some CLI versions append a terminal newline; accept only bytes whose hash
     # exactly matches the public descriptor, never merely equivalent JSON.
     for content in (raw, raw.rstrip(b'\r\n')):
         if 'sha256:' + hashlib.sha256(content).hexdigest() == descriptor['digest']:
             manifest = json.loads(content)
-            if len(content) != descriptor['size'] or 'layers' not in manifest:
-                raise ValueError('expected a single leaf image manifest')
+            if len(content) != descriptor['size']:
+                raise ValueError('descriptor size mismatch')
             return content, manifest
     raise ValueError('raw manifest does not match its public digest')
+
+
+def verified_manifest(raw, descriptor):
+    content, manifest = verified_document(raw, descriptor)
+    if 'layers' not in manifest:
+        raise ValueError('expected a single leaf image manifest')
+    return content, manifest
+
+
+def select_linux_amd64(index):
+    matches = [entry for entry in index.get('manifests', [])
+               if entry.get('platform', {}).get('os') == 'linux'
+               and entry.get('platform', {}).get('architecture') == 'amd64'
+               and not entry.get('platform', {}).get('variant')]
+    if len(matches) != 1 or not re.fullmatch(r'sha256:[0-9a-f]{64}', matches[0]['digest']):
+        raise ValueError('index must have exactly one supported linux/amd64 image')
+    return matches[0]
 
 
 def verify_local_identity(metadata, manifest_digest, config_digest, reference):
@@ -70,11 +87,21 @@ def main():
         raise ValueError('invalid manifest digest')
     reference = task.container_image.rsplit(':', 1)[0] + '@' + digest
     raw = subprocess.check_output(['docker', 'buildx', 'imagetools', 'inspect', '--raw', reference], timeout=60)
+    content, document = verified_document(raw, descriptor)
+    parent_index_digest = None
+    if 'manifests' in document:
+        parent_index_digest = digest
+        (args.output / 'index.json').write_bytes(content)
+        descriptor = select_linux_amd64(document)
+        digest = descriptor['digest']
+        reference = task.container_image.rsplit(':', 1)[0] + '@' + digest
+        raw = subprocess.check_output(['docker', 'buildx', 'imagetools', 'inspect', '--raw', reference], timeout=60)
     content, manifest = verified_manifest(raw, descriptor)
     (args.output / 'manifest.json').write_bytes(content)
     compressed = sum(layer['size'] for layer in manifest['layers'])
     free = shutil.disk_usage(ROOT.anchor).free
     preflight = dict(task_id=task.instance_id, base_commit=task.base_commit,
+                     parent_index_digest=parent_index_digest,
                      public_tag=task.container_image, manifest_digest=digest,
                      config_digest=manifest['config']['digest'], compressed_layer_bytes=compressed,
                      layers=len(manifest['layers']), host_free_bytes=free,
