@@ -1,0 +1,62 @@
+{
+  "condition": "NodeBB live-network unchanged-base full public suite diagnostic",
+  "base_commit": "61d17c95e573f91ab5c65d25218451e9afd07d77",
+  "image_id": "sha256:cc8c9217344bf50df0a4276abad046538bb20e5c2f2815a1b2e201871c5cf364",
+  "execution_phase": "trusted-baseline",
+  "docker_network": "bridge",
+  "hostname_allowlist": false,
+  "npm_offline": false,
+  "CI": true,
+  "registry_snapshot_service": false,
+  "status": "fail",
+  "exit_code": 1,
+  "elapsed_including_runner_preparation_seconds": 333.41195490000246,
+  "mocha_duration_ms": 173327,
+  "counts": {"passed": 3321, "failed": 1, "skipped": 0},
+  "completion": {
+    "complete": false,
+    "planned_tests": 7986,
+    "ended_tests": 3322,
+    "unrun_tests": 4664,
+    "initial_planned_tests": 2011,
+    "dynamically_added": 5975,
+    "report_matches": true,
+    "counts_match": true,
+    "hook_failures": []
+  },
+  "failure": {
+    "test": "Plugins install/activate/uninstall should install a plugin [occurrence 1]",
+    "source": "test/plugins.js:237",
+    "command": "npm install nodebb-plugin-imgur@1.0.16 --save",
+    "npm_error": "EROFS",
+    "syscall": "rename",
+    "path": "/tmp/work/node_modules/.bin/acorn",
+    "destination": "/tmp/work/node_modules/.bin/.acorn-qIwtCDMs",
+    "reason": "The setup links .bin to /app/node_modules/.bin on the read-only image; npm attempts to reconcile executables during installation."
+  },
+  "limits": {
+    "cpus": 1,
+    "memory_mb": 4096,
+    "scratch_mb": 4096,
+    "scratch_mode": "tmpfs",
+    "swap_policy": "disabled",
+    "pids_limit": 2048,
+    "command_timeout_seconds": 1800
+  },
+  "artifact_directory": "../output/swe-bench-pro-v2-readiness/2026-10-14-nodebb-network-full/executions/agentless-ml-e3111b00d4f142ce95c52f0e1f6a6c31",
+  "artifact_sha256": {
+    "completion-audit.json": "335c3be002721b6a396e06056bb526d990a83b0cc0e8e7d2f4b83e1cf8c91069",
+    "execution.json": "d74a13bba7af461794973ad940351879acaf3c8deb422a21180f11ede9582e34",
+    "mocha-completion.json": "607a6fd15a735f2504c1479a33d5d1e9756e477fe211c367384fd7e97debbbc8",
+    "mocha-individual.json": "b54bb7ddad4435b113f1276064b9e544641c8ea2f29ee65577142f457ecae366",
+    "mocha-raw.json": "954dcecd96b7db44a284e76e2d70d1608b19587dce741d040b32e35f65dd4a8f",
+    "stdout.log": "5c97649c4bc446cee65821cd4c9244d3ea923ace007616dd9fd7bd5e30569d87",
+    "stderr.log": "24ab43c852024c06704d124d5788b76026a2a3d06f555c98c3384d28f248cd31"
+  },
+  "full_suite_ready": false,
+  "candidate_selection_eligible": false,
+  "verifier_run": false,
+  "model_calls": 0,
+  "cache_supplement_built": false,
+  "retry_started": false
+}

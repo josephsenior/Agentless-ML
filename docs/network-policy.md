@@ -69,6 +69,30 @@ The probe ran no tests, verifier, dependency installs or model calls. There was
 no cache image build or full-suite retry. The focused policy/NodeBB checks
 passed (66 tests; eight optional Docker integration cases skipped).
 
-Next is a connected unchanged-base public suite diagnostic using the original
-image. Its result may identify ordinary setup issues; it cannot on its own
-establish readiness for offline candidate selection.
+## Connected full public suite result
+
+The requested full suite ran once on the unpatched base with the original
+image, live registries, `CI=true` and npm offline mode disabled. It reached
+**3,321 passes and one failure**. The run took 333.41 seconds including runner
+preparation; Mocha itself took 173.33 seconds. The same limits and public bail
+setting remained in place. No snapshot service or cache supplement was used.
+
+The missing-cache error is gone. The same plugin-install test now fails with
+`EROFS`: npm tries to rename `/tmp/work/node_modules/.bin/acorn`. Our setup
+links `.bin`, like the other dependencies, into the read-only image at
+`/app/node_modules`. Networking does not make that dependency layout writable.
+This is another harness setup issue, not evidence that the repository repair
+or Imgur plugin is faulty.
+
+The completion audit accounts for 7,986 registered tests and 3,322 ended tests;
+4,664 did not run after bail. Individual and raw reports agree, with no hook
+failures. The baseline remains incomplete, and it is not eligible for offline
+candidate selection. See the [full-run evidence](../experiments/swe_bench_pro/v2_js_nodebb_upload_path/network-full-public-2026-10-14.json)
+for the exact failure and report hashes. Normal container/workspace cleanup
+completed. No retry, verifier, image build or model call followed.
+
+Next: assess a writable dependency layout inside the disposable workspace,
+starting with `.bin`, while keeping the image root read-only and resource
+limits unchanged. Review whether npm also needs to modify linked package
+directories before attempting another full suite. This is not cache-supplement
+work and does not call for editing public tests.
