@@ -103,7 +103,37 @@ checks passed. See the [lifecycle evidence](../experiments/swe_bench_pro/v2_js_n
 for source hashes, all outcomes and report digests. Normal container/workspace
 cleanup completed.
 
-Next: run the unchanged complete public schedule with this private dependency
-layout and normal networking, without the group filter. No full-suite retry
-has started. NodeBB's full baseline remains unready until complete reporting is
-verified; the previous full attempt remains 3,321 passes and one failure.
+## Full public schedule with the private copy
+
+The complete unchanged schedule was then requested with this same layout and
+networking, removing only the group filter. A focused command test verifies
+that exact difference. No public tests, limits, image or lifecycle-script
+settings changed. Sixteen wrapper/reporting checks passed.
+
+The first attempt failed during source extraction, before setup or tests,
+with the existing 30-second Docker preparation timeout. Windows recorded a
+sleep/resume event during that attempt, and total elapsed time was 2,266.81
+seconds. Its artifacts remain separate. One fresh attempt used the identical
+configuration; no power settings or timeout limits were changed.
+
+The fresh run reached **4,508 passes and one failure** in 485.88 seconds including
+runner preparation (270.52 seconds in Mocha). All five plugin lifecycle cases
+passed inside the full run. The new failure is the unchanged ActivityPub
+assertion at `test/activitypub/actors.js:59`: the remote actor's stored public
+URL is `null`, rather than the fixture's expected URL. That fixture seeds the
+ActivityPub cache with a randomly generated actor ID. The report labels this
+test's file as `test/utils.js`; its assertion stack gives the source above.
+Both values and locations are retained in the evidence, not silently rewritten.
+
+The completion audit recorded 8,092 registered tests and 4,509 ended tests;
+3,583 remained unrun because the public bail setting stopped on the failure.
+Individual and raw reports agree, with no hook failures. The registered count
+differs from the previous stopped run because additional tests register during
+execution; neither count establishes complete coverage. See the
+[full-run evidence](../experiments/swe_bench_pro/v2_js_nodebb_upload_path/writable-full-public-2026-10-14.json)
+for both attempts and final report hashes. Container/workspace cleanup completed.
+
+NodeBB still has no complete usable public baseline. Next: inspect the new
+ActivityPub assertion to distinguish a base-revision failure, test-state
+interaction or setup issue before another retry. No fix, further run, verifier
+or model call followed this result.

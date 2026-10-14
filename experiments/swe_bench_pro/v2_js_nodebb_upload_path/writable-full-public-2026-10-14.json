@@ -1,0 +1,72 @@
+{
+  "condition": "NodeBB writable-dependency live-network full public suite diagnostic",
+  "base_commit": "61d17c95e573f91ab5c65d25218451e9afd07d77",
+  "image_id": "sha256:cc8c9217344bf50df0a4276abad046538bb20e5c2f2815a1b2e201871c5cf364",
+  "execution_phase": "trusted-baseline",
+  "network_mode": "bridge",
+  "dependency_layout": "Private full copy, cp -a --no-preserve=ownership, at /tmp/work/node_modules",
+  "group_filter": false,
+  "status": "fail",
+  "exit_code": 1,
+  "elapsed_including_runner_preparation_seconds": 485.87874550000197,
+  "mocha_duration_ms": 270519,
+  "counts": {"passed": 4508, "failed": 1, "skipped": 0},
+  "plugin_lifecycle_all_five_passed": true,
+  "completion": {
+    "complete": false,
+    "planned_tests": 8092,
+    "ended_tests": 4509,
+    "unrun_tests": 3583,
+    "initial_planned_tests": 2011,
+    "dynamically_added": 6081,
+    "report_matches": true,
+    "counts_match": true,
+    "hook_failures": []
+  },
+  "failure": {
+    "title": "Actor asserton happy path should save the actor's publicly accessible URL in the hash as well [occurrence 1]",
+    "reported_file": "/tmp/work/test/utils.js",
+    "assertion_source": "test/activitypub/actors.js:59",
+    "actual": null,
+    "expected": "https://example.org/user/c04c510d",
+    "expected_value_note": "The unchanged public fixture generates this actor ID randomly and seeds the ActivityPub cache."
+  },
+  "limits": {
+    "memory_mb": 4096,
+    "cpus": 1,
+    "pids_limit": 2048,
+    "scratch_mode": "tmpfs",
+    "scratch_mb": 4096,
+    "swap_policy": "disabled",
+    "command_timeout_seconds": 1800,
+    "read_only_root": true,
+    "cap_drop": "ALL",
+    "no_new_privileges": true
+  },
+  "artifact_directory": "../output/swe-bench-pro-v2-readiness/2026-10-14-nodebb-writable-full-v2/executions/agentless-ml-ae1ae1202aa14c3c9ddf48d7d407e960",
+  "artifact_sha256": {
+    "completion-audit.json": "2ef7f9eede1a582f82536f42e13917fcc705ee1a7a64d193e8cc999c3faf5eea",
+    "execution.json": "04a3127f432f048f534bbb16e08c8c56948ae09a28e1f9231ee6875649799a7c",
+    "mocha-completion.json": "3e800953bb9ffff4bdae61463f7bea05f61eca9b5fd0b86d29010dbc53c93eb6",
+    "mocha-individual.json": "128fbe7551289bc7c9f1a3c97aa0631cc2d9968d2a0cef57396b3042d2b393a2",
+    "mocha-raw.json": "a5d7baa23f294940d8a335b548023e6cd0687718df7f2496ab49cdd7af39f863",
+    "stdout.log": "fd3dd842cfbf4935f6c11b667e0783ab08fc64a94fecaf58b66a5a8b7b49d00d",
+    "stderr.log": "5a20d54f2665a24de4c2baf89653cc82f44d12d64cb0070e3eadc304289dbac0"
+  },
+  "earlier_pre_test_attempt": {
+    "artifact_directory": "../output/swe-bench-pro-v2-readiness/2026-10-14-nodebb-writable-full/executions/agentless-ml-d1fc1fe5e0264ce69b000fc9b72df651",
+    "status": "harness_error",
+    "reason": "Source extraction via docker exec timed out after the existing 30-second preparation limit.",
+    "elapsed_seconds": 2266.8114878999986,
+    "windows_sleep_event_local": "2026-10-14T17:38:53+02:00",
+    "windows_resume_event_local": "2026-10-14T17:38:54+02:00",
+    "tests_started": false,
+    "limits_changed_for_fresh_attempt": false
+  },
+  "full_suite_ready": false,
+  "candidate_selection_eligible": false,
+  "verifier_run": false,
+  "model_calls": 0,
+  "cache_supplement_built": false,
+  "further_retry_started": false
+}

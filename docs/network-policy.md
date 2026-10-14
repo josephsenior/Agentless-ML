@@ -96,6 +96,9 @@ that a complete private dependency copy fits the same CPU/memory/scratch ceiling
 and supports both executable and package-directory writes without altering the
 image. This is a copy-only diagnostic, not a successful npm transaction or a
 full-suite retry. The subsequent [public lifecycle diagnostic](nodebb-writable-dependencies.md#public-lifecycle-result)
-passed all five unchanged cases with that copy and normal networking. Next is
-the unchanged full schedule using the same layout, without the group filter.
-No full-suite retry has started and agent-side candidate checks remain offline.
+passed all five unchanged cases with that copy and normal networking. The
+subsequent full run reached 4,508 passes and one ActivityPub URL assertion
+failure; 3,583 registered tests remained unrun after bail. The previous npm
+blocker is cleared, but full-baseline readiness is still false. See the
+[latest full-run result](nodebb-writable-dependencies.md#full-public-schedule-with-the-private-copy).
+No further retry has started and agent-side candidate checks remain offline.

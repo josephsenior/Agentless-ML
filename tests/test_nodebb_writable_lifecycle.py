@@ -30,3 +30,12 @@ def test_group_requires_exact_five_passing_cases_and_clean_run_end(module):
     assert not module.assess_group({'passes': entries[:-1], 'pending': entries[-1:]}, audit)['passed']
     assert not module.assess_group({'passes': entries}, {**audit, 'aborted': True})['passed']
     assert not module.assess_group({'passes': entries}, {**audit, 'hook_failures': ['error']})['passed']
+
+
+def test_full_suite_removes_only_the_group_filter(module):
+    selected = module.lifecycle_command()
+    full = module.lifecycle_command(full_suite=True)
+    assert full.argv[2] == selected.argv[2].replace(
+        " test/plugins.js --grep '^Plugins install/activate/uninstall '", '')
+    assert full.report == selected.report
+    assert full.timeout_seconds == selected.timeout_seconds == 1800

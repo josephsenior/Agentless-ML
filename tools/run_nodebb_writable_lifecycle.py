@@ -1,5 +1,6 @@
-"""Run only NodeBB's unchanged public plugin lifecycle group with private deps."""
+"""Run NodeBB's public lifecycle group or full suite with private dependencies."""
 import argparse
+from collections import Counter
 from dataclasses import asdict, replace
 import hashlib
 import json
@@ -21,16 +22,19 @@ COPY = ('test ! -e /tmp/work/node_modules; '
         'cp -a --no-preserve=ownership /app/node_modules /tmp/work/node_modules; ')
 
 
-def lifecycle_command():
+def lifecycle_command(*, full_suite=False):
     # Use the helper's unchanged default interface; do not overwrite local edits.
     command = public_command(1800)
     script = command.argv[2]
-    changes = (
+    changes = [
         (_NODE_MODULES, COPY),
         ('npm_config_offline=true', 'npm_config_offline=false'),
-        ('output=/tmp/nodebb-report.json; rc=$?',
-         "output=/tmp/nodebb-report.json test/plugins.js --grep '^Plugins install/activate/uninstall '; rc=$?"),
-    )
+    ]
+    if not full_suite:
+        changes.append(
+            ('output=/tmp/nodebb-report.json; rc=$?',
+             "output=/tmp/nodebb-report.json test/plugins.js --grep '^Plugins install/activate/uninstall '; rc=$?")
+        )
     for before, after in changes:
         if script.count(before) != 1:
             raise ValueError('public setup boundary changed; review lifecycle wrapper')
@@ -56,6 +60,7 @@ def assess_group(report, audit):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--full-suite', action='store_true')
     args = parser.parse_args()
     spec = json.loads(SPEC.read_bytes())
     repository = ROOT.parent / 'benchmarks/swe-bench-pro-v2/repos' / spec['instance_id']
@@ -69,21 +74,31 @@ def main():
                                     network_mode='bridge')
     with LocalGitWorkspaceProvider(repository, spec['base_commit'],
                                    Path(tempfile.gettempdir()) / 'agentless-v2-survey-workspaces').create() as workspace:
-        execution = runner.run(workspace.path, lifecycle_command())
+        execution = runner.run(workspace.path, lifecycle_command(full_suite=args.full_suite))
         provenance = asdict(workspace.provenance)
     directory = Path(execution.artifact_directory)
     report = json.loads((directory / 'mocha-individual.json').read_bytes()) if (directory / 'mocha-individual.json').exists() else {}
     audit = json.loads((directory / 'mocha-completion.json').read_bytes()) if (directory / 'mocha-completion.json').exists() else {}
-    group = assess_group(report, audit)
-    evidence = dict(condition='NodeBB writable-dependency public lifecycle diagnostic',
+    group_report = {field: [entry for entry in report.get(field, [])
+                            if entry.get('rawFullTitle') in EXPECTED]
+                    for field in ('passes', 'failures', 'pending')}
+    group = assess_group(group_report if args.full_suite else report, audit)
+    counts = dict(Counter(case.status.value for case in execution.result.test_cases))
+    full_ready = bool(args.full_suite and runner.completion_audit['complete']
+                      and execution.result.status.value == 'pass' and group['passed'])
+    evidence = dict(condition='NodeBB writable-dependency public ' + ('full-suite' if args.full_suite else 'lifecycle') + ' diagnostic',
                     task_id=spec['instance_id'], base_commit=spec['base_commit'],
                     image_id=runner.image_id, workspace=provenance, execution=asdict(execution),
                     public_source_sha256=hashes, group=group, full_completion_audit=runner.completion_audit,
-                    full_suite_run=False, full_suite_ready=False, network_mode='bridge',
+                    individual_counts=counts, full_suite_run=args.full_suite,
+                    full_suite_ready=full_ready, network_mode='bridge',
                     candidate_selection_eligible=False, verifier_run=False, model_calls=0)
     (args.output / 'result.json').write_text(json.dumps(evidence, indent=2, default=str) + '\n', encoding='utf-8')
     print(json.dumps(dict(status=execution.result.status.value, group_passed=group['passed'],
-                         outcomes=group['outcomes'], artifacts=str(directory)), indent=2))
+                         full_suite_run=args.full_suite, full_suite_ready=full_ready,
+                         individual_counts=counts, outcomes=group['outcomes'], artifacts=str(directory)), indent=2))
+    if args.full_suite and not full_ready:
+        raise SystemExit('full public suite did not pass with complete reporting')
     if execution.result.status.value != 'pass' or not group['passed']:
         raise SystemExit('public lifecycle diagnostic did not pass all five unchanged cases')
 
