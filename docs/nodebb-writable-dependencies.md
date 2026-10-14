@@ -133,7 +133,9 @@ execution; neither count establishes complete coverage. See the
 [full-run evidence](../experiments/swe_bench_pro/v2_js_nodebb_upload_path/writable-full-public-2026-10-14.json)
 for both attempts and final report hashes. Container/workspace cleanup completed.
 
-NodeBB still has no complete usable public baseline. Next: inspect the new
-ActivityPub assertion to distinguish a base-revision failure, test-state
-interaction or setup issue before another retry. No fix, further run, verifier
-or model call followed this result.
+NodeBB still has no complete usable public baseline. The subsequent
+[read-only assertion investigation](nodebb-activitypub-assertion.md) identifies
+a pinned-base returned-field mismatch: the user reader deletes `url` in favour
+of `remoteUrl`, while the public test requests `url`. No infrastructure fix,
+test edit or retry followed that investigation. Next is a review of a labelled
+no-bail diagnostic that retains the failure and collects the remaining tests.

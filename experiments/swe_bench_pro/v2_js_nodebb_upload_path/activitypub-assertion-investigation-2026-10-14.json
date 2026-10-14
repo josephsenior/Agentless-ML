@@ -1,0 +1,28 @@
+{
+  "condition": "Read-only investigation of existing NodeBB ActivityPub assertion failure",
+  "base_commit": "61d17c95e573f91ab5c65d25218451e9afd07d77",
+  "finding": "Pinned code/test returned-field contract mismatch: modifyUserData renames url to remoteUrl and deletes url; getUserField(actorUri, 'url') therefore returns null.",
+  "classification": "existing base-revision assertion failure, not an identified infrastructure failure",
+  "source_matches_pinned_head": true,
+  "source_sha256": {
+    "src/user/data.js": "8c3277a1b2a00bc925bfc9dc5a8396e5d085c2d5a1abb5205fa9f49ceed582d7",
+    "src/activitypub/actors.js": "c6410e5f4818bef2c93d36592bc26acc405169af23c317e192d0029406783479",
+    "src/activitypub/mocks.js": "12aa9ddf81460679b02feaf6c9ba7866629d72b9dd288c0bcd57be0ae1cc2405",
+    "test/activitypub/actors.js": "4bd52997e01d2e059d776dcd361b0727668589f0229163a4ed63cad35dfbb2a4"
+  },
+  "existing_report_preceding_passes": [
+    "Actor asserton happy path should return true if successfully asserted",
+    "Actor asserton happy path should contain a representation of that remote user in the database"
+  ],
+  "failing_assertion_source": "test/activitypub/actors.js:59",
+  "field_rename_source": "src/user/data.js:240",
+  "field_delete_source": "src/user/data.js:241",
+  "missing_field_fallback_source": "src/user/data.js:164",
+  "new_runtime_replay": false,
+  "raw_database_value_newly_observed": false,
+  "source_modified": false,
+  "public_test_modified": false,
+  "retry_started": false,
+  "readiness_changed": false,
+  "next_step_for_review": "Separately labelled no-bail diagnostic retaining this baseline failure and collecting remaining public tests."
+}
