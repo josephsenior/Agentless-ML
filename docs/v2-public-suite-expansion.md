@@ -155,8 +155,10 @@ reviewed public responses and specifies a local service contract. They are
 consistent current snapshots, not historical task data. The
 [labelled service replay](nodebb-registry-service.md) then verified exact
 delivery and passed all seven admin plugins page cases within a complete
-2,496-case public API-file run. The unchanged full suite still needs a separate
-attempt in this supplemented setup.
+2,496-case public API-file run. A subsequent full public attempt restored the
+required `CI=true` setting, passed 3,321 cases and stopped at the Imgur plugin's
+missing offline npm installation data. The full completion audit remains
+incomplete; see the [full-suite attempts](nodebb-registry-service.md#full-public-suite-attempts).
 
 Other Vuls or NodeBB tasks still require their own base/image checks; success
 on one revision does not provision every task in that repository automatically.

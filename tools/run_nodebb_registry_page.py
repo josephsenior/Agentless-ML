@@ -1,4 +1,4 @@
-"""Verify the labelled service, then replay the unchanged public API test file."""
+"""Verify the labelled service, then replay the public API file or full suite."""
 import argparse
 from collections import Counter
 from dataclasses import asdict, replace
@@ -40,13 +40,15 @@ class RegistryRunner(NodeBBPublicSuiteRunner):
         return result
 
 
-def page_command():
+def page_command(*, full_suite=False):
     command = public_command(1800)
-    script = command.argv[2]
+    # The public CI job uses local HTTP; ActivityPub permits it only in CI.
+    script = 'export CI=true; ' + command.argv[2]
     needle = 'output=/tmp/nodebb-report.json; rc=$?'
     if script.count(needle) != 1:
         raise ValueError('public command changed; review API shard wrapper')
-    script = script.replace(needle, 'output=/tmp/nodebb-report.json test/api.js; rc=$?')
+    if not full_suite:
+        script = script.replace(needle, 'output=/tmp/nodebb-report.json test/api.js; rc=$?')
     configure = (
         "const fs=require('fs');const c=JSON.parse(fs.readFileSync('config.json','utf8'));"
         "c.registry='http://127.0.0.1:8766';fs.writeFileSync('config.json',JSON.stringify(c));"
@@ -72,7 +74,10 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--verify-only', action='store_true')
+    parser.add_argument('--full-suite', action='store_true')
     args = parser.parse_args()
+    if args.verify_only and args.full_suite:
+        parser.error('--verify-only and --full-suite are separate modes')
     args.output.mkdir(parents=True, exist_ok=False)
     build = json.loads(BUILD.read_bytes())
     runner = RegistryRunner(build['image_id'], args.output / 'executions',
@@ -91,7 +96,7 @@ def main():
         with LocalGitWorkspaceProvider(repository, BASE,
                                        Path(tempfile.gettempdir()) / 'agentless-v2-survey-workspaces').create() as workspace:
             provenance = asdict(workspace.provenance)
-            execution = runner.run(workspace.path, page_command())
+            execution = runner.run(workspace.path, page_command(full_suite=args.full_suite))
     directory = Path(execution.artifact_directory)
     verification = json.loads((directory / 'registry-verification.json').read_bytes()) if (directory / 'registry-verification.json').exists() else None
     page_result = None
@@ -107,13 +112,17 @@ def main():
         page_result = dict(target, cases=selected, passed=len(selected) == len(TITLES)
                            and {row['title'] for row in selected} == set(TITLES)
                            and all(row['status'] == 'passed' for row in selected))
+    counts = dict(Counter(case.status.value for case in execution.result.test_cases))
+    full_ready = bool(args.full_suite and verification and verification.get('verified')
+                      and runner.completion_audit['complete'] and counts.get('passed', 0)
+                      and execution.result.status.value in ('pass', 'fail'))
     evidence = dict(condition=build['condition'], image_id=runner.image_id,
                     parent_image=build['parent_image'], task_id=TASK, base_commit=BASE,
                     verify_only=args.verify_only, execution=asdict(execution), workspace=provenance,
                     public_source_sha256=source_hashes, service_verification=verification,
                     page_result=page_result, completion_audit=runner.completion_audit,
-                    individual_counts=dict(Counter(case.status.value for case in execution.result.test_cases)),
-                    full_suite_ready=False, model_calls=0, verifier_run=False)
+                    individual_counts=counts, full_suite_run=args.full_suite,
+                    full_suite_ready=full_ready, model_calls=0, verifier_run=False)
     (args.output / 'result.json').write_text(json.dumps(evidence, indent=2, default=str) + '\n', encoding='utf-8')
     print(json.dumps({key: value for key, value in evidence.items()
                       if key not in ('execution', 'completion_audit', 'workspace')}, indent=2))
@@ -123,6 +132,8 @@ def main():
         raise SystemExit('service verification failed')
     if not args.verify_only and (not page_result or not page_result['passed']):
         raise SystemExit('requested public page assertions did not all pass')
+    if args.full_suite and not full_ready:
+        raise SystemExit('full public suite has no complete usable baseline')
 
 
 if __name__ == '__main__':

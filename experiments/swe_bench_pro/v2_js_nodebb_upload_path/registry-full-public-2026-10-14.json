@@ -1,0 +1,233 @@
+{
+  "condition": "NodeBB registry snapshot diagnostic, captured 2026-10-14",
+  "date": "2026-10-14",
+  "implementation_parent": "27714b58e3ae50b031f7fb5d3927094abfe92a28",
+  "executed_wrapper_sha256": "ce4e881a72f1e690a8a2700c150f389f5cd40beaa7c6db237815a5e9fc8f7e3c",
+  "task_id": "instance_NodeBB__NodeBB-f9ce92df988db7c1ae55d9ef96d247d27478bc70-vf2cf3cbd463b7ad942381f1c6d077626485a1e9e",
+  "base_commit": "61d17c95e573f91ab5c65d25218451e9afd07d77",
+  "image_id": "sha256:3b4a66b46fa2aa2cc821870fbd9c8a0bd9ec12dae99aaf5449307c7c77ebdf0e",
+  "parent_image": "sha256:cc8c9217344bf50df0a4276abad046538bb20e5c2f2815a1b2e201871c5cf364",
+  "full_suite_run": true,
+  "full_suite_ready": false,
+  "status": "fail",
+  "exit_code": 1,
+  "duration_seconds": 298.74287359999994,
+  "individual_counts": {
+    "passed": 3321,
+    "failed": 1
+  },
+  "completion_audit": {
+    "planned_tests": 7986,
+    "ended_tests": 3322,
+    "dynamically_added": 5975,
+    "hook_failures": [],
+    "complete": false,
+    "report_matches": true,
+    "missing_tests": 4664,
+    "counts_match": true,
+    "initial_planned_tests": 2011
+  },
+  "page_result": {
+    "route": "/api/admin/extend/plugins",
+    "occurrence": 42,
+    "source": "public/openapi/read.yaml",
+    "cases": [
+      {
+        "title": "should have each path parameter defined in its context",
+        "status": "passed"
+      },
+      {
+        "title": "should have examples when parameters are present",
+        "status": "passed"
+      },
+      {
+        "title": "should contain a valid request body (if present) with application/json or multipart/form-data type if POST/PUT/DELETE",
+        "status": "passed"
+      },
+      {
+        "title": "should not error out when called",
+        "status": "passed"
+      },
+      {
+        "title": "response status code should match one of the schema defined responses",
+        "status": "passed"
+      },
+      {
+        "title": "response body should match schema definition",
+        "status": "passed"
+      },
+      {
+        "title": "should successfully re-login if needed",
+        "status": "passed"
+      }
+    ],
+    "passed": true
+  },
+  "previous_activitypub_failure_now_passed": true,
+  "failure": [
+    {
+      "title": "should install a plugin",
+      "fullTitle": "Plugins install/activate/uninstall should install a plugin [occurrence 1]",
+      "file": "/tmp/work/test/plugins.js",
+      "duration": 5937,
+      "currentRetry": 0,
+      "err": {
+        "stack": "AssertionError [ERR_ASSERTION]: ifError got unwanted exception: Command failed: npm install nodebb-plugin-imgur@1.0.16 --save\nnpm error code ENOTCACHED\nnpm error request to https://registry.npmjs.org/nodebb-plugin-imgur failed: cache mode is 'only-if-cached' but no cached response is available.\nnpm error A complete log of this run can be found in: /tmp/npm-cache/_logs/2026-10-14T09_31_21_383Z-debug-0.log\n\n    at /tmp/work/test/plugins.js:237:12\n    at /tmp/work/src/promisify.js:2:2482\n    at __node_internal_ (node:util:289:10)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)\n    at ChildProcess.exithandler (node:child_process:422:12)\n    at ChildProcess.emit (node:events:517:28)\n    at maybeClose (node:internal/child_process:1098:16)\n    at ChildProcess._handle.onexit (node:internal/child_process:303:5)\n    at Process.callbackTrampoline (node:internal/async_hooks:128:17)",
+        "message": "ifError got unwanted exception: Command failed: npm install nodebb-plugin-imgur@1.0.16 --save\nnpm error code ENOTCACHED\nnpm error request to https://registry.npmjs.org/nodebb-plugin-imgur failed: cache mode is 'only-if-cached' but no cached response is available.\nnpm error A complete log of this run can be found in: /tmp/npm-cache/_logs/2026-10-14T09_31_21_383Z-debug-0.log\n",
+        "generatedMessage": false,
+        "name": "AssertionError",
+        "code": "ERR_ASSERTION",
+        "actual": {
+          "code": 1,
+          "killed": false,
+          "signal": null,
+          "cmd": "npm install nodebb-plugin-imgur@1.0.16 --save"
+        },
+        "expected": null,
+        "operator": "ifError",
+        "uncaught": true
+      },
+      "rawFullTitle": "Plugins install/activate/uninstall should install a plugin"
+    }
+  ],
+  "service_verified": true,
+  "application_registry_requests": [
+    {
+      "time": "2026-10-14T09:29:20.753Z",
+      "method": "GET",
+      "url": "/api/v1/plugins?version=4.1.0",
+      "status": 200,
+      "user_agent": "NodeBB/4.x (http://127.0.0.1:4567/forum)",
+      "sha256": "3310d3a52b5a246389a8f27c64fdaef19294638a264a5aa2204c9c6760854a31"
+    },
+    {
+      "time": "2026-10-14T09:29:20.839Z",
+      "method": "GET",
+      "url": "/api/v1/plugins",
+      "status": 200,
+      "user_agent": "NodeBB/4.x (http://127.0.0.1:4567/forum)",
+      "sha256": "fa718847f135735ffb258b47edb3dbd29c7d0b3b7724a6e8256866ee60f3b3bc"
+    },
+    {
+      "time": "2026-10-14T09:29:20.84Z",
+      "method": "GET",
+      "url": "/api/v1/analytics/top/week",
+      "status": 200,
+      "user_agent": "NodeBB/4.x (http://127.0.0.1:4567/forum)",
+      "sha256": "724bfee8581d4b28b620ac5f871e7b1ec0fa7b4f21bcd1087a1e08bdd7f6b3c7"
+    },
+    {
+      "time": "2026-10-14T09:29:56.352Z",
+      "method": "GET",
+      "url": "/api/v1/plugins?version=4.1.0",
+      "status": 200,
+      "user_agent": "NodeBB/4.x (http://127.0.0.1:4567/forum)",
+      "sha256": "3310d3a52b5a246389a8f27c64fdaef19294638a264a5aa2204c9c6760854a31"
+    },
+    {
+      "time": "2026-10-14T09:29:56.352Z",
+      "method": "GET",
+      "url": "/api/v1/plugins",
+      "status": 200,
+      "user_agent": "NodeBB/4.x (http://127.0.0.1:4567/forum)",
+      "sha256": "fa718847f135735ffb258b47edb3dbd29c7d0b3b7724a6e8256866ee60f3b3bc"
+    },
+    {
+      "time": "2026-10-14T09:29:56.353Z",
+      "method": "GET",
+      "url": "/api/v1/analytics/top/week",
+      "status": 200,
+      "user_agent": "NodeBB/4.x (http://127.0.0.1:4567/forum)",
+      "sha256": "724bfee8581d4b28b620ac5f871e7b1ec0fa7b4f21bcd1087a1e08bdd7f6b3c7"
+    },
+    {
+      "time": "2026-10-14T09:30:00.836Z",
+      "method": "GET",
+      "url": "/api/v1/plugins?version=4.1.0",
+      "status": 200,
+      "user_agent": "NodeBB/4.x (http://127.0.0.1:4567/forum)",
+      "sha256": "3310d3a52b5a246389a8f27c64fdaef19294638a264a5aa2204c9c6760854a31"
+    },
+    {
+      "time": "2026-10-14T09:30:00.836Z",
+      "method": "GET",
+      "url": "/api/v1/plugins",
+      "status": 200,
+      "user_agent": "NodeBB/4.x (http://127.0.0.1:4567/forum)",
+      "sha256": "fa718847f135735ffb258b47edb3dbd29c7d0b3b7724a6e8256866ee60f3b3bc"
+    },
+    {
+      "time": "2026-10-14T09:30:00.837Z",
+      "method": "GET",
+      "url": "/api/v1/analytics/top/week",
+      "status": 200,
+      "user_agent": "NodeBB/4.x (http://127.0.0.1:4567/forum)",
+      "sha256": "724bfee8581d4b28b620ac5f871e7b1ec0fa7b4f21bcd1087a1e08bdd7f6b3c7"
+    },
+    {
+      "time": "2026-10-14T09:31:20.988Z",
+      "method": "GET",
+      "url": "/api/v1/plugins/nodebb-plugin-markdown",
+      "status": 200,
+      "user_agent": "NodeBB/4.x (http://127.0.0.1:4567/forum)",
+      "sha256": "12bd2745178920898cbb084f282410744a8a6c120c5bb6a9a212fb7d646397d8"
+    },
+    {
+      "time": "2026-10-14T09:31:21.059Z",
+      "method": "GET",
+      "url": "/api/v1/plugins?version=4.1.0",
+      "status": 200,
+      "user_agent": "NodeBB/4.x (http://127.0.0.1:4567/forum)",
+      "sha256": "3310d3a52b5a246389a8f27c64fdaef19294638a264a5aa2204c9c6760854a31"
+    },
+    {
+      "time": "2026-10-14T09:31:21.173Z",
+      "method": "POST",
+      "url": "/api/v1/plugin/usage",
+      "status": 405,
+      "user_agent": "NodeBB/4.x (http://127.0.0.1:4567/forum)",
+      "sha256": null
+    }
+  ],
+  "public_source_sha256": {
+    "test/api.js": "237dd47528a8512e271b60fb17f4496173dd5080fd391388f8938c8ecb845484",
+    "public/openapi/read.yaml": "0783c9a022331e42a1f6cb0c5f3959e11352dcce06838f9c58b7b0afa91c2027",
+    ".mocharc.yml": "5e170cc2b39f763c43f923bf13b99d91a86a85ae62d9024f133a5689b322b74d"
+  },
+  "reviewed_failure_source_sha256": {
+    "src/activitypub/index.js": "f0aea9a181b36abf4f0fabcce635cd9b53b1220242efa68211f4e044f3813862",
+    "src/activitypub/helpers.js": "02e61b059593847959bbb90736e96233fb5b0f18619552ad74e89cefddbd02be",
+    "test/activitypub.js": "be43f3272521c8907c6c9c79f56884e9df07a7f58eca5db2b8fce8a66fd8f548",
+    "test/plugins.js": "2f8ebbcd419e0eb1a3368646fff585476ba8944d0dbeac57ae262fec563b3759",
+    "src/plugins/install.js": "6855c483227dda9ba9d415fd54e087c107b234ed4f265b673bfbd466e375a27d"
+  },
+  "limits": {
+    "command_timeout_seconds": 1800,
+    "CI": "true",
+    "swap": "disabled",
+    "cpus": 1,
+    "network": "none",
+    "memory_mb": 4096,
+    "host_ports": "none",
+    "bail": "unchanged",
+    "tmpfs_mb": 4096
+  },
+  "artifacts": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\output\\swe-bench-pro-v2-readiness\\2026-10-14-nodebb-registry-full-ci\\executions\\agentless-ml-9084146a90a8425ebb6091f8b8c8d606",
+  "artifact_sha256": {
+    "execution.json": "5b3611debdd94d004c7dac3edf16b5e5813721c8f493b7051e5edf3db80ac5e7",
+    "report.json": "a8fdbeafcbcae04e1d005222ed982bbaa62ddc049d6a7d4429423e88ee5e15ac",
+    "mocha-raw.json": "58c23c0fc1e71f4e55aca8ba629da9ed317ede4eea8b11e2124a1d07d469fc89",
+    "mocha-individual.json": "a8fdbeafcbcae04e1d005222ed982bbaa62ddc049d6a7d4429423e88ee5e15ac",
+    "mocha-completion.json": "607a6fd15a735f2504c1479a33d5d1e9756e477fe211c367384fd7e97debbbc8",
+    "completion-audit.json": "335c3be002721b6a396e06056bb526d990a83b0cc0e8e7d2f4b83e1cf8c91069",
+    "registry-verification.json": "33bbddc09e3297c39830b32d33aaf10e5514c00bdd2e98aa81bc5d2eb3ac1e03",
+    "registry-requests.jsonl": "03b8f9e036ea10fe8a6613f2baf19b04c78c167a17c68f01bb7837f82fb9d8ac",
+    "page-target.json": "4d0453aba341b4cb75d9464c2d6fc6f751c23e9754357e468dfabb18cf44c4a7",
+    "stdout.log": "2ec78e3a9fe6458f56ba5cf5df07d36bcf79938ae232244542d2934df607a120",
+    "stderr.log": "0c871fad06215f8811f94e23812229fdb8d56df1cec808e13dc04b118c81231d"
+  },
+  "result_sha256": "7f3f550db32620beffe7cc3745a20d56b717970f8c8685a0ef84d8e6902d195a",
+  "model_calls": 0,
+  "verifier_run": false,
+  "next_step": "Verify public npm metadata, tarballs and transitive installation requirements for nodebb-plugin-imgur@1.0.16, plus its NodeBB plugin-detail response; assess a separate cache supplement before retrying"
+}

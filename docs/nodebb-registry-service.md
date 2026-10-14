@@ -67,6 +67,39 @@ host logs. Its normal container/workspace cleanup completed, and the earlier
 disposable checkout was removed after its ownership and base were verified.
 Pinned source repositories and reports were preserved.
 
-Next, run the unchanged full public NodeBB schedule in this same labelled
-snapshot setup. The API-file pass does not cover the other test files, and no
-full-suite readiness entry has been registered from it.
+## Full public suite attempts
+
+The wrapper now accepts `--full-suite`. A focused command check verifies that
+this mode removes only the API-file selection from the same registry setup;
+the normal `npm test` file discovery and public bail setting remain active.
+
+The first full attempt passed 2,195 cases, then failed ActivityPub's local-user
+URL resolution. The public setup uses an HTTP URL. At the pinned base,
+`src/activitypub/index.js` allows HTTP only when `process.env.CI === 'true'`;
+the wrapper had omitted that CI setting. Its
+[original evidence](../experiments/swe_bench_pro/v2_js_nodebb_upload_path/registry-full-without-ci-2026-10-14.json)
+is retained. The wrapper now exports `CI=true` for both replay modes, preserving
+the public HTTP configuration and the original image, limits and test source.
+
+The full retry with that setting passed the earlier ActivityPub assertion and
+reached **3,321 passes and one failure** in 298.74 seconds including runner
+preparation. The failure is the public test
+`Plugins install/activate/uninstall should install a plugin`: its normal
+`npm install nodebb-plugin-imgur@1.0.16 --save` returned `ENOTCACHED` because
+the required npm registry metadata was absent from `/tmp/npm-cache` while
+offline. The service still verified its response hashes and all seven admin
+plugins page assertions passed.
+
+The completion audit recorded 7,986 registered tests and 3,322 ended tests;
+4,664 did not run after the failure. Raw and distinct-case reports agree.
+NodeBB therefore remains **not ready** for a complete public baseline. See the
+[full-run evidence](../experiments/swe_bench_pro/v2_js_nodebb_upload_path/registry-full-public-2026-10-14.json)
+for the failure, counts, configuration and artifact hashes. Both attempts
+completed normal container and workspace cleanup.
+
+Next, verify the Imgur plugin's public npm metadata, exact tarball and transitive
+installation requirements before assessing a separate cache supplement. The
+same install path subsequently calls `Plugins.get(id)`, so the public NodeBB
+detail response for `nodebb-plugin-imgur` also needs review. Merely caching the
+top-level tarball does not prove the unchanged `npm install --save` transaction
+can finish. No cache image or further retry has been started.

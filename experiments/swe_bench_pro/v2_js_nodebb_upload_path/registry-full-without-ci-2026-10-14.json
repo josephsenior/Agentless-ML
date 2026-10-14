@@ -1,0 +1,43 @@
+{
+  "condition": "NodeBB registry snapshot diagnostic, captured 2026-10-14",
+  "image_id": "sha256:3b4a66b46fa2aa2cc821870fbd9c8a0bd9ec12dae99aaf5449307c7c77ebdf0e",
+  "base_commit": "61d17c95e573f91ab5c65d25218451e9afd07d77",
+  "status": "fail",
+  "exit_code": 1,
+  "duration_seconds": 208.36773430000017,
+  "counts": {
+    "passed": 2195,
+    "failed": 1
+  },
+  "completion": {
+    "planned": 4506,
+    "ended": 2196,
+    "missing": 2310,
+    "complete": false
+  },
+  "page_passed": true,
+  "failure": [
+    {
+      "title": "should resolve when passed a full URL",
+      "fullTitle": "ActivityPub integration Helpers .resolveLocalId() should resolve when passed a full URL [occurrence 1]",
+      "file": "/tmp/work/test/activitypub.js",
+      "duration": 1,
+      "currentRetry": 0,
+      "err": {
+        "stack": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\nnull !== 19\n\n    at Context.<anonymous> (test/activitypub.js:166:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)",
+        "message": "Expected values to be strictly equal:\n\nnull !== 19\n",
+        "generatedMessage": true,
+        "name": "AssertionError",
+        "code": "ERR_ASSERTION",
+        "actual": null,
+        "expected": 19,
+        "operator": "strictEqual"
+      },
+      "rawFullTitle": "ActivityPub integration Helpers .resolveLocalId() should resolve when passed a full URL"
+    }
+  ],
+  "executed_wrapper_sha256": "f767fc89276f1c50b94e8257bf5530ecb096cd2be7adb8ede05af44830387b4d",
+  "result_sha256": "053302189a1298d256f9b4b32f25e04a4b8485db4936a042e81f75af4e27aab8",
+  "artifacts": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\output\\swe-bench-pro-v2-readiness\\2026-10-14-nodebb-registry-full\\executions\\agentless-ml-33a23e7f0d694f9c87f8ebfdb21bc246",
+  "diagnosis": "CI was absent; src/activitypub/index.js accepts HTTP only when process.env.CI === 'true'. The public test uses the HTTP URL from public CI setup."
+}
