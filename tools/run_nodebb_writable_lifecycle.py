@@ -22,7 +22,9 @@ COPY = ('test ! -e /tmp/work/node_modules; '
         'cp -a --no-preserve=ownership /app/node_modules /tmp/work/node_modules; ')
 
 
-def lifecycle_command(*, full_suite=False):
+def lifecycle_command(*, full_suite=False, no_bail_diagnostic=False):
+    if no_bail_diagnostic and not full_suite:
+        raise ValueError('no-bail diagnostic requires the complete suite')
     # Use the helper's unchanged default interface; do not overwrite local edits.
     command = public_command(1800)
     script = command.argv[2]
@@ -30,6 +32,9 @@ def lifecycle_command(*, full_suite=False):
         (_NODE_MODULES, COPY),
         ('npm_config_offline=true', 'npm_config_offline=false'),
     ]
+    if no_bail_diagnostic:
+        changes.append(('output=/tmp/nodebb-report.json; rc=$?',
+                        'output=/tmp/nodebb-report.json --no-bail; rc=$?'))
     if not full_suite:
         changes.append(
             ('output=/tmp/nodebb-report.json; rc=$?',
@@ -61,7 +66,11 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--full-suite', action='store_true')
+    parser.add_argument('--no-bail-diagnostic', action='store_true',
+                        help='Explicit non-default inventory run; retain every failure')
     args = parser.parse_args()
+    if args.no_bail_diagnostic and not args.full_suite:
+        parser.error('--no-bail-diagnostic requires --full-suite')
     spec = json.loads(SPEC.read_bytes())
     repository = ROOT.parent / 'benchmarks/swe-bench-pro-v2/repos' / spec['instance_id']
     verify_sealed_repository(repository, spec['base_commit'])
@@ -74,7 +83,8 @@ def main():
                                     network_mode='bridge')
     with LocalGitWorkspaceProvider(repository, spec['base_commit'],
                                    Path(tempfile.gettempdir()) / 'agentless-v2-survey-workspaces').create() as workspace:
-        execution = runner.run(workspace.path, lifecycle_command(full_suite=args.full_suite))
+        execution = runner.run(workspace.path, lifecycle_command(full_suite=args.full_suite,
+                                        no_bail_diagnostic=args.no_bail_diagnostic))
         provenance = asdict(workspace.provenance)
     directory = Path(execution.artifact_directory)
     report = json.loads((directory / 'mocha-individual.json').read_bytes()) if (directory / 'mocha-individual.json').exists() else {}
@@ -84,19 +94,35 @@ def main():
                     for field in ('passes', 'failures', 'pending')}
     group = assess_group(group_report if args.full_suite else report, audit)
     counts = dict(Counter(case.status.value for case in execution.result.test_cases))
-    full_ready = bool(args.full_suite and runner.completion_audit['complete']
+    inventory_complete = bool(args.full_suite and runner.completion_audit['complete']
+                              and execution.result.status.value in ('pass', 'fail'))
+    full_ready = bool(not args.no_bail_diagnostic and args.full_suite and runner.completion_audit['complete']
                       and execution.result.status.value == 'pass' and group['passed'])
-    evidence = dict(condition='NodeBB writable-dependency public ' + ('full-suite' if args.full_suite else 'lifecycle') + ' diagnostic',
+    condition = ('explicit no-bail full-suite' if args.no_bail_diagnostic else
+                 'full-suite' if args.full_suite else 'lifecycle')
+    evidence = dict(condition='NodeBB writable-dependency public ' + condition + ' diagnostic',
                     task_id=spec['instance_id'], base_commit=spec['base_commit'],
                     image_id=runner.image_id, workspace=provenance, execution=asdict(execution),
                     public_source_sha256=hashes, group=group, full_completion_audit=runner.completion_audit,
                     individual_counts=counts, full_suite_run=args.full_suite,
                     full_suite_ready=full_ready, network_mode='bridge',
+                    no_bail_diagnostic=args.no_bail_diagnostic,
+                    repository_default_schedule=not args.no_bail_diagnostic,
+                    diagnostic_inventory_complete=inventory_complete,
+                    failures=report.get('failures', []),
                     candidate_selection_eligible=False, verifier_run=False, model_calls=0)
     (args.output / 'result.json').write_text(json.dumps(evidence, indent=2, default=str) + '\n', encoding='utf-8')
     print(json.dumps(dict(status=execution.result.status.value, group_passed=group['passed'],
                          full_suite_run=args.full_suite, full_suite_ready=full_ready,
+                         no_bail_diagnostic=args.no_bail_diagnostic,
+                         diagnostic_inventory_complete=inventory_complete,
                          individual_counts=counts, outcomes=group['outcomes'], artifacts=str(directory)), indent=2))
+    if args.no_bail_diagnostic:
+        if not inventory_complete:
+            raise SystemExit('no-bail diagnostic did not establish complete coverage')
+        if execution.result.status.value != 'pass':
+            raise SystemExit('no-bail diagnostic completed with preserved test failures')
+        return
     if args.full_suite and not full_ready:
         raise SystemExit('full public suite did not pass with complete reporting')
     if execution.result.status.value != 'pass' or not group['passed']:

@@ -39,3 +39,20 @@ def test_full_suite_removes_only_the_group_filter(module):
         " test/plugins.js --grep '^Plugins install/activate/uninstall '", '')
     assert full.report == selected.report
     assert full.timeout_seconds == selected.timeout_seconds == 1800
+
+
+def test_no_bail_is_explicit_and_changes_only_one_runner_option(module):
+    normal = module.lifecycle_command(full_suite=True)
+    diagnostic = module.lifecycle_command(full_suite=True, no_bail_diagnostic=True)
+    assert diagnostic.argv[2] == normal.argv[2].replace(
+        'output=/tmp/nodebb-report.json; rc=$?',
+        'output=/tmp/nodebb-report.json --no-bail; rc=$?')
+    assert diagnostic.report == normal.report
+    assert diagnostic.timeout_seconds == normal.timeout_seconds == 1800
+    assert '|| true' not in diagnostic.argv[2]
+    assert 'exit "$rc"' in diagnostic.argv[2]
+
+
+def test_no_bail_cannot_be_applied_to_selected_group(module):
+    with pytest.raises(ValueError, match='complete suite'):
+        module.lifecycle_command(no_bail_diagnostic=True)

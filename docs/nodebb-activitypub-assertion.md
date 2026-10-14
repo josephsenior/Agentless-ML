@@ -62,3 +62,8 @@ schedule or silently registered as an official result. Any eventual regression
 selection plan needs a declared complete baseline and matching candidate
 conditions; network-enabled diagnostic results remain separate from offline
 agent-side selection. NodeBB's current full-baseline readiness stays false.
+
+The subsequent [explicit no-bail diagnostic](nodebb-no-bail-diagnostic.md)
+completed all 8,092 cases, preserving this assertion failure and exposing two
+additional failures. It provides a complete diagnostic inventory, not a
+passing repository-default run.

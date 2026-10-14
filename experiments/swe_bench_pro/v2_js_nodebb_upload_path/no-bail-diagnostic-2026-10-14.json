@@ -1,0 +1,71 @@
+{
+  "condition": "Explicit NodeBB no-bail public inventory diagnostic",
+  "base_commit": "61d17c95e573f91ab5c65d25218451e9afd07d77",
+  "image_id": "sha256:cc8c9217344bf50df0a4276abad046538bb20e5c2f2815a1b2e201871c5cf364",
+  "execution_phase": "trusted-baseline",
+  "network_mode": "bridge",
+  "dependency_layout": "Full private writable copy under /tmp/work/node_modules",
+  "override": "--no-bail",
+  "repository_default_schedule": false,
+  "public_tests_modified": false,
+  "status": "fail",
+  "exit_code": 3,
+  "elapsed_including_runner_preparation_seconds": 462.02962899999693,
+  "mocha_duration_ms": 262675,
+  "counts": {"passed": 8089, "failed": 3, "skipped": 0},
+  "completion": {
+    "complete": true,
+    "planned_tests": 8092,
+    "ended_tests": 8092,
+    "initial_planned_tests": 2011,
+    "dynamically_added": 6081,
+    "missing_tests": [],
+    "unexpected_tests": [],
+    "hook_failures": [],
+    "report_matches": true,
+    "counts_match": true,
+    "run_ended": true,
+    "aborted": false
+  },
+  "failures": [
+    {
+      "title": "Actor asserton happy path should save the actor's publicly accessible URL in the hash as well",
+      "assertion_source": "test/activitypub/actors.js:59",
+      "actual": null,
+      "expected": "https://example.org/user/aaa931e0",
+      "original_failure_preserved": true
+    },
+    {
+      "title": "Controllers Category Actor endpoint should return a valid ActivityPub Actor JSON-LD payload",
+      "assertion_source": "test/activitypub/actors.js:169",
+      "actual": "10ae61d3-496d-489c-b4db-7cbab35f8e1e<hr /><p dir=\"auto\">This is a forum category containing topical discussion. You can start new discussions by mentioning this category.</p>\n",
+      "expected": "10ae61d3-496d-489c-b4db-7cbab35f8e1e",
+      "cause_reviewed": false
+    },
+    {
+      "title": "\"az\" file structure translations should contain every language file contained in the source language directory",
+      "assertion_source": "test/i18n.js:118",
+      "message": "_DO_NOT_EDIT_FILES_HERE.md was found in source files but was not found in language \"az\" (likely not internationalized)",
+      "cause_reviewed": false
+    }
+  ],
+  "reported_file_for_all_three": "/tmp/work/test/utils.js",
+  "limits": {"memory_mb":4096,"cpus":1,"pids_limit":2048,"scratch_mb":4096,"scratch_mode":"tmpfs","swap_policy":"disabled","command_timeout_seconds":1800,"read_only_root":true,"cap_drop":"ALL","no_new_privileges":true},
+  "artifact_directory": "../output/swe-bench-pro-v2-readiness/2026-10-14-nodebb-no-bail/executions/agentless-ml-571aef4355c84995a3e6f2f982376e50",
+  "artifact_sha256": {
+    "completion-audit.json": "6ed049e679eb00dc354075d718509d180a3d0c485c83bdacf4c7d4a944643ace",
+    "execution.json": "63c560cb6cf5b3af14562c7a6ea38a11f8eb98339fd9bab8c83b8338e9539f6c",
+    "mocha-completion.json": "9bcd67a19b76e640cff91f934bafadbf748bc5d93b7812c9f83d7c60af7b4b3b",
+    "mocha-individual.json": "eae8286c76acbe9da41651e87ab26d8044788961af6db32f7774a531e03b77ac",
+    "mocha-raw.json": "6b5e45a17a3f5440d596678f154865e754038edcefae1b484d3e174c78185025",
+    "stdout.log": "7f060ee7b720df82c9f52345bea4d42fa85c52a20dd44da513a88be817addf06",
+    "stderr.log": "a34ef7ba7abf93945dd56ee5c6e6dd612db3d09c1fa918a07ec6b3a97b98c1d3"
+  },
+  "diagnostic_inventory_complete": true,
+  "full_suite_ready": false,
+  "official_result": false,
+  "candidate_selection_eligible": false,
+  "verifier_run": false,
+  "model_calls": 0,
+  "further_retry_started": false
+}
