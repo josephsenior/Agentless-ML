@@ -1,0 +1,41 @@
+{
+  "condition": "Element Web selected public sets utility smoke",
+  "image_id": "sha256:019f091af3b25701ad36458202da68a1ffeeba294b06768d3e1fee45c01e044e",
+  "base_commit": "4f32727829c1087e9d3d9955785d8a6255457c7d",
+  "selected_file": "test/unit-tests/utils/sets-test.ts",
+  "command": "yarn test --runInBand --runTestsByPath test/unit-tests/utils/sets-test.ts --json --outputFile=/tmp/element-jest.json --cacheDirectory=/tmp/element-jest-cache",
+  "status": "pass",
+  "exit_code": 0,
+  "elapsed_including_preparation_seconds": 62.40954619999684,
+  "counts": {"passed": 5, "failed": 0, "skipped": 0, "suites": 1, "runtime_error_suites": 0},
+  "individual_report_verified": true,
+  "passed_tests": [
+    "sets setHasDiff should flag true on A length > B length",
+    "sets setHasDiff should flag true on A length < B length",
+    "sets setHasDiff should flag true on element differences",
+    "sets setHasDiff should flag false if same but order different",
+    "sets setHasDiff should flag false if same"
+  ],
+  "public_source_sha256": {
+    "package.json": "4abbd42945efab1ef44b43b7f9295b1f3c094ab13a3e94b9242a05cd1625d6a0",
+    "jest.config.ts": "bfa80429929608a97a08203941e086665abe68c478298413ec753b931c9d7c41",
+    "test/globalSetup.ts": "c5796b602b974b8bd6251ef4998064c615b22df851b05791043ea427446a1014",
+    "test/setupTests.ts": "02a8175b4bb47f53bd19ce16ac6dd1727e86fb2e521aa42173873bc14cd3f95a",
+    "test/unit-tests/utils/sets-test.ts": "e76808c1f496bf52a21626e90ef3fe5e6270055109e13fc81418e15f0ae1326f",
+    "src/utils/sets.ts": "4576c936af78b029a8acd549461e0b3a0f4fee549d9fcf05bec216e3c5d29570"
+  },
+  "limits": {"cpus":1,"memory_mb":4096,"scratch_mb":4096,"pids_limit":2048,"command_timeout_seconds":180,"network":"none","read_only_root":true,"cap_drop":"ALL","no_new_privileges":true},
+  "artifact_directory": "../output/swe-bench-pro-v2-readiness/2026-10-15-element-sets-smoke/executions/agentless-ml-8c3a6417dcd940a0b2f558bb726a447d",
+  "artifact_sha256": {
+    "execution.json": "de6b03c7bf8f99f45436079963df48d931896e326f43d01bbfb24e8103b8078b",
+    "jest-native.json": "044b96ac439411def355804fefa1e77542b5f576a4671cf42d5d638073f29fc5",
+    "stdout.log": "9fe86086039ee5047c90a8a8bd06fc97c45a12dde47e08d19a7f464f3c7d7b2f",
+    "stderr.log": "9b3c67b9fa2396edacf84841daf1401d03a5c2fd4ba55f46fd7b8112c450b154"
+  },
+  "smoke_checked": true,
+  "full_suite_ready": false,
+  "tests_modified": false,
+  "dependencies_installed": false,
+  "model_calls": 0,
+  "verifier_run": false
+}

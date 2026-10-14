@@ -140,3 +140,39 @@ rewritten. NodeBB remains parked.
 Next: read Element Web's pinned public configuration and select one bounded
 public check. That will test whether actual dependency/setup work is needed,
 without immediately committing to its full test suite.
+
+## Element Web public smoke result
+
+The selected `test/unit-tests/utils/sets-test.ts` file passed all **five public
+assertions** on 15 October 2026. `yarn test` uses the repository's Jest command;
+the wrapper selects that one file, uses `--runInBand`, and saves native Jest
+JSON and cache under `/tmp`. The original Jest configuration, jsdom environment,
+global setup and after-environment hooks are preserved. No test source, setup
+hook or configuration was replaced.
+
+`tools/run_element_sets_smoke.py` verifies image HEAD, extracts committed base
+source into `/tmp/work` without Git history, and links the existing image's
+dependencies. Source-relative imports therefore use the extracted source,
+not `/app/src`. The image stays read-only; the container has one CPU, 4 GiB
+memory/scratch, 2,048 PIDs, disabled swap, no network and a 180-second command
+cap. No install or package-bootstrap command ran. A read-only dependency link
+was sufficient for this test invocation; that does not prove installs would
+work against it.
+
+The command exited 0 in 62.41 seconds including preparation. Native Jest JSON
+shows one suite, exactly the five expected full test names, all passing,
+with no pending tests or runtime-error suites. The diagnostic checks that
+report independently rather than trusting an exit-only result. Native JSON
+is retained as diagnostic evidence, not registered as a new framework-wide
+reporting adapter. Two focused wrapper/report checks passed, and the disposable
+container was removed.
+
+See the [smoke evidence](../experiments/swe_bench_pro/v2_element_sets_smoke_2026-10-15.json)
+for all five outcomes, source hashes, report digests and limits. This upgrades
+the engineering observation from workspace-only to a successful selected
+public smoke, not full-suite or task-correctness readiness. No official verifier
+or model call ran; NodeBB remains parked.
+
+Next: provision the selected Ansible image and reuse the same cheap workspace
+probe. Element Web does not need more manual debugging based on this smoke;
+expand repository coverage before considering broader tests here.
