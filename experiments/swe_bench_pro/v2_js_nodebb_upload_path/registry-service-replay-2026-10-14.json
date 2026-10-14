@@ -1,0 +1,206 @@
+{
+  "condition": "NodeBB registry snapshot diagnostic, captured 2026-10-14",
+  "date": "2026-10-14",
+  "implementation_parent": "9a5934a8577ed7dc229868f87134a0d54b8c2084",
+  "implementation_sha256": {
+    "tools/build_nodebb_registry_image.py": "0530b015aba6cd7599f06c4a172936b831c6b4f70116497d752a8ef51d6a7ffb",
+    "tools/nodebb_registry_service.cjs": "e1bb6a6b459bf2a3340eaa35f30c8db8c300c14a71940019633ea7235c412308",
+    "tools/verify_nodebb_registry_service.cjs": "b286d9b11b26932b092ba559328cc0320b5b0fbcd155e00542e7e8be1878c27e",
+    "tools/run_nodebb_registry_page.py": "7c1b29e1cf5ebda1227aaae30429f10a583942fbcfcde39ab37271dcfb2e3eae"
+  },
+  "build": {
+    "condition": "NodeBB registry snapshot diagnostic, captured 2026-10-14",
+    "image_id": "sha256:3b4a66b46fa2aa2cc821870fbd9c8a0bd9ec12dae99aaf5449307c7c77ebdf0e",
+    "tag": "agentless-ml/nodebb-registry-snapshot:2026-10-14",
+    "parent_image": "sha256:cc8c9217344bf50df0a4276abad046538bb20e5c2f2815a1b2e201871c5cf364",
+    "parent_ref": "ghcr.io/scaleapi/swe-bench_pro-v2@sha256:cc8c9217344bf50df0a4276abad046538bb20e5c2f2815a1b2e201871c5cf364",
+    "manifest_sha256": "d67c89ad1839c57166015cb3d8e7177a86a25517ea63e0a861cca1dd135f6f7c",
+    "copied_files_sha256": {
+      "Dockerfile": "7c2154fceb2eb9265da2090ebda2e7ad1ce9d8167b11c5223a669c07dd8609d4",
+      "nodebb_registry_service.cjs": "e1bb6a6b459bf2a3340eaa35f30c8db8c300c14a71940019633ea7235c412308",
+      "verify_nodebb_registry_service.cjs": "b286d9b11b26932b092ba559328cc0320b5b0fbcd155e00542e7e8be1878c27e"
+    },
+    "service_verified": false,
+    "tests_run": false,
+    "baseline_ready": false
+  },
+  "build_artifacts": "../output/swe-bench-pro-v2-readiness/2026-10-14-nodebb-registry-image-v2",
+  "delivery_verification": {
+    "artifacts": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\output\\swe-bench-pro-v2-readiness\\2026-10-14-nodebb-registry-delivery\\executions\\agentless-ml-e653ad96455749eeab6781330bf0d101",
+    "status": "pass",
+    "verified": true,
+    "result_sha256": "7ef4cf17167607f7f63bcf988d7c9e93447adb39f0e7504fe527cf5d2c797ce1",
+    "checks": [
+      {
+        "endpoint": "/api/v1/plugins?version=4.1.0",
+        "get_sha256": "3310d3a52b5a246389a8f27c64fdaef19294638a264a5aa2204c9c6760854a31",
+        "bytes": 56548,
+        "head_verified": true
+      },
+      {
+        "endpoint": "/api/v1/plugins",
+        "get_sha256": "fa718847f135735ffb258b47edb3dbd29c7d0b3b7724a6e8256866ee60f3b3bc",
+        "bytes": 432396,
+        "head_verified": true
+      },
+      {
+        "endpoint": "/api/v1/analytics/top/week",
+        "get_sha256": "724bfee8581d4b28b620ac5f871e7b1ec0fa7b4f21bcd1087a1e08bdd7f6b3c7",
+        "bytes": 513,
+        "head_verified": true
+      },
+      {
+        "endpoint": "/api/v1/plugins/nodebb-plugin-markdown",
+        "get_sha256": "12bd2745178920898cbb084f282410744a8a6c120c5bb6a9a212fb7d646397d8",
+        "bytes": 2291,
+        "head_verified": true
+      },
+      {
+        "method": "GET",
+        "endpoint": "/unknown",
+        "status": 404
+      },
+      {
+        "method": "GET",
+        "endpoint": "/api/v1/plugins?version=999.0.0",
+        "status": 404
+      },
+      {
+        "method": "GET",
+        "endpoint": "/api/v1/plugins/unknown",
+        "status": 404
+      },
+      {
+        "method": "POST",
+        "endpoint": "/api/v1/plugin/usage",
+        "status": 405
+      }
+    ]
+  },
+  "public_api_replay": {
+    "public_source_sha256": {
+      "test/api.js": "237dd47528a8512e271b60fb17f4496173dd5080fd391388f8938c8ecb845484",
+      "public/openapi/read.yaml": "0783c9a022331e42a1f6cb0c5f3959e11352dcce06838f9c58b7b0afa91c2027",
+      ".mocharc.yml": "5e170cc2b39f763c43f923bf13b99d91a86a85ae62d9024f133a5689b322b74d"
+    },
+    "base_commit": "61d17c95e573f91ab5c65d25218451e9afd07d77",
+    "selected_file": "test/api.js",
+    "duration_seconds": 213.27197640000003,
+    "page_result": {
+      "route": "/api/admin/extend/plugins",
+      "occurrence": 42,
+      "source": "public/openapi/read.yaml",
+      "cases": [
+        {
+          "title": "should have each path parameter defined in its context",
+          "status": "passed"
+        },
+        {
+          "title": "should have examples when parameters are present",
+          "status": "passed"
+        },
+        {
+          "title": "should contain a valid request body (if present) with application/json or multipart/form-data type if POST/PUT/DELETE",
+          "status": "passed"
+        },
+        {
+          "title": "should not error out when called",
+          "status": "passed"
+        },
+        {
+          "title": "response status code should match one of the schema defined responses",
+          "status": "passed"
+        },
+        {
+          "title": "response body should match schema definition",
+          "status": "passed"
+        },
+        {
+          "title": "should successfully re-login if needed",
+          "status": "passed"
+        }
+      ],
+      "passed": true
+    },
+    "application_registry_requests": [
+      {
+        "time": "2026-10-14T09:14:24.787Z",
+        "method": "GET",
+        "url": "/api/v1/plugins?version=4.1.0",
+        "status": 200,
+        "user_agent": "NodeBB/4.x (undefined)",
+        "sha256": "3310d3a52b5a246389a8f27c64fdaef19294638a264a5aa2204c9c6760854a31"
+      },
+      {
+        "time": "2026-10-14T09:14:24.789Z",
+        "method": "GET",
+        "url": "/api/v1/plugins",
+        "status": 200,
+        "user_agent": "NodeBB/4.x (undefined)",
+        "sha256": "fa718847f135735ffb258b47edb3dbd29c7d0b3b7724a6e8256866ee60f3b3bc"
+      },
+      {
+        "time": "2026-10-14T09:14:24.789Z",
+        "method": "GET",
+        "url": "/api/v1/analytics/top/week",
+        "status": 200,
+        "user_agent": "NodeBB/4.x (undefined)",
+        "sha256": "724bfee8581d4b28b620ac5f871e7b1ec0fa7b4f21bcd1087a1e08bdd7f6b3c7"
+      }
+    ],
+    "individual_counts": {
+      "passed": 2496
+    },
+    "artifacts": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\output\\swe-bench-pro-v2-readiness\\2026-10-14-nodebb-registry-page-v2\\executions\\agentless-ml-cb9bc998965741e3885f63bd253dbeea",
+    "status": "pass",
+    "completion_audit": {
+      "complete": true,
+      "planned_tests": 2496,
+      "ended_tests": 2496,
+      "initial_planned_tests": 1,
+      "dynamically_added": 2495,
+      "missing_tests": [],
+      "unexpected_tests": [],
+      "report_matches": true,
+      "counts_match": true,
+      "run_ended": true,
+      "aborted": false,
+      "hook_failures": []
+    },
+    "exit_code": 0,
+    "artifact_sha256": {
+      "execution.json": "4326fa0fcfa5647bf49f521690231df51a08e6e9935510fc6cfbeaa28d01e730",
+      "report.json": "504260cb982dcec99ef7a1be4ca05cbe0994fbeb518246b50087c3e3b2dd34f3",
+      "mocha-raw.json": "8a8f234d040e4020ca98190701d2f5d678f1beccd0ca120c6180b076f2695dc0",
+      "mocha-individual.json": "504260cb982dcec99ef7a1be4ca05cbe0994fbeb518246b50087c3e3b2dd34f3",
+      "mocha-completion.json": "21025a4ba00d5cead369f8f2edd1a457c567bd69420666284aefe39d6bc5b222",
+      "completion-audit.json": "017affdef13d5af60adff199e97cbe6673e9241a542956fdb88f976536a8fc2b",
+      "registry-verification.json": "33bbddc09e3297c39830b32d33aaf10e5514c00bdd2e98aa81bc5d2eb3ac1e03",
+      "registry-requests.jsonl": "6cbfe4817d71dfb490b5586536fe10ca6e32659dd2196e50f11a633ac9429102",
+      "page-target.json": "4d0453aba341b4cb75d9464c2d6fc6f751c23e9754357e468dfabb18cf44c4a7",
+      "stdout.log": "28696b063b8aa28c2c253db0c82a84f43a5be57ebc3d46fe6322f957a9b2d9e3",
+      "stderr.log": "7fc58bf288d1d0887ae03d507fa1549d9fc3cb3b0ff6a02c79f0c0ddb7a0b0ee"
+    },
+    "task_id": "instance_NodeBB__NodeBB-f9ce92df988db7c1ae55d9ef96d247d27478bc70-vf2cf3cbd463b7ad942381f1c6d077626485a1e9e",
+    "result_sha256": "09bdec5efc6dfefe0231ffc397710ebf5e9335956f987283164885f9698642fa"
+  },
+  "limits": {
+    "host_ports": "none",
+    "cpus": 1,
+    "swap": "disabled",
+    "memory_mb": 4096,
+    "network": "none",
+    "tmpfs_mb": 4096,
+    "command_timeout_seconds": 1800
+  },
+  "interrupted_preparation": {
+    "disposable_checkout_removed": true,
+    "artifacts": "../output/swe-bench-pro-v2-readiness/2026-10-14-nodebb-registry-page",
+    "tests_started": false
+  },
+  "full_suite_run": false,
+  "full_suite_ready": false,
+  "model_calls": 0,
+  "verifier_run": false,
+  "next_step": "Run the unchanged full NodeBB public schedule in the same explicitly labelled snapshot setup"
+}

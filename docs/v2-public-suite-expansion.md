@@ -152,8 +152,11 @@ nor disabling the failing test would establish the same baseline.
 
 The [registry data assessment](nodebb-registry-assessment.md) now pins all four
 reviewed public responses and specifies a local service contract. They are
-consistent current snapshots, not historical task data. The service has not
-been built or used for a retry.
+consistent current snapshots, not historical task data. The
+[labelled service replay](nodebb-registry-service.md) then verified exact
+delivery and passed all seven admin plugins page cases within a complete
+2,496-case public API-file run. The unchanged full suite still needs a separate
+attempt in this supplemented setup.
 
 Other Vuls or NodeBB tasks still require their own base/image checks; success
 on one revision does not provision every task in that repository automatically.

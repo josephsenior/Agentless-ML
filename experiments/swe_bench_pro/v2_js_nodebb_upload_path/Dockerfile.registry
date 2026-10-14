@@ -1,0 +1,7 @@
+ARG PARENT_IMAGE=ghcr.io/scaleapi/swe-bench_pro-v2@sha256:cc8c9217344bf50df0a4276abad046538bb20e5c2f2815a1b2e201871c5cf364
+FROM ${PARENT_IMAGE}
+LABEL org.agentless-ml.condition="NodeBB registry snapshot diagnostic, captured 2026-10-14"
+LABEL org.agentless-ml.registry-network="loopback-only; no outbound access"
+COPY snapshots/ /opt/nodebb-registry/
+COPY nodebb_registry_service.cjs /opt/nodebb-registry/service.cjs
+COPY verify_nodebb_registry_service.cjs /opt/nodebb-registry/verify.cjs

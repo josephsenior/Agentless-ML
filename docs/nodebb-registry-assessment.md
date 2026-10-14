@@ -61,7 +61,7 @@ memory, scratch and test settings. Redis remains on port 6379 and NodeBB on
 4567. This setup would cover the reviewed registry requests; it does not supply
 arbitrary internet access or prove coverage of later external dependencies.
 
-Next, build the labelled supplemented setup and verify byte-for-byte delivery
-and unknown-route failures. Then run the unchanged admin plugins page test
-against it before considering another complete schedule. No service has been
-built, no tests retried, and NodeBB remains unready after this assessment.
+This assessment preceded the service build and did not retry tests. The
+[subsequent service diagnostic](nodebb-registry-service.md) records the labelled
+image, exact delivery checks and public page replay. Full-suite readiness still
+requires separate evidence.
