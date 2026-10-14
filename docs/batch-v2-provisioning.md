@@ -93,3 +93,50 @@ that one image within available disk capacity, resolve its immutable ID and
 run the same cheap workspace probe. Then choose a bounded public check from
 its actual base configuration. Do not launch all 642 images or begin another
 full-suite debugging campaign merely because a plan is absent.
+
+## Element Web follow-up on 15 October 2026
+
+The selected Element Web image is now installed. Its public manifest contains
+28 layers totalling 1,836,078,995 compressed bytes (1.84 GB / 1.71 GiB). Before
+pulling, the host had about 195 GiB free and Docker's filesystem about 826 GiB.
+These figures were ample for this one-image step; no cleanup was performed.
+Compressed totals are not unpacked size or incremental disk requirements.
+
+`tools/provision_v2_pilot_image.py` provisions one explicit non-parked task,
+verifies its raw manifest against the public digest, applies a bounded
+compressed-size/host-free-space policy, pulls by immutable digest and checks
+the local image's platform and registry identity. It refuses to replace a
+different existing task tag. The local tag makes the verified image discoverable
+by the next batch inventory. `--reuse-downloaded` verifies and probes an already
+pulled digest without another pull. No public check or dependency install is
+launched by this helper.
+
+The first pull stalled around a recorded sleep/resume event. Only its verified
+task-owned client was stopped; layers and logs were preserved. One fresh pull
+of the same digest completed. Its first verification then exposed a helper
+assumption: this Docker containerd image store uses the manifest digest as
+image ID, unlike older config-digest IDs. Verification now supports both forms
+while requiring the exact registry digest and, for a manifest-ID image, the
+matching local descriptor. Seven focused checks passed, including rejection
+of unknown IDs, conflicting descriptors, absent registry identity and the
+wrong architecture. The downloaded image was reused, not downloaded again.
+The engine's reported size is recorded separately; it is not labelled unpacked
+size because its meaning differs by storage backend.
+
+The reused cheap probe passed in 3.48 seconds: image HEAD matches
+`4f32727829c1087e9d3d9955785d8a6255457c7d`, committed source extracts into
+disposable Linux scratch, the workspace is writable, and no Git directory is
+copied. The extracted workspace occupies 56,344 KiB. The probe was offline,
+read-only outside scratch, capability-dropped and bounded as before. Its
+container was removed; the requested image remains installed.
+
+See the [provisioning evidence](../experiments/swe_bench_pro/v2_element_provisioning_2026-10-15.json)
+for both digests, size figures, attempt history and report hashes. Element Web
+is now `workspace_probe_passed_needs_public_plan`, not test-suite-ready.
+No dependency installation, public test, model call or verifier ran. The first
+batch's missing-image result remains historical evidence rather than being
+rewritten. NodeBB remains parked.
+
+Next: read Element Web's pinned public configuration and select one bounded
+public check. That will test whether actual dependency/setup work is needed,
+without immediately committing to its full test suite.
