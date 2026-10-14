@@ -1,0 +1,46 @@
+{
+  "condition": "Read-only investigation of two NodeBB public diagnostic failures",
+  "base_commit": "61d17c95e573f91ab5c65d25218451e9afd07d77",
+  "image_id": "sha256:cc8c9217344bf50df0a4276abad046538bb20e5c2f2815a1b2e201871c5cf364",
+  "source_matches_pinned_head": true,
+  "findings": {
+    "category_actor_summary": {
+      "assertion_source": "test/activitypub/actors.js:169",
+      "implementation_source": "src/activitypub/mocks.js:443",
+      "reason": "The implementation unconditionally appends a federated description with HTML; the test expects only the category description.",
+      "classification": "existing code/test contract mismatch"
+    },
+    "az_translation_file_inventory": {
+      "assertion_source": "test/i18n.js:118",
+      "reason": "The source inventory includes a documentation marker committed in en-GB but absent in az. JSON/key checks ignore the marker; the file-inventory check does not.",
+      "classification": "existing public file-inventory mismatch",
+      "en_GB_marker_git_blob": "1faf87ad651dee793f4423e92cca0964fdf63e92",
+      "en_GB_marker_present_in_image": true,
+      "az_marker_present_in_image": false,
+      "az_marker_present_in_pinned_tree": false
+    }
+  },
+  "checkout_raw_sha256": {
+    "src/activitypub/mocks.js": "12aa9ddf81460679b02feaf6c9ba7866629d72b9dd288c0bcd57be0ae1cc2405",
+    "test/activitypub/actors.js": "4bd52997e01d2e059d776dcd361b0727668589f0229163a4ed63cad35dfbb2a4",
+    "test/i18n.js": "09c3ad77786f19b791547720aa1fac8b5e0d7c923aa3527232bf771768c1bfd4",
+    "public/language/en-GB/_DO_NOT_EDIT_FILES_HERE.md": "85daaed127f0493c28879e69abb072dd3a2dfa127bd08cc9e6509009edc1e525"
+  },
+  "image_and_lf_normalized_checkout_sha256": {
+    "src/activitypub/mocks.js": "e4f52cf06ceacba23481c825ba5c0b422561733a00bed3e72c00242cec629ad0",
+    "test/activitypub/actors.js": "42291350cb3bb3d600346e72d78eb101638c8afa24273bbb7ea8e0d350b5d16f",
+    "test/i18n.js": "220368463a3455a56a461c1b8d77670b2b71a29ebc20313f6305dab78173701e",
+    "public/language/en-GB/_DO_NOT_EDIT_FILES_HERE.md": "df2248601a3985738c6d9f04ff7037dceefd2508fdf76cbeca49e16bee5ace8e"
+  },
+  "tests_changed": false,
+  "fixtures_changed": false,
+  "source_changed": false,
+  "ci_skip_variables_added": false,
+  "suite_retry_started": false,
+  "isolated_assertion_replay_run": false,
+  "diagnostic_inventory_passed": 8089,
+  "diagnostic_inventory_failed": 3,
+  "diagnostic_inventory_complete": true,
+  "condition_registered": false,
+  "official_readiness_changed": false
+}

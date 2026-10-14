@@ -37,7 +37,9 @@ The failures are:
   `_DO_NOT_EDIT_FILES_HERE.md` is present in the source-language directory but
   absent in `az`.
 
-The latter two causes have not been investigated. As in the earlier dynamic
+The [subsequent source investigation](nodebb-additional-baseline-failures.md)
+explains both as existing pinned-base mismatches, also present in the original
+image. As in the earlier dynamic
 test report, all three entries report `test/utils.js`; their assertion-stack
 locations are saved separately, not silently substituted. No failure was
 excluded, changed into a pass or hidden by the inventory-complete flag.
@@ -48,7 +50,7 @@ workspace's `output/swe-bench-pro-v2-readiness/2026-10-14-nodebb-no-bail`.
 Container/workspace cleanup completed. Eighteen focused checks passed. No
 official verifier, model call or further retry ran.
 
-Next: inspect the two newly exposed failures without modifying the tests.
+The two newly exposed failures were investigated without modifying the tests.
 A complete diagnostic inventory is now available, but using it for regression
 validation needs explicit review of existing failures, the non-default bail
 policy and matching network/setup conditions. Do not keep retrying merely to
