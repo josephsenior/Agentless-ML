@@ -1,0 +1,69 @@
+{
+  "condition": "NodeBB writable-dependency public lifecycle diagnostic",
+  "base_commit": "61d17c95e573f91ab5c65d25218451e9afd07d77",
+  "image_id": "sha256:cc8c9217344bf50df0a4276abad046538bb20e5c2f2815a1b2e201871c5cf364",
+  "execution_phase": "trusted-baseline",
+  "network_mode": "bridge",
+  "dependency_layout": "Full private copy of /app/node_modules under /tmp/work/node_modules; cp -a --no-preserve=ownership",
+  "test_selection": "test/plugins.js --grep '^Plugins install/activate/uninstall '",
+  "status": "pass",
+  "exit_code": 0,
+  "elapsed_including_runner_preparation_seconds": 187.7206358000003,
+  "mocha_duration_ms": 35163,
+  "counts": {"passed": 5, "failed": 0, "skipped": 0},
+  "passed_public_tests": [
+    "Plugins install/activate/uninstall should install a plugin",
+    "Plugins install/activate/uninstall should activate plugin",
+    "Plugins install/activate/uninstall should error if plugin id is invalid",
+    "Plugins install/activate/uninstall should upgrade plugin",
+    "Plugins install/activate/uninstall should uninstall a plugin"
+  ],
+  "selected_group_complete": true,
+  "full_file_completion_audit": {
+    "complete": false,
+    "planned_tests": 29,
+    "ended_tests": 5,
+    "unselected_tests": 24,
+    "report_matches": true,
+    "counts_match": true,
+    "run_ended": true,
+    "aborted": false,
+    "hook_failures": []
+  },
+  "public_source_sha256": {
+    "test/plugins.js": "2f8ebbcd419e0eb1a3368646fff585476ba8944d0dbeac57ae262fec563b3759",
+    ".mocharc.yml": "5e170cc2b39f763c43f923bf13b99d91a86a85ae62d9024f133a5689b322b74d",
+    "install/package.json": "4e246dfe3ae3c08bea90ac1075f7a07a9f7a68b1f49e20aa3411f2329c523651"
+  },
+  "limits": {
+    "memory_mb": 4096,
+    "cpus": 1,
+    "pids_limit": 2048,
+    "scratch_mode": "tmpfs",
+    "scratch_mb": 4096,
+    "swap_policy": "disabled",
+    "command_timeout_seconds": 1800,
+    "read_only_root": true,
+    "cap_drop": "ALL",
+    "no_new_privileges": true
+  },
+  "artifact_directory": "../output/swe-bench-pro-v2-readiness/2026-10-14-nodebb-writable-lifecycle/executions/agentless-ml-ca6551702929465f949405f259bfef3b",
+  "artifact_sha256": {
+    "completion-audit.json": "2d60655c933316ead4c550de04a9cc765c5f3ec96f4c1fc170a4f192623425a1",
+    "execution.json": "51f5b08211d6a21aec1bed8e9cf976a471b52d88183f03f4d2e7690198c51b09",
+    "mocha-completion.json": "499dfb7b54271974c5a0dfe8a78b9211497898f0ad2681fedff4e6f656a3b2f9",
+    "mocha-individual.json": "217ee7fd44b1f2464810144dba2034d87329e7fe3287e6807bafec6da3a14a4a",
+    "mocha-raw.json": "4cf0a548839c6a8e28efa6f27ce33530a9603ff701e281e92fe64290cf44b5b0",
+    "stdout.log": "3d4956a93fde76e2f13d55ab68f9c17b53254f58c08f5c7771319584bf1eed06",
+    "stderr.log": "89b2126dddf5da0d0665d7c62ce95ecc0d4fa6060364b96f21bd44e74aac50c8"
+  },
+  "lifecycle_scripts_disabled": false,
+  "public_tests_modified": false,
+  "registry_snapshot_service": false,
+  "cache_supplement_built": false,
+  "full_suite_run": false,
+  "full_suite_ready": false,
+  "candidate_selection_eligible": false,
+  "verifier_run": false,
+  "model_calls": 0
+}

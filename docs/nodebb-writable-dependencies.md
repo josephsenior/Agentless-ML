@@ -68,14 +68,42 @@ or model calls were run by this assessment. No baseline setup was registered.
 
 ## Next boundary
 
-Introduce this layout only in the separate connected NodeBB baseline setup,
-then check its ordinary install/upgrade/uninstall sequence before another full
-suite. Keep the public tests and resource limits unchanged. npm may still
+The layout was introduced only in a separate connected lifecycle diagnostic,
+described below. Keep the public tests and resource limits unchanged. npm may still
 reconcile the whole NodeBB root, fetch additional packages or run dependency
 lifecycle scripts; none of that is proven by a filesystem write check.
 Do not disable scripts or omit tests to manufacture a successful baseline.
 
-The assessment does not make NodeBB ready and does not enable networking for
-agent-side candidate selection. The previous connected result remains
-3,321 passes, one setup-related failure and 4,664 unrun tests.
+The copy assessment alone does not make NodeBB ready and does not enable
+networking for agent-side candidate selection.
 
+## Public lifecycle result
+
+The requested install → upgrade → uninstall diagnostic passed on 14 October
+2026. It ran the **five unchanged assertions** in NodeBB's public
+`Plugins install/activate/uninstall` group: install, activation, invalid-ID
+handling, upgrade and uninstall. The original test installs `1.0.16`, upgrades
+to `latest` and checks removal from the root manifest. No npm lifecycle script
+was disabled, and no public test source was edited.
+
+`tools/run_nodebb_writable_lifecycle.py` replaces the shared dependency-linking
+step with the assessed private copy in its own command wrapper, enables normal
+networking and selects only that public group. Other repository helpers and
+existing local edits were left untouched. The image stays read-only; the same
+one CPU, 4 GiB memory, 4 GiB scratch, 2,048 PIDs and 30-minute cap apply.
+There is no snapshot registry service or cache-supplement image.
+
+All five cases passed, with no hook failures or aborted run. Total runner time
+was 187.72 seconds; Mocha took 35.16 seconds. The reporter retains the full
+file's inventory of 29 tests, so its full-file completion audit correctly stays
+incomplete: the other 24 cases were deliberately not selected. A separate
+exact-title check verifies all five requested cases rather than relabelling
+that incomplete audit as full coverage. Fifteen focused wrapper/reporting
+checks passed. See the [lifecycle evidence](../experiments/swe_bench_pro/v2_js_nodebb_upload_path/writable-lifecycle-2026-10-14.json)
+for source hashes, all outcomes and report digests. Normal container/workspace
+cleanup completed.
+
+Next: run the unchanged complete public schedule with this private dependency
+layout and normal networking, without the group filter. No full-suite retry
+has started. NodeBB's full baseline remains unready until complete reporting is
+verified; the previous full attempt remains 3,321 passes and one failure.

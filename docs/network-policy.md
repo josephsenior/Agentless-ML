@@ -95,5 +95,7 @@ The [writable-dependency assessment](nodebb-writable-dependencies.md) now shows
 that a complete private dependency copy fits the same CPU/memory/scratch ceilings
 and supports both executable and package-directory writes without altering the
 image. This is a copy-only diagnostic, not a successful npm transaction or a
-full-suite retry. Next, introduce it in the separate connected baseline setup
-and check the normal plugin lifecycle; keep public tests unchanged.
+full-suite retry. The subsequent [public lifecycle diagnostic](nodebb-writable-dependencies.md#public-lifecycle-result)
+passed all five unchanged cases with that copy and normal networking. Next is
+the unchanged full schedule using the same layout, without the group filter.
+No full-suite retry has started and agent-side candidate checks remain offline.
