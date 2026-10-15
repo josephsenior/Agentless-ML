@@ -693,3 +693,47 @@ NodeBB remains parked and official readiness is unchanged.
 Next: inspect the incomplete download and wall-clock timeout behavior before
 requesting any further retry. Do not treat this overnight-interrupted attempt
 as a clean resource diagnostic or silently start another download.
+
+### Teleport diagnosis: sleep-aware timeout, incomplete large transfers
+
+Read-only investigation on 16 October established the overnight explanation.
+Windows' Power-Troubleshooter event records sleep from **17:23:29 on 15
+October to 01:39:36 on 16 October** (Europe/Paris). Kernel-Power records the
+sleep reason as Button or Lid. The retry started around 17:22, so almost the
+entire overnight interval was low-power time, not active downloading.
+
+The installed Python Windows wait implementation calls `WaitForSingleObject`
+with the requested milliseconds. Microsoft's
+[primary API documentation](https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-waitforsingleobject)
+states that this timeout excludes low-power time on Windows 8 and newer.
+Thus `subprocess.run(timeout=1200)` was not a sleep-inclusive wall-clock
+deadline. Docker's retry request log reports 3m20.88s, consistent with a short
+awake interval rather than eight hours of active transfer. This resolves
+the earlier uncertainty about overnight persistence without claiming an
+uninterrupted retry or a Python deadlock.
+
+Both attempts had the same two content blobs unfinished: `160ff38caab0…`
+(1,316,505,754 compressed bytes) and `ac7254a7cbee…` (1,091,763,652 bytes).
+At each client cancellation, containerd logged canceled content writes for
+those blobs. Those errors followed cancellation; they are not independent
+evidence of corrupt files, extraction failures or a full disk. The first
+awake attempt genuinely did not finish within its cap. Its logs do not
+establish whether the limiting factor was transfer, storage throughput or
+another Docker/registry issue. Calling it a proven download deadlock would
+overstate the evidence.
+
+Two 15-second-capped public range requests then fetched only the first 64 KiB
+of each blob, without saving payloads. Both returned HTTP 206 in under one
+second with the expected total blob sizes. Current blob availability is
+therefore confirmed; full-download speed and Docker VM network behavior are
+not. No new image pull, test, install, Docker restart, power-setting change
+or cache deletion occurred. See the
+[diagnostic evidence](../experiments/swe_bench_pro/v2_teleport_download_diagnosis_2026-10-16.json)
+for event timestamps, log locations, timeout implementation and range results.
+
+Before another retry, the recommended change is an explicit wall-clock
+deadline checked in short waits (so expiration is detected promptly after
+resume), with durable progress evidence for the two large transfers. Run on
+an uninterrupted awake host; do not silently change system power settings or
+extend the existing cap. This diagnosis implements no code fix and starts no
+retry. Teleport remains unprovisioned and readiness is unchanged.

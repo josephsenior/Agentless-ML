@@ -1,0 +1,57 @@
+{
+  "condition": "Read-only diagnosis of Teleport incomplete pulls and overnight timeout behavior",
+  "manifest_digest": "sha256:576147fc4357d7a6b4a6a347477e9a95f5e7fd01b277f25284589356350717e9",
+  "sleep_evidence": {
+    "source": "Windows System event log, Microsoft-Windows-Power-Troubleshooter event 1 at 2026-10-16T01:39:38.2884289+02:00",
+    "sleep_time_utc": "2026-10-15T15:23:29.3671167Z",
+    "wake_time_utc": "2026-10-15T23:39:36.7001000Z",
+    "local_sleep_time": "2026-10-15T17:23:29.3671167+02:00",
+    "local_wake_time": "2026-10-16T01:39:36.7001000+02:00",
+    "kernel_power_event_42": "2026-10-15T17:23:32.4751409+02:00; Sleep Reason: Button or Lid",
+    "conclusion": "Retry was suspended shortly after its 17:22 start, not an uninterrupted overnight active download."
+  },
+  "timeout_evidence": {
+    "helper": "tools/provision_v2_pilot_image.py: subprocess.run(..., timeout=1200)",
+    "installed_python_source": "C:/Users/GIGABYTE/AppData/Roaming/uv/python/cpython-3.14-windows-x86_64-none/Lib/subprocess.py:1593",
+    "implementation": "Windows Popen._wait calls _winapi.WaitForSingleObject(handle, timeout_millis).",
+    "primary_documentation": "https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-waitforsingleobject",
+    "documented_behavior": "On Windows 8 and newer, the wait timeout excludes time spent in low-power states.",
+    "conclusion": "Configured wait is not a sleep-inclusive wall-clock deadline. The overnight persistence is explained by host sleep and Windows wait semantics, not evidence of an active 8-hour pull."
+  },
+  "docker_log_evidence": {
+    "first_attempt": {
+      "source": "Docker/log/vm/init.log.0, lines 4150-4154 as inspected",
+      "image_request_start_utc": "2026-10-15T14:42:52.005585718Z",
+      "client_cancellation_utc": "2026-10-15T15:02:51.606597208Z",
+      "layer_write_errors": "Both unresolved layer content writes were canceled immediately after client cancellation."
+    },
+    "retry": {
+      "source": "Docker/log/vm/init.log, lines 1086-1090 as inspected",
+      "image_request_start_utc": "2026-10-15T15:21:59.632320956Z",
+      "client_cancellation_utc": "2026-10-15T23:41:16.321187812Z",
+      "api_logged_duration": "3m20.876869606s",
+      "layer_write_errors": "Both unresolved layer content writes were canceled immediately after the exact pull client was stopped."
+    },
+    "error_message": "containerd: (*service).Write failed; rpc error: code = Canceled desc = context canceled",
+    "interpretation": "These are cancellation consequences, not independent evidence of corrupt layers, failed extraction or disk exhaustion. No pre-cancellation root cause for low transfer progress was established."
+  },
+  "unfinished_blobs": [
+    {"digest":"sha256:160ff38caab00137d1e50d9a1602af1cfc0fe8f1f043859f6730f6f4b664ce34","compressed_bytes":1316505754},
+    {"digest":"sha256:ac7254a7cbeefe1105d36fb885f2d9e55f6473cc566054ba27f18dc4d1015b1e","compressed_bytes":1091763652}
+  ],
+  "bounded_public_range_checks": [
+    {"digest":"sha256:160ff38caab00137d1e50d9a1602af1cfc0fe8f1f043859f6730f6f4b664ce34","status":206,"bytes_read":65536,"elapsed_seconds":0.9386792,"content_range":"bytes 0-65535/1316505754","final_host":"pkg-containers.githubusercontent.com"},
+    {"digest":"sha256:ac7254a7cbeefe1105d36fb885f2d9e55f6473cc566054ba27f18dc4d1015b1e","status":206,"bytes_read":65536,"elapsed_seconds":0.5016152,"content_range":"bytes 0-65535/1091763652","final_host":"pkg-containers.githubusercontent.com"}
+  ],
+  "range_check_limits": "15 seconds and at most 65536 response-body bytes per request; ephemeral anonymous public-registry token; no tokens, signed URLs or blob payloads retained.",
+  "range_check_limitation": "Current access from Windows proves neither sustained multi-GB throughput nor Docker's VM transfer behavior during the earlier attempts.",
+  "recommended_before_retry": "A short-poll, sleep-inclusive wall-clock deadline with durable progress and an uninterrupted awake host. Diagnose byte progress for the two content transfers without changing task limits. This is a recommendation, not an implemented fix or authorized new pull.",
+  "new_pull_attempts": 0,
+  "code_fixes_implemented": false,
+  "power_settings_changed": false,
+  "docker_restarted": false,
+  "cached_layers_deleted": false,
+  "workspace_probe_executed": false,
+  "public_tests_run": false,
+  "official_readiness_changed": false
+}
