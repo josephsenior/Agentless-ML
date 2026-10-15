@@ -466,3 +466,42 @@ parked.
 Next: verify the required Infogami contents, then implement a small wrapper
 and run only this selected public file, retaining all nine individual results
 or any setup error. Do not launch the full service stack or suite.
+
+### Open Library query smoke result
+
+The exact public Infogami commit was fetched into a separate bare reference
+store. Its tree contains **222 regular tracked files**, with no tracked
+symlinks or nested submodules. `tools/run_openlibrary_query_smoke.py` builds
+a file/mode/Git-blob manifest from that commit and checks both the Open
+Library image HEAD and its committed Infogami gitlink before setup.
+
+`tools/verify_openlibrary_infogami.py` verified every image file's bytes against
+the corresponding public Git blob and checked its executable mode. All 222
+matched. Only those verified files were supplied to the extracted workspace;
+image-only extras, including an extra link, were not copied. All files are
+checked before anything is supplied, so a late mismatch cannot leave a
+partial dependency copy. The committed top-level Infogami link is preserved.
+Per-file SHA-256 fingerprints are retained alongside the public tree and
+manifest digest. The public reference fetch occurred before execution; the
+test container remained offline.
+
+The selected public file then passed **all nine individual cases**. The entire
+command, including extraction and verification, finished in **4.71 seconds**;
+pytest reported 0.05 seconds for the test session. Native JUnit confirms the
+exact expected cases with no skips or failures. The original pytest config,
+inherited hooks, plugin loading and autouse fixtures were preserved. Project
+imports resolve from `/tmp/work`, not `/app`. No dependencies were installed
+and no tests were changed. Four third-party deprecation warnings are retained
+in the log rather than suppressed.
+
+See the [Open Library query smoke evidence](../experiments/swe_bench_pro/v2_openlibrary_query_smoke_2026-10-15.json)
+for all nine outcomes, all 222 dependency fingerprints, public provenance and
+artifact hashes. The container was removed normally. This establishes one
+selected public file, not the full service stack, full suite or task-specific
+repair correctness; official readiness is unchanged and NodeBB remains parked.
+All 62 focused integrity, wrapper, report-parser and provisioning checks passed.
+
+Next: extend workspace coverage to Flipt, whose public image manifest was
+already verified (1.93 GB compressed). Provision only that image, then run the
+cheap workspace probe before choosing any public test. No further Open Library
+suite expansion is needed for this pilot.
