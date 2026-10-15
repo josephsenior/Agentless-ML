@@ -380,3 +380,42 @@ unchanged; the standalone wrapper is not yet a registered batch public plan.
 Next: extend runtime breadth to Open Library using its already verified
 1.07-GB-compressed image, then reuse the cheap workspace probe before choosing
 a public test. No further Navidrome suite expansion is needed for this pilot.
+
+### Open Library provisioning follow-up
+
+The selected Open Library image has 22 layers totalling 1,070,952,548
+compressed bytes (1.07 GB). Provisioning uses the previously reviewed
+Linux/amd64 digest
+`sha256:03205f63224d992c930df7a2b898353d9d3dface4ab4d921eebc73dc909c1ba6`.
+The helper now accepts `--expected-manifest` and rejects a changed selected
+digest before downloading layers, tagging an image or running a probe. This
+run supplied that exact reviewed digest. Matching, mismatched and omitted-pin
+paths are covered by focused tests; all twelve provisioning/batch checks
+passed.
+
+The existing disk policy still applies: at most 8 GiB compressed per selected
+image and host free space of at least the larger of 20 GiB or four times the
+compressed total. This run had about 182.55 GiB free before the pull. Only
+the selected image is provisioned; no cleanup, cache supplements or other
+repository downloads are part of this follow-up.
+
+The pull completed and the same cheap workspace probe passed in **3.72
+seconds**. Image HEAD matched
+`02f647f7d525286b6e3a661133c3772649e585cd`; committed source extracted into
+disposable Linux scratch, accepted a temporary write and contained no Git
+directory. The image stayed read-only, with offline probing, dropped
+capabilities, no host mounts, one CPU, task-declared memory, 4 GiB scratch,
+disabled swap and the existing 120-second cap. The disposable container was
+removed; the verified image remains installed with its task tag.
+
+See the [Open Library provisioning evidence](../experiments/swe_bench_pro/v2_openlibrary_provisioning_2026-10-15.json)
+for the exact image/base identities, limits, probe outcome and artifact hashes.
+Only one image was pulled. No dependency install, repository test, model call,
+official verifier or NodeBB run occurred. Cumulative selected-task workspace
+coverage is now **seven repositories**; Flipt, Teleport and Proton Mail
+webclients still need local images. These are engineering observations, not
+full-suite readiness or a changed official readiness count.
+
+Next: inspect Open Library's pinned public test configuration and select one
+bounded check before running any tests. Do not jump to its full service stack
+or test suite.

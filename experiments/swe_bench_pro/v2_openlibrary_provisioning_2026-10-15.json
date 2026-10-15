@@ -1,0 +1,74 @@
+{
+  "artifact_sha256": {
+    "index.json": "38dd58ffa8246da2d1dea01c9a123214a99370337c4dfdc716e38642a06b62bc",
+    "pull.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pull.stdout.log": "022533199df283fa95f524331b46abf459ad81675c8f55d94be760fb052c2fa8",
+    "manifest.json": "03205f63224d992c930df7a2b898353d9d3dface4ab4d921eebc73dc909c1ba6",
+    "preflight.json": "657df6496249505059ba9d8dfd876bd0e2e0cba068ae229b1518b131da7b02ad",
+    "result.json": "805d54a2a026e7600cc50b45833ed6f89afe3131ad006335bec75f6124f04957"
+  },
+  "probe_artifact_sha256": {
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout.log": "e580c8277a91958bd40140f1a5bf83e2902b73ec3669f87ec0e49aa7c712bfe8",
+    "execution.json": "d44460b3db742544f51c10242c015dc6fe7aa459a4662ed51563735083bd550a"
+  },
+  "result": {
+    "task_id": "instance_internetarchive__openlibrary-00bec1e7c8f3272c469a58e1377df03f955ed478-v13642507b4fc1f8d234172bf8129942da2c2ca26",
+    "base_commit": "02f647f7d525286b6e3a661133c3772649e585cd",
+    "parent_index_digest": "sha256:38dd58ffa8246da2d1dea01c9a123214a99370337c4dfdc716e38642a06b62bc",
+    "public_tag": "ghcr.io/scaleapi/swe-bench_pro-v2:instance_internetarchive__openlibrary-00bec1e7c8f3272c469a58e1377df03f955ed478-v13642507b4fc1f8d234172bf8129942da2c2ca26",
+    "manifest_digest": "sha256:03205f63224d992c930df7a2b898353d9d3dface4ab4d921eebc73dc909c1ba6",
+    "config_digest": "sha256:62174cccb4799538d0dc079efedf7e9dced4106e7768c90c89c695f8a778dd18",
+    "compressed_layer_bytes": 1070952548,
+    "layers": 22,
+    "host_free_bytes": 196014063616,
+    "host_reserve_required_bytes": 21474836480,
+    "note": "Compressed total is not unpacked size or incremental download size; layers may be shared.",
+    "generated_at": "2026-10-15T15:49:37.983893+02:00",
+    "image_id": "sha256:03205f63224d992c930df7a2b898353d9d3dface4ab4d921eebc73dc909c1ba6",
+    "docker_reported_size_bytes": 1070968506,
+    "identity_kind": "manifest-digest-containerd-store",
+    "probe": {
+      "task_id": "instance_internetarchive__openlibrary-00bec1e7c8f3272c469a58e1377df03f955ed478-v13642507b4fc1f8d234172bf8129942da2c2ca26",
+      "repository": "https://github.com/internetarchive/openlibrary.git",
+      "language": "python",
+      "base_commit": "02f647f7d525286b6e3a661133c3772649e585cd",
+      "full_suite_ready": false,
+      "public_check_executed": false,
+      "model_calls": 0,
+      "verifier_run": false,
+      "image_id": "sha256:03205f63224d992c930df7a2b898353d9d3dface4ab4d921eebc73dc909c1ba6",
+      "workspace_probe": {
+        "result": {
+          "status": "pass",
+          "command": [
+            "sh",
+            "-c",
+            "set -e; repository=; for directory in /app /testbed; do if git -C \"$directory\" rev-parse --verify HEAD >/dev/null 2>&1; then repository=\"$directory\"; break; fi; done; test -n \"$repository\"; observed=$(git -C \"$repository\" rev-parse HEAD); test \"$observed\" = 02f647f7d525286b6e3a661133c3772649e585cd; git -C \"$repository\" archive --format=tar --output=/tmp/base.tar HEAD; mkdir /tmp/provisioned; tar --no-same-owner -xf /tmp/base.tar -C /tmp/provisioned; mktemp /tmp/provisioned/.agentless-write-XXXXXX; test ! -e /tmp/provisioned/.git; du -sk /tmp/provisioned; find /tmp/provisioned -type f | wc -l"
+          ],
+          "duration_seconds": 3.7217961999999716,
+          "exit_code": 0,
+          "stdout_digest": "e580c8277a91958bd40140f1a5bf83e2902b73ec3669f87ec0e49aa7c712bfe8",
+          "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "kind": "regression",
+          "test_cases": [],
+          "counted_test_ids": null
+        },
+        "image_id": "sha256:03205f63224d992c930df7a2b898353d9d3dface4ab4d921eebc73dc909c1ba6",
+        "container_name": "agentless-ml-f5d4f6788a794e1288877ad77a932baf",
+        "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\output\\swe-bench-pro-v2-readiness\\2026-10-15-openlibrary-provision\\workspace-probes\\instance_internetarchive__openlibrary-00bec1e7c8f3272c469a58e1377df03f955ed478-v13642507b4fc1f8d234172bf8129942da2c2ca26\\agentless-ml-f5d4f6788a794e1288877ad77a932baf",
+        "message": ""
+      },
+      "status": "workspace_probe_passed_needs_public_plan"
+    },
+    "images_pulled": 1,
+    "public_tests_run": false,
+    "full_suites_run": 0,
+    "model_calls": 0,
+    "verifier_run": false,
+    "official_readiness_changed": false,
+    "host_free_after_bytes": 191517847552
+  },
+  "artifact_directory": "../output/swe-bench-pro-v2-readiness/2026-10-15-openlibrary-provision",
+  "expected_manifest": "sha256:03205f63224d992c930df7a2b898353d9d3dface4ab4d921eebc73dc909c1ba6"
+}

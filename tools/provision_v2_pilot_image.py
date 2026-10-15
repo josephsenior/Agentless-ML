@@ -70,6 +70,8 @@ def main():
                         help='Verify an already pulled digest and probe it without pulling again')
     parser.add_argument('--inspect-only', action='store_true',
                         help='Verify public manifest and size only; no layers pulled or containers run')
+    parser.add_argument('--expected-manifest',
+                        help='Require this previously reviewed leaf digest before pulling or probing')
     args = parser.parse_args()
     if args.inspect_only and args.reuse_downloaded:
         parser.error('--inspect-only and --reuse-downloaded are mutually exclusive')
@@ -101,6 +103,8 @@ def main():
         reference = task.container_image.rsplit(':', 1)[0] + '@' + digest
         raw = subprocess.check_output(['docker', 'buildx', 'imagetools', 'inspect', '--raw', reference], timeout=60)
     content, manifest = verified_manifest(raw, descriptor)
+    if args.expected_manifest is not None and digest != args.expected_manifest:
+        raise ValueError('selected manifest differs from the previously reviewed digest')
     (args.output / 'manifest.json').write_bytes(content)
     compressed = sum(layer['size'] for layer in manifest['layers'])
     free = shutil.disk_usage(ROOT.anchor).free

@@ -44,7 +44,8 @@ def test_legacy_and_containerd_identity_are_both_verified(module):
             module.verify_local_identity(bad, 'manifest', 'config', 'repo@manifest')
 
 
-def test_inspect_only_never_pulls_tags_or_probes(module, monkeypatch, tmp_path):
+@pytest.mark.parametrize('reviewed', ['unspecified', 'matching', 'mismatch'])
+def test_inspect_only_never_pulls_tags_or_probes(module, monkeypatch, tmp_path, reviewed):
     task = SimpleNamespace(instance_id='selected', base_commit='a' * 40,
                            repository_url='https://github.com/example/repo',
                            container_image='ghcr.io/scaleapi/swe-bench_pro-v2:selected')
@@ -64,8 +65,16 @@ def test_inspect_only_never_pulls_tags_or_probes(module, monkeypatch, tmp_path):
     monkeypatch.setattr(module.subprocess, 'run', lambda *a, **kw: pytest.fail('no Docker mutations'))
     monkeypatch.setattr(module, 'pilot_task', lambda *a, **kw: pytest.fail('no container probe'))
     output = tmp_path / 'preflight'
-    monkeypatch.setattr('sys.argv', ['provision', '--task-id', 'selected', '--v1-parquet', 'unused',
-                                   '--v2-tasks', 'unused', '--output', str(output), '--inspect-only'])
+    argv = ['provision', '--task-id', 'selected', '--v1-parquet', 'unused',
+            '--v2-tasks', 'unused', '--output', str(output), '--inspect-only']
+    if reviewed != 'unspecified':
+        argv += ['--expected-manifest', descriptor['digest'] if reviewed == 'matching' else 'sha256:' + '0' * 64]
+    monkeypatch.setattr('sys.argv', argv)
+    if reviewed == 'mismatch':
+        with pytest.raises(ValueError, match='previously reviewed digest'):
+            module.main()
+        assert not (output / 'preflight.json').exists()
+        return
     module.main()
     assert len(calls) == 2
     assert json.loads((output / 'preflight.json').read_text())['compressed_layer_bytes'] == 123
