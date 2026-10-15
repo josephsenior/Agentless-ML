@@ -585,3 +585,42 @@ selection. Official readiness is unchanged; NodeBB remains parked.
 Next: implement a small wrapper and run this selected test with native
 individual-event verification. Retain any setup failure without expanding
 to a full-suite debugging campaign.
+
+### Flipt release-version smoke result
+
+`tools/run_flipt_release_smoke.py` ran only the selected `TestIs` test on
+15 October 2026. **All six child cases passed**, followed by the passing
+parent and successful package completion. The command exited 0 in **44.95
+seconds**, including preparation and fresh compilation. Race detection,
+one build worker, atomic coverage, the 60-second Go test timeout and the
+180-second complete-command cap were preserved. No additional services,
+dependency installs or repository test changes were needed.
+
+The wrapper verifies image HEAD, extracts the committed source and preserves
+the original Go workspace/module layout. Dependencies remain read-only;
+build outputs use fresh writable scratch, not copied precompiled artifacts.
+The image root stays read-only, offline, capability-dropped and bounded by
+the selected CPU/memory/scratch limits. The disposable container was removed
+normally. The declared toolchain difference remains unchanged.
+
+Native events are saved as `go-native.jsonl` and the coverage profile as
+`coverage.txt`. The diagnostic parser requires the six exact child run/pass
+pairs, the parent run/pass and package start/pass, rejecting skips, failures,
+missing cases, unexpected tests/packages, duplicate outcomes and malformed
+events. The shell preserves Go's exit status independently of printing the
+saved events. This is explicit diagnostic reporting, not a newly registered
+framework-wide report adapter. The retained coverage is **4.3% of package
+statements**, consistent with selecting only the version-classification test;
+it is not evidence of broad package coverage.
+
+See the [Flipt smoke evidence](../experiments/swe_bench_pro/v2_flipt_release_smoke_2026-10-15.json)
+for all six individual outcomes, the parent/package verification and artifact
+hashes. All **81 focused checks** for reporting, integrity, provisioning and
+the neighboring smoke wrappers passed. No model call, official verifier or
+NodeBB run occurred, and official readiness is unchanged. This remains a
+selected public smoke, not full-package or full-suite readiness.
+
+Next: extend workspace coverage to Teleport using its already reviewed image
+(3.50 GB compressed), then reuse the cheap probe before choosing a public
+test. Proton Mail webclients is the other remaining unprovisioned repository;
+do not pull both images as an unbounded batch.

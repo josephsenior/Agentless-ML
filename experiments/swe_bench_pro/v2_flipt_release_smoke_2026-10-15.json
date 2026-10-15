@@ -1,0 +1,86 @@
+{
+  "result": {
+    "condition": "Flipt selected public TestIs smoke",
+    "image_id": "sha256:896e9e03b52384f2696043debe8cbf7c55334a6b5900570e6f4c91e0551d165c",
+    "base_commit": "85bb23a3571794c7ba01e61904bac6913c3d9729",
+    "selected_package": "go.flipt.io/flipt/internal/release",
+    "selected_test": "TestIs",
+    "execution": {
+      "result": {
+        "status": "pass",
+        "command": [
+          "sh",
+          "-c",
+          "set -e; test \"$(git -C /app rev-parse HEAD)\" = 85bb23a3571794c7ba01e61904bac6913c3d9729; git -C /app archive --format=tar --output=/tmp/base.tar HEAD; tar --no-same-owner -xf /tmp/base.tar -C /tmp/work; cd /tmp/work; export HOME=/tmp GOCACHE=/tmp/flipt-go-build GOTMPDIR=/tmp GOMODCACHE=/go/pkg/mod GOPROXY=off GOTOOLCHAIN=local GOMAXPROCS=1 GOFLAGS=-mod=readonly; go version; sha256sum .github/workflows/test.yml magefile.go build/testing/test.go go.mod go.sum go.work go.work.sum internal/release/check.go internal/release/check_test.go; set +e; go test -race -p 1 -coverprofile=/tmp/flipt-release-coverage.txt -covermode=atomic -v -json -count=1 -timeout=60s -run '^TestIs$' ./internal/release >/tmp/flipt-test.jsonl; outcome=$?; cat /tmp/flipt-test.jsonl; exit \"$outcome\""
+        ],
+        "duration_seconds": 44.949827899999946,
+        "exit_code": 0,
+        "stdout_digest": "e589918162a8716047e61dab92504acd476fe2ca2f1d09e77934435f82118c36",
+        "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "kind": "regression",
+        "test_cases": [],
+        "counted_test_ids": null
+      },
+      "image_id": "sha256:896e9e03b52384f2696043debe8cbf7c55334a6b5900570e6f4c91e0551d165c",
+      "container_name": "agentless-ml-a8815b18ce8d4d9aa41d5e7a3eacf9e8",
+      "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\output\\swe-bench-pro-v2-readiness\\2026-10-15-flipt-release-smoke\\executions\\agentless-ml-a8815b18ce8d4d9aa41d5e7a3eacf9e8",
+      "message": ""
+    },
+    "expected_child_tests": [
+      "TestIs/0.17.1",
+      "TestIs/1.0.0",
+      "TestIs/1.0.0-rc.1",
+      "TestIs/1.0.0-rc1",
+      "TestIs/1.0.0-snapshot",
+      "TestIs/dev"
+    ],
+    "individual_report_verified": true,
+    "atomic_coverage_retained": true,
+    "individual_results": [
+      {
+        "test_id": "go.flipt.io/flipt/internal/release::TestIs/0.17.1",
+        "status": "passed"
+      },
+      {
+        "test_id": "go.flipt.io/flipt/internal/release::TestIs/1.0.0",
+        "status": "passed"
+      },
+      {
+        "test_id": "go.flipt.io/flipt/internal/release::TestIs/1.0.0-rc.1",
+        "status": "passed"
+      },
+      {
+        "test_id": "go.flipt.io/flipt/internal/release::TestIs/1.0.0-rc1",
+        "status": "passed"
+      },
+      {
+        "test_id": "go.flipt.io/flipt/internal/release::TestIs/1.0.0-snapshot",
+        "status": "passed"
+      },
+      {
+        "test_id": "go.flipt.io/flipt/internal/release::TestIs/dev",
+        "status": "passed"
+      }
+    ],
+    "report_sha256": {
+      "go-native.jsonl": "21bbe8c0238fc25f0b7e07d1a5aed89321687f1e46e414c92219cd5222d81439",
+      "coverage.txt": "6c15c533572e0f409481079fcc7a2f651fdcc6288e719aa703b9901475f68ffe"
+    },
+    "smoke_checked": true,
+    "toolchain_note": "Image Go 1.24.3; pinned workflow variable 1.21; module toolchain go1.22.2.",
+    "report_scope": "Native diagnostic evidence, not a registered framework report adapter.",
+    "full_suite_ready": false,
+    "tests_modified": false,
+    "dependencies_installed": false,
+    "model_calls": 0,
+    "verifier_run": false
+  },
+  "artifact_sha256": {
+    "coverage.txt": "6c15c533572e0f409481079fcc7a2f651fdcc6288e719aa703b9901475f68ffe",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "execution.json": "86fb4087ddfbbcdd756381864881987653d1471ec5e6925d850f3f9438328688",
+    "go-native.jsonl": "21bbe8c0238fc25f0b7e07d1a5aed89321687f1e46e414c92219cd5222d81439",
+    "stdout.log": "e589918162a8716047e61dab92504acd476fe2ca2f1d09e77934435f82118c36"
+  },
+  "artifact_directory": "../output/swe-bench-pro-v2-readiness/2026-10-15-flipt-release-smoke"
+}
