@@ -209,3 +209,32 @@ tests or full suites ran, and official readiness is unchanged. Ansible is now
 
 Next: select one bounded Ansible public unit-test check from its pinned
 configuration. Do not expand directly to its full integration matrix.
+
+## Ansible public smoke result
+
+All six tests in `test/units/module_utils/parsing/test_convert_bool.py` passed
+on 15 October 2026. The command finished in 4.46 seconds including source
+preparation. It used the pinned repository's `ansible-test units` runner,
+Python 3.11.13, one worker and the original pytest configuration.
+`--requirements-mode skip` disabled dependency installation. The existing
+JUnit reader verified exactly the six expected test IDs, all passing.
+
+`tools/run_ansible_boolean_smoke.py` checks image HEAD, extracts committed
+source into `/tmp/work`, and runs that copy's runner. Its Python paths point
+to the extracted source; Ansible's module-utils isolation links that source,
+not the image's `/app/lib`. HOME is writable `/tmp`. The image root remains
+read-only, with one CPU, 4 GiB memory/scratch, 2,048 PIDs, no network and a
+180-second cap. No tests or configuration were edited. Ansible warned that
+it used `C.UTF-8` rather than `en_US.UTF-8`; the warning is retained rather
+than suppressed. The disposable container was removed normally.
+
+See the [Ansible smoke evidence](../experiments/swe_bench_pro/v2_ansible_boolean_smoke_2026-10-15.json)
+for individual outcomes, source fingerprints and report hashes. Four focused
+checks for the Ansible and Element wrappers passed. This establishes one
+selected public smoke, not full-suite readiness, repair correctness or an
+official score. No model or verifier ran. NodeBB remains parked.
+
+Next: consolidate the five-repository pilot results and choose a bounded
+expansion across the remaining repositories. Avoid turning each successful
+smoke into a full-suite debugging campaign. These standalone smoke wrappers
+are evidence; they do not yet register new public plans in the batch helper.

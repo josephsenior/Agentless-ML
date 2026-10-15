@@ -1,0 +1,36 @@
+{
+  "condition": "Ansible selected public boolean conversion smoke",
+  "image_id": "sha256:7cae127d37e28600d08026f70cbc2aef029ab2c9daf0bba67c912cec5fb4d0d0",
+  "base_commit": "f7234968d241d7171aadb1e873a67510753f3163",
+  "selected_file": "test/units/module_utils/parsing/test_convert_bool.py",
+  "command": "python3 bin/ansible-test units test/units/module_utils/parsing/test_convert_bool.py --python 3.11 --num-workers 1 --requirements-mode skip --local",
+  "python_version": "3.11.13",
+  "status": "pass",
+  "exit_code": 0,
+  "elapsed_including_preparation_seconds": 4.455043400000022,
+  "counts": {"passed": 6, "failed": 0, "skipped": 0},
+  "individual_report_verified": true,
+  "test_class": "test.units.module_utils.parsing.test_convert_bool.TestBoolean",
+  "passed_test_names": ["test_bools", "test_none", "test_numbers", "test_strings", "test_junk_values_nonstrict", "test_junk_values_strict"],
+  "public_source_sha256": {
+    "bin/ansible-test": "ba6db824cf4efe2077711c8d704f121813872c2b42c150da7d7214077f0c76d0",
+    "test/lib/ansible_test/_internal/commands/units/__init__.py": "2007298757e1f76395e5dae6137dd63e4a4abd5ff573f2b0e88a50d040618eb9",
+    "test/lib/ansible_test/_data/pytest/config/default.ini": "ddfe43d0c03d97645a7c106b88b686d9e1f778f1cf2dbe3736937bc193c1feee",
+    "lib/ansible/module_utils/parsing/convert_bool.py": "6c655e56f814717bfa466ec1e6375f34827b18636fbd545ad4f5a89aed28d57f",
+    "test/units/module_utils/parsing/test_convert_bool.py": "0c1af35730e08be09376d792c6772ced7b3bd7b080abf20e20138cf93ff9eb79"
+  },
+  "limits": {"cpus":1,"memory_mb":4096,"scratch_mb":4096,"pids_limit":2048,"command_timeout_seconds":180,"network":"none","read_only_root":true,"cap_drop":"ALL","no_new_privileges":true},
+  "artifact_directory": "../output/swe-bench-pro-v2-readiness/2026-10-15-ansible-boolean-smoke/executions/agentless-ml-40e2bee4eff04490ad7d179d36800ea3",
+  "artifact_sha256": {
+    "report.xml": "c158a1ec388ca3da8c8ebb826daba6453d3e58701f6d5d36ac3ab9011429abfd",
+    "stdout.log": "c2898ba7cb5c45192a23c5da4f4f14f33466bd1c51e8cd0619831da8bb8db964",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "warnings": ["ansible-test used C.UTF-8 instead of en_US.UTF-8; retained without changing locale or tests"],
+  "smoke_checked": true,
+  "full_suite_ready": false,
+  "tests_modified": false,
+  "dependencies_installed": false,
+  "model_calls": 0,
+  "verifier_run": false
+}
