@@ -658,3 +658,38 @@ Next: review one explicitly bounded retry of this same immutable digest,
 allowing Docker to reuse any retained layers, with a new evidence directory
 and the same download cap. Do not extend the timeout, clear Docker's cache
 or claim workspace readiness without a successful probe. No retry has started.
+
+### Teleport same-limit retry
+
+One retry was explicitly authorized after the capped first attempt. It uses
+the same reviewed manifest digest, the same 1,200-second download cap and a
+new artifact directory. Docker's existing layers were retained; its retry
+log explicitly reports cached layers as `Already exists`. No cleanup,
+cache rebuild or timeout extension was performed. Host free space was
+175,137,083,392 bytes at the retry preflight, above the existing reserve.
+The first-attempt evidence remains unchanged.
+
+On resuming on 16 October, the saved retry contained nine `Already exists`
+layer lines but no completed-image result. Exact-digest inspection still
+reported no local image. The original pull client and helper were still
+running, approximately **498.9 wall-clock minutes** after preflight. The
+configured subprocess timeout had not ended the process across that overnight
+interval. This is **not** evidence of an uninterrupted 20-minute retry; the
+cause of the timeout's behavior across that interval has not been established.
+
+After verifying PID 24128's command line was the exact authorized digest
+pull, only that Docker client was stopped to enforce the wall-clock boundary.
+The helper exited with the resulting nonzero client status. Docker's daemon,
+cached layers and other containers were untouched. A subsequent image
+inspection still found no registered image. The workspace probe did not run,
+no public tests or installs ran, and no further retry was started.
+
+See the [retry evidence](../experiments/swe_bench_pro/v2_teleport_provisioning_retry_2026-10-16.json)
+for cache-reuse lines, artifact hashes, configured versus observed elapsed
+time and the terminal image check. Selected-task workspace coverage remains
+eight repositories, with Teleport and Proton Mail webclients unprovisioned;
+NodeBB remains parked and official readiness is unchanged.
+
+Next: inspect the incomplete download and wall-clock timeout behavior before
+requesting any further retry. Do not treat this overnight-interrupted attempt
+as a clean resource diagnostic or silently start another download.
