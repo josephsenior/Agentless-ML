@@ -1,0 +1,32 @@
+{
+  "condition": "Sleep-inclusive pull deadline implementation and local checks; no image retry",
+  "implementation": "tools/pull_deadline.py",
+  "integrated_helper": "tools/provision_v2_pilot_image.py",
+  "download_cap_seconds": 1200,
+  "poll_interval_seconds": 1,
+  "heartbeat_interval_seconds": 5,
+  "elapsed_policy": "Maximum of UTC epoch elapsed, monotonic elapsed and zero. Sleep counts through epoch time; monotonic elapsed prevents backward wall adjustments extending an otherwise expired run.",
+  "resume_policy": "A sleeping machine cannot kill processes. On resume, a short wait returns and the next deadline check stops the owned pull client if expired; no overnight wait for the full original Windows timeout.",
+  "late_completion_policy": "Deadline is checked before accepting process completion. A completion discovered after expiry is conservatively treated as timeout, since its actual completion time is unknown.",
+  "progress_files": ["pull.progress.jsonl", "pull.status.json", "pull.stdout.log", "pull.stderr.log"],
+  "progress_scope": "Observed CLI layer states, log growth, timestamps, remaining deadline, PID and terminal result; no inferred blob-byte throughput.",
+  "cleanup_scope": "Only the Popen-owned Docker pull client is killed and reaped on deadline/interruption. No daemon stop, cache deletion, system power change or automatic retry.",
+  "checks": [
+    "Successful client preserves cached layer state and final result",
+    "Simulated sleep wall-clock jump expires deadline",
+    "Backward wall adjustment cannot defeat monotonic deadline",
+    "Nonzero client exit remains failure",
+    "Interruption stops owned client and records outcome",
+    "Real harmless local Python child is terminated at a 0.15-second deadline; Docker never launched",
+    "Client spawn failure records terminal state"
+  ],
+  "test_command": "python -m pytest -q tests/test_pull_deadline.py tests/test_provision_v2_pilot_image.py tests/test_batch_v2_provisioning.py",
+  "focused_checks_passed": 19,
+  "new_pull_attempts": 0,
+  "public_tests_run": false,
+  "workspace_probe_executed": false,
+  "power_settings_changed": false,
+  "cached_layers_deleted": false,
+  "official_readiness_changed": false,
+  "retry_assessment": "Implementation is ready for one same-digest, same-cap retry after the user can keep the host awake throughout. Do not silently change host power policy. No new pull is started by this change."
+}

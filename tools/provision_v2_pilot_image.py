@@ -12,6 +12,7 @@ from agentless_ml.adapters.benchmarks import (
     SWEbenchProDataset, SWEbenchProDatasetPin, SWEbenchProV2Dataset, SWEbenchProV2DatasetPin,
 )
 from batch_v2_provisioning import ROOT, is_parked, pilot_task
+from pull_deadline import run_pull
 
 
 def verified_document(raw, descriptor):
@@ -123,9 +124,7 @@ def main():
         raise ValueError('image exceeds this bounded pilot download/disk policy; review first')
     if not args.reuse_downloaded:
         print('Pulling exactly one image by verified manifest digest', flush=True)
-        with (args.output / 'pull.stdout.log').open('wb') as stdout, (args.output / 'pull.stderr.log').open('wb') as stderr:
-            subprocess.run(['docker', 'pull', '--platform=linux/amd64', reference],
-                           stdout=stdout, stderr=stderr, check=True, timeout=1200)
+        run_pull(reference, args.output, timeout_seconds=1200)
     metadata = json.loads(subprocess.check_output(['docker', 'image', 'inspect', reference], timeout=30))[0]
     identity_kind = verify_local_identity(metadata, digest, manifest['config']['digest'], reference)
     existing = subprocess.run(['docker', 'image', 'inspect', task.container_image], capture_output=True, timeout=30)

@@ -737,3 +737,42 @@ resume), with durable progress evidence for the two large transfers. Run on
 an uninterrupted awake host; do not silently change system power settings or
 extend the existing cap. This diagnosis implements no code fix and starts no
 retry. Teleport remains unprovisioned and readiness is unchanged.
+
+### Sleep-inclusive deadline and progress journal
+
+`tools/pull_deadline.py` now replaces the provisioning helper's single long
+Windows wait. The pull cap remains **1,200 seconds**. The helper waits in
+at-most-one-second increments and checks elapsed epoch time on each pass,
+so time asleep counts. It also checks monotonic elapsed time to prevent a
+backward wall-clock adjustment from extending an expired run. A forward
+clock adjustment can end a run early; it does not grant additional time.
+
+No process can enforce a deadline while the host is asleep. On resume, the
+short wait ends and the next check kills and reaps only the pull client if
+expired. A completion first observed after expiry is conservatively rejected
+as a timeout, because its actual completion time is unknown. No daemon,
+cache or power-policy change is part of this implementation.
+
+Each new output directory retains `pull.progress.jsonl`: a start record,
+five-second heartbeats, remaining time, observed layer states and log-growth
+events, plus a terminal record. `pull.status.json` records success, failure,
+deadline expiry or interruption, including spawn failure. Original stdout
+and stderr remain separate. The journal explicitly labels log byte counts
+as **log bytes, not downloaded blob bytes**. Docker's noninteractive CLI does
+not provide continuous blob-byte progress here, so no transfer speed or
+download percentage is inferred. Files are flushed after journal entries;
+this provides saved process evidence, not a claim of power-loss durability.
+
+Tests cover simulated sleep, backward clock changes, successful cached-layer
+reporting, failed exits, interruption, spawn failure and a real harmless
+local Python child killed at a 0.15-second deadline. No Docker pull is used
+by these tests. The [implementation check record](../experiments/swe_bench_pro/v2_pull_deadline_checks_2026-10-16.json)
+declares the semantics and limits. Teleport remains unprovisioned; no new
+pull, workspace probe or public test has started.
+All **19 focused deadline/provisioning/batch checks passed**.
+
+Next: one same-digest, same-cap retry is reasonable once the user can keep
+the host awake for the complete attempt. Preserve caches and use a new
+output directory. The deadline guard makes resumed runs bounded; it does
+not make a sleeping host an uninterrupted diagnostic. Do not change power
+settings or start another retry implicitly.
