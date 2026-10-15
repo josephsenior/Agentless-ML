@@ -1,0 +1,74 @@
+{
+  "result": {
+    "task_id": "instance_flipt-io__flipt-02e21636c58e86c51119b63e0fb5ca7b813b07b1",
+    "base_commit": "85bb23a3571794c7ba01e61904bac6913c3d9729",
+    "parent_index_digest": "sha256:1d6965a24432e66be9e26598d362abcdfccc7d02bbc58665fa2cc0a39a3260c8",
+    "public_tag": "ghcr.io/scaleapi/swe-bench_pro-v2:instance_flipt-io__flipt-02e21636c58e86c51119b63e0fb5ca7b813b07b1",
+    "manifest_digest": "sha256:896e9e03b52384f2696043debe8cbf7c55334a6b5900570e6f4c91e0551d165c",
+    "config_digest": "sha256:7d16ea3620f7dd953ac6c555c89270910d03e1bbf92367faa2c345aff0bfb751",
+    "compressed_layer_bytes": 1933188709,
+    "layers": 21,
+    "host_free_bytes": 184772161536,
+    "host_reserve_required_bytes": 21474836480,
+    "note": "Compressed total is not unpacked size or incremental download size; layers may be shared.",
+    "generated_at": "2026-10-15T16:33:49.188062+02:00",
+    "image_id": "sha256:896e9e03b52384f2696043debe8cbf7c55334a6b5900570e6f4c91e0551d165c",
+    "docker_reported_size_bytes": 1933202966,
+    "identity_kind": "manifest-digest-containerd-store",
+    "probe": {
+      "task_id": "instance_flipt-io__flipt-02e21636c58e86c51119b63e0fb5ca7b813b07b1",
+      "repository": "https://github.com/flipt-io/flipt.git",
+      "language": "go",
+      "base_commit": "85bb23a3571794c7ba01e61904bac6913c3d9729",
+      "full_suite_ready": false,
+      "public_check_executed": false,
+      "model_calls": 0,
+      "verifier_run": false,
+      "image_id": "sha256:896e9e03b52384f2696043debe8cbf7c55334a6b5900570e6f4c91e0551d165c",
+      "workspace_probe": {
+        "result": {
+          "status": "pass",
+          "command": [
+            "sh",
+            "-c",
+            "set -e; repository=; for directory in /app /testbed; do if git -C \"$directory\" rev-parse --verify HEAD >/dev/null 2>&1; then repository=\"$directory\"; break; fi; done; test -n \"$repository\"; observed=$(git -C \"$repository\" rev-parse HEAD); test \"$observed\" = 85bb23a3571794c7ba01e61904bac6913c3d9729; git -C \"$repository\" archive --format=tar --output=/tmp/base.tar HEAD; mkdir /tmp/provisioned; tar --no-same-owner -xf /tmp/base.tar -C /tmp/provisioned; mktemp /tmp/provisioned/.agentless-write-XXXXXX; test ! -e /tmp/provisioned/.git; du -sk /tmp/provisioned; find /tmp/provisioned -type f | wc -l"
+          ],
+          "duration_seconds": 5.985696400000052,
+          "exit_code": 0,
+          "stdout_digest": "4ea5c1e17d919f4830bd8efb1d4fdac4e8afc9baf5a0e86f7699872cd48b3a3c",
+          "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "kind": "regression",
+          "test_cases": [],
+          "counted_test_ids": null
+        },
+        "image_id": "sha256:896e9e03b52384f2696043debe8cbf7c55334a6b5900570e6f4c91e0551d165c",
+        "container_name": "agentless-ml-72268a542ad4435e9363db5bea2b6bb3",
+        "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\output\\swe-bench-pro-v2-readiness\\2026-10-15-flipt-provision\\workspace-probes\\instance_flipt-io__flipt-02e21636c58e86c51119b63e0fb5ca7b813b07b1\\agentless-ml-72268a542ad4435e9363db5bea2b6bb3",
+        "message": ""
+      },
+      "status": "workspace_probe_passed_needs_public_plan"
+    },
+    "images_pulled": 1,
+    "public_tests_run": false,
+    "full_suites_run": 0,
+    "model_calls": 0,
+    "verifier_run": false,
+    "official_readiness_changed": false,
+    "host_free_after_bytes": 178030542848
+  },
+  "artifact_sha256": {
+    "result.json": "b33dec16dcb92b71f96f1fa7e3069939a038cfbb6d329bc99103fa34ca18a245",
+    "pull.stdout.log": "a6ccde0913c49f554d10c5993db806e07c5eb8f5c33d992da1ea730072c1a2af",
+    "manifest.json": "896e9e03b52384f2696043debe8cbf7c55334a6b5900570e6f4c91e0551d165c",
+    "pull.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "preflight.json": "ffaef000214a1544512784c85f5623bb29121ec8d505a341153d1e1db8ec788c",
+    "index.json": "1d6965a24432e66be9e26598d362abcdfccc7d02bbc58665fa2cc0a39a3260c8"
+  },
+  "probe_artifact_sha256": {
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "execution.json": "2934d247265ea1ec34602115e3adb6b709c3755938d1113d56c8cb40e9fbe3ec",
+    "stdout.log": "4ea5c1e17d919f4830bd8efb1d4fdac4e8afc9baf5a0e86f7699872cd48b3a3c"
+  },
+  "artifact_directory": "../output/swe-bench-pro-v2-readiness/2026-10-15-flipt-provision",
+  "expected_manifest": "sha256:896e9e03b52384f2696043debe8cbf7c55334a6b5900570e6f4c91e0551d165c"
+}

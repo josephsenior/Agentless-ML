@@ -505,3 +505,36 @@ Next: extend workspace coverage to Flipt, whose public image manifest was
 already verified (1.93 GB compressed). Provision only that image, then run the
 cheap workspace probe before choosing any public test. No further Open Library
 suite expansion is needed for this pilot.
+
+### Flipt provisioning follow-up
+
+The selected Flipt image contains 21 layers totalling 1,933,188,709 compressed
+bytes (1.93 GB). The helper was given the previously reviewed Linux/amd64
+manifest digest
+`sha256:896e9e03b52384f2696043debe8cbf7c55334a6b5900570e6f4c91e0551d165c`
+via `--expected-manifest`; the public index and selected manifest still match
+the earlier preflight. Host free space was 184,772,161,536 bytes before the
+pull, above the existing reserve. Only this one image is in scope; no cleanup
+or cache-supplement build is requested. All twelve provisioning/batch checks
+passed before execution.
+
+The pull completed, the local image identity was verified and its task tag
+retained. The unchanged cheap workspace probe passed in **5.99 seconds**.
+Image HEAD matched `85bb23a3571794c7ba01e61904bac6913c3d9729`; committed
+source extracted into disposable scratch, accepted a temporary write and
+contained no Git directory. Offline probing, read-only image root, dropped
+capabilities, no host mounts, one CPU, task-declared memory, 4 GiB scratch,
+disabled swap and the 120-second probe cap were unchanged. The disposable
+container was removed normally; the verified image remains installed.
+
+The [Flipt provisioning evidence](../experiments/swe_bench_pro/v2_flipt_provisioning_2026-10-15.json)
+records exact image/base identities, limits and hashes for the download and
+probe artifacts. Only one image was pulled. No dependency installation,
+repository tests, model calls, official verifier or NodeBB runs occurred.
+Cumulative workspace evidence now covers one selected task in **eight
+repositories**. Teleport and Proton Mail webclients still need local images;
+NodeBB remains parked. These counts are not full-suite or official readiness.
+
+Next: inspect Flipt's pinned public test configuration and select one bounded
+check before running tests. Do not expand directly to its full integration
+suite or start additional services without evidence that they are needed.
