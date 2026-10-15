@@ -321,7 +321,7 @@ The public Makefile uses `go test -race ./...`; the pinned CI adds coverage
 and verbose output. Keep those settings while narrowing the package:
 
 ```sh
-go test -race -cover -v -json -count=1 -p 1 -parallel 1 -timeout 120s ./utils/number \
+go test -race -cover -v -json -count=1 -p 1 -timeout 120s ./utils/number \
   -args -ginkgo.junit-report=/tmp/navidrome-number.xml
 ```
 
@@ -342,3 +342,41 @@ are in the [selection record](../experiments/swe_bench_pro/v2_navidrome_number_s
 
 Next: implement the small diagnostic wrapper and run this one package, retaining
 setup failures or timeouts if they occur. Do not expand to the full suite.
+
+### Navidrome number wrapper
+
+`tools/run_navidrome_number_smoke.py` implements that selected check. It uses
+the existing Docker runner and JUnit reader, checks exactly six expected spec
+IDs, and refuses to count Go's single `TestNumber` wrapper as six passes.
+Build outputs use fresh writable scratch; no image build cache is copied.
+The module cache remains read-only, dependency downloads are disabled and
+source/configuration hashes are printed before execution.
+
+The first attempt compiled successfully, then Ginkgo rejected the proposed
+explicit Go `-parallel 1` flag before executing specs. It exited 1 after
+47.31 seconds and produced no JUnit report, correctly recorded as a harness
+error rather than a failed test or a passing smoke. The wrapper now omits
+that incompatible flag. Ginkgo remains serial by default, with `GOMAXPROCS=1`,
+one build worker and the same CPU/resource/time limits. The selection record
+retains the original proposal; the runnable command above reflects this
+correction. No repository tests or configuration were changed.
+
+The corrected run passed **all six individual specs** in **55.99 seconds**,
+including preparation and fresh compilation. Race detection and coverage
+remained enabled. Native Ginkgo JUnit is retained as `report.xml`; Go JSON
+events are retained in `stdout.log` after the version/source-hash preamble.
+The evidence includes both attempts and artifact hashes:
+[Navidrome number smoke](../experiments/swe_bench_pro/v2_navidrome_number_smoke_2026-10-15.json).
+Fifty-one focused report-parser, provisioning and wrapper checks passed;
+the other two smoke wrappers also passed their four checks in the initial
+seven-check wrapper run. All diagnostic containers were removed normally.
+
+This establishes a selected public test package, not the full suite, a
+historical CI reproduction or task-specific repair correctness. The image's
+Go 1.24.3 toolchain difference remains declared. No dependency installation,
+model call, official verifier or NodeBB run occurred. Official readiness is
+unchanged; the standalone wrapper is not yet a registered batch public plan.
+
+Next: extend runtime breadth to Open Library using its already verified
+1.07-GB-compressed image, then reuse the cheap workspace probe before choosing
+a public test. No further Navidrome suite expansion is needed for this pilot.

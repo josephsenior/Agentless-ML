@@ -1,0 +1,129 @@
+{
+  "result": {
+    "condition": "Navidrome selected public number-package smoke",
+    "image_id": "sha256:e02e944a8d412a74f87549ac6e61c31ae628503f253cde75bd1634c6e491937b",
+    "base_commit": "2f90fc9bd40e24afd900b5ee85426f32684b960b",
+    "selected_package": "./utils/number",
+    "expected_tests": [
+      "Number Suite::[It] Max returns the biggest float",
+      "Number Suite::[It] Max returns the biggest int",
+      "Number Suite::[It] Max returns zero value if no arguments are passed",
+      "Number Suite::[It] Min returns the smallest float",
+      "Number Suite::[It] Min returns the smallest int",
+      "Number Suite::[It] Min returns zero value if no arguments are passed"
+    ],
+    "execution": {
+      "result": {
+        "status": "pass",
+        "command": [
+          "sh",
+          "-c",
+          "set -e; test \"$(git -C /app rev-parse HEAD)\" = 2f90fc9bd40e24afd900b5ee85426f32684b960b; git -C /app archive --format=tar --output=/tmp/base.tar HEAD; tar --no-same-owner -xf /tmp/base.tar -C /tmp/work; cd /tmp/work; export HOME=/tmp GOCACHE=/tmp/navidrome-go-build GOTMPDIR=/tmp GOMODCACHE=/go/pkg/mod GOPROXY=off GOTOOLCHAIN=local GOMAXPROCS=1 GOFLAGS=-mod=readonly; go version; sha256sum Makefile .github/workflows/pipeline.yml go.mod go.sum utils/number/number.go utils/number/number_test.go; go test -race -cover -v -json -count=1 -p 1 -timeout 120s ./utils/number -args -ginkgo.junit-report=/tmp/navidrome-number.xml"
+        ],
+        "duration_seconds": 55.99150670000017,
+        "exit_code": 0,
+        "stdout_digest": "a752dcad62dd29372d9ea3e842a3785a4b082129749e4976419bd146b4ce0869",
+        "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "kind": "regression",
+        "test_cases": [
+          {
+            "test_id": "Number Suite::[It] Min returns zero value if no arguments are passed",
+            "status": "passed"
+          },
+          {
+            "test_id": "Number Suite::[It] Min returns the smallest int",
+            "status": "passed"
+          },
+          {
+            "test_id": "Number Suite::[It] Min returns the smallest float",
+            "status": "passed"
+          },
+          {
+            "test_id": "Number Suite::[It] Max returns zero value if no arguments are passed",
+            "status": "passed"
+          },
+          {
+            "test_id": "Number Suite::[It] Max returns the biggest int",
+            "status": "passed"
+          },
+          {
+            "test_id": "Number Suite::[It] Max returns the biggest float",
+            "status": "passed"
+          }
+        ],
+        "counted_test_ids": null
+      },
+      "image_id": "sha256:e02e944a8d412a74f87549ac6e61c31ae628503f253cde75bd1634c6e491937b",
+      "container_name": "agentless-ml-725af65b01954f1a889bff2810d4d4aa",
+      "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\output\\swe-bench-pro-v2-readiness\\2026-10-15-navidrome-number-smoke-v2\\executions\\agentless-ml-725af65b01954f1a889bff2810d4d4aa",
+      "message": ""
+    },
+    "individual_report_verified": true,
+    "smoke_checked": true,
+    "toolchain_note": "Image Go 1.24.3 differs from pinned CI Go 1.18/1.19.",
+    "build_cache": "fresh writable scratch; no precompiled image cache copied",
+    "full_suite_ready": false,
+    "tests_modified": false,
+    "dependencies_installed": false,
+    "model_calls": 0,
+    "verifier_run": false
+  },
+  "artifact_sha256": {
+    "report.xml": "17777b22271a86212ba9b4abe615a98a7caaea1de73405fc118a2ce85e9e6b81",
+    "stdout.log": "a752dcad62dd29372d9ea3e842a3785a4b082129749e4976419bd146b4ce0869",
+    "execution.json": "1e7a1490f44636a8905a7af189d9ad3db742043752b11a318518dcfb2bf2d58e",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "first_attempt": {
+    "artifact_sha256": {
+      "stdout.log": "53ec7a932eab23e4c3238e8e38d565b2934dfac836d7d109bec0e57b2e0e626d",
+      "execution.json": "ad16fc0890093312b08251dc5cacb1b40367a4082ff52387f435d0cd06a4e12b",
+      "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "result": {
+      "condition": "Navidrome selected public number-package smoke",
+      "image_id": "sha256:e02e944a8d412a74f87549ac6e61c31ae628503f253cde75bd1634c6e491937b",
+      "base_commit": "2f90fc9bd40e24afd900b5ee85426f32684b960b",
+      "selected_package": "./utils/number",
+      "expected_tests": [
+        "Number Suite::[It] Max returns the biggest float",
+        "Number Suite::[It] Max returns the biggest int",
+        "Number Suite::[It] Max returns zero value if no arguments are passed",
+        "Number Suite::[It] Min returns the smallest float",
+        "Number Suite::[It] Min returns the smallest int",
+        "Number Suite::[It] Min returns zero value if no arguments are passed"
+      ],
+      "execution": {
+        "result": {
+          "status": "harness_error",
+          "command": [
+            "sh",
+            "-c",
+            "set -e; test \"$(git -C /app rev-parse HEAD)\" = 2f90fc9bd40e24afd900b5ee85426f32684b960b; git -C /app archive --format=tar --output=/tmp/base.tar HEAD; tar --no-same-owner -xf /tmp/base.tar -C /tmp/work; cd /tmp/work; export HOME=/tmp GOCACHE=/tmp/navidrome-go-build GOTMPDIR=/tmp GOMODCACHE=/go/pkg/mod GOPROXY=off GOTOOLCHAIN=local GOMAXPROCS=1 GOFLAGS=-mod=readonly; go version; sha256sum Makefile .github/workflows/pipeline.yml go.mod go.sum utils/number/number.go utils/number/number_test.go; go test -race -cover -v -json -count=1 -p 1 -parallel 1 -timeout 120s ./utils/number -args -ginkgo.junit-report=/tmp/navidrome-number.xml"
+          ],
+          "duration_seconds": 47.31365230000006,
+          "exit_code": 1,
+          "stdout_digest": "53ec7a932eab23e4c3238e8e38d565b2934dfac836d7d109bec0e57b2e0e626d",
+          "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "kind": "regression",
+          "test_cases": [],
+          "counted_test_ids": null
+        },
+        "image_id": "sha256:e02e944a8d412a74f87549ac6e61c31ae628503f253cde75bd1634c6e491937b",
+        "container_name": "agentless-ml-49e5831506c14c76b27f028b54db273b",
+        "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\output\\swe-bench-pro-v2-readiness\\2026-10-15-navidrome-number-smoke\\executions\\agentless-ml-49e5831506c14c76b27f028b54db273b",
+        "message": "declared test report was not written: /tmp/navidrome-number.xml"
+      },
+      "individual_report_verified": false,
+      "smoke_checked": false,
+      "toolchain_note": "Image Go 1.24.3 differs from pinned CI Go 1.18/1.19.",
+      "build_cache": "fresh writable scratch; no precompiled image cache copied",
+      "full_suite_ready": false,
+      "tests_modified": false,
+      "dependencies_installed": false,
+      "model_calls": 0,
+      "verifier_run": false
+    },
+    "diagnosis": "Ginkgo rejected explicit Go -parallel 1 before executing specs. Only this incompatible wrapper flag was removed for the second attempt; tests, image and limits stayed unchanged."
+  }
+}
