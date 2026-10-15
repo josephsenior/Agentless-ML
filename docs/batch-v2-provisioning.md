@@ -538,3 +538,50 @@ NodeBB remains parked. These counts are not full-suite or official readiness.
 Next: inspect Flipt's pinned public test configuration and select one bounded
 check before running tests. Do not expand directly to its full integration
 suite or start additional services without evidence that they are needed.
+
+### Selected Flipt public check (not run)
+
+Select `TestIs` in `internal/release/check_test.go`. Its six named subtests
+cover two release versions, `dev`, a snapshot and two release-candidate
+formats. They call the in-process `release.Is` regex checks; no server,
+database, cloud storage or GitHub request is needed by those test bodies.
+The remaining package code and tests still compile, so this is not proof
+that its complete dependency graph is available offline.
+
+The pinned CI enters through `mage dagger:run test:unit`. Its implementation
+in `build/testing/test.go` uses race detection, one build worker and atomic
+coverage, alongside several service containers for other packages. Preserve
+those test flags while narrowing to this one public test:
+
+```sh
+go test -race -p 1 -coverprofile=/tmp/flipt-release-coverage.txt \
+  -covermode=atomic -v -json -count=1 -timeout=60s \
+  -run '^TestIs$' ./internal/release
+```
+
+The proposed wrapper should extract committed source into `/tmp/work`, keep
+the original `go.work` and local module layout, use the image's read-only
+module cache, and write a fresh build cache and coverage under `/tmp`.
+Keep one CPU, 4 GiB memory/scratch and a 180-second complete-command cap,
+including compilation. Disable dependency and automatic toolchain downloads;
+install nothing and change no tests. Do not launch Dagger or service
+containers for this selected service-independent check.
+
+Retain native Go JSON events and require all six child tests, the `TestIs`
+parent and package completion to pass. Do not count the parent as another
+independent case, or accept a parent-only or exit-only result. No Go CTRF
+reporter was found on the inspected PATH, so the wrapper must verify native
+events rather than assume an installed reporter. Report this as diagnostic
+evidence, not an implicitly registered framework-wide reporting adapter.
+
+The image supplies Go 1.24.3. The workflow variable says 1.21, while `go.mod`
+and `go.work` require 1.22.0 with a go1.22.2 toolchain directive. Preserve and
+declare that mismatch: this is an image-native smoke, not historical CI
+parity. The [selection record](../experiments/swe_bench_pro/v2_flipt_release_selection_2026-10-15.json)
+pins source hashes, all six expected names, proposed environment and limits.
+No tests, collection, compilation or dependency installation ran during
+selection. Official readiness is unchanged; NodeBB remains parked.
+
+Next: implement a small wrapper and run this selected test with native
+individual-event verification. Retain any setup failure without expanding
+to a full-suite debugging campaign.

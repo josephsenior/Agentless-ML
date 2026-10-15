@@ -1,0 +1,66 @@
+{
+  "condition": "Selected bounded Flipt public release-version check; not executed",
+  "task_id": "instance_flipt-io__flipt-02e21636c58e86c51119b63e0fb5ca7b813b07b1",
+  "image_id": "sha256:896e9e03b52384f2696043debe8cbf7c55334a6b5900570e6f4c91e0551d165c",
+  "base_commit": "85bb23a3571794c7ba01e61904bac6913c3d9729",
+  "selected_package": "./internal/release",
+  "selected_test": "TestIs",
+  "selected_file": "internal/release/check_test.go",
+  "implementation_file": "internal/release/check.go",
+  "public_configuration": {
+    "ci_entrypoint": "mage dagger:run test:unit",
+    "dagger_unit_command": "go test -race -p 1 -coverprofile=coverage.txt -covermode=atomic ./...",
+    "mage_go_test_flags": "-v -covermode=atomic -count=1 -coverprofile=coverage.txt -timeout=60s",
+    "ci_go_version_variable": "1.21",
+    "module_and_workspace_go_directive": "1.22.0",
+    "module_and_workspace_toolchain_directive": "go1.22.2",
+    "installed_go_version": "go1.24.3 linux/amd64"
+  },
+  "proposed_command": "go test -race -p 1 -coverprofile=/tmp/flipt-release-coverage.txt -covermode=atomic -v -json -count=1 -timeout=60s -run '^TestIs$' ./internal/release",
+  "expected_child_test_names": [
+    "TestIs/0.17.1",
+    "TestIs/1.0.0",
+    "TestIs/dev",
+    "TestIs/1.0.0-snapshot",
+    "TestIs/1.0.0-rc1",
+    "TestIs/1.0.0-rc.1"
+  ],
+  "count_basis": "Static source inspection: TestIs loops over six named versions and calls t.Run for each. The parent TestIs is an additional reporting event, not a seventh independent case.",
+  "proposed_environment": {
+    "HOME": "/tmp",
+    "GOCACHE": "/tmp/flipt-go-build",
+    "GOTMPDIR": "/tmp",
+    "GOMODCACHE": "/go/pkg/mod",
+    "GOPROXY": "off",
+    "GOTOOLCHAIN": "local",
+    "GOMAXPROCS": "1",
+    "GOFLAGS": "-mod=readonly"
+  },
+  "proposed_limits": {"cpus":1,"memory_mb":4096,"scratch_mb":4096,"pids_limit":2048,"outer_timeout_seconds":180,"network":"none","read_only_root":true,"cap_drop":"ALL","no_new_privileges":true},
+  "workspace_plan": "Verify image HEAD and extract committed source into /tmp/work. Preserve go.work and its local modules. Build extracted source with read-only image dependencies and fresh writable build scratch. No dependency installation, test modification or toolchain download.",
+  "report_plan": "Retain native go test -json output and coverage. Require all six expected child tests to run and pass, plus passing TestIs parent, successful package completion and zero command exit. Reject skips, failures, missing cases or unexpected executed tests. An exit-only result or parent-only result is insufficient. No Go CTRF reporter was found on the inspected image PATH; do not assume it exists.",
+  "public_source_sha256": {
+    ".github/workflows/test.yml": "d20fa46e6b68d1a0536c798f9af146097a73dd0067aa2358f405b0ec839fa34f",
+    "magefile.go": "a668036659702207cea2fd6a34fd5c9b01436f1ae95f5cb1f5998f605f26173c",
+    "build/testing/test.go": "595742c885225c8f85e66d5111d65e34e2ea136296ae191a1f25144b97154aca",
+    "go.mod": "78a0d56c385a32648d4eab7b6bd54e92fbc89cf8e76fe509f088776ec47c2dcb",
+    "go.sum": "3c726b5b25dbc43848cc10d2c64fac2597f0c6e4d35f3500db0ce6f7c09e89e1",
+    "go.work": "8f4af3bd2f3858ccca0c01984c2da59b5cbd3becefffdcc3cc180cac24b34338",
+    "go.work.sum": "dd5da9c318ff44a50635507d22f9ac1df5e387aacea355cb9164b73893f0075b",
+    "internal/release/check.go": "08b6f62e14585de4196435a7b7ec5a6e4df638dfdefbdd14ea3561a4655a7341",
+    "internal/release/check_test.go": "79d48b6b3fcaef5d04cec8a48119eab4681ab102e6adfbe7ad0f86262846b881"
+  },
+  "limitations": [
+    "The selected Is function uses regex checks; package compilation still includes other code and test dependencies. No compilation or dependency resolution has been attempted.",
+    "The full Dagger unit job provisions Redis, Gitea and cloud-storage services. This selected test does not use them; the smoke is not a reproduction of that full job.",
+    "Installed Go 1.24.3 differs from both the workflow variable and repository toolchain directive; declare an image-native smoke rather than historical toolchain parity.",
+    "This is a selected public smoke, not the full package suite, full repository suite or task-specific repair correctness check."
+  ],
+  "tests_run": false,
+  "collection_run": false,
+  "dependencies_installed": false,
+  "full_suite_ready": false,
+  "official_readiness_changed": false,
+  "model_calls": 0,
+  "verifier_run": false
+}
