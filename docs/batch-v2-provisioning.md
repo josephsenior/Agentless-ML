@@ -419,3 +419,50 @@ full-suite readiness or a changed official readiness count.
 Next: inspect Open Library's pinned public test configuration and select one
 bounded check before running any tests. Do not jump to its full service stack
 or test suite.
+
+### Selected Open Library public check (not run)
+
+Select the complete `openlibrary/tests/solr/test_query_utils.py` file. Static
+inspection identifies **nine cases**: five query-tree removals, two subtree
+replacements, one parser case and one field-replacement case. The tests and
+their query implementation use in-process `luqum` parsing, not a live Solr
+server. This count is source-derived; pytest collection has not run.
+
+The public `make test-py` target uses pytest with exclusions for Infogami,
+vendor and node_modules. Narrow that command to the selected file, preserve
+`pyproject.toml` and inherited hooks, and add native individual reporting:
+
+```sh
+python -m pytest openlibrary/tests/solr/test_query_utils.py \
+  --ignore=infogami --ignore=vendor --ignore=node_modules \
+  -o cache_dir=/tmp/openlibrary-pytest-cache \
+  --junitxml=/tmp/openlibrary-query.xml
+```
+
+Use the same protected disposable workspace, one CPU, 4 GiB memory/scratch
+and 180-second complete-command cap. The image's Python 3.12.2 matches the
+pinned project's narrow Python range. Installed metadata reports pytest
+7.4.4 and luqum 0.11.0, matching the public requirements; this does not yet
+prove all inherited imports work. No dependency installation is proposed.
+
+There is one explicit prerequisite: `openlibrary/conftest.py` imports
+Infogami. Preserve it, including its own autouse network/sleep restrictions;
+do not bypass it with `--noconftest`, disable plugin loading, or replace its
+mocks. The parent Git tree pins `vendor/infogami` to
+`d918e184ca1b0de7e8d3b02ec7b7dc4a08453cea`. The image contains files there,
+but its directory-level `rev-parse HEAD` resolves to the parent Open Library
+commit, so it does **not** verify the submodule revision. Before supplying
+those files to the extracted workspace, verify their exact public contents
+against the required commit. An ordinary parent `git archive` omits them.
+The JavaScript WMD submodule is not needed by the inspected test bodies;
+do not provision it unless actual setup evidence requires it.
+
+The [selection record](../experiments/swe_bench_pro/v2_openlibrary_query_selection_2026-10-15.json)
+contains all nine expected node IDs, source fingerprints, proposed command
+and setup caveats. No tests, collection, compilation or dependency installs
+ran during this selection. Official readiness is unchanged; NodeBB remains
+parked.
+
+Next: verify the required Infogami contents, then implement a small wrapper
+and run only this selected public file, retaining all nine individual results
+or any setup error. Do not launch the full service stack or suite.

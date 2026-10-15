@@ -1,0 +1,63 @@
+{
+  "condition": "Selected bounded public Open Library query-utility check; not executed",
+  "task_id": "instance_internetarchive__openlibrary-00bec1e7c8f3272c469a58e1377df03f955ed478-v13642507b4fc1f8d234172bf8129942da2c2ca26",
+  "image_id": "sha256:03205f63224d992c930df7a2b898353d9d3dface4ab4d921eebc73dc909c1ba6",
+  "base_commit": "02f647f7d525286b6e3a661133c3772649e585cd",
+  "selected_file": "openlibrary/tests/solr/test_query_utils.py",
+  "implementation_file": "openlibrary/solr/query_utils.py",
+  "public_configuration": {
+    "Makefile_test_py": "pytest . --ignore=infogami --ignore=vendor --ignore=node_modules",
+    "pytest_configuration": "pyproject.toml: asyncio_mode = strict",
+    "required_python": ">=3.12.2,<3.12.3",
+    "installed_python": "3.12.2",
+    "pytest_dist_info_version": "7.4.4",
+    "luqum_required_and_dist_info_version": "0.11.0"
+  },
+  "proposed_command": "python -m pytest openlibrary/tests/solr/test_query_utils.py --ignore=infogami --ignore=vendor --ignore=node_modules -o cache_dir=/tmp/openlibrary-pytest-cache --junitxml=/tmp/openlibrary-query.xml",
+  "expected_node_ids": [
+    "openlibrary/tests/solr/test_query_utils.py::test_luqum_remove_child[Complete match]",
+    "openlibrary/tests/solr/test_query_utils.py::test_luqum_remove_child[Binary Op Left]",
+    "openlibrary/tests/solr/test_query_utils.py::test_luqum_remove_child[Binary Op Right]",
+    "openlibrary/tests/solr/test_query_utils.py::test_luqum_remove_child[Group]",
+    "openlibrary/tests/solr/test_query_utils.py::test_luqum_remove_child[Unary]",
+    "openlibrary/tests/solr/test_query_utils.py::test_luqum_replace_child[Complex replace]",
+    "openlibrary/tests/solr/test_query_utils.py::test_luqum_replace_child[Deeply nested]",
+    "openlibrary/tests/solr/test_query_utils.py::test_luqum_parser",
+    "openlibrary/tests/solr/test_query_utils.py::test_luqum_replace_fields"
+  ],
+  "count_basis": "Static source inspection: five remove cases, two replace cases, one parser case, one field-replacement case. Not pytest collection.",
+  "inherited_setup": {
+    "conftest": "openlibrary/conftest.py",
+    "preserve": "All hooks, plugin loading and autouse fixtures, including the repository's own no_requests and no_sleep fixtures. No --noconftest or replacement mocks.",
+    "required_submodule": "vendor/infogami",
+    "required_submodule_commit": "d918e184ca1b0de7e8d3b02ec7b7dc4a08453cea",
+    "submodule_files_present_in_image": true,
+    "submodule_content_verified": false,
+    "caution": "git -C vendor/infogami rev-parse HEAD returned the parent Open Library commit, not the required submodule commit. Directory presence does not verify the submodule. Verify exact public contents before supplying them to the disposable workspace."
+  },
+  "proposed_limits": {"cpus":1,"memory_mb":4096,"scratch_mb":4096,"pids_limit":2048,"outer_timeout_seconds":180,"network":"none","read_only_root":true,"cap_drop":"ALL","no_new_privileges":true},
+  "workspace_plan": "Verify image HEAD and extract committed base source into /tmp/work. Supply only verified required public submodule contents; retain the committed infogami symlink and original test configuration. Resolve project imports from the extracted source, not /app. Keep caches under /tmp and install no dependencies.",
+  "report_plan": "Retain native JUnit XML and require exactly nine expected individual cases, all passed, with no skips or collection errors. Confirm emitted IDs against the source-derived inventory before declaring success.",
+  "public_source_sha256": {
+    "Makefile": "145ff4d9d0c99b781f74bf52952e8cd5518565d13387364f054b912fac712f06",
+    "pyproject.toml": "b82bc9ac4a5dd719a305c0dd115a7dd3193a895f031e961a8138e51dbc1c2779",
+    "requirements_test.txt": "4ac012ee8c3617d157e12a8464d2a9d4e2f7d5be42e584f81aa0c36f1bccfe90",
+    ".github/workflows/python_tests.yml": "a9fd908a8e936385f7f1f59e2f0ea112984e71c2272fccc5c0baa9b62587be21",
+    "openlibrary/conftest.py": "5446ed4f264b1a59575d82470b24c9cb95bc487c8a4929642f0eb38f7805ab0b",
+    "openlibrary/solr/query_utils.py": "c6919cd66ebb039df4936ff6b96f5c78345fd1268b9a24af45a66946135f8634",
+    "openlibrary/tests/solr/test_query_utils.py": "baf6c81ae68021e17e7018ee6420eaae530264a766468687e18c7bb153eed4eb",
+    ".gitmodules": "a626221c2b3bc809b7a2bfac52b64824598de3823f83b136777032e6ac93222d"
+  },
+  "limitations": [
+    "The test bodies and query implementation use in-process parsing, not a live Solr service; inherited import/setup behavior still needs runtime validation.",
+    "Installed dependency metadata is not proof that all inherited hooks import successfully.",
+    "This selects one public file, not the full suite, doctest schedule or a task-specific repair correctness check."
+  ],
+  "tests_run": false,
+  "collection_run": false,
+  "dependencies_installed": false,
+  "full_suite_ready": false,
+  "official_readiness_changed": false,
+  "model_calls": 0,
+  "verifier_run": false
+}
