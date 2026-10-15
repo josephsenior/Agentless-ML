@@ -1,0 +1,53 @@
+{
+  "pull_stderr": null,
+  "artifact_sha256": {
+    "preflight.json": "df01be241fd8b274ad971fc7dcd7786eb75e3dfc0ca64df65ab2f5b29ffbf4e1",
+    "manifest.json": "576147fc4357d7a6b4a6a347477e9a95f5e7fd01b277f25284589356350717e9",
+    "pull.stdout.log": "0bd6c25d7400b9ecbb625d397e00191c91cab6da26a77abe54c229fbf654e55d",
+    "pull.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "pull_stdout_tail": [
+    "43c4264eed91: Pull complete",
+    "ab19dfae90ef: Pull complete",
+    "c1485fd2eed9: Download complete",
+    "3b7e8ddf5341: Download complete",
+    "e7bff916ab0c: Download complete",
+    "e7bff916ab0c: Pull complete",
+    "4f4fb700ef54: Pull complete",
+    "78cee99375e3: Pull complete",
+    "e926874a3859: Pull complete",
+    "a447a3fa4bf4: Download complete",
+    "a447a3fa4bf4: Pull complete",
+    "b28643520fbd: Download complete"
+  ],
+  "digest_inspection_exit_code": 1,
+  "completed_layer_lines": 7,
+  "preflight": {
+    "task_id": "instance_gravitational__teleport-005dcb16bacc6a5d5890c4cd302ccfd4298e275d-vee9b09fb20c43af7e520f57e9239bbcf46b7113d",
+    "base_commit": "4d7c51b4f535cecfd139625e6af1746c46abc712",
+    "parent_index_digest": null,
+    "public_tag": "ghcr.io/scaleapi/swe-bench_pro-v2:instance_gravitational__teleport-005dcb16bacc6a5d5890c4cd302ccfd4298e275d-vee9b09fb20c43af7e520f57e9239bbcf46b7113d",
+    "manifest_digest": "sha256:576147fc4357d7a6b4a6a347477e9a95f5e7fd01b277f25284589356350717e9",
+    "config_digest": "sha256:321f47a1795d32a9965d9beb6e1efaf3da0322f307acb065ce44899052dad928",
+    "compressed_layer_bytes": 3500070075,
+    "layers": 21,
+    "host_free_bytes": 177770639360,
+    "host_reserve_required_bytes": 21474836480,
+    "note": "Compressed total is not unpacked size or incremental download size; layers may be shared."
+  },
+  "digest_inspection_output": "[]\r\nError response from daemon: No such image: ghcr.io/scaleapi/swe-bench_pro-v2@sha256:576147fc4357d7a6b4a6a347477e9a95f5e7fd01b277f25284589356350717e9\r\n",
+  "condition": "Teleport reviewed-image provisioning attempt; pull timed out before workspace probe",
+  "status": "image_pull_timeout",
+  "expected_manifest": "sha256:576147fc4357d7a6b4a6a347477e9a95f5e7fd01b277f25284589356350717e9",
+  "pull_timeout_seconds": 1200,
+  "pull_attempts": 1,
+  "workspace_probe_executed": false,
+  "public_tests_run": false,
+  "dependencies_installed": false,
+  "full_suites_run": 0,
+  "model_calls": 0,
+  "verifier_run": false,
+  "official_readiness_changed": false,
+  "artifact_directory": "../output/swe-bench-pro-v2-readiness/2026-10-15-teleport-provision",
+  "note": "Client pull was terminated at its timeout. Partial Docker layers were not deleted. This is not a repository/test failure; the immediate cause is the capped incomplete pull, with no verified underlying network or extraction diagnosis."
+}

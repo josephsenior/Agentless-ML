@@ -624,3 +624,37 @@ Next: extend workspace coverage to Teleport using its already reviewed image
 (3.50 GB compressed), then reuse the cheap probe before choosing a public
 test. Proton Mail webclients is the other remaining unprovisioned repository;
 do not pull both images as an unbounded batch.
+
+### Teleport provisioning follow-up
+
+The selected Teleport image contains 21 layers totalling 3,500,070,075
+compressed bytes (3.50 GB). The helper was given the previously reviewed
+manifest digest
+`sha256:576147fc4357d7a6b4a6a347477e9a95f5e7fd01b277f25284589356350717e9`
+via `--expected-manifest`; the public manifest still matches that pin.
+Host free space was 177,770,639,360 bytes before the pull, above the existing
+reserve. Only this one image is in scope; no cleanup or cache-supplement
+build is requested. All twelve provisioning/batch checks passed before
+execution.
+
+The single pull attempt reached the existing **1,200-second download cap**
+and raised `subprocess.TimeoutExpired`. Docker's subsequent exact-digest
+inspection reported no registered image. The helper therefore never tagged
+the image or started a workspace probe. The saved pull log contains seven
+completed-layer lines and additional downloaded layers; these are partial
+download evidence, not a provisioned image. No partial Docker layers were
+deleted, no cleanup or retry ran, and no repository tests were started.
+
+The [Teleport provisioning evidence](../experiments/swe_bench_pro/v2_teleport_provisioning_2026-10-15.json)
+records the verified preflight, exact cap, incomplete pull log hashes and
+failed local-image inspection. This is an image-provisioning timeout, not a
+Teleport test failure or a demonstrated framework defect. The available
+logs do not distinguish slow transfer from slow extraction sufficiently to
+claim a root cause. No dependency installation, model call, official verifier
+or NodeBB run occurred. Cumulative selected-task workspace coverage remains
+**eight repositories**; Teleport and Proton Mail webclients remain unprovisioned.
+
+Next: review one explicitly bounded retry of this same immutable digest,
+allowing Docker to reuse any retained layers, with a new evidence directory
+and the same download cap. Do not extend the timeout, clear Docker's cache
+or claim workspace readiness without a successful probe. No retry has started.
