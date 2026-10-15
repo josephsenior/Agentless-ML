@@ -307,3 +307,38 @@ Next: choose one bounded public Navidrome check from its pinned configuration.
 For further runtime breadth, Open Library is the next-smallest verified image
 (1.07 GB compressed); provision it separately rather than downloading the
 remaining four as a batch.
+
+### Selected Navidrome public check (not run)
+
+Select `utils/number/number_test.go`, the complete `./utils/number` package.
+It has six Ginkgo specs: empty arguments, integers and floats for each of
+`Min` and `Max`. The package needs no server, database, music files or external
+service. Its direct implementation imports `golang.org/x/exp/constraints`;
+the image contains that module and the pinned Ginkgo/Gomega dependencies,
+but dependency resolution is not yet proven by a build.
+
+The public Makefile uses `go test -race ./...`; the pinned CI adds coverage
+and verbose output. Keep those settings while narrowing the package:
+
+```sh
+go test -race -cover -v -json -count=1 -p 1 -parallel 1 -timeout 120s ./utils/number \
+  -args -ginkgo.junit-report=/tmp/navidrome-number.xml
+```
+
+The eventual wrapper should verify HEAD, extract source into `/tmp/work`, use
+the image's read-only module cache and fresh writable build scratch, and cap
+the complete invocation at 180 seconds, including compilation. Disable
+dependency downloads and automatic toolchain downloads for this bounded
+check. Preserve the existing 1-CPU, 4-GiB memory/scratch, read-only-root and
+capability protections. Save Go JSON and native Ginkgo JUnit, then require
+all six individual specs to pass; the single `TestNumber` wrapper is not six
+individual results. Ginkgo's installed public source confirms its JUnit flag.
+
+The image provides Go 1.24.3, whereas the pinned CI matrix used Go 1.18/1.19.
+Record this as an image-native smoke, not historical toolchain parity. No
+tests, configuration changes, dependency installs or compilation ran during
+selection. Exact source hashes, proposed environment and expected spec names
+are in the [selection record](../experiments/swe_bench_pro/v2_navidrome_number_selection_2026-10-15.json).
+
+Next: implement the small diagnostic wrapper and run this one package, retaining
+setup failures or timeouts if they occur. Do not expand to the full suite.

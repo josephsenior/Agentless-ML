@@ -1,0 +1,58 @@
+{
+  "condition": "Selected bounded public Navidrome number-package check; not executed",
+  "task_id": "instance_navidrome__navidrome-0130c6dc13438b48cf0fdfab08a89e357b5517c9",
+  "image_id": "sha256:e02e944a8d412a74f87549ac6e61c31ae628503f253cde75bd1634c6e491937b",
+  "base_commit": "2f90fc9bd40e24afd900b5ee85426f32684b960b",
+  "selected_package": "./utils/number",
+  "selected_file": "utils/number/number_test.go",
+  "public_configuration": {
+    "Makefile_test": "go test -race ./...",
+    "ci_test": "go test -race -cover ./... -v",
+    "ci_go_versions": ["1.18.x", "1.19.x"],
+    "installed_go_version": "go1.24.3 linux/amd64",
+    "ginkgo_version": "v2.6.1",
+    "gomega_version": "v1.24.2"
+  },
+  "proposed_command": "go test -race -cover -v -json -count=1 -p 1 -parallel 1 -timeout 120s ./utils/number -args -ginkgo.junit-report=/tmp/navidrome-number.xml",
+  "proposed_environment": {
+    "HOME": "/tmp",
+    "GOCACHE": "/tmp/navidrome-go-build",
+    "GOTMPDIR": "/tmp",
+    "GOMODCACHE": "/go/pkg/mod",
+    "GOPROXY": "off",
+    "GOTOOLCHAIN": "local",
+    "GOMAXPROCS": "1",
+    "GOFLAGS": "-mod=readonly"
+  },
+  "proposed_limits": {"cpus":1,"memory_mb":4096,"scratch_mb":4096,"pids_limit":2048,"outer_timeout_seconds":180,"network":"none","read_only_root":true,"cap_drop":"ALL","no_new_privileges":true},
+  "expected_public_specs": [
+    "Min returns zero value if no arguments are passed",
+    "Min returns the smallest int",
+    "Min returns the smallest float",
+    "Max returns zero value if no arguments are passed",
+    "Max returns the biggest int",
+    "Max returns the biggest float"
+  ],
+  "report_plan": "Retain Go JSON output and native Ginkgo JUnit XML; independently require exactly the six expected specs to pass, with no skipped or failed specs. Go's single TestNumber wrapper alone is insufficient.",
+  "workspace_plan": "Verify image HEAD and extract committed source into /tmp/work. Run the extracted package, keeping dependencies read-only and build outputs under /tmp. No tests or configuration changes and no dependency installation.",
+  "public_source_sha256": {
+    "Makefile": "8c827b59cedba2fbbe66a664052958d3ceab1ad4fd83715e89f17d56893eb7e0",
+    ".github/workflows/pipeline.yml": "31aa111a8006480aa2ae1e2e2f40bdfe6441b82fa4486a255ff17a245b2cb4ec",
+    "go.mod": "705e18c03861ddae610908ee79debbc5e3966938520c8a6ecb1f702f14a7a424",
+    "go.sum": "c30df75a1127b58a8cd7334fa6c6d1f3a4d9da020e1a1a38d558b54949815147",
+    "utils/number/number.go": "ef42c924ade0b61ad0be68a3eb0e4d86f2668b68966b8ee81d410718077b905e",
+    "utils/number/number_test.go": "5846ff392df6d56b201fa1762d22442558890f1a44fcf12eb3b253abb446f187"
+  },
+  "limitations": [
+    "Selection only: dependencies were inspected by path, not resolved through compilation.",
+    "The installed Go version differs from the pinned CI matrix; this is an image-native smoke, not historical CI parity.",
+    "The 180-second outer cap includes preparation and compilation; the Go test timeout alone does not bound compilation.",
+    "A selected package is not the full suite or a task-specific repair correctness test."
+  ],
+  "tests_run": false,
+  "dependencies_installed": false,
+  "full_suite_ready": false,
+  "official_readiness_changed": false,
+  "model_calls": 0,
+  "verifier_run": false
+}
