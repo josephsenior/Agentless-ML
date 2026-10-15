@@ -1,0 +1,242 @@
+{
+  "condition": "Consolidated five-repository pilot and ten-repository workspace-only expansion",
+  "date": "2026-10-15",
+  "corpus_tasks": 642,
+  "corpus_repositories": 11,
+  "corpus_pin_sha256": "78f4b9b062075be7c2767f941c5e652ed0f4ca5ea4e1f31325ac047d6b41d93d",
+  "selection": "One task per repository; prefer language coverage, local images and reviewed smokes, then lexical order. Availability-biased engineering pilot, not a research sample.",
+  "original_pilot": [
+    {
+      "repository": "future-architect/vuls",
+      "workspace": "pass",
+      "public_check": "selected public Go test passed",
+      "evidence": "v2_batch_pilot_2026-10-14.json"
+    },
+    {
+      "repository": "qutebrowser/qutebrowser",
+      "workspace": "pass",
+      "public_check": "syntax only; not public-test readiness",
+      "evidence": "v2_batch_pilot_2026-10-14.json"
+    },
+    {
+      "repository": "tutao/tutanota",
+      "workspace": "pass",
+      "public_check": "syntax only; not public-test readiness",
+      "evidence": "v2_batch_pilot_2026-10-14.json"
+    },
+    {
+      "repository": "element-hq/element-web",
+      "workspace": "pass",
+      "public_check": "five selected public Jest assertions passed",
+      "evidence": "v2_element_sets_smoke_2026-10-15.json"
+    },
+    {
+      "repository": "ansible/ansible",
+      "workspace": "pass",
+      "public_check": "six selected public unit tests passed",
+      "evidence": "v2_ansible_boolean_smoke_2026-10-15.json"
+    }
+  ],
+  "expanded_workspace_pilot": {
+    "artifact_directory": "../output/swe-bench-pro-v2-readiness/2026-10-15-expanded-workspace-pilot",
+    "artifact_sha256": {
+      "pilot.jsonl": "d5edfb053443fea28f5b66bc40a2ef75d2f8f6001683079f44756ca4e6031c90",
+      "inventory.json": "700ce51fb02ce2cb390831a48e540b7fca8b961191a9c7e92f4d61e80080d43e",
+      "summary.json": "79755a6fb40b9d393ed45a419e062500423d8a3909a87c612e90bf8c14b14258"
+    },
+    "statuses": {
+      "workspace_probe_passed": 5,
+      "needs_local_image": 5
+    },
+    "records": [
+      {
+        "task_id": "instance_future-architect__vuls-fe8d252c51114e922e6836055ef86a15f79ad042",
+        "repository": "https://github.com/future-architect/vuls.git",
+        "status": "workspace_probe_passed",
+        "base_commit": "0cdc7a3af55e323b86d4e76e17fdc90112b42a63",
+        "image_id": "sha256:0961d389ef0bcdd51da0df664b631a83938427ab3d485ecbe23996033eb73f28",
+        "workspace_probe_seconds": 1.8596961000000647,
+        "public_check_executed": false,
+        "full_suite_ready": false
+      },
+      {
+        "task_id": "instance_qutebrowser__qutebrowser-0833b5f6f140d04200ec91605f88704dd18e2970-v059c6fdc75567943479b23ebca7c07b5e9a7f34c",
+        "repository": "https://github.com/qutebrowser/qutebrowser.git",
+        "status": "workspace_probe_passed",
+        "base_commit": "def864adc8b19bdbc506919270d8ff1408b4faac",
+        "image_id": "sha256:d664721bb9fc5d0a9019f9ef46f14e567c46ed8e53371b0f0c7ab26db2e779d8",
+        "workspace_probe_seconds": 2.6790439999999762,
+        "public_check_executed": false,
+        "full_suite_ready": false
+      },
+      {
+        "task_id": "instance_tutao__tutanota-de49d486feef842101506adf040a0f00ded59519-v10a26bfb45a064b93f4fc044a0254925037b88f1",
+        "repository": "https://github.com/tutao/tutanota.git",
+        "status": "workspace_probe_passed",
+        "base_commit": "cf4bcf0b4c5ecc970715c4ca59e57cfa2c4246af",
+        "image_id": "sha256:f0c1d1561d3fe50a845212497843831b6b1fc9535c88751edc3cb6fda8a425b4",
+        "workspace_probe_seconds": 3.1126692000000276,
+        "public_check_executed": false,
+        "full_suite_ready": false
+      },
+      {
+        "task_id": "instance_element-hq__element-web-1077729a19c0ce902e713cf6fab42c91fb7907f1-vnan",
+        "repository": "https://github.com/element-hq/element-web.git",
+        "status": "workspace_probe_passed",
+        "base_commit": "4f32727829c1087e9d3d9955785d8a6255457c7d",
+        "image_id": "sha256:019f091af3b25701ad36458202da68a1ffeeba294b06768d3e1fee45c01e044e",
+        "workspace_probe_seconds": 2.8781537000002118,
+        "public_check_executed": false,
+        "full_suite_ready": false
+      },
+      {
+        "task_id": "instance_ansible__ansible-0ea40e09d1b35bcb69ff4d9cecf3d0defa4b36e8-v30a923fb5c164d6cd18280c02422f75e611e8fb2",
+        "repository": "https://github.com/ansible/ansible.git",
+        "status": "workspace_probe_passed",
+        "base_commit": "f7234968d241d7171aadb1e873a67510753f3163",
+        "image_id": "sha256:7cae127d37e28600d08026f70cbc2aef029ab2c9daf0bba67c912cec5fb4d0d0",
+        "workspace_probe_seconds": 2.4917288999999982,
+        "public_check_executed": false,
+        "full_suite_ready": false
+      },
+      {
+        "task_id": "instance_flipt-io__flipt-02e21636c58e86c51119b63e0fb5ca7b813b07b1",
+        "repository": "https://github.com/flipt-io/flipt.git",
+        "status": "needs_local_image",
+        "base_commit": "85bb23a3571794c7ba01e61904bac6913c3d9729",
+        "image_id": null,
+        "workspace_probe_seconds": null,
+        "public_check_executed": false,
+        "full_suite_ready": false
+      },
+      {
+        "task_id": "instance_gravitational__teleport-005dcb16bacc6a5d5890c4cd302ccfd4298e275d-vee9b09fb20c43af7e520f57e9239bbcf46b7113d",
+        "repository": "https://github.com/gravitational/teleport.git",
+        "status": "needs_local_image",
+        "base_commit": "4d7c51b4f535cecfd139625e6af1746c46abc712",
+        "image_id": null,
+        "workspace_probe_seconds": null,
+        "public_check_executed": false,
+        "full_suite_ready": false
+      },
+      {
+        "task_id": "instance_internetarchive__openlibrary-00bec1e7c8f3272c469a58e1377df03f955ed478-v13642507b4fc1f8d234172bf8129942da2c2ca26",
+        "repository": "https://github.com/internetarchive/openlibrary.git",
+        "status": "needs_local_image",
+        "base_commit": "02f647f7d525286b6e3a661133c3772649e585cd",
+        "image_id": null,
+        "workspace_probe_seconds": null,
+        "public_check_executed": false,
+        "full_suite_ready": false
+      },
+      {
+        "task_id": "instance_navidrome__navidrome-0130c6dc13438b48cf0fdfab08a89e357b5517c9",
+        "repository": "https://github.com/navidrome/navidrome.git",
+        "status": "needs_local_image",
+        "base_commit": "2f90fc9bd40e24afd900b5ee85426f32684b960b",
+        "image_id": null,
+        "workspace_probe_seconds": null,
+        "public_check_executed": false,
+        "full_suite_ready": false
+      },
+      {
+        "task_id": "instance_protonmail__webclients-01b519cd49e6a24d9a05d2eb97f54e420740072e",
+        "repository": "https://github.com/protonmail/webclients.git",
+        "status": "needs_local_image",
+        "base_commit": "a118161e912592cc084945157b713050ca7ea4ba",
+        "image_id": null,
+        "workspace_probe_seconds": null,
+        "public_check_executed": false,
+        "full_suite_ready": false
+      }
+    ],
+    "images_pulled": 0,
+    "public_checks_run": 0
+  },
+  "additional_repository_manifest_preflights": [
+    {
+      "task_id": "instance_flipt-io__flipt-02e21636c58e86c51119b63e0fb5ca7b813b07b1",
+      "base_commit": "85bb23a3571794c7ba01e61904bac6913c3d9729",
+      "parent_index_digest": "sha256:1d6965a24432e66be9e26598d362abcdfccc7d02bbc58665fa2cc0a39a3260c8",
+      "public_tag": "ghcr.io/scaleapi/swe-bench_pro-v2:instance_flipt-io__flipt-02e21636c58e86c51119b63e0fb5ca7b813b07b1",
+      "manifest_digest": "sha256:896e9e03b52384f2696043debe8cbf7c55334a6b5900570e6f4c91e0551d165c",
+      "config_digest": "sha256:7d16ea3620f7dd953ac6c555c89270910d03e1bbf92367faa2c345aff0bfb751",
+      "compressed_layer_bytes": 1933188709,
+      "layers": 21,
+      "host_free_bytes": 201056022528,
+      "host_reserve_required_bytes": 21474836480,
+      "note": "Compressed total is not unpacked size or incremental download size; layers may be shared."
+    },
+    {
+      "task_id": "instance_gravitational__teleport-005dcb16bacc6a5d5890c4cd302ccfd4298e275d-vee9b09fb20c43af7e520f57e9239bbcf46b7113d",
+      "base_commit": "4d7c51b4f535cecfd139625e6af1746c46abc712",
+      "parent_index_digest": null,
+      "public_tag": "ghcr.io/scaleapi/swe-bench_pro-v2:instance_gravitational__teleport-005dcb16bacc6a5d5890c4cd302ccfd4298e275d-vee9b09fb20c43af7e520f57e9239bbcf46b7113d",
+      "manifest_digest": "sha256:576147fc4357d7a6b4a6a347477e9a95f5e7fd01b277f25284589356350717e9",
+      "config_digest": "sha256:321f47a1795d32a9965d9beb6e1efaf3da0322f307acb065ce44899052dad928",
+      "compressed_layer_bytes": 3500070075,
+      "layers": 21,
+      "host_free_bytes": 201055682560,
+      "host_reserve_required_bytes": 21474836480,
+      "note": "Compressed total is not unpacked size or incremental download size; layers may be shared."
+    },
+    {
+      "task_id": "instance_internetarchive__openlibrary-00bec1e7c8f3272c469a58e1377df03f955ed478-v13642507b4fc1f8d234172bf8129942da2c2ca26",
+      "base_commit": "02f647f7d525286b6e3a661133c3772649e585cd",
+      "parent_index_digest": "sha256:38dd58ffa8246da2d1dea01c9a123214a99370337c4dfdc716e38642a06b62bc",
+      "public_tag": "ghcr.io/scaleapi/swe-bench_pro-v2:instance_internetarchive__openlibrary-00bec1e7c8f3272c469a58e1377df03f955ed478-v13642507b4fc1f8d234172bf8129942da2c2ca26",
+      "manifest_digest": "sha256:03205f63224d992c930df7a2b898353d9d3dface4ab4d921eebc73dc909c1ba6",
+      "config_digest": "sha256:62174cccb4799538d0dc079efedf7e9dced4106e7768c90c89c695f8a778dd18",
+      "compressed_layer_bytes": 1070952548,
+      "layers": 22,
+      "host_free_bytes": 201055657984,
+      "host_reserve_required_bytes": 21474836480,
+      "note": "Compressed total is not unpacked size or incremental download size; layers may be shared."
+    },
+    {
+      "task_id": "instance_navidrome__navidrome-0130c6dc13438b48cf0fdfab08a89e357b5517c9",
+      "base_commit": "2f90fc9bd40e24afd900b5ee85426f32684b960b",
+      "parent_index_digest": "sha256:70073895213a7fd298d5e17de4d9acfb358b0e482db0ff0fa49742d763156f97",
+      "public_tag": "ghcr.io/scaleapi/swe-bench_pro-v2:instance_navidrome__navidrome-0130c6dc13438b48cf0fdfab08a89e357b5517c9",
+      "manifest_digest": "sha256:e02e944a8d412a74f87549ac6e61c31ae628503f253cde75bd1634c6e491937b",
+      "config_digest": "sha256:9f7188d8d483f4f7368ca9ee40409f04ac7c0c1d466003bdff3a5b809c5873cc",
+      "compressed_layer_bytes": 923594488,
+      "layers": 23,
+      "host_free_bytes": 201055580160,
+      "host_reserve_required_bytes": 21474836480,
+      "note": "Compressed total is not unpacked size or incremental download size; layers may be shared."
+    },
+    {
+      "task_id": "instance_protonmail__webclients-01b519cd49e6a24d9a05d2eb97f54e420740072e",
+      "base_commit": "a118161e912592cc084945157b713050ca7ea4ba",
+      "parent_index_digest": "sha256:fa8f832c40a85bea4c3d99a4b5f01035ef4d8629a4402058abb9d4588fa9ebb5",
+      "public_tag": "ghcr.io/scaleapi/swe-bench_pro-v2:instance_protonmail__webclients-01b519cd49e6a24d9a05d2eb97f54e420740072e",
+      "manifest_digest": "sha256:e54c87627ae0d0ba3854201644262883fa6e7251805d5f02c4642eea58da6566",
+      "config_digest": "sha256:3555b8713d637ccb002b81a9d5f24c56e04bb2185dee261400193d2278d402cc",
+      "compressed_layer_bytes": 6518064990,
+      "layers": 18,
+      "host_free_bytes": 201045299200,
+      "host_reserve_required_bytes": 21474836480,
+      "note": "Compressed total is not unpacked size or incremental download size; layers may be shared."
+    }
+  ],
+  "manifest_artifact_directory": "../output/swe-bench-pro-v2-readiness/2026-10-15-expanded-manifests",
+  "parked_repository": "https://github.com/NodeBB/NodeBB",
+  "parked_evidence": "v2_js_nodebb_upload_path/no-bail-diagnostic-2026-10-14.json",
+  "full_suites_run": 0,
+  "runtime_follow_up": {
+    "repository": "navidrome/navidrome",
+    "evidence": "v2_navidrome_provisioning_2026-10-15.json",
+    "workspace_probe": "pass",
+    "workspace_probe_seconds": 3.903145600000016,
+    "images_pulled": 1,
+    "public_tests_run": false,
+    "current_selected_tasks_with_workspace_pass": 6,
+    "current_selected_tasks_needing_image": 4
+  },
+  "nodebb_runs": 0,
+  "official_readiness_changed": false,
+  "model_calls": 0,
+  "verifier_run": false,
+  "limitation": "One selected task per repository. Manifest availability is not workspace readiness; workspace success is not dependency/test readiness. Historical five-repository evidence includes only syntax checks for Qutebrowser and Tutanota. See separate Navidrome provisioning follow-up for the one new image runtime probe."
+}

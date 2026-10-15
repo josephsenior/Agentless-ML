@@ -238,3 +238,72 @@ Next: consolidate the five-repository pilot results and choose a bounded
 expansion across the remaining repositories. Avoid turning each successful
 smoke into a full-suite debugging campaign. These standalone smoke wrappers
 are evidence; they do not yet register new public plans in the batch helper.
+
+## Consolidated pilot and repository expansion
+
+The original five-repository pilot now has successful workspace evidence for
+all five selected tasks, but the public-check coverage is deliberately uneven:
+
+| Repository | Strongest public-check evidence |
+| --- | --- |
+| Vuls | Selected Go test passed |
+| Qutebrowser | Syntax check only |
+| Tutanota | Syntax check only |
+| Element Web | Five selected Jest assertions passed |
+| Ansible | Six selected unit tests passed |
+
+None of these results establishes a full public suite or all revisions in
+that repository. Earlier missing-image results remain historical evidence;
+the follow-ups supplement them rather than rewriting them.
+
+On 15 October, `--pilot-size 10 --execute-pilot --workspace-only` selected one
+task from every non-parked repository. The new `--workspace-only` flag prevents
+even an existing reviewed smoke from running. All five installed images passed
+fresh extraction/writability probes (1.86–3.11 seconds each). The other five
+repositories were recorded as `needs_local_image`, not failed tests. NodeBB
+was excluded, and no dependencies, public tests or full suites ran.
+
+The provisioning helper's new `--inspect-only` mode verified exact public
+manifest bytes and selected Linux/amd64 child manifests where an index was
+present. It downloaded no image layers and started no containers. All five
+new repository manifests were available:
+
+| Repository | Selected image's compressed layers |
+| --- | ---: |
+| Navidrome | 924 MB |
+| Open Library | 1,071 MB |
+| Flipt | 1,933 MB |
+| Teleport | 3,500 MB |
+| Proton Mail webclients | 6,518 MB |
+
+These are decimal compressed totals, not unpacked disk use or incremental
+download estimates. Exact task IDs, immutable digests, base revisions, sizes
+and batch artifact hashes are in the
+[consolidated evidence](../experiments/swe_bench_pro/v2_expanded_pilot_2026-10-15.json).
+Fourteen focused checks passed, including explicit tests that workspace-only
+cannot launch a smoke and inspect-only cannot pull, tag or probe an image.
+
+The next bounded runtime follow-up selects Navidrome, the smallest verified
+image, rather than pulling all five at once. No official readiness count is
+promoted by inventory, manifest verification or workspace checks.
+
+### Navidrome runtime follow-up
+
+That single follow-up completed successfully. The helper pulled Navidrome by
+the verified Linux/amd64 digest, verified the local image identity and retained
+its task tag. The same protected workspace probe passed in **3.90 seconds**:
+HEAD matched `2f90fc9bd40e24afd900b5ee85426f32684b960b`, committed source
+extracted into scratch, and the extracted workspace accepted writes without
+Git history. No repository code, dependency installation or tests ran.
+
+The [Navidrome provisioning evidence](../experiments/swe_bench_pro/v2_navidrome_provisioning_2026-10-15.json)
+retains exact image identities, probe results and artifact hashes. The earlier
+ten-repository batch snapshot still records five passes and five missing
+images; this follow-up brings cumulative selected-task workspace coverage to
+**six repositories**, with **four** still needing images. NodeBB remains
+parked. None of those counts means full-suite or benchmark-task readiness.
+
+Next: choose one bounded public Navidrome check from its pinned configuration.
+For further runtime breadth, Open Library is the next-smallest verified image
+(1.07 GB compressed); provision it separately rather than downloading the
+remaining four as a batch.

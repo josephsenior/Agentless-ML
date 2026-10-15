@@ -68,7 +68,11 @@ def main():
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--reuse-downloaded', action='store_true',
                         help='Verify an already pulled digest and probe it without pulling again')
+    parser.add_argument('--inspect-only', action='store_true',
+                        help='Verify public manifest and size only; no layers pulled or containers run')
     args = parser.parse_args()
+    if args.inspect_only and args.reuse_downloaded:
+        parser.error('--inspect-only and --reuse-downloaded are mutually exclusive')
     pin = json.loads((ROOT / 'experiments/swe_bench_pro/v2_corpus_pin.json').read_bytes())
     tasks = SWEbenchProV2Dataset(args.v2_tasks, SWEbenchProV2DatasetPin(
         pin['v2_dataset_revision'], pin['v2_visible_files_sha256'], pin['v2_task_count']),
@@ -109,6 +113,8 @@ def main():
                      note='Compressed total is not unpacked size or incremental download size; layers may be shared.')
     (args.output / 'preflight.json').write_text(json.dumps(preflight, indent=2) + '\n', encoding='utf-8')
     print(json.dumps(preflight), flush=True)
+    if args.inspect_only:
+        return
     if compressed > 8 * 1024**3 or free < max(20 * 1024**3, 4 * compressed):
         raise ValueError('image exceeds this bounded pilot download/disk policy; review first')
     if not args.reuse_downloaded:

@@ -1,0 +1,68 @@
+{
+  "result": {
+    "task_id": "instance_navidrome__navidrome-0130c6dc13438b48cf0fdfab08a89e357b5517c9",
+    "base_commit": "2f90fc9bd40e24afd900b5ee85426f32684b960b",
+    "parent_index_digest": "sha256:70073895213a7fd298d5e17de4d9acfb358b0e482db0ff0fa49742d763156f97",
+    "public_tag": "ghcr.io/scaleapi/swe-bench_pro-v2:instance_navidrome__navidrome-0130c6dc13438b48cf0fdfab08a89e357b5517c9",
+    "manifest_digest": "sha256:e02e944a8d412a74f87549ac6e61c31ae628503f253cde75bd1634c6e491937b",
+    "config_digest": "sha256:9f7188d8d483f4f7368ca9ee40409f04ac7c0c1d466003bdff3a5b809c5873cc",
+    "compressed_layer_bytes": 923594488,
+    "layers": 23,
+    "host_free_bytes": 201044578304,
+    "host_reserve_required_bytes": 21474836480,
+    "note": "Compressed total is not unpacked size or incremental download size; layers may be shared.",
+    "generated_at": "2026-10-15T15:17:58.149653+02:00",
+    "image_id": "sha256:e02e944a8d412a74f87549ac6e61c31ae628503f253cde75bd1634c6e491937b",
+    "docker_reported_size_bytes": 923610268,
+    "identity_kind": "manifest-digest-containerd-store",
+    "probe": {
+      "task_id": "instance_navidrome__navidrome-0130c6dc13438b48cf0fdfab08a89e357b5517c9",
+      "repository": "https://github.com/navidrome/navidrome.git",
+      "language": "go",
+      "base_commit": "2f90fc9bd40e24afd900b5ee85426f32684b960b",
+      "full_suite_ready": false,
+      "public_check_executed": false,
+      "model_calls": 0,
+      "verifier_run": false,
+      "image_id": "sha256:e02e944a8d412a74f87549ac6e61c31ae628503f253cde75bd1634c6e491937b",
+      "workspace_probe": {
+        "result": {
+          "status": "pass",
+          "command": [
+            "sh",
+            "-c",
+            "set -e; repository=; for directory in /app /testbed; do if git -C \"$directory\" rev-parse --verify HEAD >/dev/null 2>&1; then repository=\"$directory\"; break; fi; done; test -n \"$repository\"; observed=$(git -C \"$repository\" rev-parse HEAD); test \"$observed\" = 2f90fc9bd40e24afd900b5ee85426f32684b960b; git -C \"$repository\" archive --format=tar --output=/tmp/base.tar HEAD; mkdir /tmp/provisioned; tar --no-same-owner -xf /tmp/base.tar -C /tmp/provisioned; mktemp /tmp/provisioned/.agentless-write-XXXXXX; test ! -e /tmp/provisioned/.git; du -sk /tmp/provisioned; find /tmp/provisioned -type f | wc -l"
+          ],
+          "duration_seconds": 3.903145600000016,
+          "exit_code": 0,
+          "stdout_digest": "ca6c42d757dfb52e35b8e30f31427497f302f45beca6083b1884dea4a0386f4f",
+          "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "kind": "regression",
+          "test_cases": [],
+          "counted_test_ids": null
+        },
+        "image_id": "sha256:e02e944a8d412a74f87549ac6e61c31ae628503f253cde75bd1634c6e491937b",
+        "container_name": "agentless-ml-4f3e7c375e44435e81b4aabd811b91ef",
+        "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\output\\swe-bench-pro-v2-readiness\\2026-10-15-navidrome-provision\\workspace-probes\\instance_navidrome__navidrome-0130c6dc13438b48cf0fdfab08a89e357b5517c9\\agentless-ml-4f3e7c375e44435e81b4aabd811b91ef",
+        "message": ""
+      },
+      "status": "workspace_probe_passed_needs_public_plan"
+    },
+    "images_pulled": 1,
+    "public_tests_run": false,
+    "full_suites_run": 0,
+    "model_calls": 0,
+    "verifier_run": false,
+    "official_readiness_changed": false,
+    "host_free_after_bytes": 196774903808
+  },
+  "artifact_sha256": {
+    "manifest.json": "e02e944a8d412a74f87549ac6e61c31ae628503f253cde75bd1634c6e491937b",
+    "result.json": "b79d19b3c68ba38d2abcc72c8388750f285007f3183cdc32cd699870c1c6a65c",
+    "pull.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "preflight.json": "e31dcf1b56e7407c90499f945292e01150be94033640442a55b39ed7fce8b634",
+    "index.json": "70073895213a7fd298d5e17de4d9acfb358b0e482db0ff0fa49742d763156f97",
+    "pull.stdout.log": "819a14ef1367fdbf3086c54045d51f68a802400c6dcc69f294a2838826a08f76"
+  },
+  "artifact_directory": "../output/swe-bench-pro-v2-readiness/2026-10-15-navidrome-provision"
+}

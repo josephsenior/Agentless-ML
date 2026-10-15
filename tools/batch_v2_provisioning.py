@@ -80,7 +80,7 @@ def workspace_probe_command(task):
     return PublicTestCommand(('sh', '-c', script), timeout_seconds=120)
 
 
-def pilot_task(task, images, plans, repositories, output):
+def pilot_task(task, images, plans, repositories, output, *, workspace_only=False):
     record = dict(task_id=task.instance_id, repository=task.repository_url, language=task.language,
                   base_commit=task.base_commit, full_suite_ready=False,
                   public_check_executed=False, model_calls=0, verifier_run=False)
@@ -101,6 +101,8 @@ def pilot_task(task, images, plans, repositories, output):
         record['workspace_probe'] = asdict(execution)
         if execution.result.status.value != 'pass':
             return dict(record, status='workspace_probe_blocked')
+        if workspace_only:
+            return dict(record, status='workspace_probe_passed', public_plan_available=plan is not None)
         if plan is None:
             return dict(record, status='workspace_probe_passed_needs_public_plan')
         if plan['scope'] == 'full_public_suite':
@@ -123,6 +125,8 @@ def main():
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--pilot-size', type=int, default=5)
     parser.add_argument('--execute-pilot', action='store_true')
+    parser.add_argument('--workspace-only', action='store_true',
+                        help='Run only extraction/writability probes, never public or syntax smokes')
     args = parser.parse_args()
     if not 1 <= args.pilot_size <= 11:
         parser.error('--pilot-size must be between 1 and 11')
@@ -154,7 +158,8 @@ def main():
             record = (dict(task_id=task.instance_id, repository=task.repository_url,
                            status='not_executed', message=engine_error, full_suite_ready=False)
                       if not args.execute_pilot or engine_error else
-                      pilot_task(task, images, plans, args.repositories, args.output))
+                      pilot_task(task, images, plans, args.repositories, args.output,
+                                 workspace_only=args.workspace_only))
             results.append(record)
             journal.write(json.dumps(record, default=str) + '\n')
             journal.flush()
@@ -165,6 +170,7 @@ def main():
                    local_image_tasks=sum(t.container_image in images for t in tasks),
                    corpus_pin_sha256=hashlib.sha256(pin_path.read_bytes()).hexdigest(),
                    pilot_size=len(selected), pilot_executed=args.execute_pilot,
+                   workspace_only=args.workspace_only,
                    statuses=dict(Counter(r['status'] for r in results)),
                    pilot=results, engine_error=engine_error,
                    parked_repository=PARKED_REPO, parked_evidence=PARKED_EVIDENCE,
