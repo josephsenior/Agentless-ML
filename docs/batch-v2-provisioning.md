@@ -908,3 +908,47 @@ run occurred, and official readiness remains unchanged.
 Next: assess Proton Mail webclients' remaining verified image against current
 disk and download limits before provisioning it. No further Teleport suite
 expansion is needed for this repository-coverage pilot.
+
+### Proton Mail remaining-image assessment (no pull)
+
+On 16 October, inspect-only verification confirmed the previously reviewed
+Proton Mail webclients index and Linux/amd64 manifest still match their pins.
+The selected image has **18 layers totalling 6,518,064,990 compressed bytes**
+(6.52 GB / 6.07 GiB), below the helper's 8-GiB compressed-image cap. Neither
+the exact digest nor the selected task tag is installed locally.
+
+Host free space was **159,602,200,576 bytes** (159.6 GB / 148.6 GiB). The
+helper requires the larger of 20 GiB and four times the compressed total:
+**26,072,259,960 bytes** (26.1 GB / 24.3 GiB) here. The disk policy therefore
+passes comfortably. Docker's data VHD is also on C:, so this host volume is
+relevant to its growth. These are reserve heuristics, not measurements of the
+image's final unpacked size. No cleanup is needed to meet this policy, and
+Docker's reported reclaimable images are not authorization to delete
+benchmark images needed later.
+
+The download cap remains **1,200 seconds**, enforced by the sleep-inclusive
+deadline and progress journal. Its success is less certain than disk capacity:
+the image contains two large compressed blobs of **2,638,433,164** and
+**2,630,852,592 bytes**, plus a 952,907,708-byte blob. Teleport's 3.50-GB pull
+finished in 1,147.93 seconds. Scaling that total duration by manifest size
+gives about **2,137.75 seconds (35.63 minutes)**. This is a rough comparison,
+not an ETA or a measured Proton Mail network rate; caching, transfer
+concurrency, extraction and current connectivity can change the result.
+With no cached payload, even ignoring installation overhead, 6.52 GB in
+20 minutes requires an average **5.43 MB/s** of payload transfer.
+
+Three manifest entries match Teleport's reviewed image, totalling only 96
+compressed bytes. This limited comparison does not inspect Docker's entire
+content cache or prove that no other image shares useful layers. Likewise,
+the full compressed total must not be labelled the incremental download size.
+
+The [assessment evidence](../experiments/swe_bench_pro/v2_protonmail_assessment_2026-10-16.json)
+records exact digests, layer sizes, current free space, policy calculations
+and manifest hashes. No image pull, container, install, test, configuration
+change or cleanup ran. Proton Mail remains the only unprovisioned non-parked
+repository; official readiness is unchanged and NodeBB remains parked.
+
+Next: assess a small byte-capped transfer diagnostic before choosing a full
+pull. A single attempt is allowed by the size/disk policy, but finishing under
+20 minutes is not yet supported by evidence. Do not silently raise the cap
+or launch repeated pulls to make this assessment look successful.

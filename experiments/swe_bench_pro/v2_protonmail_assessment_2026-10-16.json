@@ -1,0 +1,85 @@
+{
+  "disk_policy_pass": true,
+  "shared_with_reviewed_teleport_manifest": {
+    "compressed_bytes": 96,
+    "entries": 3
+  },
+  "size_cap_bytes": 8589934592,
+  "artifact_sha256": {
+    "manifest.json": "e54c87627ae0d0ba3854201644262883fa6e7251805d5f02c4642eea58da6566",
+    "preflight.json": "54c32d3d816a672956f1b1d7e91a8ef5ccce94b0c11ea524470771d4395ff1bb",
+    "index.json": "fa8f832c40a85bea4c3d99a4b5f01035ef4d8629a4402058abb9d4588fa9ebb5"
+  },
+  "largest_layers": [
+    {
+      "digest": "sha256:c61445b192c3cc777932625658a097da24ab3997022db39b61c69061b6ffd3b6",
+      "size": 2638433164
+    },
+    {
+      "digest": "sha256:537609134ba4303ddf99ad92ab03474e7cc9ce5f8e4f087742f2c3ec4b1384a0",
+      "size": 2630852592
+    },
+    {
+      "digest": "sha256:4ba96c04b764c340910da71d769b6f4bdc6dc0360d34128936e07137d2776dac",
+      "size": 952907708
+    },
+    {
+      "digest": "sha256:bacfa285bf83e03a6d5af6a2e5ec7439aafecf52a4a69a09f51d50acb4bafb4d",
+      "size": 129789406
+    },
+    {
+      "digest": "sha256:47a8c5b69c061ce53dca57ab544707bb4bd7b5d2b7b0b28572b9d83d738bea60",
+      "size": 85164640
+    }
+  ],
+  "size_policy_pass": true,
+  "preflight": {
+    "task_id": "instance_protonmail__webclients-01b519cd49e6a24d9a05d2eb97f54e420740072e",
+    "base_commit": "a118161e912592cc084945157b713050ca7ea4ba",
+    "parent_index_digest": "sha256:fa8f832c40a85bea4c3d99a4b5f01035ef4d8629a4402058abb9d4588fa9ebb5",
+    "public_tag": "ghcr.io/scaleapi/swe-bench_pro-v2:instance_protonmail__webclients-01b519cd49e6a24d9a05d2eb97f54e420740072e",
+    "manifest_digest": "sha256:e54c87627ae0d0ba3854201644262883fa6e7251805d5f02c4642eea58da6566",
+    "config_digest": "sha256:3555b8713d637ccb002b81a9d5f24c56e04bb2185dee261400193d2278d402cc",
+    "compressed_layer_bytes": 6518064990,
+    "layers": 18,
+    "host_free_bytes": 159602200576,
+    "host_reserve_required_bytes": 21474836480,
+    "note": "Compressed total is not unpacked size or incremental download size; layers may be shared."
+  },
+  "required_host_free_bytes": 26072259960,
+  "teleport_comparison": {
+    "elapsed_seconds": 1147.9293794631958,
+    "cold_full_size_payload_rate_required_bytes_per_second": 5431720.825,
+    "linear_scaled_total_seconds": 2137.7509989629225,
+    "compressed_bytes": 3500070075
+  },
+  "condition": "Proton Mail reviewed-image disk/download assessment only; no provisioning",
+  "date": "2026-10-16",
+  "expected_manifest": "sha256:e54c87627ae0d0ba3854201644262883fa6e7251805d5f02c4642eea58da6566",
+  "artifact_directory": "../output/swe-bench-pro-v2-readiness/2026-10-16-protonmail-assessment",
+  "exact_digest_registered": false,
+  "task_tag_registered": false,
+  "docker_data_disk": "C:/Users/GIGABYTE/AppData/Local/Docker/wsl/disk/docker_data.vhdx",
+  "docker_data_disk_file_bytes": 179396673536,
+  "pull_cap_seconds": 1200,
+  "pull_deadline": "Sleep-inclusive watchdog with one-second checks and saved progress; unchanged.",
+  "assessment": "Image-size and host-free-space policies pass. Completion within the 20-minute download cap is not established; the large blobs and prior Teleport duration make that cap risky.",
+  "comparison_limitations": [
+    "The 35.63-minute size-proportional comparison is neither a measured Proton Mail transfer rate nor an ETA.",
+    "Manifest compressed totals are not unpacked disk use or incremental bytes still needing download.",
+    "Only 96 compressed bytes in three manifest entries match the reviewed Teleport manifest; this does not inventory Docker's entire content cache or establish global cache misses.",
+    "159.6-GB host free space and the 26.1-GB policy threshold are observations/heuristics, not a guarantee of final unpacked size.",
+    "Cold full-size payload rate of 5.43 MB/s is an optimistic necessary average to fit 20 minutes with no cache hits, ignoring installation overhead."
+  ],
+  "recommended_next_step": "Assess a small byte-capped transfer diagnostic before committing to the full pull. If a full attempt is chosen, preserve the same digest, 1200-second cap, cache and progress logging; do not raise limits or delete benchmark images implicitly.",
+  "images_pulled": 0,
+  "containers_started": 0,
+  "dependencies_installed": false,
+  "public_tests_run": false,
+  "docker_configuration_changed": false,
+  "power_settings_changed": false,
+  "cached_layers_deleted": false,
+  "official_readiness_changed": false,
+  "model_calls": 0,
+  "verifier_run": false
+}
