@@ -866,3 +866,45 @@ Next: with Docker running, inspect the installed toolchain/module cache,
 implement a small wrapper and run only this public test with individual
 report verification. Retain any setup error rather than expanding into the
 full integration suite.
+
+### Teleport cached-parser smoke result
+
+Docker Desktop was started in the background as requested. Inspection of the
+pinned image confirmed Go **1.23.1**, `/go/pkg/mod`, an available C compiler
+and source hashes matching the public selection record. The module declares
+Go 1.21; this toolchain difference is retained rather than claiming historical
+CI parity.
+
+`tools/run_teleport_cached_parser_smoke.py` then ran only `TestCachedParser`.
+The named test and its package both **passed**. The complete command took
+**97.73 seconds**, including committed-source extraction and fresh compilation,
+within the 180-second cap. The test itself reported 0.04 seconds. Race
+detection, shuffle, coverage, one build worker and the 60-second test-binary
+timeout were preserved. The shuffle seed is retained in native output.
+
+All package files, including the other tests and example, remained available
+for normal compilation. Only the selected test executed. Its internal cache
+loops are not reported as additional test cases. The cache-size override was
+unset, preserving the repository's default, and source/build scratch was
+writable only under `/tmp`. Dependencies stayed read-only, and no package,
+toolchain or service installation occurred. No test source or configuration
+was edited. Existing offline, read-only-root, capability and resource
+protections were unchanged; the disposable container was removed normally.
+
+The wrapper saves native Go events as `go-native.jsonl` and atomic coverage
+as `coverage.txt`. Its diagnostic parser requires exactly this named test to
+run/pass and the package to start/complete successfully, rejecting missing,
+extra, skipped, failed, duplicate or malformed outcomes. It preserves Go's
+exit code independently of printing saved events. Coverage was **17.3% of
+package statements**, a selected-test result rather than broad suite coverage.
+This is a standalone diagnostic, not a registered framework report adapter.
+
+The [Teleport smoke evidence](../experiments/swe_bench_pro/v2_teleport_cached_parser_smoke_2026-10-16.json)
+retains the individual outcome, exact command/toolchain, coverage and artifact
+hashes. All **93 focused checks** for reporting, pull deadlines and
+provisioning passed. No full suite, official verifier, model call or NodeBB
+run occurred, and official readiness remains unchanged.
+
+Next: assess Proton Mail webclients' remaining verified image against current
+disk and download limits before provisioning it. No further Teleport suite
+expansion is needed for this repository-coverage pilot.

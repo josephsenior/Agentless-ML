@@ -1,0 +1,60 @@
+{
+  "artifact_sha256": {
+    "coverage.txt": "5bda78e5ab7e970c74e90c4d2a4574d23b78dedf73ab86a82fde53db105bfdd0",
+    "go-native.jsonl": "2f0c2538c2a47fc6e73f518e8e8fa99dabc725fd045cdb8dda4564afae2dc85c",
+    "execution.json": "4632877e4ede46cc873e6edd45519ac4617babaa0a5cbb0987af610d359e88d2",
+    "stdout.log": "c451853e54a825476c7ec97641ebe2c7d395b9c10b8eb29901af35d802f9c40a",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "result": {
+    "condition": "Teleport selected public cached-parser smoke",
+    "image_id": "sha256:576147fc4357d7a6b4a6a347477e9a95f5e7fd01b277f25284589356350717e9",
+    "base_commit": "4d7c51b4f535cecfd139625e6af1746c46abc712",
+    "selected_package": "github.com/gravitational/teleport/lib/utils/typical",
+    "selected_test": "TestCachedParser",
+    "execution": {
+      "result": {
+        "status": "pass",
+        "command": [
+          "sh",
+          "-c",
+          "set -e; test \"$(git -C /app rev-parse HEAD)\" = 4d7c51b4f535cecfd139625e6af1746c46abc712; git -C /app archive --format=tar --output=/tmp/base.tar HEAD; tar --no-same-owner -xf /tmp/base.tar -C /tmp/work; cd /tmp/work; export HOME=/tmp GOCACHE=/tmp/teleport-go-build GOTMPDIR=/tmp GOMODCACHE=/go/pkg/mod GOPROXY=off GOTOOLCHAIN=local GOMAXPROCS=1 GOFLAGS=-mod=readonly; unset TELEPORT_EXPRESSION_CACHE_SIZE; go version; sha256sum Makefile go.mod go.sum lib/utils/typical/*.go; set +e; go test -race -shuffle=on -cover -covermode=atomic -coverprofile=/tmp/teleport-parser-coverage.txt -json -v -count=1 -p 1 -timeout=60s -run '^TestCachedParser$' ./lib/utils/typical >/tmp/teleport-test.jsonl; outcome=$?; cat /tmp/teleport-test.jsonl; exit \"$outcome\""
+        ],
+        "duration_seconds": 97.73244520000299,
+        "exit_code": 0,
+        "stdout_digest": "c451853e54a825476c7ec97641ebe2c7d395b9c10b8eb29901af35d802f9c40a",
+        "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "kind": "regression",
+        "test_cases": [],
+        "counted_test_ids": null
+      },
+      "image_id": "sha256:576147fc4357d7a6b4a6a347477e9a95f5e7fd01b277f25284589356350717e9",
+      "container_name": "agentless-ml-2e1c27ab31854408ba2e7e5af15d7c22",
+      "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\output\\swe-bench-pro-v2-readiness\\2026-10-16-teleport-cached-parser-smoke\\executions\\agentless-ml-2e1c27ab31854408ba2e7e5af15d7c22",
+      "message": ""
+    },
+    "individual_report_verified": true,
+    "atomic_coverage_retained": true,
+    "individual_results": [
+      {
+        "test_id": "github.com/gravitational/teleport/lib/utils/typical::TestCachedParser",
+        "status": "passed"
+      }
+    ],
+    "report_sha256": {
+      "go-native.jsonl": "2f0c2538c2a47fc6e73f518e8e8fa99dabc725fd045cdb8dda4564afae2dc85c",
+      "coverage.txt": "5bda78e5ab7e970c74e90c4d2a4574d23b78dedf73ab86a82fde53db105bfdd0"
+    },
+    "smoke_checked": true,
+    "toolchain_note": "Installed image Go 1.23.1; module declares Go 1.21.",
+    "scope_note": "One named test; its assertion loops are not separate reported cases. Direct untagged package smoke, not full tagged CI preparation.",
+    "report_scope": "Native diagnostic evidence, not a registered framework report adapter.",
+    "full_suite_ready": false,
+    "tests_modified": false,
+    "dependencies_installed": false,
+    "model_calls": 0,
+    "verifier_run": false
+  },
+  "artifact_directory": "../output/swe-bench-pro-v2-readiness/2026-10-16-teleport-cached-parser-smoke",
+  "focused_checks_passed": 93
+}
