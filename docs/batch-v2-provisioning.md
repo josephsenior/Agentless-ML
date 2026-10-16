@@ -817,3 +817,52 @@ official readiness is unchanged.
 
 Next: inspect Teleport's pinned public test configuration and select one
 bounded service-independent check. Do not jump to its full integration suite.
+
+### Selected Teleport public check (not run)
+
+Select `TestCachedParser` in `lib/utils/typical/cached_parser_test.go`. This
+is **one named Go test**, not hundreds of individually reported cases. Its
+assertion loops fill the default 1,000-entry parser cache, verify that reuse
+does not grow it, check bounded eviction and confirm eviction-log thresholds.
+It uses in-memory expressions and the repository's own test logger, with no
+server, database, network request or timing-dependent sleep.
+
+Docker was stopped during selection. The inspected source came directly from
+the public repository at the exact pinned base commit, rather than a guessed
+current branch. Installed Go version, module-cache location and dependency
+availability must still be checked in the image before execution; no container
+or test was started here.
+
+The public Makefile's `test-go-unit` target uses coverage, native Go JSON,
+race detection and shuffled execution. Keep these while selecting one test:
+
+```sh
+go test -race -shuffle=on -cover -json -v -count=1 -p 1 -timeout=60s \
+  -run '^TestCachedParser$' ./lib/utils/typical
+```
+
+The proposed complete-command cap is 180 seconds, including extraction and
+fresh compilation, with one CPU and the existing 4-GiB memory/scratch
+protections. Use extracted source, read-only image dependencies, writable
+`/tmp` caches and no dependency or toolchain downloads. Leave
+`TELEPORT_EXPRESSION_CACHE_SIZE` unset so the test sees its repository default.
+Retain native JSON and require exactly this test and its package to complete
+successfully; assertion-loop iterations are not independent result rows.
+
+This is a direct package smoke, not the full Makefile preparation chain or
+native-feature-tagged CI run. The selected package's five Go files have no
+build constraints or `TestMain`, but other test files still compile:
+`parser_test.go` imports the broader `lib/utils` package. Do not delete those
+files to shrink the compilation graph. Actual dependency resolution and
+transitive initialization remain unverified. The module declares Go 1.21;
+do not assume the image's toolchain matches without inspecting it.
+
+The [selection record](../experiments/swe_bench_pro/v2_teleport_cached_parser_selection_2026-10-16.json)
+contains source URLs, exact byte hashes, proposed limits and setup caveats.
+No tests, collection, compilation or installs ran. Official readiness remains
+unchanged and NodeBB remains parked.
+
+Next: with Docker running, inspect the installed toolchain/module cache,
+implement a small wrapper and run only this public test with individual
+report verification. Retain any setup error rather than expanding into the
+full integration suite.

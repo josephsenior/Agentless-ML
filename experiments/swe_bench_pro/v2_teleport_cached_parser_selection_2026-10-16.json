@@ -1,0 +1,79 @@
+{
+  "condition": "Selected bounded public Teleport cached-parser test; not executed",
+  "task_id": "instance_gravitational__teleport-005dcb16bacc6a5d5890c4cd302ccfd4298e275d-vee9b09fb20c43af7e520f57e9239bbcf46b7113d",
+  "image_id": "sha256:576147fc4357d7a6b4a6a347477e9a95f5e7fd01b277f25284589356350717e9",
+  "base_commit": "4d7c51b4f535cecfd139625e6af1746c46abc712",
+  "selected_package": "./lib/utils/typical",
+  "selected_test": "TestCachedParser",
+  "selected_file": "lib/utils/typical/cached_parser_test.go",
+  "implementation_file": "lib/utils/typical/cached_parser.go",
+  "public_configuration": {
+    "unit_target": "Makefile:test-go-unit",
+    "unit_default_flags": "-race -shuffle on",
+    "unit_command": "go test -cover -json -tags <platform/native-feature tags> <packages> <flags> <additional flags>",
+    "module_go_directive": "1.21",
+    "installed_go_version": null,
+    "installed_toolchain_note": "Docker is stopped; toolchain and dependency cache require runtime inspection before execution.",
+    "smoke_difference": "Direct selected-package Go invocation, without the full test-go preparation chain or platform/native-feature tags. This is a declared package smoke, not full CI parity."
+  },
+  "proposed_command": "go test -race -shuffle=on -cover -json -v -count=1 -p 1 -timeout=60s -run '^TestCachedParser$' ./lib/utils/typical",
+  "expected_test_names": [
+    "TestCachedParser"
+  ],
+  "count_basis": "One named public Go test with in-test assertion loops, not hundreds of individually reported test cases. It fills the default 1000-entry cache, verifies reuse and eviction, and checks two eviction-log notifications.",
+  "proposed_environment": {
+    "HOME": "/tmp",
+    "GOCACHE": "/tmp/teleport-go-build",
+    "GOTMPDIR": "/tmp",
+    "GOPROXY": "off",
+    "GOTOOLCHAIN": "local",
+    "GOMAXPROCS": "1",
+    "GOFLAGS": "-mod=readonly",
+    "TELEPORT_EXPRESSION_CACHE_SIZE": "unset, preserving the repository default of 1000"
+  },
+  "module_cache_note": "Inspect the image's actual GOMODCACHE before declaring the wrapper; use it read-only, with no installs.",
+  "proposed_limits": {
+    "cpus": 1,
+    "memory_mb": 4096,
+    "scratch_mb": 4096,
+    "pids_limit": 2048,
+    "outer_timeout_seconds": 180,
+    "network": "none",
+    "read_only_root": true,
+    "cap_drop": "ALL",
+    "no_new_privileges": true
+  },
+  "report_plan": "Retain native Go JSON and require exactly TestCachedParser to run and pass plus successful package completion and zero command exit. Reject missing/extra tests, skips, failures or incomplete output. Do not count assertion-loop iterations as separate reported cases.",
+  "workspace_plan": "Verify image HEAD and source hashes, extract committed source into /tmp/work, preserve normal package/test compilation and original repository module layout, use fresh writable build scratch. Do not delete unselected test files to reduce dependencies. No services or full build preparation unless actual setup evidence requires them.",
+  "source_access": "Pinned public GitHub source fetched directly because Docker was stopped; no containers started during selection.",
+  "public_source_urls": [
+    "https://github.com/gravitational/teleport/blob/4d7c51b4f535cecfd139625e6af1746c46abc712/Makefile",
+    "https://github.com/gravitational/teleport/blob/4d7c51b4f535cecfd139625e6af1746c46abc712/lib/utils/typical/cached_parser_test.go",
+    "https://github.com/gravitational/teleport/blob/4d7c51b4f535cecfd139625e6af1746c46abc712/lib/utils/typical/cached_parser.go"
+  ],
+  "public_source_sha256": {
+    "Makefile": "2e41e30713ee2ba6e0211f32195cc411bacbff71cdd13432a41a701260145e86",
+    "go.mod": "03fc618cdf92ee8920d1f6ecbb6a47112306b1b569179225631d75d960601815",
+    "go.sum": "af57757e7384ca89e02e55b4bd45aff6024ff8c7de107c29836f845e7e1f7ce1",
+    "lib/utils/typical/parser.go": "32325c3b8f95964492ea9cec380e52892890c9e3e8ce34ff41adaf6610928b9b",
+    "lib/utils/typical/example_test.go": "3ed6a698b710a15bdb4de19779f97d3083cb4e38c271cc1d20b854a55dc15cae",
+    "lib/utils/typical/cached_parser_test.go": "c6f05c21ac76c703a0c042f145f56e06f4b97520f3dcc17c174d6b9491e14c34",
+    "lib/utils/typical/parser_test.go": "9edd61426d004fb9c819827dcc0cab91498e844095594512b9110dc8900a41b6",
+    "lib/utils/typical/cached_parser.go": "3a8c7c683a6c8a5a49866662262462bfb7da585a319bf07248b48782f57ebe7a"
+  },
+  "limitations": [
+    "The test body uses in-memory parser/cache operations and the repository's own test logger; no server, database, external service or timing-dependent wait is required.",
+    "Other tests and the example compile even when not executed. parser_test.go imports the broader lib/utils package, so the compilation graph is not limited to the cache implementation.",
+    "No TestMain or Go build constraint was found in the five inspected typical package files, but transitive initialization and dependency resolution are not runtime-validated.",
+    "Image Go version, reporter availability, module-cache location and compatibility remain unverified while Docker is stopped.",
+    "Selected smoke only, not full package or repository suite, benchmark score or task-specific repair correctness."
+  ],
+  "tests_run": false,
+  "collection_run": false,
+  "compilation_run": false,
+  "dependencies_installed": false,
+  "full_suite_ready": false,
+  "official_readiness_changed": false,
+  "model_calls": 0,
+  "verifier_run": false
+}
