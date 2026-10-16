@@ -952,3 +952,37 @@ Next: assess a small byte-capped transfer diagnostic before choosing a full
 pull. A single attempt is allowed by the size/disk policy, but finishing under
 20 minutes is not yet supported by evidence. Do not silently raise the cap
 or launch repeated pulls to make this assessment look successful.
+
+### Proton Mail capped transfer check
+
+On 16 October, two sequential Windows-host HTTP requests read the first
+**8 MiB from each of the two largest reviewed layers**, for **16 MiB total**.
+Each request had a 30-second cancellation deadline and required HTTP 206,
+the exact byte range and total layer size, and an 8-MiB content length before
+reading the body. Reads stopped at the requested cap; responses were disposed
+and no payload was saved. This caps application payload reads, not HTTP/TLS
+overhead or internal transport buffering.
+
+Both requests delivered their complete ranges. They took **5.13 seconds**
+and **5.16 seconds**, averaging **1.64 MB/s** and **1.63 MB/s** respectively,
+including connection and header latency. The public blob endpoints are
+accessible, but these samples do not support confidence in completing the
+6.52-GB pull within 20 minutes. A cold pull needs at least **5.43 MB/s** in
+aggregate before allowing time for extraction.
+
+These short sequential samples are not a Docker throughput measurement or an
+ETA. Docker's VM network path, concurrent layer transfers and existing cache
+can change the result. Partial responses cannot verify a full layer checksum;
+the requested digests come from the previously verified manifest. The check
+verified range delivery, not complete image integrity.
+
+Host free space after the check was **166,872,272,896 bytes**, still above
+the **26,072,259,960-byte** reserve requirement. The
+[transfer evidence](../experiments/swe_bench_pro/v2_protonmail_transfer_check_2026-10-16.json)
+records headers, byte counts, timings and limitations without credentials or
+signed URLs. No pull, container, test or configuration change occurred, and
+official readiness is unchanged.
+
+Next: defer the full pull under the current cap and review the provisioning
+time budget before deciding on a full attempt. The 1,200-second limit remains
+unchanged; the transfer check has not provisioned or warmed Docker's cache.
