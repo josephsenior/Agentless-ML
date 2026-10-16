@@ -1,0 +1,143 @@
+{
+  "result": {
+    "task_id": "instance_gravitational__teleport-005dcb16bacc6a5d5890c4cd302ccfd4298e275d-vee9b09fb20c43af7e520f57e9239bbcf46b7113d",
+    "base_commit": "4d7c51b4f535cecfd139625e6af1746c46abc712",
+    "parent_index_digest": null,
+    "public_tag": "ghcr.io/scaleapi/swe-bench_pro-v2:instance_gravitational__teleport-005dcb16bacc6a5d5890c4cd302ccfd4298e275d-vee9b09fb20c43af7e520f57e9239bbcf46b7113d",
+    "manifest_digest": "sha256:576147fc4357d7a6b4a6a347477e9a95f5e7fd01b277f25284589356350717e9",
+    "config_digest": "sha256:321f47a1795d32a9965d9beb6e1efaf3da0322f307acb065ce44899052dad928",
+    "compressed_layer_bytes": 3500070075,
+    "layers": 21,
+    "host_free_bytes": 174957076480,
+    "host_reserve_required_bytes": 21474836480,
+    "note": "Compressed total is not unpacked size or incremental download size; layers may be shared.",
+    "generated_at": "2026-10-16T02:14:17.656325+02:00",
+    "image_id": "sha256:576147fc4357d7a6b4a6a347477e9a95f5e7fd01b277f25284589356350717e9",
+    "docker_reported_size_bytes": 3500078873,
+    "identity_kind": "manifest-digest-containerd-store",
+    "probe": {
+      "task_id": "instance_gravitational__teleport-005dcb16bacc6a5d5890c4cd302ccfd4298e275d-vee9b09fb20c43af7e520f57e9239bbcf46b7113d",
+      "repository": "https://github.com/gravitational/teleport.git",
+      "language": "go",
+      "base_commit": "4d7c51b4f535cecfd139625e6af1746c46abc712",
+      "full_suite_ready": false,
+      "public_check_executed": false,
+      "model_calls": 0,
+      "verifier_run": false,
+      "image_id": "sha256:576147fc4357d7a6b4a6a347477e9a95f5e7fd01b277f25284589356350717e9",
+      "workspace_probe": {
+        "result": {
+          "status": "pass",
+          "command": [
+            "sh",
+            "-c",
+            "set -e; repository=; for directory in /app /testbed; do if git -C \"$directory\" rev-parse --verify HEAD >/dev/null 2>&1; then repository=\"$directory\"; break; fi; done; test -n \"$repository\"; observed=$(git -C \"$repository\" rev-parse HEAD); test \"$observed\" = 4d7c51b4f535cecfd139625e6af1746c46abc712; git -C \"$repository\" archive --format=tar --output=/tmp/base.tar HEAD; mkdir /tmp/provisioned; tar --no-same-owner -xf /tmp/base.tar -C /tmp/provisioned; mktemp /tmp/provisioned/.agentless-write-XXXXXX; test ! -e /tmp/provisioned/.git; du -sk /tmp/provisioned; find /tmp/provisioned -type f | wc -l"
+          ],
+          "duration_seconds": 8.601838000002317,
+          "exit_code": 0,
+          "stdout_digest": "1e21f0abd9a93a3919e4abf6ce0a30ba99606edefe7cbd752b652c5784dd06ed",
+          "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "kind": "regression",
+          "test_cases": [],
+          "counted_test_ids": null
+        },
+        "image_id": "sha256:576147fc4357d7a6b4a6a347477e9a95f5e7fd01b277f25284589356350717e9",
+        "container_name": "agentless-ml-054fbee649024a56b1789ee916ae60c9",
+        "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\output\\swe-bench-pro-v2-readiness\\2026-10-16-teleport-deadline-retry\\workspace-probes\\instance_gravitational__teleport-005dcb16bacc6a5d5890c4cd302ccfd4298e275d-vee9b09fb20c43af7e520f57e9239bbcf46b7113d\\agentless-ml-054fbee649024a56b1789ee916ae60c9",
+        "message": ""
+      },
+      "status": "workspace_probe_passed_needs_public_plan"
+    },
+    "images_pulled": 1,
+    "public_tests_run": false,
+    "full_suites_run": 0,
+    "model_calls": 0,
+    "verifier_run": false,
+    "official_readiness_changed": false,
+    "host_free_after_bytes": 163579265024
+  },
+  "pull_status": {
+    "reference": "ghcr.io/scaleapi/swe-bench_pro-v2@sha256:576147fc4357d7a6b4a6a347477e9a95f5e7fd01b277f25284589356350717e9",
+    "timeout_seconds": 1200,
+    "deadline_utc": "2026-10-16T02:14:59.789596+02:00",
+    "sleep_counts_toward_deadline": true,
+    "poll_interval_seconds": 1,
+    "progress_scope": "CLI layer states and log bytes, not transferred blob bytes",
+    "status": "pass",
+    "elapsed_seconds": 1147.9293794631958,
+    "returncode": 0,
+    "log_bytes_observed": {
+      "stdout": 2141,
+      "stderr": 0
+    }
+  },
+  "probe_artifact_sha256": {
+    "execution.json": "99ea41ec8b3560775cbc6e416c5086fc94f3dc9721dc9bf452e6723618a86dde",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout.log": "1e21f0abd9a93a3919e4abf6ce0a30ba99606edefe7cbd752b652c5784dd06ed"
+  },
+  "artifact_sha256": {
+    "preflight.json": "9c8bc0fd6e3c60a38d95cb6ef659498809a67dbc0d6ad5dae3490a94a326cc84",
+    "pull.stdout.log": "84b0ffad40d0547f9f8923a801be881d5bfba7d241ae1a99d362367e82ead3cd",
+    "pull.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pull.status.json": "404702faae96155311eb2c5e111572d3182c17321e5afd8e1829046f7d45ada3",
+    "pull.progress.jsonl": "ab1767564d157bc5b5f0731725f98cf5ec23ddf29be9a95d63fc291e867d329e",
+    "manifest.json": "576147fc4357d7a6b4a6a347477e9a95f5e7fd01b277f25284589356350717e9",
+    "result.json": "25a1c0bb31009a775bcf40d7475350b32c6ebf7843ab45d6b5c61f8a0cdb950d"
+  },
+  "cached_layer_events": 1,
+  "heartbeat_count": 228,
+  "large_layer_events": [
+    {
+      "event": "layer_state",
+      "observed_at": "2026-10-16T01:55:01.844674+02:00",
+      "elapsed_seconds": 2.0550806522369385,
+      "layer": "160ff38caab0",
+      "state": "Pulling fs layer"
+    },
+    {
+      "event": "layer_state",
+      "observed_at": "2026-10-16T01:55:01.844853+02:00",
+      "elapsed_seconds": 2.055263042449951,
+      "layer": "ac7254a7cbee",
+      "state": "Pulling fs layer"
+    },
+    {
+      "event": "layer_state",
+      "observed_at": "2026-10-16T02:11:49.640357+02:00",
+      "elapsed_seconds": 1009.8507652282715,
+      "layer": "ac7254a7cbee",
+      "state": "Download complete"
+    },
+    {
+      "event": "layer_state",
+      "observed_at": "2026-10-16T02:12:50.298198+02:00",
+      "elapsed_seconds": 1070.5086228847504,
+      "layer": "160ff38caab0",
+      "state": "Download complete"
+    },
+    {
+      "event": "layer_state",
+      "observed_at": "2026-10-16T02:13:04.447718+02:00",
+      "elapsed_seconds": 1084.6581282615662,
+      "layer": "160ff38caab0",
+      "state": "Pull complete"
+    },
+    {
+      "event": "layer_state",
+      "observed_at": "2026-10-16T02:14:01.989746+02:00",
+      "elapsed_seconds": 1142.2001597881317,
+      "layer": "ac7254a7cbee",
+      "state": "Pull complete"
+    }
+  ],
+  "max_heartbeat_elapsed_gap_seconds": 5.135940571046376,
+  "artifact_directory": "../output/swe-bench-pro-v2-readiness/2026-10-16-teleport-deadline-retry",
+  "expected_manifest": "sha256:576147fc4357d7a6b4a6a347477e9a95f5e7fd01b277f25284589356350717e9",
+  "attempt_scope": "One authorized same-digest retry with the sleep-inclusive 1200-second deadline; no automatic retries.",
+  "cache_note": "No cache was cleared. Cache-hit events are reported as observed, not assumed from previous incomplete pulls.",
+  "power_settings_changed": false,
+  "cached_layers_deleted": false,
+  "cumulative_selected_repositories_with_workspace_pass": 9,
+  "remaining_unprovisioned_repository": "protonmail/webclients"
+}

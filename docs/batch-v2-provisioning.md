@@ -776,3 +776,44 @@ the host awake for the complete attempt. Preserve caches and use a new
 output directory. The deadline guard makes resumed runs bounded; it does
 not make a sleeping host an uninterrupted diagnostic. Do not change power
 settings or start another retry implicitly.
+
+### Teleport retry with the sleep-inclusive deadline: passed
+
+One same-digest retry on 16 October completed successfully. The pull took
+**1,147.93 seconds (19 minutes 8 seconds)**, within the unchanged 1,200-second
+cap. The verified Linux/amd64 image was registered and retained with its task
+tag. No additional pull or timeout extension occurred.
+
+The new journal records the two previously incomplete blobs finishing their
+downloads at about 1,009.85 seconds (`ac7254a7cbee…`) and 1,070.51 seconds
+(`160ff38caab0…`). Their installation completions followed before the deadline.
+Heartbeats remained continuous, with a maximum gap of **5.14 seconds** between
+recorded heartbeats. The terminal status is `pass` with client exit 0. This
+provides an observed bounded run rather than another overnight-interrupted
+attempt; it does not imply that every prior slowdown has been diagnosed.
+
+No cache was cleared. Docker reported one `Already exists` layer event in
+this run; cache reuse is recorded as observed, not assumed from the earlier
+partial downloads. System power settings and Docker configuration were not
+changed. The progress journal still reports layer states and log bytes, not
+continuous network-byte throughput.
+
+The unchanged cheap workspace probe then passed in **8.60 seconds**. Image
+HEAD matched `4d7c51b4f535cecfd139625e6af1746c46abc712`; committed source
+extracted into disposable scratch, accepted a temporary write and contained
+no Git directory. Existing offline, read-only-root, capability, no-host-mount,
+one-CPU, task-memory, 4-GiB scratch and 120-second probe protections remained
+unchanged. The disposable probe container was removed normally. No repository
+code, dependency install or tests ran.
+
+See the [successful deadline retry evidence](../experiments/swe_bench_pro/v2_teleport_deadline_retry_2026-10-16.json)
+for exact image identities, terminal pull status, heartbeat summary, large-layer
+events, probe results and hashes for all retained artifacts. Earlier failure
+and interrupted-retry records remain intact. Cumulative selected-task
+workspace coverage is now **nine repositories**. Proton Mail webclients is
+the only remaining unprovisioned non-parked repository; NodeBB remains parked.
+These counts do not establish full-suite or task-specific correctness, and
+official readiness is unchanged.
+
+Next: inspect Teleport's pinned public test configuration and select one
+bounded service-independent check. Do not jump to its full integration suite.
