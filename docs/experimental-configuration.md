@@ -68,16 +68,29 @@ and a baseline passing-test inventory. Existing baseline failures remain
 visible; they do not automatically exclude a task. Syntax-only checks do not
 satisfy this proposed research eligibility rule.
 
-The latest DeepSWE survey has 112 usable public baselines. Numba stays excluded
-with its timeout reason recorded. Testem, Cliffy, GoReleaser and Pwntools use
-registered modified images. Report that stratum explicitly and give both systems
-the same registered setup. A task becoming eligible later belongs to a new
-frozen task-list version, not a quiet change to a running experiment.
+The latest registered DeepSWE survey has 112 usable public baselines. Numba
+also completed a [separate three-hour baseline](history/deepswe-numba-three-hour-attempt-2026-10-17.md)
+in about 95 minutes, with 9,987 passes and four retained cache-related
+failures/errors. Its longer candidate-validation profile is not registered;
+it remains excluded under the existing 30-minute condition. That runtime also
+needs to be accounted for before assuming multiple candidates fit the task clock.
+
+Testem, Cliffy, GoReleaser and Pwntools use registered modified images. Report
+that stratum explicitly and give both systems the same registered setup.
+A task becoming eligible later belongs to a new frozen task-list version,
+not a quiet change to a running experiment.
 
 V2 has 642 safely loaded tasks and four reviewed development smoke plans.
-Its broad provisioning survey is now available, but complete public schedules
-and sealed sources still need review for additional tasks. The existing V2
-syntax checks and selected Go test remain useful engineering checks.
+The [repository pilot](batch-v2-provisioning.md#current-coverage-17-october-2026)
+also has workspace evidence for selected tasks from nine repositories.
+Complete public schedules and sealed sources still need review for additional
+experiment tasks. The existing selected tests and syntax checks remain
+engineering evidence, rather than full-suite eligibility.
+
+The complete-public-schedule requirement above is a proposed research choice.
+A pilot can use a fixed eligible subset; preparing every task in both corpora
+is not a prerequisite for that pilot. Its subset and limits must be declared
+before inspecting model outcomes.
 
 Development tasks and tasks whose reference solutions were used to validate
 the scorer need an explicit exposure list before selecting a research holdout.
@@ -99,7 +112,8 @@ when claiming an official V2 result.
 
 ## Work before freezing
 
-1. Expand complete V2 public schedules by repository. The four reviewed smoke
+1. Choose the initial task set and review complete V2 public schedules for those
+   tasks, expanding by repository as needed. The four reviewed smoke
    plans now pass with sealed sources in the [fresh Docker survey](swe-bench-pro-v2-readiness.md#completed-offline-replay);
    they still do not satisfy the proposed full-suite eligibility rule.
 2. Agree the declared method and comparison requirements with Professor Zhang.

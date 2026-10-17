@@ -17,8 +17,10 @@ from v2_nodebb_public import public_command
 
 
 def baseline_command():
-    command = public_command(1800, offline=False)
-    return replace(command, argv=('sh', '-c', 'export CI=true; ' + command.argv[2]))
+    command = public_command(1800)
+    script = command.argv[2].replace('npm_config_offline=true', 'npm_config_offline=false')
+    return replace(command, argv=(*command.argv[:2], 'export CI=true; ' + script,
+                                  *command.argv[3:]))
 
 
 def probe_command():

@@ -64,12 +64,16 @@ def test_real_builder_results_are_reported_conservatively(
 def test_pwntools_plan_runs_public_sphinx_configuration(tmp_path):
     overrides = load_test_overrides(Path(__file__).resolve().parents[1] / "experiments/deepswe/test_overrides.json")
     plan = deepswe_test_plan("python", tmp_path, overrides["pwntools-tube-multiplexing"])
-    assert plan.runner == "pwntools-doctest" and plan.targets == ()
+    assert plan.runner == "pwntools-native-doctest" and plan.targets == ()
     script = plan.command().argv[2]
+    assert script.startswith(". /opt/pwntools-setup-local-ssh.sh\n")
     assert "cd /tmp/work/docs" in script
     assert "PYTHONPATH=/tmp/work/src:/tmp/work PWNLIB_NOTERM=1 python" in script
     assert "pip install" not in script
+    assert plan.command().report == deepswe_test_command("pwntools-doctest").report
     with pytest.raises(ValueError, match="does not support narrowed targets"):
+        deepswe_test_command("pwntools-doctest", ("tubes/process",))
+    with pytest.raises(ValueError, match="source/.*file paths"):
         deepswe_test_command(plan.runner, ("tubes/process",))
 
 

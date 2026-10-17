@@ -2,7 +2,7 @@
 
 The Docker runner now preserves unchanged, checkout-contained Git symlinks.
 This closes the Windows/Linux gap identified in the
-[repository review](deepswe-repository-review-2026-10-04.md). It does not let
+[repository review](history/deepswe-repository-review-2026-10-04.md). It does not let
 the model create or edit symlinks, and it does not initialize submodules.
 
 ## Why ordinary copying was wrong
@@ -95,7 +95,7 @@ it preserves pass/fail/skip outcomes and ignores non-test events. However, a
 full Wazero rerun under the task's declared 8 GiB memory cap was itself
 OOM-killed after about 306 seconds, before producing a report. The converter
 was not exercised on Wazero's full output in that attempt. The subsequent
-[16-GiB diagnostic](wazero-memory-diagnostic-2026-10-05.md) completed the full
+[16-GiB diagnostic](history/wazero-memory-diagnostic-2026-10-05.md) completed the full
 schedule and report conversion with 155,928 passes and 39 skips. Observed
 container memory exceeded 8 GiB during test execution. Wazero still has no
 passing baseline at its published 8-GiB limit; the diagnostic leaves the

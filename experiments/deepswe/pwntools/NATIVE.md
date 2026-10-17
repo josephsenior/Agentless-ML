@@ -1,13 +1,13 @@
 # Separate native/SSH diagnostic
 
 This extends the Sphinx-only image; it does not replace either that image or
-the published benchmark image. See the [review and results](../../../docs/deepswe-pwntools-native-2026-10-07.md).
+the published benchmark image. See the [review and results](../../../docs/history/deepswe-pwntools-native-2026-10-07.md).
 
 The follow-on [MSP430 image](MSP430.md) fixes the selected assembly failure
 and provides an explicit broader public-Docker-schedule diagnostic. Its
 results are separate from the native-image results recorded here.
 
-The separate [SSH-aligned follow-up](../../../docs/deepswe-pwntools-ssh-aligned-2026-10-08.md)
+The separate [SSH-aligned follow-up](../../../docs/history/deepswe-pwntools-ssh-aligned-2026-10-08.md)
 extends the offline image, advertises `/home/travis` through a link to the same
 temporary filesystem, and sets the SFTP creation mask expected by the public
 examples. Its selected filesystem result is 148/149, not a full baseline.

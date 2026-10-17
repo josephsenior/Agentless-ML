@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1020" viewBox="0 0 1440 1020" role="img" aria-labelledby="title description">
+  <title id="title">Agentless-ML architecture</title>
+  <desc id="description">Benchmark inputs and recorded stage responses enter a fixed controller: file localization, symbol localization, edit localization, repair candidates, public checks, and deterministic selection with prediction export. Shared language structure and isolated Docker execution support the workflow. Live model integration is planned. Held-out scoring runs separately after export and does not feed back into repair.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 Z" fill="#60758a"/>
+    </marker>
+    <style>
+      text { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; }
+      .heading { font-size: 27px; font-weight: 650; fill: #172b43; }
+      .body { font-size: 23px; fill: #42566b; }
+      .label { font-size: 20px; font-weight: 650; letter-spacing: 1.4px; fill: #48637d; }
+      .step { font-size: 24px; font-weight: 650; fill: #172b43; }
+      .detail { font-size: 21px; fill: #42566b; }
+      .connector { fill: none; stroke: #60758a; stroke-width: 2.5; marker-end: url(#arrow); }
+    </style>
+  </defs>
+  <rect width="1440" height="1020" rx="24" fill="#f6f8fb"/>
+  <text x="48" y="64" font-size="38" font-weight="700" fill="#172b43">Agentless-ML</text>
+  <text x="48" y="104" class="body">One fixed repair workflow. Shared across languages and benchmarks.</text>
+
+  <!-- Inputs are explicit; no hidden verifier data enters the controller. -->
+  <rect x="40" y="148" width="652" height="142" rx="16" fill="#ffffff" stroke="#d4dee8" stroke-width="2"/>
+  <text x="66" y="184" class="label">BENCHMARK INPUTS</text>
+  <text x="66" y="225" class="heading">DeepSWE · SWE-bench Pro V2</text>
+  <text x="66" y="262" class="body">Issue + pinned repository; hidden answers excluded</text>
+
+  <rect x="716" y="148" width="684" height="142" rx="16" fill="#ffffff" stroke="#d4dee8" stroke-width="2"/>
+  <text x="742" y="184" class="label">STAGE RESPONSES</text>
+  <text x="742" y="225" class="heading">Recorded bundles implemented</text>
+  <rect x="738" y="240" width="394" height="36" rx="8" fill="#fff8eb" stroke="#b58632" stroke-dasharray="5 4"/>
+  <text x="752" y="265" font-size="21" fill="#805a1b">Live model integration: planned</text>
+  <path d="M 366 290 V 330" class="connector"/>
+  <path d="M 1058 290 V 330" class="connector"/>
+
+  <!-- The arrows describe controller order, not an interactive model loop. -->
+  <rect x="40" y="338" width="1360" height="290" rx="18" fill="#eaf1fa" stroke="#bfd0e5" stroke-width="2"/>
+  <text x="68" y="379" class="heading">Fixed controller</text>
+  <text x="68" y="415" class="body">The controller chooses the stages; the model does not choose actions or react to test feedback.</text>
+
+  <g>
+    <rect x="68" y="450" width="194" height="140" rx="12" fill="#ffffff" stroke="#b6c9df"/>
+    <text x="86" y="480" class="label">01</text>
+    <text x="86" y="518" class="step">File</text>
+    <text x="86" y="548" class="step">localization</text>
+    <text x="86" y="575" class="detail">Repository paths</text>
+    <path d="M 264 520 H 286" class="connector"/>
+
+    <rect x="290" y="450" width="194" height="140" rx="12" fill="#ffffff" stroke="#b6c9df"/>
+    <text x="308" y="480" class="label">02</text>
+    <text x="308" y="518" class="step">Symbol</text>
+    <text x="308" y="548" class="step">localization</text>
+    <text x="308" y="575" class="detail">Program elements</text>
+    <path d="M 486 520 H 508" class="connector"/>
+
+    <rect x="512" y="450" width="194" height="140" rx="12" fill="#ffffff" stroke="#b6c9df"/>
+    <text x="530" y="480" class="label">03</text>
+    <text x="530" y="518" class="step">Edit</text>
+    <text x="530" y="548" class="step">localization</text>
+    <text x="530" y="575" class="detail">Allowed line spans</text>
+    <path d="M 708 520 H 730" class="connector"/>
+
+    <rect x="734" y="450" width="194" height="140" rx="12" fill="#ffffff" stroke="#b6c9df"/>
+    <text x="752" y="480" class="label">04</text>
+    <text x="752" y="518" class="step">Repair</text>
+    <text x="752" y="548" class="step">candidates</text>
+    <text x="752" y="575" class="detail">Multiple samples</text>
+    <path d="M 930 520 H 952" class="connector"/>
+
+    <rect x="956" y="450" width="194" height="140" rx="12" fill="#ffffff" stroke="#b6c9df"/>
+    <text x="974" y="480" class="label">05</text>
+    <text x="974" y="518" class="step">Public</text>
+    <text x="974" y="548" class="step">checks</text>
+    <text x="974" y="575" class="detail">Candidate results</text>
+    <path d="M 1152 520 H 1174" class="connector"/>
+
+    <rect x="1178" y="450" width="194" height="140" rx="12" fill="#e5f5f0" stroke="#8bbfad"/>
+    <text x="1196" y="480" class="label">06</text>
+    <text x="1196" y="518" class="step">Select</text>
+    <text x="1196" y="548" class="step">&amp; export</text>
+    <text x="1196" y="575" class="detail">One final patch</text>
+  </g>
+
+  <text x="48" y="675" class="label">SHARED IMPLEMENTATION</text>
+  <rect x="40" y="694" width="652" height="148" rx="16" fill="#ffffff" stroke="#d4dee8" stroke-width="2"/>
+  <text x="66" y="732" class="heading">Source structure</text>
+  <text x="66" y="769" class="body">Python · Go · JavaScript · TypeScript · Rust</text>
+  <text x="66" y="806" class="detail">Language parsers → common files, symbols and line spans</text>
+
+  <rect x="716" y="694" width="684" height="148" rx="16" fill="#ffffff" stroke="#d4dee8" stroke-width="2"/>
+  <text x="742" y="732" class="heading">Candidate execution</text>
+  <text x="742" y="769" class="body">Disposable workspaces + Docker public checks</text>
+  <text x="742" y="806" class="detail">Structured reproduction and regression reports for selection</text>
+
+  <!-- Scoring is separate and cannot supply repair or selection feedback. -->
+  <rect x="40" y="878" width="1360" height="94" rx="16" fill="#eef0f6" stroke="#cbd1df" stroke-width="2"/>
+  <text x="66" y="915" class="label">AFTER EXPORT ONLY</text>
+  <text x="66" y="948" class="heading">Final patch → held-out benchmark scoring</text>
+  <text x="950" y="934" class="body">No feedback into repair</text>
+</svg>

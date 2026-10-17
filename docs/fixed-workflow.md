@@ -7,7 +7,7 @@ Optional [regression selection](regression-selection.md) runs a trusted inventor
 on the unpatched revision and consumes a recorded exclusion response. Its frozen
 schedule is shared across all candidate groups; older fixed schedules still work.
 
-`FixedWorkflowController` connects the first complete Python path: pinned source,
+`FixedWorkflowController` connects the shared recorded workflow: pinned source,
 file localization, symbol localization, focused repair context, multiple repair
 samples, isolated patch application, public Docker tests, deterministic selection,
 and prediction/run export.

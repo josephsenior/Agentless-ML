@@ -1,128 +1,62 @@
 # Agentless-ML
 
-Agentless-ML is a research implementation of the Agentless software-repair
-workflow, redesigned so that the same fixed pipeline can eventually be evaluated
-across programming languages and benchmark harnesses.
+An Agentless-style software-repair framework for **Python, Go, JavaScript,
+TypeScript and Rust**, targeting DeepSWE and SWE-bench Pro V2.
 
-The project asks a specific question: how much of a coding system's performance
-comes from a carefully designed, predetermined workflow, and how much comes from
-letting an agent adapt its actions as it works? Agentless-ML is the fixed-workflow
-side of that comparison. It is being developed for experiments involving
-DeepSWE, SWE-bench Pro, and a capability-matched adaptive system.
+The workflow localizes the relevant code, generates several repair candidates,
+checks them and selects one final patch. The controller decides the stages;
+the model does not choose tools or enter an interactive repair loop.
 
-> [!IMPORTANT]
-> This repository is an early research prototype. Three recorded Python tasks now
-> exercise the recorded Python pipeline. Controlled Go, JavaScript, TypeScript and Rust workflows also work, but
-> live-model runs, remaining framework behavior, and
-> complete benchmark integrations are not finished. It should not yet be used
-> to report benchmark results.
+![Agentless-ML architecture: benchmark inputs and recorded responses enter a fixed localization, repair, public-validation and selection workflow; shared language structure and Docker execution support it, while held-out scoring stays separate.](docs/images/architecture.svg)
 
-## What stays Agentless?
+Public tests can inform selection. Hidden benchmark verification runs only
+after the final patch is exported, with no feedback into repair. Recorded stage
+responses work today; live model execution is the next integration milestone.
 
-The controller follows a fixed sequence:
+[Documentation](docs/README.md) · [Method and differences](docs/replication-map.md) ·
+[Commands](tools/README.md) · [Experiment configuration](docs/experimental-configuration.md)
 
-```text
-task → file localization → symbol localization → edit localization
-     → candidate repair → validation → deterministic selection
-```
+## Current state
 
-The model can generate several candidates within a stage, but it does not decide
-which tool to call next or enter an open-ended act–observe–decide loop. Test
-execution and final selection remain controller operations. Hidden benchmark
-verification happens only after one final patch has been selected.
+The core workflow is implemented and has end-to-end coverage with saved
+responses across all five languages. These runs check the implementation;
+they are not live-model benchmark results.
 
-The workflow is fixed; the surrounding plumbing is not. Dataset loaders,
-repository preparation, language parsers, model providers, and test commands can
-be replaced behind shared interfaces. The precise boundary is recorded in
-[the invariants document](docs/agentless-invariants.md).
+As of **17 October 2026**:
 
-## Why reimplement it?
+| Area | What is established |
+| --- | --- |
+| Core workflow | Hierarchical localization, multi-file edits, reproduction and regression checks, deterministic selection and prediction export. |
+| DeepSWE | All 113 task descriptions load; 112 have registered usable public baselines. The remaining task, Numba, has completed a separate longer diagnostic but is not registered under that profile. |
+| SWE-bench Pro V2 | All 642 task descriptions load. Recorded workflows cover selected Python, Go, JavaScript and TypeScript tasks; workspace checks cover selected tasks from nine repositories. Broad full-suite readiness is incomplete. |
+| Model execution | The controller currently consumes recorded responses. Live integration and complete model-budget enforcement remain to be implemented. |
+| Research experiments | The protocol is a draft. The eligible task set, model settings, matched Grinta condition and scoring route still need to be fixed before reporting results. |
 
-The published Agentless implementation was built for its original Python and
-SWE-bench setting. It contains assumptions about repository names, Python ASTs,
-the original harness, and model APIs of that period. Extending those assumptions
-directly would make a multilingual comparison difficult to interpret.
+These are implementation and environment-readiness counts, not solved-task
+results. Numba's longer run finished in about 95 minutes with four retained
+cache-related failures/errors; see the [full record](docs/history/deepswe-numba-three-hour-attempt-2026-10-17.md).
+Current coverage is tracked in [DeepSWE](docs/deepswe.md) and
+[SWE-bench Pro V2](docs/swe-bench-pro-v2-readiness.md). Earlier investigations
+live in [the development history](docs/history/README.md).
 
-Agentless-ML therefore lives in a separate repository. The published code is
-kept unchanged as a regression reference. We reproduce prompt-visible behavior
-at explicit boundaries, then implement benchmark and language support behind new
-interfaces. This separation is described in
-[ADR 0001](docs/adr/0001-separate-generalized-baseline.md).
+## Getting started
 
-For a component-by-component comparison, design reasons, evidence, and remaining
-differences, start with [the replication map](docs/replication-map.md). It separates
-tested Python parity from intended generalization and provisional development code.
-
-## What works today
-
-The current implementation includes:
-
-- immutable task, repository, patch, validation, prediction, and run schemas;
-- checks that reject answer-like or verifier-only task metadata;
-- a normalized Python file and symbol representation;
-- one language-neutral Tree-sitter structure engine for Go, JavaScript,
-  TypeScript and Rust. Each language is a description (node-type tables, path
-  policy and prompt vocabulary) rather than its own adapter implementation; see
-  [ADR 0003](docs/adr/0003-language-engine.md);
-- Go support connected to the recorded controller, including receiver methods,
-  types, constants, variables, and a controlled two-file repair test;
-- JavaScript and TypeScript support, including JSX/TSX and mixed JS/TS source,
-  with controlled two-file repair tests through the same controller;
-- Rust support, including traits, impl blocks, inline modules and attributes,
-  with a controlled two-file repair test through the same controller;
-- a structure regression corpus of real files vendored at pinned commits, checked
-  against the workflow-level representation contract, and pinned prompts for
-  every language;
-- Agentless-compatible Python skeleton rendering;
-- filtered project-tree and localization-prompt construction, with no
-  language-specific branches in the prompt renderers;
-- parsing and validation of returned file, class, function, variable, and line
-  locations;
-- focused source-context construction for the published repair configuration;
-- Agentless-compatible Python repair-prompt construction, shared by every language
-  with a language-supplied example edit;
-- atomic SEARCH/REPLACE parsing and multi-file edit application;
-- canonical Git patch construction, normalization, and deterministic candidate
-  selection;
-- isolated local Git workspaces pinned to an immutable commit, with candidate
-  patch checks, provenance records, and owned-directory cleanup;
-- Docker execution of fixed public test commands, resource limits, recorded
-  outcomes, and a prepared two-patch selection demonstration without model calls;
-- a fixed recorded-response controller spanning Python localization through
-  candidate validation, selection, final prediction, and reproducibility export;
-- a fail-closed SWE-bench Pro V2 loader for all 642 pinned agent-visible tasks,
-  plus recorded Python, Go, JavaScript and TypeScript smoke runs in official V2 images;
-  three earlier qutebrowser smoke runs used V1 images;
-- a fail-closed DeepSWE adapter that loads all 113 pinned tasks (Go, Python,
-  TypeScript, JavaScript and Rust) from their agent-visible files only, without
-  opening hidden tests or reference solutions; see [DeepSWE](docs/deepswe.md);
-- golden fixtures generated by the pinned Agentless v1.5.0 implementation.
-
-The parity suite includes a controlled Python module and SWE-bench Lite instance
-`psf__requests-2317` at its pinned Requests revision. The test cases cover both
-normal behavior and several quirks in the published implementation. See
-[Python parity](docs/python-parity.md) for the exact scope and limitations.
-
-## Installation and tests
-
-Python 3.11 or newer is required. The lockfile is maintained with
-[uv](https://docs.astral.sh/uv/).
+Python 3.11 or newer is required. With [uv](https://docs.astral.sh/uv/):
 
 ```bash
 git clone https://github.com/josephsenior/Agentless-ML.git
 cd Agentless-ML
-uv sync --extra dev
-uv run pytest
+uv sync --extra dev --locked
+uv run --no-sync pytest
 ```
 
-Benchmark dataset loading is an optional installation because PyArrow is not
-needed by the core workflow:
+Benchmark loaders also need the optional dataset dependency:
 
 ```bash
-uv sync --extra dev --extra benchmarks
+uv sync --extra dev --extra benchmarks --locked
 ```
 
-An ordinary virtual environment also works:
+An ordinary virtual environment works too:
 
 ```bash
 python -m venv .venv
@@ -130,155 +64,82 @@ python -m pip install -e '.[dev]'
 python -m pytest
 ```
 
-The runtime uses LibCST for Python and Tree-sitter grammars for Go, JavaScript,
-TypeScript, TSX and Rust.
-Fixture-capture tools
-also require the separately pinned Agentless checkout; ordinary unit tests do
-not.
+Framework tests do not need model credentials or hidden benchmark data.
+Some checks require an optional local toolchain and are skipped when it is
+unavailable. Actual benchmark runs need separately prepared repositories,
+pinned images and Docker.
 
-## Repository guide
+## Commands
 
-```text
-src/agentless_ml/schemas/             shared experimental records
-src/agentless_ml/adapters/benchmarks/ benchmark-specific safe task loaders
-src/agentless_ml/adapters/languages/  language descriptions; Python parity implementation
-src/agentless_ml/structure/           language-neutral structure engine and contract
-src/agentless_ml/localization/        prompt, location, and context logic
-src/agentless_ml/repair/              repair prompts, edits, patches, and selection
-src/agentless_ml/workspace/           isolated local candidate checkouts
-src/agentless_ml/validation/          container-backed public test execution
-src/agentless_ml/workflow/            fixed end-to-end controller
-tests/fixtures/                        captured regression artifacts
-tools/                                 fixture-capture utilities
-experiments/                           answer-free pinned smoke-run inputs
-docs/                                  design boundaries and parity notes
-```
+The [tools guide](tools/README.md) separates the main commands, recorded
+replays, fixture maintenance and repository-specific diagnostics.
 
-All upstream revisions used by the fixtures are listed in
-[PROVENANCE.md](PROVENANCE.md). Golden files include source hashes and are
-recaptured with scripts in `tools/`; they are not hand-written expected outputs.
-Gold patches and hidden verifier tests are not included in agent-visible task
-records or used for candidate generation or selection. Only the post-selection
-scorer (`agentless_ml.scoring`) reads them, and no workflow module imports it
-([DeepSWE scoring](docs/deepswe.md#scoring-a-selected-patch)).
-
-[Go support](docs/go-adapter.md) explains the first non-Python language, its tests,
-and the choices that differ from Python. The optional compiler check runs only
-the small authored Go fixture; ordinary tests do not require a Go installation.
-
-[JavaScript and TypeScript support](docs/javascript-typescript.md) covers the
-supported declarations, parser selection, mixed repositories and optional Node
-checks. Ordinary framework tests do not require Node or a TypeScript compiler.
-
-[Rust support](docs/rust-adapter.md) covers traits, impl blocks, modules and the
-optional compiler check. Ordinary framework tests do not require Rust installed.
-
-## SWE-bench Pro V2 loading and recorded smoke tasks
-
-SWE-bench Pro V2 is the selected research target. The pinned loader checks all
-642 V2 tasks using only `task.toml` and `instruction.md`, joined to repository
-and base-commit metadata from the pinned V1 dataset. See
-[the benchmark note](docs/swe-bench-pro.md) for the corpus check and trust
-boundary. The existing smoke set also has three pinned V1 qutebrowser tasks. Their
-localization and repair responses are recorded inputs, so these runs make zero
-model calls. After cloning qutebrowser and pulling the pinned images, run one
-experiment with:
+For the small recorded demonstration, inspect its options first:
 
 ```bash
-python tools/run_swe_bench_pro_slice.py \
-  --dataset-parquet /path/to/test-00000-of-00001.parquet \
-  --experiment qutebrowser_network_error \
-  --source-repository /path/to/qutebrowser \
-  --workspace-root /path/to/temporary-workspaces \
-  --artifact-root /path/to/run-artifacts
+uv run python tools/demo_fixed_workflow.py --help
 ```
 
-For the V2 smoke run, use `qutebrowser_network_error` and add
-`--v2-task-dir /path/to/SWE-bench_Pro-os/v2/tasks/<instance_id>`. That directory
-only needs its two agent-visible files. The recorded V1 responses are reused
-for a workflow check, not a V2 benchmark score.
+With Docker running and the demonstration image already available, the same
+script runs the authored example and exports its selected patch:
 
-The first non-Python V2 run uses a pinned Vuls Go task. Its separate recorded
-runner, `tools/run_swe_bench_pro_v2_go_slice.py`, takes `--v1-parquet`,
-`--v2-tasks`, `--source-repository`, `--workspace-root`, and `--artifact-root`.
-On that task, the selected patch passed public checks and the local V2 verifier;
-the empty patch failed and the reference patch passed. These are engineering
-checks with hand-written responses, not model benchmark results. See the
-[benchmark note](docs/swe-bench-pro.md) for the exact task and limitations.
+```bash
+uv run python tools/demo_fixed_workflow.py --output artifacts/fixed-workflow
+```
 
-The next recorded V2 task checks NodeBB's JavaScript admin upload handler with
-`tools/run_swe_bench_pro_v2_js_slice.py`. It exercised a real top-level
-function-member symbol, a public missing-folder reproduction, candidate
-selection, and post-selection V2 scoring. This too is a hand-written workflow
-check, not a model result.
+For benchmark work, use the documented workflow and survey commands in
+[DeepSWE](docs/deepswe.md), [SWE-bench Pro](docs/swe-bench-pro.md) and
+[V2 provisioning](docs/batch-v2-provisioning.md).
+Post-selection scorers are separate commands; running a public regression
+suite does not produce a benchmark score.
 
-The TypeScript V2 smoke task uses Tutanota's credential-decryption path. Run
-`tools/run_swe_bench_pro_v2_ts_slice.py` with the same five arguments as the Go
-runner. Its public check distinguishes the incomplete one-file repair from the
-selected two-file repair. The latter resolved in the local V2 verifier; empty
-and reference patches returned 0 and 1 respectively. This is a recorded
-engineering check, not a live-model score or a full TypeScript project build.
+## Code and records
 
-A real Rust DeepSWE `fd` task has also traversed the recorded controller and
-post-selection scorer. Its deliberately non-solving control patch preserved all
-241 baseline tests and scored unresolved on the held-out verifier, as expected.
-See [the DeepSWE note](docs/deepswe.md#recorded-rust-workflow-smoke-task).
+| Location | Contents |
+| --- | --- |
+| `src/agentless_ml/` | Shared schemas, language structure, localization, repair, workspaces, validation, controller and scoring. |
+| `tests/` | Framework tests and pinned parity fixtures. |
+| `tools/` | Command-line entry points and development helpers, indexed in the tools guide. |
+| `experiments/` | Reviewed configurations, corpus pins and compact run evidence. |
+| `docs/` | Current method, implementation and benchmark guides. |
+| `docs/history/` | Earlier setup investigations and run records. |
+| `artifacts/` | Ignored local run outputs; some published development records cite these files. |
 
-Selection uses supplied repository tests and issue-derived reproduction checks. The
-official benchmark verifier remains a separate, post-selection evaluation step; it
-is implemented for DeepSWE (`tools/score_deepswe.py`). For the V2 smoke tasks,
-`tools/score_swe_bench_pro_v2.py` also runs the pinned V2 verifier in a fresh
-image after selection. See the [benchmark note](docs/swe-bench-pro.md) for its
-empty/reference checks and the limits of this local result; official Harbor
-re-grading is not yet integrated.
-
-## Roadmap
-
-The [recorded edit-line stage](docs/edit-localization.md) now connects symbol
-localization to finer repair context. It is optional for replaying older fixtures;
-grouped localization/repair samples are also supported.
-[Recorded regression selection](docs/regression-selection.md) now checks a trusted
-inventory on the baseline revision and freezes a schedule from recorded exclusions.
-[Recorded reproduction tests](docs/reproduction-tests.md) now support multiple
-recorded sources, baseline eligibility checks and exact-source voting to choose
-one unchanged test for candidate checks. Automatic test discovery, live generation
-and upstream normalization/marker-protocol parity remain unfinished.
-
-The local workspace layer is documented in [Candidate workspaces](docs/workspaces.md).
-It isolates repository changes; [public validation](docs/public-validation.md)
-now runs fixed commands in disposable Docker containers. The two-patch demo
-exercises real test execution and selection without model API calls.
-
-The recorded [fixed workflow](docs/fixed-workflow.md) now exercises the complete
-Python controller without model API calls. Milestones 1 and 2 below have recorded
-development coverage; live-model trials remain separate. The planned sequence is:
-
-1. complete one real pinned Python task end to end — complete;
-2. integrate one target benchmark and run several Python smoke tasks — complete;
-3. add languages while refining shared structures: Go, JavaScript/TypeScript
-   and Rust now have controlled recorded coverage, and share one structure
-   engine and one set of prompt renderers;
-4. complete the remaining framework behavior and stabilize the multilingual
-   interfaces after testing the planned languages (the controller path no
-   longer branches on language names);
-5. connect a live model and complete both benchmark integrations;
-6. run a small paired Agentless-ML versus Grinta pilot;
-7. freeze the experimental protocol;
-8. run the main experiment.
-
-The main experiments will begin only after the system boundary, benchmark pins,
-task eligibility rules, budgets, and failure policy are frozen.
+See [the experiment records guide](experiments/README.md) before removing
+generated outputs. Raw reports and predictions may still be needed to
+reproduce a result even though Git ignores them.
 
 ## Relationship to Agentless
 
-Agentless-ML builds on the ideas introduced by
-[Agentless](https://github.com/OpenAutoCoder/Agentless). It is a separate
-implementation and does not claim that the original release natively supports
-the new benchmarks or languages. Published Agentless results and Agentless-ML
-results must be reported as different experimental conditions.
+This is a separate implementation based on
+[Agentless](https://github.com/OpenAutoCoder/Agentless), intended as a fixed-workflow
+baseline for comparison with Grinta. The aim is to generalize source representation
+and benchmark execution without making the repair process an adaptive agent.
+
+The pinned reference is kept unchanged. Python parity is checked at specific
+boundaries, while multilingual support and several repair/selection choices
+extend or differ from that reference. This is not a claim of full upstream parity.
+
+[The replication map](docs/replication-map.md) records those differences and
+their evidence. [The invariants](docs/agentless-invariants.md) state what stays
+fixed, and [the design decisions](docs/adr/0001-separate-generalized-baseline.md)
+explain the implementation boundary. Upstream revisions and fixture provenance
+are listed in [PROVENANCE.md](PROVENANCE.md).
+
+## Remaining work
+
+The next implementation milestone is live model execution through the existing
+stages, with enforced call, token and time budgets. Then calibrate a small
+development pilot and agree the experimental configuration with Professor Zhang,
+including the matched Grinta condition.
+
+Benchmark provisioning can expand by repository as the chosen experiment
+requires. Loading every description, running a selected smoke check and
+establishing a complete public baseline are different levels of coverage.
+Method differences and the remaining integration gaps are listed in
+[the proposed configuration](docs/experimental-configuration.md).
 
 ## License
 
-Agentless-ML is released under the [MIT License](LICENSE). Upstream fixtures and
-source-derived regression artifacts retain the provenance of their original
-projects.
+[MIT](LICENSE). Upstream fixtures and source-derived regression artifacts retain
+the provenance and applicable licenses of their original projects.

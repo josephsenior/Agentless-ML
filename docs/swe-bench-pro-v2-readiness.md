@@ -1,5 +1,11 @@
 # SWE-bench Pro V2 provisioning survey
 
+As of 17 October, all 642 task descriptions load and the repository pilot has
+workspace evidence for selected tasks from nine repositories. Selected public
+checks are recorded separately from this survey's four development plans; they
+do not establish complete suites for every task. See the
+[current coverage table](batch-v2-provisioning.md#current-coverage-17-october-2026).
+
 Current engineering direction: [batch inventory and bounded cross-repository
 pilot](batch-v2-provisioning.md). NodeBB is parked with its complete, labelled
 diagnostic evidence; its three existing failures remain recorded. No further

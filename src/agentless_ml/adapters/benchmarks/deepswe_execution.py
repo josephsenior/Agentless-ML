@@ -311,9 +311,9 @@ PWNTOOLS_DOCTEST = DeepSWETestCommand(
     report=TestReport(ReportFormat.CTRF_JSON, "/tmp/ctrf.json"),
 )
 
-# Explicit diagnostic only, never selected by the canonical task override.
-# The separate native image provides an ephemeral loopback-only SSH service.
-# Sphinx file selectors are public travis/docker's documented TARGET mechanism.
+# The registered supplemented profile provides an ephemeral loopback-only SSH
+# service and retains the full public schedule. Diagnostic file selectors use
+# public travis/docker's documented TARGET mechanism.
 PWNTOOLS_NATIVE_DOCTEST = DeepSWETestCommand(
     script=(". /opt/pwntools-setup-local-ssh.sh\n" + PWNTOOLS_DOCTEST.script + ' "$@"'),
     report=PWNTOOLS_DOCTEST.report,

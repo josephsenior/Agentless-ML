@@ -21,9 +21,9 @@ The reproducible pins are in `experiments/swe_bench_pro/v2_corpus_pin.json`;
 `tools/check_swe_bench_pro_v2_corpus.py` checks the complete join. It reads no
 V2 verifier or reference-solution files.
 
-This is metadata loading, not 642 executable runs. Only the smoke tasks below
-have pinned and checked images. Each additional task needs its image ID and
-base checkout checked before execution.
+This is metadata loading, not 642 executable runs. Additional image and workspace
+checks are tracked in the [repository pilot](batch-v2-provisioning.md); each
+selected revision still needs its own image identity and base checkout checked.
 
 The [V2 provisioning survey](swe-bench-pro-v2-readiness.md) now records these
 checks explicitly and preserves the difference between syntax smoke checks,
@@ -78,7 +78,7 @@ in the [Python replay evidence](../experiments/swe_bench_pro/python_reproduction
 
 ## First Go task through V2
 
-The Go, JavaScript and TypeScript slices below were [replayed on 11 October 2026](multilingual-reproduction-replay-2026-10-11.md)
+The Go, JavaScript and TypeScript slices below were [replayed on 11 October 2026](history/multilingual-reproduction-replay-2026-10-11.md)
 after migration to structured reproduction reporting. All selected repair-2
 with zero model calls. No held-out verifier was rerun; the historical scoring
 observations below remain separate from these new workflow checks.

@@ -3,12 +3,12 @@
 This adds two verified Debian packages to the MSP430 image. It is not a
 replacement for the published benchmark image. Package versions and archive
 SHA-256 values are recorded in [riscv-packages.json](riscv-packages.json).
-See the [results and remaining failures](../../../docs/deepswe-pwntools-riscv-2026-10-07.md).
-The [process-failure diagnosis](../../../docs/deepswe-pwntools-process-2026-10-07.md)
+See the [results and remaining failures](../../../docs/history/deepswe-pwntools-riscv-2026-10-07.md).
+The [process-failure diagnosis](../../../docs/history/deepswe-pwntools-process-2026-10-07.md)
 explains three remaining examples without modifying this image or schedule.
-The [libcdb diagnosis](../../../docs/deepswe-pwntools-libcdb-2026-10-07.md)
+The [libcdb diagnosis](../../../docs/history/deepswe-pwntools-libcdb-2026-10-07.md)
 separates working local lookup from missing public library and debug data.
-The [public dependency audit](../../../docs/deepswe-pwntools-public-assets-2026-10-07.md)
+The [public dependency audit](../../../docs/history/deepswe-pwntools-public-assets-2026-10-07.md)
 and [asset pins](public-assets.json) verify files for a future separate offline
 image; no such image is included in this checkpoint.
 APT authenticates repository metadata; the recipe additionally checks the
