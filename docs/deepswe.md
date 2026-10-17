@@ -1,17 +1,19 @@
 # DeepSWE integration
 
-Numba's [approved three-hour public-baseline attempt](history/deepswe-numba-three-hour-attempt-2026-10-17.md)
-completed on 17 October in about 95 minutes: **9,987 passed**, one failed,
-three errored and 618 were skipped or expected failures, across all **10,609**
-reported IDs. The four nonpassing cases concern the user-cache fallback.
-This longer condition is not yet registered for candidate validation; the
-existing survey count remains **112/113** under its current profiles.
+Registered public-baseline readiness is **113/113**. Numba's complete rerun
+passed **9,991 tests**, with zero failures/errors and 618 skipped or expected
+failures. Its verified setup is now registered for baseline and candidate
+validation: two native workers, writable user-cache fallback and an explicit
+three-hour command cap. See the
+[registration record](history/deepswe-numba-registered-readiness-2026-10-17.md).
+This count includes Numba's longer allowance and four supplemented-image
+profiles; it is not a uniform original-30-minute result or a solved-task count.
 
 Wazero's separate [short-mode diagnostic](history/wazero-short-diagnostic-2026-10-11.md)
 passed under its original 8 GiB limit, with 155,923 passes and 44 skips.
 This reduced-coverage result was not a full baseline or an official readiness
-update. The later full schedule completed; registered readiness is **112/113**,
-with Numba unready under its existing 30-minute profile. See the
+update. The later full schedule completed, raising readiness at that checkpoint
+to **112/113**. Numba's subsequent registration is recorded above. See the
 [scratch/swap review](history/deepswe-scratch-swap-2026-10-12.md).
 
 Pebble's [registered public CI setup](history/deepswe-pebble-registered-ci-2026-10-10.md)
@@ -511,12 +513,12 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
 
 ## What is not implemented
 
-The registered survey has **112 usable public baselines**. After correcting its
+The registered survey has **113 usable public baselines**. After correcting its
 writable user-cache fallback, Numba also completed its 10,609-case public
 schedule under the separately approved three-hour allowance: **9,991 passed,
 zero failures/errors**, and 618 skipped or expected failures. Its longer
-candidate-validation profile is not registered, so the survey count remains
-unchanged. See [the complete rerun](history/deepswe-numba-writable-cache-2026-10-17.md).
+candidate-validation profile is now registered using that same verified
+command and full report. See [the registration](history/deepswe-numba-registered-readiness-2026-10-17.md).
 
 The remaining experiment work is:
 

@@ -8,11 +8,10 @@ promoted to a baseline. Uses the resource diagnostic's unchanged Docker limits.
 import argparse
 import json
 import tempfile
-from dataclasses import replace
 from datetime import UTC, datetime
 from pathlib import Path
 
-from agentless_ml.adapters.benchmarks.deepswe_execution import NUMBA_RUNTESTS
+from agentless_ml.adapters.benchmarks.deepswe_execution import deepswe_test_command
 from agentless_ml.workspace import LocalGitWorkspaceProvider, verify_sealed_repository
 from run_numba_resource_diagnostic import BASE, ROOT, TASK, SampledRunner
 
@@ -20,16 +19,7 @@ from run_numba_resource_diagnostic import BASE, ROOT, TASK, SampledRunner
 def full_command(timeout_seconds=1800):
     if type(timeout_seconds) is not int or not 1 <= timeout_seconds <= 10800:
         raise ValueError("full-attempt timeout must be an integer from 1 to 10800 seconds")
-    # Native schedule and build stay identical; only the worker count changes.
-    template = replace(NUMBA_RUNTESTS, script=NUMBA_RUNTESTS.script + " -m 2")
-    command = template.command((), timeout_seconds=timeout_seconds)
-    native = (command.argv[0], command.argv[1],
-              "export AGENTLESS_NUMBA_DIAGNOSTIC=1; " + command.argv[2],
-              *command.argv[3:])
-    # Keep the deadline even if the host supervisor disappears. This covers
-    # build, import checks and tests, not just the test phase.
-    return replace(command, argv=("timeout", "--signal=TERM", "--kill-after=10s",
-                                 f"{timeout_seconds}s", *native))
+    return deepswe_test_command("numba-runtests", timeout_seconds=timeout_seconds)
 
 
 class FullBaselineRunner(SampledRunner):

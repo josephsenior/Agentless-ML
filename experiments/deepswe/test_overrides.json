@@ -29,9 +29,10 @@
   },
   "numba-stencil-boundary-modes": {
     "runner": "numba-runtests",
+    "timeout_seconds": 10800,
     "scratch_mode": "volume",
     "swap_policy": "docker-default",
-    "reason": "Build native extensions with the documented python setup.py build_ext --inplace and verify candidate imports. Run the public runtests.py entry point with its default full schedule and native loader, including CUDA availability checks; generic pytest bypasses those hooks. Record real unittest outcomes through the existing BasicTestRunner without changing discovery, ordering or assertions. Set OPENBLAS_NUM_THREADS=1 before Python starts to limit the image's NumPy/SciPy BLAS pools; retain Numba's own thread maximum because lowering it removes generated public cases. Discovery verified the same 10609 IDs with this BLAS setting; full-suite completion remains unproven. Use disposable disk-backed /tmp scratch and leave swap at the Docker default, matching Pier's Docker resource mapping. Keep the declared 8-GiB RAM, two CPUs, 30-minute timeout, image, dependencies, offline network and test schedule unchanged."
+    "reason": "Register the complete public baseline verified on 2026-10-17: build native extensions from candidate source, verify imports, and run the unchanged native runtests.py schedule with two workers (-m 2). Set OPENBLAS_NUM_THREADS=1 and XDG_CACHE_HOME=/tmp/numba-user-cache without lowering Numba's own thread maximum or forcing NUMBA_CACHE_DIR. All 10609 IDs were retained: 9991 passed, zero failures/errors, 595 skips and 23 expected failures. Use the approved 10800-second host and container command caps instead of the former 1800 seconds, for both baseline and candidate validation. Preserve the original pinned image, 8-GiB RAM, two CPUs, disposable disk scratch, Docker-default swap, offline networking, assertions and report. This is an explicit longer public-validation condition; it does not change the corpus agent budget or the held-out verifier."
   },
   "wazero-multi-module-snapshots": {
     "scratch_mode": "volume",

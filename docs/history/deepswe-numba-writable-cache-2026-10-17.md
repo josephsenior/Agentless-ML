@@ -59,3 +59,7 @@ complete public baseline under the approved longer allowance. It does not
 register that allowance for candidate validation: the canonical survey still
 has 112/113 registered usable baselines. No further attempt, model call or
 held-out verifier was run.
+
+Subsequently, the user approved registering this exact command and longer
+allowance. The [registration record](deepswe-numba-registered-readiness-2026-10-17.md)
+documents the evidence reuse and updated 113/113 readiness count.

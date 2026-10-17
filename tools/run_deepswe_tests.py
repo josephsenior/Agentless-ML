@@ -49,7 +49,8 @@ def main() -> int:
     parser.add_argument("--task-id", required=True)
     parser.add_argument("--image")
     parser.add_argument("--artifacts", type=Path, default=ROOT / "artifacts" / "deepswe")
-    parser.add_argument("--timeout-seconds", type=float, default=1800)
+    parser.add_argument("--timeout-seconds", type=float, default=None,
+                        help="Override the registered task command cap (otherwise 1800 seconds)")
     parser.add_argument("targets", nargs="*")
     arguments = parser.parse_args()
 
@@ -104,7 +105,8 @@ def main() -> int:
         # Targets on the command line replace the task's derived plan.
         targets = tuple(arguments.targets) if arguments.targets else plan.targets
         command = deepswe_test_command(
-            plan.runner, targets, timeout_seconds=arguments.timeout_seconds
+            plan.runner, targets, timeout_seconds=(plan.timeout_seconds
+                if arguments.timeout_seconds is None else arguments.timeout_seconds)
         )
         command = runtime_command(command, environment)
         print(f"{task.instance_id} [{task.language}, {plan.runner}] at {task.base_commit[:12]}")

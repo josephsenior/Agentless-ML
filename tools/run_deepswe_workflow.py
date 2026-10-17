@@ -138,7 +138,7 @@ def main() -> None:
             runtime_command(deepswe_test_command(
                 test_runner,
                 targets,
-                timeout_seconds=suite.get("timeout_seconds", 1800),
+                timeout_seconds=suite.get("timeout_seconds", plan.timeout_seconds),
             ), environment),
         ),
     )

@@ -83,6 +83,11 @@ longer exists. Do not run every file as a way of discovering what it does.
 default cap is 30 minutes; the separately approved three-hour run used
 `--timeout-seconds 10800`. That run does not change the shared survey profile.
 
+The subsequently registered Numba task plan now defaults to that verified
+three-hour allowance and two-worker command in the regular survey, public-test
+tool and workflow. An explicit command-line or experiment timeout overrides
+the task default. See the [registration record](../docs/history/deepswe-numba-registered-readiness-2026-10-17.md).
+
 Modules such as `deepswe_environments.py`, `v2_go_public.py`,
 `v2_nodebb_public.py`, `pull_deadline.py` and `numba_test_timing.py`, along with
 the `.cjs` reporters/services, are support code imported by runners or copied

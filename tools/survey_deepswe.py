@@ -199,7 +199,8 @@ def main() -> int:
     parser.add_argument("--rerun", action="store_true")
     parser.add_argument("--results", type=Path, default=ROOT / "artifacts" / "deepswe" / "survey.jsonl")
     parser.add_argument("--artifacts", type=Path, default=ROOT / "artifacts" / "deepswe" / "survey")
-    parser.add_argument("--timeout-seconds", type=float, default=1800)
+    parser.add_argument("--timeout-seconds", type=float, default=None,
+                        help="Override the registered task command cap (otherwise 1800 seconds)")
     parser.add_argument("--tmpfs-mb", type=int, default=4096)
     # Pulling every image is about 100 GB; stop before the disk is full rather
     # than fail tasks for reasons that have nothing to do with them.

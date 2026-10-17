@@ -27,7 +27,7 @@ import json
 import re
 import shlex
 from collections.abc import Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path, PurePosixPath
 
 from agentless_ml.adapters.benchmarks.deepswe_eicrud import EICRUD_MONGO_SCRIPT
@@ -244,7 +244,7 @@ NUMBA_RUNTESTS = DeepSWETestCommand(
         'mkdir -p "$XDG_CACHE_HOME" || exit 125; '
         "python setup.py build_ext --inplace || exit 125; "
         f"python -c '{_NUMBA_IMPORT_CHECK}' || exit 125; "
-        f"python -c '{NUMBA_REPORTER}' {WORK}/runtests.py /tmp/report.xml"
+        f"python -c '{NUMBA_REPORTER}' {WORK}/runtests.py /tmp/report.xml -m 2"
     ),
     report=PYTEST.report,
 )
@@ -980,23 +980,27 @@ class DeepSWETestPlan:
     runner: str
     targets: tuple[str, ...]
     override_reason: str | None = None
+    timeout_seconds: float = 1800
 
-    def command(self, *, timeout_seconds: float = 1800) -> PublicTestCommand:
-        return deepswe_test_command(self.runner, self.targets, timeout_seconds=timeout_seconds)
+    def command(self, *, timeout_seconds: float | None = None) -> PublicTestCommand:
+        return deepswe_test_command(
+            self.runner, self.targets,
+            timeout_seconds=self.timeout_seconds if timeout_seconds is None else timeout_seconds,
+        )
 
 
 def load_test_overrides(path: Path) -> dict[str, dict[str, object]]:
     """Per-task corrections that cannot be derived, each with its reason.
 
     Keys are task IDs; each entry has a nonempty ``reason`` and may replace the
-    runner or targets, append arguments, or raise the disposable /tmp size.
+    runner or targets, append arguments, or set scratch and command time limits.
     """
     raw = json.loads(Path(path).read_text(encoding="utf-8"))
     overrides: dict[str, dict[str, object]] = {}
     for task_id, entry in raw.items():
         if not isinstance(entry, dict) or set(entry) - {
             "reason", "arguments", "targets", "runner", "tmpfs_mb",
-            "scratch_mode", "swap_policy",
+            "scratch_mode", "swap_policy", "timeout_seconds",
         }:
             raise ValueError(f"override for {task_id} has unknown keys")
         if not isinstance(entry.get("reason"), str) or not entry["reason"].strip():
@@ -1013,6 +1017,10 @@ def load_test_overrides(path: Path) -> dict[str, dict[str, object]]:
             type(entry["tmpfs_mb"]) is not int or entry["tmpfs_mb"] <= 0
         ):
             raise ValueError(f"override for {task_id}: tmpfs_mb must be a positive integer")
+        if "timeout_seconds" in entry and (
+            type(entry["timeout_seconds"]) is not int or entry["timeout_seconds"] <= 0
+        ):
+            raise ValueError(f"override for {task_id}: timeout_seconds must be a positive integer")
         if "scratch_mode" in entry and entry["scratch_mode"] not in ("tmpfs", "volume"):
             raise ValueError(f"override for {task_id}: unknown scratch_mode")
         if "swap_policy" in entry and entry["swap_policy"] not in (
@@ -1021,7 +1029,7 @@ def load_test_overrides(path: Path) -> dict[str, dict[str, object]]:
             raise ValueError(f"override for {task_id}: unknown swap_policy")
         if not entry.get("arguments") and not any(
             key in entry for key in (
-                "targets", "runner", "tmpfs_mb", "scratch_mode", "swap_policy"
+                "targets", "runner", "tmpfs_mb", "scratch_mode", "swap_policy", "timeout_seconds"
             )
         ):
             raise ValueError(f"override for {task_id} changes nothing")
@@ -1044,7 +1052,9 @@ def deepswe_test_plan(
     if "targets" in override:
         targets = tuple(override["targets"])  # type: ignore[arg-type]
     targets += tuple(override.get("arguments", ()))  # type: ignore[arg-type]
-    return DeepSWETestPlan(runner, targets, str(override["reason"]))
+    return DeepSWETestPlan(
+        runner, targets, str(override["reason"]), override.get("timeout_seconds", 1800),
+    )
 
 
 def deepswe_test_command(
@@ -1075,4 +1085,14 @@ def deepswe_test_command(
             f"no verified DeepSWE test command for {runner!r}; "
             f"have {', '.join(sorted(TEST_COMMANDS))}"
         ) from None
-    return template.command(targets, timeout_seconds=timeout_seconds)
+    command = template.command(targets, timeout_seconds=timeout_seconds)
+    if runner == "numba-runtests":
+        # Match the completed two-worker baseline, including its independent
+        # container deadline and progress-only observer. This is the same
+        # build/import/test command for base and patched candidate workspaces.
+        native = (command.argv[0], command.argv[1],
+                  "export AGENTLESS_NUMBA_DIAGNOSTIC=1; " + command.argv[2],
+                  *command.argv[3:])
+        return replace(command, argv=("timeout", "--signal=TERM", "--kill-after=10s",
+                                      f"{timeout_seconds:g}s", *native))
+    return command

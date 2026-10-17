@@ -33,7 +33,8 @@ from agentless_ml.workspace import LocalGitWorkspaceProvider
 
 
 def script(runner, targets=()):
-    return deepswe_test_command(runner, targets).argv[2]
+    command = deepswe_test_command(runner, targets)
+    return command.argv[command.argv.index("-c") + 1]
 
 
 def test_python_puts_the_checkout_ahead_of_the_images_installed_package():
@@ -53,16 +54,19 @@ def test_numba_builds_candidate_extensions_before_import_and_native_runner(tmp_p
     override = load_test_overrides(OVERRIDES)["numba-stencil-boundary-modes"]
     plan = deepswe_test_plan("python", tmp_path, override)
     assert plan.runner == "numba-runtests" and plan.targets == ()
-    text = plan.command().argv[2]
+    command = plan.command()
+    assert command.timeout_seconds == 10800
+    assert command.argv[:4] == ("timeout", "--signal=TERM", "--kill-after=10s", "10800s")
+    text = command.argv[6]
     assert text.index("export OPENBLAS_NUM_THREADS=1;") < text.index("python setup.py")
     assert "export NUMBA_NUM_THREADS=" not in text
     assert "python setup.py build_ext --inplace || exit 125" in text
     assert text.index("build_ext --inplace") < text.index("refusing non-candidate import")
     assert text.index("refusing non-candidate import") < text.index("BasicTestRunner.resultclass")
-    assert text.endswith("/tmp/work/runtests.py /tmp/report.xml")
+    assert text.endswith("/tmp/work/runtests.py /tmp/report.xml -m 2")
     assert "python -m pytest" not in text
     assert "sys.argv = [entry, *sys.argv[3:]]" in text and "completed or not records" in text
-    assert not text.endswith("/tmp/report.xml -m 2")  # baseline stays serial
+    assert text.count("/tmp/report.xml -m 2") == 1
     assert "/app/numba" not in text and "pip install" not in text
     assert "_min_llvmlite_version" not in text and "sed " not in text
     assert plan.command().report == TEST_COMMANDS["pytest"].report
@@ -86,7 +90,8 @@ def test_numba_and_wazero_use_pier_aligned_scratch_and_swap():
         assert overrides[task_id]["scratch_mode"] == "volume"
         assert overrides[task_id]["swap_policy"] == "docker-default"
         assert "8-GiB RAM" in overrides[task_id]["reason"]
-        assert "30-minute timeout" in overrides[task_id]["reason"]
+    assert overrides["numba-stencil-boundary-modes"]["timeout_seconds"] == 10800
+    assert "30-minute timeout" in overrides["wazero-multi-module-snapshots"]["reason"]
 
 
 @pytest.mark.parametrize("image_copy", [False, True])

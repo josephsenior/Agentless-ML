@@ -68,12 +68,13 @@ and a baseline passing-test inventory. Existing baseline failures remain
 visible; they do not automatically exclude a task. Syntax-only checks do not
 satisfy this proposed research eligibility rule.
 
-The latest registered DeepSWE survey has 112 usable public baselines. Numba
+The latest registered DeepSWE survey has 113 usable public baselines. Numba
 also completed a [cache-corrected three-hour baseline](history/deepswe-numba-writable-cache-2026-10-17.md)
 with 9,991 passes, no failures/errors, and 618 skipped or expected failures.
 Host execution took about 94 minutes; the native runner reported about 99.
-Its longer candidate-validation profile is not registered;
-it remains excluded under the existing 30-minute condition. That runtime also
+Its [longer public-validation profile is registered](history/deepswe-numba-registered-readiness-2026-10-17.md)
+for baseline and candidate commands. It still does not fit the original
+30-minute public-command condition. That runtime also
 needs to be accounted for before assuming multiple candidates fit the task clock.
 
 Testem, Cliffy, GoReleaser and Pwntools use registered modified images. Report

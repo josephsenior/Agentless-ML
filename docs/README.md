@@ -36,7 +36,7 @@ and their original outcomes live in [history](history/README.md).
 
 The configuration is still a proposal. A baseline count is not a solved-task
 count, and saved-response replays are not model results. For the latest Numba
-result, see the [three-hour baseline record](history/deepswe-numba-three-hour-attempt-2026-10-17.md).
+result and registered profile, see the [Numba readiness record](history/deepswe-numba-registered-readiness-2026-10-17.md).
 
 ## Development evidence
 

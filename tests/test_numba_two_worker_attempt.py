@@ -45,6 +45,33 @@ def test_three_hour_attempt_preserves_schedule_and_reports(monkeypatch):
             attempt.full_command(invalid)
 
 
+def test_registered_numba_timeout_defaults_and_explicit_override(tmp_path):
+    from agentless_ml.adapters.benchmarks.deepswe_execution import (
+        load_test_overrides, deepswe_test_plan,
+    )
+    override = load_test_overrides(
+        Path(__file__).resolve().parents[1] / "experiments/deepswe/test_overrides.json"
+    )["numba-stencil-boundary-modes"]
+    plan = deepswe_test_plan("python", tmp_path, override)
+    assert plan.command().timeout_seconds == 10800
+    assert plan.command(timeout_seconds=None).argv[3] == "10800s"
+    assert plan.command(timeout_seconds=60).timeout_seconds == 60
+    assert plan.command(timeout_seconds=60).argv[3] == "60s"
+    ordinary = deepswe_test_plan("go", tmp_path)
+    assert ordinary.command().timeout_seconds == 1800
+
+
+@pytest.mark.parametrize("invalid", [0, -1, True, 1.5, "10800"])
+def test_registered_timeout_rejects_invalid_allowance(tmp_path, invalid):
+    import json
+    from agentless_ml.adapters.benchmarks.deepswe_execution import load_test_overrides
+    path = tmp_path / "override.json"
+    path.write_text(json.dumps({"example": {"timeout_seconds": invalid,
+                                            "reason": "reviewed allowance"}}))
+    with pytest.raises(ValueError, match="timeout_seconds must be a positive integer"):
+        load_test_overrides(path)
+
+
 def test_full_run_does_not_collect_uninstalled_diagnostic_hooks(monkeypatch):
     monkeypatch.syspath_prepend(str(Path(__file__).resolve().parents[1] / "tools"))
     import run_numba_two_worker_baseline as attempt

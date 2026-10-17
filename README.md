@@ -27,7 +27,7 @@ As of **17 October 2026**:
 | Area | What is established |
 | --- | --- |
 | Core workflow | Hierarchical localization, multi-file edits, reproduction and regression checks, deterministic selection and prediction export. |
-| DeepSWE | All 113 task descriptions load; 112 have registered usable public baselines. Numba now also has a passing complete public baseline under a separate three-hour allowance; that longer candidate-validation profile is not registered. |
+| DeepSWE | All 113 tasks have registered usable public baselines. Numba uses its verified two-worker, three-hour public-validation profile; four other tasks use registered supplemented images. |
 | SWE-bench Pro V2 | All 642 task descriptions load. Recorded workflows cover selected Python, Go, JavaScript and TypeScript tasks; workspace checks cover selected tasks from nine repositories. Broad full-suite readiness is incomplete. |
 | Model execution | The controller currently consumes recorded responses. Live integration and complete model-budget enforcement remain to be implemented. |
 | Research experiments | The protocol is a draft. The eligible task set, model settings, matched Grinta condition and scoring route still need to be fixed before reporting results. |
