@@ -1,5 +1,12 @@
 # DeepSWE integration
 
+Numba's [approved three-hour public-baseline attempt](deepswe-numba-three-hour-attempt-2026-10-17.md)
+completed on 17 October in about 95 minutes: **9,987 passed**, one failed,
+three errored and 618 were skipped or expected failures, across all **10,609**
+reported IDs. The four nonpassing cases concern the user-cache fallback.
+This longer condition is not yet registered for candidate validation; the
+existing survey count remains **112/113** under its current profiles.
+
 Wazero's separate [short-mode diagnostic](wazero-short-diagnostic-2026-10-11.md)
 passed under its original 8 GiB limit, with 155,923 passes and 44 skips.
 This reduced-coverage result was not a full baseline or an official readiness

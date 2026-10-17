@@ -51,3 +51,55 @@ failures, skips or timeout evidence before deciding whether the longer public
 schedule can be registered for candidate validation. The canonical readiness
 count remains **112/113** until that review; a longer baseline alone does not
 silently change the experimental protocol.
+
+## Completed attempt
+
+The one attempt finished after **about 95 minutes**, inside the three-hour
+allowance. It produced **10,609 unique reported test IDs**, matching the
+reviewed native discovery count. The native summary and structured report
+agree:
+
+| Outcome | Count |
+| --- | ---: |
+| Passed | 9,987 |
+| Failed assertions | 1 |
+| Test errors | 3 |
+| Native skips | 595 |
+| Expected failures | 23 |
+
+The structured report represents the 23 expected failures as skipped, so it
+contains 618 skipped outcomes. The native command returned **1**, and the
+runner correctly retained status `fail` with the full report. This was a
+completed baseline with passing-test evidence, not an all-passing suite.
+
+All four nonpassing cases belong to public cache tests:
+`TestCache.test_frozen`, `TestCache.test_non_creatable_pycache`,
+`TestCache.test_non_writable_pycache` and `TestCacheZip.test_zip_caching`.
+The ZIP test explicitly reports a read-only filesystem at
+`/root/.cache/numba`. The other tests exercise the user-wide fallback, whose
+public implementation rejects a locator when its cache cannot be created.
+A writable user-cache location is the next setup fix to assess; no such
+change or further test run was made here. All four outcomes remain visible.
+
+There were **551 resource samples**, with a maximum interval of 11.9 seconds.
+The largest observed kernel memory peak was **7,576,219,648 bytes** (about
+7.06 GiB), below the 8-GiB cap. No sampled OOM events, OOM kills or swap use
+were recorded. The owned container, disposable volume and temporary candidate
+checkout were cleaned up normally.
+
+The host execution record reports 5,702.42 seconds and the native summary
+5,707.688 seconds. Both measurements are retained with their different clock
+and measurement scopes; neither is presented as an exact cross-clock study.
+The complete attempt ran from 16:12:52 to 17:47:57 on 17 October, Paris time,
+including setup before the timed public command. No automatic or manual retry
+followed.
+
+The [result record](../experiments/deepswe/numba_three_hour_baseline_2026_10_17.json)
+pins the report, execution, resource journal and log hashes. Raw artifacts are
+under `../output/deepswe-survey/2026-10-17-numba-three-hour/logs/agentless-ml-5d409d9e5ac347ccb527c09b5146a03f/`.
+
+This establishes a complete Numba public baseline under the approved longer
+allowance. Registering a matching candidate-validation profile and accounting
+for its cost remain separate decisions. The existing 30-minute profile and
+canonical **112/113** survey count were not changed. No held-out verifier or
+model was run.
