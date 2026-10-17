@@ -21,6 +21,9 @@ def test_full_attempt_has_native_report_without_short_cutoff(monkeypatch):
     assert "numba.tests." not in text
     assert "build_ext --inplace" in text
     assert "export OPENBLAS_NUM_THREADS=1;" in text
+    assert text.index("export XDG_CACHE_HOME=/tmp/numba-user-cache;") < text.index("python setup.py")
+    assert 'mkdir -p "$XDG_CACHE_HOME" || exit 125;' in text
+    assert "export NUMBA_CACHE_DIR=" not in text
     assert "refusing non-candidate import" in text
     assert command.failure_exit_codes == (1,)
 

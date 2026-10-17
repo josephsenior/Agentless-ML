@@ -238,6 +238,10 @@ NUMBA_RUNTESTS = DeepSWETestCommand(
         # BLAS sees all 16 host CPUs despite the two-CPU quota. Keep Numba's
         # own thread maximum: lowering it removes generated public test cases.
         "export OPENBLAS_NUM_THREADS=1; "
+        # Public cache-fallback tests need a writable user cache. XDG changes
+        # that fallback without overriding Numba's normal source-local caches.
+        "export XDG_CACHE_HOME=/tmp/numba-user-cache; "
+        'mkdir -p "$XDG_CACHE_HOME" || exit 125; '
         "python setup.py build_ext --inplace || exit 125; "
         f"python -c '{_NUMBA_IMPORT_CHECK}' || exit 125; "
         f"python -c '{NUMBA_REPORTER}' {WORK}/runtests.py /tmp/report.xml"
