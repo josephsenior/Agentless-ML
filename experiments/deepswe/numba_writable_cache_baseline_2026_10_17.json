@@ -1,0 +1,78 @@
+{
+  "date": "2026-10-17",
+  "task_id": "numba-stencil-boundary-modes",
+  "condition": "Complete public baseline with writable user-cache fallback and the approved three-hour allowance",
+  "base_commit": "5781334aa654972fdc749003e7c1e93e6d277110",
+  "image_id": "sha256:d30747d56f59cb61bb9a4e87ba8dc4df29ccbb471a1a1146f20d5d9d58fa90ac",
+  "runner_commit": "320aa94",
+  "started_at": "2026-10-17T19:26:31.760621+00:00",
+  "finished_at": "2026-10-17T21:00:45.023144+00:00",
+  "host_execution_duration_seconds": 5650.911055900011,
+  "native_reported_duration_seconds": 5919.713,
+  "duration_note": "Different clocks/scopes: approximately 94 minutes of host execution and 99 minutes reported by the native runner. Both durations are retained.",
+  "timeout_seconds": 10800,
+  "container_timeout_seconds": 10800,
+  "workers": 2,
+  "cpus": 2,
+  "memory_mb": 8192,
+  "pids_limit": 2048,
+  "scratch_mode": "volume",
+  "swap_policy": "docker-default",
+  "network_mode": "none",
+  "environment": {"OPENBLAS_NUM_THREADS": "1", "XDG_CACHE_HOME": "/tmp/numba-user-cache"},
+  "candidate_source_build": "python setup.py build_ext --inplace, followed by guarded candidate import checks",
+  "result": {
+    "status": "pass",
+    "exit_code": 0,
+    "complete_schedule": true,
+    "report_cases": 10609,
+    "unique_report_ids": 10609,
+    "passed": 9991,
+    "failed": 0,
+    "errors": 0,
+    "native_skipped": 595,
+    "native_expected_failures": 23,
+    "skipped_in_structured_report": 618
+  },
+  "coverage_comparison": {
+    "previous_report_cases": 10609,
+    "missing_ids": [],
+    "new_ids": [],
+    "changed_outcomes": [
+      {"id": "numba.tests.test_caching.TestCache.test_frozen", "before": "failed", "after": "passed"},
+      {"id": "numba.tests.test_caching.TestCache.test_non_creatable_pycache", "before": "error", "after": "passed"},
+      {"id": "numba.tests.test_caching.TestCache.test_non_writable_pycache", "before": "error", "after": "passed"},
+      {"id": "numba.tests.test_caching.TestCacheZip.test_zip_caching", "before": "error", "after": "passed"}
+    ]
+  },
+  "resources": {
+    "samples": 540,
+    "maximum_elapsed_sample_gap_seconds": 32.84,
+    "maximum_observed_memory_peak_bytes": 7324282880,
+    "maximum_observed_swap_bytes": 0,
+    "maximum_observed_oom_events": 0,
+    "maximum_observed_oom_kill_events": 0
+  },
+  "artifact_directory": "../output/deepswe-survey/2026-10-17-numba-writable-cache-full/logs/agentless-ml-b7160fe2a41e451986a0c7d876696ce9",
+  "artifact_sha256": {
+    "execution.json": "38cf364ada5e02bdd32d8fdfbcf33fdd5763ef917c5cd4bc37158a7919018a7c",
+    "full-attempt.json": "de778970804adb21d13db350a62cc0544f690a62ba5a3590a77db5529cd6ce5e",
+    "report.xml": "842b848bab3b83ff1433d06c8057d440463ad4f2399fa5cb7d60029d37a7bc7c",
+    "resource-samples.jsonl": "25a89c30813844a38ff2833a499bf9e4fe0428b5f9e7a8b84fc465e1ad9a9f53",
+    "stderr.log": "0fa2c507bcf954d47aa9b79aa241055eb4202019708ed9738176135328f5361f",
+    "stdout.log": "61006506e600517c8bce2bf21eb06fae17793dacceba1cd60594ad27fdde5c0b"
+  },
+  "readiness": {
+    "full_public_baseline_passed": true,
+    "longer_candidate_profile_registered": false,
+    "canonical_count": "112/113",
+    "reason": "This approved baseline completes successfully; registering a matching candidate-validation profile remains separate."
+  },
+  "full_attempts_started": 1,
+  "automatic_retries": 0,
+  "test_source_changed": false,
+  "official_override_changed": false,
+  "official_survey_updated": false,
+  "model_calls": 0,
+  "verifier_run": false
+}

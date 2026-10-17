@@ -69,9 +69,10 @@ visible; they do not automatically exclude a task. Syntax-only checks do not
 satisfy this proposed research eligibility rule.
 
 The latest registered DeepSWE survey has 112 usable public baselines. Numba
-also completed a [separate three-hour baseline](history/deepswe-numba-three-hour-attempt-2026-10-17.md)
-in about 95 minutes, with 9,987 passes and four retained cache-related
-failures/errors. Its longer candidate-validation profile is not registered;
+also completed a [cache-corrected three-hour baseline](history/deepswe-numba-writable-cache-2026-10-17.md)
+with 9,991 passes, no failures/errors, and 618 skipped or expected failures.
+Host execution took about 94 minutes; the native runner reported about 99.
+Its longer candidate-validation profile is not registered;
 it remains excluded under the existing 30-minute condition. That runtime also
 needs to be accounted for before assuming multiple candidates fit the task clock.
 

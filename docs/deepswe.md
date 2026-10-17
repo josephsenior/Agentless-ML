@@ -511,12 +511,12 @@ SHA-256 and the DeepSWE revision, beside the verifier's own `reward.json`,
 
 ## What is not implemented
 
-The registered survey has **112 usable public baselines**. Numba has now also
-produced a complete 10,609-case report under a separately approved three-hour
-allowance: 9,987 passed, four failed or errored and 618 were skipped or expected
-failures. Its user-cache fallback needs a setup review, and the longer
-candidate-validation profile is not registered. Its existing 30-minute condition
-therefore remains unready. See [the full record](history/deepswe-numba-three-hour-attempt-2026-10-17.md).
+The registered survey has **112 usable public baselines**. After correcting its
+writable user-cache fallback, Numba also completed its 10,609-case public
+schedule under the separately approved three-hour allowance: **9,991 passed,
+zero failures/errors**, and 618 skipped or expected failures. Its longer
+candidate-validation profile is not registered, so the survey count remains
+unchanged. See [the complete rerun](history/deepswe-numba-writable-cache-2026-10-17.md).
 
 The remaining experiment work is:
 

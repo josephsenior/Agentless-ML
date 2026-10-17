@@ -17,7 +17,7 @@
     "baseline_failures": "retain all outcomes; protect baseline-passing IDs with a frozen schedule",
     "modified_environments": "same registered environment for both systems; report separately from published images",
     "development_and_verifier_control_tasks": "exclude from the research holdout; complete explicit denylist before freeze",
-    "numba": "ineligible under the current 30-minute condition; a separate three-hour baseline completed with 9987 passes and four cache-related failures/errors, but the longer candidate-validation profile is not registered"
+    "numba": "ineligible under the current 30-minute condition; the cache-corrected three-hour baseline passed with 9991 passes, zero failures/errors and 618 skipped or expected failures, but the longer candidate-validation profile is not registered"
   },
   "implemented_method_to_declare": {
     "fixed_stages": true,

@@ -27,14 +27,15 @@ As of **17 October 2026**:
 | Area | What is established |
 | --- | --- |
 | Core workflow | Hierarchical localization, multi-file edits, reproduction and regression checks, deterministic selection and prediction export. |
-| DeepSWE | All 113 task descriptions load; 112 have registered usable public baselines. The remaining task, Numba, has completed a separate longer diagnostic but is not registered under that profile. |
+| DeepSWE | All 113 task descriptions load; 112 have registered usable public baselines. Numba now also has a passing complete public baseline under a separate three-hour allowance; that longer candidate-validation profile is not registered. |
 | SWE-bench Pro V2 | All 642 task descriptions load. Recorded workflows cover selected Python, Go, JavaScript and TypeScript tasks; workspace checks cover selected tasks from nine repositories. Broad full-suite readiness is incomplete. |
 | Model execution | The controller currently consumes recorded responses. Live integration and complete model-budget enforcement remain to be implemented. |
 | Research experiments | The protocol is a draft. The eligible task set, model settings, matched Grinta condition and scoring route still need to be fixed before reporting results. |
 
 These are implementation and environment-readiness counts, not solved-task
-results. Numba's longer run finished in about 95 minutes with four retained
-cache-related failures/errors; see the [full record](docs/history/deepswe-numba-three-hour-attempt-2026-10-17.md).
+results. After correcting its writable cache location, Numba's complete rerun
+passed 9,991 tests with zero failures/errors; see the
+[full record](docs/history/deepswe-numba-writable-cache-2026-10-17.md).
 Current coverage is tracked in [DeepSWE](docs/deepswe.md) and
 [SWE-bench Pro V2](docs/swe-bench-pro-v2-readiness.md). Earlier investigations
 live in [the development history](docs/history/README.md).
