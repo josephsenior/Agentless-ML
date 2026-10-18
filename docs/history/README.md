@@ -11,6 +11,10 @@ here does not change the recorded test outcomes.
 
 ## Useful starting points
 
+- [Earlier SWE-bench Pro V1 development](swe-bench-pro-v1-development.md): the
+  original three Python workflows and metadata projection. Use the
+  [V2 guide](../swe-bench-pro.md) for the current benchmark target.
+
 | Investigation | Records |
 | --- | --- |
 | DeepSWE survey and runner setup | [Integration checkpoints](deepswe-integration-log.md), [initial survey](deepswe-survey-2026-09-28.md), [runner review](deepswe-runner-review-2026-10-04.md), [scratch and swap](deepswe-scratch-swap-2026-10-12.md) |
