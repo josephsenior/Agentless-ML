@@ -33,6 +33,11 @@ automatically interchangeable with a Docker error. See the
 
 ## Proposed starting budgets
 
+Model integration and budget choices are deferred pending the user's discussion
+with Professor Zhang. The numbers below are retained as earlier proposals,
+not instructions to implement them now. Current model-free work follows the
+[capability-matching plan](grinta-capability-match.md).
+
 For engineering calibration, propose one file response, one symbol response,
 two edit-location samples, four repairs per edit sample, four reproduction
 samples and one regression-exclusion response: at most **17 model calls**.
@@ -102,9 +107,12 @@ unseen model evaluation.
 
 For Grinta, match task versions, initial repository content, model revision,
 public information, edit-operation capabilities, environment and aggregate
-budgets. Adaptive tools and feedback remain its intended difference. We have
-not inspected or validated a Grinta configuration, so capability matching is
-a proposal requiring evidence from that implementation.
+budgets. Adaptive tools and feedback remain its intended difference. Source
+inspection has begun; runtime matching is not yet validated. The agreed
+implementation direction is to restrict Grinta to Agentless-ML's existing
+repair operations, not expand Agentless-ML. The
+[shared task specification and implementation plan](grinta-capability-match.md)
+records the inspected gaps, enforcement requirements and model-free milestones.
 
 Each condition exports one final patch. Score it afterwards with the same
 pinned verifier and resource policy. Keep the original eligible denominator

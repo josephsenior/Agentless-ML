@@ -46,6 +46,7 @@
     "resampling_after_errors": false
   },
   "shared_budget_proposal": {
+    "decision_status": "deferred pending discussion with Professor Zhang; retained values are not approved for implementation",
     "max_model_calls_per_task": 17,
     "max_cumulative_input_tokens": 200000,
     "max_cumulative_output_tokens": 40000,
@@ -72,7 +73,10 @@
     "same_edit_operation_capabilities": true,
     "same_container_profile_and_task_budget": true,
     "adaptive_tools_and_feedback": "Grinta may use its adaptive loop; this is the intended experimental difference",
-    "status": "Grinta configuration and enforcement have not been inspected or agreed"
+    "implementation_direction": "restrict Grinta to existing Agentless-ML repair operations; do not expand Agentless-ML",
+    "plan": "../docs/grinta-capability-match.md",
+    "model_integration": "deferred pending discussion with Professor Zhang",
+    "status": "source inspection started; shared task export and runtime enforcement are planned, not implemented or validated"
   },
   "required_decisions_before_freeze": [
     "Professor Zhang reviews the declared method and comparison target",

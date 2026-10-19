@@ -32,6 +32,7 @@ and their original outcomes live in [history](history/README.md).
 | V2 image and workspace checks | [Batch provisioning](batch-v2-provisioning.md) |
 | Review of complete public schedules | [Suite expansion](v2-public-suite-expansion.md) |
 | Proposed budgets, eligibility and Grinta comparison | [Experimental configuration](experimental-configuration.md) |
+| Shared DeepSWE inputs and restrictions for Grinta | [Capability-matching plan](grinta-capability-match.md) |
 | Configurations, small evidence records and raw outputs | [Experiment records](../experiments/README.md) |
 
 The configuration is still a proposal. A baseline count is not a solved-task
