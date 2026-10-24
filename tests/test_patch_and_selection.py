@@ -359,8 +359,7 @@ def test_a_created_file_becomes_a_new_file_patch() -> None:
         "@@ -0,0 +1 @@\n"
         "+y = 2\n"
     )
-    with pytest.raises(ValueError, match="deletion"):
-        build_unified_diff({"a.py": "x = 1\n"}, {})
+    assert "deleted file mode 100644\n--- a/a.py\n+++ /dev/null" in build_unified_diff({"a.py": "x = 1\n"}, {})
 
 
 def test_created_files_vote_together_when_only_comments_differ() -> None:

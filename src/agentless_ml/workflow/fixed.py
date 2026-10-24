@@ -547,7 +547,7 @@ class FixedWorkflowController:
                         "file localization selected no known source files"
                     )
                 sources = {
-                    path: (visible_workspace.path / path).read_text(encoding="utf-8")
+                    path: (visible_workspace.path / path).read_bytes().decode("utf-8")
                     for path in selected_files
                 }
                 nodes = {
@@ -743,7 +743,9 @@ class FixedWorkflowController:
                         candidate_id=candidate_id,
                         raw_response=response,
                         diff=build_unified_diff(
-                            applied.original_sources, applied.updated_sources
+                            applied.original_sources, applied.updated_sources,
+                            renamed_paths=applied.renamed_paths,
+                            source_modes=self.provider.file_modes,
                         ),
                         localization_rank=rank,
                         sample_index=index,

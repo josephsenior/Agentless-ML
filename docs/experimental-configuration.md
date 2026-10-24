@@ -17,7 +17,7 @@ ways that affect capabilities or selection:
 
 | Choice | Implemented behavior | Reason to declare it |
 | --- | --- | --- |
-| Repair scope | Apply valid edits atomically across multiple files; allow new regular text files. No deletion, rename or mode changes. | Broader than the reference postprocessor's first-file behavior; file creation also changes the prompt. |
+| Repair scope | Apply edits, creation, deletion and renaming atomically across regular text files. Preserve existing modes. | Broader than the reference postprocessor's first-file behavior; the added operations change the repair prompt. Zhang approved deletion and renaming on 23 October. |
 | Patch voting | Python uses AST-based normalization with documented exceptions. Other languages use comment-stripped textual diffs. | Formatting variants can form different voting groups; neither key proves semantic equivalence. |
 | Reproduction selection | Check every parseable sample on the base, vote by exact extracted source among eligible failures, break ties by first appearance, then freeze one source. | Differs from upstream Python normalization and printed-marker checks. |
 | Reproduction evidence | Require structured reports and a clean assertion/test failure on the base; passing, errored or skipped evidence cannot qualify. | Stronger evidence contract, with language-specific limitations documented in the reporting notes. |
@@ -109,8 +109,8 @@ For Grinta, match task versions, initial repository content, model revision,
 public information, edit-operation capabilities, environment and aggregate
 budgets. Adaptive tools and feedback remain its intended difference. Source
 inspection has begun; runtime matching is not yet validated. The agreed
-implementation direction is to restrict Grinta to Agentless-ML's existing
-repair operations, not expand Agentless-ML. The
+implementation direction, updated after Zhang's 23 October reply, is to extend
+Agentless-ML with deletion and renaming while retaining the fixed workflow. The
 [shared task specification and implementation plan](grinta-capability-match.md)
 records the inspected gaps, enforcement requirements and model-free milestones.
 
@@ -122,11 +122,11 @@ when claiming an official V2 result.
 
 ## Work before freezing
 
-1. Choose the initial task set and review complete V2 public schedules for those
-   tasks, expanding by repository as needed. The four reviewed smoke
-   plans now pass with sealed sources in the [fresh Docker survey](swe-bench-pro-v2-readiness.md#completed-offline-replay);
-   they still do not satisfy the proposed full-suite eligibility rule.
-2. Agree the declared method and comparison requirements with Professor Zhang.
+1. Choose a small representative DeepSWE pilot, as Zhang requested, and use
+   the existing registered environments. Compare with Grinta and mainstream
+   agents before investing in broader runs. V2 preparation is deferred until
+   these results have been reviewed.
+2. Record the declared method and resolve remaining comparison requirements.
 3. Select a model, implement complete budget accounting, and calibrate the
    proposed sample counts on development tasks.
 4. Pin the holdout, exposure list, environment strata, seeds and scoring route;

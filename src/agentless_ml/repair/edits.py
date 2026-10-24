@@ -1,4 +1,4 @@
-"""Parse and atomically apply model-produced SEARCH/REPLACE edits."""
+"""Parse and atomically apply text edits and explicit file operations."""
 
 from __future__ import annotations
 
@@ -34,12 +34,34 @@ class SearchReplaceEdit:
 
 
 @dataclass(frozen=True, slots=True)
+class DeleteFile:
+    path: str
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "path", _normalize_path(self.path))
+
+
+@dataclass(frozen=True, slots=True)
+class RenameFile:
+    path: str
+    destination: str
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "path", _normalize_path(self.path))
+        object.__setattr__(self, "destination", _normalize_path(self.destination))
+
+
+RepairEdit = SearchReplaceEdit | DeleteFile | RenameFile
+
+
+@dataclass(frozen=True, slots=True)
 class AppliedRepair:
-    edits: tuple[SearchReplaceEdit, ...]
+    edits: tuple[RepairEdit, ...]
     original_sources: Mapping[str, str]
     updated_sources: Mapping[str, str]
     changed_paths: tuple[str, ...]
     created_paths: tuple[str, ...] = ()
+    renamed_paths: tuple[tuple[str, str], ...] = ()
 
 
 _FENCED_BLOCK = re.compile(r"```[^\n`]*\n(.*?)(?:\n```|\Z)", re.DOTALL)
@@ -53,6 +75,8 @@ def _normalize_path(path: str) -> str:
         or candidate.as_posix() == "."
         or candidate.is_absolute()
         or ".." in candidate.parts
+        or any(part.casefold() == ".git" for part in candidate.parts)
+        or any(ord(char) < 32 or char == '"' for char in raw)
         or (candidate.parts and ":" in candidate.parts[0])
     ):
         raise EditParseError(f"unsafe repository-relative path: {path!r}")
@@ -64,10 +88,10 @@ def _response_blocks(response: str) -> list[str]:
     return blocks if blocks else [response]
 
 
-def parse_search_replace_edits(response: str) -> tuple[SearchReplaceEdit, ...]:
-    """Extract ordered, de-duplicated SEARCH/REPLACE edits from a response."""
-    edits: list[SearchReplaceEdit] = []
-    seen: set[SearchReplaceEdit] = set()
+def parse_search_replace_edits(response: str) -> tuple[RepairEdit, ...]:
+    """Extract ordered, de-duplicated edits and file operations from a response."""
+    edits: list[RepairEdit] = []
+    seen: set[RepairEdit] = set()
     saw_marker = "<<<<<<< SEARCH" in response or ">>>>>>> REPLACE" in response
 
     for block in _response_blocks(response):
@@ -81,6 +105,18 @@ def parse_search_replace_edits(response: str) -> tuple[SearchReplaceEdit, ...]:
                 index += 1
                 continue
             if stripped != "<<<<<<< SEARCH":
+                if stripped.startswith(("DELETE FILE", "RENAME FILE")):
+                    if current_path is None:
+                        raise EditParseError("file operation requires a preceding '### path'")
+                    if stripped == "DELETE FILE":
+                        operation: RepairEdit = DeleteFile(current_path)
+                    elif stripped.startswith("RENAME FILE TO "):
+                        operation = RenameFile(current_path, stripped[len("RENAME FILE TO "):])
+                    else:
+                        raise EditParseError("malformed file operation")
+                    if operation not in seen:
+                        edits.append(operation)
+                        seen.add(operation)
                 index += 1
                 continue
             if current_path is None:
@@ -136,7 +172,7 @@ def _inside_intervals(
 
 def apply_search_replace_edits(
     sources: Mapping[str, str],
-    edits: Sequence[SearchReplaceEdit],
+    edits: Sequence[RepairEdit],
     *,
     allowed_intervals: Mapping[str, Sequence[tuple[int, int]]] | None = None,
     existing_paths: Collection[str] | None = None,
@@ -165,6 +201,8 @@ def apply_search_replace_edits(
     updated = dict(originals)
     changed_paths: list[str] = []
     created_paths: list[str] = []
+    renamed_paths: list[tuple[str, str]] = []
+    structural_paths: set[str] = set()
     taken = (
         None
         if existing_paths is None
@@ -184,6 +222,28 @@ def apply_search_replace_edits(
             normalized_intervals[normalized_path] = checked
 
     for edit in edits:
+        if isinstance(edit, (DeleteFile, RenameFile)):
+            if edit.path not in originals or edit.path not in updated:
+                raise EditApplicationError(f"file operation requires an existing visible file: {edit.path}")
+            if edit.path in structural_paths:
+                raise EditApplicationError(f"multiple file operations on {edit.path}")
+            if normalized_intervals is not None and not normalized_intervals.get(edit.path):
+                raise EditApplicationError(f"file operation has no authorized interval: {edit.path}")
+            if isinstance(edit, RenameFile):
+                _require_new_path(edit.destination, taken)
+                updated[edit.destination] = updated[edit.path]
+                assert taken is not None
+                taken.add(edit.destination.casefold())
+                renamed_paths.append((edit.path, edit.destination))
+                structural_paths.add(edit.destination)
+                if normalized_intervals is not None:
+                    normalized_intervals[edit.destination] = normalized_intervals[edit.path]
+                changed_paths.append(edit.destination)
+            del updated[edit.path]
+            structural_paths.add(edit.path)
+            if edit.path not in changed_paths:
+                changed_paths.append(edit.path)
+            continue
         if edit.creates_file:
             if edit.path in created_paths:
                 raise EditApplicationError(f"file is created more than once: {edit.path}")
@@ -199,6 +259,7 @@ def apply_search_replace_edits(
                 raise EditApplicationError(
                     f"cannot create a file that already exists: {edit.path}"
                 )
+            _require_new_path(edit.path, taken)
             content = edit.replacement
             if content and not content.endswith("\n"):
                 content += "\n"
@@ -235,7 +296,7 @@ def apply_search_replace_edits(
     changed_paths = [
         path
         for path in changed_paths
-        if path in created_paths or updated[path] != originals[path]
+        if path not in originals or path not in updated or updated[path] != originals[path]
     ]
     if not changed_paths:
         raise EditApplicationError("edits do not change the repository")
@@ -245,4 +306,13 @@ def apply_search_replace_edits(
         updated_sources=MappingProxyType(updated),
         changed_paths=tuple(changed_paths),
         created_paths=tuple(created_paths),
+        renamed_paths=tuple(renamed_paths),
     )
+
+
+def _require_new_path(path: str, taken: set[str] | None) -> None:
+    if taken is None:
+        raise EditApplicationError("new destination requires the repository's tracked paths")
+    folded = path.casefold()
+    if any(folded == other or folded.startswith(other + "/") or other.startswith(folded + "/") for other in taken):
+        raise EditApplicationError(f"destination collides with an existing path: {path}")

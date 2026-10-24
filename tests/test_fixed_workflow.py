@@ -143,6 +143,64 @@ def controller(tmp_path, source, runner):
     )
 
 
+@pytest.mark.parametrize("obsolete_content", [b"old = True\n", b"old = True\r\n"])
+def test_file_operations_reach_validation_and_prediction(tmp_path, source, obsolete_content):
+    """Recorded responses, real Git workspaces, and an actual Python check."""
+    import sys
+
+    repository, _ = source
+    (repository / "obsolete.py").write_bytes(obsolete_content)
+    git(repository, "add", ".")
+    git(repository, "commit", "-m", "obsolete module")
+    source = repository, git(repository, "rev-parse", "HEAD")
+
+    class OperationRunner(FakeRunner):
+        calls = 0
+
+        def run(self, source, command, *, artifact_root=None):
+            self.calls += 1
+            directory = Path(artifact_root) / "actual-python-check"
+            directory.mkdir(parents=True)
+            check = subprocess.run(
+                [sys.executable, "-c", (
+                    "from pathlib import Path; from arithmetic import add; "
+                    "assert add(2, 3) == 5; "
+                    "assert not Path('calculator.py').exists(); "
+                    "assert not Path('obsolete.py').exists()"
+                )], cwd=source, capture_output=True, timeout=10,
+            )
+            return ExecutionRecord(ValidationResult(
+                status=ValidationStatus.PASS if check.returncode == 0 else ValidationStatus.FAIL,
+                command=command.argv, duration_seconds=0.01,
+                exit_code=check.returncode, kind=command.kind,
+            ), self.image_id, "local-python-check", str(directory))
+
+    runner = OperationRunner()
+    bundle = RecordedStageResponses(
+        file_localization="```\ncalculator.py\nobsolete.py\n```",
+        symbol_localization="```\ncalculator.py\nfunction: add\nobsolete.py\nline: 1\n```",
+        edit_localization="```\ncalculator.py\nline: 2\nobsolete.py\nline: 1\n```",
+        repairs=("### calculator.py\nRENAME FILE", (
+            "```python\n### calculator.py\nRENAME FILE TO arithmetic.py\n"
+            "### arithmetic.py\n<<<<<<< SEARCH\n    return a - b\n"
+            "=======\n    return a + b\n>>>>>>> REPLACE\n"
+            "### obsolete.py\nDELETE FILE\n```"
+        )), source="controlled file-operation fixture",
+    )
+    result = controller(tmp_path, source, runner).run(bundle)
+    assert [attempt.status for attempt in result.attempts] == ["repair_error", "validated"]
+    assert runner.calls == 1
+    assert result.prediction.selected_candidate_id == "repair-1"
+    assert result.run.model_calls == 0
+    patch = result.prediction.model_patch
+    assert "rename from calculator.py\nrename to arithmetic.py" in patch
+    assert "deleted file mode 100644" in patch
+    exported = json.loads((Path(result.artifact_directory) / "prediction.json").read_text())
+    assert exported["model_patch"] == patch
+    assert (repository / "calculator.py").read_text() == ORIGINAL
+    assert (repository / "obsolete.py").exists()
+
+
 def test_file_location_parser_validates_and_limits_paths():
     response = "```\nrepo/a.py\n../secret.py\nunknown.py\nb.py\na.py\nc.py\n```"
     assert parse_file_locations(

@@ -1,7 +1,7 @@
 import hashlib
 
 from agentless_ml.repair import build_repair_prompt
-from agentless_ml.repair.prompts import FILE_CREATION_INSTRUCTION
+from agentless_ml.repair.prompts import FILE_CREATION_INSTRUCTION, FILE_OPERATION_INSTRUCTION
 
 
 def test_python_repair_prompt_preserves_published_diff_format() -> None:
@@ -24,13 +24,14 @@ def test_repair_prompt_changes_only_output_fence_vocabulary_for_language() -> No
     assert "```python" not in prompt
 
 
-def test_python_prompt_is_pinned_v1_5_golden_plus_file_creation_paragraph() -> None:
+def test_python_prompt_is_pinned_v1_5_golden_plus_file_operation_paragraphs() -> None:
     prompt = build_repair_prompt("Fix it", "### a.py\nold")
     assert (
-        ">>>>>>> REPLACE\n\n" + FILE_CREATION_INSTRUCTION + "\n\nHere is an example:"
+        ">>>>>>> REPLACE\n\n" + FILE_CREATION_INSTRUCTION + "\n\n" + FILE_OPERATION_INSTRUCTION + "\n\nHere is an example:"
     ) in prompt
-    # Removing the one added paragraph must give back the published text exactly.
+    # Removing the added paragraphs must give back the published text exactly.
     prompt = prompt.replace("\n\n" + FILE_CREATION_INSTRUCTION, "", 1)
+    prompt = prompt.replace("\n\n" + FILE_OPERATION_INSTRUCTION, "", 1)
     assert len(prompt) == 1143
     assert hashlib.sha256(prompt.encode()).hexdigest() == (
         "29d228544ec722ee5e6b86c47ea8de1da740528181082c63f2f5ae30136242b9"

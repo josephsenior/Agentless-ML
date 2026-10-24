@@ -125,8 +125,10 @@ The backend accepts patches to existing regular text files, and patches that
 create new regular (mode `100644`) text files. A new file must be declared with
 `new file mode 100644` under a matching `diff --git` header, must not exist, must
 not collide case-insensitively with a tracked path, and must not sit under a
-symlink or a non-directory; Git creates any missing parent directories. Deletion,
-rename/copy, executable-mode changes, symlink changes, binary patches, and
+symlink or a non-directory; Git creates any missing parent directories. Regular
+text files can also be deleted or explicitly renamed to an unused path. Renames
+preserve existing permissions, including mode 100755. Copy metadata,
+executable-mode changes, symlink changes, binary patches, and
 submodule edits are rejected explicitly. Unchanged symlinks and uninitialized
 submodules do not block edits to regular files elsewhere in the repository.
 Symlink paths are omitted from localization context, and new files cannot be

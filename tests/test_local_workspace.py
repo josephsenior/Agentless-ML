@@ -329,7 +329,6 @@ def test_failed_clone_cleans_only_its_new_directory(source, monkeypatch) -> None
 @pytest.mark.parametrize(
     "patch",
     [
-        "--- a/a.py\n+++ /dev/null\n@@ -1 +0,0 @@\n-value = 1\n",
         "diff --git a/a.py b/a.py\nold mode 100644\nnew mode 120000\n",
         "diff --git a/a.py b/a.py\nGIT binary patch\nliteral 1\nA\n",
         "not a patch at all\n",

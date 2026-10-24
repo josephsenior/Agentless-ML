@@ -2,6 +2,8 @@
 
 from agentless_ml.repair.edits import (
     AppliedRepair,
+    DeleteFile,
+    RenameFile,
     EditApplicationError,
     EditParseError,
     SearchReplaceEdit,
@@ -24,6 +26,8 @@ from agentless_ml.repair.selection import (
 
 __all__ = [
     "AppliedRepair",
+    "DeleteFile",
+    "RenameFile",
     "EditApplicationError",
     "EditParseError",
     "NoSelectableCandidate",

@@ -8,9 +8,9 @@ tool loop. Recorded responses can therefore exercise it deterministically.
 
 - The Python repair prompt matches Agentless v1.5.0 at revision
   `b150f28465a77a81a7f4776384957a4271f5bd69` for its documented
-  `--cot --diff_format` condition, plus one added paragraph explaining file
-  creation (below). A golden prompt checksum of the published text, taken with
-  that one paragraph removed, protects that seam.
+  `--cot --diff_format` condition, plus paragraphs explaining file creation and
+  deletion/renaming (below). A golden prompt checksum of the published text,
+  taken with those additions removed, protects that seam.
 - Responses use fenced SEARCH/REPLACE blocks with repository-relative paths.
 - Candidate filtering prefers the minimum number of public regression failures.
 - When reproduction evidence is enabled, reproduction-passing candidates are
@@ -36,7 +36,30 @@ files: actionlint's adds `rule_action_pinning.go` (730 lines), which no patch
 limited to existing files can match. A created file needs no localization
 interval, since all of it is new; it may not replace, case-collide with or sit
 under anything tracked, and it is always an ordinary (mode 100644) text file.
-Deletion, renames and mode changes remain unsupported.
+Deletion and renaming are explicit operations, approved by Professor Zhang on
+23 October 2026 to extend repair capabilities without changing the workflow:
+
+````text
+```python
+### obsolete.py
+DELETE FILE
+### old.py
+RENAME FILE TO package/new.py
+```
+````
+
+They apply to existing selected regular text files. A localized segment authorizes
+the whole-file operation; the prompt explicitly says so. A rename preserves file
+contents and permissions. Later SEARCH/REPLACE blocks can edit the new path within
+the same localized intervals. An empty REPLACE block only removes text, not the file.
+
+The destination must be new: overwrites, case-only renames, reserved paths and
+file/directory collisions are rejected. Each existing file can have at most one
+structural operation in a response; rename chains and reusing a deleted path are
+not supported. Any invalid operation rejects the entire candidate before tests.
+Git patches record explicit rename metadata, including renames with content edits.
+Voting compares resulting paths and normalized contents, so a deletion and an
+emptied file do not vote together. Mode changes remain unsupported.
 
 Agentless-ML also rejects unsafe paths, empty searches on existing files, missing files, ambiguous
 matches, no-op edits, patch errors, and infrastructure-failed candidates. An

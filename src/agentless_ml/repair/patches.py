@@ -14,28 +14,39 @@ from agentless_ml.schemas import PatchCandidate
 def build_unified_diff(
     original_sources: Mapping[str, str],
     updated_sources: Mapping[str, str],
+    *,
+    renamed_paths: tuple[tuple[str, str], ...] = (),
+    source_modes: Mapping[str, str] | None = None,
 ) -> str:
     """Build one deterministic Git-style patch for all changed visible files.
 
     A path present only in ``updated_sources`` is a new regular file (mode 100644).
-    A path present only in ``original_sources`` would be a deletion, which is not
-    supported.
+    Missing original paths are deletions. Explicit renames preserve Git modes;
+    no content-similarity inference is used to discover them.
     """
-    if not set(original_sources) <= set(updated_sources):
-        raise ValueError("file deletion is not supported at this boundary")
     chunks: list[str] = []
-    for path in sorted(updated_sources):
+    renamed = dict(renamed_paths)
+    destinations = set(renamed.values())
+    if len(renamed) != len(renamed_paths) or len(destinations) != len(renamed_paths):
+        raise ValueError("duplicate rename source or destination")
+    for old_path, new_path in renamed.items():
+        if old_path not in original_sources or old_path in updated_sources or new_path in original_sources or new_path not in updated_sources:
+            raise ValueError("rename does not match source snapshots")
+    for path in sorted((set(original_sources) | set(updated_sources)) - destinations):
+        target_path = renamed.get(path, path)
+        is_rename = path in renamed
         created = path not in original_sources
-        old = "" if created else original_sources[path]
-        new = updated_sources[path]
-        if old == new and not created:
+        deleted = target_path not in updated_sources
+        old = original_sources.get(path, "")
+        new = updated_sources.get(target_path, "")
+        if old == new and not (created or deleted or is_rename):
             continue
         body = list(
             unified_diff(
                 old.splitlines(keepends=True),
                 new.splitlines(keepends=True),
                 fromfile="/dev/null" if created else f"a/{path}",
-                tofile=f"b/{path}",
+                tofile="/dev/null" if deleted else f"b/{target_path}",
                 lineterm="\n",
             )
         )
@@ -43,9 +54,18 @@ def build_unified_diff(
             line if line.endswith("\n") else line + "\n\\ No newline at end of file\n"
             for line in body
         )
-        header = f"diff --git a/{path} b/{path}\n"
+        header = f"diff --git a/{path} b/{target_path}\n"
         if created:
             header += "new file mode 100644\n"
+        elif deleted:
+            mode = (source_modes or {}).get(path, "100644")
+            if mode not in {"100644", "100755"}:
+                raise ValueError("deletion requires a regular file")
+            header += f"deleted file mode {mode}\n"
+        elif is_rename:
+            if old == new:
+                header += "similarity index 100%\n"
+            header += f"rename from {path}\nrename to {target_path}\n"
         chunks.append(header + rendered)
     if not chunks:
         raise ValueError("cannot build an empty patch")
@@ -57,9 +77,21 @@ def normalize_patch(patch: str) -> str:
     if not patch.strip():
         return ""
     normalized: list[str] = []
-    for raw_line in patch.replace("\r\n", "\n").replace("\r", "\n").splitlines():
+    lines = patch.replace("\r\n", "\n").replace("\r", "\n").splitlines()
+    for index, raw_line in enumerate(lines):
         line = raw_line.rstrip()
-        if line.startswith(("diff --git ", "index ")):
+        if line.startswith("diff --git "):
+            following = []
+            for other in lines[index + 1:]:
+                if other.startswith("diff --git "):
+                    break
+                following.append(other)
+            # Empty files have no content hunk. Keep their path identity so
+            # deleting different empty files cannot become one voting group.
+            if not any(other.startswith("--- ") for other in following):
+                normalized.append(line)
+            continue
+        if line.startswith("index "):
             continue
         if line.startswith("--- "):
             line = "--- " + line[4:].split("\t", 1)[0]
@@ -169,7 +201,7 @@ def comment_normalized_diff(
         stripped_diff = build_unified_diff(stripped_originals, stripped_updated)
     except ValueError:
         return None
-    if language == "python" and len(stripped_originals) == len(stripped_updated) == 1:
+    if language == "python" and stripped_originals.keys() == stripped_updated.keys() and len(stripped_updated) == 1:
         path = next(iter(stripped_updated))
         if path.endswith(adapter.extensions) and _is_just_new_python_function(
             stripped_originals[path], stripped_updated[path]

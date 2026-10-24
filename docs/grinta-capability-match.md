@@ -1,11 +1,16 @@
 # Matching Agentless-ML and Grinta
 
-Implementation plan, 19 October 2026. The user has chosen the direction:
-restrict Grinta's comparison configuration to Agentless-ML's existing repair
-capabilities. Do not expand Agentless-ML to match unrestricted Grinta.
-This document specifies the work; it does not claim enforcement is implemented.
-Model integration, model selection and model budgets are deferred until the
-user discusses them with Professor Zhang. No live runs are part of this plan.
+Updated 24 October 2026 following Professor Zhang's 23 October reply.
+Extend Agentless-ML with file deletion and renaming while keeping its fixed
+workflow. This supersedes the 19 October restriction-only plan. The repair
+implementation now supports these operations; matching Grinta's runtime remains
+planned work, not a demonstrated result. No live runs are part of this change.
+
+Start with a small representative DeepSWE evaluation against Grinta and
+mainstream agents, inspect the results, then decide on broader experiments.
+SWE-bench Pro V2 follows later; completing all its environments is not a
+prerequisite. Zhang prefers a leading OpenAI or Anthropic model, but the exact
+model and access arrangement remain unresolved. Model integration stays deferred.
 
 ## What we are comparing
 
@@ -31,7 +36,7 @@ local file matches those commits.
 | Area | Evidence | Implication |
 | --- | --- | --- |
 | Task revision | Both DeepSWE pin files name `0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea`. | A shared corpus revision already exists; task content and environments still need per-task equality checks. |
-| Repairs | Agentless-ML's `repair/edits.py` accepts SEARCH/REPLACE edits; `repair/patches.py` rejects file deletion and creates new files as mode 100644. | Restrict Grinta's submitted repairs to the same representable operations. |
+| Repairs (19 October inspection) | Agentless-ML then accepted SEARCH/REPLACE edits and new files, but rejected deletion and renaming. | Superseded by the new explicit deletion/rename operations; check both systems against the updated contract. |
 | Context | Agentless-ML's `localization/context.py` filters tests and non-source files from its initial tree. Grinta exposes file-reading and search tools. | Match available public resources, while retaining each method's context-selection behavior. Do not promise identical model-visible context. |
 | Shell edits | Grinta's `backend/execution/runtime_mixins/editor_only_shell_policy.py` returns no block under its current compatibility policy. | Editor-tool restrictions alone cannot enforce the comparison condition. |
 | Environment | Agentless-ML resolves registered image and runner profiles; Grinta's `evaluation/deepswe/pier_agent.py` installs its runtime through Pier. | Compare effective dependencies and resource settings, not just original image names. |
@@ -57,7 +62,7 @@ replacement for the existing TaskSpec.
 | Public resources | Repository snapshot, verified public fixtures and their hashes, dependency/cache setup, reviewed command definitions and report formats. Keep reference solutions and hidden grader files out of this record and the agent workspace. |
 | Baseline | Existing public baseline evidence and full result inventory, retaining failures and skips. Passing IDs used by Agentless selection remain identifiable. Make equivalent baseline information available to Grinta; prompt presentation may differ. |
 | Environment | Published image digest, effective registered image digest, setup identity, working directory, user, environment variables, writable paths, CPU/memory/PID limits, scratch and swap settings, and phase-specific network policy. |
-| Edit contract | Allowed regular-text modifications and additions; forbidden deletion, rename, mode/type changes and binary patch operations. Include path and encoding rules verified against the current repair implementation. |
+| Edit contract | Allow regular-text modifications, additions, deletions and explicit renames. Preserve existing permissions; new files use mode 100644. Forbid mode/type changes and binary patches. Include path, destination-collision and encoding rules from the repair implementation. |
 | Timing | Reviewed public-command limits separately from the total attempt deadline. An unresolved attempt deadline stays explicitly unresolved and blocks a research launch. |
 | Provenance | Specification version/hash, each implementation revision, effective configuration and setup hashes. |
 
@@ -71,15 +76,15 @@ create the specification. Four supplemented-image profiles and Numba's longer
 public-command allowance must remain explicit. Numba's 10,800-second command
 limit does not automatically grant either arm a three-hour total task budget.
 
-## Grinta's restricted comparison configuration
+## Grinta's comparison configuration
 
-Allow edits to existing regular text files, creation of regular text files,
-and multi-file repairs. Preserve existing file modes. Emptying a file is a
-content edit, not deleting the file. Rename detection in Git is heuristic:
-judge actual path additions/removals and modes, not a similarity label.
+Allow edits, creation, deletion and renaming of regular text files, including
+multi-file repairs. Preserve existing file modes. Emptying a file is a content
+edit, not deleting the file. Agentless-ML uses explicit rename instructions;
+compare resulting paths, contents and modes rather than Git similarity labels.
 
-Do not add deletion, rename, permission changes, symlink creation, binary edits
-or submodule-pointer changes to Agentless-ML. Before claiming exact matching,
+Permission changes, symlink creation, binary edits and submodule-pointer changes
+remain outside Agentless-ML's repair contract. Before claiming exact matching,
 exercise existing executable files, newline/encoding behavior and path rules
 against its actual patch exporter; a capability table alone is insufficient.
 Grinta must not gain additional operations through its terminal or Git commands.
@@ -93,45 +98,49 @@ Do not ban every filesystem deletion inside a test process. Keep generated
 artifacts in disposable execution space where possible; unexpected changes to
 submitted source must be detected and rejected, not silently filtered out.
 
-Use checked edit operations for persistent source changes. Terminal/build/test
-execution needs an isolated copy or equivalent boundary so unsupported changes
-cannot become the next accepted source state. Inspect changes at that boundary
-and again when exporting the patch. A final-patch check alone cannot establish
-that an unsupported intermediate state never influenced later observations.
-If isolation cannot provide that stronger guarantee, record the limitation
-and do not label final-output filtering as full action-level enforcement.
-Command-name regexes and instructions to the model are not sufficient.
+Review the remaining operation limits at command boundaries and at final export.
+Deletion and renaming no longer require prohibitions or monitoring for the
+comparison. Do not build a filesystem surveillance layer for them. A final-patch
+check describes submitted output; it does not prove what every intermediate shell
+command did. Document that distinction when defining the remaining restrictions.
 
 ## Implementation order and completion checks
 
-1. **Export the shared task records.** Reuse existing loaders, registered
+1. **Implement deletion and renaming in Agentless-ML.** Keep the fixed stages,
+   candidate validation and deterministic selection unchanged. Exercise parsing,
+   atomic application, voting and prediction export with recorded responses.
+   Completed 24 October: 161 focused checks passed, with five optional
+   Docker/compiler checks skipped. The new controller test uses real disposable
+   Git workspaces and a local Python check through final prediction export;
+   it is controlled implementation evidence, not a live-model benchmark result.
+2. **Export the shared task records.** Reuse existing loaders, registered
    environments and public plans. Resolve real values; reject missing pins or
    unresolved required setup. Check one ordinary development task and one
    registered override without Docker or model calls. Verify determinism and
    absence of answer fields. Then export the remaining records cheaply.
-2. **Add Grinta's opt-in comparison profile.** Consume the shared record;
-   constrain editing tools and terminal persistence; check the exported patch.
-   Exercise allowed edits plus deletion, rename, chmod, symlink, binary and
-   indirect shell/script bypass attempts using a small synthetic repository.
+3. **Add Grinta's opt-in comparison profile.** Consume the shared record;
+   check the exported patch and review remaining operation restrictions.
+   Exercise allowed edits, creation, deletion and renaming, plus rejected
+   mode, symlink and binary changes using a small synthetic repository.
    Verify a normal build can still create and remove temporary products.
    Keep restrictions disabled in ordinary Grinta sessions.
-3. **Wire the same task setup into both launch paths.** Reuse prepared public
+4. **Wire the same task setup into both launch paths.** Reuse prepared public
    commands and fixtures. Check runtime installation does not silently replace
    task toolchains or dependencies. Compare effective resource/network settings,
    writable paths and source hashes. Check Pier's concrete environment controls
    before deciding whether any harness change is necessary.
-4. **Run one model-free paired rehearsal.** Use recorded Agentless responses
+5. **Run one model-free paired rehearsal.** Use recorded Agentless responses
    and scripted Grinta actions on an existing development task. Exercise a
    permitted repair, a forbidden operation and public validation; export both
    final patches. This tests integration, not model quality. Start with a bounded
    public check; expand only if the remaining uncertainty requires it.
-5. **Record the demonstrated match and remaining limits.** Save compact
+6. **Record the demonstrated match and remaining limits.** Save compact
    evidence, implementation revisions, effective task records and configuration.
    No corpus-wide baseline rerun, readiness-count change or benchmark-score
    claim follows automatically from this rehearsal.
 
-The first coding milestone is step 1. Complete the enforcement checks in step 2
-before calling Grinta capability-matched. Steps 3 and 4 establish that the
+The next coding milestone is step 2. Complete the comparison checks in step 3
+before calling Grinta capability-matched. Steps 4 and 5 establish that the
 matching profile actually runs in comparable environments.
 
 ## Deferred until discussion with Professor Zhang

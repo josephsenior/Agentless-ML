@@ -122,15 +122,45 @@ def _created_paths(diff: str) -> frozenset[str]:
     return frozenset(created)
 
 
+def _renamed_paths(diff: str) -> dict[str, str]:
+    """Read explicit rename metadata; never infer renames from similarity."""
+    renamed: dict[str, str] = {}
+    sources: set[str] = set()
+    header = ""
+    origin = None
+    for line in diff.splitlines():
+        if line.startswith("diff --git "):
+            if origin is not None:
+                raise WorkspaceError("rename is missing its destination")
+            header = line
+        elif line.startswith("rename from "):
+            if origin is not None:
+                raise WorkspaceError("duplicate rename source")
+            origin = _safe_path(line[len("rename from "):])
+        elif line.startswith("rename to "):
+            destination = _safe_path(line[len("rename to "):])
+            if origin is None or header != f"diff --git a/{origin} b/{destination}":
+                raise WorkspaceError("rename without a matching diff header")
+            if origin in sources or destination in renamed:
+                raise WorkspaceError("duplicate rename source or destination")
+            renamed[destination] = origin
+            sources.add(origin)
+            origin = None
+    if origin is not None:
+        raise WorkspaceError("rename is missing its destination")
+    return renamed
+
+
 def _tracked_paths(
     repository: Path, commit: str, timeout: float
-) -> tuple[frozenset[str], frozenset[str]]:
+) -> tuple[frozenset[str], frozenset[str], dict[str, str]]:
     listing = _require_git(
         repository, "ls-tree", "-rz", "--full-tree", commit, timeout=timeout
     )
     paths: set[str] = set()
     symlinks: set[str] = set()
     folded: set[str] = set()
+    modes: dict[str, str] = {}
     for record in listing.split(b"\0"):
         if not record:
             continue
@@ -154,7 +184,9 @@ def _tracked_paths(
         else:
             paths.add(path)
         folded.add(path.casefold())
-    return frozenset(paths), frozenset(symlinks)
+        if regular:
+            modes[path] = mode.decode("ascii")
+    return frozenset(paths), frozenset(symlinks), modes
 
 
 def _remove_owned(directory: Path, root: Path, token: str) -> None:
@@ -269,7 +301,7 @@ class LocalGitWorkspaceProvider:
             .decode()
             .strip()
         )
-        self.paths, self.symlink_paths = _tracked_paths(
+        self.paths, self.symlink_paths, self.file_modes = _tracked_paths(
             self.source_repository, resolved, timeout_seconds
         )
 
@@ -407,22 +439,20 @@ class LocalGitWorkspace:
             return result(
                 PatchApplicationStatus.PATCH_ERROR, "candidate patch digest mismatch"
             )
-        # This version accepts modifications to existing regular text files and
-        # new regular (mode 100644) text files; nothing else.
+        # Regular text files can be edited, created, deleted or renamed.
+        # Existing permissions are preserved; new files use mode 100644.
         if any(
             line.startswith(
                 (
                     "old mode ",
                     "new mode ",
-                    "deleted file mode ",
-                    "rename from ",
                     "copy from ",
-                    "+++ /dev/null",
                     "GIT binary patch",
                     "Binary files ",
                 )
             )
             or (line.startswith("new file mode ") and line != "new file mode 100644")
+            or (line.startswith("deleted file mode ") and line not in {"deleted file mode 100644", "deleted file mode 100755"})
             for line in candidate.diff.splitlines()
         ):
             return result(
@@ -430,6 +460,7 @@ class LocalGitWorkspace:
             )
         try:
             created = _created_paths(candidate.diff)
+            renamed = _renamed_paths(candidate.diff)
             numstat = _git(
                 self.path,
                 "apply",
@@ -449,7 +480,11 @@ class LocalGitWorkspace:
                 if not entry:
                     continue
                 added, deleted, raw_path = entry.split(b"\t", 2)
-                path = _safe_path(raw_path.decode("utf-8"))
+                reported_path = _safe_path(raw_path.decode("utf-8"))
+                # git apply --numstat reports the destination alone, unlike
+                # git diff --numstat's two-path rename records.
+                destination = reported_path if reported_path in renamed else None
+                path = renamed.get(reported_path, reported_path)
                 if added == b"-" or deleted == b"-":
                     raise WorkspaceError("patch must change text files only")
                 target = self.path / path
@@ -466,6 +501,9 @@ class LocalGitWorkspace:
                 ):
                     raise WorkspaceError("patch target is not an owned regular file")
                 paths.append(path)
+                if destination is not None:
+                    self._require_creatable(destination)
+                    paths.append(destination)
             if not paths:
                 raise WorkspaceError("patch has no file changes")
             for options in (("--check", "--index"), ("--index",)):

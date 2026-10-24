@@ -25,6 +25,8 @@ Every *SEARCH/REPLACE* edit must use this format:
 
 To create a new file, write the new file's path and leave the SEARCH block empty (nothing between the search line and the dividing line); the replace block is then the whole content of the new file.
 
+To delete an existing selected file entirely, write '### path' followed by 'DELETE FILE' on its own line. To rename an existing selected file, write '### old/path' followed by 'RENAME FILE TO new/path' on its own line. The destination must not already exist. These operations affect the whole file, even when only a segment is shown. A rename preserves contents and permissions; subsequent SEARCH/REPLACE edits may use the new path and the same localized lines. Use at most one delete or rename per existing file. An empty REPLACE block removes text, not the file. Put file operations inside the same fenced blocks as other edits.
+
 Here is an example:
 
 ```rust

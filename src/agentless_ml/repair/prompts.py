@@ -33,6 +33,8 @@ Every *SEARCH/REPLACE* edit must use this format:
 
 {file_creation_instruction}
 
+{file_operation_instruction}
+
 Here is an example:
 
 ```{language}
@@ -57,6 +59,18 @@ FILE_CREATION_INSTRUCTION = (
     "block is then the whole content of the new file."
 )
 
+FILE_OPERATION_INSTRUCTION = (
+    "To delete an existing selected file entirely, write '### path' followed by "
+    "'DELETE FILE' on its own line. To rename an existing selected file, write "
+    "'### old/path' followed by 'RENAME FILE TO new/path' on its own line. "
+    "The destination must not already exist. These operations affect the whole "
+    "file, even when only a segment is shown. A rename preserves contents and "
+    "permissions; subsequent SEARCH/REPLACE edits may use the new path and the "
+    "same localized lines. Use at most one delete or rename per existing file. "
+    "An empty REPLACE block removes text, not the file. Put file operations "
+    "inside the same fenced blocks as other edits."
+)
+
 
 def build_repair_prompt(
     problem_statement: str,
@@ -66,8 +80,8 @@ def build_repair_prompt(
 ) -> str:
     """Build the fixed repair-stage prompt.
 
-    Python output is the v1.5.0 ``--cot --diff_format`` template plus one added
-    paragraph, ``FILE_CREATION_INSTRUCTION``. Every language supplies its own
+    Python output is the v1.5.0 ``--cot --diff_format`` template plus the file
+    creation and deletion/rename instructions. Every language supplies its own
     example edit; the instructions around it are shared.
     """
     if not problem_statement.strip():
@@ -80,6 +94,7 @@ def build_repair_prompt(
         problem_statement=problem_statement,
         repair_relevant_file_instruction=_RELEVANT_FILE_INSTRUCTION,
         file_creation_instruction=FILE_CREATION_INSTRUCTION,
+        file_operation_instruction=FILE_OPERATION_INSTRUCTION,
         content=selected_context.rstrip(),
         language=adapter.language,
         example_path=example.path,

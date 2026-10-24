@@ -11,7 +11,8 @@ the model does not choose tools or enter an interactive repair loop.
 
 Public tests can inform selection. Hidden benchmark verification runs only
 after the final patch is exported, with no feedback into repair. Recorded stage
-responses work today; live model execution is the next integration milestone.
+responses work today; live model execution remains deferred while the shared
+comparison setup and model access are settled.
 
 [Documentation](docs/README.md) · [Method and differences](docs/replication-map.md) ·
 [Commands](tools/README.md) · [Experiment configuration](docs/experimental-configuration.md)
@@ -22,11 +23,11 @@ The core workflow is implemented and has end-to-end coverage with saved
 responses across all five languages. These runs check the implementation;
 they are not live-model benchmark results.
 
-As of **17 October 2026**:
+As of **24 October 2026** (baseline counts last updated 17 October):
 
 | Area | What is established |
 | --- | --- |
-| Core workflow | Hierarchical localization, multi-file edits, reproduction and regression checks, deterministic selection and prediction export. |
+| Core workflow | Hierarchical localization, multi-file edits including creation, deletion and renaming, reproduction and regression checks, deterministic selection and prediction export. |
 | DeepSWE | All 113 tasks have registered usable public baselines. Numba uses its verified two-worker, three-hour public-validation profile; four other tasks use registered supplemented images. |
 | SWE-bench Pro V2 | All 642 task descriptions load. Recorded workflows cover selected Python, Go, JavaScript and TypeScript tasks; workspace checks cover selected tasks from nine repositories. Broad full-suite readiness is incomplete. |
 | Model execution | The controller currently consumes recorded responses. Live integration and complete model-budget enforcement remain to be implemented. |
@@ -39,6 +40,10 @@ passed 9,991 tests with zero failures/errors; see the
 Current coverage is tracked in [DeepSWE](docs/deepswe.md) and
 [SWE-bench Pro V2](docs/swe-bench-pro-v2-readiness.md). Earlier investigations
 live in [the development history](docs/history/README.md).
+
+The next research step is a small representative DeepSWE pilot against Grinta
+and mainstream agents, before broader runs or V2. The
+[comparison plan](docs/grinta-capability-match.md) records the remaining setup.
 
 ## Getting started
 

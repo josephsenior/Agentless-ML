@@ -110,7 +110,9 @@ Multi-file application supports repairs that span files, but can accept repairs 
 pinned upstream postprocessor would not produce. It therefore affects capability,
 even with the same fixed controller. File creation is supported (an empty SEARCH
 block under an untracked path), which upstream v1.5.0 also cannot do, and which adds
-one paragraph to every repair prompt; deletion remains unsupported. See
+one paragraph to every repair prompt. A further paragraph documents explicit
+deletion and renaming, added after Zhang's 23 October approval while retaining
+the fixed workflow. These are declared extensions, not upstream parity. See
 [repair and selection](repair-selection.md#intentional-changes).
 
 The common repair code uses the task language to choose a voting key. Python
