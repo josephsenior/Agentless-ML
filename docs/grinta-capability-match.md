@@ -52,7 +52,8 @@ repository-relative to its separate checkout. Its other relevant files are
 Produce one versioned, machine-readable task record from the existing safe
 loader, corpus pin, registered environments and public-test plans. Both launch
 paths consume that record rather than maintaining separate copies of setup
-knowledge. This is a planned interchange format, not a new benchmark or a
+knowledge. The [interchange exporter](shared-deepswe-task-spec.md) now exists;
+launcher consumption is still planned. This is not a new benchmark or a
 replacement for the existing TaskSpec.
 
 | Record section | Required contents |
@@ -118,6 +119,10 @@ command did. Document that distinction when defining the remaining restrictions.
    unresolved required setup. Check one ordinary development task and one
    registered override without Docker or model calls. Verify determinism and
    absence of answer fields. Then export the remaining records cheaply.
+   Completed and verified 25 October: all 113 records exported, with native
+   public reports retained. Actionlint and Numba exports replay identically.
+   Historical command/runtime differences are recorded separately; no baselines
+   were rerun and readiness did not change. See the [export guide](shared-deepswe-task-spec.md).
 3. **Add Grinta's opt-in comparison profile.** Consume the shared record;
    check the exported patch and review remaining operation restrictions.
    Exercise allowed edits, creation, deletion and renaming, plus rejected
@@ -139,7 +144,8 @@ command did. Document that distinction when defining the remaining restrictions.
    No corpus-wide baseline rerun, readiness-count change or benchmark-score
    claim follows automatically from this rehearsal.
 
-The next coding milestone is step 2. Complete the comparison checks in step 3
+The next coding milestone is consuming the shared records in step 3.
+Complete its comparison checks
 before calling Grinta capability-matched. Steps 4 and 5 establish that the
 matching profile actually runs in comparable environments.
 

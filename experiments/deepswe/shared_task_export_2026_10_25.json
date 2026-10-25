@@ -1,0 +1,1527 @@
+{
+  "all_record_and_native_report_hashes_verified": true,
+  "bundle": "artifacts/shared-deepswe-final-2026-10-24",
+  "deterministic_real_task_replays": [
+    "actionlint-action-pinning-lint",
+    "numba-stencil-boundary-modes"
+  ],
+  "docker_runs": 0,
+  "exported_tasks": 113,
+  "launchers_consume_specs": false,
+  "manifest": {
+    "errors": [],
+    "launched_runs": 0,
+    "records": [
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 5,
+          "passed": 165
+        },
+        "differences": [
+          "command",
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "925e79fc1dbc305bb56fd1da7ab79e26e2edcd4d584b0d4cea08f238de8d7b60",
+        "task_id": "abs-module-cache-flags"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 5,
+          "passed": 165
+        },
+        "differences": [
+          "command",
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "b85be115b0f1e0aba12e9f5ddf76c2a5a4c782ea2d489a0ca3666adba840bec6",
+        "task_id": "abs-stepped-slices"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 16,
+          "passed": 1802,
+          "skipped": 16
+        },
+        "differences": [
+          "command",
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "65b98f3c7db2614dc6d0a5758ee2b179c814a238dff38914eba69e32b48c3cd9",
+        "task_id": "actionlint-action-pinning-lint"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 2824,
+          "skipped": 28
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "5b20abc5df1f0c3a8aabcebc5ff019f14f9de191ea9ce5874a3688190e567313",
+        "task_id": "adaptix-name-mapping-aliases"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 8
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "e0f68f720fae7a6d0d9204d1db80a6d4e9271bd2fe57926a1abb2d8fbeff944e",
+        "task_id": "aiomonitor-task-snapshots-diff"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 1,
+          "passed": 118
+        },
+        "differences": [
+          "command",
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "91120a6e4b744a8c7ede3ae26e62f8766c1f3d4c713577eaf29bd28c775d2616",
+        "task_id": "anko-default-function-arguments"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 1,
+          "passed": 118
+        },
+        "differences": [
+          "command",
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "d816ba6817515b22a42f730b2a0281e542310d91737198edf412c3ee63003dee",
+        "task_id": "anko-typed-variable-bindings"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 2,
+          "passed": 1471
+        },
+        "differences": [
+          "command",
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "c5b1d5b3f8bdcb6ea6cc1ecbf2285e0a9a8b45024643fc030320c42aff370cbd",
+        "task_id": "arcane-drift-detection-baselines"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 1678
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "9b4dd5c17a4704b68ecffb8629f4a9b3ecd1919a9b03b2c864197a2a1225b309",
+        "task_id": "arktype-json-schema-refs-dependencies"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 158
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "f8485a936dc6558cd940fc7415d92b6b8ae6d2a2670b93982a954ce340287980",
+        "task_id": "awilix-async-container-initialization"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "error": 1,
+          "passed": 274
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "496f25bd38504822b758cfc6e486ae798cd14b08115e28d961f7d55acf37d03e",
+        "task_id": "bandit-incremental-cache-control"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "error": 1,
+          "passed": 274
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "3868772261d71034fa393f85a2162830d55d0858f634724dd8d64dba459bb8c8",
+        "task_id": "bandit-interprocedural-taint-checks"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 273
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "c51200683612c0522eefe6446d8051513a773ef525fd622dcd945c2338331429",
+        "task_id": "bandit-structured-nosec-directives"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 1,
+          "passed": 1609
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "a7327282066cf30275fc2099c9a59745b484cfa160276e6c06a5859c9abda6d7",
+        "task_id": "boa-hierarchical-evaluation-cancellation"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "error": 6,
+          "passed": 879,
+          "skipped": 15
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "ef85298bfab30ada3e70e9a24ba40d1652bf9b5ebd457ae402baf49935e31052",
+        "task_id": "cattrs-partial-structuring-recovery"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 640
+        },
+        "differences": [
+          "command",
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "dcaefb1bebf27f960acbb0dc060096ee2846b56055aaeb1e5059a34f2642983d",
+        "task_id": "clack-async-autocomplete-options"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 27,
+          "passed": 52
+        },
+        "differences": [
+          "command",
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "dd5325e36f47021e6cf789a5f4010aae9c6ce24d690550409c50799f73dcca28",
+        "task_id": "claude-code-by-agents-recursive-delegation"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 878
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "f75200b5371d13e20a2db3deee75d21aa9efced1eed5a5ff132f6facf890df35",
+        "task_id": "cliffy-config-file-parsing"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 16715,
+          "skipped": 2
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "c3e268779de9a65c93dc816dfc0629bf953b586c86493ef39de632695260eda9",
+        "task_id": "csstree-shorthand-expansion-compression"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 1012
+        },
+        "differences": [
+          "command",
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "8b552ffc8a9e5d36e7c885628bdff8b803ed6224f8dd051ea6e6b21605bc3d4c",
+        "task_id": "dasel-html-document-format"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 41,
+          "passed": 1991,
+          "skipped": 64
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "57f38b12997ae7dbca50e67a9a13265278fbe1b46f8805f43315afdef945c001",
+        "task_id": "dateutil-rfc5545-timezone-interop"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 205,
+          "passed": 3100,
+          "skipped": 3139
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "abfd2790ab735e67a15c98dcf3a445289014b70942ba552b5faf01d7ce76f2e0",
+        "task_id": "drizzle-orm-window-function-builders"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 1267
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "744d10d7fcc5cf1ff65f05c8845307078cbbbf950948bb917739784b74393e3d",
+        "task_id": "dynamodb-toolbox-conditional-attribute-requirements"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 1267
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "2c3d7f14a4f60e01e4f5483045757522644b2b4994503e215132a8240485a5bd",
+        "task_id": "dynamodb-toolbox-lazy-recursive-schemas"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 541,
+          "passed": 976
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "4ee2f77bd40bad34c6766aa36aad194ba53d753af99c8db8ae53c477a1337adb",
+        "task_id": "effect-sse-httpapi-streaming"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 69,
+          "passed": 147
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "7594925fde58d9dc2d89bac442365f30c498ec83ff5e21b847b61177727e5610",
+        "task_id": "eicrud-keyset-pagination-cursor"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 62
+        },
+        "differences": [
+          "command",
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "131d72bc40ab9be75ad4b5cda387450f75607625d14ec308f9b3ad0d00698823",
+        "task_id": "etree-xml-diff-patch"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 66762,
+          "skipped": 1
+        },
+        "differences": [
+          "command",
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "5a243635eace2698188088f2a233b8e707e65360d7139cdb558c2595dd5d1e2b",
+        "task_id": "expr-try-catch-errors"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "error": 19,
+          "passed": 3134,
+          "skipped": 7
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "6243776dcd61de31994aa207323c73875ee8963564874ce57b134d98b671e696",
+        "task_id": "fastapi-deprecation-response-headers"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "error": 19,
+          "passed": 3134,
+          "skipped": 7
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "ef23dad6182f0b6621ac781a6352674aaa9c25351f76121b6bdf2648aaa25567",
+        "task_id": "fastapi-implicit-head-options"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 241
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "145e1198c7681e285e9ba4ed548ea8f1a76a908b6655753fdf275b02584f712a",
+        "task_id": "fd-deterministic-multi-key-sorting"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 600
+        },
+        "differences": [
+          "command",
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "042af967a3d1a91b21751d8355abb33f3332c88c001ddeec45b0a2aea3a0575f",
+        "task_id": "geo-shapeindex-serialization"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 4,
+          "passed": 337,
+          "skipped": 1
+        },
+        "differences": [
+          "command",
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "72cacb97c8873cbc29ec65eeba083684ceeab4bf1792c15f2c3b00abc55e9db8",
+        "task_id": "go-critic-doc-link-checker"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 8,
+          "passed": 538,
+          "skipped": 19
+        },
+        "differences": [
+          "command",
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "c577547a25a5d4df7c9d64d54e01143daafcd0f38b9c5efaca7c0538c278cdd7",
+        "task_id": "go-genai-streamed-function-args"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 57,
+          "passed": 2507,
+          "skipped": 24
+        },
+        "differences": [
+          "command",
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "80e0c4484aa7032a66272f4607c5eb7fd5e8f34a5a068b6e89e80689c5f34c32",
+        "task_id": "go-git-worktree-merge-conflicts"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 46,
+          "passed": 2907,
+          "skipped": 47
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "9192e0f067f1bbd0ec1b1da89da38680e239a48c502b7b5ae9eb5b433acd2dbf",
+        "task_id": "goreleaser-retry-publish-auditing"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 820,
+          "skipped": 30
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "acee337ba6a0ea1b5f8d00e5dc96421e476c92397e67883ea75fb029f4c67b8a",
+        "task_id": "gql-incremental-graphql-delivery"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 618,
+          "passed": 6627
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "a661525a73c95fa8f2db99d2b6b4afe7c9b5e53f6861233f2e086ac50c48a05a",
+        "task_id": "happy-dom-abort-pending-body-reads"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 618,
+          "passed": 6627
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "fbe0a01bebf4bb88e7e68a8583680a8e57cd72311447f6f896c9b18cec3fb0dd",
+        "task_id": "happy-dom-deterministic-intersectionobserver"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 58,
+          "passed": 2239,
+          "skipped": 10
+        },
+        "differences": [
+          "report_contract",
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "090efbe6bcaf817795e2d90da9529c5a47ad50e35190205d1bf1f2ff5981f2a3",
+        "task_id": "helm-array-merge-strategies"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 58,
+          "passed": 2239,
+          "skipped": 10
+        },
+        "differences": [
+          "report_contract",
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "091047088ab0f6de0ab6bb11e64f26e3d9d5ebbe03438919e632fab923febf5e",
+        "task_id": "helm-unified-manifest-stream"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 4,
+          "passed": 1413,
+          "skipped": 1
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "6d3677d5383d85a6bcd5b9027cdab533e77bd5dd639578ece11730a3859f5ffd",
+        "task_id": "httpx-deterministic-cookie-store"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 4,
+          "passed": 1413,
+          "skipped": 1
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "aa416d8732ef8f7519423f43ce2d8e263c1d0f64c130bbc375ebeb63a0cb5924",
+        "task_id": "httpx-multipart-response-parsing"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 4,
+          "passed": 1413,
+          "skipped": 1
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "944ac30cec9643cf3036cdb00f58a2fb96cc09dc42b16bb7d4d587c2ca718368",
+        "task_id": "httpx-streaming-json-iteration"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 2
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "d68ea335c7e4d2613fef6a36c338ea7ddc8cd2e6a29fea6b8efa7294cea16b00",
+        "task_id": "igel-persist-feature-schema"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 2,
+          "passed": 930
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "b8fdfbf5f20037ab42ae2c457148445b435db51c591a9c2f51203999e41c58ae",
+        "task_id": "ink-grid-box-layout"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "error": 1,
+          "failed": 34,
+          "passed": 1554,
+          "skipped": 144
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "9132e8801b8f7fc08b62f10df8209e0ea99ae6b5ddc90301970709b5e9317360",
+        "task_id": "ipython-session-bundle-replay"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 1252
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "449baa430637f44886c4b6139b07f21b0f16e495fb0499ae21a4ccd6e5d555f3",
+        "task_id": "katex-multicolumn-array-spans"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 116
+        },
+        "differences": [
+          "command",
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "9732bad32eb9ca8eb9733aa17cdfdb858506d567c96159075647a4feb5b344bf",
+        "task_id": "kcp-go-multiplexed-kcp-streams"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 153
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "806b52ebe3a6f6167792c99fb246a70d6875ddaa819e322f501aefb2610fdb7f",
+        "task_id": "kea-atomic-signal-selectors"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 40,
+          "passed": 1017
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "6d2b2c138942f5b8749336cd8018ce4451fb8321851ef24e68acaccfbded337a",
+        "task_id": "kgateway-consistent-hash-policy"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "error": 2,
+          "passed": 1427,
+          "skipped": 175
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "7872a6ebfcc9eb8400333ae8bebcba57920f9835843aea1e591250ff2751b561",
+        "task_id": "kombu-single-active-consumer-priority"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "error": 2,
+          "failed": 1,
+          "passed": 1426,
+          "skipped": 175
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "71fdf26c7c54cb5f45b94d0e80fa2d673220520e06abe78daa4c34ae9e24d5ae",
+        "task_id": "kombu-virtual-queue-dead-lettering"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 172
+        },
+        "differences": [
+          "command",
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "e754c75cd5fb53aaea3bd41b6227f5a9359e2b53d3b9f3bd2a055764177e965d",
+        "task_id": "koota-composite-trait-aspects"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 160
+        },
+        "differences": [
+          "command",
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "1761a131ce9629b7eaa99b94a7d02e60bddb08e8c86f10e5a3371cf38ba8c302",
+        "task_id": "koota-deferred-mutation-buffer"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 170
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "2a160af184d60762ec41546f79402ae1e38293592fdadc143e271593f486db13",
+        "task_id": "koota-entity-snapshot-rollback"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 172
+        },
+        "differences": [
+          "command",
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "a7753243e642372483012f36cd698459705edbf55e0da69b251f9a1f9bbe53de",
+        "task_id": "koota-pair-relation-tracking"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 172
+        },
+        "differences": [
+          "command",
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "b99830698bc1082dc8cfab2a93a75fce933086234a067b1bbeb74a643b96e31a",
+        "task_id": "koota-query-predicates"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 438
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "537de76664b09f1a3e8b4ab78fcaa0af0cbdf9a636100c389c0c9a3ddb93e168",
+        "task_id": "kysely-window-grouping-helpers"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 21,
+          "passed": 1664,
+          "skipped": 33
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "8bfa8b8627e32e7828a7cc9003d435a83db6551b3158a3b55eeaa648d8f46815",
+        "task_id": "langchain-request-coalescing"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "error": 19,
+          "passed": 30411,
+          "skipped": 1
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "4384f4dc5d840c268e84a39f066ef6066700e8b51acfcaf116793c9b39cf2f53",
+        "task_id": "mashumaro-flattened-dataclass-fields"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 51497
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "0966284d32dd24d14c4c224573f3d2898ff45d684f7987c2f0058ad7ae2e0721",
+        "task_id": "meriyah-explicit-resource-declarations"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "error": 27,
+          "failed": 177,
+          "passed": 310,
+          "skipped": 8
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "033584b469790b131c868f7c1db4322bc28979aa67b5b174b2f9138a7a1d6acc",
+        "task_id": "mnamer-daemon-watch-lifecycle"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 804,
+          "skipped": 2
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "1f2117aadf20ec9e429f67b81be1bbe8837551ffdf3fd3a13d7f1ea22985fbce",
+        "task_id": "mobly-grouped-test-barriers"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 10093,
+          "skipped": 1699
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "731e55ac5c75045fcd929bbd6f8937f32c7f546ecace619b60d44a4d821fdbdd",
+        "task_id": "narwhals-rolling-window-suite"
+      },
+      {
+        "baseline_evidence": "matching",
+        "counts": {
+          "passed": 9991,
+          "skipped": 618
+        },
+        "differences": [],
+        "spec_sha256": "b5ab2ad49d8c53f02befb46992cc5644950b9f9bdbf5394228916d7d0694e3bc",
+        "task_id": "numba-stencil-boundary-modes"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 1131
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "e4e6aaa2ab6452f6c4a8006e003f288900c4d247a0233ef5a7bb9d312fb2d5ff",
+        "task_id": "obsidian-linter-auto-table-of-contents"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 1131
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "0ffd5cd6fb1ae728be4e1c1cdda790dd0fb15033df6f4864a4a2c9699bf9a78d",
+        "task_id": "obsidian-linter-link-format-conversion"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 1131
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "37ef9da25c51467a67aa9e1b36acdae11c2d805a13b1dcac7468ad4312d2df6a",
+        "task_id": "obsidian-linter-scoped-ignore-markers"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 1,
+          "passed": 27
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "c9fb52f345c07db39fb3d42a71ddfc7629c060b3e95c3d552ec92eebdd1686b5",
+        "task_id": "ofetch-per-origin-circuit-breaker"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 8,
+          "passed": 154
+        },
+        "differences": [
+          "command",
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "2b40b73b0502be6a1eb9d73fbc811092f9f70eb188a16e5290cd2ef65163338f",
+        "task_id": "onedump-dump-encryption-pipeline"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 4,
+          "passed": 28985,
+          "skipped": 3
+        },
+        "differences": [
+          "command",
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "7d78b83719e6b1bdde66d01e47c428f4226ea4212ecbad9f9b6465f7e1f6ae1f",
+        "task_id": "opa-rego-rule-profiling"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 4,
+          "passed": 28985,
+          "skipped": 3
+        },
+        "differences": [
+          "command",
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "3e95dc3feebf8c94ea748d076a958f976e8a753622192e8bdf94eae4e6ba6944",
+        "task_id": "opa-template-string-reconstruction"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 3046,
+          "skipped": 10
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "011452531bee71c03d2e6803ddbd024e4792e0d32d450d5e18a3a557ca549ac2",
+        "task_id": "optique-conditional-option-dependencies"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 145
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "4d11b6641dc671abf33c4e8834aa5bd63efc746e07febacbf989b8294503a400",
+        "task_id": "oxvg-structural-selector-preservation"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 1,
+          "passed": 168
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "24b8906169ef923ff3f30948319f0fc2c8b2d1c335d42da1c1c5e110fba1d9a0",
+        "task_id": "participle-grammar-conflict-analysis"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 10,
+          "passed": 14245,
+          "skipped": 18
+        },
+        "differences": [
+          "report_contract",
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "aca85479ba91910c5d2b217a40003b424d5dea9ed3a6ef5fad42d52db430a43b",
+        "task_id": "pebble-durability-wait-apis"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 1,
+          "passed": 508
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "374fdcd6eaeb973a88b3c5caf705efdfc7dd7f5552be0ccadc4ca575a9c50fab",
+        "task_id": "pest-character-class-coalescing"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 82,
+          "skipped": 5
+        },
+        "differences": [
+          "command",
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "76ebb5408b8fbcfe39ae5940da2db1a1a89ee8bc6fe4212a8ac31453dd1a555b",
+        "task_id": "prometheus-transactional-reload-status"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 3064
+        },
+        "differences": [
+          "command",
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "0940100a4111a8cbfe782dacb0a2efa673afbb25e4303229ea0f08ce49de6f7f",
+        "task_id": "prometheus-typed-label-sorting"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "error": 1,
+          "failed": 25,
+          "passed": 1068,
+          "skipped": 23
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "a1f487187df758794a13a276da8c343737b3a8c99da7676506710d20ba0e8235",
+        "task_id": "psd-tools-blend-range-api"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 6,
+          "passed": 49
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "53f7f70e747690a6e72ea70122d2022f5157834ab7c554048d55f5ac50efd616",
+        "task_id": "pwntools-tube-multiplexing"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 1404,
+          "skipped": 187
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "4078c64225eb89499217add54470bf889a6be97e46ffa1b17d4fc84bb8628ffd",
+        "task_id": "python-statemachine-state-data-scoping"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 143,
+          "passed": 112
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "97b388af9583decfa9caedcb11367ca9ef7743d7e53aa5d0bef0a92f13b64383",
+        "task_id": "query-persist-restored-query-state"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 524
+        },
+        "differences": [
+          "command",
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "dcf3342770a793a1ede0beab8d80a611860122736c1db219d55b5741d1fa2b36",
+        "task_id": "quill-shared-toolbar-focus"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "error": 1,
+          "failed": 1,
+          "passed": 685,
+          "skipped": 5
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "a02fd9860e54f271a8fac11871910207bda6e416f55bdd995adec74991f0358e",
+        "task_id": "returns-validated-error-accumulation"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 283
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "97691fcb050344e072ad661080b46d715ee1cbe1bf110d51e5758d0c8d087540",
+        "task_id": "scc-bounded-memory-spilling"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 467,
+          "skipped": 1
+        },
+        "differences": [
+          "command",
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "97670ffba763fec76471946f70b81e827a10756f9bb4047875b351a97a12bf19",
+        "task_id": "scriggo-method-declarations"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 4,
+          "passed": 2859,
+          "skipped": 357
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "a2f183c7af3f39562dececd7499cbff4cf7083d9e25043a3d5bd728ab57293d0",
+        "task_id": "skrub-duration-encoding"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 5709,
+          "skipped": 2
+        },
+        "differences": [
+          "command",
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "cbd1ed35287392d58a70150e903995c33dadb3cdbead0c5759d2d29646879a4d",
+        "task_id": "sql-formatter-bigquery-pipe-formatting"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 139,
+          "passed": 1089
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "176cab49f3efc6c701eb9d742b33395e6d9dc678b7f88a0fd86eb5cc90de2240",
+        "task_id": "sqlfmt-create-table-ddl-formatting"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 1040,
+          "skipped": 16
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "179d2c77a7b21b19f61be94a552600652d43508889fcb75cce89244915c5e491",
+        "task_id": "sqlite-utils-safe-import-checkpoints"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 82,
+          "skipped": 2
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "441a801e1cb6e4760434e227a66d7c3a1b1349c21d8e63c3518d00b8548db614",
+        "task_id": "superjson-error-stack-serialization"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 155,
+          "passed": 449
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "292e5322a808ad998d01c35d1f0d5902ac118ace800cb89945bc633219bc138f",
+        "task_id": "task-task-graph-export"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 301
+        },
+        "differences": [
+          "command",
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "ebb7c5f26a7da68cb31aa8b8f8e8c89fee04d5d0a752d2bbd97bfb0e4aa58440",
+        "task_id": "tengo-callable-instance-isolation"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 301
+        },
+        "differences": [
+          "command",
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "5cfc70b5dbe7c1d46b3aa4a618a8c89d8639056d59721e6e15ce4cd15dd9ce9d",
+        "task_id": "tengo-destructuring-bindings"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 87
+        },
+        "differences": [
+          "command",
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "23a97250fdc14f0023f5f12d0b38bff7cb65b46334311bb4bee5d9b10d525db5",
+        "task_id": "termenv-preserve-ansi-resets"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 9,
+          "passed": 488,
+          "skipped": 3
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "b29b564565e2faee589da2a7d2a5d89f392285300dbca818707e49b016cc57eb",
+        "task_id": "testem-bail-on-test-failure"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 497,
+          "skipped": 3
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "60e4c521603694ec22aa9fc506fc5ac9caace67d080a4862708d259bacd9a12c",
+        "task_id": "testem-per-launcher-reports"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 24,
+          "passed": 3388,
+          "skipped": 7
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "7a512df7f33daa59b6c0da3714269ce9eef3a1e6db4749eccd995d9e489bf7f2",
+        "task_id": "textual-kitty-key-phases"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "error": 444,
+          "failed": 4,
+          "passed": 2966,
+          "skipped": 8
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "e1d7e92944937b925bd9d2ac9e74f1b90c287b417bd4ddff0d471403f0520018",
+        "task_id": "textual-richlog-follow-state"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 964
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "955796762aa9501812bf696786bd6256b8f34ab1b599543723d1f21476541e1c",
+        "task_id": "tomlkit-toml-table-converters"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 561
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "cd7d95d7a5783b4407e28c15dec01e7d4babc69913ba38fe546f52d6e5713197",
+        "task_id": "true-myth-iterable-collection-combinators"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 442
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "a26d0548d729d19960b42d4165f465a639f29a8563cb71ff36353b84578132fb",
+        "task_id": "ts-pattern-match-each"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 276
+        },
+        "differences": [
+          "command",
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "9b19424ec33bf49e77308ed4badcf74e4b20ffc0fc17c64cfe5a81ed6f062d9f",
+        "task_id": "updo-policy-alerting"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 4509
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "efab495a6683096dc219ee6d5a00a002e28e577bee063e564a59bb43bae5fdf2",
+        "task_id": "valibot-recursive-schema-composition"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 4,
+          "passed": 2123,
+          "skipped": 93
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "6cbfa93487a9835a13768899ffcbd5e719f49c779218269482c3ff9526a55ec5",
+        "task_id": "vitest-duration-sharding"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 295
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "84f6ddedc2fd01192d9daaa043a54bf8caea39c4b4529910a16bff6f366876e7",
+        "task_id": "vulture-persistent-analysis-cache"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 791
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "8e2ac0488d2222ba79a773ea31d90f789117fe447d4de45ad055d9e6987b25fe",
+        "task_id": "wasmi-trap-coredumps"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 155928,
+          "skipped": 39
+        },
+        "differences": [
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "566c672dd2a68a0c26f318d7af177ac14ba5cdfe3fe0a6d8ec6705ccd4007354",
+        "task_id": "wazero-multi-module-snapshots"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 36,
+          "passed": 2194,
+          "skipped": 41
+        },
+        "differences": [
+          "command",
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "e144cd65fb6c7a8db05e3400bf1eca32788944e6fd92f54e9a418946aa96a534",
+        "task_id": "yaegi-go-embed-directives"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "passed": 231,
+          "skipped": 6
+        },
+        "differences": [
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "bee4ec4151c1f616b7bc44d6a83862a8d8e6cb638056819bb6b9e8bf1713cd4a",
+        "task_id": "yjs-map-conflict-detection"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "counts": {
+          "failed": 96,
+          "passed": 649
+        },
+        "differences": [
+          "command",
+          "limits_or_missing_historical_limits",
+          "network_or_missing_historical_network"
+        ],
+        "spec_sha256": "090af7cea6e615aa6820497e1247fdefd2e76ef4be5fb8f45074308ce13e7da5",
+        "task_id": "ytt-jsonpath-query-api"
+      }
+    ],
+    "schema_version": 1
+  },
+  "manifest_sha256": "47e2ef84f7106148441170b879f7d55bf8667e623915ef007cbdeaed67175c3a",
+  "model_calls": 0,
+  "readiness_changed": false,
+  "tests": {
+    "focused_exporter_passed": 12,
+    "optional_checks_skipped": 4,
+    "related_contract_checks_passed": 147
+  },
+  "verified_on": "2026-10-25"
+}

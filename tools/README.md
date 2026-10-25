@@ -13,6 +13,7 @@ described in the linked guides.
 
 | Command | Purpose |
 | --- | --- |
+| [export_deepswe_task_specs.py](export_deepswe_task_specs.py) | Export shared public DeepSWE task records and existing baseline evidence without Docker or model calls. See the [format guide](../docs/shared-deepswe-task-spec.md). |
 | [demo_fixed_workflow.py](demo_fixed_workflow.py) | Run the small authored example through the recorded controller and export a patch. |
 | [demo_public_validation.py](demo_public_validation.py) | Exercise Docker validation and selection on controlled candidates. |
 | [run_deepswe_workflow.py](run_deepswe_workflow.py) | Replay a configured DeepSWE development workflow with saved responses. |
