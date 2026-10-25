@@ -1,0 +1,68 @@
+{
+  "date": "2026-10-25",
+  "scope": "actual launcher preflights: configured inputs and independently prepared clean Git workspaces",
+  "container_runtime_match_verified": false,
+  "capability_enforcement_verified": false,
+  "model_calls": 0,
+  "benchmark_tests_run": 0,
+  "reader_copies_byte_identical": true,
+  "tests": {
+    "agentless_passed": 21,
+    "grinta_launcher_passed": 12
+  },
+  "agentless_files": {
+    "src/agentless_ml/shared_task.py": "b29e999e9695c1a5571fb99e5438b5e7cfde70095217e973d55685418e1711ff",
+    "tools/run_shared_deepswe_workflow.py": "ac2dce4275166b78533a45f65b1c5653fa765799dca7dd1385bbad1a76f0e9b1",
+    "tools/compare_shared_deepswe_starts.py": "e9faec9c5e8fc1d4f1535c37abca3ffd0eb872c088d6919e55361e093096b56f"
+  },
+  "grinta_files": {
+    "evaluation/deepswe/shared_task.py": "b29e999e9695c1a5571fb99e5438b5e7cfde70095217e973d55685418e1711ff",
+    "evaluation/deepswe/run_grinta.py": "7b70e62875f031b65261f200b0d95c25aae95e6d00706c0222dd216b320316a0"
+  },
+  "comparisons": [
+    {
+      "agentless_revision": "c27751285db21877176a548bdbb5c6f47be03a3e+dirty",
+      "benchmark_tests_run": 0,
+      "capability_enforcement_verified": false,
+      "compared_sections": [
+        "edit_contract",
+        "environment",
+        "identity",
+        "problem",
+        "public_validation",
+        "timing"
+      ],
+      "configured_starting_conditions_match": true,
+      "grinta_revision": "8ae9283eda40154dd16bd466d64c1a44e03ed329",
+      "independent_clean_workspaces_verified": true,
+      "model_calls": 0,
+      "observed_container_match": false,
+      "scope": "real launcher preflights; configured inputs and prepared source, not installed runtime equivalence",
+      "spec_sha256": "65b98f3c7db2614dc6d0a5758ee2b179c814a238dff38914eba69e32b48c3cd9",
+      "starting_conditions_sha256": "c97ffd65464a6e6052ae3186290cbf5bc63598c50e7b43cf5915ff178a48e86a",
+      "task_id": "actionlint-action-pinning-lint"
+    },
+    {
+      "agentless_revision": "c27751285db21877176a548bdbb5c6f47be03a3e+dirty",
+      "benchmark_tests_run": 0,
+      "capability_enforcement_verified": false,
+      "compared_sections": [
+        "edit_contract",
+        "environment",
+        "identity",
+        "problem",
+        "public_validation",
+        "timing"
+      ],
+      "configured_starting_conditions_match": true,
+      "grinta_revision": "8ae9283eda40154dd16bd466d64c1a44e03ed329",
+      "independent_clean_workspaces_verified": true,
+      "model_calls": 0,
+      "observed_container_match": false,
+      "scope": "real launcher preflights; configured inputs and prepared source, not installed runtime equivalence",
+      "spec_sha256": "b5ab2ad49d8c53f02befb46992cc5644950b9f9bdbf5394228916d7d0694e3bc",
+      "starting_conditions_sha256": "f4c2c2012454bb81482742429c23b6fa29912b8ebad89b8618905d7be1c3f70a",
+      "task_id": "numba-stencil-boundary-modes"
+    }
+  ]
+}

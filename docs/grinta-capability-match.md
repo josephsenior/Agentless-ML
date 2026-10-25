@@ -52,8 +52,8 @@ repository-relative to its separate checkout. Its other relevant files are
 Produce one versioned, machine-readable task record from the existing safe
 loader, corpus pin, registered environments and public-test plans. Both launch
 paths consume that record rather than maintaining separate copies of setup
-knowledge. The [interchange exporter](shared-deepswe-task-spec.md) now exists;
-launcher consumption is still planned. This is not a new benchmark or a
+knowledge. The [interchange exporter and launcher preflights](shared-deepswe-task-spec.md)
+now exist; observed runtime matching is still outstanding. This is not a new benchmark or a
 replacement for the existing TaskSpec.
 
 | Record section | Required contents |
@@ -129,6 +129,10 @@ command did. Document that distinction when defining the remaining restrictions.
    mode, symlink and binary changes using a small synthetic repository.
    Verify a normal build can still create and remove temporary products.
    Keep restrictions disabled in ordinary Grinta sessions.
+   Shared-record preflight consumption is implemented in both launchers.
+   Actionlint and Numba have matching prepared source and configured conditions;
+   33 focused checks passed across both repositories. This does not complete
+   runtime enforcement or establish that Pier's installed runtime is matched.
 4. **Wire the same task setup into both launch paths.** Reuse prepared public
    commands and fixtures. Check runtime installation does not silently replace
    task toolchains or dependencies. Compare effective resource/network settings,
@@ -144,8 +148,8 @@ command did. Document that distinction when defining the remaining restrictions.
    No corpus-wide baseline rerun, readiness-count change or benchmark-score
    claim follows automatically from this rehearsal.
 
-The next coding milestone is consuming the shared records in step 3.
-Complete its comparison checks
+The next milestone is observing and aligning the actual container setup in step 4,
+alongside the remaining operation checks in step 3. Complete those checks
 before calling Grinta capability-matched. Steps 4 and 5 establish that the
 matching profile actually runs in comparable environments.
 

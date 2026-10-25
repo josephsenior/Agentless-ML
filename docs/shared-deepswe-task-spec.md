@@ -5,8 +5,10 @@ share. It reads the pinned corpus, Git objects at each base commit, existing
 environment registrations and saved public baseline reports. It does not start
 Docker, download anything, run tests or call a model.
 
-This is the interchange format for the comparison. Neither launcher consumes
-it yet. Exporting a record does not mean the comparison is ready to run.
+This is the interchange format for the comparison. Both launchers now consume
+it in model-free preflight mode. Agentless also supports recorded-response runs
+from the record; Grinta's shared path refuses live execution while model access,
+budgets and observed container matching remain unresolved.
 
 Verified 25 October 2026: all **113 records** exported and their specification
 and native-report hashes checked. Rebuilding Actionlint and Numba with identical
@@ -94,5 +96,57 @@ schema, profiles and resource settings before executing them.
 
 Every record has `launch.authorized: false`. Model selection/access, total
 budgets, the pilot list, launcher integration and comparison enforcement remain
-separate work. The next step is to make both launch paths consume these records
-and demonstrate equal initial task and environment settings without model calls.
+separate work. Preflight consumption is implemented below; observed container
+matching and runtime enforcement remain outstanding.
+
+## Launcher consumption and paired preflight
+
+Agentless has a dedicated entry point, so legacy experiment-specific schedules
+cannot silently override the shared command:
+
+```powershell
+python tools/run_shared_deepswe_workflow.py `
+  --shared-task artifacts/shared-deepswe-final-2026-10-24/actionlint-action-pinning-lint/task.json `
+  --source-repository ../benchmarks/deepswe/repos/actionlint-action-pinning-lint `
+  --workspace-root artifacts/shared-workspaces `
+  --artifact-root artifacts/shared-run --inspect-start
+```
+
+It reconstructs TaskSpec and the public command, checks the registered image,
+setup code hashes and supported runtime settings, then verifies an independent
+checkout at the pinned commit. For a recorded controller run, replace
+`--inspect-start` with `--experiment <recorded-response-directory>`. The response
+directory must identify the same task and must not override the public schedule.
+The controller establishes a fresh baseline; historical evidence is not silently
+treated as a current selection inventory. No recorded full-suite run was needed
+for the preflight checks below.
+
+Grinta's `evaluation.deepswe.run_grinta` accepts `--shared-task` instead of
+`--instruction` or `--instruction-file`. With `--dry-run`, it verifies the prepared
+checkout and reports the shared starting conditions without loading its legacy
+model configuration. Without `--dry-run`, this new mode stops before a model call.
+Its older Pier evaluation path remains separate and unchanged.
+
+The portable stdlib reader is mirrored byte-for-byte in both repositories.
+It checks the record, command, setup and native-report hashes and the checkout's
+commit/tree/cleanliness. The comparison tool exercises the actual CLI paths:
+
+```powershell
+python tools/compare_shared_deepswe_starts.py `
+  --shared-task artifacts/shared-deepswe-final-2026-10-24/actionlint-action-pinning-lint/task.json `
+  --source-repository ../benchmarks/deepswe/repos/actionlint-action-pinning-lint `
+  --grinta-root ../../Grinta --output artifacts/shared-comparison
+```
+
+On 25 October, Actionlint and Numba matched across task identity, problem text,
+prepared source, configured image/runtime settings, public command and baseline,
+edit contract and timing fields. Independent clean Git workspaces were checked.
+The [paired evidence](../experiments/deepswe/shared_start_comparison_2026_10_25.json)
+records the exact implementation file hashes and both comparisons. There were
+21 passing Agentless checks and 12 passing Grinta launcher checks.
+
+This is **configuration and source agreement**, not proof of installed runtime
+equivalence. No containers or benchmark tests were run in this comparison.
+Grinta's Pier-installed dependencies, effective container protections and
+remaining edit restrictions still need an observed model-free rehearsal before
+claiming the complete comparison environment is matched.
