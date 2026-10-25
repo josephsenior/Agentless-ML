@@ -156,10 +156,11 @@ command did. Document that distinction when defining the remaining restrictions.
    No corpus-wide baseline rerun, readiness-count change or benchmark-score
    claim follows automatically from this rehearsal.
 
-The next milestone is packaging this verified runtime setup for the chosen
-small DeepSWE pilot and freezing its remaining configuration. One controlled
-container rehearsal does not establish all task environments or live-model
-equivalence. Model/access and budget decisions remain separate.
+The verified setup is now packaged with an exposed engineering control and a
+proposed five-task language-coverage pilot; see the [package guide](deepswe-pilot-package.md).
+The proposal is not frozen, and the five runtime setups remain pending. The
+next work is reviewing the pilot list/exposure audit and preparing those exact
+runtime bindings. Model/access and budget decisions remain separate.
 
 ## Deferred until discussion with Professor Zhang
 

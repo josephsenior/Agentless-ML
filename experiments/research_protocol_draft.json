@@ -79,7 +79,7 @@
     "evaluation_order": "small representative DeepSWE pilot against Grinta and mainstream agents, review results before broader investment or SWE-bench Pro V2",
     "plan": "../docs/grinta-capability-match.md",
     "model_integration": "deferred pending discussion with Professor Zhang",
-    "status": "source inspection started; shared task export and runtime enforcement are planned, not implemented or validated"
+    "status": "shared records and launcher preflights implemented; one controlled real-container/edit-contract rehearsal passed; pilot preparation packaged with selection and per-task runtime verification still pending"
   },
   "required_decisions_before_freeze": [
     "Professor Zhang reviews the declared method and comparison target",

@@ -27,6 +27,7 @@ and their original outcomes live in [history](history/README.md).
 | Topic | Current guide |
 | --- | --- |
 | DeepSWE loading, execution, baseline profiles and scoring | [DeepSWE](deepswe.md) |
+| Reproducible small-pilot preparation bundle | [DeepSWE pilot package](deepswe-pilot-package.md) |
 | Shared inputs for the Agentless-ML/Grinta comparison | [Shared DeepSWE task records](shared-deepswe-task-spec.md) |
 | SWE-bench Pro loading and recorded workflows | [SWE-bench Pro](swe-bench-pro.md) |
 | V2 public-suite readiness | [Readiness survey](swe-bench-pro-v2-readiness.md) |
