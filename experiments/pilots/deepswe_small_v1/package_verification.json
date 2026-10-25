@@ -1,0 +1,154 @@
+{
+  "archive": "artifacts/deepswe-small-pilot-v1.zip",
+  "archive_bytes": 2117708,
+  "archive_inventory_and_checksums_verified": true,
+  "archive_sha256": "52f25f677f598e1fd5eb4ff014e24fa899ac1bde84ce31d510aa9a46a20ac99a",
+  "benchmark_tests_run": 0,
+  "bundle": "artifacts/deepswe-small-pilot-v1",
+  "container_runs": 0,
+  "exposure_audit_complete": false,
+  "focused_tests_passed": 6,
+  "local_image_availability_rechecked": false,
+  "manifest": {
+    "bundle_id": "deepswe-small-pilot-preparation-v1",
+    "engineering_control": "actionlint-action-pinning-lint",
+    "exposure_audit_complete": false,
+    "files_sha256": {
+      "README.md": "f8909a8cffa546487d45a4bfff0a6e0cae72a5bc2a633733ff3252bca79f7ad3",
+      "configs/agentless-ml.json": "7a09452511a9a29e3080e9f2cca99fb94e5b71307a96f8cc8a6af604d94f884f",
+      "configs/common.json": "f1e5b27ca1055b8c6b9de6edcbbae2a362303d972504ba889b0decbcc5281241",
+      "configs/grinta.json": "577584b6fa1b0e1cf5d2e03909ef6ec5f8c59626df453cb9ad7d42dc31d6885b",
+      "configs/mainstream-agent.json": "ad9c5b9fee4ecf2f6c4b1f3f8d2b7801759a4e0d57f36432c4e7e88a841317bd",
+      "evidence/container-rehearsal.json": "7f1b60afff0f633736e2270f65d147165fbef686f8de4102986f91e9da677a13",
+      "proposal.json": "6cc75c39b2a9fb674d68e08ec50503b64316b4ef92c6a17d22c3b86fbe695b94",
+      "runtime.json": "c7385dd75858ed85a72bd1e932386dd999af516af523e3168181a91352f6ff41",
+      "tasks/actionlint-action-pinning-lint/baseline-report.json": "33ec5cda924d628f52de6dd79b38b1d15e1e194a3dbb85202706fa3bde11afb7",
+      "tasks/actionlint-action-pinning-lint/task.json": "86da36ef7f450c0ada3d90200277df03f75099c1a00a0bf510edd2b56ffcca2e",
+      "tasks/aiomonitor-task-snapshots-diff/baseline-report.xml": "945e78306dabe2fed159c664301e2389b28fe301e2c9042957fbfac6ec9be8aa",
+      "tasks/aiomonitor-task-snapshots-diff/task.json": "a940c695aa832cd491dc238358d11869342ab81283f4bfeaee3a999bbffe4233",
+      "tasks/meriyah-explicit-resource-declarations/baseline-report.xml": "0d88e0d1108d38d1c2ba4367f325459f1f41b7df37e11a5a8d66ac2ee0984adc",
+      "tasks/meriyah-explicit-resource-declarations/task.json": "b9c9b2481ea036f40e3ceee71b4f60c43aed3ff2f7a4f86d8f457c5cd290a819",
+      "tasks/pebble-durability-wait-apis/baseline-report.json": "dc64644937af5c2e7ba6a392f258c6051d51d93ba79378144a24a6e677387bb4",
+      "tasks/pebble-durability-wait-apis/task.json": "46d233e3b4b8a5625e7fc52b1d0cb249c7ff17f001cfafe7acce02a9f17f5ee9",
+      "tasks/pest-character-class-coalescing/baseline-report.xml": "befd238002335b0a6c4e653aba30965d7b7e50b0482649dddf5b26997186e788",
+      "tasks/pest-character-class-coalescing/task.json": "e3a6f25bc2d38f7966a9abc6f966247b05f971556c3f65ace34c0ca4d20c3c5e",
+      "tasks/testem-bail-on-test-failure/baseline-report.xml": "4fe4ab43e0813bfc2f339b2fe88722afafc62a68419758650bb030ef9e03268f",
+      "tasks/testem-bail-on-test-failure/task.json": "26ee2841b0773eb8cadf0539a0977cae5396961e7e925b3d4f1b98b1f6d538f3"
+    },
+    "implementations": {
+      "agentless_revision": "7df5a17b1c44d70baad1824f57dfb389bc58205e",
+      "grinta_launcher_revision": "a330e9664a84406b4a5a6740c3320563d9fea903",
+      "note": "Installed Grinta revision is pinned separately in runtime.json.",
+      "packager_sha256": "412b5a30a0176f6fdbe01ead43c15a716b722e963336d739debbe65fe91cb545"
+    },
+    "known_exposures": {
+      "abs-module-cache-flags": [
+        "Grinta paired model case study"
+      ],
+      "actionlint-action-pinning-lint": [
+        "Grinta paired model case study",
+        "Agentless recorded repairs and scorer development"
+      ],
+      "cattrs-partial-structuring-recovery": [
+        "Grinta paired model case study"
+      ],
+      "fastapi-implicit-head-options": [
+        "Grinta paired model case study"
+      ],
+      "fd-deterministic-multi-key-sorting": [
+        "Agentless recorded repairs and reproduction/scoring development"
+      ],
+      "go-git-worktree-merge-conflicts": [
+        "Grinta paired model case study"
+      ],
+      "httpx-streaming-json-iteration": [
+        "Grinta paired model case study"
+      ],
+      "testem-per-launcher-reports": [
+        "Grinta paired model case study"
+      ],
+      "wazero-multi-module-snapshots": [
+        "Grinta paired model case study"
+      ]
+    },
+    "schema_version": 1,
+    "selection_frozen": false,
+    "status": "preparation_only",
+    "tasks": [
+      {
+        "baseline_evidence": "review_required",
+        "language": "go",
+        "role": "engineering_control",
+        "runtime_status": "controlled_rehearsal_verified",
+        "spec_sha256": "65b98f3c7db2614dc6d0a5758ee2b179c814a238dff38914eba69e32b48c3cd9",
+        "task_file": "tasks/actionlint-action-pinning-lint/task.json",
+        "task_id": "actionlint-action-pinning-lint"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "language": "python",
+        "role": "proposed_pilot",
+        "runtime_status": "pending",
+        "spec_sha256": "e0f68f720fae7a6d0d9204d1db80a6d4e9271bd2fe57926a1abb2d8fbeff944e",
+        "task_file": "tasks/aiomonitor-task-snapshots-diff/task.json",
+        "task_id": "aiomonitor-task-snapshots-diff"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "language": "go",
+        "role": "proposed_pilot",
+        "runtime_status": "pending",
+        "spec_sha256": "aca85479ba91910c5d2b217a40003b424d5dea9ed3a6ef5fad42d52db430a43b",
+        "task_file": "tasks/pebble-durability-wait-apis/task.json",
+        "task_id": "pebble-durability-wait-apis"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "language": "javascript",
+        "role": "proposed_pilot",
+        "runtime_status": "pending",
+        "spec_sha256": "b29b564565e2faee589da2a7d2a5d89f392285300dbca818707e49b016cc57eb",
+        "task_file": "tasks/testem-bail-on-test-failure/task.json",
+        "task_id": "testem-bail-on-test-failure"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "language": "typescript",
+        "role": "proposed_pilot",
+        "runtime_status": "pending",
+        "spec_sha256": "0966284d32dd24d14c4c224573f3d2898ff45d684f7987c2f0058ad7ae2e0721",
+        "task_file": "tasks/meriyah-explicit-resource-declarations/task.json",
+        "task_id": "meriyah-explicit-resource-declarations"
+      },
+      {
+        "baseline_evidence": "review_required",
+        "language": "rust",
+        "role": "proposed_pilot",
+        "runtime_status": "pending",
+        "spec_sha256": "374fdcd6eaeb973a88b3c5caf705efdfc7dd7f5552be0ccadc4ca575a9c50fab",
+        "task_file": "tasks/pest-character-class-coalescing/task.json",
+        "task_id": "pest-character-class-coalescing"
+      }
+    ],
+    "verified_runtime_image": "sha256:3537e0869975ce4e6d66101a4f9236e7e93c3c524b7ec961a1e62e4bbecbe81c"
+  },
+  "manifest_sha256": "07b5fc0b981c1d85aab8fe305ab82490d3524b4093204d401fc1833eea9a874b",
+  "model_calls": 0,
+  "reason": "Docker was stopped; saved immutable runtime pins and verification evidence are packaged.",
+  "repeated_zip_bytes_identical": true,
+  "selection_frozen": false,
+  "verification": {
+    "bundle_id": "deepswe-small-pilot-preparation-v1",
+    "engineering_control": "actionlint-action-pinning-lint",
+    "live_launch_enabled": false,
+    "proposed_tasks": [
+      "aiomonitor-task-snapshots-diff",
+      "pebble-durability-wait-apis",
+      "testem-bail-on-test-failure",
+      "meriyah-explicit-resource-declarations",
+      "pest-character-class-coalescing"
+    ],
+    "verified_files": 20
+  },
+  "verified_on": "2026-10-25"
+}
