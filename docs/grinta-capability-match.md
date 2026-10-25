@@ -3,8 +3,10 @@
 Updated 24 October 2026 following Professor Zhang's 23 October reply.
 Extend Agentless-ML with file deletion and renaming while keeping its fixed
 workflow. This supersedes the 19 October restriction-only plan. The repair
-implementation now supports these operations; matching Grinta's runtime remains
-planned work, not a demonstrated result. No live runs are part of this change.
+implementation now supports these operations. A 25 October controlled rehearsal
+also matched the real container settings and exercised Grinta's edit restrictions.
+See the [runtime record](history/shared-container-rehearsal-2026-10-25.md) for
+scope; no live model run is part of this work.
 
 Start with a small representative DeepSWE evaluation against Grinta and
 mainstream agents, inspect the results, then decide on broader experiments.
@@ -53,7 +55,7 @@ Produce one versioned, machine-readable task record from the existing safe
 loader, corpus pin, registered environments and public-test plans. Both launch
 paths consume that record rather than maintaining separate copies of setup
 knowledge. The [interchange exporter and launcher preflights](shared-deepswe-task-spec.md)
-now exist; observed runtime matching is still outstanding. This is not a new benchmark or a
+now exist, together with one observed runtime rehearsal. This is not a new benchmark or a
 replacement for the existing TaskSpec.
 
 | Record section | Required contents |
@@ -133,11 +135,17 @@ command did. Document that distinction when defining the remaining restrictions.
    Actionlint and Numba have matching prepared source and configured conditions;
    33 focused checks passed across both repositories. This does not complete
    runtime enforcement or establish that Pier's installed runtime is matched.
+   The subsequent opt-in completed-action guard and final export check were
+   exercised with Grinta's native executor, including Linux mode/type changes.
 4. **Wire the same task setup into both launch paths.** Reuse prepared public
    commands and fixtures. Check runtime installation does not silently replace
    task toolchains or dependencies. Compare effective resource/network settings,
    writable paths and source hashes. Check Pier's concrete environment controls
    before deciding whether any harness change is necessary.
+   The shared profile now uses real Pier with the same observed protections as
+   Agentless. Core installation preserves task tools; the controlled Actionlint
+   setup matched. Model transport remains deferred, and this diagnostic image
+   is not automatically a registered pilot environment.
 5. **Run one model-free paired rehearsal.** Use recorded Agentless responses
    and scripted Grinta actions on an existing development task. Exercise a
    permitted repair, a forbidden operation and public validation; export both
@@ -148,10 +156,10 @@ command did. Document that distinction when defining the remaining restrictions.
    No corpus-wide baseline rerun, readiness-count change or benchmark-score
    claim follows automatically from this rehearsal.
 
-The next milestone is observing and aligning the actual container setup in step 4,
-alongside the remaining operation checks in step 3. Complete those checks
-before calling Grinta capability-matched. Steps 4 and 5 establish that the
-matching profile actually runs in comparable environments.
+The next milestone is packaging this verified runtime setup for the chosen
+small DeepSWE pilot and freezing its remaining configuration. One controlled
+container rehearsal does not establish all task environments or live-model
+equivalence. Model/access and budget decisions remain separate.
 
 ## Deferred until discussion with Professor Zhang
 

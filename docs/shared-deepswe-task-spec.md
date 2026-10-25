@@ -8,7 +8,7 @@ Docker, download anything, run tests or call a model.
 This is the interchange format for the comparison. Both launchers now consume
 it in model-free preflight mode. Agentless also supports recorded-response runs
 from the record; Grinta's shared path refuses live execution while model access,
-budgets and observed container matching remain unresolved.
+budgets and model transport remain unresolved.
 
 Verified 25 October 2026: all **113 records** exported and their specification
 and native-report hashes checked. Rebuilding Actionlint and Numba with identical
@@ -97,7 +97,7 @@ schema, profiles and resource settings before executing them.
 Every record has `launch.authorized: false`. Model selection/access, total
 budgets, the pilot list, launcher integration and comparison enforcement remain
 separate work. Preflight consumption is implemented below; observed container
-matching and runtime enforcement remain outstanding.
+matching and runtime enforcement now have the controlled evidence below.
 
 ## Launcher consumption and paired preflight
 
@@ -145,8 +145,11 @@ The [paired evidence](../experiments/deepswe/shared_start_comparison_2026_10_25.
 records the exact implementation file hashes and both comparisons. There were
 21 passing Agentless checks and 12 passing Grinta launcher checks.
 
-This is **configuration and source agreement**, not proof of installed runtime
-equivalence. No containers or benchmark tests were run in this comparison.
-Grinta's Pier-installed dependencies, effective container protections and
-remaining edit restrictions still need an observed model-free rehearsal before
-claiming the complete comparison environment is matched.
+That initial preflight was configuration and source agreement. The subsequent
+[actual container rehearsal](history/shared-container-rehearsal-2026-10-25.md)
+matched the real Agentless and Pier containers after core-runtime installation,
+including their source bytes/modes, limits, network and protections. Grinta's
+native edits passed the controlled public test; unsupported source changes were
+rejected. This covers one controlled environment, with no model calls or
+benchmark-suite reruns. The prepared runtime remains an explicitly labelled
+diagnostic image until it is registered for the selected pilot tasks.

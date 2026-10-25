@@ -13,6 +13,7 @@ described in the linked guides.
 
 | Command | Purpose |
 | --- | --- |
+| [rehearse_shared_containers.py](rehearse_shared_containers.py) | Observe real Agentless and Pier containers with a prepared common runtime; exercise native Grinta edits without a model. |
 | [run_shared_deepswe_workflow.py](run_shared_deepswe_workflow.py) | Consume a shared task for preflight or a recorded Agentless run. |
 | [compare_shared_deepswe_starts.py](compare_shared_deepswe_starts.py) | Compare both real launcher preflights on independent pinned workspaces; no model calls. |
 | [export_deepswe_task_specs.py](export_deepswe_task_specs.py) | Export shared public DeepSWE task records and existing baseline evidence without Docker or model calls. See the [format guide](../docs/shared-deepswe-task-spec.md). |

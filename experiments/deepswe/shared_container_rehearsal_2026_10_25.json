@@ -1,0 +1,168 @@
+{
+  "date": "2026-10-25",
+  "scope": "Actionlint image; authored controlled source; actual Agentless Docker and Pier 0.3.1 Docker plus installed Grinta RuntimeExecutor",
+  "model_calls": 0,
+  "benchmark_tests_run": 0,
+  "readiness_changed": false,
+  "official_runtime_registration_changed": false,
+  "installed_grinta_revision": "7f8b43a0293c143e2ca6363697baa8185ad3fa34",
+  "prepared_core_runtime": {
+    "archive_blobs_and_modes_verified": true,
+    "codex_transport_install_complete": false,
+    "condition": "diagnostic common runtime image only; no readiness registration",
+    "grinta_commit": "7f8b43a0293c143e2ca6363697baa8185ad3fa34",
+    "model_calls": 0,
+    "parent_image_id": "sha256:522a6e93a31656d03cc79474dafc5542bb27109051914d5566d7d29789c2a1a6",
+    "prepared_image_id": "sha256:3537e0869975ce4e6d66101a4f9236e7e93c3c524b7ec961a1e62e4bbecbe81c",
+    "scope": "installed Grinta core runtime and parser assets; Codex transport remains deferred",
+    "status": "pass",
+    "task_fingerprint_unchanged": true
+  },
+  "parent_image_layers_verified": true,
+  "task_toolchain_unchanged": true,
+  "tool_versions": {
+    "curl": "curl 7.88.1 (x86_64-pc-linux-gnu) libcurl/7.88.1 OpenSSL/3.0.17 zlib/1.2.13 brotli/1.0.9 zstd/1.5.4 libidn2/2.3.3 libpsl/0.21.2 (+libidn2/2.3.3) libssh2/1.10.0 nghttp2/1.52.0 librtmp/2.3 OpenLDAP/2.5.13\nRelease-Date: 2023-02-20, security patched: 7.88.1-10+deb12u14\nProtocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtmp rtsp scp sftp smb smbs smtp smtps telnet tftp\nFeatures: alt-svc AsynchDNS brotli GSS-API HSTS HTTP2 HTTPS-proxy IDN IPv6 Kerberos Largefile libz NTLM NTLM_WB PSL SPNEGO SSL threadsafe TLS-SRP UnixSockets zstd",
+    "git": "git version 2.39.5",
+    "go": "go version go1.25.5 linux/amd64",
+    "node": "v24.12.0",
+    "npm": "11.6.2",
+    "python": "Python 3.12.12",
+    "uv": "uv 0.9.18"
+  },
+  "fingerprint_files": {
+    "before.json": "079e00a887a0d30145e6bf05317e7e923849092071fd92c39cc1975fb9249662",
+    "core-after.json": "079e00a887a0d30145e6bf05317e7e923849092071fd92c39cc1975fb9249662"
+  },
+  "source_archive_sha256": "b39bff55c9d0165fe3bd0dbbd745fea24544b0a472124922abe9c9f08d5e262a",
+  "source_archive_blobs_modes_verified_against_git": true,
+  "paired_result": {
+    "benchmark_tests_run": 0,
+    "condition": "runtime-supplemented controlled diagnostic; benchmark readiness unchanged",
+    "containers_match": true,
+    "controlled_public_check_run": true,
+    "grinta_executor": {
+      "binary_command_stopped_before_feedback": true,
+      "case_collision_rejected": true,
+      "chmod_rejected": true,
+      "controlled_public_test_passed": true,
+      "invalid_final_patch_rejected": true,
+      "native_file_edit_and_shell_create_delete_rename": true,
+      "new_executable_rejected": true,
+      "next_action_stopped": true,
+      "permitted_patch_exported": true,
+      "rename_executable_with_edit_allowed": true,
+      "symlink_rejected": true
+    },
+    "initial_task_probes_match": true,
+    "model_calls": 0,
+    "observed_agentless": {
+      "host": {
+        "CapDrop": [
+          "ALL"
+        ],
+        "ExtraHosts": null,
+        "Memory": 8589934592,
+        "MemorySwap": 8589934592,
+        "NanoCpus": 2000000000,
+        "NetworkMode": "none",
+        "PidsLimit": 2048,
+        "PortBindings": null,
+        "Privileged": false,
+        "ReadonlyRootfs": true,
+        "SecurityOpt": [
+          "no-new-privileges"
+        ],
+        "Tmpfs": {
+          "/tmp": "rw,exec,nosuid,nodev,size=4096m,mode=1777"
+        }
+      },
+      "host_binds": null,
+      "image_id": "sha256:3537e0869975ce4e6d66101a4f9236e7e93c3c524b7ec961a1e62e4bbecbe81c",
+      "mounts": [],
+      "user": "root",
+      "workdir": "/tmp"
+    },
+    "observed_pier": {
+      "host": {
+        "CapDrop": [
+          "ALL"
+        ],
+        "ExtraHosts": null,
+        "Memory": 8589934592,
+        "MemorySwap": 8589934592,
+        "NanoCpus": 2000000000,
+        "NetworkMode": "none",
+        "PidsLimit": 2048,
+        "PortBindings": null,
+        "Privileged": false,
+        "ReadonlyRootfs": true,
+        "SecurityOpt": [
+          "no-new-privileges"
+        ],
+        "Tmpfs": {
+          "/tmp": "rw,exec,nosuid,nodev,size=4096m,mode=1777"
+        }
+      },
+      "host_binds": null,
+      "image_id": "sha256:3537e0869975ce4e6d66101a4f9236e7e93c3c524b7ec961a1e62e4bbecbe81c",
+      "mounts": [],
+      "user": "root",
+      "workdir": "/tmp"
+    },
+    "prepared_runtime_image": "sha256:3537e0869975ce4e6d66101a4f9236e7e93c3c524b7ec961a1e62e4bbecbe81c",
+    "source_spec_sha256": "65b98f3c7db2614dc6d0a5758ee2b179c814a238dff38914eba69e32b48c3cd9",
+    "task_id": "actionlint-action-pinning-lint"
+  },
+  "setup_blockers_retained": [
+    {
+      "container": "grinta-runtime-rehearsal-adab6e2e8929",
+      "error": "TimeoutExpired: Command '['docker', 'exec', 'grinta-runtime-rehearsal-adab6e2e8929', '/bin/bash', '/tmp/grinta-install.sh']' timed out after 896.2649999999994 seconds",
+      "grinta_commit": "7f8b43a0293c143e2ca6363697baa8185ad3fa34",
+      "model_calls": 0,
+      "parent_image_id": "sha256:522a6e93a31656d03cc79474dafc5542bb27109051914d5566d7d29789c2a1a6",
+      "seconds": 979.9,
+      "setup_network": "bridge",
+      "status": "blocked",
+      "task_id": "actionlint-action-pinning-lint"
+    },
+    {
+      "cache_image": null,
+      "container": "grinta-runtime-rehearsal-71526e040a73",
+      "error": "TimeoutExpired: Command '['docker', 'exec', 'grinta-runtime-rehearsal-71526e040a73', '/bin/bash', '/tmp/grinta-install.sh']' timed out after 352.984000000004 seconds",
+      "grinta_commit": "7f8b43a0293c143e2ca6363697baa8185ad3fa34",
+      "model_calls": 0,
+      "parent_image_id": "sha256:522a6e93a31656d03cc79474dafc5542bb27109051914d5566d7d29789c2a1a6",
+      "seconds": 601.7,
+      "setup_network": "bridge",
+      "source_delivery": {
+        "commit": "7f8b43a0293c143e2ca6363697baa8185ad3fa34",
+        "mode": "local Git archive",
+        "sha256": "b39bff55c9d0165fe3bd0dbbd745fea24544b0a472124922abe9c9f08d5e262a"
+      },
+      "status": "blocked",
+      "task_id": "actionlint-action-pinning-lint"
+    }
+  ],
+  "limits": [
+    "One controlled diagnostic does not establish all 113 task environments.",
+    "Installed core revision is 7f8b43a; the later starting-path collision check has separate host coverage.",
+    "Source enforcement checks completed actions; temporary changes restored inside one command are allowed.",
+    "Codex transport download timed out; model access/integration remains deferred."
+  ],
+  "host_tests": {
+    "initial_focused_passed": 24,
+    "windows_skipped_posix_checks": 4,
+    "additional_path_collision_test_passed": true,
+    "additional_numba_profile_test_passed": true,
+    "additional_gitlink_pointer_test_passed": true,
+    "distinct_passing_checks": 27
+  },
+  "grinta_harness_files_sha256": {
+    "evaluation/deepswe/shared_environment.py": "f03337ea09ae5f167815af0096ed2a65c7265a826b19c88893f55dff3ef1a83d",
+    "evaluation/deepswe/install_recipe.py": "b96d4255525327939f3cff1a63d7140f1e972d6503cb2aad78a98dd690d9602d",
+    "evaluation/deepswe/rehearse_shared_runtime.py": "7ee438f0ca1fdb215847656494913043b26190a94f9ef89dc84d87374f9278c8",
+    "backend/execution/comparison_edit_guard.py": "832e0b8143faf0007f7fe8d3a0e4dd016a96ece3ac00ee3ee9cb5140752ef5d8"
+  },
+  "agentless_rehearsal_sha256": "2f87003ececb58140dbea0fa9bc0360f712727197d13e373e5d166dd37ae7513",
+  "linux_diagnostic_resolved_windows_skips": true
+}
