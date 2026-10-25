@@ -21,6 +21,11 @@ EVIDENCE = ROOT / "experiments/deepswe/shared_container_rehearsal_2026_10_25.jso
 def select_tasks(records, proposal):
     """Select by public eligibility and a fixed hash, never by model outcomes."""
     selected = []
+    exposed_repositories = {
+        records[task_id]["identity"]["repository_url"]
+        for task_id in proposal["known_exposures"]
+        if task_id in records
+    }
     for language in proposal["languages"]:
         eligible = [
             r
@@ -28,6 +33,12 @@ def select_tasks(records, proposal):
             if r["identity"]["language"] == language
             and r["identity"]["task_id"] not in proposal["known_exposures"]
             and r["identity"]["task_id"] != proposal["engineering_control"]
+            and (
+                not proposal["selection"].get(
+                    "exclude_known_exposed_repositories", False
+                )
+                or r["identity"]["repository_url"] not in exposed_repositories
+            )
             and r["public_validation"]["baseline"]["passing_ids"]
             and (
                 not proposal["selection"]["require_published_image"]
@@ -39,7 +50,7 @@ def select_tasks(records, proposal):
         if not eligible:
             raise ValueError(f"no eligible proposed task for {language}")
 
-        def rank(record):
+        def rank(record, language=language):
             text = "\0".join(
                 (proposal["selection"]["seed"], language, record["identity"]["task_id"])
             )
@@ -69,6 +80,47 @@ def validate_runtime(control, evidence):
     if not re.fullmatch(r"sha256:[0-9a-f]{64}", runtime["prepared_image_id"]):
         raise ValueError("runtime image must be immutable")
     return runtime
+
+
+def validate_pilot_runtimes(records, selected, evidence):
+    bindings = {}
+    for item in evidence:
+        task_id = item["task_id"]
+        if task_id not in selected or task_id in bindings:
+            raise ValueError("unexpected or duplicate pilot runtime evidence")
+        record = records[task_id]
+        pair = item.get("paired_result", {})
+        if (
+            item.get("status") != "pass"
+            or item.get("source_spec_sha256") != record["spec_sha256"]
+            or item.get("parent_image_id")
+            != record["environment"]["effective_image_id"]
+            or not item.get("task_toolchain_unchanged")
+            or not item.get("parent_image_layers_verified")
+            or not item.get("offline_language_parser_and_executor_import")
+            or not pair.get("containers_match")
+            or not pair.get("initial_task_probes_match")
+            or pair.get("task_id") != task_id
+            or pair.get("source_spec_sha256") != record["spec_sha256"]
+            or pair.get("prepared_runtime_image") != item.get("prepared_runtime_image")
+            or not pair.get("grinta_executor")
+            or not all(pair["grinta_executor"].values())
+            or not re.fullmatch(
+                r"sha256:[0-9a-f]{64}", item.get("prepared_runtime_image", "")
+            )
+        ):
+            raise ValueError("pilot runtime evidence does not verify its task")
+        bindings[task_id] = {
+            "parent_image_id": item["parent_image_id"],
+            "prepared_image_id": item["prepared_runtime_image"],
+            "grinta_commit": item["grinta_commit"],
+            "codex_transport_install_complete": item[
+                "codex_transport_install_complete"
+            ],
+        }
+    if set(bindings) != set(selected):
+        raise ValueError("pilot runtime evidence must cover the selected tasks")
+    return bindings
 
 
 def implementation_provenance(grinta_root):
@@ -158,10 +210,22 @@ def verify_bundle(directory):
         records[control_id],
         json.loads((directory / "evidence/container-rehearsal.json").read_bytes()),
     )
-    if set(runtime["task_bindings"]) != {control_id}:
+    pilot_bindings = {}
+    review_file = directory / "evidence/pilot-runtimes.json"
+    if review_file.exists():
+        pilot_bindings = validate_pilot_runtimes(
+            records,
+            [i["task_id"] for i in manifest["tasks"] if i["role"] == "proposed_pilot"],
+            json.loads(review_file.read_bytes()),
+        )
+    if set(runtime["task_bindings"]) != {control_id, *pilot_bindings}:
         raise ValueError(
             "verified control image must not be assigned to unverified tasks"
         )
+    if any(
+        runtime["task_bindings"][key] != value for key, value in pilot_bindings.items()
+    ):
+        raise ValueError("pilot runtime binding differs from observed evidence")
     if (
         runtime["task_bindings"][control_id]["prepared_image_id"]
         != manifest["verified_runtime_image"]
@@ -194,7 +258,14 @@ def verify_bundle(directory):
 
 
 def build_bundle(
-    records_root, grinta_root, output, proposal, evidence, *, inspect_image=False
+    records_root,
+    grinta_root,
+    output,
+    proposal,
+    evidence,
+    *,
+    inspect_image=False,
+    pilot_evidence=None,
 ):
     if output.exists():
         raise ValueError("bundle output must be a new directory")
@@ -223,8 +294,15 @@ def build_bundle(
     selected = select_tasks(records, proposal)
     control_id = proposal["engineering_control"]
     runtime = validate_runtime(records[control_id], evidence)
+    pilot_bindings = (
+        validate_pilot_runtimes(records, selected, pilot_evidence)
+        if pilot_evidence is not None
+        else {}
+    )
     if inspect_image:
         check_image(runtime["prepared_image_id"])
+        for binding in pilot_bindings.values():
+            check_image(binding["prepared_image_id"])
     output.mkdir(parents=True)
 
     def write(name, data):
@@ -250,7 +328,11 @@ def build_bundle(
                 "spec_sha256": record["spec_sha256"],
                 "runtime_status": "controlled_rehearsal_verified"
                 if role == "engineering_control"
-                else "pending",
+                else (
+                    "controlled_rehearsal_verified"
+                    if task_id in pilot_bindings
+                    else "pending"
+                ),
                 "baseline_evidence": record["public_validation"]["baseline"][
                     "current_command_evidence"
                 ],
@@ -258,6 +340,8 @@ def build_bundle(
         )
     write("proposal.json", proposal)
     write("evidence/container-rehearsal.json", evidence)
+    if pilot_evidence is not None:
+        write("evidence/pilot-runtimes.json", pilot_evidence)
     write(
         "runtime.json",
         {
@@ -272,7 +356,8 @@ def build_bundle(
                         "grinta_commit",
                         "codex_transport_install_complete",
                     )
-                }
+                },
+                **pilot_bindings,
             },
             "local_image_inspected": inspect_image,
             "other_tasks": "Require separately prepared runtime images and observed matching; never reuse the control image blindly.",
@@ -335,8 +420,12 @@ def build_bundle(
         "This bundle packages public task records, public baseline reports, comparison contracts and existing evidence.\n"
         "The proposal contains one task per language. Selection is provisional; known exposed tasks are excluded.\n"
         "Actionlint is an exposed engineering control, not an unseen research result.\n\n"
-        "Only the control has a verified prepared core-runtime image. The other runtime images remain pending.\n"
-        "Docker images and source repositories are separate inputs identified by immutable pins.\n"
+        + (
+            "All five proposed tasks have separate verified core-runtime images. These checks use a controlled fixture, not full task baselines.\n"
+            if pilot_bindings
+            else "Only the control has a verified prepared core-runtime image. The other runtime images remain pending.\n"
+        )
+        + "Docker images and source repositories are separate inputs identified by immutable pins.\n"
         "Installed Grinta code is pinned separately from the current launcher revisions.\n\n"
         "Verify integrity from Agentless-ML: python tools/package_deepswe_pilot.py verify --bundle <this-folder>\n"
         "For the model-free control, use tools/rehearse_shared_containers.py with the control task.json,\n"
@@ -372,6 +461,8 @@ def main():
     build.add_argument("--records-root", type=Path, required=True)
     build.add_argument("--grinta-root", type=Path, required=True)
     build.add_argument("--output", type=Path, required=True)
+    build.add_argument("--proposal", type=Path, default=PROPOSAL)
+    build.add_argument("--pilot-runtime-evidence", type=Path)
     build.add_argument("--check-local-image", action="store_true")
     build.add_argument("--zip", type=Path)
     verify = commands.add_parser("verify")
@@ -384,9 +475,14 @@ def main():
         args.records_root,
         args.grinta_root,
         args.output,
-        json.loads(PROPOSAL.read_bytes()),
+        json.loads(args.proposal.read_bytes()),
         json.loads(EVIDENCE.read_bytes()),
         inspect_image=args.check_local_image,
+        pilot_evidence=(
+            json.loads(args.pilot_runtime_evidence.read_bytes())
+            if args.pilot_runtime_evidence
+            else None
+        ),
     )
     if args.zip:
         create_zip(args.output, args.zip)

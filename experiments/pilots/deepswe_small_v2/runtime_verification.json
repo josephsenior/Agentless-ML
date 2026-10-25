@@ -1,0 +1,2655 @@
+[
+  {
+    "after_fingerprint_sha256": "25173edd862625e6f7f4c67edd943f7398a45c5ae453d5848d0b620fe341e481",
+    "before_fingerprint_sha256": "25173edd862625e6f7f4c67edd943f7398a45c5ae453d5848d0b620fe341e481",
+    "benchmark_tests_run": 0,
+    "codex_transport_install_complete": false,
+    "dockerfile": "FROM agentless-ml/pilot-input:3ed6b906c1d458538a2ee8005224c0c9c32ff0775038a88feb1d3b7e68eea7db AS core\nFROM agentless-ml/pilot-input:e0c8b4e4044d5831693b4f6a6da483b255a889b71376574fba9e3c93d36ceb7c\nCOPY --from=core /root/.local/share/uv/tools/grinta /root/.local/share/uv/tools/grinta\nCOPY --from=core /root/.local/bin/grinta /root/.local/bin/grinta\nCOPY --from=core /root/.local/bin/grinta-deepswe /root/.local/bin/grinta-deepswe\nCOPY --from=core /root/.cache/tree-sitter-language-pack /root/.cache/tree-sitter-language-pack\n",
+    "grinta_commit": "7f8b43a0293c143e2ca6363697baa8185ad3fa34",
+    "launcher_preflight": {
+      "agentless_revision": "6535cb881f5080daa158799b9c711056b7aaeb07+dirty",
+      "benchmark_tests_run": 0,
+      "capability_enforcement_verified": false,
+      "compared_sections": [
+        "edit_contract",
+        "environment",
+        "identity",
+        "problem",
+        "public_validation",
+        "timing"
+      ],
+      "configured_starting_conditions_match": true,
+      "grinta_revision": "a330e9664a84406b4a5a6740c3320563d9fea903",
+      "independent_clean_workspaces_verified": true,
+      "model_calls": 0,
+      "observed_container_match": false,
+      "scope": "real launcher preflights; configured inputs and prepared source, not installed runtime equivalence",
+      "spec_sha256": "e0f68f720fae7a6d0d9204d1db80a6d4e9271bd2fe57926a1abb2d8fbeff944e",
+      "starting_conditions_sha256": "7764ea22cb231fbd6fd217a62492ec68d4a50a6371a0f516f363c1de2c13d1d6",
+      "task_id": "aiomonitor-task-snapshots-diff"
+    },
+    "model_calls": 0,
+    "offline_language_parser_and_executor_import": true,
+    "paired_result": {
+      "benchmark_tests_run": 0,
+      "condition": "runtime-supplemented controlled diagnostic; benchmark readiness unchanged",
+      "containers_match": true,
+      "controlled_public_check_run": true,
+      "grinta_executor": {
+        "binary_command_stopped_before_feedback": true,
+        "case_collision_rejected": true,
+        "chmod_rejected": true,
+        "controlled_public_test_passed": true,
+        "invalid_final_patch_rejected": true,
+        "native_file_edit_and_shell_create_delete_rename": true,
+        "new_executable_rejected": true,
+        "next_action_stopped": true,
+        "permitted_patch_exported": true,
+        "rename_executable_with_edit_allowed": true,
+        "symlink_rejected": true
+      },
+      "initial_task_probes_match": true,
+      "model_calls": 0,
+      "observed_agentless": {
+        "host": {
+          "CapDrop": [
+            "ALL"
+          ],
+          "ExtraHosts": null,
+          "Memory": 8589934592,
+          "MemorySwap": 8589934592,
+          "NanoCpus": 2000000000,
+          "NetworkMode": "none",
+          "PidsLimit": 2048,
+          "PortBindings": null,
+          "Privileged": false,
+          "ReadonlyRootfs": true,
+          "SecurityOpt": [
+            "no-new-privileges"
+          ],
+          "Tmpfs": {
+            "/tmp": "rw,exec,nosuid,nodev,size=4096m,mode=1777"
+          }
+        },
+        "host_binds": null,
+        "image_id": "sha256:b232fe4c75a62b71aa223a3e638d5eb17ad74340f9f723fced3e308841f90a77",
+        "mounts": [],
+        "user": "root",
+        "workdir": "/tmp"
+      },
+      "observed_pier": {
+        "host": {
+          "CapDrop": [
+            "ALL"
+          ],
+          "ExtraHosts": null,
+          "Memory": 8589934592,
+          "MemorySwap": 8589934592,
+          "NanoCpus": 2000000000,
+          "NetworkMode": "none",
+          "PidsLimit": 2048,
+          "PortBindings": null,
+          "Privileged": false,
+          "ReadonlyRootfs": true,
+          "SecurityOpt": [
+            "no-new-privileges"
+          ],
+          "Tmpfs": {
+            "/tmp": "rw,exec,nosuid,nodev,size=4096m,mode=1777"
+          }
+        },
+        "host_binds": null,
+        "image_id": "sha256:b232fe4c75a62b71aa223a3e638d5eb17ad74340f9f723fced3e308841f90a77",
+        "mounts": [],
+        "user": "root",
+        "workdir": "/tmp"
+      },
+      "prepared_runtime_image": "sha256:b232fe4c75a62b71aa223a3e638d5eb17ad74340f9f723fced3e308841f90a77",
+      "source_spec_sha256": "e0f68f720fae7a6d0d9204d1db80a6d4e9271bd2fe57926a1abb2d8fbeff944e",
+      "task_id": "aiomonitor-task-snapshots-diff"
+    },
+    "parent_image_id": "sha256:e0c8b4e4044d5831693b4f6a6da483b255a889b71376574fba9e3c93d36ceb7c",
+    "parent_image_layers_verified": true,
+    "payload_image_id": "sha256:3ed6b906c1d458538a2ee8005224c0c9c32ff0775038a88feb1d3b7e68eea7db",
+    "prepared_runtime_image": "sha256:b232fe4c75a62b71aa223a3e638d5eb17ad74340f9f723fced3e308841f90a77",
+    "retained_artifact_directory": "artifacts/deepswe-small-v2-runtimes-local/aiomonitor-task-snapshots-diff",
+    "scope": "core runtime and controlled fixture; not a task baseline",
+    "source_spec_sha256": "e0f68f720fae7a6d0d9204d1db80a6d4e9271bd2fe57926a1abb2d8fbeff944e",
+    "status": "pass",
+    "task_id": "aiomonitor-task-snapshots-diff",
+    "task_toolchain_fingerprint": {
+      "environment": {
+        "GOFLAGS": null,
+        "GOMODCACHE": null,
+        "GOPATH": null,
+        "HOME": "/root",
+        "NODE_PATH": null,
+        "PATH": "/root/.cargo/bin:/root/.local/bin:/root/.rye/shims:/root/.bun/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+        "PYTHONPATH": null
+      },
+      "python_packages": [
+        [
+          "CacheControl",
+          "0.14.4"
+        ],
+        [
+          "Jinja2",
+          "3.1.6"
+        ],
+        [
+          "MarkupSafe",
+          "3.0.3"
+        ],
+        [
+          "PyYAML",
+          "6.0.3"
+        ],
+        [
+          "Pygments",
+          "2.19.2"
+        ],
+        [
+          "RapidFuzz",
+          "3.14.3"
+        ],
+        [
+          "SecretStorage",
+          "3.5.0"
+        ],
+        [
+          "aioconsole",
+          "0.8.1"
+        ],
+        [
+          "aiohappyeyeballs",
+          "2.6.2"
+        ],
+        [
+          "aiohttp",
+          "3.10.10"
+        ],
+        [
+          "aiomonitor",
+          "0.7.1"
+        ],
+        [
+          "aiomonitor",
+          "0.7.1"
+        ],
+        [
+          "aiosignal",
+          "1.4.0"
+        ],
+        [
+          "aiotools",
+          "1.7.0"
+        ],
+        [
+          "annotated-types",
+          "0.7.0"
+        ],
+        [
+          "anyio",
+          "4.12.0"
+        ],
+        [
+          "anysqlite",
+          "0.0.5"
+        ],
+        [
+          "argcomplete",
+          "3.6.3"
+        ],
+        [
+          "asttokens",
+          "3.0.1"
+        ],
+        [
+          "attrs",
+          "24.2.0"
+        ],
+        [
+          "blinker",
+          "1.9.0"
+        ],
+        [
+          "build",
+          "1.2.2.post1"
+        ],
+        [
+          "certifi",
+          "2025.11.12"
+        ],
+        [
+          "cffi",
+          "2.0.0"
+        ],
+        [
+          "cfgv",
+          "3.5.0"
+        ],
+        [
+          "charset-normalizer",
+          "3.4.4"
+        ],
+        [
+          "cleo",
+          "2.1.0"
+        ],
+        [
+          "click",
+          "8.3.1"
+        ],
+        [
+          "coverage",
+          "7.14.1"
+        ],
+        [
+          "crashtest",
+          "0.4.1"
+        ],
+        [
+          "cryptography",
+          "46.0.3"
+        ],
+        [
+          "decorator",
+          "5.3.1"
+        ],
+        [
+          "dep-logic",
+          "0.5.2"
+        ],
+        [
+          "distlib",
+          "0.4.0"
+        ],
+        [
+          "docutils",
+          "0.21.2"
+        ],
+        [
+          "dulwich",
+          "0.21.7"
+        ],
+        [
+          "executing",
+          "2.2.1"
+        ],
+        [
+          "fastjsonschema",
+          "2.21.2"
+        ],
+        [
+          "filelock",
+          "3.20.1"
+        ],
+        [
+          "findpython",
+          "0.7.1"
+        ],
+        [
+          "flit_core",
+          "3.12.0"
+        ],
+        [
+          "frozenlist",
+          "1.8.0"
+        ],
+        [
+          "h11",
+          "0.16.0"
+        ],
+        [
+          "hatchling",
+          "1.28.0"
+        ],
+        [
+          "hishel",
+          "0.1.5"
+        ],
+        [
+          "httpcore",
+          "1.0.9"
+        ],
+        [
+          "httpx",
+          "0.28.1"
+        ],
+        [
+          "id",
+          "1.5.0"
+        ],
+        [
+          "identify",
+          "2.6.19"
+        ],
+        [
+          "idna",
+          "3.11"
+        ],
+        [
+          "iniconfig",
+          "2.3.0"
+        ],
+        [
+          "installer",
+          "0.7.0"
+        ],
+        [
+          "ipdb",
+          "0.13.13"
+        ],
+        [
+          "ipython",
+          "9.14.1"
+        ],
+        [
+          "ipython_pygments_lexers",
+          "1.1.1"
+        ],
+        [
+          "janus",
+          "2.0.0"
+        ],
+        [
+          "jaraco.classes",
+          "3.4.0"
+        ],
+        [
+          "jedi",
+          "0.20.0"
+        ],
+        [
+          "jeepney",
+          "0.9.0"
+        ],
+        [
+          "keyring",
+          "24.3.1"
+        ],
+        [
+          "markdown-it-py",
+          "4.0.0"
+        ],
+        [
+          "matplotlib-inline",
+          "0.2.2"
+        ],
+        [
+          "mdurl",
+          "0.1.2"
+        ],
+        [
+          "more-itertools",
+          "10.8.0"
+        ],
+        [
+          "msgpack",
+          "1.1.2"
+        ],
+        [
+          "multidict",
+          "6.7.1"
+        ],
+        [
+          "mypy",
+          "1.13.0"
+        ],
+        [
+          "mypy_extensions",
+          "1.1.0"
+        ],
+        [
+          "nodeenv",
+          "1.10.0"
+        ],
+        [
+          "packaging",
+          "25.0"
+        ],
+        [
+          "parso",
+          "0.8.7"
+        ],
+        [
+          "pathspec",
+          "0.12.1"
+        ],
+        [
+          "pbs-installer",
+          "2025.12.17"
+        ],
+        [
+          "pdm",
+          "2.26.2"
+        ],
+        [
+          "pexpect",
+          "4.9.0"
+        ],
+        [
+          "pip",
+          "25.3"
+        ],
+        [
+          "pipx",
+          "1.8.0"
+        ],
+        [
+          "pkginfo",
+          "1.12.1.2"
+        ],
+        [
+          "platformdirs",
+          "4.5.1"
+        ],
+        [
+          "pluggy",
+          "1.6.0"
+        ],
+        [
+          "poetry",
+          "1.8.2"
+        ],
+        [
+          "poetry-core",
+          "1.9.0"
+        ],
+        [
+          "poetry-plugin-export",
+          "1.8.0"
+        ],
+        [
+          "pre-commit",
+          "3.5.0"
+        ],
+        [
+          "prompt_toolkit",
+          "3.0.52"
+        ],
+        [
+          "propcache",
+          "0.5.2"
+        ],
+        [
+          "psutil",
+          "7.2.2"
+        ],
+        [
+          "ptyprocess",
+          "0.7.0"
+        ],
+        [
+          "pure_eval",
+          "0.2.3"
+        ],
+        [
+          "pycparser",
+          "2.23"
+        ],
+        [
+          "pydantic",
+          "2.13.4"
+        ],
+        [
+          "pydantic_core",
+          "2.46.4"
+        ],
+        [
+          "pyproject_hooks",
+          "1.2.0"
+        ],
+        [
+          "pytest",
+          "8.3.3"
+        ],
+        [
+          "pytest-aiohttp",
+          "1.0.5"
+        ],
+        [
+          "pytest-asyncio",
+          "0.24.0"
+        ],
+        [
+          "pytest-cov",
+          "4.0.0"
+        ],
+        [
+          "pytest-sugar",
+          "0.9.7"
+        ],
+        [
+          "python-dotenv",
+          "1.2.1"
+        ],
+        [
+          "requests",
+          "2.32.5"
+        ],
+        [
+          "requests-toolbelt",
+          "1.0.0"
+        ],
+        [
+          "resolvelib",
+          "1.2.1"
+        ],
+        [
+          "rich",
+          "14.2.0"
+        ],
+        [
+          "ruff",
+          "0.7.2"
+        ],
+        [
+          "setuptools",
+          "80.9.0"
+        ],
+        [
+          "setuptools-scm",
+          "9.2.2"
+        ],
+        [
+          "shellingham",
+          "1.5.4"
+        ],
+        [
+          "socksio",
+          "1.0.0"
+        ],
+        [
+          "stack-data",
+          "0.6.3"
+        ],
+        [
+          "telnetlib3",
+          "2.0.4"
+        ],
+        [
+          "termcolor",
+          "3.3.0"
+        ],
+        [
+          "terminaltables",
+          "3.1.10"
+        ],
+        [
+          "tomlkit",
+          "0.13.3"
+        ],
+        [
+          "towncrier",
+          "24.8.0"
+        ],
+        [
+          "trafaret",
+          "2.1.1"
+        ],
+        [
+          "traitlets",
+          "5.15.1"
+        ],
+        [
+          "trove-classifiers",
+          "2025.12.1.14"
+        ],
+        [
+          "truststore",
+          "0.10.4"
+        ],
+        [
+          "types-requests",
+          "2.33.0.20260518"
+        ],
+        [
+          "typing-inspection",
+          "0.4.2"
+        ],
+        [
+          "typing_extensions",
+          "4.15.0"
+        ],
+        [
+          "unearth",
+          "0.18.1"
+        ],
+        [
+          "urllib3",
+          "2.6.2"
+        ],
+        [
+          "userpath",
+          "1.9.2"
+        ],
+        [
+          "uvloop",
+          "0.21.0"
+        ],
+        [
+          "virtualenv",
+          "20.35.4"
+        ],
+        [
+          "wcwidth",
+          "0.8.1"
+        ],
+        [
+          "wheel",
+          "0.45.1"
+        ],
+        [
+          "yarl",
+          "1.24.2"
+        ]
+      ],
+      "system_packages_sha256": "5ef346fc01a76f1d29366102daee86e490abac1b21bcd8577de05427da47b290",
+      "tools": {
+        "cargo": {
+          "path": "/root/.cargo/bin/cargo",
+          "resolved": "/root/.cargo/bin/rustup",
+          "sha256": "20a06e644b0d9bd2fbdbfd52d42540bdde820ea7df86e92e533c073da0cdd43c",
+          "version": "cargo 1.92.0 (344c4567c 2025-10-21)"
+        },
+        "curl": {
+          "path": "/usr/bin/curl",
+          "resolved": "/usr/bin/curl",
+          "sha256": "58824afa640f512e07e895c0f2d1e1fe2c3fd1456acab689b6e4c1c75cef2593",
+          "version": "curl 7.88.1 (x86_64-pc-linux-gnu) libcurl/7.88.1 OpenSSL/3.0.17 zlib/1.2.13 brotli/1.0.9 zstd/1.5.4 libidn2/2.3.3 libpsl/0.21.2 (+libidn2/2.3.3) libssh2/1.10.0 nghttp2/1.52.0 librtmp/2.3 OpenLDAP/2.5.13\nRelease-Date: 2023-02-20, security patched: 7.88.1-10+deb12u14\nProtocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtmp rtsp scp sftp smb smbs smtp smtps telnet tftp\nFeatures: alt-svc AsynchDNS brotli GSS-API HSTS HTTP2 HTTPS-proxy IDN IPv6 Kerberos Largefile libz NTLM NTLM_WB PSL SPNEGO SSL threadsafe TLS-SRP UnixSockets zstd"
+        },
+        "git": {
+          "path": "/usr/bin/git",
+          "resolved": "/usr/bin/git",
+          "sha256": "00c84136d8294294580daa32f25b3e83ddb8341e9b5b70722e4c9a973ba5f749",
+          "version": "git version 2.39.5"
+        },
+        "go": {
+          "path": "/usr/local/bin/go",
+          "resolved": "/usr/local/go/bin/go",
+          "sha256": "d29b19f04e57fa2f35d4725a8743b663289ac29832128a235c4a3f76f885b150",
+          "version": "go version go1.25.5 linux/amd64"
+        },
+        "node": {
+          "path": "/usr/bin/node",
+          "resolved": "/usr/bin/node",
+          "sha256": "16143bdaa79716e871d3d9b2f50ce680bca293eba7f0c3fc1d004ed2258fc839",
+          "version": "v24.12.0"
+        },
+        "npm": {
+          "path": "/usr/bin/npm",
+          "resolved": "/usr/lib/node_modules/npm/bin/npm-cli.js",
+          "sha256": "8e5f6f3429f8cdbe693cdc29904e9d5a7b127a494bd15c804bd54c7403bfcbe7",
+          "version": "11.6.2"
+        },
+        "pnpm": {
+          "path": "/usr/bin/pnpm",
+          "resolved": "/usr/lib/node_modules/pnpm/bin/pnpm.cjs",
+          "sha256": "b276da51dc8ca5b0d3ee3371695b50fc8b3244b281b091c63a3f082a88dadeb9",
+          "version": "10.26.1"
+        },
+        "python": {
+          "path": "/usr/local/bin/python",
+          "resolved": "/usr/local/bin/python3.12",
+          "sha256": "4dbf3143240288fb2170257ffaa7bd030cdda5d2703d1f5f30b627042267e2e3",
+          "version": "Python 3.12.12"
+        },
+        "rustc": {
+          "path": "/root/.cargo/bin/rustc",
+          "resolved": "/root/.cargo/bin/rustup",
+          "sha256": "20a06e644b0d9bd2fbdbfd52d42540bdde820ea7df86e92e533c073da0cdd43c",
+          "version": "rustc 1.92.0 (ded5c06cf 2025-12-08)"
+        },
+        "uv": {
+          "path": "/root/.local/bin/uv",
+          "resolved": "/root/.local/bin/uv",
+          "sha256": "7f73d66b9767a281c2cae604b7cd0b6eaa1f0dda5ae28b9067e6de745d9593eb",
+          "version": "uv 0.9.18"
+        }
+      }
+    },
+    "task_toolchain_unchanged": true,
+    "verified_on": "2026-10-25"
+  },
+  {
+    "after_fingerprint_sha256": "ccd72f92e809970c71d7faa8309fa5f0b617d70dc5a9ad3eb792d2a2f41f6df4",
+    "before_fingerprint_sha256": "ccd72f92e809970c71d7faa8309fa5f0b617d70dc5a9ad3eb792d2a2f41f6df4",
+    "benchmark_tests_run": 0,
+    "codex_transport_install_complete": false,
+    "dockerfile": "FROM agentless-ml/pilot-input:3ed6b906c1d458538a2ee8005224c0c9c32ff0775038a88feb1d3b7e68eea7db AS core\nFROM agentless-ml/pilot-input:b063f2d927a8b3d71db24c4ec198a0d05644d3ecbe96289d8b2b2bdbecaa72bd\nCOPY --from=core /root/.local/share/uv/tools/grinta /root/.local/share/uv/tools/grinta\nCOPY --from=core /root/.local/bin/grinta /root/.local/bin/grinta\nCOPY --from=core /root/.local/bin/grinta-deepswe /root/.local/bin/grinta-deepswe\nCOPY --from=core /root/.cache/tree-sitter-language-pack /root/.cache/tree-sitter-language-pack\n",
+    "grinta_commit": "7f8b43a0293c143e2ca6363697baa8185ad3fa34",
+    "launcher_preflight": {
+      "agentless_revision": "6535cb881f5080daa158799b9c711056b7aaeb07+dirty",
+      "benchmark_tests_run": 0,
+      "capability_enforcement_verified": false,
+      "compared_sections": [
+        "edit_contract",
+        "environment",
+        "identity",
+        "problem",
+        "public_validation",
+        "timing"
+      ],
+      "configured_starting_conditions_match": true,
+      "grinta_revision": "a330e9664a84406b4a5a6740c3320563d9fea903",
+      "independent_clean_workspaces_verified": true,
+      "model_calls": 0,
+      "observed_container_match": false,
+      "scope": "real launcher preflights; configured inputs and prepared source, not installed runtime equivalence",
+      "spec_sha256": "aca85479ba91910c5d2b217a40003b424d5dea9ed3a6ef5fad42d52db430a43b",
+      "starting_conditions_sha256": "8f563aa7add364b4ea0365b82a2b7f22781a48bcd08bccada3b4723b6dd57cdf",
+      "task_id": "pebble-durability-wait-apis"
+    },
+    "model_calls": 0,
+    "offline_language_parser_and_executor_import": true,
+    "paired_result": {
+      "benchmark_tests_run": 0,
+      "condition": "runtime-supplemented controlled diagnostic; benchmark readiness unchanged",
+      "containers_match": true,
+      "controlled_public_check_run": true,
+      "grinta_executor": {
+        "binary_command_stopped_before_feedback": true,
+        "case_collision_rejected": true,
+        "chmod_rejected": true,
+        "controlled_public_test_passed": true,
+        "invalid_final_patch_rejected": true,
+        "native_file_edit_and_shell_create_delete_rename": true,
+        "new_executable_rejected": true,
+        "next_action_stopped": true,
+        "permitted_patch_exported": true,
+        "rename_executable_with_edit_allowed": true,
+        "symlink_rejected": true
+      },
+      "initial_task_probes_match": true,
+      "model_calls": 0,
+      "observed_agentless": {
+        "host": {
+          "CapDrop": [
+            "ALL"
+          ],
+          "ExtraHosts": null,
+          "Memory": 8589934592,
+          "MemorySwap": 8589934592,
+          "NanoCpus": 2000000000,
+          "NetworkMode": "none",
+          "PidsLimit": 2048,
+          "PortBindings": null,
+          "Privileged": false,
+          "ReadonlyRootfs": true,
+          "SecurityOpt": [
+            "no-new-privileges"
+          ],
+          "Tmpfs": {
+            "/tmp": "rw,exec,nosuid,nodev,size=4096m,mode=1777"
+          }
+        },
+        "host_binds": null,
+        "image_id": "sha256:943c183255896a35375f1449732578a0e49a47544d0ee4cf11b3b7401fc41832",
+        "mounts": [],
+        "user": "root",
+        "workdir": "/tmp"
+      },
+      "observed_pier": {
+        "host": {
+          "CapDrop": [
+            "ALL"
+          ],
+          "ExtraHosts": null,
+          "Memory": 8589934592,
+          "MemorySwap": 8589934592,
+          "NanoCpus": 2000000000,
+          "NetworkMode": "none",
+          "PidsLimit": 2048,
+          "PortBindings": null,
+          "Privileged": false,
+          "ReadonlyRootfs": true,
+          "SecurityOpt": [
+            "no-new-privileges"
+          ],
+          "Tmpfs": {
+            "/tmp": "rw,exec,nosuid,nodev,size=4096m,mode=1777"
+          }
+        },
+        "host_binds": null,
+        "image_id": "sha256:943c183255896a35375f1449732578a0e49a47544d0ee4cf11b3b7401fc41832",
+        "mounts": [],
+        "user": "root",
+        "workdir": "/tmp"
+      },
+      "prepared_runtime_image": "sha256:943c183255896a35375f1449732578a0e49a47544d0ee4cf11b3b7401fc41832",
+      "source_spec_sha256": "aca85479ba91910c5d2b217a40003b424d5dea9ed3a6ef5fad42d52db430a43b",
+      "task_id": "pebble-durability-wait-apis"
+    },
+    "parent_image_id": "sha256:b063f2d927a8b3d71db24c4ec198a0d05644d3ecbe96289d8b2b2bdbecaa72bd",
+    "parent_image_layers_verified": true,
+    "payload_image_id": "sha256:3ed6b906c1d458538a2ee8005224c0c9c32ff0775038a88feb1d3b7e68eea7db",
+    "prepared_runtime_image": "sha256:943c183255896a35375f1449732578a0e49a47544d0ee4cf11b3b7401fc41832",
+    "retained_artifact_directory": "artifacts/deepswe-small-v2-runtimes-local/pebble-durability-wait-apis",
+    "scope": "core runtime and controlled fixture; not a task baseline",
+    "source_spec_sha256": "aca85479ba91910c5d2b217a40003b424d5dea9ed3a6ef5fad42d52db430a43b",
+    "status": "pass",
+    "task_id": "pebble-durability-wait-apis",
+    "task_toolchain_fingerprint": {
+      "environment": {
+        "GOFLAGS": null,
+        "GOMODCACHE": null,
+        "GOPATH": null,
+        "HOME": "/root",
+        "NODE_PATH": null,
+        "PATH": "/root/go/bin:/root/.cargo/bin:/root/.local/bin:/root/.rye/shims:/root/.bun/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+        "PYTHONPATH": null
+      },
+      "python_packages": [
+        [
+          "CacheControl",
+          "0.14.4"
+        ],
+        [
+          "Pygments",
+          "2.19.2"
+        ],
+        [
+          "RapidFuzz",
+          "3.14.3"
+        ],
+        [
+          "SecretStorage",
+          "3.5.0"
+        ],
+        [
+          "anyio",
+          "4.12.0"
+        ],
+        [
+          "anysqlite",
+          "0.0.5"
+        ],
+        [
+          "argcomplete",
+          "3.6.3"
+        ],
+        [
+          "blinker",
+          "1.9.0"
+        ],
+        [
+          "build",
+          "1.3.0"
+        ],
+        [
+          "certifi",
+          "2025.11.12"
+        ],
+        [
+          "cffi",
+          "2.0.0"
+        ],
+        [
+          "charset-normalizer",
+          "3.4.4"
+        ],
+        [
+          "cleo",
+          "2.1.0"
+        ],
+        [
+          "click",
+          "8.3.1"
+        ],
+        [
+          "crashtest",
+          "0.4.1"
+        ],
+        [
+          "cryptography",
+          "46.0.3"
+        ],
+        [
+          "dep-logic",
+          "0.5.2"
+        ],
+        [
+          "distlib",
+          "0.4.0"
+        ],
+        [
+          "dulwich",
+          "0.21.7"
+        ],
+        [
+          "fastjsonschema",
+          "2.21.2"
+        ],
+        [
+          "filelock",
+          "3.20.1"
+        ],
+        [
+          "findpython",
+          "0.7.1"
+        ],
+        [
+          "flit_core",
+          "3.12.0"
+        ],
+        [
+          "h11",
+          "0.16.0"
+        ],
+        [
+          "hatchling",
+          "1.28.0"
+        ],
+        [
+          "hishel",
+          "0.1.5"
+        ],
+        [
+          "httpcore",
+          "1.0.9"
+        ],
+        [
+          "httpx",
+          "0.28.1"
+        ],
+        [
+          "id",
+          "1.5.0"
+        ],
+        [
+          "idna",
+          "3.11"
+        ],
+        [
+          "installer",
+          "0.7.0"
+        ],
+        [
+          "jaraco.classes",
+          "3.4.0"
+        ],
+        [
+          "jeepney",
+          "0.9.0"
+        ],
+        [
+          "keyring",
+          "24.3.1"
+        ],
+        [
+          "markdown-it-py",
+          "4.0.0"
+        ],
+        [
+          "mdurl",
+          "0.1.2"
+        ],
+        [
+          "more-itertools",
+          "10.8.0"
+        ],
+        [
+          "msgpack",
+          "1.1.2"
+        ],
+        [
+          "packaging",
+          "25.0"
+        ],
+        [
+          "pathspec",
+          "0.12.1"
+        ],
+        [
+          "pbs-installer",
+          "2025.12.17"
+        ],
+        [
+          "pdm",
+          "2.26.2"
+        ],
+        [
+          "pexpect",
+          "4.9.0"
+        ],
+        [
+          "pip",
+          "25.3"
+        ],
+        [
+          "pipx",
+          "1.8.0"
+        ],
+        [
+          "pkginfo",
+          "1.12.1.2"
+        ],
+        [
+          "platformdirs",
+          "4.5.1"
+        ],
+        [
+          "pluggy",
+          "1.6.0"
+        ],
+        [
+          "poetry",
+          "1.8.2"
+        ],
+        [
+          "poetry-core",
+          "1.9.0"
+        ],
+        [
+          "poetry-plugin-export",
+          "1.8.0"
+        ],
+        [
+          "ptyprocess",
+          "0.7.0"
+        ],
+        [
+          "pycparser",
+          "2.23"
+        ],
+        [
+          "pyproject_hooks",
+          "1.2.0"
+        ],
+        [
+          "python-dotenv",
+          "1.2.1"
+        ],
+        [
+          "requests",
+          "2.32.5"
+        ],
+        [
+          "requests-toolbelt",
+          "1.0.0"
+        ],
+        [
+          "resolvelib",
+          "1.2.1"
+        ],
+        [
+          "rich",
+          "14.2.0"
+        ],
+        [
+          "setuptools",
+          "80.9.0"
+        ],
+        [
+          "setuptools-scm",
+          "9.2.2"
+        ],
+        [
+          "shellingham",
+          "1.5.4"
+        ],
+        [
+          "socksio",
+          "1.0.0"
+        ],
+        [
+          "tomlkit",
+          "0.13.3"
+        ],
+        [
+          "trove-classifiers",
+          "2025.12.1.14"
+        ],
+        [
+          "truststore",
+          "0.10.4"
+        ],
+        [
+          "typing_extensions",
+          "4.15.0"
+        ],
+        [
+          "unearth",
+          "0.18.1"
+        ],
+        [
+          "urllib3",
+          "2.6.2"
+        ],
+        [
+          "userpath",
+          "1.9.2"
+        ],
+        [
+          "virtualenv",
+          "20.35.4"
+        ],
+        [
+          "wheel",
+          "0.45.1"
+        ]
+      ],
+      "system_packages_sha256": "5ef346fc01a76f1d29366102daee86e490abac1b21bcd8577de05427da47b290",
+      "tools": {
+        "cargo": {
+          "path": "/root/.cargo/bin/cargo",
+          "resolved": "/root/.cargo/bin/rustup",
+          "sha256": "20a06e644b0d9bd2fbdbfd52d42540bdde820ea7df86e92e533c073da0cdd43c",
+          "version": "cargo 1.92.0 (344c4567c 2025-10-21)"
+        },
+        "curl": {
+          "path": "/usr/bin/curl",
+          "resolved": "/usr/bin/curl",
+          "sha256": "58824afa640f512e07e895c0f2d1e1fe2c3fd1456acab689b6e4c1c75cef2593",
+          "version": "curl 7.88.1 (x86_64-pc-linux-gnu) libcurl/7.88.1 OpenSSL/3.0.17 zlib/1.2.13 brotli/1.0.9 zstd/1.5.4 libidn2/2.3.3 libpsl/0.21.2 (+libidn2/2.3.3) libssh2/1.10.0 nghttp2/1.52.0 librtmp/2.3 OpenLDAP/2.5.13\nRelease-Date: 2023-02-20, security patched: 7.88.1-10+deb12u14\nProtocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtmp rtsp scp sftp smb smbs smtp smtps telnet tftp\nFeatures: alt-svc AsynchDNS brotli GSS-API HSTS HTTP2 HTTPS-proxy IDN IPv6 Kerberos Largefile libz NTLM NTLM_WB PSL SPNEGO SSL threadsafe TLS-SRP UnixSockets zstd"
+        },
+        "git": {
+          "path": "/usr/bin/git",
+          "resolved": "/usr/bin/git",
+          "sha256": "00c84136d8294294580daa32f25b3e83ddb8341e9b5b70722e4c9a973ba5f749",
+          "version": "git version 2.39.5"
+        },
+        "go": {
+          "path": "/usr/local/bin/go",
+          "resolved": "/usr/local/go/bin/go",
+          "sha256": "d29b19f04e57fa2f35d4725a8743b663289ac29832128a235c4a3f76f885b150",
+          "version": "go version go1.25.5 linux/amd64"
+        },
+        "node": {
+          "path": "/usr/bin/node",
+          "resolved": "/usr/bin/node",
+          "sha256": "16143bdaa79716e871d3d9b2f50ce680bca293eba7f0c3fc1d004ed2258fc839",
+          "version": "v24.12.0"
+        },
+        "npm": {
+          "path": "/usr/bin/npm",
+          "resolved": "/usr/lib/node_modules/npm/bin/npm-cli.js",
+          "sha256": "8e5f6f3429f8cdbe693cdc29904e9d5a7b127a494bd15c804bd54c7403bfcbe7",
+          "version": "11.6.2"
+        },
+        "pnpm": {
+          "path": "/usr/bin/pnpm",
+          "resolved": "/usr/lib/node_modules/pnpm/bin/pnpm.cjs",
+          "sha256": "b276da51dc8ca5b0d3ee3371695b50fc8b3244b281b091c63a3f082a88dadeb9",
+          "version": "10.26.1"
+        },
+        "python": {
+          "path": "/usr/local/bin/python",
+          "resolved": "/usr/local/bin/python3.12",
+          "sha256": "4dbf3143240288fb2170257ffaa7bd030cdda5d2703d1f5f30b627042267e2e3",
+          "version": "Python 3.12.12"
+        },
+        "rustc": {
+          "path": "/root/.cargo/bin/rustc",
+          "resolved": "/root/.cargo/bin/rustup",
+          "sha256": "20a06e644b0d9bd2fbdbfd52d42540bdde820ea7df86e92e533c073da0cdd43c",
+          "version": "rustc 1.92.0 (ded5c06cf 2025-12-08)"
+        },
+        "uv": {
+          "path": "/root/.local/bin/uv",
+          "resolved": "/root/.local/bin/uv",
+          "sha256": "7f73d66b9767a281c2cae604b7cd0b6eaa1f0dda5ae28b9067e6de745d9593eb",
+          "version": "uv 0.9.18"
+        }
+      }
+    },
+    "task_toolchain_unchanged": true,
+    "verified_on": "2026-10-25"
+  },
+  {
+    "after_fingerprint_sha256": "f6adcc88d0cc7a51e27ffea395ffa76d669f0b5079e32035a1da9cdfca27665d",
+    "before_fingerprint_sha256": "f6adcc88d0cc7a51e27ffea395ffa76d669f0b5079e32035a1da9cdfca27665d",
+    "benchmark_tests_run": 0,
+    "codex_transport_install_complete": false,
+    "dockerfile": "FROM agentless-ml/pilot-input:3ed6b906c1d458538a2ee8005224c0c9c32ff0775038a88feb1d3b7e68eea7db AS core\nFROM agentless-ml/pilot-input:459b6d4c5f8d45218b25d0837a88d91052d0fb066c21b8bc2939290c4876b3ae\nCOPY --from=core /root/.local/share/uv/tools/grinta /root/.local/share/uv/tools/grinta\nCOPY --from=core /root/.local/bin/grinta /root/.local/bin/grinta\nCOPY --from=core /root/.local/bin/grinta-deepswe /root/.local/bin/grinta-deepswe\nCOPY --from=core /root/.cache/tree-sitter-language-pack /root/.cache/tree-sitter-language-pack\n",
+    "grinta_commit": "7f8b43a0293c143e2ca6363697baa8185ad3fa34",
+    "launcher_preflight": {
+      "agentless_revision": "6535cb881f5080daa158799b9c711056b7aaeb07+dirty",
+      "benchmark_tests_run": 0,
+      "capability_enforcement_verified": false,
+      "compared_sections": [
+        "edit_contract",
+        "environment",
+        "identity",
+        "problem",
+        "public_validation",
+        "timing"
+      ],
+      "configured_starting_conditions_match": true,
+      "grinta_revision": "a330e9664a84406b4a5a6740c3320563d9fea903",
+      "independent_clean_workspaces_verified": true,
+      "model_calls": 0,
+      "observed_container_match": false,
+      "scope": "real launcher preflights; configured inputs and prepared source, not installed runtime equivalence",
+      "spec_sha256": "449baa430637f44886c4b6139b07f21b0f16e495fb0499ae21a4ccd6e5d555f3",
+      "starting_conditions_sha256": "fbadfedd3bc63f932a3d1387afdafed5080cd465815bcc023e34910af31ca497",
+      "task_id": "katex-multicolumn-array-spans"
+    },
+    "model_calls": 0,
+    "offline_language_parser_and_executor_import": true,
+    "paired_result": {
+      "benchmark_tests_run": 0,
+      "condition": "runtime-supplemented controlled diagnostic; benchmark readiness unchanged",
+      "containers_match": true,
+      "controlled_public_check_run": true,
+      "grinta_executor": {
+        "binary_command_stopped_before_feedback": true,
+        "case_collision_rejected": true,
+        "chmod_rejected": true,
+        "controlled_public_test_passed": true,
+        "invalid_final_patch_rejected": true,
+        "native_file_edit_and_shell_create_delete_rename": true,
+        "new_executable_rejected": true,
+        "next_action_stopped": true,
+        "permitted_patch_exported": true,
+        "rename_executable_with_edit_allowed": true,
+        "symlink_rejected": true
+      },
+      "initial_task_probes_match": true,
+      "model_calls": 0,
+      "observed_agentless": {
+        "host": {
+          "CapDrop": [
+            "ALL"
+          ],
+          "ExtraHosts": null,
+          "Memory": 8589934592,
+          "MemorySwap": 8589934592,
+          "NanoCpus": 2000000000,
+          "NetworkMode": "none",
+          "PidsLimit": 2048,
+          "PortBindings": null,
+          "Privileged": false,
+          "ReadonlyRootfs": true,
+          "SecurityOpt": [
+            "no-new-privileges"
+          ],
+          "Tmpfs": {
+            "/tmp": "rw,exec,nosuid,nodev,size=4096m,mode=1777"
+          }
+        },
+        "host_binds": null,
+        "image_id": "sha256:a8d038432022245e1a15d0fbe26d58d20ba1504b910ca31f527ff24ab11f4bdc",
+        "mounts": [],
+        "user": "root",
+        "workdir": "/tmp"
+      },
+      "observed_pier": {
+        "host": {
+          "CapDrop": [
+            "ALL"
+          ],
+          "ExtraHosts": null,
+          "Memory": 8589934592,
+          "MemorySwap": 8589934592,
+          "NanoCpus": 2000000000,
+          "NetworkMode": "none",
+          "PidsLimit": 2048,
+          "PortBindings": null,
+          "Privileged": false,
+          "ReadonlyRootfs": true,
+          "SecurityOpt": [
+            "no-new-privileges"
+          ],
+          "Tmpfs": {
+            "/tmp": "rw,exec,nosuid,nodev,size=4096m,mode=1777"
+          }
+        },
+        "host_binds": null,
+        "image_id": "sha256:a8d038432022245e1a15d0fbe26d58d20ba1504b910ca31f527ff24ab11f4bdc",
+        "mounts": [],
+        "user": "root",
+        "workdir": "/tmp"
+      },
+      "prepared_runtime_image": "sha256:a8d038432022245e1a15d0fbe26d58d20ba1504b910ca31f527ff24ab11f4bdc",
+      "source_spec_sha256": "449baa430637f44886c4b6139b07f21b0f16e495fb0499ae21a4ccd6e5d555f3",
+      "task_id": "katex-multicolumn-array-spans"
+    },
+    "parent_image_id": "sha256:459b6d4c5f8d45218b25d0837a88d91052d0fb066c21b8bc2939290c4876b3ae",
+    "parent_image_layers_verified": true,
+    "payload_image_id": "sha256:3ed6b906c1d458538a2ee8005224c0c9c32ff0775038a88feb1d3b7e68eea7db",
+    "prepared_runtime_image": "sha256:a8d038432022245e1a15d0fbe26d58d20ba1504b910ca31f527ff24ab11f4bdc",
+    "retained_artifact_directory": "artifacts/deepswe-small-v2-runtimes-local/katex-multicolumn-array-spans",
+    "scope": "core runtime and controlled fixture; not a task baseline",
+    "source_spec_sha256": "449baa430637f44886c4b6139b07f21b0f16e495fb0499ae21a4ccd6e5d555f3",
+    "status": "pass",
+    "task_id": "katex-multicolumn-array-spans",
+    "task_toolchain_fingerprint": {
+      "environment": {
+        "GOFLAGS": null,
+        "GOMODCACHE": null,
+        "GOPATH": null,
+        "HOME": "/root",
+        "NODE_PATH": null,
+        "PATH": "/root/.cargo/bin:/root/.local/bin:/root/.rye/shims:/root/.bun/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+        "PYTHONPATH": null
+      },
+      "python_packages": [
+        [
+          "CacheControl",
+          "0.14.4"
+        ],
+        [
+          "Pygments",
+          "2.19.2"
+        ],
+        [
+          "RapidFuzz",
+          "3.14.3"
+        ],
+        [
+          "SecretStorage",
+          "3.5.0"
+        ],
+        [
+          "anyio",
+          "4.12.0"
+        ],
+        [
+          "anysqlite",
+          "0.0.5"
+        ],
+        [
+          "argcomplete",
+          "3.6.3"
+        ],
+        [
+          "blinker",
+          "1.9.0"
+        ],
+        [
+          "build",
+          "1.3.0"
+        ],
+        [
+          "certifi",
+          "2025.11.12"
+        ],
+        [
+          "cffi",
+          "2.0.0"
+        ],
+        [
+          "charset-normalizer",
+          "3.4.4"
+        ],
+        [
+          "cleo",
+          "2.1.0"
+        ],
+        [
+          "click",
+          "8.3.1"
+        ],
+        [
+          "crashtest",
+          "0.4.1"
+        ],
+        [
+          "cryptography",
+          "46.0.3"
+        ],
+        [
+          "dep-logic",
+          "0.5.2"
+        ],
+        [
+          "distlib",
+          "0.4.0"
+        ],
+        [
+          "dulwich",
+          "0.21.7"
+        ],
+        [
+          "fastjsonschema",
+          "2.21.2"
+        ],
+        [
+          "filelock",
+          "3.20.1"
+        ],
+        [
+          "findpython",
+          "0.7.1"
+        ],
+        [
+          "flit_core",
+          "3.12.0"
+        ],
+        [
+          "h11",
+          "0.16.0"
+        ],
+        [
+          "hatchling",
+          "1.28.0"
+        ],
+        [
+          "hishel",
+          "0.1.5"
+        ],
+        [
+          "httpcore",
+          "1.0.9"
+        ],
+        [
+          "httpx",
+          "0.28.1"
+        ],
+        [
+          "id",
+          "1.5.0"
+        ],
+        [
+          "idna",
+          "3.11"
+        ],
+        [
+          "installer",
+          "0.7.0"
+        ],
+        [
+          "jaraco.classes",
+          "3.4.0"
+        ],
+        [
+          "jeepney",
+          "0.9.0"
+        ],
+        [
+          "keyring",
+          "24.3.1"
+        ],
+        [
+          "markdown-it-py",
+          "4.0.0"
+        ],
+        [
+          "mdurl",
+          "0.1.2"
+        ],
+        [
+          "more-itertools",
+          "10.8.0"
+        ],
+        [
+          "msgpack",
+          "1.1.2"
+        ],
+        [
+          "packaging",
+          "25.0"
+        ],
+        [
+          "pathspec",
+          "0.12.1"
+        ],
+        [
+          "pbs-installer",
+          "2025.12.17"
+        ],
+        [
+          "pdm",
+          "2.26.2"
+        ],
+        [
+          "pexpect",
+          "4.9.0"
+        ],
+        [
+          "pip",
+          "25.3"
+        ],
+        [
+          "pipx",
+          "1.8.0"
+        ],
+        [
+          "pkginfo",
+          "1.12.1.2"
+        ],
+        [
+          "platformdirs",
+          "4.5.1"
+        ],
+        [
+          "pluggy",
+          "1.6.0"
+        ],
+        [
+          "poetry",
+          "1.8.2"
+        ],
+        [
+          "poetry-core",
+          "1.9.0"
+        ],
+        [
+          "poetry-plugin-export",
+          "1.8.0"
+        ],
+        [
+          "ptyprocess",
+          "0.7.0"
+        ],
+        [
+          "pycparser",
+          "2.23"
+        ],
+        [
+          "pyproject_hooks",
+          "1.2.0"
+        ],
+        [
+          "python-dotenv",
+          "1.2.1"
+        ],
+        [
+          "requests",
+          "2.32.5"
+        ],
+        [
+          "requests-toolbelt",
+          "1.0.0"
+        ],
+        [
+          "resolvelib",
+          "1.2.1"
+        ],
+        [
+          "rich",
+          "14.2.0"
+        ],
+        [
+          "setuptools",
+          "80.9.0"
+        ],
+        [
+          "setuptools-scm",
+          "9.2.2"
+        ],
+        [
+          "shellingham",
+          "1.5.4"
+        ],
+        [
+          "socksio",
+          "1.0.0"
+        ],
+        [
+          "tomlkit",
+          "0.13.3"
+        ],
+        [
+          "trove-classifiers",
+          "2025.12.1.14"
+        ],
+        [
+          "truststore",
+          "0.10.4"
+        ],
+        [
+          "typing_extensions",
+          "4.15.0"
+        ],
+        [
+          "unearth",
+          "0.18.1"
+        ],
+        [
+          "urllib3",
+          "2.6.2"
+        ],
+        [
+          "userpath",
+          "1.9.2"
+        ],
+        [
+          "virtualenv",
+          "20.35.4"
+        ],
+        [
+          "wheel",
+          "0.45.1"
+        ]
+      ],
+      "system_packages_sha256": "5ef346fc01a76f1d29366102daee86e490abac1b21bcd8577de05427da47b290",
+      "tools": {
+        "cargo": {
+          "path": "/root/.cargo/bin/cargo",
+          "resolved": "/root/.cargo/bin/rustup",
+          "sha256": "20a06e644b0d9bd2fbdbfd52d42540bdde820ea7df86e92e533c073da0cdd43c",
+          "version": "cargo 1.92.0 (344c4567c 2025-10-21)"
+        },
+        "curl": {
+          "path": "/usr/bin/curl",
+          "resolved": "/usr/bin/curl",
+          "sha256": "58824afa640f512e07e895c0f2d1e1fe2c3fd1456acab689b6e4c1c75cef2593",
+          "version": "curl 7.88.1 (x86_64-pc-linux-gnu) libcurl/7.88.1 OpenSSL/3.0.17 zlib/1.2.13 brotli/1.0.9 zstd/1.5.4 libidn2/2.3.3 libpsl/0.21.2 (+libidn2/2.3.3) libssh2/1.10.0 nghttp2/1.52.0 librtmp/2.3 OpenLDAP/2.5.13\nRelease-Date: 2023-02-20, security patched: 7.88.1-10+deb12u14\nProtocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtmp rtsp scp sftp smb smbs smtp smtps telnet tftp\nFeatures: alt-svc AsynchDNS brotli GSS-API HSTS HTTP2 HTTPS-proxy IDN IPv6 Kerberos Largefile libz NTLM NTLM_WB PSL SPNEGO SSL threadsafe TLS-SRP UnixSockets zstd"
+        },
+        "git": {
+          "path": "/usr/bin/git",
+          "resolved": "/usr/bin/git",
+          "sha256": "00c84136d8294294580daa32f25b3e83ddb8341e9b5b70722e4c9a973ba5f749",
+          "version": "git version 2.39.5"
+        },
+        "go": {
+          "path": "/usr/local/bin/go",
+          "resolved": "/usr/local/go/bin/go",
+          "sha256": "d29b19f04e57fa2f35d4725a8743b663289ac29832128a235c4a3f76f885b150",
+          "version": "go version go1.25.5 linux/amd64"
+        },
+        "node": {
+          "path": "/usr/bin/node",
+          "resolved": "/usr/bin/node",
+          "sha256": "16143bdaa79716e871d3d9b2f50ce680bca293eba7f0c3fc1d004ed2258fc839",
+          "version": "v24.12.0"
+        },
+        "npm": {
+          "path": "/usr/bin/npm",
+          "resolved": "/usr/lib/node_modules/npm/bin/npm-cli.js",
+          "sha256": "8e5f6f3429f8cdbe693cdc29904e9d5a7b127a494bd15c804bd54c7403bfcbe7",
+          "version": "11.6.2"
+        },
+        "pnpm": {
+          "path": "/usr/bin/pnpm",
+          "resolved": "/usr/lib/node_modules/pnpm/bin/pnpm.cjs",
+          "sha256": "b276da51dc8ca5b0d3ee3371695b50fc8b3244b281b091c63a3f082a88dadeb9",
+          "version": "ERROR  This project is configured to use yarn\nFor help, run: pnpm help"
+        },
+        "python": {
+          "path": "/usr/local/bin/python",
+          "resolved": "/usr/local/bin/python3.12",
+          "sha256": "4dbf3143240288fb2170257ffaa7bd030cdda5d2703d1f5f30b627042267e2e3",
+          "version": "Python 3.12.12"
+        },
+        "rustc": {
+          "path": "/root/.cargo/bin/rustc",
+          "resolved": "/root/.cargo/bin/rustup",
+          "sha256": "20a06e644b0d9bd2fbdbfd52d42540bdde820ea7df86e92e533c073da0cdd43c",
+          "version": "rustc 1.92.0 (ded5c06cf 2025-12-08)"
+        },
+        "uv": {
+          "path": "/root/.local/bin/uv",
+          "resolved": "/root/.local/bin/uv",
+          "sha256": "7f73d66b9767a281c2cae604b7cd0b6eaa1f0dda5ae28b9067e6de745d9593eb",
+          "version": "uv 0.9.18"
+        }
+      }
+    },
+    "task_toolchain_unchanged": true,
+    "verified_on": "2026-10-25"
+  },
+  {
+    "after_fingerprint_sha256": "94fedbbb119a3323c4731d7aebbcad0d596f011dcd06254275fef5b670e3de23",
+    "before_fingerprint_sha256": "94fedbbb119a3323c4731d7aebbcad0d596f011dcd06254275fef5b670e3de23",
+    "benchmark_tests_run": 0,
+    "codex_transport_install_complete": false,
+    "dockerfile": "FROM agentless-ml/pilot-input:3ed6b906c1d458538a2ee8005224c0c9c32ff0775038a88feb1d3b7e68eea7db AS core\nFROM agentless-ml/pilot-input:43ce618452b29610b682ea77e384dcb8c57308957a7eb65734a47d76a7ff47dc\nCOPY --from=core /root/.local/share/uv/tools/grinta /root/.local/share/uv/tools/grinta\nCOPY --from=core /root/.local/bin/grinta /root/.local/bin/grinta\nCOPY --from=core /root/.local/bin/grinta-deepswe /root/.local/bin/grinta-deepswe\nCOPY --from=core /root/.cache/tree-sitter-language-pack /root/.cache/tree-sitter-language-pack\n",
+    "grinta_commit": "7f8b43a0293c143e2ca6363697baa8185ad3fa34",
+    "launcher_preflight": {
+      "agentless_revision": "6535cb881f5080daa158799b9c711056b7aaeb07+dirty",
+      "benchmark_tests_run": 0,
+      "capability_enforcement_verified": false,
+      "compared_sections": [
+        "edit_contract",
+        "environment",
+        "identity",
+        "problem",
+        "public_validation",
+        "timing"
+      ],
+      "configured_starting_conditions_match": true,
+      "grinta_revision": "a330e9664a84406b4a5a6740c3320563d9fea903",
+      "independent_clean_workspaces_verified": true,
+      "model_calls": 0,
+      "observed_container_match": false,
+      "scope": "real launcher preflights; configured inputs and prepared source, not installed runtime equivalence",
+      "spec_sha256": "0966284d32dd24d14c4c224573f3d2898ff45d684f7987c2f0058ad7ae2e0721",
+      "starting_conditions_sha256": "9d93c5007ea72e98016de9da688a7dad3e469b594a93a1ef377ebcaf08148f99",
+      "task_id": "meriyah-explicit-resource-declarations"
+    },
+    "model_calls": 0,
+    "offline_language_parser_and_executor_import": true,
+    "paired_result": {
+      "benchmark_tests_run": 0,
+      "condition": "runtime-supplemented controlled diagnostic; benchmark readiness unchanged",
+      "containers_match": true,
+      "controlled_public_check_run": true,
+      "grinta_executor": {
+        "binary_command_stopped_before_feedback": true,
+        "case_collision_rejected": true,
+        "chmod_rejected": true,
+        "controlled_public_test_passed": true,
+        "invalid_final_patch_rejected": true,
+        "native_file_edit_and_shell_create_delete_rename": true,
+        "new_executable_rejected": true,
+        "next_action_stopped": true,
+        "permitted_patch_exported": true,
+        "rename_executable_with_edit_allowed": true,
+        "symlink_rejected": true
+      },
+      "initial_task_probes_match": true,
+      "model_calls": 0,
+      "observed_agentless": {
+        "host": {
+          "CapDrop": [
+            "ALL"
+          ],
+          "ExtraHosts": null,
+          "Memory": 8589934592,
+          "MemorySwap": 8589934592,
+          "NanoCpus": 2000000000,
+          "NetworkMode": "none",
+          "PidsLimit": 2048,
+          "PortBindings": null,
+          "Privileged": false,
+          "ReadonlyRootfs": true,
+          "SecurityOpt": [
+            "no-new-privileges"
+          ],
+          "Tmpfs": {
+            "/tmp": "rw,exec,nosuid,nodev,size=4096m,mode=1777"
+          }
+        },
+        "host_binds": null,
+        "image_id": "sha256:943fc9b681c4cdef39614e3daabb96530f0d8b3cc41a9b12ec057f55a3650a86",
+        "mounts": [],
+        "user": "root",
+        "workdir": "/tmp"
+      },
+      "observed_pier": {
+        "host": {
+          "CapDrop": [
+            "ALL"
+          ],
+          "ExtraHosts": null,
+          "Memory": 8589934592,
+          "MemorySwap": 8589934592,
+          "NanoCpus": 2000000000,
+          "NetworkMode": "none",
+          "PidsLimit": 2048,
+          "PortBindings": null,
+          "Privileged": false,
+          "ReadonlyRootfs": true,
+          "SecurityOpt": [
+            "no-new-privileges"
+          ],
+          "Tmpfs": {
+            "/tmp": "rw,exec,nosuid,nodev,size=4096m,mode=1777"
+          }
+        },
+        "host_binds": null,
+        "image_id": "sha256:943fc9b681c4cdef39614e3daabb96530f0d8b3cc41a9b12ec057f55a3650a86",
+        "mounts": [],
+        "user": "root",
+        "workdir": "/tmp"
+      },
+      "prepared_runtime_image": "sha256:943fc9b681c4cdef39614e3daabb96530f0d8b3cc41a9b12ec057f55a3650a86",
+      "source_spec_sha256": "0966284d32dd24d14c4c224573f3d2898ff45d684f7987c2f0058ad7ae2e0721",
+      "task_id": "meriyah-explicit-resource-declarations"
+    },
+    "parent_image_id": "sha256:43ce618452b29610b682ea77e384dcb8c57308957a7eb65734a47d76a7ff47dc",
+    "parent_image_layers_verified": true,
+    "payload_image_id": "sha256:3ed6b906c1d458538a2ee8005224c0c9c32ff0775038a88feb1d3b7e68eea7db",
+    "prepared_runtime_image": "sha256:943fc9b681c4cdef39614e3daabb96530f0d8b3cc41a9b12ec057f55a3650a86",
+    "retained_artifact_directory": "artifacts/deepswe-small-v2-runtimes-local/meriyah-explicit-resource-declarations",
+    "scope": "core runtime and controlled fixture; not a task baseline",
+    "source_spec_sha256": "0966284d32dd24d14c4c224573f3d2898ff45d684f7987c2f0058ad7ae2e0721",
+    "status": "pass",
+    "task_id": "meriyah-explicit-resource-declarations",
+    "task_toolchain_fingerprint": {
+      "environment": {
+        "GOFLAGS": null,
+        "GOMODCACHE": null,
+        "GOPATH": null,
+        "HOME": "/root",
+        "NODE_PATH": null,
+        "PATH": "/root/.cargo/bin:/root/.local/bin:/root/.rye/shims:/root/.bun/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+        "PYTHONPATH": null
+      },
+      "python_packages": [
+        [
+          "CacheControl",
+          "0.14.4"
+        ],
+        [
+          "Pygments",
+          "2.19.2"
+        ],
+        [
+          "RapidFuzz",
+          "3.14.3"
+        ],
+        [
+          "SecretStorage",
+          "3.5.0"
+        ],
+        [
+          "anyio",
+          "4.12.0"
+        ],
+        [
+          "anysqlite",
+          "0.0.5"
+        ],
+        [
+          "argcomplete",
+          "3.6.3"
+        ],
+        [
+          "blinker",
+          "1.9.0"
+        ],
+        [
+          "build",
+          "1.3.0"
+        ],
+        [
+          "certifi",
+          "2025.11.12"
+        ],
+        [
+          "cffi",
+          "2.0.0"
+        ],
+        [
+          "charset-normalizer",
+          "3.4.4"
+        ],
+        [
+          "cleo",
+          "2.1.0"
+        ],
+        [
+          "click",
+          "8.3.1"
+        ],
+        [
+          "crashtest",
+          "0.4.1"
+        ],
+        [
+          "cryptography",
+          "46.0.3"
+        ],
+        [
+          "dep-logic",
+          "0.5.2"
+        ],
+        [
+          "distlib",
+          "0.4.0"
+        ],
+        [
+          "dulwich",
+          "0.21.7"
+        ],
+        [
+          "fastjsonschema",
+          "2.21.2"
+        ],
+        [
+          "filelock",
+          "3.20.1"
+        ],
+        [
+          "findpython",
+          "0.7.1"
+        ],
+        [
+          "flit_core",
+          "3.12.0"
+        ],
+        [
+          "h11",
+          "0.16.0"
+        ],
+        [
+          "hatchling",
+          "1.28.0"
+        ],
+        [
+          "hishel",
+          "0.1.5"
+        ],
+        [
+          "httpcore",
+          "1.0.9"
+        ],
+        [
+          "httpx",
+          "0.28.1"
+        ],
+        [
+          "id",
+          "1.5.0"
+        ],
+        [
+          "idna",
+          "3.11"
+        ],
+        [
+          "installer",
+          "0.7.0"
+        ],
+        [
+          "jaraco.classes",
+          "3.4.0"
+        ],
+        [
+          "jeepney",
+          "0.9.0"
+        ],
+        [
+          "keyring",
+          "24.3.1"
+        ],
+        [
+          "markdown-it-py",
+          "4.0.0"
+        ],
+        [
+          "mdurl",
+          "0.1.2"
+        ],
+        [
+          "more-itertools",
+          "10.8.0"
+        ],
+        [
+          "msgpack",
+          "1.1.2"
+        ],
+        [
+          "packaging",
+          "25.0"
+        ],
+        [
+          "pathspec",
+          "0.12.1"
+        ],
+        [
+          "pbs-installer",
+          "2025.12.17"
+        ],
+        [
+          "pdm",
+          "2.26.2"
+        ],
+        [
+          "pexpect",
+          "4.9.0"
+        ],
+        [
+          "pip",
+          "25.3"
+        ],
+        [
+          "pipx",
+          "1.8.0"
+        ],
+        [
+          "pkginfo",
+          "1.12.1.2"
+        ],
+        [
+          "platformdirs",
+          "4.5.1"
+        ],
+        [
+          "pluggy",
+          "1.6.0"
+        ],
+        [
+          "poetry",
+          "1.8.2"
+        ],
+        [
+          "poetry-core",
+          "1.9.0"
+        ],
+        [
+          "poetry-plugin-export",
+          "1.8.0"
+        ],
+        [
+          "ptyprocess",
+          "0.7.0"
+        ],
+        [
+          "pycparser",
+          "2.23"
+        ],
+        [
+          "pyproject_hooks",
+          "1.2.0"
+        ],
+        [
+          "python-dotenv",
+          "1.2.1"
+        ],
+        [
+          "requests",
+          "2.32.5"
+        ],
+        [
+          "requests-toolbelt",
+          "1.0.0"
+        ],
+        [
+          "resolvelib",
+          "1.2.1"
+        ],
+        [
+          "rich",
+          "14.2.0"
+        ],
+        [
+          "setuptools",
+          "80.9.0"
+        ],
+        [
+          "setuptools-scm",
+          "9.2.2"
+        ],
+        [
+          "shellingham",
+          "1.5.4"
+        ],
+        [
+          "socksio",
+          "1.0.0"
+        ],
+        [
+          "tomlkit",
+          "0.13.3"
+        ],
+        [
+          "trove-classifiers",
+          "2025.12.1.14"
+        ],
+        [
+          "truststore",
+          "0.10.4"
+        ],
+        [
+          "typing_extensions",
+          "4.15.0"
+        ],
+        [
+          "unearth",
+          "0.18.1"
+        ],
+        [
+          "urllib3",
+          "2.6.2"
+        ],
+        [
+          "userpath",
+          "1.9.2"
+        ],
+        [
+          "virtualenv",
+          "20.35.4"
+        ],
+        [
+          "wheel",
+          "0.45.1"
+        ]
+      ],
+      "system_packages_sha256": "5ef346fc01a76f1d29366102daee86e490abac1b21bcd8577de05427da47b290",
+      "tools": {
+        "cargo": {
+          "path": "/root/.cargo/bin/cargo",
+          "resolved": "/root/.cargo/bin/rustup",
+          "sha256": "20a06e644b0d9bd2fbdbfd52d42540bdde820ea7df86e92e533c073da0cdd43c",
+          "version": "cargo 1.92.0 (344c4567c 2025-10-21)"
+        },
+        "curl": {
+          "path": "/usr/bin/curl",
+          "resolved": "/usr/bin/curl",
+          "sha256": "58824afa640f512e07e895c0f2d1e1fe2c3fd1456acab689b6e4c1c75cef2593",
+          "version": "curl 7.88.1 (x86_64-pc-linux-gnu) libcurl/7.88.1 OpenSSL/3.0.17 zlib/1.2.13 brotli/1.0.9 zstd/1.5.4 libidn2/2.3.3 libpsl/0.21.2 (+libidn2/2.3.3) libssh2/1.10.0 nghttp2/1.52.0 librtmp/2.3 OpenLDAP/2.5.13\nRelease-Date: 2023-02-20, security patched: 7.88.1-10+deb12u14\nProtocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtmp rtsp scp sftp smb smbs smtp smtps telnet tftp\nFeatures: alt-svc AsynchDNS brotli GSS-API HSTS HTTP2 HTTPS-proxy IDN IPv6 Kerberos Largefile libz NTLM NTLM_WB PSL SPNEGO SSL threadsafe TLS-SRP UnixSockets zstd"
+        },
+        "git": {
+          "path": "/usr/bin/git",
+          "resolved": "/usr/bin/git",
+          "sha256": "00c84136d8294294580daa32f25b3e83ddb8341e9b5b70722e4c9a973ba5f749",
+          "version": "git version 2.39.5"
+        },
+        "go": {
+          "path": "/usr/local/bin/go",
+          "resolved": "/usr/local/go/bin/go",
+          "sha256": "d29b19f04e57fa2f35d4725a8743b663289ac29832128a235c4a3f76f885b150",
+          "version": "go version go1.25.5 linux/amd64"
+        },
+        "node": {
+          "path": "/usr/bin/node",
+          "resolved": "/usr/bin/node",
+          "sha256": "16143bdaa79716e871d3d9b2f50ce680bca293eba7f0c3fc1d004ed2258fc839",
+          "version": "v24.12.0"
+        },
+        "npm": {
+          "path": "/usr/bin/npm",
+          "resolved": "/usr/lib/node_modules/npm/bin/npm-cli.js",
+          "sha256": "8e5f6f3429f8cdbe693cdc29904e9d5a7b127a494bd15c804bd54c7403bfcbe7",
+          "version": "11.6.2"
+        },
+        "pnpm": {
+          "path": "/usr/bin/pnpm",
+          "resolved": "/usr/lib/node_modules/pnpm/bin/pnpm.cjs",
+          "sha256": "b276da51dc8ca5b0d3ee3371695b50fc8b3244b281b091c63a3f082a88dadeb9",
+          "version": "10.26.1"
+        },
+        "python": {
+          "path": "/usr/local/bin/python",
+          "resolved": "/usr/local/bin/python3.12",
+          "sha256": "4dbf3143240288fb2170257ffaa7bd030cdda5d2703d1f5f30b627042267e2e3",
+          "version": "Python 3.12.12"
+        },
+        "rustc": {
+          "path": "/root/.cargo/bin/rustc",
+          "resolved": "/root/.cargo/bin/rustup",
+          "sha256": "20a06e644b0d9bd2fbdbfd52d42540bdde820ea7df86e92e533c073da0cdd43c",
+          "version": "rustc 1.92.0 (ded5c06cf 2025-12-08)"
+        },
+        "uv": {
+          "path": "/root/.local/bin/uv",
+          "resolved": "/root/.local/bin/uv",
+          "sha256": "7f73d66b9767a281c2cae604b7cd0b6eaa1f0dda5ae28b9067e6de745d9593eb",
+          "version": "uv 0.9.18"
+        }
+      }
+    },
+    "task_toolchain_unchanged": true,
+    "verified_on": "2026-10-25"
+  },
+  {
+    "after_fingerprint_sha256": "94fedbbb119a3323c4731d7aebbcad0d596f011dcd06254275fef5b670e3de23",
+    "before_fingerprint_sha256": "94fedbbb119a3323c4731d7aebbcad0d596f011dcd06254275fef5b670e3de23",
+    "benchmark_tests_run": 0,
+    "codex_transport_install_complete": false,
+    "dockerfile": "FROM agentless-ml/pilot-input:3ed6b906c1d458538a2ee8005224c0c9c32ff0775038a88feb1d3b7e68eea7db AS core\nFROM agentless-ml/pilot-input:3147fd9b5a532ba679ac2c933ddf16e7ade6f32ddcf3b2d93576f243be3bd6af\nCOPY --from=core /root/.local/share/uv/tools/grinta /root/.local/share/uv/tools/grinta\nCOPY --from=core /root/.local/bin/grinta /root/.local/bin/grinta\nCOPY --from=core /root/.local/bin/grinta-deepswe /root/.local/bin/grinta-deepswe\nCOPY --from=core /root/.cache/tree-sitter-language-pack /root/.cache/tree-sitter-language-pack\n",
+    "grinta_commit": "7f8b43a0293c143e2ca6363697baa8185ad3fa34",
+    "launcher_preflight": {
+      "agentless_revision": "6535cb881f5080daa158799b9c711056b7aaeb07+dirty",
+      "benchmark_tests_run": 0,
+      "capability_enforcement_verified": false,
+      "compared_sections": [
+        "edit_contract",
+        "environment",
+        "identity",
+        "problem",
+        "public_validation",
+        "timing"
+      ],
+      "configured_starting_conditions_match": true,
+      "grinta_revision": "a330e9664a84406b4a5a6740c3320563d9fea903",
+      "independent_clean_workspaces_verified": true,
+      "model_calls": 0,
+      "observed_container_match": false,
+      "scope": "real launcher preflights; configured inputs and prepared source, not installed runtime equivalence",
+      "spec_sha256": "374fdcd6eaeb973a88b3c5caf705efdfc7dd7f5552be0ccadc4ca575a9c50fab",
+      "starting_conditions_sha256": "3b40b1169a96713334171e4949c13bab9cab3c5f59b22361e1a718ff589f221a",
+      "task_id": "pest-character-class-coalescing"
+    },
+    "model_calls": 0,
+    "offline_language_parser_and_executor_import": true,
+    "paired_result": {
+      "benchmark_tests_run": 0,
+      "condition": "runtime-supplemented controlled diagnostic; benchmark readiness unchanged",
+      "containers_match": true,
+      "controlled_public_check_run": true,
+      "grinta_executor": {
+        "binary_command_stopped_before_feedback": true,
+        "case_collision_rejected": true,
+        "chmod_rejected": true,
+        "controlled_public_test_passed": true,
+        "invalid_final_patch_rejected": true,
+        "native_file_edit_and_shell_create_delete_rename": true,
+        "new_executable_rejected": true,
+        "next_action_stopped": true,
+        "permitted_patch_exported": true,
+        "rename_executable_with_edit_allowed": true,
+        "symlink_rejected": true
+      },
+      "initial_task_probes_match": true,
+      "model_calls": 0,
+      "observed_agentless": {
+        "host": {
+          "CapDrop": [
+            "ALL"
+          ],
+          "ExtraHosts": null,
+          "Memory": 8589934592,
+          "MemorySwap": 8589934592,
+          "NanoCpus": 2000000000,
+          "NetworkMode": "none",
+          "PidsLimit": 2048,
+          "PortBindings": null,
+          "Privileged": false,
+          "ReadonlyRootfs": true,
+          "SecurityOpt": [
+            "no-new-privileges"
+          ],
+          "Tmpfs": {
+            "/tmp": "rw,exec,nosuid,nodev,size=4096m,mode=1777"
+          }
+        },
+        "host_binds": null,
+        "image_id": "sha256:67599d932430ee5212c99ced28db74238a091dd493f905a29cd2ce8e59f579da",
+        "mounts": [],
+        "user": "root",
+        "workdir": "/tmp"
+      },
+      "observed_pier": {
+        "host": {
+          "CapDrop": [
+            "ALL"
+          ],
+          "ExtraHosts": null,
+          "Memory": 8589934592,
+          "MemorySwap": 8589934592,
+          "NanoCpus": 2000000000,
+          "NetworkMode": "none",
+          "PidsLimit": 2048,
+          "PortBindings": null,
+          "Privileged": false,
+          "ReadonlyRootfs": true,
+          "SecurityOpt": [
+            "no-new-privileges"
+          ],
+          "Tmpfs": {
+            "/tmp": "rw,exec,nosuid,nodev,size=4096m,mode=1777"
+          }
+        },
+        "host_binds": null,
+        "image_id": "sha256:67599d932430ee5212c99ced28db74238a091dd493f905a29cd2ce8e59f579da",
+        "mounts": [],
+        "user": "root",
+        "workdir": "/tmp"
+      },
+      "prepared_runtime_image": "sha256:67599d932430ee5212c99ced28db74238a091dd493f905a29cd2ce8e59f579da",
+      "source_spec_sha256": "374fdcd6eaeb973a88b3c5caf705efdfc7dd7f5552be0ccadc4ca575a9c50fab",
+      "task_id": "pest-character-class-coalescing"
+    },
+    "parent_image_id": "sha256:3147fd9b5a532ba679ac2c933ddf16e7ade6f32ddcf3b2d93576f243be3bd6af",
+    "parent_image_layers_verified": true,
+    "payload_image_id": "sha256:3ed6b906c1d458538a2ee8005224c0c9c32ff0775038a88feb1d3b7e68eea7db",
+    "prepared_runtime_image": "sha256:67599d932430ee5212c99ced28db74238a091dd493f905a29cd2ce8e59f579da",
+    "retained_artifact_directory": "artifacts/deepswe-small-v2-runtimes-local/pest-character-class-coalescing",
+    "scope": "core runtime and controlled fixture; not a task baseline",
+    "source_spec_sha256": "374fdcd6eaeb973a88b3c5caf705efdfc7dd7f5552be0ccadc4ca575a9c50fab",
+    "status": "pass",
+    "task_id": "pest-character-class-coalescing",
+    "task_toolchain_fingerprint": {
+      "environment": {
+        "GOFLAGS": null,
+        "GOMODCACHE": null,
+        "GOPATH": null,
+        "HOME": "/root",
+        "NODE_PATH": null,
+        "PATH": "/root/.cargo/bin:/root/.local/bin:/root/.rye/shims:/root/.bun/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+        "PYTHONPATH": null
+      },
+      "python_packages": [
+        [
+          "CacheControl",
+          "0.14.4"
+        ],
+        [
+          "Pygments",
+          "2.19.2"
+        ],
+        [
+          "RapidFuzz",
+          "3.14.3"
+        ],
+        [
+          "SecretStorage",
+          "3.5.0"
+        ],
+        [
+          "anyio",
+          "4.12.0"
+        ],
+        [
+          "anysqlite",
+          "0.0.5"
+        ],
+        [
+          "argcomplete",
+          "3.6.3"
+        ],
+        [
+          "blinker",
+          "1.9.0"
+        ],
+        [
+          "build",
+          "1.3.0"
+        ],
+        [
+          "certifi",
+          "2025.11.12"
+        ],
+        [
+          "cffi",
+          "2.0.0"
+        ],
+        [
+          "charset-normalizer",
+          "3.4.4"
+        ],
+        [
+          "cleo",
+          "2.1.0"
+        ],
+        [
+          "click",
+          "8.3.1"
+        ],
+        [
+          "crashtest",
+          "0.4.1"
+        ],
+        [
+          "cryptography",
+          "46.0.3"
+        ],
+        [
+          "dep-logic",
+          "0.5.2"
+        ],
+        [
+          "distlib",
+          "0.4.0"
+        ],
+        [
+          "dulwich",
+          "0.21.7"
+        ],
+        [
+          "fastjsonschema",
+          "2.21.2"
+        ],
+        [
+          "filelock",
+          "3.20.1"
+        ],
+        [
+          "findpython",
+          "0.7.1"
+        ],
+        [
+          "flit_core",
+          "3.12.0"
+        ],
+        [
+          "h11",
+          "0.16.0"
+        ],
+        [
+          "hatchling",
+          "1.28.0"
+        ],
+        [
+          "hishel",
+          "0.1.5"
+        ],
+        [
+          "httpcore",
+          "1.0.9"
+        ],
+        [
+          "httpx",
+          "0.28.1"
+        ],
+        [
+          "id",
+          "1.5.0"
+        ],
+        [
+          "idna",
+          "3.11"
+        ],
+        [
+          "installer",
+          "0.7.0"
+        ],
+        [
+          "jaraco.classes",
+          "3.4.0"
+        ],
+        [
+          "jeepney",
+          "0.9.0"
+        ],
+        [
+          "keyring",
+          "24.3.1"
+        ],
+        [
+          "markdown-it-py",
+          "4.0.0"
+        ],
+        [
+          "mdurl",
+          "0.1.2"
+        ],
+        [
+          "more-itertools",
+          "10.8.0"
+        ],
+        [
+          "msgpack",
+          "1.1.2"
+        ],
+        [
+          "packaging",
+          "25.0"
+        ],
+        [
+          "pathspec",
+          "0.12.1"
+        ],
+        [
+          "pbs-installer",
+          "2025.12.17"
+        ],
+        [
+          "pdm",
+          "2.26.2"
+        ],
+        [
+          "pexpect",
+          "4.9.0"
+        ],
+        [
+          "pip",
+          "25.3"
+        ],
+        [
+          "pipx",
+          "1.8.0"
+        ],
+        [
+          "pkginfo",
+          "1.12.1.2"
+        ],
+        [
+          "platformdirs",
+          "4.5.1"
+        ],
+        [
+          "pluggy",
+          "1.6.0"
+        ],
+        [
+          "poetry",
+          "1.8.2"
+        ],
+        [
+          "poetry-core",
+          "1.9.0"
+        ],
+        [
+          "poetry-plugin-export",
+          "1.8.0"
+        ],
+        [
+          "ptyprocess",
+          "0.7.0"
+        ],
+        [
+          "pycparser",
+          "2.23"
+        ],
+        [
+          "pyproject_hooks",
+          "1.2.0"
+        ],
+        [
+          "python-dotenv",
+          "1.2.1"
+        ],
+        [
+          "requests",
+          "2.32.5"
+        ],
+        [
+          "requests-toolbelt",
+          "1.0.0"
+        ],
+        [
+          "resolvelib",
+          "1.2.1"
+        ],
+        [
+          "rich",
+          "14.2.0"
+        ],
+        [
+          "setuptools",
+          "80.9.0"
+        ],
+        [
+          "setuptools-scm",
+          "9.2.2"
+        ],
+        [
+          "shellingham",
+          "1.5.4"
+        ],
+        [
+          "socksio",
+          "1.0.0"
+        ],
+        [
+          "tomlkit",
+          "0.13.3"
+        ],
+        [
+          "trove-classifiers",
+          "2025.12.1.14"
+        ],
+        [
+          "truststore",
+          "0.10.4"
+        ],
+        [
+          "typing_extensions",
+          "4.15.0"
+        ],
+        [
+          "unearth",
+          "0.18.1"
+        ],
+        [
+          "urllib3",
+          "2.6.2"
+        ],
+        [
+          "userpath",
+          "1.9.2"
+        ],
+        [
+          "virtualenv",
+          "20.35.4"
+        ],
+        [
+          "wheel",
+          "0.45.1"
+        ]
+      ],
+      "system_packages_sha256": "5ef346fc01a76f1d29366102daee86e490abac1b21bcd8577de05427da47b290",
+      "tools": {
+        "cargo": {
+          "path": "/root/.cargo/bin/cargo",
+          "resolved": "/root/.cargo/bin/rustup",
+          "sha256": "20a06e644b0d9bd2fbdbfd52d42540bdde820ea7df86e92e533c073da0cdd43c",
+          "version": "cargo 1.92.0 (344c4567c 2025-10-21)"
+        },
+        "curl": {
+          "path": "/usr/bin/curl",
+          "resolved": "/usr/bin/curl",
+          "sha256": "58824afa640f512e07e895c0f2d1e1fe2c3fd1456acab689b6e4c1c75cef2593",
+          "version": "curl 7.88.1 (x86_64-pc-linux-gnu) libcurl/7.88.1 OpenSSL/3.0.17 zlib/1.2.13 brotli/1.0.9 zstd/1.5.4 libidn2/2.3.3 libpsl/0.21.2 (+libidn2/2.3.3) libssh2/1.10.0 nghttp2/1.52.0 librtmp/2.3 OpenLDAP/2.5.13\nRelease-Date: 2023-02-20, security patched: 7.88.1-10+deb12u14\nProtocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtmp rtsp scp sftp smb smbs smtp smtps telnet tftp\nFeatures: alt-svc AsynchDNS brotli GSS-API HSTS HTTP2 HTTPS-proxy IDN IPv6 Kerberos Largefile libz NTLM NTLM_WB PSL SPNEGO SSL threadsafe TLS-SRP UnixSockets zstd"
+        },
+        "git": {
+          "path": "/usr/bin/git",
+          "resolved": "/usr/bin/git",
+          "sha256": "00c84136d8294294580daa32f25b3e83ddb8341e9b5b70722e4c9a973ba5f749",
+          "version": "git version 2.39.5"
+        },
+        "go": {
+          "path": "/usr/local/bin/go",
+          "resolved": "/usr/local/go/bin/go",
+          "sha256": "d29b19f04e57fa2f35d4725a8743b663289ac29832128a235c4a3f76f885b150",
+          "version": "go version go1.25.5 linux/amd64"
+        },
+        "node": {
+          "path": "/usr/bin/node",
+          "resolved": "/usr/bin/node",
+          "sha256": "16143bdaa79716e871d3d9b2f50ce680bca293eba7f0c3fc1d004ed2258fc839",
+          "version": "v24.12.0"
+        },
+        "npm": {
+          "path": "/usr/bin/npm",
+          "resolved": "/usr/lib/node_modules/npm/bin/npm-cli.js",
+          "sha256": "8e5f6f3429f8cdbe693cdc29904e9d5a7b127a494bd15c804bd54c7403bfcbe7",
+          "version": "11.6.2"
+        },
+        "pnpm": {
+          "path": "/usr/bin/pnpm",
+          "resolved": "/usr/lib/node_modules/pnpm/bin/pnpm.cjs",
+          "sha256": "b276da51dc8ca5b0d3ee3371695b50fc8b3244b281b091c63a3f082a88dadeb9",
+          "version": "10.26.1"
+        },
+        "python": {
+          "path": "/usr/local/bin/python",
+          "resolved": "/usr/local/bin/python3.12",
+          "sha256": "4dbf3143240288fb2170257ffaa7bd030cdda5d2703d1f5f30b627042267e2e3",
+          "version": "Python 3.12.12"
+        },
+        "rustc": {
+          "path": "/root/.cargo/bin/rustc",
+          "resolved": "/root/.cargo/bin/rustup",
+          "sha256": "20a06e644b0d9bd2fbdbfd52d42540bdde820ea7df86e92e533c073da0cdd43c",
+          "version": "rustc 1.92.0 (ded5c06cf 2025-12-08)"
+        },
+        "uv": {
+          "path": "/root/.local/bin/uv",
+          "resolved": "/root/.local/bin/uv",
+          "sha256": "7f73d66b9767a281c2cae604b7cd0b6eaa1f0dda5ae28b9067e6de745d9593eb",
+          "version": "uv 0.9.18"
+        }
+      }
+    },
+    "task_toolchain_unchanged": true,
+    "verified_on": "2026-10-25"
+  }
+]

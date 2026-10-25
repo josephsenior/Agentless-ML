@@ -1,0 +1,32 @@
+{
+  "benchmark_tests_run": 0,
+  "change": "Testem replaced by KaTeX because of repository overlap with an earlier model study; same seed and hash rule.",
+  "configured_starts_match": true,
+  "limitations": [
+    "Exposure audit is bounded, selection remains provisional.",
+    "Controlled fixture checks do not establish successful repair of the five benchmark tasks.",
+    "Existing baseline failures and historical metadata differences remain.",
+    "Installed Grinta core is pinned at 7f8b43a0293c143e2ca6363697baa8185ad3fa34; current host launcher is separately pinned.",
+    "Model transport, model choice and aggregate budgets remain deferred."
+  ],
+  "model_calls": 0,
+  "official_readiness_changed": false,
+  "reviewed_on": "2026-10-25",
+  "runtime_checks_passed": 5,
+  "selected_tasks": [
+    "aiomonitor-task-snapshots-diff",
+    "pebble-durability-wait-apis",
+    "katex-multicolumn-array-spans",
+    "meriyah-explicit-resource-declarations",
+    "pest-character-class-coalescing"
+  ],
+  "setup_interruptions_retained": [
+    "Docker Desktop initially failed opening dockerInference; user reopened it successfully.",
+    "First Docker build rejected bare image IDs as repository names. Checked deterministic local tags fixed the build reference; logs retained at artifacts/deepswe-small-v2-runtimes/payload."
+  ],
+  "source_review": [
+    "Grinta evaluation/deepswe/CASE_STUDY_2026-09-01.md",
+    "prior Grinta trial-directory task identities",
+    "recorded Agentless experiment declarations"
+  ]
+}

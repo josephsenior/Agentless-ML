@@ -10,7 +10,8 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 import package_deepswe_pilot as pilot
-from test_shared_deepswe_specs import inputs as input_fixture, build
+from test_shared_deepswe_specs import build
+from test_shared_deepswe_specs import inputs as input_fixture
 
 inputs = input_fixture
 
@@ -172,3 +173,91 @@ def test_control_image_cannot_be_reused_for_proposed_task(fixture, tmp_path):
     manifest_file.write_bytes(pilot.canonical(manifest))
     with pytest.raises(ValueError, match="unverified tasks"):
         pilot.verify_bundle(output)
+
+
+def test_reviewed_selection_excludes_other_tasks_from_an_exposed_repository(fixture):
+    root, proposal, _ = fixture
+    records = {
+        p.parent.name: json.loads(p.read_bytes()) for p in root.glob("*/task.json")
+    }
+    alternate = copy.deepcopy(records["py-task"])
+    alternate["identity"].update(
+        task_id="fresh-python", repository_url="https://github.com/fresh/python"
+    )
+    records["fresh-python"] = alternate
+    records["go-task"]["identity"]["repository_url"] = "https://github.com/fresh/go"
+    proposal["selection"]["exclude_known_exposed_repositories"] = True
+    assert pilot.select_tasks(records, proposal) == ["fresh-python", "go-task"]
+
+
+def runtime_evidence(fixture):
+    root, proposal, control = fixture
+    records = {
+        p.parent.name: json.loads(p.read_bytes()) for p in root.glob("*/task.json")
+    }
+    items = []
+    for task_id in pilot.select_tasks(records, proposal):
+        record = records[task_id]
+        image = "sha256:" + pilot.digest(task_id.encode())
+        items.append(
+            {
+                "task_id": task_id,
+                "status": "pass",
+                "source_spec_sha256": record["spec_sha256"],
+                "parent_image_id": record["environment"]["effective_image_id"],
+                "prepared_runtime_image": image,
+                "task_toolchain_unchanged": True,
+                "parent_image_layers_verified": True,
+                "offline_language_parser_and_executor_import": True,
+                "grinta_commit": "a" * 40,
+                "codex_transport_install_complete": False,
+                "paired_result": {
+                    **control["paired_result"],
+                    "task_id": task_id,
+                    "source_spec_sha256": record["spec_sha256"],
+                    "prepared_runtime_image": image,
+                    "grinta_executor": {"controlled_public_test_passed": True},
+                },
+            }
+        )
+    return items
+
+
+def test_verified_pilot_images_are_bound_to_their_own_task(fixture, tmp_path):
+    root, proposal, control = fixture
+    output = tmp_path / "bundle"
+    pilot.build_bundle(
+        root,
+        Path("unused"),
+        output,
+        proposal,
+        control,
+        pilot_evidence=runtime_evidence(fixture),
+    )
+    runtime = json.loads((output / "runtime.json").read_bytes())
+    assert set(runtime["task_bindings"]) == {"control", "py-task", "go-task"}
+    assert len({v["prepared_image_id"] for v in runtime["task_bindings"].values()}) == 3
+    assert (output / "evidence/pilot-runtimes.json").exists()
+
+
+@pytest.mark.parametrize("change", ["wrong_spec", "missing_task", "failed_executor"])
+def test_incomplete_or_mismatched_runtime_cannot_be_promoted(fixture, tmp_path, change):
+    root, proposal, control = fixture
+    items = runtime_evidence(fixture)
+    if change == "wrong_spec":
+        items[0]["source_spec_sha256"] = "0" * 64
+    elif change == "missing_task":
+        items.pop()
+    else:
+        items[0]["paired_result"]["grinta_executor"][
+            "controlled_public_test_passed"
+        ] = False
+    with pytest.raises(ValueError, match="pilot runtime evidence"):
+        pilot.build_bundle(
+            root,
+            Path("unused"),
+            tmp_path / "bundle",
+            proposal,
+            control,
+            pilot_evidence=items,
+        )

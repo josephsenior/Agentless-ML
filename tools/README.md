@@ -14,6 +14,7 @@ described in the linked guides.
 | Command | Purpose |
 | --- | --- |
 | [package_deepswe_pilot.py](package_deepswe_pilot.py) | Build and verify the small pilot preparation bundle, with unresolved research settings explicit. See the [package guide](../docs/deepswe-pilot-package.md). |
+| [verify_deepswe_pilot_runtimes.py](verify_deepswe_pilot_runtimes.py) | Prepare separate core images for the reviewed pilot tasks and compare both real runners offline, without a model or full baseline reruns. |
 | [rehearse_shared_containers.py](rehearse_shared_containers.py) | Observe real Agentless and Pier containers with a prepared common runtime; exercise native Grinta edits without a model. |
 | [run_shared_deepswe_workflow.py](run_shared_deepswe_workflow.py) | Consume a shared task for preflight or a recorded Agentless run. |
 | [compare_shared_deepswe_starts.py](compare_shared_deepswe_starts.py) | Compare both real launcher preflights on independent pinned workspaces; no model calls. |

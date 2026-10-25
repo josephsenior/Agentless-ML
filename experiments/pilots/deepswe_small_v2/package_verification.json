@@ -1,0 +1,17 @@
+{
+  "bundle_id": "deepswe-small-pilot-preparation-v2",
+  "engineering_control": "actionlint-action-pinning-lint",
+  "focused_package_tests_passed": 11,
+  "live_launch_enabled": false,
+  "official_readiness_changed": false,
+  "proposed_tasks": [
+    "aiomonitor-task-snapshots-diff",
+    "pebble-durability-wait-apis",
+    "katex-multicolumn-array-spans",
+    "meriyah-explicit-resource-declarations",
+    "pest-character-class-coalescing"
+  ],
+  "runtime_checks_passed": 5,
+  "verified_files": 21,
+  "zip_sha256": "e9faecba944fe276de7e79582967bb9767acb7d0aa7100697e32742fa6487909"
+}

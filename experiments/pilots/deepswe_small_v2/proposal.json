@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "bundle_id": "deepswe-small-pilot-preparation-v2",
+  "status": "reviewed_preparation",
+  "selection_frozen": false,
+  "benchmark_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+  "corpus_task_count": 113,
+  "engineering_control": "actionlint-action-pinning-lint",
+  "languages": [
+    "python",
+    "go",
+    "javascript",
+    "typescript",
+    "rust"
+  ],
+  "selection": {
+    "method": "one per language, same minimum SHA-256 rule; additionally exclude repositories in known exposure history",
+    "seed": "deepswe-small-pilot-preparation-v1",
+    "require_published_image": true,
+    "maximum_public_command_seconds": 1800,
+    "purpose": "Proposed language coverage for a small engineering pilot; not a representative benchmark score.",
+    "exclude_known_exposed_repositories": true
+  },
+  "known_exposures": {
+    "abs-module-cache-flags": [
+      "Grinta paired model case study"
+    ],
+    "go-git-worktree-merge-conflicts": [
+      "Grinta paired model case study"
+    ],
+    "wazero-multi-module-snapshots": [
+      "Grinta paired model case study"
+    ],
+    "fastapi-implicit-head-options": [
+      "Grinta paired model case study"
+    ],
+    "httpx-streaming-json-iteration": [
+      "Grinta paired model case study"
+    ],
+    "testem-per-launcher-reports": [
+      "Grinta paired model case study"
+    ],
+    "cattrs-partial-structuring-recovery": [
+      "Grinta paired model case study"
+    ],
+    "actionlint-action-pinning-lint": [
+      "Grinta paired model case study",
+      "Agentless recorded repairs and scorer development"
+    ],
+    "fd-deterministic-multi-key-sorting": [
+      "Agentless recorded repairs and reproduction/scoring development"
+    ]
+  },
+  "exposure_sources": [
+    "Grinta: evaluation/deepswe/CASE_STUDY_2026-09-01.md",
+    "Agentless-ML: experiments/deepswe/*/experiment.json"
+  ],
+  "exposure_audit_complete": false,
+  "live_launch_enabled": false,
+  "review": {
+    "reviewed_on": "2026-10-25",
+    "supersedes": "deepswe-small-pilot-preparation-v1",
+    "change": "Replace Testem with the next eligible JavaScript task, KaTeX, due to repository overlap with an earlier model study. Other four tasks unchanged.",
+    "scope": "Named case study, available prior trial-directory identities and recorded Agentless experiment declarations; no outcomes used for selection."
+  }
+}
