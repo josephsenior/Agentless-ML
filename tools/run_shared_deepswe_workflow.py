@@ -146,6 +146,11 @@ def main(argv=None):
     )
     parser.add_argument("--repair-samples", type=int)
     parser.add_argument("--edit-samples", type=int, default=1)
+    parser.add_argument(
+        "--pilot-budget",
+        action="store_true",
+        help="Enforce agreed 7200-second/2000000-token pilot limits",
+    )
     args = parser.parse_args(argv)
     record = load_shared_task(args.shared_task)
     published, registration, command = resolve(record)
@@ -215,11 +220,27 @@ def main(argv=None):
         if live_provider
         else "recorded/manual-v1",
     )
+    budget = None
+    if args.pilot_budget:
+        from agentless_ml.attempt_budget import AttemptBudget
+
+        if (
+            not live_provider
+            or args.model != "gpt-6.1-sol"
+            or args.reasoning != "medium"
+            or args.edit_samples != 1
+            or args.repair_samples != 4
+        ):
+            parser.error(
+                "Pilot contract requires live gpt-6.1-sol/medium with 1 edit sample and 4 repairs"
+            )
+        budget = AttemptBudget()
     result = (
         controller.run_live(
             live_provider,
             repair_samples=args.repair_samples,
             edit_samples=args.edit_samples,
+            budget=budget,
         )
         if live_provider
         else controller.run(_responses(args.experiment))

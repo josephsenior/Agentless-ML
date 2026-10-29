@@ -10,6 +10,23 @@ from test_fixed_workflow import source as source_fixture
 source = source_fixture
 
 
+def test_live_token_limit_prevents_another_stage(tmp_path, source):
+    from agentless_ml.attempt_budget import AttemptBudget, BudgetExceeded
+    recorded = responses()
+    class Provider:
+        calls = 0
+        def complete(self, prompt, **kwargs):
+            self.calls += 1
+            return {'text': recorded.file_localization,
+                    'usage': {'input_tokens': 10, 'output_tokens': 5}}
+    provider = Provider()
+    with pytest.raises(BudgetExceeded):
+        controller(tmp_path, source, FakeRunner()).run_live(provider, budget=AttemptBudget(tokens=15))
+    assert provider.calls == 1
+    evidence = json.loads(next((tmp_path / 'runs').glob('*/budget.json')).read_text())
+    assert evidence['used_tokens'] == 15
+
+
 def test_fixed_stages_request_responses_then_validate_and_export(tmp_path, source):
     recorded = responses()
 

@@ -1,8 +1,11 @@
 {
   "schema_version": 1,
-  "status": "user_agreed_pending_enforcement",
+  "status": "implemented_local_checks_passed",
   "scope": "small DeepSWE pilot; first one task with both systems",
-  "systems": ["agentless-ml", "grinta"],
+  "systems": [
+    "agentless-ml",
+    "grinta"
+  ],
   "model": "gpt-6.1-sol",
   "reasoning_effort": "medium",
   "authentication": "chatgpt-plan",
@@ -11,8 +14,15 @@
     "combined_input_output_tokens": 2000000,
     "first_limit_reached_stops_run": true,
     "early_completion_ends_run": true,
-    "includes": ["model_requests", "tool_execution", "candidate_validation"],
-    "excludes": ["provisioning", "initial_public_baseline"],
+    "includes": [
+      "model_requests",
+      "tool_execution",
+      "candidate_validation"
+    ],
+    "excludes": [
+      "provisioning",
+      "initial_public_baseline"
+    ],
     "token_accounting": "Sum reported input_tokens and output_tokens for every request; reasoning tokens already included in output are not added again.",
     "inflight_token_overshoot": "An already-started response may finish beyond the token threshold; record actual usage and overshoot."
   },
@@ -21,5 +31,6 @@
     "repair_candidates_per_edit_sample": 4
   },
   "live_pilot_enabled": false,
-  "next_step": "Implement and verify matching aggregate enforcement before the first paired task."
+  "next_step": "Implement and verify matching aggregate enforcement before the first paired task.",
+  "paired_live_budget_verified": false
 }

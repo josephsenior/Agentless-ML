@@ -320,7 +320,13 @@ class FixedWorkflowController:
         return source
 
     def run_live(
-        self, provider, *, repair_samples=1, edit_samples=1, reproduction_samples=1
+        self,
+        provider,
+        *,
+        repair_samples=1,
+        edit_samples=1,
+        reproduction_samples=1,
+        budget=None,
     ):
         """Use predetermined sample counts; model responses never choose actions."""
         if any(
@@ -341,10 +347,10 @@ class FixedWorkflowController:
             if self.reproduction_spec
             else (),
         )
-        return self.run(responses, response_provider=provider)
+        return self.run(responses, response_provider=provider, budget=budget)
 
     def run(
-        self, responses: RecordedStageResponses, *, response_provider=None
+        self, responses: RecordedStageResponses, *, response_provider=None, budget=None
     ) -> WorkflowResult:
         started_at = datetime.now(UTC)
         started = time.monotonic()
@@ -352,9 +358,17 @@ class FixedWorkflowController:
         directory = self.artifact_root / run_id
         directory.mkdir(parents=True)
         calls = input_tokens = output_tokens = 0
+        original_runner = self.runner
+        if budget is not None:
+            from agentless_ml.budget_runner import BudgetRunner
+
+            self.runner = BudgetRunner(self.runner, budget)
 
         def ask(stage, prompt):
             nonlocal calls, input_tokens, output_tokens
+            if budget is not None:
+                budget.start()
+                budget.check()
             calls += 1
             call_dir = directory / "model-calls" / str(calls)
             call_dir.mkdir(parents=True)
@@ -366,16 +380,31 @@ class FixedWorkflowController:
                     "provider_settings": getattr(response_provider, "settings", {}),
                 },
             )
-            response = response_provider.complete(prompt)
+            response = (
+                response_provider.complete(prompt, remaining_seconds=budget.remaining)
+                if budget is not None
+                else response_provider.complete(prompt)
+            )
             _write_json(call_dir / "response.json", response)
             usage = response.get("usage")
             if not isinstance(usage, dict) or any(
                 not isinstance(usage.get(k), int) or usage[k] < 0
                 for k in ("input_tokens", "output_tokens")
             ):
+                if budget is not None:
+                    budget.charge(None, None)
                 raise WorkflowError("completed response lacks usable token accounting")
             input_tokens += usage["input_tokens"]
             output_tokens += usage["output_tokens"]
+            if budget is not None:
+                _write_json(
+                    directory / "budget.json",
+                    {**budget.snapshot(), "pending_charge": usage},
+                )
+                try:
+                    budget.charge(usage["input_tokens"], usage["output_tokens"])
+                finally:
+                    _write_json(directory / "budget.json", budget.snapshot())
             text = response.get("text", "")
             if not isinstance(text, str) or not text.strip():
                 raise WorkflowError("empty model response")
@@ -848,6 +877,8 @@ class FixedWorkflowController:
             attempts: list[CandidateAttempt] = []
             candidates: list[PatchCandidate] = []
             for rank, index, response, candidate_intervals in repair_plan:
+                if budget is not None:
+                    budget.check()
                 candidate_id = (
                     f"loc-{rank}-repair-{index}"
                     if responses.edit_samples
@@ -922,6 +953,8 @@ class FixedWorkflowController:
                 selection = select_candidate(candidates)
             except ValueError as exc:
                 raise WorkflowError(str(exc)) from exc
+            if budget is not None:
+                budget.check()
             selected = selection.candidate
             prediction = FinalPrediction(
                 instance_id=self.task.instance_id,
@@ -957,6 +990,8 @@ class FixedWorkflowController:
             _write_json(controller_path, controller_data)
             _write_json(directory / "prediction.json", asdict(prediction))
             _write_json(directory / "run.json", asdict(record))
+            if budget is not None:
+                _write_json(directory / "budget.json", budget.snapshot())
             _write_json(
                 directory / "selection.json",
                 {
@@ -975,6 +1010,8 @@ class FixedWorkflowController:
                 str(directory),
             )
         except Exception as exc:
+            if budget is not None:
+                _write_json(directory / "budget.json", budget.snapshot())
             _write_json(
                 directory / "failure.json",
                 {
@@ -984,3 +1021,6 @@ class FixedWorkflowController:
                 },
             )
             raise
+
+        finally:
+            self.runner = original_runner

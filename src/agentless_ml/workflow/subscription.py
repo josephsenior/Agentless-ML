@@ -60,7 +60,12 @@ class SubscriptionResponses:
         if not self.python.is_file():
             raise ValueError("Grinta Python environment not found")
 
-    def complete(self, prompt):
+    def complete(self, prompt, *, remaining_seconds=None):
+        timeout = (
+            self.timeout
+            if remaining_seconds is None
+            else min(self.timeout, remaining_seconds)
+        )
         result = subprocess.run(
             [str(self.python), "-c", WORKER],
             cwd=self.root,
@@ -70,13 +75,13 @@ class SubscriptionResponses:
                     "model": self.model,
                     "reasoning": self.reasoning,
                     "profile": self.profile,
-                    "timeout": self.timeout,
+                    "timeout": timeout,
                 }
             ),
             text=True,
             encoding="utf-8",
             capture_output=True,
-            timeout=self.timeout + 60,
+            timeout=timeout if remaining_seconds is not None else timeout + 60,
             check=False,
         )
         if result.returncode:

@@ -1,0 +1,26 @@
+{
+  "scope": "opt-in pilot budget enforcement; local verification only",
+  "agentless_checks_passed": 7,
+  "grinta_checks_passed": 25,
+  "matching_accounting_sha256": "4204176f1717b9f76ec4cc722de0feec9efe7374ac8ed2157597ee4a4fbde89f",
+  "limits": {
+    "seconds": 7200,
+    "combined_tokens": 2000000
+  },
+  "verified": [
+    "token_threshold",
+    "reported_inflight_overshoot",
+    "initial_baseline_exclusion",
+    "remaining_candidate_timeout",
+    "no_next_live_stage_after_limit",
+    "async_deadline_cancellation",
+    "subscription_usage_charged_once_without_double_counting_reasoning"
+  ],
+  "model_calls": 0,
+  "benchmark_tasks_run": 0,
+  "paired_live_budget_verified": false,
+  "limitations": [
+    "Grinta cancellation is cooperative; detached processes do not have an independent OS kill switch.",
+    "Shared-record live Grinta gate remains closed until the paired container launcher is integrated."
+  ]
+}
