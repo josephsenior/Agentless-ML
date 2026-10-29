@@ -90,8 +90,7 @@ class SubscriptionResponses:
                 "Subscription response failed; check Grinta sign-in and plan allowance"
             )
         response = json.loads(result.stdout)
-        if response.get("model") != self.model or not response.get("text", "").strip():
-            raise ValueError(
-                "Subscription returned an empty response or a different model"
-            )
+        # Stage semantics belong to the controller. In particular, an empty
+        # regression-selection response validly means no tests are excluded.
+        # Return completed responses before validation so usage is retained.
         return response

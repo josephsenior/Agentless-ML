@@ -406,7 +406,12 @@ class FixedWorkflowController:
                 finally:
                     _write_json(directory / "budget.json", budget.snapshot())
             text = response.get("text", "")
-            if not isinstance(text, str) or not text.strip():
+            expected_model = getattr(response_provider, "model", None)
+            if expected_model and response.get("model") != expected_model:
+                raise WorkflowError("response model differs from requested model")
+            if not isinstance(text, str) or (
+                not text.strip() and stage != "regression-selection"
+            ):
                 raise WorkflowError("empty model response")
             return text
 
