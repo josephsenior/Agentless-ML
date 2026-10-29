@@ -151,6 +151,8 @@ def main(argv=None):
         action="store_true",
         help="Enforce agreed 7200-second/2000000-token pilot limits",
     )
+    parser.add_argument("--runtime-registry", type=Path)
+    parser.add_argument("--runtime-evidence", type=Path)
     args = parser.parse_args(argv)
     record = load_shared_task(args.shared_task)
     published, registration, command = resolve(record)
@@ -185,8 +187,22 @@ def main(argv=None):
             raise ValueError("shared runs cannot override the shared public schedule")
     environment = record["environment"]
     limits = environment["limits"]
+    runtime_image = environment["effective_image_id"]
+    if bool(args.runtime_registry) != bool(args.runtime_evidence):
+        parser.error(
+            "runtime registry and verification evidence must be supplied together"
+        )
+    if args.runtime_registry:
+        from agentless_ml.runtime_binding import verified_runtime
+
+        runtime_image = verified_runtime(
+            record,
+            json.loads(args.runtime_registry.read_bytes()),
+            json.loads(args.runtime_evidence.read_bytes()),
+        )
+        manifest["prepared_runtime_image"] = runtime_image
     runner = runtime_runner(
-        environment["effective_image_id"],
+        runtime_image,
         args.artifact_root / "executions",
         registration,
         task=published,
@@ -198,10 +214,7 @@ def main(argv=None):
         swap_policy=limits["swap_policy"],
         run_as_image_user=True,
     )
-    if (
-        runner.image_id != environment["effective_image_id"]
-        or runner.user != environment["user"]["user"]
-    ):
+    if runner.image_id != runtime_image or runner.user != environment["user"]["user"]:
         raise ValueError("observed image or user differs from the shared record")
     task = replace(
         published, container_image=runner.image_id, container_digest=runner.image_id
