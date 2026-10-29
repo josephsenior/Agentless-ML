@@ -16,7 +16,7 @@ described in the linked guides.
 | [package_deepswe_pilot.py](package_deepswe_pilot.py) | Build and verify the small pilot preparation bundle, with unresolved research settings explicit. See the [package guide](../docs/deepswe-pilot-package.md). |
 | [verify_deepswe_pilot_runtimes.py](verify_deepswe_pilot_runtimes.py) | Prepare separate core images for the reviewed pilot tasks and compare both real runners offline, without a model or full baseline reruns. |
 | [rehearse_shared_containers.py](rehearse_shared_containers.py) | Observe real Agentless and Pier containers with a prepared common runtime; exercise native Grinta edits without a model. |
-| [run_shared_deepswe_workflow.py](run_shared_deepswe_workflow.py) | Consume a shared task for preflight or a recorded Agentless run. |
+| [run_shared_deepswe_workflow.py](run_shared_deepswe_workflow.py) | Shared-task preflight, recorded replay or explicit [live subscription](../docs/live-subscription.md) workflow. |
 | [compare_shared_deepswe_starts.py](compare_shared_deepswe_starts.py) | Compare both real launcher preflights on independent pinned workspaces; no model calls. |
 | [export_deepswe_task_specs.py](export_deepswe_task_specs.py) | Export shared public DeepSWE task records and existing baseline evidence without Docker or model calls. See the [format guide](../docs/shared-deepswe-task-spec.md). |
 | [demo_fixed_workflow.py](demo_fixed_workflow.py) | Run the small authored example through the recorded controller and export a patch. |

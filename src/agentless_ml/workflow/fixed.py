@@ -8,7 +8,7 @@ import math
 import time
 import uuid
 from collections.abc import Mapping
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from datetime import UTC, datetime
 from enum import Enum
 from pathlib import Path
@@ -156,10 +156,10 @@ def _write_json(path: Path, value: Any) -> None:
 
 
 class FixedWorkflowController:
-    """Execute one predetermined run from immutable recorded responses.
+    """Execute the same fixed stages with recorded or requested text responses.
 
-    The response bundle contains data only. The controller has no model client,
-    retry branch, test-feedback loop, or hidden-verifier interface.
+    Live sampling is predetermined. Validation feedback never triggers another
+    model request, and the response provider receives only the stage prompt.
     """
 
     def __init__(
@@ -272,15 +272,19 @@ class FixedWorkflowController:
                     sample_directory / "baseline.json",
                     {
                         "result": asdict(execution.result),
-                        "checked_result": asdict(check_reproduction_result(
-                            execution.result, report_declared=spec.command.report is not None,
-                        )),
+                        "checked_result": asdict(
+                            check_reproduction_result(
+                                execution.result,
+                                report_declared=spec.command.report is not None,
+                            )
+                        ),
                         "workspace": asdict(workspace.provenance),
                         "artifact_directory": execution.artifact_directory,
                     },
                 )
             status = check_reproduction_result(
-                execution.result, report_declared=spec.command.report is not None,
+                execution.result,
+                report_declared=spec.command.report is not None,
             ).status
             attempts.append({"sample_index": index, "status": status.value})
             _write_json(directory / "reproduction-attempts.json", attempts)
@@ -315,12 +319,68 @@ class FixedWorkflowController:
         )
         return source
 
-    def run(self, responses: RecordedStageResponses) -> WorkflowResult:
+    def run_live(
+        self, provider, *, repair_samples=1, edit_samples=1, reproduction_samples=1
+    ):
+        """Use predetermined sample counts; model responses never choose actions."""
+        if any(
+            not isinstance(n, int) or n < 1
+            for n in (repair_samples, edit_samples, reproduction_samples)
+        ):
+            raise ValueError("sample counts must be positive integers")
+        responses = RecordedStageResponses(
+            file_localization="pending",
+            symbol_localization="pending",
+            source="chatgpt-plan/live",
+            edit_samples=tuple(
+                RecordedEditSample("pending", ("pending",) * repair_samples)
+                for _ in range(edit_samples)
+            ),
+            regression_exclusions="pending" if self.regression_tests else None,
+            reproduction_samples=("pending",) * reproduction_samples
+            if self.reproduction_spec
+            else (),
+        )
+        return self.run(responses, response_provider=provider)
+
+    def run(
+        self, responses: RecordedStageResponses, *, response_provider=None
+    ) -> WorkflowResult:
         started_at = datetime.now(UTC)
         started = time.monotonic()
         run_id = "run-" + uuid.uuid4().hex
         directory = self.artifact_root / run_id
         directory.mkdir(parents=True)
+        calls = input_tokens = output_tokens = 0
+
+        def ask(stage, prompt):
+            nonlocal calls, input_tokens, output_tokens
+            calls += 1
+            call_dir = directory / "model-calls" / str(calls)
+            call_dir.mkdir(parents=True)
+            _write_json(
+                call_dir / "request.json",
+                {
+                    "stage": stage,
+                    "prompt": prompt,
+                    "provider_settings": getattr(response_provider, "settings", {}),
+                },
+            )
+            response = response_provider.complete(prompt)
+            _write_json(call_dir / "response.json", response)
+            usage = response.get("usage")
+            if not isinstance(usage, dict) or any(
+                not isinstance(usage.get(k), int) or usage[k] < 0
+                for k in ("input_tokens", "output_tokens")
+            ):
+                raise WorkflowError("completed response lacks usable token accounting")
+            input_tokens += usage["input_tokens"]
+            output_tokens += usage["output_tokens"]
+            text = response.get("text", "")
+            if not isinstance(text, str) or not text.strip():
+                raise WorkflowError("empty model response")
+            return text
+
         try:
             _write_json(directory / "responses.json", asdict(responses))
             if bool(self.regression_tests) != (
@@ -337,6 +397,19 @@ class FixedWorkflowController:
             ):
                 raise WorkflowError(
                     "reproduction specification and recorded source must be supplied together"
+                )
+            if response_provider is not None and self.reproduction_spec is not None:
+                prompt = render_reproduction_prompt(
+                    self.task.problem_statement,
+                    self.task.language,
+                    self.reproduction_spec,
+                )
+                responses = replace(
+                    responses,
+                    reproduction_samples=tuple(
+                        ask("reproduction", prompt)
+                        for _ in responses.reproduction_samples
+                    ),
                 )
             if self.reproduction_spec is not None and responses.reproduction_samples:
                 source = self._prepare_reproduction_samples(
@@ -381,19 +454,25 @@ class FixedWorkflowController:
                             directory / "reproduction-baseline.json",
                             {
                                 "result": asdict(execution.result),
-                                "checked_result": asdict(check_reproduction_result(
-                                    execution.result,
-                                    report_declared=spec.command.report is not None,
-                                )),
+                                "checked_result": asdict(
+                                    check_reproduction_result(
+                                        execution.result,
+                                        report_declared=spec.command.report is not None,
+                                    )
+                                ),
                                 "workspace": asdict(workspace.provenance),
                                 "artifact_directory": execution.artifact_directory,
                             },
                         )
                 except ValueError as exc:
                     raise WorkflowError(str(exc)) from exc
-                if check_reproduction_result(
-                    execution.result, report_declared=spec.command.report is not None,
-                ).status != ValidationStatus.FAIL:
+                if (
+                    check_reproduction_result(
+                        execution.result,
+                        report_declared=spec.command.report is not None,
+                    ).status
+                    != ValidationStatus.FAIL
+                ):
                     raise WorkflowError(
                         "generated reproduction must fail on the original revision without infrastructure errors"
                     )
@@ -454,6 +533,11 @@ class FixedWorkflowController:
                 (directory / "regression-selection.txt").write_text(
                     prompt + "\n", encoding="utf-8"
                 )
+                if response_provider is not None:
+                    responses = replace(
+                        responses,
+                        regression_exclusions=ask("regression-selection", prompt),
+                    )
                 try:
                     # Guaranteed by the check above: self.regression_tests is
                     # truthy here, so regression_exclusions must be supplied.
@@ -472,7 +556,9 @@ class FixedWorkflowController:
                         "passing_ids": passing_ids,
                         "excluded_ids": excluded,
                         "selected_ids": tuple(
-                            test_id for test_id in passing_ids if test_id not in excluded
+                            test_id
+                            for test_id in passing_ids
+                            if test_id not in excluded
                         ),
                         "response": responses.regression_exclusions,
                     },
@@ -504,7 +590,7 @@ class FixedWorkflowController:
                     "implementation_revision": self.implementation_revision,
                     "harness_revision": self.harness_revision,
                     "model_name": self.model_name,
-                    "model_calls": 0,
+                    "model_calls": calls,
                     "localization_mode": "edit-samples"
                     if responses.edit_samples
                     else "edit-lines"
@@ -536,6 +622,11 @@ class FixedWorkflowController:
                     project_tree,
                     extension=self.adapter.extension,
                 )
+                if response_provider is not None:
+                    responses = replace(
+                        responses,
+                        file_localization=ask("file-localization", file_prompt),
+                    )
                 selected_files = parse_file_locations(
                     responses.file_localization,
                     source_paths,
@@ -559,6 +650,11 @@ class FixedWorkflowController:
                     sources,
                     adapter=self.adapter,
                 )
+                if response_provider is not None:
+                    responses = replace(
+                        responses,
+                        symbol_localization=ask("symbol-localization", symbol_prompt),
+                    )
                 locations = parse_locations_for_files(
                     extract_code_blocks(responses.symbol_localization),
                     selected_files,
@@ -600,7 +696,13 @@ class FixedWorkflowController:
                             "edit_prompt": edit_prompt,
                         },
                     )
+                    generated_samples = []
                     for rank, sample in enumerate(responses.edit_samples):
+                        if response_provider is not None:
+                            sample = replace(
+                                sample,
+                                edit_localization=ask("edit-localization", edit_prompt),
+                            )
                         sample_directory = directory / "localizations" / str(rank)
                         sample_directory.mkdir(parents=True)
                         try:
@@ -637,9 +739,29 @@ class FixedWorkflowController:
                             + "\n",
                             encoding="utf-8",
                         )
+                        if response_provider is not None:
+                            sample = replace(
+                                sample,
+                                repairs=tuple(
+                                    ask(
+                                        "repair",
+                                        build_repair_prompt(
+                                            self.task.problem_statement,
+                                            context,
+                                            language=self.adapter.language,
+                                        ),
+                                    )
+                                    for _ in sample.repairs
+                                ),
+                            )
+                            generated_samples.append(sample)
                         repair_plan.extend(
                             (rank, index, response, sample_intervals)
                             for index, response in enumerate(sample.repairs)
+                        )
+                    if response_provider is not None:
+                        responses = replace(
+                            responses, edit_samples=tuple(generated_samples)
                         )
                 if responses.edit_localization is not None:
                     numbered_context, _ = construct_selected_context(
@@ -737,13 +859,15 @@ class FixedWorkflowController:
                         sources,
                         edits,
                         allowed_intervals=candidate_intervals,
-                        existing_paths=self.provider.paths | self.provider.symlink_paths,
+                        existing_paths=self.provider.paths
+                        | self.provider.symlink_paths,
                     )
                     candidate = build_patch_candidate(
                         candidate_id=candidate_id,
                         raw_response=response,
                         diff=build_unified_diff(
-                            applied.original_sources, applied.updated_sources,
+                            applied.original_sources,
+                            applied.updated_sources,
                             renamed_paths=applied.renamed_paths,
                             source_modes=self.provider.file_modes,
                         ),
@@ -811,7 +935,9 @@ class FixedWorkflowController:
                 raise WorkflowError("run duration is not finite")
             record = RunRecord(
                 run_id=run_id,
-                condition="agentless-ml-recorded",
+                condition="agentless-ml-live"
+                if response_provider is not None
+                else "agentless-ml-recorded",
                 instance_id=self.task.instance_id,
                 started_at=started_at,
                 implementation_revision=self.implementation_revision,
@@ -819,12 +945,16 @@ class FixedWorkflowController:
                 harness_revision=self.harness_revision,
                 container_digest=self.runner.image_id,
                 model_name=self.model_name,
-                model_calls=0,
-                input_tokens=0,
-                output_tokens=0,
+                model_calls=calls,
+                input_tokens=input_tokens,
+                output_tokens=output_tokens,
                 wall_time_seconds=duration,
                 final_patch_sha256=final_digest,
             )
+            controller_path = directory / "controller.json"
+            controller_data = json.loads(controller_path.read_text(encoding="utf-8"))
+            controller_data["model_calls"] = calls
+            _write_json(controller_path, controller_data)
             _write_json(directory / "prediction.json", asdict(prediction))
             _write_json(directory / "run.json", asdict(record))
             _write_json(
@@ -850,7 +980,7 @@ class FixedWorkflowController:
                 {
                     "type": type(exc).__name__,
                     "message": str(exc),
-                    "model_calls": 0,
+                    "model_calls": calls,
                 },
             )
             raise

@@ -1,0 +1,92 @@
+"""Text-only subscription responses using Grinta's saved ChatGPT authorization."""
+
+import json
+import os
+import subprocess
+from pathlib import Path
+
+WORKER = """
+import json,sys
+from openai import OpenAI
+from backend.inference.clients.chatgpt_plan_auth import access_token
+request=json.load(sys.stdin)
+client=OpenAI(api_key=access_token(request['profile']),base_url='https://api.openai.com/v1',max_retries=0,timeout=request['timeout'])
+with client.responses.create(model=request['model'],input=[{'role':'user','content':request['prompt']}],reasoning={'effort':request['reasoning']},store=False,stream=True) as stream:
+ for event in stream:
+  if event.type in ('response.failed','response.incomplete','error'):
+   raise RuntimeError('Subscription response failed or was incomplete')
+  if event.type=='response.completed':
+   response=event.response
+   text=''.join(part.text for item in response.output if item.type=='message' for part in item.content if part.type=='output_text')
+   print(json.dumps({'text':text,'usage':response.usage.model_dump() if response.usage else None,'model':response.model}))
+   break
+ else:
+  raise RuntimeError('Subscription stream ended before completion')
+"""
+
+
+class SubscriptionResponses:
+    @property
+    def settings(self):
+        return {
+            "model": self.model,
+            "reasoning": self.reasoning,
+            "authentication": "chatgpt-plan",
+            "profile": self.profile,
+            "timeout_seconds": self.timeout,
+        }
+
+    def __init__(
+        self,
+        grinta_root,
+        *,
+        model="gpt-6.1-sol",
+        reasoning="medium",
+        profile="default",
+        timeout=120,
+    ):
+        self.root = Path(grinta_root).resolve()
+        self.python = (
+            self.root
+            / ".venv"
+            / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
+        )
+        self.model, self.reasoning, self.profile, self.timeout = (
+            model,
+            reasoning,
+            profile,
+            timeout,
+        )
+        if not self.python.is_file():
+            raise ValueError("Grinta Python environment not found")
+
+    def complete(self, prompt):
+        result = subprocess.run(
+            [str(self.python), "-c", WORKER],
+            cwd=self.root,
+            input=json.dumps(
+                {
+                    "prompt": prompt,
+                    "model": self.model,
+                    "reasoning": self.reasoning,
+                    "profile": self.profile,
+                    "timeout": self.timeout,
+                }
+            ),
+            text=True,
+            encoding="utf-8",
+            capture_output=True,
+            timeout=self.timeout + 60,
+            check=False,
+        )
+        if result.returncode:
+            # Never copy transport diagnostics or credential-bearing exceptions.
+            raise RuntimeError(
+                "Subscription response failed; check Grinta sign-in and plan allowance"
+            )
+        response = json.loads(result.stdout)
+        if response.get("model") != self.model or not response.get("text", "").strip():
+            raise ValueError(
+                "Subscription returned an empty response or a different model"
+            )
+        return response
