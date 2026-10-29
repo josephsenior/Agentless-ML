@@ -47,7 +47,10 @@ operations, not a real two-hour benchmark run.
 
 Focused local tests cover matching thresholds, overshoot, initial-baseline
 exclusion, unavailable usage, candidate timeout clamping, provider accounting and
-deadline cancellation. No pilot was started. Grinta's shared-record launcher
-still deliberately blocks live execution until the paired container launch path
-is integrated; the budget flag does not bypass that gate. Historical preparation
+deadline cancellation. These were model-free checks when the contract was first
+implemented. The separate shared-container launcher has since been integrated,
+and the first task reached live engineering attempts on 29 October 2026. See the
+[first-task checkpoint](../experiments/pilots/deepswe_small_v2/first_task_checkpoint_2026-10-29.md)
+for retained failures and actual usage. No paired repair result is available yet.
+The legacy shared-record launch gate remains separate. Historical preparation
 bundles keep their original configuration and checksums.

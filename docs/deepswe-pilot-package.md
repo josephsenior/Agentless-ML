@@ -110,6 +110,13 @@ Do not use the historical model defaults as the new research configuration.
 
 ## Before a live pilot
 
+**Historical preparation checklist.** Model access and the time/token contract
+were subsequently agreed, and a separate shared-container launcher was added.
+The first task's engineering attempts and remaining blockers are recorded in the
+[29 October checkpoint](../experiments/pilots/deepswe_small_v2/first_task_checkpoint_2026-10-29.md).
+The original v2 package below remains a preparation artifact with its original
+pins; it is not a record of successful repairs.
+
 Review and freeze the task list and exposure audit, review differences in the
 historical public baselines, and select
 the model/access arrangement. Aggregate time/token budgets, sample allocation,

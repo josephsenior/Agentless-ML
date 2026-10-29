@@ -1,0 +1,286 @@
+{
+  "date": "2026-10-29",
+  "task_id": "aiomonitor-task-snapshots-diff",
+  "status": "engineering_checkpoint_no_paired_result",
+  "contract": {
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "seconds": 7200,
+    "combined_tokens": 2000000,
+    "agentless_edit_samples": 1,
+    "agentless_repair_samples": 4
+  },
+  "task_spec_sha256": "e0f68f720fae7a6d0d9204d1db80a6d4e9271bd2fe57926a1abb2d8fbeff944e",
+  "image_id": "sha256:187fbe4dbd160574f16782cfed1fb2ef04423ae77b925108a1b7679d8df73345",
+  "agentless_original": {
+    "raw_response_retained": false,
+    "usage": null,
+    "reason": "Provider rejected before raw response retention; exact original response unknown."
+  },
+  "agentless_authorized_engineering_retry": {
+    "failure": {
+      "type": "WorkflowError",
+      "message": "symbol localization produced no valid repair context",
+      "model_calls": 3
+    },
+    "budget": {
+      "time_limit_seconds": 7200,
+      "token_limit": 2000000,
+      "used_tokens": 4951,
+      "token_overshoot": 0,
+      "remaining_seconds": 7152.877058000013
+    },
+    "model_calls": [
+      {
+        "stage": "regression-selection",
+        "request": {
+          "path": "artifacts/deepswe-first-paired-2026-10-29/agentless-engineering-retry-1/run-23654bd013404c0790ae1fdfed06372d/model-calls/1/request.json",
+          "sha256": "43cd400d83e04934a3e5c0e9b5b29de68691457ff684c8ee8e8852e906088d2b",
+          "bytes": 2708
+        },
+        "response": {
+          "path": "artifacts/deepswe-first-paired-2026-10-29/agentless-engineering-retry-1/run-23654bd013404c0790ae1fdfed06372d/model-calls/1/response.json",
+          "sha256": "0e51d1675ae0c4c847bd2236e7c5afeb20562d8507463516345487836ae7e0a1",
+          "bytes": 1417
+        },
+        "usage": {
+          "input_tokens": 513,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 29,
+          "output_tokens_details": {
+            "reasoning_tokens": 23
+          },
+          "total_tokens": 542,
+          "attribution": {
+            "items": {
+              "msg_0f601182cb832c9d016ae3bca5b8348191a2be72db8769b372": {
+                "input_tokens": 511,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 511,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0f601182cb832c9d016ae3bca7ce3c8191a526057f7cbd6b4d": {
+                "input_tokens": 0,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 6,
+                "content": [
+                  {
+                    "input_tokens": 0,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 6
+                  }
+                ]
+              },
+              "rs_0f601182cb832c9d016ae3bca7ad48819187bbd4e3ba00c41f": {
+                "input_tokens": 2,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 23
+              }
+            }
+          }
+        }
+      },
+      {
+        "stage": "file-localization",
+        "request": {
+          "path": "artifacts/deepswe-first-paired-2026-10-29/agentless-engineering-retry-1/run-23654bd013404c0790ae1fdfed06372d/model-calls/2/request.json",
+          "sha256": "a5d0a0e642780407a238d8bee6bc03d70c8b2b210eee1d0f779b5b744dc461e6",
+          "bytes": 3147
+        },
+        "response": {
+          "path": "artifacts/deepswe-first-paired-2026-10-29/agentless-engineering-retry-1/run-23654bd013404c0790ae1fdfed06372d/model-calls/2/response.json",
+          "sha256": "c0eebe7fa2239ca099a87857f2b70cee50f4904ee99f7ad1c914fc16fc7ee23a",
+          "bytes": 1709
+        },
+        "usage": {
+          "input_tokens": 615,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 263,
+          "output_tokens_details": {
+            "reasoning_tokens": 165
+          },
+          "total_tokens": 878,
+          "attribution": {
+            "items": {
+              "msg_0a3cef411caace03016ae3bcafe1c4819199643c210e39b99a": {
+                "input_tokens": 613,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 613,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0a3cef411caace03016ae3bcb73c3481918a55142b4590f7cb": {
+                "input_tokens": 0,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 98,
+                "content": [
+                  {
+                    "input_tokens": 0,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 98
+                  }
+                ]
+              },
+              "rs_0a3cef411caace03016ae3bcb71d2c8191930719d573f3f7b7": {
+                "input_tokens": 2,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 165
+              }
+            }
+          }
+        }
+      },
+      {
+        "stage": "symbol-localization",
+        "request": {
+          "path": "artifacts/deepswe-first-paired-2026-10-29/agentless-engineering-retry-1/run-23654bd013404c0790ae1fdfed06372d/model-calls/3/request.json",
+          "sha256": "7de62d42a2103562e8b3aad9d3e2b0a7e1f114b825fd2ab9a84b6ba8b1d90a61",
+          "bytes": 13536
+        },
+        "response": {
+          "path": "artifacts/deepswe-first-paired-2026-10-29/agentless-engineering-retry-1/run-23654bd013404c0790ae1fdfed06372d/model-calls/3/response.json",
+          "sha256": "3d37659b64854e6bbbd19bf4a73a373a2de9d1fbe990aae0ce7151184b50f6ba",
+          "bytes": 2968
+        },
+        "usage": {
+          "input_tokens": 3070,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 461,
+          "output_tokens_details": {
+            "reasoning_tokens": 95
+          },
+          "total_tokens": 3531,
+          "attribution": {
+            "items": {
+              "msg_08ee0856499e622b016ae3bcbf7b288191aab3f909fbeee55a": {
+                "input_tokens": 3068,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 3068,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_08ee0856499e622b016ae3bcc53818819193fd9aeb073ce846": {
+                "input_tokens": 0,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 366,
+                "content": [
+                  {
+                    "input_tokens": 0,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 366
+                  }
+                ]
+              },
+              "rs_08ee0856499e622b016ae3bcc515f48191970230fab87f951e": {
+                "input_tokens": 2,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 95
+              }
+            }
+          }
+        }
+      }
+    ],
+    "repair_generated": false,
+    "prediction_exported": false,
+    "evidence": [
+      {
+        "path": "artifacts/deepswe-first-paired-2026-10-29/agentless-engineering-retry-1/run-23654bd013404c0790ae1fdfed06372d/failure.json",
+        "sha256": "07a04fb9ca07e5e129aad87f3efe343ba5bbbe8f45295ed3851578b5104edf93",
+        "bytes": 124
+      },
+      {
+        "path": "artifacts/deepswe-first-paired-2026-10-29/agentless-engineering-retry-1/run-23654bd013404c0790ae1fdfed06372d/budget.json",
+        "sha256": "b38c2be4c34151cdfb59c1f2ff57241faca8228613a103fefe4e9f2fb3ecffbc",
+        "bytes": 155
+      }
+    ]
+  },
+  "grinta_latest_launch": {
+    "result": {
+      "task_id": "aiomonitor-task-snapshots-diff",
+      "spec_sha256": "e0f68f720fae7a6d0d9204d1db80a6d4e9271bd2fe57926a1abb2d8fbeff944e",
+      "image_id": "sha256:187fbe4dbd160574f16782cfed1fb2ef04423ae77b925108a1b7679d8df73345",
+      "status": "failed",
+      "grinta_revision": "d2d92a24e71b20f280bfe61a70c65fa90e225780",
+      "error_type": "ValueError",
+      "error": "relay request differs from agreed model settings",
+      "attempt_budget": {
+        "time_limit_seconds": 7200,
+        "token_limit": 2000000,
+        "used_tokens": 0,
+        "token_overshoot": 0,
+        "remaining_seconds": 7192.6720000000205
+      }
+    },
+    "evidence": [
+      {
+        "path": "artifacts/deepswe-first-paired-2026-10-29/grinta-live-scratch-data/result.json",
+        "sha256": "f6a64d2086bf1af68f018f8689320283ce52442768017f91ff8407e467c0fad3",
+        "bytes": 597
+      },
+      {
+        "path": "artifacts/deepswe-first-paired-2026-10-29/grinta-live-scratch-data/agent.log",
+        "sha256": "31de7c16049df3d4fd946a0353331e6712fdb2abc03415b2235ee4d64e7cd9cd",
+        "bytes": 49
+      },
+      {
+        "path": "artifacts/deepswe-first-paired-2026-10-29/grinta-live-scratch-data/baseline-report.xml",
+        "sha256": "4bc85c9b5bd4faff8ce6e4cdad04f4aab91e36686f4367ea7e54c4c2ea235e60",
+        "bytes": 943
+      }
+    ],
+    "baseline": {
+      "cases": 8,
+      "failure": 0,
+      "error": 0,
+      "skipped": 0
+    },
+    "correction_commit": "ae9a2f8a7",
+    "verification": "10 focused provider/pipe tests and static checks passed without inference",
+    "corrected_runtime_launched": false
+  },
+  "hidden_scoring_performed": false,
+  "other_pilot_tasks_launched": false,
+  "readiness_changed": false
+}
