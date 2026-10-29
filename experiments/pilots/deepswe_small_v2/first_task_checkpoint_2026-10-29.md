@@ -68,3 +68,23 @@ successful task repair or complete budget enforcement in a long live attempt.
 Next: review Agentless's strict output-format behavior and refresh Grinta's
 private runtime with the tested settings fix. Preserve the failed attempts when
 agreeing on any further live retry. No benchmark readiness counts changed.
+
+## Follow-up: format reviewed, runtime refreshed
+
+The [pinned-source format review](../../../docs/agentless-response-format-review.md)
+confirmed that our Python prompt is byte-identical to the reference and that
+both block extractors reject the retained unfenced response. The prompt and
+parser remain unchanged.
+
+The replacement Aiomonitor image is
+`sha256:3c558e3f6d7a50d73c829e9e29ac41179962b2583951d080b6949a1a4cdf7649`.
+It contains committed Grinta revision
+`ae9a2f8a78f629a932d170affe4d7d3ef836a66f`, including the reasoning-setting fix.
+Task toolchain fingerprints and parent layers were verified. Both runners'
+controlled fixture checks passed, and an offline request-construction check in
+the image preserved `medium` reasoning through the common sanitizer.
+
+The new registry and runtime evidence are under
+`artifacts/paired-first-task-runtime-2026-10-29-reasoning-fix/` locally.
+Earlier images and failed attempts remain retained. This follow-up does not
+authorize or record another live model attempt.

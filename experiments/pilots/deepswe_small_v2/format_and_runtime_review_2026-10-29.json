@@ -1,0 +1,119 @@
+{
+  "date": "2026-10-29",
+  "task_id": "aiomonitor-task-snapshots-diff",
+  "format_review": {
+    "upstream_revision": "b150f28465a77a81a7f4776384957a4271f5bd69",
+    "symbol_prompt_byte_identical": true,
+    "parser_differential_checks": {
+      "actual_unfenced_reply": {
+        "same_as_upstream": true,
+        "extracted_blocks": 0
+      },
+      "same_reply_fenced": {
+        "same_as_upstream": true,
+        "extracted_blocks": 1
+      },
+      "incomplete_fence": {
+        "same_as_upstream": true,
+        "extracted_blocks": 1
+      },
+      "labelled_fence": {
+        "same_as_upstream": true,
+        "extracted_blocks": 1
+      }
+    },
+    "decision": "Preserve pinned prompt and parser. A stricter output instruction would be an explicit prompt variation, requiring review before any retry.",
+    "files": {
+      "FL.py": "16dbd2b52aaad7d9cc7e2026b9eef25183b1cd835676f4ea28242524ad001f31",
+      "postprocess_data.py": "9b83b0563f37aea9d8c14686ca4eaf527b0a6166a5ba613beae62d10a4ae9b6d",
+      "upstream-symbol-prompt.txt": "f83d9c085f140ee00b89be621db1a60f3fb27750491abf6e4cfbbac083a3c17c"
+    }
+  },
+  "prepared_runtime": {
+    "image_id": "sha256:3c558e3f6d7a50d73c829e9e29ac41179962b2583951d080b6949a1a4cdf7649",
+    "base_image_id": "sha256:187fbe4dbd160574f16782cfed1fb2ef04423ae77b925108a1b7679d8df73345",
+    "grinta_revision": "ae9a2f8a78f629a932d170affe4d7d3ef836a66f",
+    "task_toolchain_unchanged": true,
+    "parent_image_layers_verified": true,
+    "containers_match": true,
+    "initial_task_probes_match": true,
+    "native_edit_checks": {
+      "binary_command_stopped_before_feedback": true,
+      "case_collision_rejected": true,
+      "chmod_rejected": true,
+      "controlled_public_test_passed": true,
+      "invalid_final_patch_rejected": true,
+      "native_file_edit_and_shell_create_delete_rename": true,
+      "new_executable_rejected": true,
+      "next_action_stopped": true,
+      "permitted_patch_exported": true,
+      "rename_executable_with_edit_allowed": true,
+      "symlink_rejected": true
+    },
+    "subscription_payload_check": {
+      "model": "gpt-6.1-sol",
+      "reasoning": {
+        "effort": "medium",
+        "summary": "detailed"
+      },
+      "store": false,
+      "stream": true,
+      "timeout_not_in_body": true,
+      "model_calls": 0
+    },
+    "startup_check": {
+      "status": "setup_verified",
+      "public_tests_passed": 8,
+      "model_calls": 0
+    },
+    "registry": {
+      "path": "artifacts/paired-first-task-runtime-2026-10-29-reasoning-fix/runtime.json",
+      "sha256": "f98daf456b6427cd062eb54d5e08bba3195c4d85c293c8c8fee4490fc785ab58"
+    },
+    "runtime_evidence": {
+      "path": "artifacts/paired-first-task-runtime-2026-10-29-reasoning-fix/runtime-evidence.json",
+      "sha256": "2b310a98be7062ade37c103e3a09dfb4fbb473d1880be47a0ba1d5717f9e38de"
+    },
+    "supporting_evidence": [
+      {
+        "path": "artifacts/paired-first-task-runtime-2026-10-29-reasoning-fix/Dockerfile",
+        "sha256": "840474368530d5dd96c79cfd268a8fa2363edf705929dc1e719586b360279c8b"
+      },
+      {
+        "path": "artifacts/paired-first-task-runtime-2026-10-29-reasoning-fix/source.tar",
+        "sha256": "2ea29f5933d7ca0d563dc165ec3d94c343dfe53fc28072d6acad9b95588ff473"
+      },
+      {
+        "path": "artifacts/paired-first-task-runtime-2026-10-29-reasoning-fix/before.json",
+        "sha256": "092dd543f17937b594de1b5a65a81a7e2d36a7580aa2867e3b63d06192c7b82a"
+      },
+      {
+        "path": "artifacts/paired-first-task-runtime-2026-10-29-reasoning-fix/after.json",
+        "sha256": "092dd543f17937b594de1b5a65a81a7e2d36a7580aa2867e3b63d06192c7b82a"
+      },
+      {
+        "path": "artifacts/paired-first-task-runtime-2026-10-29-reasoning-fix/source-provenance.json",
+        "sha256": "bc1d03eab7585d6db4beedebaa11917fae8a080900bb284485705acdac2c2b34"
+      },
+      {
+        "path": "artifacts/paired-first-task-runtime-2026-10-29-reasoning-fix/paired-rehearsal/result.json",
+        "sha256": "9015d049e32d3fd5fd255d2e1656a0e8d55c4179e333258d4e7c3128fa124671"
+      },
+      {
+        "path": "artifacts/paired-first-task-runtime-2026-10-29-reasoning-fix/subscription-payload-check.json",
+        "sha256": "a91ea2c6baff9bfcbcc741953174cd489a297d03e7d531252a4f2113766a5242"
+      },
+      {
+        "path": "artifacts/paired-first-task-runtime-2026-10-29-reasoning-fix/startup-check/result.json",
+        "sha256": "41138eb1c309bfabcf40f711edd6004b04b16ed321fdeec63ebf80d9157afe3e"
+      },
+      {
+        "path": "artifacts/paired-first-task-runtime-2026-10-29-reasoning-fix/startup-check/baseline-report.xml",
+        "sha256": "60e2c5766632bf7947500893dcc46a342c8ff1168194bc9feedca2b3ceba6444"
+      }
+    ]
+  },
+  "focused_agentless_tests_passed": 18,
+  "live_retry_started": false,
+  "readiness_changed": false
+}
