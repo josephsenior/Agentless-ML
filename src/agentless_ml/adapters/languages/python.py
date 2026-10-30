@@ -19,7 +19,8 @@ from agentless_ml.schemas import FileNode, SymbolNode
 from agentless_ml.schemas.prompts import LanguagePrompts, RepairExample
 from agentless_ml.structure.resolution import ResolvedLocations, merge_intervals
 
-# Published Agentless v1.5.0 prompt text, kept byte-identical for parity.
+# Published Agentless v1.5.0 prompt with an explicit fence requirement in the
+# final instruction; see docs/agentless-response-format-review.md.
 _AGENTLESS_SYMBOL_LOCALIZATION = """
 Please look through the following GitHub Problem Description and the Skeleton of Relevant Files.
 Identify all locations that need inspection or editing to fix the problem, including directly related areas as well as any potentially related global variables, functions, and classes.
@@ -54,7 +55,7 @@ function: MyClass4.my_method_1
 class: MyClass5
 ```
 
-Return just the locations.
+Return just the locations inside an unlabelled fenced code block, as shown above.
 """
 
 PYTHON_PROMPTS = LanguagePrompts(

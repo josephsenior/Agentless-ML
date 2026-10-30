@@ -48,4 +48,4 @@ function: MyClass4.my_method_1
 class: MyClass5
 ```
 
-Return just the locations.
+Return just the locations inside an unlabelled fenced code block, as shown above.
