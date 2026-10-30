@@ -271,6 +271,30 @@ def test_multiple_edit_samples_share_selection(tmp_path, source):
     assert not list((tmp_path / "workspaces").iterdir())
 
 
+@pytest.mark.parametrize("sampled", [False, True])
+def test_displayed_trailing_blank_line_can_be_localized(tmp_path, source, sampled):
+    recorded = responses()
+    location = "```\ncalculator.py\nline: 3\n```"
+    bundle = (
+        replace(recorded, repairs=(), edit_samples=(
+            RecordedEditSample(location, (recorded.repairs[2],)),
+        ))
+        if sampled else replace(recorded, edit_localization=location)
+    )
+    result = controller(tmp_path, source, FakeRunner()).run(bundle)
+    directory = Path(result.artifact_directory)
+    context = json.loads((directory / "symbol-context.json").read_text())
+    assert "3|" in context["context"]
+    assert "return a + b" in result.prediction.model_patch
+
+
+def test_line_beyond_displayed_trailing_blank_is_still_rejected(tmp_path, source):
+    with pytest.raises(WorkflowError, match="edit location was not shown"):
+        controller(tmp_path, source, FakeRunner()).run(
+            replace(responses(), edit_localization="```\ncalculator.py\nline: 4\n```")
+        )
+
+
 def test_edit_samples_do_not_share_allowed_lines(tmp_path, source):
     repository, _ = source
     long_source = "def add(a, b):\n" + "    # padding\n" * 40 + "    return a - b\n"

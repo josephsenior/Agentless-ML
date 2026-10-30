@@ -33,8 +33,16 @@ the run. Falling back to the coarse context would conceal a failed stage and
 change the allowed repair region. This strict policy is a local choice, not a
 claim of identical upstream error handling.
 
+Visible line limits use the same newline splitting as the context renderer.
+In Python context this includes a numbered blank line after a final newline.
+On 30 October 2026, the Aiomonitor run exposed a mismatch: the prompt showed
+`62|`, but validation clamped the range to 61 using the parser's physical-line
+count. The controller now accepts that displayed line and still rejects numbers
+beyond the shown range. The exact saved response's 14 locations pass local
+replay with this correction; no new model response was needed to check it.
+
 Multiple recorded responses are supported as explicit localization/repair groups.
-Live sampling remains unfinished. The prompt is a shared multilingual prompt,
+Live subscription runs request these stages in the same fixed order. The prompt is a shared multilingual prompt,
 not a byte-for-byte copy of upstream.
 The reference is `localize_line_from_coarse_function_locs` in the pinned
 [Agentless FL.py](https://github.com/OpenAutoCoder/Agentless/blob/b150f28465a77a81a7f4776384957a4271f5bd69/agentless/fl/FL.py).
@@ -59,8 +67,8 @@ Ties keep the existing first-appearance rule. Supplying more repairs to one grou
 can therefore affect voting; experiment budgets must specify those counts.
 
 Explicit groups avoid inferring an association from two independent lists. They
-also allow unequal recorded sample counts without allocating a live sampling
-budget yet. This implements local grouping and selection behavior; it does not
+also allow unequal recorded sample counts; live runs declare their sample
+allocation and attempt budget separately. This implements local grouping and selection behavior; it does not
 establish parity with every upstream sampling or merge configuration.
 
 All localization samples are checked before any candidate is executed. A malformed

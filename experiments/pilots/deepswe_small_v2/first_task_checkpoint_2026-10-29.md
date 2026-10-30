@@ -22,9 +22,17 @@ The fixes were:
 - Use Grinta's actual response-ID property in its asynchronous streaming adapter,
   and preserve finalized output items in the host relay (`cb61d4c84`). The missing
   property previously stopped tool delivery and caused repeated controller errors.
+- Initialize the Git tracking index in newly sealed source archives
+  (`1dc316da0`). Source bytes were present, but Git incorrectly reported staged
+  deletions and untracked files without that index. The fix was tested on a
+  fresh archive; the already-running development workspace was not altered.
+- Align Agentless edit-line validation with the rendered context, including its
+  displayed trailing blank line. The Aiomonitor response selected a line that
+  was visible but incorrectly excluded by a shorter parser line count. All 14
+  saved locations pass local replay after this correction.
 
 The [format review](../../../docs/agentless-response-format-review.md) explains
-that last change. Verified runtime/setup evidence and the prepared Docker images
+the Python prompt clarification. Verified runtime/setup evidence and the prepared Docker images
 were preserved, including image
 `sha256:3c558e3f6d7a50d73c829e9e29ac41179962b2583951d080b6949a1a4cdf7649`.
 

@@ -675,6 +675,11 @@ class FixedWorkflowController:
                     path: (visible_workspace.path / path).read_bytes().decode("utf-8")
                     for path in selected_files
                 }
+                # Context rendering uses split("\n"), including a displayed
+                # trailing blank line. Validation must use the same boundary.
+                context_line_counts = {
+                    path: len(source.split("\n")) for path, source in sources.items()
+                }
                 nodes = {
                     path: self.adapter.parse_file(path, source)
                     for path, source in sources.items()
@@ -716,7 +721,7 @@ class FixedWorkflowController:
                     )
                     visible_intervals = {
                         path: [
-                            (start, min(nodes[path].line_count, end))
+                            (start, min(context_line_counts[path], end))
                             for start, end in spans
                         ]
                         for path, spans in intervals.items()
@@ -750,7 +755,7 @@ class FixedWorkflowController:
                         )
                         sample_intervals = {
                             path: [
-                                (max(1, start), min(nodes[path].line_count, end))
+                                (max(1, start), min(context_line_counts[path], end))
                                 for start, end in spans
                             ]
                             for path, spans in sample_intervals.items()
@@ -820,7 +825,7 @@ class FixedWorkflowController:
                             responses.edit_localization,
                             {
                                 path: [
-                                    (start, min(nodes[path].line_count, end))
+                                    (start, min(context_line_counts[path], end))
                                     for start, end in spans
                                 ]
                                 for path, spans in intervals.items()
@@ -833,7 +838,7 @@ class FixedWorkflowController:
                     )
                     intervals = {
                         path: [
-                            (max(1, start), min(nodes[path].line_count, end))
+                            (max(1, start), min(context_line_counts[path], end))
                             for start, end in spans
                         ]
                         for path, spans in intervals.items()
