@@ -11,14 +11,25 @@ from openai import OpenAI
 from backend.inference.clients.chatgpt_plan_auth import access_token
 request=json.load(sys.stdin)
 client=OpenAI(api_key=access_token(request['profile']),base_url='https://api.openai.com/v1',max_retries=0,timeout=request['timeout'])
+items={}
+text_parts={}
 with client.responses.create(model=request['model'],input=[{'role':'user','content':request['prompt']}],reasoning={'effort':request['reasoning']},store=False,stream=True) as stream:
  for event in stream:
   if event.type in ('response.failed','response.incomplete','error'):
    raise RuntimeError('Subscription response failed or was incomplete')
+  if event.type=='response.output_item.done':
+   items[event.output_index]=event.item
+  if event.type=='response.output_text.delta':
+   key=(event.output_index,event.content_index)
+   text_parts[key]=text_parts.get(key,'')+event.delta
+  if event.type=='response.output_text.done':
+   text_parts[(event.output_index,event.content_index)]=event.text
   if event.type=='response.completed':
    response=event.response
-   text=''.join(part.text for item in response.output if item.type=='message' for part in item.content if part.type=='output_text')
-   print(json.dumps({'text':text,'usage':response.usage.model_dump() if response.usage else None,'model':response.model}))
+   def text_of(output):
+    return ''.join(part.text for item in output if item.type=='message' for part in item.content if part.type=='output_text')
+   text=text_of(items[k] for k in sorted(items)) or text_of(response.output) or ''.join(text_parts[k] for k in sorted(text_parts))
+   print(json.dumps({'text':text,'usage':response.usage.model_dump() if response.usage else None,'model':response.model,'stream_output_items':len(items),'stream_text_characters':sum(len(v) for v in text_parts.values())}))
    break
  else:
   raise RuntimeError('Subscription stream ended before completion')
