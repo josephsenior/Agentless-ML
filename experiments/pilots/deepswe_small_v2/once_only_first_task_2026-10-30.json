@@ -1,0 +1,88 @@
+{
+  "date": "2026-10-30",
+  "task_id": "aiomonitor-task-snapshots-diff",
+  "scope": "Development task; live generation followed by unchanged-response replay after postprocessing bug fix; no clean paired research result",
+  "limits": {
+    "seconds": 7200,
+    "once_only_context_tokens": 1000000
+  },
+  "agentless": {
+    "generation_model_calls": 8,
+    "content_tokens": 34665,
+    "processed_tokens": 45032,
+    "postprocessing_new_model_calls": 0,
+    "candidate_statuses": [
+      {
+        "candidate_id": "loc-0-repair-0",
+        "status": "validated",
+        "message": ""
+      },
+      {
+        "candidate_id": "loc-0-repair-1",
+        "status": "validated",
+        "message": ""
+      },
+      {
+        "candidate_id": "loc-0-repair-2",
+        "status": "validated",
+        "message": ""
+      },
+      {
+        "candidate_id": "loc-0-repair-3",
+        "status": "repair_error",
+        "message": "missing SEARCH/REPLACE edit"
+      }
+    ],
+    "selection": {
+      "reason": "best_regression_then_normalized_majority",
+      "vote_count": 1,
+      "considered_candidate_ids": [
+        "loc-0-repair-0",
+        "loc-0-repair-1",
+        "loc-0-repair-2"
+      ],
+      "selected_candidate_id": "loc-0-repair-0"
+    },
+    "score": {
+      "status": "unresolved",
+      "reward": 0,
+      "f2p_passed": 38,
+      "f2p_total": 53,
+      "p2p_passed": 8,
+      "p2p_total": 8,
+      "patch_sha256": "2617c078ce354447dde1d7f6d68bc42aef9143b70c6647992162f39de7aa7f8c"
+    },
+    "selected_patch": "agentless_aiomonitor_selected.patch",
+    "evidence": [
+      {
+        "path": "artifacts/deepswe-first-paired-once-only-2026-10-30/agentless-current/run-94ac5bc2f260445a9acd7d0092b40d37/budget.json",
+        "sha256": "65da74ed1d0eb6246f302f5bfe1ac8ff215cb3b61fe5cb17323b8509bfb913d7"
+      },
+      {
+        "path": "artifacts/deepswe-first-paired-once-only-2026-10-30/agentless-postprocessing/runs/run-c04c2b6c01114513a5cd0713e294d2b9/prediction.json",
+        "sha256": "a10a68f2be48a2d405d20a6037a3359886449be79cc3fa01c7bf93a5550a246a"
+      },
+      {
+        "path": "artifacts/deepswe-first-paired-once-only-2026-10-30/agentless-score/aiomonitor-task-snapshots-diff/agentless-ml-verifier-d4d8fd92e04745e9a18472aa85a6e651/score.json",
+        "sha256": "c4fff0961ae47761e3f782ea2eb3347dd4f5caa8246d8e6e7af2f13fb5eaeb22"
+      }
+    ]
+  },
+  "grinta": {
+    "status": "subscription_capacity_blocked",
+    "provider_error": "The ChatGPT user has reached their Subscription Sharing usage limit. Ask the user to try again after their usage limit resets or use an API key instead.",
+    "content_tokens": 202696,
+    "processed_tokens": 1709501,
+    "completed_model_responses": 27,
+    "final_prediction_exported": false,
+    "evidence": [
+      {
+        "path": "artifacts/deepswe-first-paired-once-only-2026-10-30/grinta-current/result.json",
+        "sha256": "0eb1d48462976bed54d73c5bd76a83f73d1bc6a4e184e9a0cff2d06a248a2a78"
+      }
+    ]
+  },
+  "other_pilot_tasks_started": false,
+  "runtime_image": "sha256:694a2a50c55aec432ebe43a0cdeb5aca03ae29a7b5ca546106128c1a8ba735ef",
+  "historical_exposure_disclosed": true
+}

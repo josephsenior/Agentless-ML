@@ -64,5 +64,8 @@ The machine-readable agreement is
 [agreed_contract.json](../experiments/pilots/deepswe_small_v2/agreed_contract.json).
 Older runs, snapshots and `budget_verification.json` describe the previous
 2,000,000 cumulative-token policy; they are historical evidence and were not
-relabelled. Local verification of the new policy used no model calls. End-to-end
-live verification of the revised policy remains pending.
+relabelled. Local verification of the new policy used no model calls. The
+[first development task](../experiments/pilots/deepswe_small_v2/once_only_first_task_2026-10-30.md)
+subsequently recorded both measures on live requests. Agentless exported a patch
+after saved-response postprocessing; Grinta stopped on the service's independent
+subscription-sharing limit. A complete paired live result remains pending.
