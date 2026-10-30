@@ -114,6 +114,38 @@ new
         )
 
 
+@pytest.mark.parametrize("first,replacement", [("first", "first\ninserted"),
+                                               ("first\nsecond", "first")])
+def test_later_edits_keep_original_authorization_after_line_shifts(first, replacement):
+    from agentless_ml.repair import SearchReplaceEdit
+
+    source = first + "\nprotected\ntarget\n"
+    last_line = len(source.splitlines())
+    ranges = {"a.py": [(1, len(first.splitlines())), (last_line, last_line)]}
+    result = apply_search_replace_edits(
+        {"a.py": source},
+        (SearchReplaceEdit("a.py", first, replacement),
+         SearchReplaceEdit("a.py", "target", "fixed")),
+        allowed_intervals=ranges,
+    )
+    assert result.updated_sources["a.py"] == replacement + "\nprotected\nfixed\n"
+    assert ranges["a.py"][-1] == (last_line, last_line)
+
+
+def test_line_shifts_do_not_authorize_originally_protected_source():
+    from agentless_ml.repair import SearchReplaceEdit
+
+    source = {"a.py": "first\nprotected\ntarget\n"}
+    with pytest.raises(EditApplicationError, match="outside authorized intervals"):
+        apply_search_replace_edits(
+            source,
+            (SearchReplaceEdit("a.py", "first", "first\ninserted"),
+             SearchReplaceEdit("a.py", "protected", "illegal")),
+            allowed_intervals={"a.py": [(1, 1), (3, 3)]},
+        )
+    assert source["a.py"] == "first\nprotected\ntarget\n"
+
+
 def _create(path: str, content: str) -> str:
     return f"""### {path}
 {'<' * 7} SEARCH

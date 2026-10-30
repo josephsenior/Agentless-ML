@@ -41,6 +41,14 @@ count. The controller now accepts that displayed line and still rejects numbers
 beyond the shown range. The exact saved response's 14 locations pass local
 replay with this correction; no new model response was needed to check it.
 
+While applying a repair's edits in sequence, the controller carries its allowed
+regions along with inserted or removed lines. Those regions still originate in
+the original localization; unchanged protected lines do not become editable
+just because an earlier edit moves them. This fixes a later Aiomonitor failure
+where valid SEARCH blocks were rejected after earlier insertions shifted their
+positions. Source text that exists outside the permitted regions is now reported
+as outside those regions, rather than misleadingly reported as missing.
+
 Multiple recorded responses are supported as explicit localization/repair groups.
 Live subscription runs request these stages in the same fixed order. The prompt is a shared multilingual prompt,
 not a byte-for-byte copy of upstream.

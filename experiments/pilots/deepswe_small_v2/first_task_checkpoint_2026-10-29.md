@@ -30,6 +30,13 @@ The fixes were:
   displayed trailing blank line. The Aiomonitor response selected a line that
   was visible but incorrectly excluded by a shorter parser line count. All 14
   saved locations pass local replay after this correction.
+- Let a streaming repair use the remaining attempt deadline rather than killing
+  its worker after 120 seconds; the HTTP idle-read timeout remains bounded
+  (`3afd10b`).
+- Carry authorized edit regions along with line insertions/deletions during a
+  repair. Three source-applicable Aiomonitor responses had been rejected because
+  later SEARCH blocks moved outside stale line coordinates. The original allowed
+  regions and all saved model responses remain unchanged.
 
 The [format review](../../../docs/agentless-response-format-review.md) explains
 the Python prompt clarification. Verified runtime/setup evidence and the prepared Docker images

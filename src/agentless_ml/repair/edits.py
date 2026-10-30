@@ -272,6 +272,7 @@ def apply_search_replace_edits(
             raise EditApplicationError(f"edited file is not visible: {edit.path}")
         source = updated[edit.path]
         matches = _occurrences(source, edit.search)
+        found_in_source = bool(matches)
         if normalized_intervals is not None and edit.path not in created_paths:
             if edit.path not in normalized_intervals:
                 raise EditApplicationError(
@@ -283,10 +284,30 @@ def apply_search_replace_edits(
                 if _inside_intervals(source, match, normalized_intervals[edit.path])
             ]
         if not matches:
+            if found_in_source:
+                raise EditApplicationError(
+                    f"SEARCH content is outside authorized intervals in {edit.path}"
+                )
             raise EditApplicationError(f"SEARCH content not found in {edit.path}")
         if len(matches) != 1:
             raise EditApplicationError(f"SEARCH content is ambiguous in {edit.path}")
         offset, _ = matches[0]
+        if normalized_intervals is not None and edit.path not in created_paths:
+            first_line = source.count("\n", 0, offset) + 1
+            last_line = matches[0][1]
+            new_last = first_line + edit.replacement.count("\n")
+            delta = edit.replacement.count("\n") - edit.search.count("\n")
+            # Later SEARCH blocks refer to the evolving source. Carry the
+            # original authorization regions along with insertions/deletions.
+            shifted = []
+            for start, end in normalized_intervals[edit.path]:
+                if end < first_line:
+                    shifted.append((start, end))
+                elif start > last_line:
+                    shifted.append((start + delta, end + delta))
+                else:
+                    shifted.append((min(start, first_line), max(new_last, end + delta)))
+            normalized_intervals[edit.path] = tuple(shifted)
         updated[edit.path] = (
             source[:offset] + edit.replacement + source[offset + len(edit.search) :]
         )
