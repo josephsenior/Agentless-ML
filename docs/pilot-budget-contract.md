@@ -1,58 +1,68 @@
 # Agreed small-pilot budget
 
-The user agreed to these limits for the initial DeepSWE comparison:
+Youssef revised the token measure on 30 October 2026: use once-only content,
+not the sum of input/output usage over repeated requests.
 
-| Setting | Both systems, for each task independently |
+| Setting | Each system, independently for each task |
 | --- | --- |
-| Model | GPT-6.1 Sol |
-| Reasoning | Medium |
+| Model | GPT-6.1 Sol, medium reasoning |
 | Connection | ChatGPT-plan subscription |
-| Attempt time | 2 hours (7,200 seconds) |
-| Token threshold | 2,000,000 combined input and output tokens |
+| Attempt time | 7,200 seconds |
+| Content allowance | 1,000,000 once-only content tokens |
+| Actual provider usage | Recorded separately, including repeated input |
 
-The first reached limit stops the run. Finishing early ends it immediately.
-Model requests, tool execution and candidate validation count toward the attempt.
-Provisioning and the initial public baseline happen beforehand and are excluded.
-Repeated input/history counts whenever the provider reports it as input usage.
-Reasoning tokens included in output usage must not be counted twice.
-An already-started response may cross the token threshold; retain its actual usage
-and report the overshoot.
+The first reached limit stops work. Provisioning and the initial public baseline
+remain excluded. Model requests, tool execution and candidate validation are
+inside the time allowance. Agentless retains one edit-localization sample and
+four repair candidates. The first task is a development run; review it before
+starting the remaining four pilot tasks.
 
-Agentless-ML uses one edit-localization sample and four repair candidates. These
-are the initial pilot settings; first run one task with both systems, inspect
-actual usage and limits, then review the configuration before the other four.
+## What counts once
 
-The machine-readable source is
+The counter normalizes messages, function calls/results, system instructions and
+tool schemas, then tokenizes their canonical JSON with `tiktoken==0.14.0` and
+`o200k_base`. This is a reproducible custom content measure, not a claim to match
+OpenAI's model-specific wire-token count, dollar cost or compute consumption.
+
+Replayed input is matched by normalized content and occurrence count. Replaying
+history does not add tokens. Two identical messages present twice in history
+count as two occurrences, not one. Every newly generated reply is a new occurrence,
+even if its text repeats an earlier reply; replaying it afterward does not count
+again. Function call IDs distinguish tool calls and results. Dropping history
+does not refund previously counted content. Changed messages count as new whole
+messages; overlapping source snippets in different prompts are not deduplicated
+word by word. In Agentless, repeated identical repair prompts count once, while
+each newly generated repair counts.
+
+Visible assistant text and tool arguments count as content. Opaque reasoning
+items are excluded from this content ledger; their reported generation tokens
+remain included in actual provider usage. The ledger stores hashes and counts,
+not raw message text. The initial implementation targets the text/function-call
+messages of this pilot, not image/audio token accounting.
+
+## Enforcement and reporting
+
+`AttemptBudget.pilot()` selects this policy in both launchers. Their accounting
+modules are byte-identical. The generic constructor retains the older cumulative
+mode for historical callers/tests; this does not select the current pilot policy.
+Normal Grinta outside the opt-in comparison scope is unchanged.
+
+Before inference, the counter observes the request and stops if its new content
+hits the threshold. After completion it observes generated output, reports any
+content overshoot, and stops further work. The fixed workflow saves `budget.json`;
+Grinta saves its attempt-budget snapshots. Both retain `processed_input_tokens`,
+`processed_output_tokens` and `processed_tokens` from provider usage separately
+from `used_tokens`, which measures the selected content allowance. The snapshot
+includes `token_accounting` and `content_tokenizer`. Missing provider usage still
+stops the run rather than silently losing resource reporting.
+
+The two-hour deadline and validation timeout clamping remain enforced. Cleanup
+and evidence writing can continue after work stops. No subscription quota or
+billing fallback is changed by this local measurement policy.
+
+The machine-readable agreement is
 [agreed_contract.json](../experiments/pilots/deepswe_small_v2/agreed_contract.json).
-Use `--pilot-budget` on the live shared-task launcher, together with
-`--edit-samples 1 --repair-samples 4`, to enable enforcement. Grinta's prepared-
-workspace launcher also accepts `--pilot-budget`, with
-`--model chatgpt-plan/gpt-6.1-sol --reasoning-effort medium`. Normal defaults
-are unchanged. Both use the same accounting implementation.
-
-Agentless checks before requests and validation work, charges reported usage
-before accepting a response, and caps model subprocess and Docker command
-timeouts at the remaining allowance. It saves `budget.json`. Grinta checks model
-and tool boundaries, charges completed provider usage once, and cancels the
-running attempt at its deadline; its manifest retains `attempt_budget` and
-`budget_exhausted`. Missing usage stops further work. No new response is
-requested after the threshold, including when an in-flight response overshoots.
-
-Budget exhaustion terminates the attempt rather than exporting a new prediction
-from a partially completed workflow. Cleanup and writing diagnostic evidence may
-continue after the work deadline. This is cooperative cancellation of the Grinta
-controller; it is not an independent OS kill switch for arbitrary detached child
-processes. The deadline tests verify cancellation and cleanup on controlled async
-operations, not a real two-hour benchmark run.
-
-Focused local tests cover matching thresholds, overshoot, initial-baseline
-exclusion, unavailable usage, candidate timeout clamping, provider accounting and
-deadline cancellation. These were model-free checks when the contract was first
-implemented. The separate shared-container launcher has since been integrated,
-and the first task reached live engineering attempts on 29 October 2026. See the
-[first-task checkpoint](../experiments/pilots/deepswe_small_v2/first_task_checkpoint_2026-10-29.md)
-for the development fixes. Failed-run folders were later removed at Youssef's
-request; the historical checkpoint manifest remains, with deletion noted.
-No paired repair result is available yet.
-The legacy shared-record launch gate remains separate. Historical preparation
-bundles keep their original configuration and checksums.
+Older runs, snapshots and `budget_verification.json` describe the previous
+2,000,000 cumulative-token policy; they are historical evidence and were not
+relabelled. Local verification of the new policy used no model calls. End-to-end
+live verification of the revised policy remains pending.

@@ -1,0 +1,28 @@
+{
+  "scope": "once-only content budget; model-free local checks",
+  "date": "2026-10-30",
+  "agentless_checks_passed": 25,
+  "grinta_checks_passed": 24,
+  "model_calls": 0,
+  "limits": {
+    "seconds": 7200,
+    "once_only_content_tokens": 1000000
+  },
+  "accounting": "once_only_context",
+  "tokenizer": "tiktoken 0.14.0 / o200k_base",
+  "matching_accounting_sha256": "60cf426058911ee5f90d151d1b9c52cc6a3419d04bbcdc54863cf44c0901b4a0",
+  "runtime": {
+    "base_runtime_image": "sha256:e04f1825b7e699f0b597f7eaa29aa534d25d1dab21a143e222fb19d5a29ce27a",
+    "grinta_revision": "d77c97e4cb42c23c0e916fa2a64785d3188c1859",
+    "prepared_image_id": "sha256:694a2a50c55aec432ebe43a0cdeb5aca03ae29a7b5ca546106128c1a8ba735ef",
+    "task_toolchain_unchanged": true,
+    "parent_image_layers_verified": true,
+    "private_dependency": "tiktoken==0.14.0",
+    "tokenizer_vocabulary_sha256": "446a9538cb6c348e3516120d7c08b09f57c36495e2acfffe59a5bf8b0cfb1a2d",
+    "framework_cache_env": "TIKTOKEN_CACHE_DIR=/root/.cache/grinta-tokenizer"
+  },
+  "containers_match": true,
+  "initial_task_probes_match": true,
+  "offline_counter_check": "Passed in readonly offline image using synthetic processed usage; no real inference",
+  "live_verification_pending": true
+}

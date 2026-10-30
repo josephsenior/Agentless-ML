@@ -1,6 +1,6 @@
 {
-  "schema_version": 1,
-  "status": "implemented_local_checks_passed",
+  "schema_version": 2,
+  "status": "once_only_content_accounting_local_checks_passed",
   "scope": "small DeepSWE pilot; first one task with both systems",
   "systems": [
     "agentless-ml",
@@ -11,7 +11,6 @@
   "authentication": "chatgpt-plan",
   "budget_per_task_per_system": {
     "wall_time_seconds": 7200,
-    "combined_input_output_tokens": 2000000,
     "first_limit_reached_stops_run": true,
     "early_completion_ends_run": true,
     "includes": [
@@ -23,14 +22,19 @@
       "provisioning",
       "initial_public_baseline"
     ],
-    "token_accounting": "Sum reported input_tokens and output_tokens for every request; reasoning tokens already included in output are not added again.",
-    "inflight_token_overshoot": "An already-started response may finish beyond the token threshold; record actual usage and overshoot."
+    "token_accounting": "once_only_context",
+    "once_only_content_tokens": 1000000,
+    "token_accounting_tokenizer": "tiktoken 0.14.0 / o200k_base",
+    "token_accounting_definition": "Count canonical text messages, function calls/results, instructions and tool schemas once across replayed history. New generated message occurrences count even if identical. Do not deduplicate words or overlapping code across different messages.",
+    "actual_usage_reporting": "Record summed provider input/output tokens separately; no processed-token threshold in this contract.",
+    "token_overshoot": "A completed message or response can cross the content threshold; record actual overshoot and stop following work."
   },
   "agentless_sampling": {
     "edit_localization_samples": 1,
     "repair_candidates_per_edit_sample": 4
   },
-  "live_pilot_enabled": false,
-  "next_step": "Implement and verify matching aggregate enforcement before the first paired task.",
-  "paired_live_budget_verified": false
+  "live_pilot_enabled": true,
+  "next_step": "Use the new accounting on the first development task; review outcomes before the other four tasks.",
+  "paired_live_budget_verified": false,
+  "updated_on": "2026-10-30"
 }

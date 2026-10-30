@@ -149,7 +149,7 @@ def main(argv=None):
     parser.add_argument(
         "--pilot-budget",
         action="store_true",
-        help="Enforce agreed 7200-second/2000000-token pilot limits",
+        help="Enforce 7200 seconds and 1000000 once-only content tokens",
     )
     parser.add_argument("--runtime-registry", type=Path)
     parser.add_argument("--runtime-evidence", type=Path)
@@ -247,7 +247,7 @@ def main(argv=None):
             parser.error(
                 "Pilot contract requires live gpt-6.1-sol/medium with 1 edit sample and 4 repairs"
             )
-        budget = AttemptBudget()
+        budget = AttemptBudget.pilot()
     result = (
         controller.run_live(
             live_provider,

@@ -10,6 +10,29 @@ from test_fixed_workflow import source as source_fixture
 source = source_fixture
 
 
+def test_live_workflow_reports_content_and_processed_usage_separately(tmp_path, source):
+    from agentless_ml.attempt_budget import AttemptBudget
+
+    recorded = responses()
+
+    class Provider:
+        calls = 0
+
+        def complete(self, prompt, **kwargs):
+            text = [recorded.file_localization, recorded.symbol_localization,
+                    "```\ncalculator.py\nline: 2\n```", recorded.repairs[2]][self.calls]
+            self.calls += 1
+            return {"text": text, "usage": {"input_tokens": 1000000, "output_tokens": 5}}
+
+    budget = AttemptBudget.pilot()
+    result = controller(tmp_path, source, FakeRunner()).run_live(Provider(), budget=budget)
+    evidence = json.loads((Path(result.artifact_directory) / "budget.json").read_text())
+    assert evidence["processed_tokens"] == 4000020
+    assert 0 < evidence["used_tokens"] < 1000000
+    assert evidence["token_accounting"] == "once_only_context"
+    assert "return a + b" in result.prediction.model_patch
+
+
 def test_live_regression_selection_accepts_empty_answer_and_records_usage(
     tmp_path, source
 ):

@@ -380,6 +380,8 @@ class FixedWorkflowController:
                     "provider_settings": getattr(response_provider, "settings", {}),
                 },
             )
+            if budget is not None:
+                budget.observe_request({"input": [{"role": "user", "content": prompt}]})
             response = (
                 response_provider.complete(prompt, remaining_seconds=budget.remaining)
                 if budget is not None
@@ -403,6 +405,9 @@ class FixedWorkflowController:
                 )
                 try:
                     budget.charge(usage["input_tokens"], usage["output_tokens"])
+                    budget.observe_response([{
+                        "role": "assistant", "content": response.get("text", ""),
+                    }])
                 finally:
                     _write_json(directory / "budget.json", budget.snapshot())
             text = response.get("text", "")
