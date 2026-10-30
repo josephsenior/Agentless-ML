@@ -46,8 +46,8 @@ existing parser; it does not guarantee that every future model response will
 follow the format. An unfenced response still yields no symbol blocks.
 
 The initial review on 29 October preserved both components. This later change
-was explicitly approved by Youssef. Earlier failed attempts and their prompts
-remain historical evidence; they have not been rewritten. No new model attempt
+was explicitly approved by Youssef. Failed-run folders were later deleted at his
+request; the fix summary and historical checkpoint manifest remain. No new model attempt
 was run to validate the clarification. This comparison does not establish parity
 for the whole upstream workflow's handling of failed localization.
 

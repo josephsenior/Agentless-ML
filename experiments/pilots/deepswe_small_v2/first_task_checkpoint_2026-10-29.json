@@ -282,5 +282,13 @@
   },
   "hidden_scoring_performed": false,
   "other_pilot_tasks_launched": false,
-  "readiness_changed": false
+  "readiness_changed": false,
+  "artifact_retention": {
+    "updated_on": "2026-10-30",
+    "failed_run_folders_deleted": true,
+    "reason": "User requested removal of buggy development runs; preserve a concise fix summary.",
+    "raw_run_paths": "Historical references only; files deleted.",
+    "tracked_manifest_preserved": true,
+    "verified_setup_evidence_and_images_preserved": true
+  }
 }

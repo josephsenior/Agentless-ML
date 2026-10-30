@@ -51,6 +51,8 @@ deadline cancellation. These were model-free checks when the contract was first
 implemented. The separate shared-container launcher has since been integrated,
 and the first task reached live engineering attempts on 29 October 2026. See the
 [first-task checkpoint](../experiments/pilots/deepswe_small_v2/first_task_checkpoint_2026-10-29.md)
-for retained failures and actual usage. No paired repair result is available yet.
+for the development fixes. Failed-run folders were later removed at Youssef's
+request; the historical checkpoint manifest remains, with deletion noted.
+No paired repair result is available yet.
 The legacy shared-record launch gate remains separate. Historical preparation
 bundles keep their original configuration and checksums.
