@@ -10,6 +10,31 @@ import pytest
 from agentless_ml.workflow.subscription import WORKER
 
 
+@pytest.mark.parametrize("remaining,process_timeout,http_timeout", [
+    (600, 600, 120), (30, 30, 30), (None, 180, 120),
+])
+def test_worker_deadline_uses_remaining_attempt_time(
+    tmp_path, monkeypatch, remaining, process_timeout, http_timeout
+):
+    import os
+    import subprocess
+
+    from agentless_ml.workflow.subscription import SubscriptionResponses
+
+    python = tmp_path / ".venv" / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
+    python.parent.mkdir(parents=True)
+    python.touch()
+
+    def run(argv, **kwargs):
+        assert kwargs["timeout"] == process_timeout
+        assert json.loads(kwargs["input"])["timeout"] == http_timeout
+        return subprocess.CompletedProcess(argv, 0, json.dumps({"text": "patch"}), "")
+
+    monkeypatch.setattr(subprocess, "run", run)
+    result = SubscriptionResponses(tmp_path).complete("repair", remaining_seconds=remaining)
+    assert result["text"] == "patch"
+
+
 def run_worker(monkeypatch, capsys, events):
     class Stream:
         def __enter__(self):

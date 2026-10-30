@@ -92,7 +92,9 @@ class SubscriptionResponses:
             text=True,
             encoding="utf-8",
             capture_output=True,
-            timeout=timeout if remaining_seconds is not None else timeout + 60,
+            # HTTP timeout bounds a stalled transport read. A response can
+            # legitimately stream longer; its overall deadline is the task's.
+            timeout=remaining_seconds if remaining_seconds is not None else timeout + 60,
             check=False,
         )
         if result.returncode:
