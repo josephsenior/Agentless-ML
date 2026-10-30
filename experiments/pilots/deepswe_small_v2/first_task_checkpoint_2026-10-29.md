@@ -15,6 +15,13 @@ The fixes were:
   into `extra_body` (`ae9a2f8a7`).
 - Explicitly request a fenced Python symbol-localization response (`aeec64e`).
   This clarifies an ambiguity inherited from pinned Agentless; parsing is unchanged.
+- Preserve Agentless text from finalized output-item and text events before
+  accepting stream completion (`c05f533`). Previously the worker inspected only
+  the terminal response body. Empty regression-selection answers remain valid;
+  interrupted or failed streams remain rejected.
+- Use Grinta's actual response-ID property in its asynchronous streaming adapter,
+  and preserve finalized output items in the host relay (`cb61d4c84`). The missing
+  property previously stopped tool delivery and caused repeated controller errors.
 
 The [format review](../../../docs/agentless-response-format-review.md) explains
 that last change. Verified runtime/setup evidence and the prepared Docker images
