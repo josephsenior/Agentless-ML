@@ -55,7 +55,8 @@ def render_legacy_project_tree(ordered_file_paths: Sequence[str]) -> str:
 def render_project_tree(
     ordered_file_paths: Sequence[str],
     *,
-    adapter: LanguageAdapter,
+    adapter: LanguageAdapter | None = None,
+    file_adapters: Mapping[str, LanguageAdapter] | None = None,
 ) -> str:
     """Render a source tree using the adapter's file and test filters.
 
@@ -70,9 +71,11 @@ def render_project_tree(
             raise ValueError("file path must include a repository root and file")
         if any(part == ".." for part in parts):
             raise ValueError("file path must not contain parent traversal")
-        if not adapter.is_source_path("/".join(parts[1:])):
+        path = "/".join(parts[1:])
+        parser = file_adapters.get(path) if file_adapters is not None else adapter
+        if parser is None or not parser.is_source_path(path):
             continue
-        if adapter.is_test_path("/".join(parts)):
+        if parser.is_test_path("/".join(parts)):
             continue
         _insert_path(tree, parts)
 
@@ -93,10 +96,16 @@ def render_file_localization_prompt(
     problem_statement: str,
     project_tree: str,
     *,
-    extension: str = ".py",
+    extension: str | None = ".py",
 ) -> str:
-    template = FILE_LOCALIZATION_TEMPLATE.replace("file1.py", "file1" + extension)
-    template = template.replace("file2.py", "file2" + extension)
+    template = FILE_LOCALIZATION_TEMPLATE
+    if extension is None:
+        template = template.replace(
+            "the full path", "repository-relative paths exactly as shown beneath the root directory"
+        ).replace("file1.py", "src/file.ext").replace("file2.py", "lib/other.ext")
+    else:
+        template = template.replace("file1.py", "file1" + extension)
+        template = template.replace("file2.py", "file2" + extension)
     return template.format(
         problem_statement=problem_statement,
         structure=project_tree.strip(),
@@ -108,14 +117,16 @@ def render_symbol_localization_prompt(
     ordered_files: Mapping[str, str],
     *,
     adapter: LanguageAdapter | None = None,
+    file_adapters: Mapping[str, LanguageAdapter] | None = None,
     compress_assign: bool = False,
     total_lines: int = 30,
     prefix_lines: int = 10,
     suffix_lines: int = 10,
 ) -> str:
-    parser = adapter or PythonAdapter()
+    default_parser = adapter or PythonAdapter()
     blocks = []
     for file_name, source in ordered_files.items():
+        parser = file_adapters[file_name] if file_adapters is not None else default_parser
         skeleton = parser.render_skeleton(
             source,
             path=file_name,
@@ -129,7 +140,23 @@ def render_symbol_localization_prompt(
         )
         template = FILE_BLOCK_TEMPLATE.replace("```python", "```" + label)
         blocks.append(template.format(file_name=file_name, file_content=skeleton))
-    return parser.prompts.symbol_localization.format(
+    if file_adapters is None:
+        template = default_parser.prompts.symbol_localization
+    else:
+        languages = {parser.language for parser in file_adapters.values()}
+        if len(languages) == 1:
+            template = next(iter(file_adapters.values())).prompts.symbol_localization
+        else:
+            template = (
+                "Identify the declarations that need inspection or editing. Use names "
+                "from each file's skeleton.\n\n"
+                "### GitHub Problem Description ###\n{problem_statement}\n\n"
+                "### Skeleton of Relevant Files ###\n{file_contents}\n"
+                "Return only locations in one unlabelled fenced block. For each file, "
+                "write its repository-relative path followed by one location per line "
+                "(for example, function: name, class: Name, or line: N)."
+            )
+    return template.format(
         problem_statement=problem_statement,
         file_contents="".join(blocks),
     )

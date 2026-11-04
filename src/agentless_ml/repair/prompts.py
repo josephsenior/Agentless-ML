@@ -77,6 +77,7 @@ def build_repair_prompt(
     selected_context: str,
     *,
     language: str = "python",
+    mixed_languages: bool = False,
 ) -> str:
     """Build the fixed repair-stage prompt.
 
@@ -90,7 +91,13 @@ def build_repair_prompt(
         raise ValueError("selected_context must not be empty")
     adapter = get_language_adapter(language)
     example = adapter.prompts.repair_example
-    return _SEARCH_REPLACE_PROMPT.format(
+    template = _SEARCH_REPLACE_PROMPT
+    if mixed_languages:
+        template = template.replace(
+            "Wrap the *SEARCH/REPLACE* edit in blocks ```{language}...```.",
+            "Wrap edits in fenced blocks. Use each file's language for its code.",
+        )
+    return template.format(
         problem_statement=problem_statement,
         repair_relevant_file_instruction=_RELEVANT_FILE_INSTRUCTION,
         file_creation_instruction=FILE_CREATION_INSTRUCTION,

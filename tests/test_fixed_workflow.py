@@ -1024,3 +1024,75 @@ def test_a_repair_can_create_a_new_file_and_it_reaches_the_prediction(tmp_path, 
     assert "diff --git a/mathops.py b/mathops.py\nnew file mode 100644\n" in patch
     assert "+++ b/mathops.py\n@@ -0,0 +1,2 @@\n+def plus(a, b):\n" in patch
     assert not (repository / "mathops.py").exists()
+
+
+def test_javascript_labeled_task_exports_mixed_language_repair(tmp_path, source):
+    repository, _ = source
+    (repository / "entry.js").write_bytes(b"export function entry() { return 1; }\n")
+    (repository / "values.ts").write_bytes(
+        b"export function value(): number { return 1; }\n"
+    )
+    git(repository, "add", ".")
+    git(repository, "commit", "-m", "mixed source")
+    commit = git(repository, "rev-parse", "HEAD")
+
+    class MixedRunner(FakeRunner):
+        def run(self, source, command, *, artifact_root=None):
+            Path(artifact_root).mkdir(parents=True)
+            assert "return 2;" in (Path(source) / "entry.js").read_text()
+            assert "return 2;" in (Path(source) / "values.ts").read_text()
+            return ExecutionRecord(
+                ValidationResult(
+                    status=ValidationStatus.PASS,
+                    command=command.argv,
+                    duration_seconds=0.01,
+                    exit_code=0,
+                    kind=command.kind,
+                ),
+                self.image_id,
+                "fixture-container",
+                str(artifact_root),
+            )
+
+    runner = MixedRunner()
+    workflow = FixedWorkflowController(
+        task=replace(task(commit), language="javascript"),
+        source_repository=repository,
+        workspace_root=tmp_path / "workspaces",
+        artifact_root=tmp_path / "runs",
+        runner=runner,
+        public_commands=(PublicTestCommand(("fixture-check",)),),
+        implementation_revision="test",
+        harness_revision="test",
+        model_name="recorded/test-model",
+    )
+    repair = (
+        "```javascript\n### entry.js\n<<<<<<< SEARCH\n"
+        "export function entry() { return 1; }\n=======\n"
+        "export function entry() { return 2; }\n>>>>>>> REPLACE\n```\n"
+        "```typescript\n### values.ts\n<<<<<<< SEARCH\n"
+        "export function value(): number { return 1; }\n=======\n"
+        "export function value(): number { return 2; }\n>>>>>>> REPLACE\n```"
+    )
+    result = workflow.run(RecordedStageResponses(
+        file_localization="```\nentry.js\nvalues.ts\n```",
+        symbol_localization="```\nentry.js\nfunction: entry\nvalues.ts\nfunction: value\n```",
+        repairs=(),
+        edit_samples=(RecordedEditSample(
+            "```\nentry.js\nline: 1\nvalues.ts\nline: 1\n```", (repair,)
+        ),),
+        source="mixed-language fixture",
+    ))
+
+    artifacts = Path(result.artifact_directory)
+    file_prompt = (artifacts / "prompts/file-localization.txt").read_text()
+    assert "entry.js" in file_prompt and "values.ts" in file_prompt
+    symbol_prompt = (artifacts / "prompts/symbol-localization.txt").read_text()
+    assert "### File: entry.js ###\n```javascript" in symbol_prompt
+    assert "### File: values.ts ###\n```typescript" in symbol_prompt
+    repair_prompt = (artifacts / "localizations/0/repair.txt").read_text()
+    assert "Use each file's language" in repair_prompt
+    assert result.prediction.selected_candidate_id == "loc-0-repair-0"
+    assert "+++ b/entry.js" in result.prediction.model_patch
+    assert "+++ b/values.ts" in result.prediction.model_patch
+    assert (artifacts / "prediction.json").is_file()

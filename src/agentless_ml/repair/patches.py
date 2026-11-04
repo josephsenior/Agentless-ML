@@ -7,7 +7,7 @@ import hashlib
 from collections.abc import Mapping
 from difflib import unified_diff
 
-from agentless_ml.adapters.languages import get_language_adapter
+from agentless_ml.adapters.languages import get_language_adapter, source_adapter
 from agentless_ml.schemas import PatchCandidate
 
 
@@ -149,7 +149,7 @@ def comment_normalized_diff(
     original_sources: Mapping[str, str],
     updated_sources: Mapping[str, str],
     *,
-    language: str,
+    language: str | None,
 ) -> str | None:
     """A voting key from language-normalized source snapshots.
 
@@ -162,14 +162,13 @@ def comment_normalized_diff(
     That candidate made no change this key can see; the caller falls back to
     ``normalize_patch`` on the real diff instead, which is still unique.
     """
-    adapter = get_language_adapter(language)
+    explicit_adapter = get_language_adapter(language) if language is not None else None
 
     def stripped(path: str, source: str) -> str:
-        # A created file may be in another format (a data file in a Go task);
-        # only the task language's own files have comments this adapter knows.
-        if not path.endswith(adapter.extensions):
+        adapter = explicit_adapter or source_adapter(path)
+        if adapter is None or not path.endswith(adapter.extensions):
             return source
-        if language == "python":
+        if adapter.language == "python":
             # Upstream canonicalizes parseable Python before removing docstrings.
             # Keep invalid source unchanged, as its normalize_code() does.
             try:
@@ -177,7 +176,7 @@ def comment_normalized_diff(
             except (SyntaxError, ValueError, RecursionError):
                 pass
         without_comments = adapter.strip_comments(source, path=path)
-        if language == "python":
+        if adapter.language == "python":
             # The published tokenizer also drops every empty line before the
             # normalized diff is built.
             without_comments = "\n".join(
@@ -201,9 +200,9 @@ def comment_normalized_diff(
         stripped_diff = build_unified_diff(stripped_originals, stripped_updated)
     except ValueError:
         return None
-    if language == "python" and stripped_originals.keys() == stripped_updated.keys() and len(stripped_updated) == 1:
+    if language in (None, "python") and stripped_originals.keys() == stripped_updated.keys() and len(stripped_updated) == 1:
         path = next(iter(stripped_updated))
-        if path.endswith(adapter.extensions) and _is_just_new_python_function(
+        if path.endswith(".py") and _is_just_new_python_function(
             stripped_originals[path], stripped_updated[path]
         ):
             # Upstream removes context and hunk headers for an added function.
@@ -220,7 +219,7 @@ def build_patch_candidate(
     diff: str,
     localization_rank: int,
     sample_index: int,
-    language: str = "python",
+    language: str | None = "python",
     original_sources: Mapping[str, str] | None = None,
     updated_sources: Mapping[str, str] | None = None,
 ) -> PatchCandidate:

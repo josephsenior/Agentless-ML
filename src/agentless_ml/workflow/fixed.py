@@ -14,7 +14,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Any
 
-from agentless_ml.adapters.languages import get_language_adapter
+from agentless_ml.adapters.languages import source_adapter
 from agentless_ml.localization import (
     construct_selected_context,
     extract_code_blocks,
@@ -177,7 +177,6 @@ class FixedWorkflowController:
         regression_tests: tuple[RegressionTest, ...] = (),
         reproduction_spec: ReproductionSpec | None = None,
     ):
-        self.adapter = get_language_adapter(task.language)
         if not public_commands and not regression_tests and reproduction_spec is None:
             raise ValueError("public test schedule must not be empty")
         if len({test.test_id for test in regression_tests}) != len(regression_tests):
@@ -641,25 +640,32 @@ class FixedWorkflowController:
             )
             with self.provider.create() as visible_workspace:
                 repository_name = Path(self.provider.source_repository).name
-                source_paths = tuple(
-                    sorted(
-                        path
-                        for path in self.provider.paths
-                        if self.adapter.is_source_path(path)
-                    )
-                )
+                file_adapters = {
+                    path: adapter
+                    for path in sorted(self.provider.paths)
+                    if (adapter := source_adapter(path)) is not None
+                }
+                source_paths = tuple(file_adapters)
+                adapters_by_language = {
+                    adapter.language: adapter for adapter in file_adapters.values()
+                }
+                extensions = tuple(dict.fromkeys(
+                    extension
+                    for adapter in adapters_by_language.values()
+                    for extension in adapter.extensions
+                ))
                 if not source_paths:
                     raise WorkflowError(
                         "pinned repository has no supported source files"
                     )
                 project_tree = render_project_tree(
                     tuple(f"{repository_name}/{path}" for path in source_paths),
-                    adapter=self.adapter,
+                    file_adapters=file_adapters,
                 )
                 file_prompt = render_file_localization_prompt(
                     self.task.problem_statement,
                     project_tree,
-                    extension=self.adapter.extension,
+                    extension=None,
                 )
                 if response_provider is not None:
                     responses = replace(
@@ -670,7 +676,7 @@ class FixedWorkflowController:
                     responses.file_localization,
                     source_paths,
                     repository_name=repository_name,
-                    extension=self.adapter.extensions,
+                    extension=extensions,
                 )
                 if not selected_files:
                     raise WorkflowError(
@@ -685,14 +691,17 @@ class FixedWorkflowController:
                 context_line_counts = {
                     path: len(source.split("\n")) for path, source in sources.items()
                 }
+                selected_adapters = {
+                    path: file_adapters[path] for path in selected_files
+                }
                 nodes = {
-                    path: self.adapter.parse_file(path, source)
+                    path: selected_adapters[path].parse_file(path, source)
                     for path, source in sources.items()
                 }
                 symbol_prompt = render_symbol_localization_prompt(
                     self.task.problem_statement,
                     sources,
-                    adapter=self.adapter,
+                    file_adapters=selected_adapters,
                 )
                 if response_provider is not None:
                     responses = replace(
@@ -702,7 +711,7 @@ class FixedWorkflowController:
                 locations = parse_locations_for_files(
                     extract_code_blocks(responses.symbol_localization),
                     selected_files,
-                    extension=self.adapter.extensions,
+                    extension=extensions,
                 )
                 selected_context, intervals = construct_selected_context(
                     locations, nodes, sources
@@ -715,6 +724,20 @@ class FixedWorkflowController:
                     raise WorkflowError(
                         "symbol localization produced no valid repair context"
                     )
+
+                def repair_prompt_for(
+                    context: str, spans: dict[str, list[tuple[int, int]]]
+                ) -> str:
+                    languages = tuple(dict.fromkeys(
+                        selected_adapters[path].language for path in spans
+                    ))
+                    return build_repair_prompt(
+                        self.task.problem_statement,
+                        context,
+                        language=languages[0] if languages else self.task.language,
+                        mixed_languages=len(languages) > 1,
+                    )
+
                 edit_prompt = None
                 repair_plan = []
                 if responses.edit_samples:
@@ -774,27 +797,16 @@ class FixedWorkflowController:
                                 "context": context,
                             },
                         )
+                        sample_prompt = repair_prompt_for(context, sample_intervals)
                         (sample_directory / "repair.txt").write_text(
-                            build_repair_prompt(
-                                self.task.problem_statement,
-                                context,
-                                language=self.adapter.language,
-                            )
-                            + "\n",
+                            sample_prompt + "\n",
                             encoding="utf-8",
                         )
                         if response_provider is not None:
                             sample = replace(
                                 sample,
                                 repairs=tuple(
-                                    ask(
-                                        "repair",
-                                        build_repair_prompt(
-                                            self.task.problem_statement,
-                                            context,
-                                            language=self.adapter.language,
-                                        ),
-                                    )
+                                    ask("repair", sample_prompt)
                                     for _ in sample.repairs
                                 ),
                             )
@@ -848,11 +860,7 @@ class FixedWorkflowController:
                         ]
                         for path, spans in intervals.items()
                     }
-                repair_prompt = build_repair_prompt(
-                    self.task.problem_statement,
-                    selected_context,
-                    language=self.adapter.language,
-                )
+                repair_prompt = repair_prompt_for(selected_context, intervals)
                 if not responses.edit_samples:
                     repair_plan = [
                         (0, index, response, intervals)
@@ -919,7 +927,7 @@ class FixedWorkflowController:
                         ),
                         localization_rank=rank,
                         sample_index=index,
-                        language=self.adapter.language,
+                        language=None,
                         original_sources=applied.original_sources,
                         updated_sources=applied.updated_sources,
                     )

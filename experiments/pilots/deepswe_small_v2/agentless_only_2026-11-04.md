@@ -13,3 +13,7 @@ All three attempts used Agentless-ML revision `8fe247b2c19afdaca899088e468f7b650
 Pebble used 523,200 once-only content tokens and about 55 minutes on the workflow clock. The selected patch SHA-256 is `4955a12d53a90d34d1d40c6431b58d3f3895e55f769073285f604b59181c3e39`. KaTeX used 37,397 once-only content tokens. Total provider-reported usage was 551,510 tokens across the pilot.
 
 The pilot produced one scored prediction in three attempts. There were no subscription refusals. This establishes one end-to-end solve and identifies two workflow blockers. Three prepared tasks do not establish a benchmark-wide solve rate or a comparison with Grinta. Local raw evidence is under `artifacts/agentless-only-deepswe-2026-11-04`.
+
+Follow-up investigation showed that the parser already accepted the displayed
+task-name prefix. The underlying KaTeX blocker was the JavaScript-only source
+inventory. See the [bug report and design decision](katex_mixed_language_fix_2026-11-04.md).
