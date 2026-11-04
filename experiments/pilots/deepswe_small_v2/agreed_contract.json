@@ -23,7 +23,7 @@
       "initial_public_baseline"
     ],
     "token_accounting": "once_only_context",
-    "once_only_content_tokens": 1000000,
+    "once_only_content_tokens": 2000000,
     "token_accounting_tokenizer": "tiktoken 0.14.0 / o200k_base",
     "token_accounting_definition": "Count canonical text messages, function calls/results, instructions and tool schemas once across replayed history. New generated message occurrences count even if identical. Do not deduplicate words or overlapping code across different messages.",
     "actual_usage_reporting": "Record summed provider input/output tokens separately; no processed-token threshold in this contract.",
@@ -34,7 +34,7 @@
     "repair_candidates_per_edit_sample": 4
   },
   "live_pilot_enabled": true,
-  "next_step": "Use the new accounting on the first development task; review outcomes before the other four tasks.",
+  "next_step": "Verify the prepared Grinta runtime and the model single-request limit before further live runs.",
   "paired_live_budget_verified": false,
-  "updated_on": "2026-10-30"
+  "updated_on": "2026-11-04"
 }

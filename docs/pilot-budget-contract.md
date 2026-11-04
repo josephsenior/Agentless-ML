@@ -1,14 +1,15 @@
 # Agreed small-pilot budget
 
 Youssef revised the token measure on 30 October 2026: use once-only content,
-not the sum of input/output usage over repeated requests.
+not the sum of input/output usage over repeated requests. On 4 November the
+per-task cap was raised from 1,000,000 to 2,000,000 for both systems.
 
 | Setting | Each system, independently for each task |
 | --- | --- |
 | Model | GPT-6.1 Sol, medium reasoning |
 | Connection | ChatGPT-plan subscription |
 | Attempt time | 7,200 seconds |
-| Content allowance | 1,000,000 once-only content tokens |
+| Content allowance | 2,000,000 once-only content tokens |
 | Actual provider usage | Recorded separately, including repeated input |
 
 The first reached limit stops work. Provisioning and the initial public baseline
@@ -16,6 +17,25 @@ remain excluded. Model requests, tool execution and candidate validation are
 inside the time allowance. Agentless retains one edit-localization sample and
 four repair candidates. The first task is a development run; review it before
 starting the remaining four pilot tasks.
+
+## Why the cap changed
+
+An offline audit reconstructed the regression-selection prompts from all 113
+saved DeepSWE public reports using the pilot tokenizer. The median was 19,346
+content tokens. Three prompts exceeded 1M: Meriyah (1,679,982), Expr
+(1,513,478), and Wazero (5,574,167). Meriyah matched the actual blocked pilot
+request. Expr and Wazero are estimates for future runs based on saved reports,
+including a command difference for Expr. A 2M shared cap gives Meriyah and Expr
+more headroom under the local counter. Wazero's saved prompt still exceeds it.
+Model request limits and subscription quotas are independent of this cap.
+The 1M pilot results retain the limits they actually ran under.
+
+Agentless-ML keeps baseline-passing public checks in regression scoring unless
+the model explicitly excludes their exact IDs. Upstream halves the list when
+its prompt is oversized and then uses that shortened list for scoring.
+[Published Agentless v1.5.0](https://github.com/OpenAutoCoder/Agentless/blob/b150f28465a77a81a7f4776384957a4271f5bd69/agentless/test/select_regression_tests.py#L95-L124)
+We preserve the full baseline so report order cannot silently drop checks and
+change which candidate wins. No prompt truncation or grouping was added.
 
 ## What counts once
 

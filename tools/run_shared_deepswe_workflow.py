@@ -149,7 +149,7 @@ def main(argv=None):
     parser.add_argument(
         "--pilot-budget",
         action="store_true",
-        help="Enforce 7200 seconds and 1000000 once-only content tokens",
+        help="Enforce 7200 seconds and 2000000 once-only content tokens",
     )
     parser.add_argument("--runtime-registry", type=Path)
     parser.add_argument("--runtime-evidence", type=Path)
