@@ -1,0 +1,82 @@
+{
+  "date": "2026-11-07",
+  "task_id": "katex-multicolumn-array-spans",
+  "scope": "One user-authorized Astra medium development run on an already exposed task",
+  "model": "gpt-6-astra",
+  "reasoning": "medium",
+  "model_calls": 8,
+  "limits": {
+    "seconds": 7200,
+    "once_only_content_tokens": 2000000
+  },
+  "sampling": {
+    "edit_samples": 1,
+    "repair_samples": 4
+  },
+  "implementation_revision": "ca927ec8ceb40a6d74f0d5d3b2ff2ddd5926a1b3",
+  "budget": {
+    "time_limit_seconds": 7200,
+    "token_limit": 2000000,
+    "used_tokens": 74522,
+    "token_overshoot": 0,
+    "token_accounting": "once_only_context",
+    "content_tokenizer": "o200k_base",
+    "processed_input_tokens": 72524,
+    "processed_output_tokens": 7252,
+    "processed_tokens": 79776,
+    "remaining_seconds": 6832.910779600003
+  },
+  "selected_candidate": "loc-0-repair-3",
+  "attempts": [
+    {
+      "candidate_id": "loc-0-repair-0",
+      "sample_index": 0,
+      "status": "repair_error",
+      "message": "missing SEARCH/REPLACE edit",
+      "localization_rank": 0
+    },
+    {
+      "candidate_id": "loc-0-repair-1",
+      "sample_index": 1,
+      "status": "repair_error",
+      "message": "missing SEARCH/REPLACE edit",
+      "localization_rank": 0
+    },
+    {
+      "candidate_id": "loc-0-repair-2",
+      "sample_index": 2,
+      "status": "repair_error",
+      "message": "missing SEARCH/REPLACE edit",
+      "localization_rank": 0
+    },
+    {
+      "candidate_id": "loc-0-repair-3",
+      "sample_index": 3,
+      "status": "validated",
+      "message": "",
+      "localization_rank": 0
+    }
+  ],
+  "score": {
+    "task_id": "katex-multicolumn-array-spans",
+    "status": "unresolved",
+    "reward": 0,
+    "f2p_passed": 0,
+    "f2p_total": 94,
+    "p2p_passed": 599,
+    "p2p_total": 599,
+    "image_id": "sha256:459b6d4c5f8d45218b25d0837a88d91052d0fb066c21b8bc2939290c4876b3ae",
+    "patch_sha256": "65e2b5966334a123da0b4d77dddb711ae71c2691bf1a76cda1d217036f03d174",
+    "dataset_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-katex-astra-medium-2026-11-07\\score\\katex-multicolumn-array-spans\\agentless-ml-verifier-35f29aeb2a154297a417b50c6f058266",
+    "message": "",
+    "verifier_exit_code": 0
+  },
+  "evidence": "artifacts\\agentless-katex-astra-medium-2026-11-07",
+  "launcher_override": "Saved experiment driver permits Astra through the Sol-only guard. Reasoning remains medium and all enforcement remains enabled.",
+  "public_candidate_result": {
+    "passed": 1251,
+    "failed": 1,
+    "total": 1252
+  }
+}
