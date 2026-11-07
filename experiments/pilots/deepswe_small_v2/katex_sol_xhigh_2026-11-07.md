@@ -36,3 +36,29 @@ development, and one attempt per effort does not estimate average performance.
 
 [Exact results](katex_sol_xhigh_2026-11-07.json).
 Local artifacts are under `artifacts/agentless-katex-sol-xhigh-2026-11-07`.
+
+## Diagnosis of the ten remaining failures
+
+All ten verifier failure sections report the same exception at
+`parseArray`, patched `src/environments/array.ts:285`. The affected cases
+exercise matrix variants and their delimiters.
+
+The generated patch calculates a hard column limit from either
+`maxNumCols` or the number of alignment entries in `cols`. Matrix handlers
+initially pass one centered alignment entry as a default style. They infer the
+actual column count from parsed rows afterward. The patch mistakes that initial
+style entry for a one-column limit.
+
+For example, the verifier's matrix input contains a cell spanning two columns
+followed by a third cell. The generated check compares the first cell's span of
+two with an inferred limit of one and throws before the matrix handler can
+determine its real width. Parentheses and bracket checks fail at this same
+parsing exception before the delimiters are rendered.
+
+This is a shared defect in the generated repair's column-limit logic. The
+framework applied that repair and the verifier executed it. A correction would
+need to distinguish an explicitly declared array width from a matrix alignment
+default and account for spans when inferring matrix width. No patch correction
+or verifier retry was performed during this inspection. The shared exception
+can mask later errors, so this finding does not establish that one code change
+would make all 94 checks pass.
