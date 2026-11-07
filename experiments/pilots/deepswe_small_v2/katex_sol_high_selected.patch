@@ -1,0 +1,532 @@
+diff --git a/src/Parser.ts b/src/Parser.ts
+--- a/src/Parser.ts
++++ b/src/Parser.ts
+@@ -59,6 +59,12 @@
+     leftrightDepth: number;
+     nextToken: Token | null;
+ 
++    currentEnvironment: {name: string} | null = null;
++    arrayCell: {
++        environment: {name: string} | null;
++        multicolumn: boolean;
++    } | null = null;
++
+     constructor(input: string, settings: Settings) {
+         // Start in math mode
+         this.mode = "math";
+@@ -462,14 +468,151 @@
+     }
+ 
+     /**
++     * Read an environment name without taking its tokens away from \begin.
++     * fetch() has already expanded the command token; restore the expanded
++     * argument tokens in the same order in which the normal parser sees them.
++     */
++    private peekEnvironmentName(): string {
++        const tokens: Token[] = [];
++        let environment = "";
++        let opened = false;
++        this.consume();
++        try {
++            while (true) {
++                const token = this.fetch();
++                tokens.push(token);
++                this.consume();
++                if (token.text === "EOF") {
++                    break;
++                }
++                if (!opened) {
++                    if (/^\s+$/.test(token.text)) {
++                        continue;
++                    }
++                    if (token.text !== "{") {
++                        break;
++                    }
++                    opened = true;
++                } else if (token.text === "}") {
++                    break;
++                } else {
++                    environment += token.text;
++                }
++            }
++        } finally {
++            this.nextToken = null;
++            this.gullet.pushTokens(tokens.reverse());
++        }
++        return environment;
++    }
++
++    private parseMulticolumn(): AnyParseNode {
++        const token = this.fetch();
++        const context = this.arrayCell;
++        const supported = new Set([
++            "array", "matrix", "pmatrix", "bmatrix", "Bmatrix",
++            "vmatrix", "Vmatrix", "cases", "rcases", "aligned", "smallmatrix",
++        ]);
++        if (!context || context.environment !== this.currentEnvironment ||
++            !this.currentEnvironment ||
++            !supported.has(this.currentEnvironment.name)) {
++            throw new ParseError(
++                "\\multicolumn is only allowed in array-like environments", token);
++        }
++        if (context.multicolumn) {
++            throw new ParseError("Only one \\multicolumn is allowed per cell", token);
++        }
++        context.multicolumn = true;
++        this.consume();
++
++        const readArgument = (): string => {
++            this.consumeSpaces();
++            this.expect("{");
++            let text = "";
++            while (this.fetch().text !== "}") {
++                const next = this.fetch();
++                if (next.text === "EOF" || next.text === "{") {
++                    throw new ParseError("Invalid \\multicolumn argument", next);
++                }
++                text += next.text;
++                this.consume();
++            }
++            this.expect("}");
++            return text.trim();
++        };
++
++        const count = readArgument();
++        const span = Number(count);
++        if (!/^\+?\d+$/.test(count) ||
++            !Number.isSafeInteger(span) || span < 1) {
++            throw new ParseError(
++                "\\multicolumn requires a positive integer column count", token);
++        }
++
++        const alignment = readArgument().replace(/\s/g, "");
++        const match = /^(\|*)([lcr])(\|*)$/.exec(alignment);
++        if (!match) {
++            throw new ParseError(
++                "Invalid \\multicolumn alignment: " + alignment, token);
++        }
++
++        this.consumeSpaces();
++        this.expect("{");
++        this.gullet.beginGroup();
++        this.arrayCell = null;
++        let body: AnyParseNode[];
++        try {
++            body = this.parseExpression(false);
++            this.expect("}");
++        } finally {
++            this.arrayCell = context;
++            this.gullet.endGroup();
++        }
++
++        return {
++            type: "multicolumn",
++            mode: this.mode,
++            span,
++            align: match[2] as "l" | "c" | "r",
++            leftRules: match[1].length,
++            rightRules: match[3].length,
++            body,
++        };
++    }
++
++    /**
+      * Parses an entire function, including its base and all of its arguments.
+      */
+     parseFunction(
+         breakOnTokenText?: BreakToken,
+-        name?: string, // For determining its context
++        name?: string,
++    ): AnyParseNode | null | undefined {
++        if (this.fetch().text !== "\\begin") {
++            return this.parseFunctionImpl(breakOnTokenText, name);
++        }
++
++        const token = this.fetch();
++        const environment = this.peekEnvironmentName();
++        // peekEnvironmentName consumed \begin, but restored its argument.
++        this.nextToken = token;
++        const previous = this.currentEnvironment;
++        this.currentEnvironment = {name: environment};
++        try {
++            return this.parseFunctionImpl(breakOnTokenText, name);
++        } finally {
++            this.currentEnvironment = previous;
++        }
++    }
++
++    private parseFunctionImpl(
++        breakOnTokenText?: BreakToken,
++        name?: string,
+     ): AnyParseNode | null | undefined {
+         const token = this.fetch();
+         const func = token.text;
++        if (func === "\\multicolumn") {
++            return this.parseMulticolumn();
++        }
+         const funcData = functions[func];
+         if (!funcData) {
+             return null;
+diff --git a/src/environments/array.ts b/src/environments/array.ts
+--- a/src/environments/array.ts
++++ b/src/environments/array.ts
+@@ -78,6 +78,13 @@
+         return !name.includes("*");
+     }
+     // return undefined;
++}
++
++function arrayColumnCount(row: AnyParseNode[]): number {
++    return row.reduce(
++        (count, cell) => count + (cell.type === "multicolumn" ? cell.span : 1),
++        0,
++    );
+ }
+ 
+ /**
+@@ -169,14 +176,33 @@
+     hLinesBeforeRow.push(getHLines(parser));
+ 
+     while (true) {  // eslint-disable-line no-constant-condition
+-        // Parse each cell in its own group (namespace)
+-        const cellBody = parser.parseExpression(false, singleRow ? "\\end" : "\\\\");
++        // Parse each cell in its own group (namespace).
++        const previousCell = parser.arrayCell;
++        const context = {
++            environment: parser.currentEnvironment,
++            multicolumn: false,
++        };
++        parser.arrayCell = context;
++        let cellBody: AnyParseNode[];
++        try {
++            cellBody = parser.parseExpression(
++                false, singleRow ? "\\end" : "\\\\");
++        } finally {
++            parser.arrayCell = previousCell;
++        }
+         parser.gullet.endGroup();
+         parser.gullet.beginGroup();
++
++        const multicolumn = cellBody.length === 1 &&
++            cellBody[0].type === "multicolumn" ? cellBody[0] : null;
++        if (context.multicolumn && !multicolumn) {
++            throw new ParseError(
++                "\\multicolumn must occupy an entire array cell");
++        }
+         let cell: AnyParseNode = {
+             type: "ordgroup",
+             mode: parser.mode,
+-            body: cellBody,
++            body: multicolumn ? multicolumn.body : cellBody,
+         };
+         if (style) {
+             cell = {
+@@ -186,10 +212,17 @@
+                 body: [cell],
+             };
+         }
+-        row.push(cell);
++        row.push(multicolumn ? {...multicolumn, body: [cell]} : cell);
++        const declaredColumns =
++            cols?.filter(col => col.type === "align").length || maxNumCols;
++        if (multicolumn && declaredColumns &&
++            arrayColumnCount(row) > declaredColumns) {
++            throw new ParseError(
++                "\\multicolumn exceeds the remaining columns", multicolumn);
++        }
+         const next = parser.fetch().text;
+         if (next === "&") {
+-            if (maxNumCols && row.length === maxNumCols) {
++            if (maxNumCols && arrayColumnCount(row) >= maxNumCols) {
+                 if (singleRow || colSeparationType) {
+                     // {equation} or {split}
+                     throw new ParseError("Too many tab characters: &",
+@@ -247,6 +280,28 @@
+     parser.gullet.endGroup();
+     // End array group defining \cr
+     parser.gullet.endGroup();
++
++    if (body.some(row => row.some(cell => cell.type === "multicolumn"))) {
++        const ordinaryRows = body.filter(
++            row => !row.some(cell => cell.type === "multicolumn"));
++        const declaredColumns =
++            cols?.filter(col => col.type === "align").length || maxNumCols;
++        const inferredRows = ordinaryRows.length ? ordinaryRows : body;
++        const numColumns = declaredColumns ||
++            Math.max(0, ...inferredRows.map(arrayColumnCount));
++        for (const cells of body) {
++            let column = 0;
++            for (const cell of cells) {
++                const span = cell.type === "multicolumn" ? cell.span : 1;
++                if (cell.type === "multicolumn" &&
++                    column + span > numColumns) {
++                    throw new ParseError(
++                        "\\multicolumn exceeds the remaining columns", cell);
++                }
++                column += span;
++            }
++        }
++    }
+ 
+     return {
+         type: "array",
+@@ -331,6 +386,11 @@
+         }
+     }
+     setHLinePos(hLinesBeforeRow[0]);
++
++    if (group.body.some(row =>
++        row.some(cell => cell.type === "multicolumn"))) {
++        return multicolumnHtmlBuilder(group, options);
++    }
+ 
+     for (r = 0; r < group.body.length; ++r) {
+         const inrow = group.body[r];
+@@ -550,6 +610,165 @@
+     r: "right ",
+ };
+ 
++const multicolumnHtmlBuilder: HtmlBuilder<"array"> = function(group, options) {
++    const metrics = options.fontMetrics();
++    const ruleThickness = Math.max(
++        metrics.defaultRuleThickness, options.minRuleThickness);
++    const arraycolsep = group.colSeparationType === "small" ? 0.1389 : 0.5;
++    const strut = 12 / metrics.ptPerEm * group.arraystretch;
++    const descriptors: Array<{
++        align: string;
++        pregap?: number;
++        postgap?: number;
++    }> = [];
++    const defaultRules: string[][] = [[]];
++
++    for (const descriptor of group.cols || []) {
++        if (descriptor.type === "align") {
++            descriptors.push(descriptor);
++            defaultRules.push([]);
++        } else {
++            defaultRules[descriptors.length].push(descriptor.separator);
++        }
++    }
++
++    const numColumns = Math.max(
++        descriptors.length, ...group.body.map(arrayColumnCount));
++    while (defaultRules.length <= numColumns) {
++        defaultRules.push([]);
++    }
++
++    const children: HtmlDomNode[] = [];
++    const rowSizes: number[] = [];
++    let totalHeight = 0;
++
++    for (let r = 0; r < group.body.length; r++) {
++        const input = group.body[r];
++        const elements = input.map(cell => html.buildGroup(
++            cell.type === "multicolumn" ? cell.body[0] : cell, options));
++        const height = Math.max(0.7 * strut, ...elements.map(elt => elt.height));
++        const depth = Math.max(0.3 * strut, ...elements.map(elt => elt.depth));
++        const gap = group.rowGaps[r]
++            ? calculateSize(group.rowGaps[r]!, options)
++            : 0;
++        const jot = group.addJot && r + 1 < group.body.length
++            ? 3 / metrics.ptPerEm : 0;
++        const rowSize = Math.max(0, height + depth + gap + jot);
++        rowSizes.push(rowSize);
++        totalHeight += rowSize;
++
++        const rules = defaultRules.map(boundary => boundary.slice());
++        let column = 0;
++        for (let c = 0; c < input.length; c++) {
++            const cell = input[c];
++            const span = cell.type === "multicolumn" ? cell.span : 1;
++            const end = column + span;
++            if (cell.type === "multicolumn") {
++                rules[column] = new Array(cell.leftRules).fill("|");
++                rules[end] = new Array(cell.rightRules).fill("|");
++                for (let boundary = column + 1; boundary < end; boundary++) {
++                    rules[boundary] = [];
++                }
++            }
++
++            const elem = elements[c];
++            elem.height = height;
++            elem.depth = depth;
++            const vlist = makeVList({
++                positionType: "individualShift",
++                children: [{type: "elem", elem, shift: 0}],
++            }, options);
++            const align = cell.type === "multicolumn"
++                ? cell.align : descriptors[column]?.align || "c";
++            const cellSpan = makeSpan(
++                ["multicolumn-cell", "col-align-" + align], [vlist], options);
++            cellSpan.style.gridColumn = `${column + 1} / ${end + 1}`;
++            cellSpan.style.gridRow = String(r + 1);
++            cellSpan.style.alignSelf = "start";
++            cellSpan.style.textAlign =
++                align === "l" ? "left" : align === "r" ? "right" : "center";
++            cellSpan.style.whiteSpace = "nowrap";
++            cellSpan.style.paddingLeft = makeEm(
++                column > 0 || group.hskipBeforeAndAfter
++                    ? descriptors[column]?.pregap ?? arraycolsep : 0);
++            cellSpan.style.paddingRight = makeEm(
++                end < numColumns || group.hskipBeforeAndAfter
++                    ? descriptors[end - 1]?.postgap ?? arraycolsep : 0);
++            children.push(cellSpan);
++            column = end;
++        }
++
++        for (let boundary = 0; boundary <= numColumns; boundary++) {
++            const boundaryRules = rules[boundary];
++            if (!boundaryRules.length) {
++                continue;
++            }
++            const lines = boundaryRules.map((separator, index) => {
++                const line = makeSpan(["vertical-separator"], [], options);
++                line.style.display = "inline-block";
++                line.style.height = "100%";
++                line.style.borderRightWidth = makeEm(ruleThickness);
++                line.style.borderRightStyle =
++                    separator === ":" ? "dashed" : "solid";
++                if (index) {
++                    line.style.marginLeft = makeEm(metrics.doubleRuleSep);
++                }
++                return line;
++            });
++            const rule = makeSpan(["multicolumn-rule"], lines, options);
++            rule.style.gridColumn = String(
++                boundary === numColumns ? numColumns : boundary + 1);
++            rule.style.gridRow = String(r + 1);
++            rule.style.justifySelf =
++                boundary === numColumns ? "end" : "start";
++            rule.style.alignSelf = "stretch";
++            rule.style.width = "0";
++            rule.style.whiteSpace = "nowrap";
++            rule.style.position = "relative";
++            rule.style.left = makeEm(-ruleThickness / 2);
++            if (boundary === numColumns) {
++                rule.style.marginLeft = makeEm(
++                    -Math.max(0, lines.length - 1) *
++                    (ruleThickness + metrics.doubleRuleSep));
++            }
++            children.push(rule);
++        }
++    }
++
++    for (let boundary = 0;
++        boundary < group.hLinesBeforeRow.length; boundary++) {
++        const lines = group.hLinesBeforeRow[boundary];
++        for (let index = 0; index < lines.length; index++) {
++            const line = makeSpan(["horizontal-separator"], [], options);
++            line.style.gridColumn = "1 / -1";
++            line.style.gridRow = String(Math.min(
++                boundary + 1, group.body.length));
++            line.style.alignSelf =
++                boundary === group.body.length ? "end" : "start";
++            line.style.borderTopWidth = makeEm(ruleThickness);
++            line.style.borderTopStyle = lines[index] ? "dashed" : "solid";
++            line.style.height = "0";
++            line.style.marginTop = makeEm(
++                index * (ruleThickness + metrics.doubleRuleSep));
++            children.push(line);
++        }
++    }
++
++    const offset = totalHeight / 2 + metrics.axisHeight;
++    const grid = makeSpan(["mtable", "multicolumn-array"], children, options);
++    grid.style.display = "inline-grid";
++    grid.style.gridTemplateColumns =
++        `repeat(${numColumns}, max-content)`;
++    grid.style.gridTemplateRows = rowSizes.map(makeEm).join(" ");
++    grid.style.verticalAlign = makeEm(-(totalHeight - offset));
++    grid.height = offset;
++    grid.depth = totalHeight - offset;
++    const result = makeSpan(["mord"], [grid], options);
++    result.height = grid.height;
++    result.depth = grid.depth;
++    return result;
++};
++
+ const mathmlBuilder: MathMLBuilder<"array"> = function(group, options) {
+     const tbl = [];
+     const glue = new MathNode("mtd", [], ["mtr-glue"]);
+@@ -558,8 +777,19 @@
+         const rw = group.body[i];
+         const row = [];
+         for (let j = 0; j < rw.length; j++) {
+-            row.push(new MathNode("mtd",
+-                [mml.buildGroup(rw[j], options)]));
++            const cell = rw[j];
++            const td = new MathNode("mtd", [
++                mml.buildGroup(
++                    cell.type === "multicolumn" ? cell.body[0] : cell,
++                    options),
++            ]);
++            if (cell.type === "multicolumn") {
++                td.setAttribute("columnspan", String(cell.span));
++                td.setAttribute("columnalign",
++                    cell.align === "l" ? "left" :
++                    cell.align === "r" ? "right" : "center");
++            }
++            row.push(td);
+         }
+         if (group.tags && group.tags[i]) {
+             row.unshift(glue);
+@@ -738,22 +968,31 @@
+     }
+     const isAligned = !numCols;
+     res.body.forEach(function(row) {
+-        for (let i = 1; i < row.length; i += 2) {
+-            // Modify ordgroup node within styling node
+-            const styling = assertNodeType(row[i], "styling");
+-            const ordgroup = assertNodeType(styling.body[0], "ordgroup");
+-            ordgroup.body.unshift(emptyGroup);
++        let column = 0;
++        for (let i = 0; i < row.length; i++) {
++            const cell = row[i];
++            if (cell.type === "multicolumn") {
++                column += cell.span;
++                continue;
++            }
++            if (column % 2 === 1) {
++                // Modify ordgroup node within styling node.
++                const styling = assertNodeType(cell, "styling");
++                const ordgroup = assertNodeType(styling.body[0], "ordgroup");
++                ordgroup.body.unshift(emptyGroup);
++            }
++            column++;
+         }
+         if (!isAligned) { // Case 1
+-            const curMaths = row.length / 2;
++            const curMaths = column / 2;
+             if (numMaths < curMaths) {
+                 throw new ParseError(
+                     "Too many math in a row: " +
+                     `expected ${numMaths}, but got ${curMaths}`,
+                     row[0]);
+             }
+-        } else if (numCols < row.length) { // Case 2
+-            numCols = row.length;
++        } else if (numCols < column) { // Case 2
++            numCols = column;
+         }
+     });
+ 
+diff --git a/src/parseNode.ts b/src/parseNode.ts
+--- a/src/parseNode.ts
++++ b/src/parseNode.ts
+@@ -43,6 +43,16 @@
+         leqno?: boolean;
+         isCD?: boolean;
+     };
++    "multicolumn": {
++        type: "multicolumn";
++        mode: Mode;
++        loc?: SourceLocation | null | undefined;
++        span: number;
++        align: "l" | "c" | "r";
++        leftRules: number;
++        rightRules: number;
++        body: AnyParseNode[];
++    };
+     "cdlabel": {
+         type: "cdlabel";
+         mode: Mode;

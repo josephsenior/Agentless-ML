@@ -1,0 +1,83 @@
+{
+  "date": "2026-11-07",
+  "task_id": "katex-multicolumn-array-spans",
+  "scope": "User-authorized development comparison of Sol medium and high; previously exposed task",
+  "implementation_revision": "5ad83761e2f6268877fac9fd81be131563e3414b",
+  "model": "gpt-6.1-sol",
+  "reasoning": "high",
+  "model_calls": 8,
+  "limits": {
+    "seconds": 7200,
+    "once_only_content_tokens": 2000000
+  },
+  "sampling": {
+    "edit_samples": 1,
+    "repairs": 4
+  },
+  "budget": {
+    "time_limit_seconds": 7200,
+    "token_limit": 2000000,
+    "used_tokens": 98150,
+    "token_overshoot": 0,
+    "token_accounting": "once_only_context",
+    "content_tokenizer": "o200k_base",
+    "processed_input_tokens": 79562,
+    "processed_output_tokens": 49606,
+    "processed_tokens": 129168,
+    "remaining_seconds": 5759.428824999995
+  },
+  "selected_candidate": "loc-0-repair-1",
+  "attempts": [
+    {
+      "candidate_id": "loc-0-repair-0",
+      "sample_index": 0,
+      "status": "repair_error",
+      "message": "edited file is not visible: src/functions/environment.ts",
+      "localization_rank": 0
+    },
+    {
+      "candidate_id": "loc-0-repair-1",
+      "sample_index": 1,
+      "status": "validated",
+      "message": "",
+      "localization_rank": 0
+    },
+    {
+      "candidate_id": "loc-0-repair-2",
+      "sample_index": 2,
+      "status": "validated",
+      "message": "",
+      "localization_rank": 0
+    },
+    {
+      "candidate_id": "loc-0-repair-3",
+      "sample_index": 3,
+      "status": "repair_error",
+      "message": "SEARCH content not found in src/environments/array.ts",
+      "localization_rank": 0
+    }
+  ],
+  "score": {
+    "task_id": "katex-multicolumn-array-spans",
+    "status": "unresolved",
+    "reward": 0,
+    "f2p_passed": 82,
+    "f2p_total": 94,
+    "p2p_passed": 599,
+    "p2p_total": 599,
+    "image_id": "sha256:459b6d4c5f8d45218b25d0837a88d91052d0fb066c21b8bc2939290c4876b3ae",
+    "patch_sha256": "7c8fa830eaa6f2d051f7e45be76b7eac60f2c814bbd510d3cc5316b5a3e6671e",
+    "dataset_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-katex-sol-high-2026-11-07\\score\\katex-multicolumn-array-spans\\agentless-ml-verifier-e40467ebb0a84d2db9e65730ec5fbedb",
+    "message": "",
+    "verifier_exit_code": 0
+  },
+  "evidence": "artifacts\\agentless-katex-sol-high-2026-11-07",
+  "launcher_override": "The saved experiment driver permits high effort in the medium-only pilot guard. All other launcher settings and enforcement were retained.",
+  "medium_reference": {
+    "processed_tokens": 86163,
+    "content_tokens": 77143,
+    "workflow_seconds": 510.0293922,
+    "applicable_candidates": 0
+  }
+}
