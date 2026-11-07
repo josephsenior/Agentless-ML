@@ -1,0 +1,51 @@
+{
+  "date": "2026-11-07",
+  "scope": "Four short concurrent Sol high requests through existing subscription worker; no benchmark task",
+  "peak_overlapping_response_streams": 4,
+  "all_markers_match": true,
+  "total_reported_tokens": 104,
+  "requests": [
+    {
+      "index": 1,
+      "status": "completed",
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "started_at": 122116.796,
+      "first_event_at": 122119.328,
+      "finished_at": 122121.343,
+      "duration": 15.650501999989501
+    },
+    {
+      "index": 2,
+      "status": "completed",
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "started_at": 122115.218,
+      "first_event_at": 122119.484,
+      "finished_at": 122121.796,
+      "duration": 15.995551100000739
+    },
+    {
+      "index": 3,
+      "status": "completed",
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "started_at": 122115.703,
+      "first_event_at": 122118.031,
+      "finished_at": 122120.0,
+      "duration": 14.41836080000212
+    },
+    {
+      "index": 4,
+      "status": "completed",
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "started_at": 122116.234,
+      "first_event_at": 122118.671,
+      "finished_at": 122120.437,
+      "duration": 14.853408399998443
+    }
+  ],
+  "limitation": "Short requests establish observed four-way overlap on this session, not sustained throughput or guaranteed allowance for large repair requests.",
+  "evidence": "artifacts/subscription-four-concurrent-2026-11-07"
+}
