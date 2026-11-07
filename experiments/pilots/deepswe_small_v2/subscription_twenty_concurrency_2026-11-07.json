@@ -1,0 +1,214 @@
+{
+  "date": "2026-11-07",
+  "scope": "Twenty short concurrent Sol high requests through existing subscription worker; no benchmark task",
+  "requests_launched": 20,
+  "completed": 20,
+  "all_markers_match": true,
+  "peak_overlapping_response_streams": 6,
+  "total_reported_tokens": 520,
+  "http_start_spread_seconds": 14.85899999999674,
+  "requests": [
+    {
+      "index": 1,
+      "status": "completed",
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "started_at": 122684.203,
+      "first_event_at": 122687.187,
+      "finished_at": 122690.671,
+      "duration": 58.01964510000835
+    },
+    {
+      "index": 2,
+      "status": "completed",
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "started_at": 122686.906,
+      "first_event_at": 122690.437,
+      "finished_at": 122692.484,
+      "duration": 59.53875870000047
+    },
+    {
+      "index": 3,
+      "status": "completed",
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "started_at": 122692.109,
+      "first_event_at": 122695.171,
+      "finished_at": 122697.093,
+      "duration": 64.26768620000803
+    },
+    {
+      "index": 4,
+      "status": "completed",
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "started_at": 122692.812,
+      "first_event_at": 122695.468,
+      "finished_at": 122697.734,
+      "duration": 64.88683370000217
+    },
+    {
+      "index": 5,
+      "status": "completed",
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "started_at": 122681.156,
+      "first_event_at": 122684.046,
+      "finished_at": 122687.703,
+      "duration": 55.993242600001395
+    },
+    {
+      "index": 6,
+      "status": "completed",
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "started_at": 122688.234,
+      "first_event_at": 122691.562,
+      "finished_at": 122693.625,
+      "duration": 60.40010949999851
+    },
+    {
+      "index": 7,
+      "status": "completed",
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "started_at": 122682.687,
+      "first_event_at": 122685.39,
+      "finished_at": 122689.265,
+      "duration": 57.105555000001914
+    },
+    {
+      "index": 8,
+      "status": "completed",
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "started_at": 122689.531,
+      "first_event_at": 122692.859,
+      "finished_at": 122694.546,
+      "duration": 61.310273800001596
+    },
+    {
+      "index": 9,
+      "status": "completed",
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "started_at": 122681.656,
+      "first_event_at": 122684.109,
+      "finished_at": 122687.703,
+      "duration": 56.067700800005696
+    },
+    {
+      "index": 10,
+      "status": "completed",
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "started_at": 122690.562,
+      "first_event_at": 122693.484,
+      "finished_at": 122695.296,
+      "duration": 62.035795699994196
+    },
+    {
+      "index": 11,
+      "status": "completed",
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "started_at": 122685.343,
+      "first_event_at": 122689.921,
+      "finished_at": 122692.25,
+      "duration": 59.342113099992275
+    },
+    {
+      "index": 12,
+      "status": "completed",
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "started_at": 122682.187,
+      "first_event_at": 122684.859,
+      "finished_at": 122688.453,
+      "duration": 56.50662200000079
+    },
+    {
+      "index": 13,
+      "status": "completed",
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "started_at": 122679.703,
+      "first_event_at": 122682.093,
+      "finished_at": 122684.656,
+      "duration": 53.09882529999595
+    },
+    {
+      "index": 14,
+      "status": "completed",
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "started_at": 122680.203,
+      "first_event_at": 122682.75,
+      "finished_at": 122685.953,
+      "duration": 54.40540420000616
+    },
+    {
+      "index": 15,
+      "status": "completed",
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "started_at": 122680.687,
+      "first_event_at": 122683.578,
+      "finished_at": 122687.109,
+      "duration": 55.385473100002855
+    },
+    {
+      "index": 16,
+      "status": "completed",
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "started_at": 122678.625,
+      "first_event_at": 122681.656,
+      "finished_at": 122683.875,
+      "duration": 52.13440279998758
+    },
+    {
+      "index": 17,
+      "status": "completed",
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "started_at": 122693.484,
+      "first_event_at": 122695.718,
+      "finished_at": 122697.781,
+      "duration": 64.93174919999728
+    },
+    {
+      "index": 18,
+      "status": "completed",
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "started_at": 122691.453,
+      "first_event_at": 122694.375,
+      "finished_at": 122696.234,
+      "duration": 62.97283549999702
+    },
+    {
+      "index": 19,
+      "status": "completed",
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "started_at": 122683.328,
+      "first_event_at": 122686.671,
+      "finished_at": 122689.921,
+      "duration": 57.54765849999967
+    },
+    {
+      "index": 20,
+      "status": "completed",
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "started_at": 122679.218,
+      "first_event_at": 122681.703,
+      "finished_at": 122684.25,
+      "duration": 52.573894599991036
+    }
+  ],
+  "interpretation": "All 20 short calls launched together completed correctly. Worker startup spread HTTP initiation across about 15 seconds; observed peak was six overlapping response streams. This is not proof of 20 simultaneous server-side generations or of a six-request service limit.",
+  "evidence": "artifacts/subscription-twenty-concurrent-2026-11-07"
+}
