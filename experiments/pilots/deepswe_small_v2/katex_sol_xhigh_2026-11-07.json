@@ -1,0 +1,85 @@
+{
+  "date": "2026-11-07",
+  "task_id": "katex-multicolumn-array-spans",
+  "scope": "One user-authorized Sol xhigh development run on an already exposed task",
+  "model": "gpt-6.1-sol",
+  "reasoning": "xhigh",
+  "model_calls": 8,
+  "limits": {
+    "seconds": 7200,
+    "once_only_content_tokens": 2000000
+  },
+  "sampling": {
+    "edit_samples": 1,
+    "repair_samples": 4
+  },
+  "implementation_revision": "6150d22a470e97c90e8665afab250284d0f5d4df",
+  "budget": {
+    "time_limit_seconds": 7200,
+    "token_limit": 2000000,
+    "used_tokens": 97654,
+    "token_overshoot": 0,
+    "token_accounting": "once_only_context",
+    "content_tokenizer": "o200k_base",
+    "processed_input_tokens": 80514,
+    "processed_output_tokens": 106489,
+    "processed_tokens": 187003,
+    "remaining_seconds": 4168.037367900004
+  },
+  "selected_candidate": "loc-0-repair-0",
+  "attempts": [
+    {
+      "candidate_id": "loc-0-repair-0",
+      "sample_index": 0,
+      "status": "validated",
+      "message": "",
+      "localization_rank": 0
+    },
+    {
+      "candidate_id": "loc-0-repair-1",
+      "sample_index": 1,
+      "status": "validated",
+      "message": "",
+      "localization_rank": 0
+    },
+    {
+      "candidate_id": "loc-0-repair-2",
+      "sample_index": 2,
+      "status": "validated",
+      "message": "",
+      "localization_rank": 0
+    },
+    {
+      "candidate_id": "loc-0-repair-3",
+      "sample_index": 3,
+      "status": "validated",
+      "message": "",
+      "localization_rank": 0
+    }
+  ],
+  "score": {
+    "task_id": "katex-multicolumn-array-spans",
+    "status": "unresolved",
+    "reward": 0,
+    "f2p_passed": 84,
+    "f2p_total": 94,
+    "p2p_passed": 599,
+    "p2p_total": 599,
+    "image_id": "sha256:459b6d4c5f8d45218b25d0837a88d91052d0fb066c21b8bc2939290c4876b3ae",
+    "patch_sha256": "538996708b15bd2de8e02d021fce33a50aa5cecb03cb648358c094865724d683",
+    "dataset_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-katex-sol-xhigh-2026-11-07\\score\\katex-multicolumn-array-spans\\agentless-ml-verifier-ed6d284d85124214a351edd35cb56821",
+    "message": "",
+    "verifier_exit_code": 0
+  },
+  "evidence": "artifacts\\agentless-katex-sol-xhigh-2026-11-07",
+  "launcher_override": "Saved experiment driver permits xhigh through the medium-only guard; the workflow and enforcement are otherwise the shared launcher.",
+  "high_reference": {
+    "processed_tokens": 129168,
+    "workflow_seconds": 1440.571175,
+    "issue_checks_passed": 82,
+    "issue_checks_total": 94,
+    "regression_passed": 599,
+    "applicable_candidates": 2
+  }
+}
