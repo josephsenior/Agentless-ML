@@ -32,3 +32,8 @@ separately using public validation signals, rather than this held-out outcome.
 [verifier output](koota_sample_two_diagnostic_2026-11-08/container-output.txt).
 
 Local attempt: `artifacts/koota-sample-two-score-2026-11-08`.
+
+The [2026-11-09 inspection](koota_sample_two_stall_2026-11-09.md) identifies the
+stall as a pre-existing Koota bit-counter overflow triggered by retained aspect
+registrations, with an independent pinned-base reproduction. The timeout above
+remains the official diagnostic outcome.

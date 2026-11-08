@@ -1,0 +1,40 @@
+
+> @koota/core@0.0.1 test /app/packages/core
+> vitest run tests/diagnostic-overflow.test.ts --config diagnostic.config.ts --reporter=verbose
+
+
+ RUN  v4.0.13 /app/packages/core
+
+ × tests/diagnostic-overflow.test.ts > reproduces the existing highest-bit tracking loop 8ms
+   → [diagnostic bit overflow] bit=-2147483648 mask=1073741824 worldTraits=31
+
+ Test Files  1 failed (1)
+      Tests  1 failed (1)
+   Start at  23:15:54
+   Duration  411ms (transform 228ms, setup 32ms, collect 245ms, tests 9ms, environment 0ms, prepare 4ms)
+
+/app/packages/core:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  @koota/core@0.0.1 test: `vitest run tests/diagnostic-overflow.test.ts --config diagnostic.config.ts --reporter=verbose`
+Exit status 1
+stderr | tests/diagnostic-overflow.test.ts > reproduces the existing highest-bit tracking loop
+[diagnostic start] reproduces the existing highest-bit tracking loop
+
+stderr | tests/diagnostic-overflow.test.ts > reproduces the existing highest-bit tracking loop
+[diagnostic end] reproduces the existing highest-bit tracking loop
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/diagnostic-overflow.test.ts > reproduces the existing highest-bit tracking loop
+Error: [diagnostic bit overflow] bit=-2147483648 mask=1073741824 worldTraits=31
+ ❯ createQueryInstance src/query/query.ts:373:45
+    371|                     // Check each bit in the mask
+    372|                     for (let bit = 1; bit <= mask; bit <<= 1) {
+    373|                         if (bit <= 0) throw new Error(`[diagnostic bit…
+       |                                             ^
+    374|                         if (!(mask & bit)) continue;
+    375|
+ ❯ Object.query src/world/world.ts:231:29
+ ❯ tests/diagnostic-overflow.test.ts:11:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯

@@ -1,0 +1,195 @@
+[verifier] model.patch applied (33817 bytes)
+[verifier] Resetting files touched by test.patch
+[verifier] Applying test.patch
+
+> @koota/core@0.0.1 test /app/packages/core
+> vitest run tests/aspect.test.ts --config diagnostic.config.ts --reporter=verbose
+
+
+ RUN  v4.0.13 /app/packages/core
+
+/app/packages/core:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  @koota/core@0.0.1 test: `vitest run tests/aspect.test.ts --config diagnostic.config.ts --reporter=verbose`
+Command failed with signal "SIGTERM"
+stderr | tests/aspect.test.ts > Aspect > creation > should create an aspect with id, traits, and schema
+[diagnostic start] Aspect > creation > should create an aspect with id, traits, and schema
+
+stderr | tests/aspect.test.ts > Aspect > creation > should create an aspect with id, traits, and schema
+[diagnostic end] Aspect > creation > should create an aspect with id, traits, and schema
+
+stderr | tests/aspect.test.ts > Aspect > creation > should throw on overlapping field names
+[diagnostic start] Aspect > creation > should throw on overlapping field names
+
+stderr | tests/aspect.test.ts > Aspect > creation > should throw on overlapping field names
+[diagnostic end] Aspect > creation > should throw on overlapping field names
+
+stderr | tests/aspect.test.ts > Aspect > creation > should throw when relation is a constituent
+[diagnostic start] Aspect > creation > should throw when relation is a constituent
+
+stderr | tests/aspect.test.ts > Aspect > creation > should throw when relation is a constituent
+[diagnostic end] Aspect > creation > should throw when relation is a constituent
+
+stderr | tests/aspect.test.ts > Aspect > creation > should allow tag traits as constituents
+[diagnostic start] Aspect > creation > should allow tag traits as constituents
+
+stderr | tests/aspect.test.ts > Aspect > creation > should allow tag traits as constituents
+[diagnostic end] Aspect > creation > should allow tag traits as constituents
+
+stderr | tests/aspect.test.ts > Aspect > creation > should flatten nested aspects
+[diagnostic start] Aspect > creation > should flatten nested aspects
+
+stderr | tests/aspect.test.ts > Aspect > creation > should flatten nested aspects
+[diagnostic end] Aspect > creation > should flatten nested aspects
+
+stderr | tests/aspect.test.ts > Aspect > creation > should return distinct instances for identical arguments
+[diagnostic start] Aspect > creation > should return distinct instances for identical arguments
+
+stderr | tests/aspect.test.ts > Aspect > creation > should return distinct instances for identical arguments
+[diagnostic end] Aspect > creation > should return distinct instances for identical arguments
+
+stderr | tests/aspect.test.ts > Aspect > creation > should require at least two constituents
+[diagnostic start] Aspect > creation > should require at least two constituents
+
+stderr | tests/aspect.test.ts > Aspect > creation > should require at least two constituents
+[diagnostic end] Aspect > creation > should require at least two constituents
+
+stderr | tests/aspect.test.ts > Aspect > entity operations > should check has with aspect
+[diagnostic start] Aspect > entity operations > should check has with aspect
+
+stderr | tests/aspect.test.ts > Aspect > entity operations > should check has with aspect
+[diagnostic end] Aspect > entity operations > should check has with aspect
+
+stderr | tests/aspect.test.ts > Aspect > entity operations > should get merged data from aspect
+[diagnostic start] Aspect > entity operations > should get merged data from aspect
+
+stderr | tests/aspect.test.ts > Aspect > entity operations > should get merged data from aspect
+[diagnostic end] Aspect > entity operations > should get merged data from aspect
+
+stderr | tests/aspect.test.ts > Aspect > entity operations > should return undefined from get when entity lacks a constituent
+[diagnostic start] Aspect > entity operations > should return undefined from get when entity lacks a constituent
+
+stderr | tests/aspect.test.ts > Aspect > entity operations > should return undefined from get when entity lacks a constituent
+[diagnostic end] Aspect > entity operations > should return undefined from get when entity lacks a constituent
+
+stderr | tests/aspect.test.ts > Aspect > entity operations > should set distributed fields across constituents
+[diagnostic start] Aspect > entity operations > should set distributed fields across constituents
+
+stderr | tests/aspect.test.ts > Aspect > entity operations > should set distributed fields across constituents
+[diagnostic end] Aspect > entity operations > should set distributed fields across constituents
+
+stderr | tests/aspect.test.ts > Aspect > entity operations > should trigger per-constituent onChange when set via aspect
+[diagnostic start] Aspect > entity operations > should trigger per-constituent onChange when set via aspect
+
+stderr | tests/aspect.test.ts > Aspect > entity operations > should trigger per-constituent onChange when set via aspect
+[diagnostic end] Aspect > entity operations > should trigger per-constituent onChange when set via aspect
+
+stderr | tests/aspect.test.ts > Aspect > entity operations > should add all constituent traits via aspect
+[diagnostic start] Aspect > entity operations > should add all constituent traits via aspect
+
+stderr | tests/aspect.test.ts > Aspect > entity operations > should add all constituent traits via aspect
+[diagnostic end] Aspect > entity operations > should add all constituent traits via aspect
+
+stderr | tests/aspect.test.ts > Aspect > entity operations > should add aspect without arguments using defaults
+[diagnostic start] Aspect > entity operations > should add aspect without arguments using defaults
+
+stderr | tests/aspect.test.ts > Aspect > entity operations > should add aspect without arguments using defaults
+[diagnostic end] Aspect > entity operations > should add aspect without arguments using defaults
+
+stderr | tests/aspect.test.ts > Aspect > entity operations > should not overwrite existing constituents on add
+[diagnostic start] Aspect > entity operations > should not overwrite existing constituents on add
+
+stderr | tests/aspect.test.ts > Aspect > entity operations > should not overwrite existing constituents on add
+[diagnostic end] Aspect > entity operations > should not overwrite existing constituents on add
+
+stderr | tests/aspect.test.ts > Aspect > entity operations > should remove all constituent traits via aspect
+[diagnostic start] Aspect > entity operations > should remove all constituent traits via aspect
+
+stderr | tests/aspect.test.ts > Aspect > entity operations > should remove all constituent traits via aspect
+[diagnostic end] Aspect > entity operations > should remove all constituent traits via aspect
+
+stderr | tests/aspect.test.ts > Aspect > entity operations > should handle tag constituents in has check
+[diagnostic start] Aspect > entity operations > should handle tag constituents in has check
+
+stderr | tests/aspect.test.ts > Aspect > entity operations > should handle tag constituents in has check
+[diagnostic end] Aspect > entity operations > should handle tag constituents in has check
+
+stderr | tests/aspect.test.ts > Aspect > entity operations > should exclude tag fields from get data
+[diagnostic start] Aspect > entity operations > should exclude tag fields from get data
+
+stderr | tests/aspect.test.ts > Aspect > entity operations > should exclude tag fields from get data
+[diagnostic end] Aspect > entity operations > should exclude tag fields from get data
+
+stderr | tests/aspect.test.ts > Aspect > query matching > should match entities with all constituents
+[diagnostic start] Aspect > query matching > should match entities with all constituents
+
+stderr | tests/aspect.test.ts > Aspect > query matching > should match entities with all constituents
+[diagnostic end] Aspect > query matching > should match entities with all constituents
+
+stderr | tests/aspect.test.ts > Aspect > query matching > should combine aspect with other traits in query
+[diagnostic start] Aspect > query matching > should combine aspect with other traits in query
+
+stderr | tests/aspect.test.ts > Aspect > query matching > should combine aspect with other traits in query
+[diagnostic end] Aspect > query matching > should combine aspect with other traits in query
+
+stderr | tests/aspect.test.ts > Aspect > query matching > should deliver merged data in readEach
+[diagnostic start] Aspect > query matching > should deliver merged data in readEach
+
+stderr | tests/aspect.test.ts > Aspect > query matching > should deliver merged data in readEach
+[diagnostic end] Aspect > query matching > should deliver merged data in readEach
+
+stderr | tests/aspect.test.ts > Aspect > query matching > should distribute writes in updateEach
+[diagnostic start] Aspect > query matching > should distribute writes in updateEach
+
+stderr | tests/aspect.test.ts > Aspect > query matching > should distribute writes in updateEach
+[diagnostic end] Aspect > query matching > should distribute writes in updateEach
+
+stderr | tests/aspect.test.ts > Aspect > query matching > should handle mixed aspect and regular trait in readEach
+[diagnostic start] Aspect > query matching > should handle mixed aspect and regular trait in readEach
+
+stderr | tests/aspect.test.ts > Aspect > query matching > should handle mixed aspect and regular trait in readEach
+[diagnostic end] Aspect > query matching > should handle mixed aspect and regular trait in readEach
+
+stderr | tests/aspect.test.ts > Aspect > query matching > should update queries when entity gains last constituent
+[diagnostic start] Aspect > query matching > should update queries when entity gains last constituent
+
+stderr | tests/aspect.test.ts > Aspect > query matching > should update queries when entity gains last constituent
+[diagnostic end] Aspect > query matching > should update queries when entity gains last constituent
+
+stderr | tests/aspect.test.ts > Aspect > query matching > should update queries when entity loses any constituent
+[diagnostic start] Aspect > query matching > should update queries when entity loses any constituent
+
+stderr | tests/aspect.test.ts > Aspect > query matching > should update queries when entity loses any constituent
+[diagnostic end] Aspect > query matching > should update queries when entity loses any constituent
+
+stderr | tests/aspect.test.ts > Aspect > Not modifier > should match entities missing at least one constituent
+[diagnostic start] Aspect > Not modifier > should match entities missing at least one constituent
+
+stderr | tests/aspect.test.ts > Aspect > Not modifier > should match entities missing at least one constituent
+[diagnostic end] Aspect > Not modifier > should match entities missing at least one constituent
+
+stderr | tests/aspect.test.ts > Aspect > Not modifier > should update Not(aspect) when entity gains all constituents
+[diagnostic start] Aspect > Not modifier > should update Not(aspect) when entity gains all constituents
+
+stderr | tests/aspect.test.ts > Aspect > Not modifier > should update Not(aspect) when entity gains all constituents
+[diagnostic end] Aspect > Not modifier > should update Not(aspect) when entity gains all constituents
+
+stderr | tests/aspect.test.ts > Aspect > Not modifier > should update Not(aspect) when entity loses a constituent
+[diagnostic start] Aspect > Not modifier > should update Not(aspect) when entity loses a constituent
+
+stderr | tests/aspect.test.ts > Aspect > Not modifier > should update Not(aspect) when entity loses a constituent
+[diagnostic end] Aspect > Not modifier > should update Not(aspect) when entity loses a constituent
+
+stderr | tests/aspect.test.ts > Aspect > Not modifier > should combine Not(aspect) with required traits
+[diagnostic start] Aspect > Not modifier > should combine Not(aspect) with required traits
+
+stderr | tests/aspect.test.ts > Aspect > Not modifier > should combine Not(aspect) with required traits
+[diagnostic end] Aspect > Not modifier > should combine Not(aspect) with required traits
+
+stderr | tests/aspect.test.ts > Aspect > Changed modifier > should detect changes to any constituent
+[diagnostic start] Aspect > Changed modifier > should detect changes to any constituent
+
+stderr | tests/aspect.test.ts > Aspect > Changed modifier > should detect changes to any constituent
+[diagnostic end] Aspect > Changed modifier > should detect changes to any constituent
+
+stderr | tests/aspect.test.ts > Aspect > Changed modifier > should not match unchanged entities
+[diagnostic start] Aspect > Changed modifier > should not match unchanged entities

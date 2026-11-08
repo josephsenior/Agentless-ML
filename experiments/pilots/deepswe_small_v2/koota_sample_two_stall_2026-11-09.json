@@ -1,0 +1,102 @@
+{
+  "date": "2026-11-09",
+  "timezone": "Europe/Paris",
+  "task_id": "koota-composite-trait-aspects",
+  "scope": "Post-selection stall diagnosis; no new official score or generated repair",
+  "candidate_id": "loc-0-repair-2",
+  "patch_sha256": "e07c60316629eab08f308249dbbb05ac10bb27fd306b7694270ca2abc7d8444d",
+  "base_commit": "9c434858b2b522002f8c5eb4a554fa8836a7cf3c",
+  "model_calls": 0,
+  "official_score_unchanged": "timeout after 1800 seconds",
+  "diagnostics": [
+    {
+      "scope": "Short issue-suite progress diagnostic; not an official score",
+      "container": "agentless-koota-stall-diagnostic-20261109",
+      "exit_code": 124,
+      "elapsed_seconds": 75.71728119999898,
+      "model_calls": 0,
+      "limits": {
+        "seconds": 75,
+        "cpus": 2,
+        "memory_gib": 8,
+        "network": "none"
+      },
+      "evidence": "test-progress.txt"
+    },
+    {
+      "scope": "Disposable query-loop tripwire diagnostic; not an official score",
+      "container": "agentless-koota-stall-tripwire-20261109",
+      "exit_code": 1,
+      "elapsed_seconds": 2.0903078999981517,
+      "model_calls": 0,
+      "limits": {
+        "seconds": 75,
+        "cpus": 2,
+        "memory_gib": 8,
+        "network": "none"
+      },
+      "evidence": "tripwire-output.txt"
+    },
+    {
+      "scope": "Isolated unchanged-entity test, exact saved patch; diagnostic only",
+      "container": "agentless-koota-stall-isolated-20261109",
+      "exit_code": 0,
+      "elapsed_seconds": 1.8879711000008683,
+      "model_calls": 0,
+      "limits": {
+        "seconds": 20,
+        "cpus": 2,
+        "memory_gib": 8,
+        "network": "none"
+      },
+      "evidence": "isolated-output.txt"
+    },
+    {
+      "scope": "Pinned base without candidate patch, synthetic high-bit reproduction with tripwire; not a benchmark score",
+      "container": "agentless-koota-base-overflow-20261109",
+      "exit_code": 1,
+      "elapsed_seconds": 1.784065699997882,
+      "model_calls": 0,
+      "limits": {
+        "seconds": 20,
+        "cpus": 2,
+        "memory_gib": 8,
+        "network": "none"
+      },
+      "evidence": "base-overflow-output.txt"
+    }
+  ],
+  "stalled_test": "Aspect > Changed modifier > should not match unchanged entities",
+  "tripwire": {
+    "source": "packages/core/src/query/query.ts",
+    "base_line": 372,
+    "candidate_line_before_instrumentation": 376,
+    "loop": "for (let bit = 1; bit <= mask; bit <<= 1)",
+    "mask": 1073741824,
+    "observed_bit": -2147483648,
+    "world_traits": 31,
+    "termination_explanation": "Signed left shift wraps from 2**30 to -2**31 and then zero. Both remain <= mask, and shifting zero stays zero.",
+    "instrumentation": "Throw when bit <= 0, before the original loop body. No repair to loop behavior was applied."
+  },
+  "trigger": "Generated global aspects Set survives world.reset; each reset eagerly reinstalls retained aspects and registers their backing traits. The stalled full-suite test reaches the highest positive 32-bit bitflag. The isolated original test passes without accumulated registrations.",
+  "classification": {
+    "underlying_defect": "Existing Koota pinned-base query loop, independently reproduced with no candidate patch applied",
+    "candidate_interaction": "Generated registration strategy exposes the existing overflow",
+    "agentless_ml_framework_bug_established": false
+  },
+  "guarded_suite_diagnostic": {
+    "passed": 49,
+    "failed": 2,
+    "failures": [
+      "Intentional overflow tripwire in unchanged-entity tracking test",
+      "Or(aspect, Health) returned an empty result instead of containing the spawned matching entity"
+    ],
+    "official_score": false
+  },
+  "limitations": [
+    "Guarded suite uses source instrumentation and is not a benchmark result.",
+    "Isolated test intentionally filters the suite and does not replace full-suite evaluation.",
+    "Independent base reproduction adds a synthetic test and tripwire; assertions and source changes exist only in disposable containers.",
+    "No conclusion that repairing overflow would solve the complete task."
+  ]
+}

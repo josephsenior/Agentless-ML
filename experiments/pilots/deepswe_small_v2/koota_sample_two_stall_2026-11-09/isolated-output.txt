@@ -1,0 +1,72 @@
+[verifier] model.patch applied (33817 bytes)
+[verifier] Resetting files touched by test.patch
+[verifier] Applying test.patch
+
+> @koota/core@0.0.1 test /app/packages/core
+> vitest run tests/aspect.test.ts -t 'should not match unchanged entities' --config diagnostic.config.ts --reporter=verbose
+
+
+ RUN  v4.0.13 /app/packages/core
+
+ ↓ tests/aspect.test.ts > Aspect > creation > should create an aspect with id, traits, and schema
+ ↓ tests/aspect.test.ts > Aspect > creation > should throw on overlapping field names
+ ↓ tests/aspect.test.ts > Aspect > creation > should throw when relation is a constituent
+ ↓ tests/aspect.test.ts > Aspect > creation > should allow tag traits as constituents
+ ↓ tests/aspect.test.ts > Aspect > creation > should flatten nested aspects
+ ↓ tests/aspect.test.ts > Aspect > creation > should return distinct instances for identical arguments
+ ↓ tests/aspect.test.ts > Aspect > creation > should require at least two constituents
+ ↓ tests/aspect.test.ts > Aspect > entity operations > should check has with aspect
+ ↓ tests/aspect.test.ts > Aspect > entity operations > should get merged data from aspect
+ ↓ tests/aspect.test.ts > Aspect > entity operations > should return undefined from get when entity lacks a constituent
+ ↓ tests/aspect.test.ts > Aspect > entity operations > should set distributed fields across constituents
+ ↓ tests/aspect.test.ts > Aspect > entity operations > should trigger per-constituent onChange when set via aspect
+ ↓ tests/aspect.test.ts > Aspect > entity operations > should add all constituent traits via aspect
+ ↓ tests/aspect.test.ts > Aspect > entity operations > should add aspect without arguments using defaults
+ ↓ tests/aspect.test.ts > Aspect > entity operations > should not overwrite existing constituents on add
+ ↓ tests/aspect.test.ts > Aspect > entity operations > should remove all constituent traits via aspect
+ ↓ tests/aspect.test.ts > Aspect > entity operations > should handle tag constituents in has check
+ ↓ tests/aspect.test.ts > Aspect > entity operations > should exclude tag fields from get data
+ ↓ tests/aspect.test.ts > Aspect > query matching > should match entities with all constituents
+ ↓ tests/aspect.test.ts > Aspect > query matching > should combine aspect with other traits in query
+ ↓ tests/aspect.test.ts > Aspect > query matching > should deliver merged data in readEach
+ ↓ tests/aspect.test.ts > Aspect > query matching > should distribute writes in updateEach
+ ↓ tests/aspect.test.ts > Aspect > query matching > should handle mixed aspect and regular trait in readEach
+ ↓ tests/aspect.test.ts > Aspect > query matching > should update queries when entity gains last constituent
+ ↓ tests/aspect.test.ts > Aspect > query matching > should update queries when entity loses any constituent
+ ↓ tests/aspect.test.ts > Aspect > Not modifier > should match entities missing at least one constituent
+ ↓ tests/aspect.test.ts > Aspect > Not modifier > should update Not(aspect) when entity gains all constituents
+ ↓ tests/aspect.test.ts > Aspect > Not modifier > should update Not(aspect) when entity loses a constituent
+ ↓ tests/aspect.test.ts > Aspect > Not modifier > should combine Not(aspect) with required traits
+ ↓ tests/aspect.test.ts > Aspect > Changed modifier > should detect changes to any constituent
+ ✓ tests/aspect.test.ts > Aspect > Changed modifier > should not match unchanged entities 6ms
+ ↓ tests/aspect.test.ts > Aspect > Added modifier > should match entity that just gained all constituents
+ ↓ tests/aspect.test.ts > Aspect > Added modifier > should not match entity that already had all constituents
+ ↓ tests/aspect.test.ts > Aspect > Added modifier > should match entity spawned with all constituents
+ ↓ tests/aspect.test.ts > Aspect > Removed modifier > should match entity that just lost a constituent
+ ↓ tests/aspect.test.ts > Aspect > Removed modifier > should not match entity that never had all constituents
+ ↓ tests/aspect.test.ts > Aspect > subscriptions > should fire onAdd when entity gains all constituents
+ ↓ tests/aspect.test.ts > Aspect > subscriptions > should fire onAdd when spawned with all constituents
+ ↓ tests/aspect.test.ts > Aspect > subscriptions > should not fire onAdd when entity already has all constituents
+ ↓ tests/aspect.test.ts > Aspect > subscriptions > should fire onRemove when entity loses a constituent from complete set
+ ↓ tests/aspect.test.ts > Aspect > subscriptions > should not fire onRemove when entity already lacks a constituent
+ ↓ tests/aspect.test.ts > Aspect > subscriptions > should fire onChange when constituent changes and entity has all
+ ↓ tests/aspect.test.ts > Aspect > subscriptions > should not fire onChange when entity lacks a constituent
+ ↓ tests/aspect.test.ts > Aspect > subscriptions > should return unsubscribe function
+ ↓ tests/aspect.test.ts > Aspect > composition > should work with Or modifier alongside aspect
+ ↓ tests/aspect.test.ts > Aspect > composition > should work with two aspects in the same query
+ ↓ tests/aspect.test.ts > Aspect > composition > should handle nested aspect in Not
+ ↓ tests/aspect.test.ts > Aspect > composition > should handle aspect with tag-only constituents
+ ↓ tests/aspect.test.ts > Aspect > change detection in updateEach > should trigger change detection per constituent when using updateEach
+ ↓ tests/aspect.test.ts > Aspect > change detection in updateEach > should not trigger change for unchanged constituents
+ ↓ tests/aspect.test.ts > Aspect > world reset > should work after world reset
+
+ Test Files  1 passed (1)
+      Tests  1 passed | 50 skipped (51)
+   Start at  23:15:18
+   Duration  440ms (transform 253ms, setup 31ms, collect 276ms, tests 7ms, environment 0ms, prepare 4ms)
+
+stderr | tests/aspect.test.ts > Aspect > Changed modifier > should not match unchanged entities
+[diagnostic start] Aspect > Changed modifier > should not match unchanged entities
+
+stderr | tests/aspect.test.ts > Aspect > Changed modifier > should not match unchanged entities
+[diagnostic end] Aspect > Changed modifier > should not match unchanged entities
