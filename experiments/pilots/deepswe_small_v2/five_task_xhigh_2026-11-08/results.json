@@ -1,0 +1,486 @@
+{
+  "date": "2026-11-08",
+  "plan": {
+    "task_ids": [
+      "etree-xml-diff-patch",
+      "obsidian-linter-scoped-ignore-markers",
+      "koota-composite-trait-aspects",
+      "superjson-error-stack-serialization",
+      "gql-incremental-graphql-delivery"
+    ],
+    "model": "gpt-6.1-sol",
+    "reasoning": "xhigh",
+    "revision": "8661cee7ac3d23826002c6bda167555e03368607+dirty",
+    "task_concurrency": 5,
+    "repair_concurrency_per_task": 4,
+    "repair_samples": 4,
+    "edit_samples": 1,
+    "docker_concurrency": 1,
+    "once_only_content_tokens_per_task": 2000000,
+    "time_limit_seconds_per_task": 7200,
+    "queue_policy": "Docker queue waiting counts toward the task deadline except initial baseline preparation. Scoring occurs after export.",
+    "scope": "Agentless-only development batch"
+  },
+  "tasks": [
+    {
+      "task_id": "etree-xml-diff-patch",
+      "status": "scored",
+      "budget": {
+        "time_limit_seconds": 7200,
+        "token_limit": 2000000,
+        "used_tokens": 90090,
+        "token_overshoot": 0,
+        "token_accounting": "once_only_context",
+        "content_tokenizer": "o200k_base",
+        "processed_input_tokens": 33728,
+        "processed_output_tokens": 94033,
+        "processed_tokens": 127761,
+        "remaining_seconds": 6309.8226689
+      },
+      "completed_model_responses": 8,
+      "docker_queue_wait_seconds": 13.83307990000003,
+      "workflow_seconds": 890.1773310999997,
+      "artifact_directory": "artifacts\\agentless-five-xhigh-2026-11-08\\etree-xml-diff-patch\\runs\\run-fe15009848704e4e86336d2efff78c11",
+      "attempts": [
+        {
+          "candidate_id": "loc-0-repair-0",
+          "sample_index": 0,
+          "status": "validated",
+          "message": "",
+          "localization_rank": 0
+        },
+        {
+          "candidate_id": "loc-0-repair-1",
+          "sample_index": 1,
+          "status": "validated",
+          "message": "",
+          "localization_rank": 0
+        },
+        {
+          "candidate_id": "loc-0-repair-2",
+          "sample_index": 2,
+          "status": "validated",
+          "message": "",
+          "localization_rank": 0
+        },
+        {
+          "candidate_id": "loc-0-repair-3",
+          "sample_index": 3,
+          "status": "validated",
+          "message": "",
+          "localization_rank": 0
+        }
+      ],
+      "public_candidate_results": [
+        {
+          "candidate": "loc-0-repair-0",
+          "status": "pass",
+          "counts": {
+            "passed": 69
+          }
+        },
+        {
+          "candidate": "loc-0-repair-1",
+          "status": "pass",
+          "counts": {
+            "passed": 70
+          }
+        },
+        {
+          "candidate": "loc-0-repair-2",
+          "status": "pass",
+          "counts": {
+            "passed": 69
+          }
+        },
+        {
+          "candidate": "loc-0-repair-3",
+          "status": "pass",
+          "counts": {
+            "passed": 69
+          }
+        }
+      ],
+      "score": {
+        "task_id": "etree-xml-diff-patch",
+        "status": "resolved",
+        "reward": 1,
+        "f2p_passed": 52,
+        "f2p_total": 52,
+        "p2p_passed": 15,
+        "p2p_total": 15,
+        "image_id": "sha256:e057fb0080708ee7a527b9c2d1d55351f602126d35eecb595d506b1aa52581d3",
+        "patch_sha256": "b28cccae250fa93e0bf4391fa9ef84b351b2affc3b960025e5f2a0726cb5748b",
+        "dataset_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+        "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-five-xhigh-2026-11-08\\etree-xml-diff-patch\\score\\etree-xml-diff-patch\\agentless-ml-verifier-fca045f21d5643a3871925463f32a9d0",
+        "message": "",
+        "verifier_exit_code": 0
+      },
+      "selected_candidate": "loc-0-repair-0"
+    },
+    {
+      "task_id": "gql-incremental-graphql-delivery",
+      "status": "scored",
+      "budget": {
+        "time_limit_seconds": 7200,
+        "token_limit": 2000000,
+        "used_tokens": 108061,
+        "token_overshoot": 0,
+        "token_accounting": "once_only_context",
+        "content_tokenizer": "o200k_base",
+        "processed_input_tokens": 78439,
+        "processed_output_tokens": 98966,
+        "processed_tokens": 177405,
+        "remaining_seconds": 6060.714218200001
+      },
+      "completed_model_responses": 8,
+      "docker_queue_wait_seconds": 21.765625099999852,
+      "workflow_seconds": 1139.2857817999993,
+      "artifact_directory": "artifacts\\agentless-five-xhigh-2026-11-08\\gql-incremental-graphql-delivery\\runs\\run-5827627052a648f7b6752d98660d01c4",
+      "attempts": [
+        {
+          "candidate_id": "loc-0-repair-0",
+          "sample_index": 0,
+          "status": "validated",
+          "message": "",
+          "localization_rank": 0
+        },
+        {
+          "candidate_id": "loc-0-repair-1",
+          "sample_index": 1,
+          "status": "validated",
+          "message": "",
+          "localization_rank": 0
+        },
+        {
+          "candidate_id": "loc-0-repair-2",
+          "sample_index": 2,
+          "status": "validated",
+          "message": "",
+          "localization_rank": 0
+        },
+        {
+          "candidate_id": "loc-0-repair-3",
+          "sample_index": 3,
+          "status": "validated",
+          "message": "",
+          "localization_rank": 0
+        }
+      ],
+      "public_candidate_results": [
+        {
+          "candidate": "loc-0-repair-0",
+          "status": "fail",
+          "counts": {
+            "passed": 825,
+            "skipped": 30,
+            "failed": 1
+          }
+        },
+        {
+          "candidate": "loc-0-repair-1",
+          "status": "fail",
+          "counts": {
+            "passed": 824,
+            "skipped": 30,
+            "failed": 1
+          }
+        },
+        {
+          "candidate": "loc-0-repair-2",
+          "status": "fail",
+          "counts": {
+            "passed": 812,
+            "skipped": 30,
+            "failed": 15
+          }
+        },
+        {
+          "candidate": "loc-0-repair-3",
+          "status": "fail",
+          "counts": {
+            "passed": 823,
+            "skipped": 30,
+            "failed": 1
+          }
+        }
+      ],
+      "score": {
+        "task_id": "gql-incremental-graphql-delivery",
+        "status": "unresolved",
+        "reward": 0,
+        "f2p_passed": 14,
+        "f2p_total": 17,
+        "p2p_passed": 810,
+        "p2p_total": 811,
+        "image_id": "sha256:ed624caaa47e2992730a75099e3da71aee7cbdaf33efbaef93ee0ef320f3394f",
+        "patch_sha256": "49b586c7eb67665caa33657fe5e1bb5b4f392a23e13cc6edfe4d098eb5d895d3",
+        "dataset_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+        "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-five-xhigh-2026-11-08\\gql-incremental-graphql-delivery\\score\\gql-incremental-graphql-delivery\\agentless-ml-verifier-1d8a5d31ee8047f3bd449bbb077e5858",
+        "message": "",
+        "verifier_exit_code": 0
+      },
+      "selected_candidate": "loc-0-repair-0"
+    },
+    {
+      "task_id": "koota-composite-trait-aspects",
+      "status": "failed",
+      "budget": {
+        "time_limit_seconds": 7200,
+        "token_limit": 2000000,
+        "used_tokens": 26215,
+        "token_overshoot": 0,
+        "token_accounting": "once_only_context",
+        "content_tokenizer": "o200k_base",
+        "processed_input_tokens": 34499,
+        "processed_output_tokens": 56103,
+        "processed_tokens": 90602,
+        "remaining_seconds": 6311.6990831
+      },
+      "completed_model_responses": 8,
+      "docker_queue_wait_seconds": 80.27080829999977,
+      "workflow_seconds": 888.3009168999997,
+      "artifact_directory": "artifacts\\agentless-five-xhigh-2026-11-08\\koota-composite-trait-aspects\\runs\\run-36a5c12e908e4eb0ad52e171b121313f",
+      "attempts": [
+        {
+          "candidate_id": "loc-0-repair-0",
+          "sample_index": 0,
+          "status": "repair_error",
+          "message": "missing SEARCH/REPLACE edit",
+          "localization_rank": 0
+        },
+        {
+          "candidate_id": "loc-0-repair-1",
+          "sample_index": 1,
+          "status": "repair_error",
+          "message": "missing SEARCH/REPLACE edit",
+          "localization_rank": 0
+        },
+        {
+          "candidate_id": "loc-0-repair-2",
+          "sample_index": 2,
+          "status": "repair_error",
+          "message": "missing SEARCH/REPLACE edit",
+          "localization_rank": 0
+        },
+        {
+          "candidate_id": "loc-0-repair-3",
+          "sample_index": 3,
+          "status": "repair_error",
+          "message": "missing SEARCH/REPLACE edit",
+          "localization_rank": 0
+        }
+      ],
+      "public_candidate_results": [],
+      "message": "no repair response produced a patch candidate"
+    },
+    {
+      "task_id": "obsidian-linter-scoped-ignore-markers",
+      "status": "scored",
+      "budget": {
+        "time_limit_seconds": 7200,
+        "token_limit": 2000000,
+        "used_tokens": 87143,
+        "token_overshoot": 0,
+        "token_accounting": "once_only_context",
+        "content_tokenizer": "o200k_base",
+        "processed_input_tokens": 73577,
+        "processed_output_tokens": 110629,
+        "processed_tokens": 184206,
+        "remaining_seconds": 5966.2978067
+      },
+      "completed_model_responses": 8,
+      "docker_queue_wait_seconds": 53.16285899999957,
+      "workflow_seconds": 1233.7021932999996,
+      "artifact_directory": "artifacts\\agentless-five-xhigh-2026-11-08\\obsidian-linter-scoped-ignore-markers\\runs\\run-832aff5ba54f4f74a3ebd24a96779a2e",
+      "attempts": [
+        {
+          "candidate_id": "loc-0-repair-0",
+          "sample_index": 0,
+          "status": "validated",
+          "message": "",
+          "localization_rank": 0
+        },
+        {
+          "candidate_id": "loc-0-repair-1",
+          "sample_index": 1,
+          "status": "validated",
+          "message": "",
+          "localization_rank": 0
+        },
+        {
+          "candidate_id": "loc-0-repair-2",
+          "sample_index": 2,
+          "status": "validated",
+          "message": "",
+          "localization_rank": 0
+        },
+        {
+          "candidate_id": "loc-0-repair-3",
+          "sample_index": 3,
+          "status": "validated",
+          "message": "",
+          "localization_rank": 0
+        }
+      ],
+      "public_candidate_results": [
+        {
+          "candidate": "loc-0-repair-0",
+          "status": "fail",
+          "counts": {
+            "passed": 1139,
+            "failed": 10
+          }
+        },
+        {
+          "candidate": "loc-0-repair-1",
+          "status": "fail",
+          "counts": {
+            "passed": 1140,
+            "failed": 5
+          }
+        },
+        {
+          "candidate": "loc-0-repair-2",
+          "status": "fail",
+          "counts": {
+            "passed": 1140,
+            "failed": 1
+          }
+        },
+        {
+          "candidate": "loc-0-repair-3",
+          "status": "fail",
+          "counts": {
+            "passed": 1156,
+            "failed": 2
+          }
+        }
+      ],
+      "score": {
+        "task_id": "obsidian-linter-scoped-ignore-markers",
+        "status": "resolved",
+        "reward": 1,
+        "f2p_passed": 33,
+        "f2p_total": 33,
+        "p2p_passed": 1133,
+        "p2p_total": 1133,
+        "image_id": "sha256:5522ad4d38ef3cd0163dfd1f584dcafd197b914ddf56816d0a88941067657d67",
+        "patch_sha256": "b6e3865132844e61e53247c1e100086e4db1dc4119a0eb6eadfd08304969a2c7",
+        "dataset_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+        "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-five-xhigh-2026-11-08\\obsidian-linter-scoped-ignore-markers\\score\\obsidian-linter-scoped-ignore-markers\\agentless-ml-verifier-065e97050f894e819c228b168d9be0b9",
+        "message": "",
+        "verifier_exit_code": 0
+      },
+      "selected_candidate": "loc-0-repair-2"
+    },
+    {
+      "task_id": "superjson-error-stack-serialization",
+      "status": "scored",
+      "budget": {
+        "time_limit_seconds": 7200,
+        "token_limit": 2000000,
+        "used_tokens": 36497,
+        "token_overshoot": 0,
+        "token_accounting": "once_only_context",
+        "content_tokenizer": "o200k_base",
+        "processed_input_tokens": 19140,
+        "processed_output_tokens": 89359,
+        "processed_tokens": 108499,
+        "remaining_seconds": 6310.0367916
+      },
+      "completed_model_responses": 8,
+      "docker_queue_wait_seconds": 65.9070386000003,
+      "workflow_seconds": 889.9632084000004,
+      "artifact_directory": "artifacts\\agentless-five-xhigh-2026-11-08\\superjson-error-stack-serialization\\runs\\run-5f826ce0ea4c473fbd367173329f9217",
+      "attempts": [
+        {
+          "candidate_id": "loc-0-repair-0",
+          "sample_index": 0,
+          "status": "validated",
+          "message": "",
+          "localization_rank": 0
+        },
+        {
+          "candidate_id": "loc-0-repair-1",
+          "sample_index": 1,
+          "status": "validated",
+          "message": "",
+          "localization_rank": 0
+        },
+        {
+          "candidate_id": "loc-0-repair-2",
+          "sample_index": 2,
+          "status": "validated",
+          "message": "",
+          "localization_rank": 0
+        },
+        {
+          "candidate_id": "loc-0-repair-3",
+          "sample_index": 3,
+          "status": "validated",
+          "message": "",
+          "localization_rank": 0
+        }
+      ],
+      "public_candidate_results": [
+        {
+          "candidate": "loc-0-repair-0",
+          "status": "pass",
+          "counts": {
+            "passed": 82,
+            "skipped": 2
+          }
+        },
+        {
+          "candidate": "loc-0-repair-1",
+          "status": "pass",
+          "counts": {
+            "passed": 82,
+            "skipped": 2
+          }
+        },
+        {
+          "candidate": "loc-0-repair-2",
+          "status": "pass",
+          "counts": {
+            "passed": 82,
+            "skipped": 2
+          }
+        },
+        {
+          "candidate": "loc-0-repair-3",
+          "status": "pass",
+          "counts": {
+            "passed": 82,
+            "skipped": 2
+          }
+        }
+      ],
+      "score": {
+        "task_id": "superjson-error-stack-serialization",
+        "status": "resolved",
+        "reward": 1,
+        "f2p_passed": 80,
+        "f2p_total": 80,
+        "p2p_passed": 116,
+        "p2p_total": 116,
+        "image_id": "sha256:ada56382a90fbe2dd01bde0f685a1bbd0ceac556f7b802199e60dbbca6e76387",
+        "patch_sha256": "554800877cda6dc1be615465829254527854b40ae97aac28cc92f12c196ced82",
+        "dataset_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+        "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-five-xhigh-2026-11-08\\superjson-error-stack-serialization\\score\\superjson-error-stack-serialization\\agentless-ml-verifier-6893a2d357754db0addf113d4d8cd7d6",
+        "message": "",
+        "verifier_exit_code": 0
+      },
+      "selected_candidate": "loc-0-repair-0"
+    }
+  ],
+  "solved": 3,
+  "attempted": 5,
+  "completed_model_requests": 40,
+  "provider_reported_tokens": 688473,
+  "provider_input_tokens": 239383,
+  "provider_output_tokens": 449090,
+  "elapsed_seconds": 1315.7257959842682,
+  "observed_peak_docker_execution": 1
+}

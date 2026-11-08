@@ -34,3 +34,38 @@ workflow remains sequential unless repair concurrency is explicitly selected.
 Run with `tools/run_agentless_batch.py` and the frozen list above. Local output
 is `artifacts/agentless-five-xhigh-2026-11-08`. Model calls occur through the
 existing subscription connection. Every exported patch is scored after selection.
+
+## Results
+
+The batch solved three of its five tasks with the selected exported patches.
+All forty model requests completed; no subscription refusal, local budget
+stop, or time-limit stop occurred. Observed Docker execution concurrency was
+one. Elapsed time from the frozen plan to the last result was about 22 minutes.
+
+| Task | DeepSWE result | Issue checks | Regression checks | Provider-reported tokens |
+| --- | --- | ---: | ---: | ---: |
+| Etree XML diff/patch | Resolved | 52/52 | 15/15 | 127,761 |
+| Obsidian Linter scoped ignore markers | Resolved | 33/33 | 1,133/1,133 | 184,206 |
+| SuperJSON error stack serialization | Resolved | 80/80 | 116/116 | 108,499 |
+| GQL incremental GraphQL delivery | Unresolved | 14/17 | 810/811 | 177,405 |
+| Koota composite trait aspects | No patch exported | Unscored | Unscored | 90,602 |
+
+Koota returned four explanations without SEARCH/REPLACE edit blocks. All four
+candidates applied in each of the other tasks. GQL's candidates failed some
+public checks; the selected patch remained unresolved under the separate
+verifier. Obsidian's public candidate runs also contained failures, retained in
+the evidence, and its selected patch passed all of the verifier's issue and
+regression checks. Report-level public counts can differ when the candidate
+adds or changes public tests; the frozen baseline IDs still govern selection.
+
+Total provider-reported usage was **688,473 tokens**, averaging about 137,695
+per attempted task. All response usage, candidate failures and skips are retained
+in the [result record](five_task_xhigh_2026-11-08/results.json). The four exported
+patches are beside that file. The Koota attempt remains in the five-task
+denominator. This selected development batch does not establish a full
+DeepSWE benchmark score or a Grinta comparison.
+
+Four repair samples are sufficient to continue evaluating the workflow at this
+stage. More samples would increase usage and would share the same localized
+context. This batch does not measure the extra solve rate from increasing the
+sample count, so it does not establish that a larger count is worthwhile.
