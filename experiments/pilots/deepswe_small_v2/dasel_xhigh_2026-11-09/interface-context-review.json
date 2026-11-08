@@ -1,0 +1,22 @@
+{
+  "scope": "Illustrative context-only proposal measured offline; not a replay, model request, implemented policy or result",
+  "original_prompt_characters": 4185,
+  "additional_characters": 694,
+  "hypothetical_prompt_characters": 4879,
+  "declarations": [
+    {
+      "path": "parsing/reader.go",
+      "start_line": 18,
+      "end_line": 25,
+      "text": "// Reader reads a value from a byte slice.\ntype Reader interface {\n\t// Read reads a value from a byte slice.\n\tRead([]byte) (*model.Value, error)\n}\n\n// NewReaderFn is a function that creates a new reader.\ntype NewReaderFn func(options ReaderOptions) (Reader, error)"
+    },
+    {
+      "path": "parsing/writer.go",
+      "start_line": 27,
+      "end_line": 34,
+      "text": "// Writer writes a value to a byte slice.\ntype Writer interface {\n\t// Write writes a value to a byte slice.\n\tWrite(*model.Value) ([]byte, error)\n}\n\n// NewWriterFn is a function that creates a new writer.\ntype NewWriterFn func(options WriterOptions) (Writer, error)"
+    }
+  ],
+  "original_prompt_sha256": "2161c11ee5f06dd52a1a73526aea6f9117f767775769afecf4e98d5bd29b4c67",
+  "limitations": "Character count is not a tokenizer count. Earlier-selected declarations were manually identified for this review; no general retrieval implementation was added. No outcome improvement has been measured."
+}

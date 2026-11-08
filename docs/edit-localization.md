@@ -101,3 +101,10 @@ misleading single repair prompt. `responses.json` retains the complete grouping,
 and candidate attempts retain their localization rank even when repair parsing
 fails. Controller tests cover common selection, duplicate votes, distinct line
 windows, input conflicts and failure before execution. No model calls are made.
+
+## Review of declaration context
+
+Dasel exposed a case where correct windowing drops factory signatures that were
+visible during symbol localization. The [interface-context review](interface-context-review.md)
+assesses retaining those declarations as an explicit method variant. It is a
+proposal; the ten-line context and edit permissions above remain unchanged.
