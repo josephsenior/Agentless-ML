@@ -1,0 +1,16 @@
+[verifier] model.patch applied (33817 bytes)
+[verifier] Resetting files touched by test.patch
+[verifier] Applying test.patch
+
+> @koota/core@0.0.1 test /app/packages/core
+> vitest run '--exclude=**/aspect.test.ts' --reporter=junit --outputFile=/logs/verifier/base.xml
+
+JUNIT report written to /logs/verifier/base.xml
+
+> @koota/react@0.0.1 test /app/packages/react
+> vitest --environment=jsdom run --reporter=junit --outputFile=/logs/verifier/base2.xml
+
+JUNIT report written to /logs/verifier/base2.xml
+
+> @koota/core@0.0.1 test /app/packages/core
+> vitest run tests/aspect.test.ts --reporter=junit --outputFile=/logs/verifier/new.xml

@@ -1,0 +1,67 @@
+{
+  "date_utc": "2026-11-08",
+  "scope": "Post-selection diagnostic of unselected sample; not a replacement prediction or a new model attempt",
+  "task_id": "koota-composite-trait-aspects",
+  "candidate_id": "loc-0-repair-2",
+  "model_calls": 0,
+  "provenance": {
+    "scope": "Post-selection diagnostic of previously unselected candidate; does not replace original prediction",
+    "candidate_id": "loc-0-repair-2",
+    "patch_sha256": "e07c60316629eab08f308249dbbb05ac10bb27fd306b7694270ca2abc7d8444d",
+    "source_run": "artifacts\\agentless-koota-overload-fix-xhigh-2026-11-08\\koota-composite-trait-aspects\\runs\\run-20ce2bcd708048cbaf2c84f414355196",
+    "model_calls": 0
+  },
+  "limits": {
+    "verifier_timeout_seconds": 1800,
+    "cpus": 2,
+    "memory_gib": 8,
+    "network": "disabled"
+  },
+  "score": {
+    "task_id": "koota-composite-trait-aspects",
+    "status": "timeout",
+    "reward": null,
+    "f2p_passed": null,
+    "f2p_total": null,
+    "p2p_passed": null,
+    "p2p_total": null,
+    "image_id": "sha256:7a3afca50b7b8a2181ec2706f235ea85eebaa731500e9137c434a4190567ac27",
+    "patch_sha256": "e07c60316629eab08f308249dbbb05ac10bb27fd306b7694270ca2abc7d8444d",
+    "dataset_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\koota-sample-two-score-2026-11-08\\score\\koota-composite-trait-aspects\\agentless-ml-verifier-9416e1e981d440b5b30608d7ffe3cf59",
+    "message": "verifier exceeded 1800s",
+    "verifier_exit_code": null
+  },
+  "observed_native_regression_reports": [
+    {
+      "file": "base.xml",
+      "tests": 137,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "297dd16962a34086fda117b36b9607d380439b9f33cf73669691463f5a16a8d3"
+    },
+    {
+      "file": "base2.xml",
+      "tests": 35,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "2e560bc5bbf7be3df423f49a86a69c225256b88c2154484ed79ed091b092a0c3"
+    }
+  ],
+  "issue_report": {
+    "file": "new.xml",
+    "bytes_observed": 0,
+    "completed": false
+  },
+  "observation": "Issue-specific vitest command stayed active with roughly one CPU core and 200 MiB memory; no completed issue report. This observation does not establish which test or code path stalled.",
+  "original_prediction_unchanged": {
+    "candidate_id": "loc-0-repair-0",
+    "issue_passed": 5,
+    "issue_total": 51,
+    "regression_passed": 172,
+    "regression_total": 172
+  },
+  "evidence_note": "Native XML reports and container output copied while running, before the scorer removed its timed-out container. Official timeout score has null counts; the 172 passing regression cases are separately observed native reports."
+}
