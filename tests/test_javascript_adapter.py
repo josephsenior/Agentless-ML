@@ -265,3 +265,70 @@ def test_javascript_strip_comments_removes_jsdoc_and_line_comments():
     stripped = get_language_adapter("javascript").strip_comments(source, path="f.js")
     assert "jsdoc" not in stripped and "inline" not in stripped
     assert '"// not a comment"' in stripped
+
+
+@pytest.mark.parametrize("path", ["overloads.ts", "overloads.tsx", "overloads.mts", "overloads.cts"])
+def test_overload_group_resolves_declarations_and_implementation(path):
+    source = (
+        "export function createWorld(options: object): object;\n"
+        "export function createWorld(...traits: string[]): object;\n"
+        "// The implementation belongs to both signatures.\n"
+        "export function createWorld(...args: any[]): object {\n"
+        "  return { onAdd() {}, onRemove() {}, onChange() {} };\n"
+        "}\n"
+    )
+    adapter = get_language_adapter("typescript")
+    node = adapter.parse_file(path, source)
+    # Keep all declarations for representation/skeleton compatibility.
+    assert len([symbol for symbol in node.symbols if symbol.name == "createWorld"]) == 3
+    resolved = resolve_locations("function: createWorld", node, source, context_window=0)
+    assert resolved.line_intervals == ((1, 6),)
+    assert not resolved.unrecognized
+    context, intervals = construct_selected_context(
+        {path: ["function: createWorld"]}, {path: node}, {path: source},
+        context_window=0,
+    )
+    assert intervals[path] == [(1, 6)]
+    assert "onAdd" in context and "onRemove" in context and "onChange" in context
+
+
+def test_overloaded_methods_and_constructors_resolve_with_qualified_names():
+    source = (
+        "export class C {\n"
+        "  constructor(x: string);\n"
+        "  constructor(x: number);\n"
+        "  constructor(x: any) {}\n"
+        "  static read(x: string): string;\n"
+        "  static read(x: number): number;\n"
+        "  static read(x: any) { return x; }\n"
+        "}\n"
+    )
+    adapter = get_language_adapter("typescript")
+    node = adapter.parse_file("a.ts", source)
+    assert resolve_locations(
+        "method: C.constructor", node, source, context_window=0
+    ).line_intervals == ((2, 4),)
+    assert resolve_locations(
+        "method: C.read", node, source, context_window=0
+    ).line_intervals == ((5, 7),)
+
+
+@pytest.mark.parametrize("source,location", [
+    ("function f(x: string): string;\nconst gap = 1;\n"
+     "function f(x: any) { return x; }", "function: f"),
+    ("function f(x: string): string;\n"
+     "function f(x: number): number;", "function: f"),
+    ("function f(x: string): string;\nfunction f(x: any) { return x; }\n"
+     "function f(x: any) { return x; }", "function: f"),
+    ("class A { f(x: string): string; f(x: any) { return x; } }\n"
+     "class B { f(x: string): string; f(x: any) { return x; } }", "method: f"),
+    ("class C { static f(x: string): string; f(x: any) { return x; } }",
+     "method: C.f"),
+    ("class C { get x() { return 1; } set x(v: number) {} }", "method: C.x"),
+])
+def test_overload_resolution_preserves_real_ambiguity(source, location):
+    adapter = get_language_adapter("typescript")
+    node = adapter.parse_file("a.ts", source)
+    result = resolve_locations(location, node, source, context_window=0)
+    assert not result.is_valid
+    assert result.unrecognized == (location,)

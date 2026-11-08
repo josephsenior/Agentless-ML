@@ -110,3 +110,24 @@ selection limits on this attempt. Correcting overload resolution alone does
 not establish that Koota would be solved: the trait and modifier files would
 still be absent from the selected set. No code correction, retry, or held-out
 inspection was performed during this diagnosis.
+
+## Overload resolution fix
+
+The implementation now groups adjacent TypeScript overload signatures with
+their implementation in the same syntax scope when resolving a model-selected
+name. The interval includes the signatures and implementation. Functions,
+methods and constructors are covered. Static/instance mismatches and genuine
+duplicate implementations remain ambiguous. Source representations and prompt
+skeletons retain all original declarations.
+
+An offline replay of Koota's unchanged saved symbol response restored
+`packages/core/src/world/world.ts` lines 18–408, covering all three subscription
+hooks. Trait and entity-method files still depend on file localization selecting
+them in a future run. The original pilot attempt remains unsuccessful.
+
+The regression checks covered overload syntax, comments between declarations,
+qualified class members, constructors, distinct scopes, duplicate implementations,
+accessors and declaration-only signatures. The adapter, structure corpus,
+prompt fixtures and recorded workflow checks passed (110 passed, two optional
+Node execution checks skipped).
+[Replay evidence](koota_overload_resolution_2026-11-08.json).

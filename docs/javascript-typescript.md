@@ -93,6 +93,26 @@ in their skeletons. Nested object values are visible but only direct members rec
 qualified symbols. Assignment compression is unsupported. Parser errors fail
 explicitly; successful parsing does not imply valid types or a working build.
 
+## TypeScript overload selection
+
+A location such as `function: createWorld` can select an overload group.
+Consecutive overload signatures followed by their implementation in the same
+scope resolve to one interval covering all signatures and the body. Comments
+between declarations are allowed. Qualified method and constructor locations
+use the same rule, with static modifiers respected.
+
+The source representation and displayed skeleton still contain every
+declaration. Grouping happens when resolving a location. Multiple implementations,
+different scopes, getter/setter pairs, signatures interrupted by another
+declaration, and declaration-only overloads retain their existing ambiguity
+handling and can be selected by line.
+
+The Koota pilot exposed this defect when its valid `createWorld` selection
+matched two signatures and one implementation and produced no context.
+Replaying the saved response after the fix restored world.ts lines 18–408,
+including onAdd, onRemove and onChange.
+[Offline replay evidence](../experiments/pilots/deepswe_small_v2/koota_overload_resolution_2026-11-08.json).
+
 ## Checks performed
 
 [Adapter tests](../tests/test_javascript_adapter.py) cover names and source spans,

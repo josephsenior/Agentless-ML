@@ -199,6 +199,7 @@ _typescript_grammar = Grammar("typescript", tree_sitter_typescript.language_type
 TYPESCRIPT = replace(
     JAVASCRIPT,
     language="typescript",
+    overload_signatures=frozenset({"function_signature", "method_signature"}),
     extension=".ts",
     extensions=_TS_EXTENSIONS + _JS_EXTENSIONS,
     grammars={

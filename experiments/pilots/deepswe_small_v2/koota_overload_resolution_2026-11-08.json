@@ -1,0 +1,71 @@
+{
+  "task_id": "koota-composite-trait-aspects",
+  "base_commit": "9c434858b2b522002f8c5eb4a554fa8836a7cf3c",
+  "input": "Unchanged saved symbol-localization response from the five-task pilot",
+  "before_intervals": {
+    "packages/core/src/entity/entity.ts": [
+      [
+        4,
+        116
+      ]
+    ],
+    "packages/core/src/query/query.ts": [
+      [
+        23,
+        465
+      ]
+    ],
+    "packages/core/src/query/query-result.ts": [
+      [
+        12,
+        294
+      ]
+    ],
+    "packages/core/src/index.ts": [
+      [
+        32,
+        52
+      ]
+    ]
+  },
+  "after_intervals": {
+    "packages/core/src/entity/entity.ts": [
+      [
+        4,
+        116
+      ]
+    ],
+    "packages/core/src/query/query.ts": [
+      [
+        23,
+        465
+      ]
+    ],
+    "packages/core/src/query/query-result.ts": [
+      [
+        12,
+        294
+      ]
+    ],
+    "packages/core/src/world/world.ts": [
+      [
+        18,
+        408
+      ]
+    ],
+    "packages/core/src/index.ts": [
+      [
+        32,
+        52
+      ]
+    ]
+  },
+  "restored_world_hooks": [
+    "onAdd",
+    "onRemove",
+    "onChange"
+  ],
+  "model_calls": 0,
+  "docker_runs": 0,
+  "scope": "Recomputed coarse context only; no repair retry or revised benchmark outcome"
+}

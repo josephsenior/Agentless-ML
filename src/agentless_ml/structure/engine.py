@@ -70,10 +70,15 @@ def parse(
     return grammar, data, root
 
 
-def extract(spec: LanguageSpec, path: str, source: str) -> FileNode:
+def extract(
+    spec: LanguageSpec, path: str, source: str, *, group_overloads: bool = False
+) -> FileNode:
     grammar, data, root = parse(spec, path, source)
     context = Context(data, spec.naming)
-    symbols = _walk(spec, root.named_children, context, spec.declarations, spec.wrappers)
+    symbols = _walk(
+        spec, root.named_children, context, spec.declarations, spec.wrappers,
+        group_overloads=group_overloads,
+    )
     return FileNode(path, grammar.language, len(source.splitlines()), tuple(symbols))
 
 
@@ -84,19 +89,29 @@ def _walk(
     declarations: Mapping[str, Rule],
     wrappers: Mapping[str, Wrapper],
     span: Node | None = None,
+    *,
+    group_overloads: bool = False,
 ) -> list[SymbolNode]:
     symbols: list[SymbolNode] = []
     leading: list[Node] = []
+    overloads: list[SymbolNode] = []
+    overload_modifiers: tuple[str, ...] = ()
     for node in nodes:
         if node.type in spec.ignored:
             continue
         if node.type in spec.leading:
             leading.append(node)
             continue
+        if group_overloads and node.type in spec.comment_node_types:
+            continue
+        previous_count = len(symbols)
         rule = declarations.get(node.type)
         found = tuple(rule(node, context)) if rule else ()
         if found:
-            symbols.extend(_symbol(spec, found_one, context, leading, span) for found_one in found)
+            symbols.extend(
+                _symbol(spec, found_one, context, leading, span, group_overloads)
+                for found_one in found
+            )
         elif node.type in wrappers:
             wrapper = wrappers[node.type]
             if wrapper.child_field is None:
@@ -112,8 +127,44 @@ def _walk(
                     declarations,
                     wrappers,
                     node if wrapper.widens_span else span,
+                    group_overloads=group_overloads,
                 )
             )
+        if group_overloads and spec.overload_signatures:
+            owner = node
+            while owner.type in wrappers:
+                field = wrappers[owner.type].child_field
+                child = owner.child_by_field_name(field) if field else None
+                if child is None:
+                    break
+                owner = child
+            modifiers = tuple(
+                child.type for child in owner.children
+                if child.type in {"static", "get", "set"}
+            )
+            current = symbols[-1] if len(symbols) == previous_count + 1 else None
+            same_group = bool(
+                current and overloads
+                and current.qualified_name == overloads[-1].qualified_name
+                and current.kind == overloads[-1].kind
+                and modifiers == overload_modifiers
+            )
+            if owner.type in spec.overload_signatures and current:
+                overloads = [*overloads, current] if same_group else [current]
+                overload_modifiers = modifiers
+            else:
+                if (same_group and owner.child_by_field_name("body") is not None
+                        and not any(flag in modifiers for flag in ("get", "set"))):
+                    # Only adjacent syntax declarations in this lexical scope
+                    # can join the implementation. Other duplicates stay distinct.
+                    symbols[-len(overloads) - 1:] = [replace(
+                        current,
+                        start_line=overloads[0].start_line,
+                        signature="\n".join(
+                            symbol.signature for symbol in [*overloads, current]
+                        ),
+                    )]
+                overloads = []
         leading = []
     return symbols
 
@@ -124,6 +175,7 @@ def _symbol(
     context: Context,
     leading: Sequence[Node],
     inherited_span: Node | None,
+    group_overloads: bool = False,
 ) -> SymbolNode:
     span = found.span or inherited_span or found.owner
     start = leading[0] if leading else span
@@ -145,7 +197,10 @@ def _symbol(
                 rules, wrappers = spec.declarations, spec.wrappers
             else:
                 rules, wrappers = spec.member_declarations, {}
-            children = _walk(spec, members.named_children, scope, rules, wrappers)
+            children = _walk(
+                spec, members.named_children, scope, rules, wrappers,
+                group_overloads=group_overloads,
+            )
     return SymbolNode(
         kind=found.kind,
         name=found.name,
@@ -203,6 +258,12 @@ class TreeSitterLanguage:
         fine_grained_only: bool,
         remove_line_locations: bool,
     ) -> ResolvedLocations:
+        if self.spec.overload_signatures:
+            # Group only for name resolution. Recorded source representations
+            # and skeletons retain every overload declaration.
+            file_node = extract(
+                self.spec, file_node.path, source, group_overloads=True
+            )
         return resolve_symbol_locations(
             locations,
             file_node,

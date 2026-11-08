@@ -237,6 +237,8 @@ class LanguageSpec:
     leading: frozenset[str] = frozenset()
     ignored: frozenset[str] = frozenset()
     requires: Mapping[str, str] = field(default_factory=dict)
+    # Consecutive signatures followed by one body form one selectable API.
+    overload_signatures: frozenset[str] = frozenset()
     separator: str = "."
     naming: Naming = field(default_factory=Naming)
     # Node types this language's grammar uses for comments, including doc
