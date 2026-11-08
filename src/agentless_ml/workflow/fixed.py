@@ -8,6 +8,7 @@ import math
 import time
 import uuid
 from collections.abc import Mapping
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import asdict, dataclass, replace
 from datetime import UTC, datetime
 from enum import Enum
@@ -326,11 +327,12 @@ class FixedWorkflowController:
         edit_samples=1,
         reproduction_samples=1,
         budget=None,
+        repair_concurrency=1,
     ):
         """Use predetermined sample counts; model responses never choose actions."""
         if any(
             not isinstance(n, int) or n < 1
-            for n in (repair_samples, edit_samples, reproduction_samples)
+            for n in (repair_samples, edit_samples, reproduction_samples, repair_concurrency)
         ):
             raise ValueError("sample counts must be positive integers")
         responses = RecordedStageResponses(
@@ -346,11 +348,17 @@ class FixedWorkflowController:
             if self.reproduction_spec
             else (),
         )
-        return self.run(responses, response_provider=provider, budget=budget)
+        return self.run(
+            responses, response_provider=provider, budget=budget,
+            repair_concurrency=repair_concurrency,
+        )
 
     def run(
-        self, responses: RecordedStageResponses, *, response_provider=None, budget=None
+        self, responses: RecordedStageResponses, *, response_provider=None, budget=None,
+        repair_concurrency=1,
     ) -> WorkflowResult:
+        if type(repair_concurrency) is not int or repair_concurrency < 1:
+            raise ValueError('repair_concurrency must be a positive integer')
         started_at = datetime.now(UTC)
         started = time.monotonic()
         run_id = "run-" + uuid.uuid4().hex
@@ -363,8 +371,8 @@ class FixedWorkflowController:
 
             self.runner = BudgetRunner(self.runner, budget)
 
-        def ask(stage, prompt):
-            nonlocal calls, input_tokens, output_tokens
+        def prepare_call(stage, prompt):
+            nonlocal calls
             if budget is not None:
                 budget.start()
                 budget.check()
@@ -381,11 +389,17 @@ class FixedWorkflowController:
             )
             if budget is not None:
                 budget.observe_request({"input": [{"role": "user", "content": prompt}]})
-            response = (
+            return call_dir
+
+        def complete_call(prompt):
+            return (
                 response_provider.complete(prompt, remaining_seconds=budget.remaining)
                 if budget is not None
                 else response_provider.complete(prompt)
             )
+
+        def finish_call(stage, call_dir, response):
+            nonlocal input_tokens, output_tokens
             _write_json(call_dir / "response.json", response)
             usage = response.get("usage")
             if not isinstance(usage, dict) or any(
@@ -403,10 +417,14 @@ class FixedWorkflowController:
                     {**budget.snapshot(), "pending_charge": usage},
                 )
                 try:
-                    budget.charge(usage["input_tokens"], usage["output_tokens"])
-                    budget.observe_response([{
-                        "role": "assistant", "content": response.get("text", ""),
-                    }])
+                    try:
+                        budget.charge(usage["input_tokens"], usage["output_tokens"])
+                    finally:
+                        # Retain output accounting even if an in-flight response
+                        # completes after the shared budget has been exhausted.
+                        budget.observe_response([{
+                            "role": "assistant", "content": response.get("text", ""),
+                        }])
                 finally:
                     _write_json(directory / "budget.json", budget.snapshot())
             text = response.get("text", "")
@@ -418,6 +436,37 @@ class FixedWorkflowController:
             ):
                 raise WorkflowError("empty model response")
             return text
+
+        def ask(stage, prompt):
+            call_dir = prepare_call(stage, prompt)
+            return finish_call(stage, call_dir, complete_call(prompt))
+
+        def ask_repairs(prompt, count):
+            if repair_concurrency == 1:
+                return tuple(ask("repair", prompt) for _ in range(count))
+            call_dirs = [prepare_call("repair", prompt) for _ in range(count)]
+            answers = [None] * count
+            errors = {}
+            with ThreadPoolExecutor(max_workers=min(repair_concurrency, count)) as pool:
+                futures = {
+                    pool.submit(complete_call, prompt): index for index in range(count)
+                }
+                for future in as_completed(futures):
+                    index = futures[future]
+                    try:
+                        answers[index] = finish_call(
+                            "repair", call_dirs[index], future.result()
+                        )
+                    except Exception as exc:
+                        errors[index] = exc
+                        _write_json(call_dirs[index] / "failure.json", {
+                            "type": type(exc).__name__, "message": str(exc),
+                        })
+            # Every already-started response is retained and charged. A failed
+            # batch ends the workflow before candidate validation.
+            if errors:
+                raise errors[min(errors)]
+            return tuple(answers)
 
         try:
             _write_json(directory / "responses.json", asdict(responses))
@@ -629,6 +678,7 @@ class FixedWorkflowController:
                     "harness_revision": self.harness_revision,
                     "model_name": self.model_name,
                     "model_calls": calls,
+                    "repair_concurrency": repair_concurrency,
                     "localization_mode": "edit-samples"
                     if responses.edit_samples
                     else "edit-lines"
@@ -805,10 +855,7 @@ class FixedWorkflowController:
                         if response_provider is not None:
                             sample = replace(
                                 sample,
-                                repairs=tuple(
-                                    ask("repair", sample_prompt)
-                                    for _ in sample.repairs
-                                ),
+                                repairs=ask_repairs(sample_prompt, len(sample.repairs)),
                             )
                             generated_samples.append(sample)
                         repair_plan.extend(

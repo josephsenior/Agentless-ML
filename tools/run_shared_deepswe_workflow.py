@@ -146,6 +146,7 @@ def main(argv=None):
     )
     parser.add_argument("--repair-samples", type=int)
     parser.add_argument("--edit-samples", type=int, default=1)
+    parser.add_argument("--repair-concurrency", type=int, default=1)
     parser.add_argument(
         "--pilot-budget",
         action="store_true",
@@ -254,6 +255,7 @@ def main(argv=None):
             repair_samples=args.repair_samples,
             edit_samples=args.edit_samples,
             budget=budget,
+            repair_concurrency=args.repair_concurrency,
         )
         if live_provider
         else controller.run(_responses(args.experiment))

@@ -130,3 +130,61 @@ def test_failed_provider_does_not_reach_validation_or_retry(tmp_path, source):
     with pytest.raises(RuntimeError, match="connection failed"):
         controller(tmp_path, source, FakeRunner()).run_live(provider)
     assert provider.calls == 1
+
+
+@pytest.mark.parametrize("failing_sample", [None, 1])
+def test_parallel_repairs_retain_order_and_inflight_usage(tmp_path, source, failing_sample):
+    import threading
+    import time
+    from agentless_ml.attempt_budget import AttemptBudget
+
+    recorded = responses()
+
+    class Provider:
+        def __init__(self):
+            self.calls = 0
+            self.lock = threading.Lock()
+            self.barrier = threading.Barrier(4)
+
+        def complete(self, prompt, **kwargs):
+            with self.lock:
+                index = self.calls
+                self.calls += 1
+            if index < 3:
+                text = [recorded.file_localization, recorded.symbol_localization,
+                        "```\ncalculator.py\nline: 2\n```"][index]
+            else:
+                sample = index - 3
+                self.barrier.wait(timeout=5)
+                time.sleep((3 - sample) * 0.03)
+                if sample == failing_sample:
+                    raise RuntimeError("controlled parallel failure")
+                text = recorded.repairs[2] + f"\nSample {sample}"
+            return {"text": text, "usage": {"input_tokens": 10, "output_tokens": 5}}
+
+    provider = Provider()
+    budget = AttemptBudget.pilot()
+    workflow = controller(tmp_path, source, FakeRunner())
+    if failing_sample is None:
+        result = workflow.run_live(
+            provider, repair_samples=4, repair_concurrency=4, budget=budget
+        )
+        directory = Path(result.artifact_directory)
+        saved = json.loads((directory / "responses.json").read_text())
+        for index, text in enumerate(saved["edit_samples"][0]["repairs"], 4):
+            response = json.loads(
+                (directory / f"model-calls/{index}/response.json").read_text()
+            )
+            assert response["text"] == text
+        assert result.prediction.selected_candidate_id == "loc-0-repair-0"
+        assert budget.snapshot()["processed_tokens"] == 105
+    else:
+        with pytest.raises(RuntimeError, match="controlled parallel failure"):
+            workflow.run_live(
+                provider, repair_samples=4, repair_concurrency=4, budget=budget
+            )
+        directory = next((tmp_path / "runs").iterdir())
+        assert not (directory / "prediction.json").exists()
+        assert len(list((directory / "model-calls").glob("*/response.json"))) == 6
+        assert budget.snapshot()["processed_tokens"] == 90
+    assert provider.calls == 7
