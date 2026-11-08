@@ -69,3 +69,44 @@ Four repair samples are sufficient to continue evaluating the workflow at this
 stage. More samples would increase usage and would share the same localized
 context. This batch does not measure the extra solve rate from increasing the
 sample count, so it does not establish that a larger count is worthwhile.
+
+## Koota context-loss inspection
+
+All four repairs received the same selected context and returned explanations
+requesting missing implementations. No additional inference was used for this
+inspection.
+
+File localization selected entity.ts, query.ts, query-result.ts, world.ts and
+index.ts, exhausting the five-file allowance. The tree did show trait.ts,
+entity-methods-patch.ts, and modifier.ts, which the model later requested, but
+they were not selected and their source was not provided to repair.
+
+A separate reproducible resolver issue dropped world.ts. Symbol localization
+returned `function: createWorld`. The TypeScript representation has three
+same-name function entries at the pinned revision:
+
+- Line 28 is an overload declaration.
+- Line 29 is a second overload declaration.
+- Lines 30–408 contain the implementation.
+
+The generic resolver requires exactly one name match. Replaying the selected
+name produced empty intervals and an unrecognized location. Therefore
+world.ts vanished from the symbol context. Its onAdd, onRemove and onChange
+implementations, inside createWorld, never reached edit localization or repair.
+The model had selected the correct named function, and its skeleton displayed
+the overloads. This demonstrates a framework limitation in resolving an
+overload group. A deterministic resolution rule for a verified overload group
+with one implementation could address that context loss while keeping genuine
+same-name ambiguity handling.
+
+Edit localization further narrowed the remaining files. query.ts went from
+443 displayed coarse-context lines to 176 fine-context lines, and
+query-result.ts from 283 to 225. entity.ts supplied the creation entry point
+but not the trait operations it calls. The four repair responses identified
+these missing implementations and declined to invent applicable SEARCH blocks.
+
+This identifies both a specific resolver issue and broader file/context
+selection limits on this attempt. Correcting overload resolution alone does
+not establish that Koota would be solved: the trait and modifier files would
+still be absent from the selected set. No code correction, retry, or held-out
+inspection was performed during this diagnosis.
