@@ -1,0 +1,130 @@
+{
+  "date": "2026-11-09",
+  "scope": "Offline saved-prompt inspection; no model calls, Docker execution, candidate edit or rescoring",
+  "task_id": "dasel-html-document-format",
+  "run_directory": "artifacts\\agentless-dasel-xhigh-2026-11-09\\dasel-html-document-format\\runs\\run-2b31c9aa483b41c5a72f5b050ad1f9c9",
+  "signatures": {
+    "reader": {
+      "path": "parsing/reader.go",
+      "line": 25,
+      "text": "type NewReaderFn func(options ReaderOptions) (Reader, error)"
+    },
+    "writer": {
+      "path": "parsing/writer.go",
+      "line": 34,
+      "text": "type NewWriterFn func(options WriterOptions) (Writer, error)"
+    }
+  },
+  "prompt_checks": [
+    {
+      "call": 3,
+      "stage": "symbol-localization",
+      "prompt_characters": 4895,
+      "prompt_sha256": "fb7e13b06b731731428688178fc1c758b2cf3a6d926080fe2e27bb9a2d16740e",
+      "factory_signatures_present": {
+        "reader": true,
+        "writer": true
+      },
+      "reader_interface_present": true,
+      "writer_interface_present": true
+    },
+    {
+      "call": 4,
+      "stage": "edit-localization",
+      "prompt_characters": 5421,
+      "prompt_sha256": "0dcd60b88a975f3916f5b21685daae0bda3d07783af3fc207fe9070f8e867261",
+      "factory_signatures_present": {
+        "reader": true,
+        "writer": true
+      },
+      "reader_interface_present": true,
+      "writer_interface_present": true
+    },
+    {
+      "call": 5,
+      "stage": "repair",
+      "prompt_characters": 4185,
+      "prompt_sha256": "2161c11ee5f06dd52a1a73526aea6f9117f767775769afecf4e98d5bd29b4c67",
+      "factory_signatures_present": {
+        "reader": false,
+        "writer": false
+      },
+      "reader_interface_present": false,
+      "writer_interface_present": false
+    },
+    {
+      "call": 6,
+      "stage": "repair",
+      "prompt_characters": 4185,
+      "prompt_sha256": "2161c11ee5f06dd52a1a73526aea6f9117f767775769afecf4e98d5bd29b4c67",
+      "factory_signatures_present": {
+        "reader": false,
+        "writer": false
+      },
+      "reader_interface_present": false,
+      "writer_interface_present": false
+    },
+    {
+      "call": 7,
+      "stage": "repair",
+      "prompt_characters": 4185,
+      "prompt_sha256": "2161c11ee5f06dd52a1a73526aea6f9117f767775769afecf4e98d5bd29b4c67",
+      "factory_signatures_present": {
+        "reader": false,
+        "writer": false
+      },
+      "reader_interface_present": false,
+      "writer_interface_present": false
+    },
+    {
+      "call": 8,
+      "stage": "repair",
+      "prompt_characters": 4185,
+      "prompt_sha256": "2161c11ee5f06dd52a1a73526aea6f9117f767775769afecf4e98d5bd29b4c67",
+      "factory_signatures_present": {
+        "reader": false,
+        "writer": false
+      },
+      "reader_interface_present": false,
+      "writer_interface_present": false
+    }
+  ],
+  "edit_localization_response": "```\nparsing/reader.go\nline: 3\nline: 5\nparsing/writer.go\nline: 3\nline: 10\n```",
+  "selected_context": {
+    "localization_rank": 0,
+    "locations": {
+      "parsing/reader.go": [
+        "line: 3",
+        "line: 5"
+      ],
+      "parsing/writer.go": [
+        "line: 3",
+        "line: 10"
+      ]
+    },
+    "intervals": {
+      "parsing/reader.go": [
+        [
+          1,
+          15
+        ]
+      ],
+      "parsing/writer.go": [
+        [
+          1,
+          20
+        ]
+      ]
+    },
+    "context": "### parsing/reader.go\n...\npackage parsing\n\nimport \"github.com/tomwright/dasel/v3/model\"\n\nvar readers = map[Format]NewReaderFn{}\n\ntype ReaderOptions struct {\n\tExt map[string]string\n}\n\n// DefaultReaderOptions returns the default reader options.\nfunc DefaultReaderOptions() ReaderOptions {\n\treturn ReaderOptions{\n\t\tExt: make(map[string]string),\n\t}\n...\n\n\n### parsing/writer.go\n...\npackage parsing\n\nimport (\n\t\"bytes\"\n\t\"fmt\"\n\n\t\"github.com/tomwright/dasel/v3/model\"\n)\n\nvar writers = map[Format]NewWriterFn{}\n\ntype WriterOptions struct {\n\tCompact bool\n\tIndent  string\n\tExt     map[string]string\n}\n\n// DefaultWriterOptions returns the default writer options.\nfunc DefaultWriterOptions() WriterOptions {\n\treturn WriterOptions{\n...\n\n\n"
+  },
+  "context_window": 10,
+  "repair_responses": {
+    "loc-0-repair-0": "Guessed factory functions returning Reader/Writer without error; compiler rejected signatures.",
+    "loc-0-repair-1": "Explicitly requested missing interfaces and factory signatures; no edit blocks.",
+    "loc-0-repair-2": "Explicitly requested missing interfaces and factory signatures; no edit blocks.",
+    "loc-0-repair-3": "Guessed factory functions returning Reader/Writer without error; compiler rejected signatures."
+  },
+  "conclusion": "Both signatures were visible during symbol and edit localization, but absent from all repair prompts. The model selected registry-adjacent line numbers; the configured ten-line window correctly omitted the later signatures. This establishes narrow repair context and invalid generated guesses, not a demonstrated location resolver defect. Repair requests are independent single-prompt calls and do not inherit the earlier localization transcript.",
+  "limits": "Providing the missing signatures might prevent these type mismatches, but does not establish that any generated HTML implementation would solve the task."
+}

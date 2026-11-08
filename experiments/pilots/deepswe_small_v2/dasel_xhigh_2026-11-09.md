@@ -45,7 +45,41 @@ established by this run. We did not manually repair or rescore its candidates.
 [summary and compiler errors](dasel_xhigh_2026-11-09/summary.json), and
 [exported patch](dasel_xhigh_2026-11-09/selected.patch).
 
-Next, inspect whether the correct factory type definitions were included in the
-saved repair context. That can distinguish missing context from a reasoning
-mistake without another model call. Do not change the generated patch based on
-held-out checks.
+## Saved repair-context inspection
+
+Neither factory signature appeared in any of the four repair prompts. Both were
+visible in the symbol-localization and edit-localization requests. Symbol
+localization even selected `NewReaderFn` and `NewWriterFn` explicitly.
+
+Edit localization then chose reader lines 3 and 5, and writer lines 3 and 10.
+The configured ten-line context window produced reader lines 1–15 and writer
+lines 1–20. The actual declarations are at reader line 25 and writer line 34:
+
+```go
+type NewReaderFn func(options ReaderOptions) (Reader, error)
+type NewWriterFn func(options WriterOptions) (Writer, error)
+```
+
+The Reader and Writer interface declarations were also outside the repair
+excerpts. All four repairs received the same 4,185-character prompt. Each repair
+request contains its own prompt and does not inherit earlier localization
+messages, so the earlier visibility does not provide that information to repair.
+
+Samples 1 and 2 explicitly said those interfaces and constructor signatures were
+missing and requested more source instead of returning edits. Samples 0 and 3
+guessed incompatible factories, which the public compiler rejected.
+
+The context ranges match the selected lines and configured padding. This shows
+a limitation of this run's edit localization and narrow repair context; it does
+not establish a resolver malfunction. It would be inaccurate to say the repair
+model saw and ignored the correct factory signatures. It still produced invalid
+code from incomplete context. Adding the missing declarations might prevent
+these type errors, but would not establish correctness of the rest of the HTML
+implementation.
+
+No model request, Docker execution, patch modification or rescore was needed.
+[Exact prompt checks, hashes and selected context](dasel_xhigh_2026-11-09/prompt-inspection.json).
+
+Next, review whether retaining interface declarations in repair context is a
+method change worth evaluating across tasks. Do not special-case Dasel or
+silently alter this completed result.
