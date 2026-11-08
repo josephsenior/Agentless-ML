@@ -1,0 +1,963 @@
+diff --git a/packages/core/src/aspect/aspect.ts b/packages/core/src/aspect/aspect.ts
+new file mode 100644
+--- /dev/null
++++ b/packages/core/src/aspect/aspect.ts
+@@ -0,0 +1,410 @@
++import { $internal } from '../common';
++import type { Entity } from '../entity/types';
++import { $relation, $relationPair } from '../relation/symbols';
++import { trait } from '../trait/trait';
++import type { ConfigurableTrait, ExtractSchema, Trait } from '../trait/types';
++import { universe } from '../universe/universe';
++import type { World } from '../world';
++
++type UnionToIntersection<T> = (
++    T extends unknown ? (value: T) => void : never
++) extends (value: infer I) => void
++    ? I
++    : never;
++
++type ConstituentSchema<T extends readonly Trait[]> = UnionToIntersection<
++    NonNullable<ExtractSchema<T[number]>>
++>;
++
++type AspectSchema<T extends readonly Trait[]> = {
++    [K in keyof ConstituentSchema<T>]: ConstituentSchema<T>[K];
++};
++
++export type Aspect<T extends readonly Trait[] = readonly Trait[]> = ReturnType<
++    typeof trait<AspectSchema<T>>
++> & {
++    readonly id: number;
++    readonly traits: readonly Trait[];
++    readonly schema: AspectSchema<T>;
++};
++
++interface AspectData {
++    aspect: Aspect;
++    traits: readonly Trait[];
++    schema: Record<string, any>;
++    fields: Map<string, Trait>;
++}
++
++interface ConfiguredAspect {
++    data: AspectData;
++    values: Record<string, any>;
++}
++
++type EntityMethodName = 'has' | 'get' | 'set' | 'add' | 'remove';
++type EntityMethod = (this: number, ...args: any[]) => any;
++
++const revisionField = '__kootaAspectRevision';
++const aspects = new Map<Trait, AspectData>();
++const configurations = new WeakMap<object, ConfiguredAspect>();
++const initializedWorlds = new WeakMap<World, Map<AspectData, (() => unknown)[]>>();
++const nativeMethods = {} as Record<EntityMethodName, EntityMethod>;
++let entityMethodsInstalled = false;
++
++function callEntity(method: EntityMethodName, entity: Entity, ...args: any[]): any {
++    return Reflect.apply(nativeMethods[method], entity, args);
++}
++
++export function isAspect(value: unknown): value is Aspect {
++    return typeof value === 'function' && aspects.has(value as Trait);
++}
++
++export function getAspectData(aspect: Aspect): AspectData {
++    return aspects.get(aspect)!;
++}
++
++function getConfiguredAspect(value: ConfigurableTrait): ConfiguredAspect | undefined {
++    if (isAspect(value)) {
++        return { data: getAspectData(value), values: {} };
++    }
++
++    if (value !== null && (typeof value === 'object' || typeof value === 'function')) {
++        return configurations.get(value as object);
++    }
++
++    return undefined;
++}
++
++function getSchema(value: Trait): Record<string, any> {
++    const internal = (value as any)[$internal];
++    return (value as any).schema ?? internal.schema ?? {};
++}
++
++/**
++ * Creates a distinct aspect. The membership trait is deliberately separate from
++ * the constituent data: aspect writes must always reach the original stores.
++ */
++export function createAspect<T extends [Trait, Trait, ...Trait[]]>(...inputs: T): Aspect<T> {
++    if (inputs.length < 2) {
++        throw new Error('createAspect requires at least two traits');
++    }
++
++    const flattened: Trait[] = [];
++
++    for (const input of inputs) {
++        if (isAspect(input)) {
++            flattened.push(...input.traits);
++            continue;
++        }
++
++        const internal = (input as any)?.[$internal];
++
++        if (
++            typeof input !== 'function' ||
++            !internal ||
++            (input as any)[$relation] ||
++            (input as any)[$relationPair] ||
++            internal.relation ||
++            internal.isRelation
++        ) {
++            throw new Error('Aspect constituents must be traits, not relations');
++        }
++
++        flattened.push(input);
++    }
++
++    const schema: Record<string, any> = {};
++    const fields = new Map<string, Trait>();
++
++    for (const constituent of flattened) {
++        const constituentSchema = getSchema(constituent);
++
++        for (const field of Object.keys(constituentSchema)) {
++            if (fields.has(field)) {
++                throw new Error(`Aspect constituents have overlapping field "${field}"`);
++            }
++
++            fields.set(field, constituent);
++            Object.defineProperty(schema, field, {
++                value: constituentSchema[field],
++                enumerable: true,
++                configurable: true,
++                writable: true,
++            });
++        }
++    }
++
++    const members = Object.freeze([...new Set(flattened)]);
++    Object.freeze(schema);
++
++    // A data-bearing membership trait also makes all-tag aspects selectable.
++    const membership = trait({ [revisionField]: 0 });
++    const id = (membership as any).id ?? (membership as any)[$internal].id;
++    let data: AspectData;
++
++    const aspect = new Proxy(membership, {
++        get(target, property, receiver) {
++            if (property === 'id') return id;
++            if (property === 'traits') return members;
++            if (property === 'schema') return schema;
++            return Reflect.get(target, property, receiver);
++        },
++
++        apply(target, receiver, args) {
++            const configured = Reflect.apply(target, receiver, args);
++            configurations.set(configured as object, {
++                data,
++                values: args[0] ?? {},
++            });
++            return configured;
++        },
++    }) as unknown as Aspect;
++
++    data = { aspect, traits: members, schema, fields };
++    aspects.set(aspect, data);
++
++    // Aspects can be defined after a world already contains entities.
++    for (const world of universe.worlds) {
++        if (world) initializeAspect(world, data);
++    }
++
++    return aspect as Aspect<T>;
++}
++
++export function hasAspect(entity: Entity, aspect: Aspect): boolean {
++    return aspect.traits.every((constituent) => callEntity('has', entity, constituent));
++}
++
++export function getAspectValue(
++    entity: Entity,
++    aspect: Aspect
++): Record<string, any> | undefined {
++    if (!hasAspect(entity, aspect)) return undefined;
++
++    const value: Record<string, any> = {};
++    for (const constituent of aspect.traits) {
++        Object.assign(value, callEntity('get', entity, constituent));
++    }
++    return value;
++}
++
++export function setAspectValue(
++    entity: Entity,
++    aspect: Aspect,
++    value: unknown,
++    ...options: any[]
++): void {
++    const current = getAspectValue(entity, aspect);
++    if (current === undefined) return;
++
++    let values = value as Record<string, any>;
++
++    if (typeof value === 'function') {
++        values = value(current) ?? current;
++    }
++
++    if (!values) return;
++
++    const updates = new Map<Trait, Record<string, any>>();
++    const { fields } = getAspectData(aspect);
++
++    for (const field of Object.keys(values)) {
++        const owner = fields.get(field);
++        if (!owner) continue;
++
++        let update = updates.get(owner);
++        if (!update) {
++            update = {};
++            updates.set(owner, update);
++        }
++
++        Object.defineProperty(update, field, {
++            value: values[field],
++            enumerable: true,
++            configurable: true,
++            writable: true,
++        });
++    }
++
++    for (const [constituent, update] of updates) {
++        callEntity('set', entity, constituent, update, ...options);
++    }
++}
++
++export function addAspectTraits(
++    entity: Entity,
++    inputs: readonly ConfigurableTrait[],
++    add: (...traits: ConfigurableTrait[]) => void
++): void {
++    if (!inputs.some((input) => getConfiguredAspect(input))) {
++        add(...inputs);
++        return;
++    }
++
++    for (const input of inputs) {
++        const configured = getConfiguredAspect(input);
++
++        if (!configured) {
++            add(input);
++            continue;
++        }
++
++        const { data, values } = configured;
++
++        for (const constituent of data.traits) {
++            if (callEntity('has', entity, constituent)) continue;
++
++            const initial: Record<string, any> = {};
++
++            for (const [field, owner] of data.fields) {
++                if (
++                    owner === constituent &&
++                    Object.prototype.hasOwnProperty.call(values, field)
++                ) {
++                    Object.defineProperty(initial, field, {
++                        value: values[field],
++                        enumerable: true,
++                        configurable: true,
++                        writable: true,
++                    });
++                }
++            }
++
++            add(Object.keys(initial).length ? constituent(initial) : constituent);
++        }
++    }
++}
++
++export function expandAspectRemovals(inputs: readonly Trait[]): Trait[] {
++    const result = new Set<Trait>();
++
++    for (const input of inputs) {
++        if (isAspect(input)) {
++            for (const constituent of input.traits) result.add(constituent);
++        } else {
++            result.add(input);
++        }
++    }
++
++    return [...result];
++}
++
++function initializeAspect(world: World, data: AspectData): void {
++    let initialized = initializedWorlds.get(world);
++
++    if (!initialized) {
++        initialized = new Map();
++        initializedWorlds.set(world, initialized);
++    }
++
++    if (initialized.has(data)) return;
++
++    const subscriptions: (() => unknown)[] = [];
++    initialized.set(data, subscriptions);
++
++    const { aspect, traits } = data;
++    let revision = 0;
++
++    function synchronize(entity: Entity, changing?: Trait, present?: boolean) {
++        const complete = traits.every((constituent) =>
++            constituent === changing
++                ? present
++                : callEntity('has', entity, constituent)
++        );
++        const hadAspect = callEntity('has', entity, aspect);
++
++        if (complete && !hadAspect) {
++            callEntity('add', entity, aspect);
++        } else if (!complete && hadAspect) {
++            callEntity('remove', entity, aspect);
++        }
++    }
++
++    for (const constituent of traits) {
++        subscriptions.push(
++            world.onAdd(constituent, (entity) => synchronize(entity, constituent, true)),
++            world.onRemove(constituent, (entity) => synchronize(entity, constituent, false)),
++            world.onChange(constituent, (entity) => {
++                if (hasAspect(entity, aspect) && callEntity('has', entity, aspect)) {
++                    callEntity(
++                        'set',
++                        entity,
++                        aspect,
++                        { [revisionField]: ++revision },
++                        true
++                    );
++                }
++            })
++        );
++    }
++
++    for (const entity of world.entities) synchronize(entity);
++}
++
++export function initializeAspectWorld(world: World): void {
++    for (const data of aspects.values()) initializeAspect(world, data);
++}
++
++export function disposeAspectWorld(world: World): void {
++    const initialized = initializedWorlds.get(world);
++    if (!initialized) return;
++
++    for (const subscriptions of initialized.values()) {
++        for (const unsubscribe of subscriptions) unsubscribe();
++    }
++
++    initializedWorlds.delete(world);
++}
++
++/**
++ * Extend the existing entity-method patch while retaining the native operations
++ * for membership maintenance. Internal membership writes must not expand again.
++ */
++export function installAspectEntityMethods(): void {
++    if (entityMethodsInstalled) return;
++    entityMethodsInstalled = true;
++
++    const prototype = Number.prototype as unknown as Record<EntityMethodName, EntityMethod>;
++    const names: EntityMethodName[] = ['has', 'get', 'set', 'add', 'remove'];
++
++    for (const name of names) nativeMethods[name] = prototype[name];
++
++    for (const name of names) {
++        const descriptor = Object.getOwnPropertyDescriptor(prototype, name);
++
++        Object.defineProperty(prototype, name, {
++            ...descriptor,
++            value: function (this: number, ...args: any[]) {
++                const entity = Number(this) as Entity;
++
++                if (name === 'has' && isAspect(args[0])) {
++                    return hasAspect(entity, args[0]);
++                }
++
++                if (name === 'get' && isAspect(args[0])) {
++                    return getAspectValue(entity, args[0]);
++                }
++
++                if (name === 'set' && isAspect(args[0])) {
++                    setAspectValue(entity, args[0], args[1], ...args.slice(2));
++                    return entity;
++                }
++
++                if (
++                    name === 'add' &&
++                    args.some((input) => getConfiguredAspect(input))
++                ) {
++                    addAspectTraits(entity, args, (...traits) => {
++                        callEntity('add', entity, ...traits);
++                    });
++                    return entity;
++                }
++
++                if (name === 'remove' && args.some(isAspect)) {
++                    return callEntity('remove', entity, ...expandAspectRemovals(args));
++                }
++
++                return callEntity(name, entity, ...args);
++            },
++        });
++    }
++}
+diff --git a/packages/core/src/aspect/query-result.ts b/packages/core/src/aspect/query-result.ts
+new file mode 100644
+--- /dev/null
++++ b/packages/core/src/aspect/query-result.ts
+@@ -0,0 +1,198 @@
++import type { Entity } from '../entity/types';
++import { createQueryResult } from '../query/query-result';
++import type {
++    InstancesFromParameters,
++    QueryInstance,
++    QueryParameter,
++    QueryResult,
++    QueryResultOptions,
++    StoresFromParameters,
++} from '../query/types';
++import type { Trait } from '../trait/types';
++import type { World } from '../world';
++import { getAspectData, isAspect } from './aspect';
++
++interface Selection {
++    index?: number;
++    fields?: [string, number][];
++}
++
++/**
++ * Expose an AoS field as a column when an aspect store combines AoS and SoA
++ * constituents. Like ordinary useStores, these accesses do not detect changes.
++ */
++function getColumn(store: any, field: string): any {
++    if (!Array.isArray(store)) return store[field];
++
++    return new Proxy([], {
++        get(target, property, receiver) {
++            if (property === 'length') return store.length;
++
++            if (typeof property === 'string' && /^(0|[1-9]\d*)$/.test(property)) {
++                return store[Number(property)]?.[field];
++            }
++
++            return Reflect.get(target, property, receiver);
++        },
++
++        set(target, property, value, receiver) {
++            if (typeof property === 'string' && /^(0|[1-9]\d*)$/.test(property)) {
++                const index = Number(property);
++                if (!store[index]) store[index] = {};
++                store[index][field] = value;
++                return true;
++            }
++
++            return Reflect.set(target, property, value, receiver);
++        },
++    });
++}
++
++export function createAspectQueryResult<T extends QueryParameter[]>(
++    world: World,
++    entities: Entity[],
++    query: QueryInstance,
++    selectedTraits: Trait[]
++): QueryResult<T> {
++    const dataTraits: Trait[] = [];
++    const indices = new Map<Trait, number>();
++
++    function include(trait: Trait): number {
++        const existing = indices.get(trait);
++        if (existing !== undefined) return existing;
++
++        const index = dataTraits.length;
++        indices.set(trait, index);
++        dataTraits.push(trait);
++        return index;
++    }
++
++    const selections: Selection[] = selectedTraits.map((selected) => {
++        if (!isAspect(selected)) return { index: include(selected) };
++
++        const fields: [string, number][] = [];
++        for (const [field, owner] of getAspectData(selected).fields) {
++            fields.push([field, include(owner)]);
++        }
++        return { fields };
++    });
++
++    // Constituents are flattened at creation, so this cannot recurse into the
++    // aspect-result path. Shared constituents use the same callback snapshot.
++    const result = createQueryResult<QueryParameter[]>(world, entities, query, dataTraits);
++    const readEach = result.readEach.bind(result);
++    const updateEach = result.updateEach.bind(result);
++    const useStores = result.useStores.bind(result);
++
++    function mergeState(state: any[], writable: boolean): any[] {
++        return selections.map((selection) => {
++            if (selection.index !== undefined) return state[selection.index];
++
++            const merged: Record<string, any> = {};
++
++            for (const [field, index] of selection.fields!) {
++                const snapshot = state[index];
++
++                Object.defineProperty(
++                    merged,
++                    field,
++                    writable
++                        ? {
++                              enumerable: true,
++                              configurable: true,
++                              get: () => snapshot[field],
++                              set: (value) => {
++                                  snapshot[field] = value;
++                              },
++                          }
++                        : {
++                              enumerable: true,
++                              configurable: true,
++                              writable: true,
++                              value: snapshot[field],
++                          }
++                );
++            }
++
++            return merged;
++        });
++    }
++
++    return Object.assign(result, {
++        readEach(
++            callback: (state: InstancesFromParameters<T>, entity: Entity, index: number) => void
++        ) {
++            readEach((state, entity, index) => {
++                callback(
++                    mergeState(state, false) as InstancesFromParameters<T>,
++                    entity,
++                    index
++                );
++            });
++
++            return result as unknown as QueryResult<T>;
++        },
++
++        updateEach(
++            callback: (state: InstancesFromParameters<T>, entity: Entity, index: number) => void,
++            options: QueryResultOptions = { changeDetection: 'auto' }
++        ) {
++            updateEach((state, entity, index) => {
++                const merged = mergeState(state, true);
++                const original = [...merged];
++
++                callback(merged as InstancesFromParameters<T>, entity, index);
++
++                // Also support replacing a callback slot instead of mutating
++                // the object supplied in that slot.
++                for (let i = 0; i < selections.length; i++) {
++                    if (merged[i] === original[i]) continue;
++
++                    const selection = selections[i];
++
++                    if (selection.index !== undefined) {
++                        state[selection.index] = merged[i];
++                        continue;
++                    }
++
++                    if (!merged[i]) continue;
++
++                    for (const [field, ownerIndex] of selection.fields!) {
++                        if (Object.prototype.hasOwnProperty.call(merged[i], field)) {
++                            state[ownerIndex][field] = merged[i][field];
++                        }
++                    }
++                }
++            }, options);
++
++            return result as unknown as QueryResult<T>;
++        },
++
++        useStores(callback: (stores: StoresFromParameters<T>, entities: readonly Entity[]) => void) {
++            useStores((stores, matchingEntities) => {
++                const merged = selections.map((selection) => {
++                    if (selection.index !== undefined) return stores[selection.index];
++
++                    const store: Record<string, any> = {};
++                    for (const [field, index] of selection.fields!) {
++                        Object.defineProperty(store, field, {
++                            value: getColumn(stores[index], field),
++                            enumerable: true,
++                            configurable: true,
++                            writable: true,
++                        });
++                    }
++                    return store;
++                });
++
++                callback(merged as StoresFromParameters<T>, matchingEntities);
++            });
++
++            return result as unknown as QueryResult<T>;
++        },
++
++        select<U extends QueryParameter[]>(...params: U): QueryResult<U> {
++            return createQueryResult<U>(world, entities, query, params);
++        },
++    }) as unknown as QueryResult<T>;
++}
+diff --git a/packages/core/src/entity/entity.ts b/packages/core/src/entity/entity.ts
+--- a/packages/core/src/entity/entity.ts
++++ b/packages/core/src/entity/entity.ts
+@@ -10,6 +10,9 @@
+ 
+ // Ensure entity methods are patched.
+ import './entity-methods-patch';
++import { addAspectTraits, installAspectEntityMethods } from '../aspect/aspect';
++
++installAspectEntityMethods();
+ 
+ export function createEntity(world: World, ...traits: ConfigurableTrait[]): Entity {
+     const ctx = world[$internal];
+@@ -23,7 +26,9 @@
+     }
+ 
+     ctx.entityTraits.set(entity, new Set());
+-    addTrait(world, entity, ...traits);
++    addAspectTraits(entity, traits, (...constituents) => {
++        addTrait(world, entity, ...constituents);
++    });
+ 
+     return entity;
+ }
+diff --git a/packages/core/src/index.ts b/packages/core/src/index.ts
+--- a/packages/core/src/index.ts
++++ b/packages/core/src/index.ts
+@@ -39,6 +39,8 @@
+     RelationPair,
+     RelationTarget,
+ } from './relation/types';
++export { createAspect } from './aspect/aspect';
++export type { Aspect } from './aspect/aspect';
+ export { getStore, trait } from './trait/trait';
+ export type {
+     ConfigurableTrait,
+diff --git a/packages/core/src/query/query-result.ts b/packages/core/src/query/query-result.ts
+--- a/packages/core/src/query/query-result.ts
++++ b/packages/core/src/query/query-result.ts
+@@ -19,6 +19,9 @@
+     StoresFromParameters,
+ } from './types';
+ 
++import { isAspect } from '../aspect/aspect';
++import { createAspectQueryResult } from '../aspect/query-result';
++
+ export function createQueryResult<T extends QueryParameter[]>(
+     world: World,
+     entities: Entity[],
+@@ -29,6 +32,10 @@
+     const stores: Store<any>[] = [];
+ 
+     getQueryStores(params, traits, stores, world);
++
++    if (traits.some(isAspect)) {
++        return createAspectQueryResult<T>(world, entities, query, traits);
++    }
+ 
+     const results = Object.assign(entities, {
+         readEach(
+diff --git a/packages/core/src/world/world.ts b/packages/core/src/world/world.ts
+--- a/packages/core/src/world/world.ts
++++ b/packages/core/src/world/world.ts
+@@ -24,6 +24,16 @@
+ import { universe } from '../universe/universe';
+ import type { World, WorldInternal, WorldOptions } from './types';
+ import { allocateWorldId, releaseWorldId } from './utils/world-index';
++import {
++    addAspectTraits,
++    disposeAspectWorld,
++    expandAspectRemovals,
++    getAspectValue,
++    hasAspect,
++    initializeAspectWorld,
++    isAspect,
++    setAspectValue,
++} from '../aspect/aspect';
+ 
+ export function createWorld(options: WorldOptions): World;
+ export function createWorld(...traits: ConfigurableTrait[]): World;
+@@ -99,6 +109,8 @@
+                 // clear lazyTraits
+                 lazyTraits = undefined;
+             }
++            initializeAspectWorld(world);
++
+             // Create world entity.
+             ctx.worldEntity = createEntity(world, IsExcluded, ...initTraits);
+         },
+@@ -108,24 +120,47 @@
+         },
+ 
+         has(target: Entity | Trait): boolean {
++            if (isAspect(target)) {
++                return hasAspect(world[$internal].worldEntity, target);
++            }
++
+             return typeof target === 'number'
+                 ? isEntityAlive(world[$internal].entityIndex, target)
+                 : hasTrait(world, world[$internal].worldEntity, target);
+         },
+ 
+         add(...addTraits: ConfigurableTrait[]) {
+-            addTrait(world, world[$internal].worldEntity, ...addTraits);
++            const entity = world[$internal].worldEntity;
++            addAspectTraits(entity, addTraits, (...constituents) => {
++                addTrait(world, entity, ...constituents);
++            });
+         },
+ 
+         remove(...removeTraits: Trait[]) {
+-            removeTrait(world, world[$internal].worldEntity, ...removeTraits);
++            removeTrait(
++                world,
++                world[$internal].worldEntity,
++                ...expandAspectRemovals(removeTraits)
++            );
+         },
+ 
+         get<T extends Trait>(trait: T): TraitRecord<ExtractSchema<T>> | undefined {
++            if (isAspect(trait)) {
++                return getAspectValue(
++                    world[$internal].worldEntity,
++                    trait
++                ) as TraitRecord<ExtractSchema<T>> | undefined;
++            }
++
+             return getTrait(world, world[$internal].worldEntity, trait);
+         },
+ 
+         set<T extends Trait>(trait: T, value: TraitValue<ExtractSchema<T>> | SetTraitCallback<T>) {
++            if (isAspect(trait)) {
++                setAspectValue(world[$internal].worldEntity, trait, value, true);
++                return;
++            }
++
+             setTrait(world, world[$internal].worldEntity, trait, value, true);
+         },
+ 
+@@ -135,6 +170,7 @@
+             world[$internal].worldEntity = null!;
+ 
+             world.reset();
++            disposeAspectWorld(world);
+             isInitialized = false;
+             // Clean up universe side effects.
+             releaseWorldId(universe.worldIndex, id);
+diff --git a/packages/core/tests/aspect.test.ts b/packages/core/tests/aspect.test.ts
+new file mode 100644
+--- /dev/null
++++ b/packages/core/tests/aspect.test.ts
+@@ -0,0 +1,193 @@
++import { describe, expect, it } from 'vitest';
++import {
++    createAdded,
++    createAspect,
++    createChanged,
++    createRemoved,
++    createWorld,
++    Not,
++    Or,
++    relation,
++    trait,
++} from '../src';
++
++describe('aspects', () => {
++    it('flattens nested aspects, accepts tags, and creates distinct instances', () => {
++        const Position = trait({ x: 0 });
++        const Velocity = trait({ speed: 0 });
++        const Active = trait();
++
++        const Motion = createAspect(Position, Velocity);
++        const ActiveMotion = createAspect(Motion, Active);
++
++        expect(ActiveMotion.traits).toEqual([Position, Velocity, Active]);
++        expect(ActiveMotion.schema).toEqual({ x: 0, speed: 0 });
++        expect(createAspect(Position, Velocity)).not.toBe(Motion);
++        expect(createAspect(Position, Velocity).id).not.toBe(Motion.id);
++    });
++
++    it('rejects overlapping fields and relation constituents', () => {
++        const Position = trait({ x: 0 });
++        const OtherPosition = trait({ x: 1 });
++        const Parent = relation();
++
++        expect(() => createAspect(Position, OtherPosition)).toThrow(/overlapping/);
++        expect(() => createAspect(Position, Parent as any)).toThrow(/relations/);
++        expect(() => (createAspect as any)(Position)).toThrow(/at least two/);
++    });
++
++    it('adds only missing constituents and distributes get, set, and remove', () => {
++        const world = createWorld();
++        const Position = trait({ x: 0 });
++        const Velocity = trait({ speed: 0 });
++        const Motion = createAspect(Position, Velocity);
++        const entity = world.spawn(Position({ x: 10 }));
++
++        expect(entity.has(Motion)).toBe(false);
++        expect(entity.get(Motion)).toBeUndefined();
++
++        entity.add(Motion({ x: 100, speed: 20 }));
++
++        expect(entity.get(Position)).toEqual({ x: 10 });
++        expect(entity.get(Velocity)).toEqual({ speed: 20 });
++        expect(entity.get(Motion)).toEqual({ x: 10, speed: 20 });
++
++        entity.set(Motion, { x: 30, speed: 40 });
++
++        expect(entity.get(Position)).toEqual({ x: 30 });
++        expect(entity.get(Velocity)).toEqual({ speed: 40 });
++
++        entity.remove(Motion);
++
++        expect(entity.has(Position)).toBe(false);
++        expect(entity.has(Velocity)).toBe(false);
++        expect(entity.get(Motion)).toBeUndefined();
++
++        world.destroy();
++    });
++
++    it('supports world-level operations and aspects created after entities', () => {
++        const world = createWorld();
++        const A = trait({ a: 0 });
++        const B = trait({ b: 0 });
++        const entity = world.spawn(A, B);
++        const AB = createAspect(A, B);
++
++        expect(world.query(AB)).toContain(entity);
++
++        world.add(AB({ a: 1, b: 2 }));
++        expect(world.get(AB)).toEqual({ a: 1, b: 2 });
++
++        world.set(AB, { a: 3 });
++        expect(world.get(A)).toEqual({ a: 3 });
++
++        world.remove(AB);
++        expect(world.has(AB)).toBe(false);
++
++        world.destroy();
++    });
++
++    it('requires complete aspects and composes with Not and Or', () => {
++        const world = createWorld();
++        const A = trait({ a: 0 });
++        const B = trait({ b: 0 });
++        const C = trait();
++        const AB = createAspect(A, B);
++
++        const incomplete = world.spawn(A);
++        const complete = world.spawn(A, B);
++        const alternative = world.spawn(C);
++
++        expect([...world.query(AB)]).toEqual([complete]);
++        expect(world.query(Not(AB))).toContain(incomplete);
++        expect(world.query(Not(AB))).not.toContain(complete);
++        expect(world.query(Or(AB, C))).toContain(complete);
++        expect(world.query(Or(AB, C))).toContain(alternative);
++        expect(world.query(Or(AB, C))).not.toContain(incomplete);
++
++        world.destroy();
++    });
++
++    it('merges readEach and distributes updateEach to constituent stores', () => {
++        const world = createWorld();
++        const A = trait({ a: 0 });
++        const B = trait({ b: 0 });
++        const AB = createAspect(A, B);
++        const entity = world.spawn(AB({ a: 1, b: 2 }));
++
++        world.query(AB).readEach(([value]) => {
++            expect(value).toEqual({ a: 1, b: 2 });
++        });
++
++        world.query(AB).updateEach(([value]) => {
++            value.a = 3;
++            value.b = 4;
++        });
++
++        expect(entity.get(A)).toEqual({ a: 3 });
++        expect(entity.get(B)).toEqual({ b: 4 });
++
++        // Writes must still reach the stores when detection is disabled.
++        world.query(AB).updateEach(([value]) => {
++            value.a = 5;
++        }, { changeDetection: 'never' });
++
++        expect(entity.get(A)).toEqual({ a: 5 });
++
++        world.destroy();
++    });
++
++    it('tracks completeness transitions and constituent changes', () => {
++        const world = createWorld();
++        const A = trait({ a: 0 });
++        const B = trait({ b: 0 });
++        const AB = createAspect(A, B);
++        const Added = createAdded();
++        const Removed = createRemoved();
++        const Changed = createChanged();
++
++        const entity = world.spawn(A);
++
++        expect(world.query(Added(AB))).toHaveLength(0);
++        expect(world.query(Changed(AB))).toHaveLength(0);
++
++        entity.add(B);
++        expect(world.query(Added(AB))).toContain(entity);
++
++        entity.set(A, { a: 1 });
++        expect(world.query(Changed(AB))).toContain(entity);
++
++        entity.remove(A);
++        expect(world.query(Removed(AB))).toContain(entity);
++
++        world.destroy();
++    });
++
++    it('fires hooks only for completeness transitions and complete changes', () => {
++        const world = createWorld();
++        const A = trait({ a: 0 });
++        const B = trait({ b: 0 });
++        const AB = createAspect(A, B);
++        const events: string[] = [];
++
++        const unsubscribeAdd = world.onAdd(AB, () => events.push('add'));
++        const unsubscribeRemove = world.onRemove(AB, () => events.push('remove'));
++        const unsubscribeChange = world.onChange(AB, () => events.push('change'));
++
++        const entity = world.spawn(A);
++        entity.set(A, { a: 1 });
++        expect(events).toEqual([]);
++
++        entity.add(B);
++        entity.set(A, { a: 2 });
++        entity.remove(B);
++        entity.set(A, { a: 3 });
++
++        expect(events).toEqual(['add', 'change', 'remove']);
++
++        unsubscribeAdd();
++        unsubscribeRemove();
++        unsubscribeChange();
++        world.destroy();
++    });
++});

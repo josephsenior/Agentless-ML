@@ -1,0 +1,101 @@
+{
+  "date": "2026-11-08",
+  "scope": "Fresh Agentless-only development follow-up after overload resolution fix",
+  "task_id": "koota-composite-trait-aspects",
+  "model": "gpt-6.1-sol",
+  "reasoning": "xhigh",
+  "implementation_revision": "323fa75e66f346259004eecbe734a0860a8db3b3+dirty",
+  "sampling": {
+    "edit_samples": 1,
+    "repair_samples": 4,
+    "repair_concurrency": 4
+  },
+  "model_calls": 8,
+  "budget": {
+    "time_limit_seconds": 7200,
+    "token_limit": 2000000,
+    "used_tokens": 53583,
+    "token_overshoot": 0,
+    "token_accounting": "once_only_context",
+    "content_tokenizer": "o200k_base",
+    "processed_input_tokens": 39570,
+    "processed_output_tokens": 98290,
+    "processed_tokens": 137860,
+    "remaining_seconds": 6209.191312700001
+  },
+  "score": {
+    "task_id": "koota-composite-trait-aspects",
+    "status": "unresolved",
+    "reward": 0,
+    "f2p_passed": 5,
+    "f2p_total": 51,
+    "p2p_passed": 172,
+    "p2p_total": 172,
+    "image_id": "sha256:7a3afca50b7b8a2181ec2706f235ea85eebaa731500e9137c434a4190567ac27",
+    "patch_sha256": "547635b8be84652a9983597bba4d0a834446be1ee8b048384ce8b5252dcb09bd",
+    "dataset_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-koota-overload-fix-xhigh-2026-11-08\\koota-composite-trait-aspects\\score\\koota-composite-trait-aspects\\agentless-ml-verifier-2baf1e6cdb364d6ca6ff6dcf2c75e977",
+    "message": "",
+    "verifier_exit_code": 0
+  },
+  "selected_candidate": "loc-0-repair-0",
+  "attempts": [
+    {
+      "candidate_id": "loc-0-repair-0",
+      "sample_index": 0,
+      "status": "validated",
+      "message": "",
+      "localization_rank": 0
+    },
+    {
+      "candidate_id": "loc-0-repair-1",
+      "sample_index": 1,
+      "status": "repair_error",
+      "message": "missing SEARCH/REPLACE edit",
+      "localization_rank": 0
+    },
+    {
+      "candidate_id": "loc-0-repair-2",
+      "sample_index": 2,
+      "status": "validated",
+      "message": "",
+      "localization_rank": 0
+    },
+    {
+      "candidate_id": "loc-0-repair-3",
+      "sample_index": 3,
+      "status": "validated",
+      "message": "",
+      "localization_rank": 0
+    }
+  ],
+  "world_coarse_intervals": [
+    [
+      18,
+      408
+    ]
+  ],
+  "world_repair_intervals": [
+    [
+      19,
+      47
+    ],
+    [
+      70,
+      90
+    ],
+    [
+      96,
+      138
+    ],
+    [
+      304,
+      364
+    ],
+    [
+      382,
+      402
+    ]
+  ],
+  "evidence": "artifacts\\agentless-koota-overload-fix-xhigh-2026-11-08\\koota-composite-trait-aspects"
+}
