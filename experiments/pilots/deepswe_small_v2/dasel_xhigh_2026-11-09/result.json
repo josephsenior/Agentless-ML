@@ -1,0 +1,63 @@
+{
+  "task_id": "dasel-html-document-format",
+  "status": "scored",
+  "model_calls": 8,
+  "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-dasel-xhigh-2026-11-09\\dasel-html-document-format\\runs\\run-2b31c9aa483b41c5a72f5b050ad1f9c9",
+  "score": {
+    "task_id": "dasel-html-document-format",
+    "status": "unresolved",
+    "reward": 0,
+    "f2p_passed": 0,
+    "f2p_total": 146,
+    "p2p_passed": 406,
+    "p2p_total": 1012,
+    "image_id": "sha256:0529d5659b2d11ee76e3ba13a877043b3e43bcf123f36a840f9cf5b5ade09b78",
+    "patch_sha256": "dab6a181cd2567a4488c76a9110c7482d98149fa384339f171fc6c2ccf508b34",
+    "dataset_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-dasel-xhigh-2026-11-09\\dasel-html-document-format\\score\\dasel-html-document-format\\agentless-ml-verifier-843f63dc0b8d4c74b5372ef937e741d9",
+    "message": "",
+    "verifier_exit_code": 0
+  },
+  "budget": {
+    "time_limit_seconds": 7200,
+    "token_limit": 2000000,
+    "used_tokens": 48831,
+    "token_overshoot": 0,
+    "token_accounting": "once_only_context",
+    "content_tokenizer": "o200k_base",
+    "processed_input_tokens": 30240,
+    "processed_output_tokens": 58961,
+    "processed_tokens": 89201,
+    "remaining_seconds": 6515.552091500002
+  },
+  "docker_events": [
+    {
+      "kind": "public_validation",
+      "queued": 28351.044654,
+      "started": 28351.0446594,
+      "finished": 28394.5067388,
+      "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-dasel-xhigh-2026-11-09\\dasel-html-document-format\\runs\\run-2b31c9aa483b41c5a72f5b050ad1f9c9\\regression-baseline\\0"
+    },
+    {
+      "kind": "public_validation",
+      "queued": 28974.9510874,
+      "started": 28974.9510923,
+      "finished": 29009.720053,
+      "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-dasel-xhigh-2026-11-09\\dasel-html-document-format\\runs\\run-2b31c9aa483b41c5a72f5b050ad1f9c9\\executions\\loc-0-repair-0"
+    },
+    {
+      "kind": "public_validation",
+      "queued": 29011.0352804,
+      "started": 29011.0352835,
+      "finished": 29046.0542643,
+      "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-dasel-xhigh-2026-11-09\\dasel-html-document-format\\runs\\run-2b31c9aa483b41c5a72f5b050ad1f9c9\\executions\\loc-0-repair-3"
+    },
+    {
+      "kind": "scoring",
+      "started": 29046.1394149,
+      "finished": 29079.0158626
+    }
+  ],
+  "docker_queue_wait_seconds": 1.340000017080456e-05,
+  "completed_model_responses": 8
+}

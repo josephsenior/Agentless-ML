@@ -1,0 +1,1030 @@
+diff --git a/parsing/html.go b/parsing/html.go
+new file mode 100644
+--- /dev/null
++++ b/parsing/html.go
+@@ -0,0 +1,808 @@
++package parsing
++
++import (
++	"bytes"
++	"encoding/json"
++	"fmt"
++	stdhtml "html"
++	"sort"
++	"strings"
++
++	"github.com/tomwright/dasel/v3/model"
++)
++
++// HTML is the HTML document format.
++const HTML Format = "html"
++
++type htmlNode struct {
++	tag      string
++	attrs    map[string]string
++	text     string
++	children []*htmlNode
++}
++
++type htmlReader struct {
++	options ReaderOptions
++}
++
++func newHTMLReader(options ReaderOptions) Reader {
++	return &htmlReader{options: options}
++}
++
++func (r *htmlReader) Read(data []byte) (*model.Value, error) {
++	root := parseHTMLDocument(string(data))
++
++	var value any
++	if r.options.Ext["html-mode"] == "structured" {
++		value = structuredHTMLValue(root)
++	} else {
++		value = map[string]any{
++			"head": simpleHTMLValue(root.children[0]),
++			"body": simpleHTMLValue(root.children[1]),
++		}
++	}
++
++	data, err := json.Marshal(value)
++	if err != nil {
++		return nil, fmt.Errorf("html: encode parsed document: %w", err)
++	}
++
++	// Reuse the JSON reader's conversion into the common model.
++	factory, ok := readers["json"]
++	if !ok {
++		return nil, fmt.Errorf("html: JSON reader is not registered")
++	}
++	return factory(DefaultReaderOptions()).Read(data)
++}
++
++type htmlWriter struct {
++	options WriterOptions
++}
++
++func newHTMLWriter(options WriterOptions) Writer {
++	return &htmlWriter{options: options}
++}
++
++func (w *htmlWriter) Write(value *model.Value) ([]byte, error) {
++	// Reuse the JSON writer's conversion out of the common model.
++	factory, ok := writers["json"]
++	if !ok {
++		return nil, fmt.Errorf("html: JSON writer is not registered")
++	}
++	options := DefaultWriterOptions()
++	options.Compact = true
++	data, err := factory(options).Write(value)
++	if err != nil {
++		return nil, err
++	}
++
++	decoder := json.NewDecoder(bytes.NewReader(data))
++	decoder.UseNumber()
++	var decoded any
++	if err := decoder.Decode(&decoded); err != nil {
++		return nil, fmt.Errorf("html: decode model value: %w", err)
++	}
++
++	var nodes []*htmlNode
++	if w.options.Ext["html-mode"] == "structured" {
++		node, err := htmlNodeFromStructured(decoded)
++		if err != nil {
++			return nil, err
++		}
++		nodes = []*htmlNode{node}
++	} else {
++		nodes, err = htmlNodesFromMap(decoded)
++		if err != nil {
++			return nil, err
++		}
++	}
++
++	indent := w.options.Indent
++	if indent == "" {
++		indent = "  "
++	}
++	var output bytes.Buffer
++	for i, node := range nodes {
++		if i > 0 && !w.options.Compact {
++			output.WriteByte('\n')
++		}
++		renderHTMLNode(&output, node, 0, indent, w.options.Compact, false)
++	}
++	return output.Bytes(), nil
++}
++
++func newHTMLElement(tag string) *htmlNode {
++	return &htmlNode{
++		tag:   tag,
++		attrs: make(map[string]string),
++	}
++}
++
++func appendHTMLText(node *htmlNode, text string) {
++	if text == "" {
++		return
++	}
++	if count := len(node.children); count > 0 && node.children[count-1].tag == "" {
++		node.children[count-1].text += text
++		return
++	}
++	node.children = append(node.children, &htmlNode{text: text})
++}
++
++func parseHTMLDocument(input string) *htmlNode {
++	document := newHTMLElement("#document")
++	stack := []*htmlNode{document}
++
++	for pos := 0; pos < len(input); {
++		current := stack[len(stack)-1]
++
++		if input[pos] != '<' {
++			end := strings.IndexByte(input[pos:], '<')
++			if end < 0 {
++				end = len(input)
++			} else {
++				end += pos
++			}
++			appendHTMLText(current, stdhtml.UnescapeString(input[pos:end]))
++			pos = end
++			continue
++		}
++
++		if strings.HasPrefix(input[pos:], "<!--") {
++			end := strings.Index(input[pos+4:], "-->")
++			if end < 0 {
++				break
++			}
++			pos += 4 + end + 3
++			continue
++		}
++
++		if strings.HasPrefix(input[pos:], "<!") || strings.HasPrefix(input[pos:], "<?") {
++			pos = htmlDeclarationEnd(input, pos+2)
++			continue
++		}
++
++		token, ok := scanHTMLTag(input, pos)
++		if !ok {
++			appendHTMLText(current, "<")
++			pos++
++			continue
++		}
++		pos = token.end
++
++		if token.closing {
++			for i := len(stack) - 1; i > 0; i-- {
++				if stack[i].tag == token.tag {
++					stack = stack[:i]
++					break
++				}
++			}
++			continue
++		}
++
++		stack = closeHTMLForStart(stack, token.tag)
++		current = stack[len(stack)-1]
++		node := newHTMLElement(token.tag)
++		node.attrs = token.attrs
++		current.children = append(current.children, node)
++
++		if token.selfClosing || isHTMLVoid(node.tag) {
++			continue
++		}
++
++		if isHTMLRaw(node.tag) || node.tag == "title" || node.tag == "textarea" {
++			end, next := htmlRawEnd(input, pos, node.tag)
++			text := input[pos:end]
++			if !isHTMLRaw(node.tag) {
++				text = stdhtml.UnescapeString(text)
++			}
++			appendHTMLText(node, text)
++			pos = next
++			continue
++		}
++
++		stack = append(stack, node)
++	}
++
++	root := newHTMLElement("html")
++	head := newHTMLElement("head")
++	body := newHTMLElement("body")
++	root.children = []*htmlNode{head, body}
++
++	var collect func(*htmlNode)
++	collect = func(parent *htmlNode) {
++		for _, child := range parent.children {
++			switch child.tag {
++			case "html":
++				mergeHTMLAttributes(root, child)
++				collect(child)
++			case "head":
++				mergeHTMLAttributes(head, child)
++				head.children = append(head.children, child.children...)
++			case "body":
++				mergeHTMLAttributes(body, child)
++				body.children = append(body.children, child.children...)
++			default:
++				body.children = append(body.children, child)
++			}
++		}
++	}
++	collect(document)
++	return root
++}
++
++func mergeHTMLAttributes(destination, source *htmlNode) {
++	for key, value := range source.attrs {
++		if _, exists := destination.attrs[key]; !exists {
++			destination.attrs[key] = value
++		}
++	}
++}
++
++type htmlTagToken struct {
++	tag         string
++	attrs       map[string]string
++	end         int
++	closing     bool
++	selfClosing bool
++}
++
++func scanHTMLTag(input string, start int) (htmlTagToken, bool) {
++	token := htmlTagToken{attrs: make(map[string]string)}
++	pos := start + 1
++	if pos < len(input) && input[pos] == '/' {
++		token.closing = true
++		pos++
++	}
++	if pos >= len(input) || !isHTMLLetter(input[pos]) {
++		return token, false
++	}
++
++	nameStart := pos
++	for pos < len(input) && !isHTMLSpace(input[pos]) &&
++		input[pos] != '/' && input[pos] != '>' {
++		pos++
++	}
++	token.tag = strings.ToLower(input[nameStart:pos])
++
++	for pos < len(input) {
++		for pos < len(input) && isHTMLSpace(input[pos]) {
++			pos++
++		}
++		if pos >= len(input) {
++			return token, false
++		}
++		if input[pos] == '>' {
++			token.end = pos + 1
++			return token, true
++		}
++		if input[pos] == '/' && pos+1 < len(input) && input[pos+1] == '>' {
++			token.selfClosing = true
++			token.end = pos + 2
++			return token, true
++		}
++		if token.closing {
++			pos++
++			continue
++		}
++
++		nameStart = pos
++		for pos < len(input) && !isHTMLSpace(input[pos]) &&
++			input[pos] != '=' && input[pos] != '>' && input[pos] != '/' {
++			pos++
++		}
++		if nameStart == pos {
++			pos++
++			continue
++		}
++		name := strings.ToLower(input[nameStart:pos])
++		for pos < len(input) && isHTMLSpace(input[pos]) {
++			pos++
++		}
++
++		value := ""
++		if pos < len(input) && input[pos] == '=' {
++			pos++
++			for pos < len(input) && isHTMLSpace(input[pos]) {
++				pos++
++			}
++			if pos >= len(input) {
++				return token, false
++			}
++			if input[pos] == '"' || input[pos] == '\'' {
++				quote := input[pos]
++				pos++
++				valueStart := pos
++				for pos < len(input) && input[pos] != quote {
++					pos++
++				}
++				if pos >= len(input) {
++					return token, false
++				}
++				value = input[valueStart:pos]
++				pos++
++			} else {
++				valueStart := pos
++				for pos < len(input) && !isHTMLSpace(input[pos]) && input[pos] != '>' {
++					if input[pos] == '/' && pos+1 < len(input) && input[pos+1] == '>' {
++						break
++					}
++					pos++
++				}
++				value = input[valueStart:pos]
++			}
++		}
++		if _, exists := token.attrs[name]; !exists {
++			token.attrs[name] = stdhtml.UnescapeString(value)
++		}
++	}
++	return token, false
++}
++
++func htmlDeclarationEnd(input string, pos int) int {
++	var quote byte
++	for pos < len(input) {
++		char := input[pos]
++		pos++
++		if quote != 0 {
++			if char == quote {
++				quote = 0
++			}
++			continue
++		}
++		switch char {
++		case '\'', '"':
++			quote = char
++		case '>':
++			return pos
++		}
++	}
++	return len(input)
++}
++
++func htmlRawEnd(input string, pos int, tag string) (int, int) {
++	for search := pos; search < len(input); {
++		offset := strings.Index(input[search:], "</")
++		if offset < 0 {
++			break
++		}
++		start := search + offset
++		token, ok := scanHTMLTag(input, start)
++		if ok && token.closing && token.tag == tag {
++			return start, token.end
++		}
++		search = start + 2
++	}
++	return len(input), len(input)
++}
++
++func isHTMLLetter(char byte) bool {
++	return char >= 'a' && char <= 'z' || char >= 'A' && char <= 'Z'
++}
++
++func isHTMLSpace(char byte) bool {
++	switch char {
++	case ' ', '\t', '\n', '\r', '\f':
++		return true
++	default:
++		return false
++	}
++}
++
++func isHTMLVoid(tag string) bool {
++	switch tag {
++	case "area", "base", "br", "col", "embed", "hr", "img", "input",
++		"link", "meta", "param", "source", "track", "wbr":
++		return true
++	default:
++		return false
++	}
++}
++
++func isHTMLRaw(tag string) bool {
++	return tag == "script" || tag == "style"
++}
++
++func closesHTMLParagraph(tag string) bool {
++	switch tag {
++	case "address", "article", "aside", "blockquote", "details", "dialog",
++		"div", "dl", "dt", "dd", "fieldset", "figcaption", "figure", "footer",
++		"form", "h1", "h2", "h3", "h4", "h5", "h6", "header", "hgroup",
++		"hr", "li", "main", "menu", "nav", "ol", "p", "pre", "section",
++		"table", "ul":
++		return true
++	default:
++		return false
++	}
++}
++
++func htmlContains(tags []string, tag string) bool {
++	for _, candidate := range tags {
++		if tag == candidate {
++			return true
++		}
++	}
++	return false
++}
++
++func closeHTMLOpen(stack []*htmlNode, targets, boundaries []string) []*htmlNode {
++	for i := len(stack) - 1; i > 0; i-- {
++		tag := stack[i].tag
++		if htmlContains(targets, tag) {
++			return stack[:i]
++		}
++		if htmlContains(boundaries, tag) {
++			break
++		}
++	}
++	return stack
++}
++
++func closeHTMLForStart(stack []*htmlNode, tag string) []*htmlNode {
++	if tag == "head" || tag == "body" {
++		for len(stack) > 1 && stack[len(stack)-1].tag != "html" {
++			stack = stack[:len(stack)-1]
++		}
++		return stack
++	}
++
++	if closesHTMLParagraph(tag) {
++		stack = closeHTMLOpen(stack, []string{"p"},
++			[]string{"html", "body", "table", "td", "th", "button"})
++	}
++
++	switch tag {
++	case "li":
++		return closeHTMLOpen(stack, []string{"li"}, []string{"ul", "ol", "menu", "html"})
++	case "dt", "dd":
++		return closeHTMLOpen(stack, []string{"dt", "dd"}, []string{"dl", "html"})
++	case "td", "th":
++		return closeHTMLOpen(stack, []string{"td", "th"}, []string{"tr", "table", "html"})
++	case "tr":
++		return closeHTMLOpen(stack, []string{"tr"}, []string{"table", "html"})
++	case "thead", "tbody", "tfoot":
++		return closeHTMLOpen(stack, []string{"thead", "tbody", "tfoot"}, []string{"table", "html"})
++	case "option":
++		return closeHTMLOpen(stack, []string{"option"}, []string{"select", "datalist", "html"})
++	case "optgroup":
++		stack = closeHTMLOpen(stack, []string{"option"}, []string{"select", "html"})
++		return closeHTMLOpen(stack, []string{"optgroup"}, []string{"select", "html"})
++	case "h1", "h2", "h3", "h4", "h5", "h6":
++		return closeHTMLOpen(stack, []string{"h1", "h2", "h3", "h4", "h5", "h6"},
++			[]string{"html", "body", "table", "td", "th"})
++	default:
++		return stack
++	}
++}
++
++func htmlDirectText(node *htmlNode) string {
++	var text strings.Builder
++	for _, child := range node.children {
++		if child.tag == "" {
++			text.WriteString(child.text)
++		}
++	}
++	if isHTMLRaw(node.tag) {
++		return text.String()
++	}
++	return strings.TrimSpace(text.String())
++}
++
++func simpleHTMLValue(node *htmlNode) any {
++	result := make(map[string]any)
++	for key, value := range node.attrs {
++		result["-"+key] = value
++	}
++	text := htmlDirectText(node)
++	if text != "" {
++		result["#text"] = text
++	}
++
++	for _, child := range node.children {
++		if child.tag == "" {
++			continue
++		}
++		value := simpleHTMLValue(child)
++		existing, exists := result[child.tag]
++		if !exists {
++			result[child.tag] = value
++			continue
++		}
++		if values, ok := existing.([]any); ok {
++			result[child.tag] = append(values, value)
++		} else {
++			result[child.tag] = []any{existing, value}
++		}
++	}
++
++	if len(result) == 0 {
++		return ""
++	}
++	if len(result) == 1 && len(node.attrs) == 0 {
++		if value, exists := result["#text"]; exists {
++			return value
++		}
++	}
++	return result
++}
++
++func structuredHTMLValue(node *htmlNode) map[string]any {
++	attrs := make(map[string]any, len(node.attrs))
++	for key, value := range node.attrs {
++		attrs[key] = value
++	}
++	children := make([]any, 0)
++	for _, child := range node.children {
++		if child.tag != "" {
++			children = append(children, structuredHTMLValue(child))
++		}
++	}
++	return map[string]any{
++		"tag":      node.tag,
++		"attrs":    attrs,
++		"text":     htmlDirectText(node),
++		"children": children,
++	}
++}
++
++func htmlMapKeys(value map[string]any) []string {
++	keys := make([]string, 0, len(value))
++	for key := range value {
++		keys = append(keys, key)
++	}
++	// Maps have no source ordering. Keep output deterministic, and ensure
++	// document head precedes body.
++	priority := func(key string) int {
++		switch strings.ToLower(key) {
++		case "head":
++			return -1
++		case "body":
++			return 1
++		default:
++			return 0
++		}
++	}
++	sort.Slice(keys, func(i, j int) bool {
++		a, b := priority(keys[i]), priority(keys[j])
++		if a != b {
++			return a < b
++		}
++		return keys[i] < keys[j]
++	})
++	return keys
++}
++
++func validHTMLTag(tag string) bool {
++	if tag == "" || !isHTMLLetter(tag[0]) {
++		return false
++	}
++	for i := 1; i < len(tag); i++ {
++		char := tag[i]
++		if !isHTMLLetter(char) && !(char >= '0' && char <= '9') &&
++			char != '-' && char != ':' && char != '_' && char != '.' {
++			return false
++		}
++	}
++	return true
++}
++
++func validHTMLAttribute(name string) bool {
++	if name == "" {
++		return false
++	}
++	for i := 0; i < len(name); i++ {
++		if isHTMLSpace(name[i]) || strings.ContainsRune("\"'<>/=`", rune(name[i])) {
++			return false
++		}
++	}
++	return true
++}
++
++func htmlScalar(value any) (string, error) {
++	switch value := value.(type) {
++	case nil:
++		return "", nil
++	case string:
++		return value, nil
++	case json.Number:
++		return value.String(), nil
++	case bool:
++		if value {
++			return "true", nil
++		}
++		return "false", nil
++	default:
++		return "", fmt.Errorf("html: expected a scalar, got %T", value)
++	}
++}
++
++func htmlNodesFromMap(value any) ([]*htmlNode, error) {
++	elements, ok := value.(map[string]any)
++	if !ok {
++		return nil, fmt.Errorf("html: expected an element map, got %T", value)
++	}
++	var nodes []*htmlNode
++	for _, tag := range htmlMapKeys(elements) {
++		if err := appendHTMLValue(&nodes, tag, elements[tag]); err != nil {
++			return nil, err
++		}
++	}
++	return nodes, nil
++}
++
++func appendHTMLValue(nodes *[]*htmlNode, tag string, value any) error {
++	tag = strings.ToLower(tag)
++	if !validHTMLTag(tag) {
++		return fmt.Errorf("html: invalid tag name %q", tag)
++	}
++	if values, ok := value.([]any); ok {
++		for _, value := range values {
++			if err := appendHTMLValue(nodes, tag, value); err != nil {
++				return err
++			}
++		}
++		return nil
++	}
++
++	node := newHTMLElement(tag)
++	if properties, ok := value.(map[string]any); ok {
++		for _, key := range htmlMapKeys(properties) {
++			value := properties[key]
++			switch {
++			case strings.HasPrefix(key, "-"):
++				name := strings.ToLower(strings.TrimPrefix(key, "-"))
++				if !validHTMLAttribute(name) {
++					return fmt.Errorf("html: invalid attribute name %q", name)
++				}
++				text, err := htmlScalar(value)
++				if err != nil {
++					return err
++				}
++				node.attrs[name] = text
++			case key == "#text":
++				text, err := htmlScalar(value)
++				if err != nil {
++					return err
++				}
++				appendHTMLText(node, text)
++			default:
++				if err := appendHTMLValue(&node.children, key, value); err != nil {
++					return err
++				}
++			}
++		}
++		// Text belongs before child element maps, independent of key sorting.
++		var textNodes, elementNodes []*htmlNode
++		for _, child := range node.children {
++			if child.tag == "" {
++				textNodes = append(textNodes, child)
++			} else {
++				elementNodes = append(elementNodes, child)
++			}
++		}
++		node.children = append(textNodes, elementNodes...)
++	} else {
++		text, err := htmlScalar(value)
++		if err != nil {
++			return err
++		}
++		appendHTMLText(node, text)
++	}
++	*nodes = append(*nodes, node)
++	return nil
++}
++
++func htmlNodeFromStructured(value any) (*htmlNode, error) {
++	properties, ok := value.(map[string]any)
++	if !ok {
++		return nil, fmt.Errorf("html: expected a structured element, got %T", value)
++	}
++	tag, ok := properties["tag"].(string)
++	tag = strings.ToLower(tag)
++	if !ok || !validHTMLTag(tag) {
++		return nil, fmt.Errorf("html: invalid structured element tag")
++	}
++	node := newHTMLElement(tag)
++
++	if value := properties["attrs"]; value != nil {
++		attrs, ok := value.(map[string]any)
++		if !ok {
++			return nil, fmt.Errorf("html: structured attrs must be a map")
++		}
++		for _, key := range htmlMapKeys(attrs) {
++			name := strings.ToLower(key)
++			if !validHTMLAttribute(name) {
++				return nil, fmt.Errorf("html: invalid attribute name %q", name)
++			}
++			text, err := htmlScalar(attrs[key])
++			if err != nil {
++				return nil, err
++			}
++			node.attrs[name] = text
++		}
++	}
++	if value := properties["text"]; value != nil {
++		text, err := htmlScalar(value)
++		if err != nil {
++			return nil, err
++		}
++		appendHTMLText(node, text)
++	}
++	if value := properties["children"]; value != nil {
++		children, ok := value.([]any)
++		if !ok {
++			return nil, fmt.Errorf("html: structured children must be a slice")
++		}
++		for _, value := range children {
++			child, err := htmlNodeFromStructured(value)
++			if err != nil {
++				return nil, err
++			}
++			node.children = append(node.children, child)
++		}
++	}
++	return node, nil
++}
++
++var htmlEscaper = strings.NewReplacer(
++	"&", "&amp;",
++	"<", "&lt;",
++	">", "&gt;",
++	`"`, "&quot;",
++	"'", "&apos;",
++)
++
++func renderHTMLNode(output *bytes.Buffer, node *htmlNode, depth int, indent string, compact, raw bool) {
++	if node.tag == "" {
++		if raw {
++			output.WriteString(node.text)
++		} else {
++			output.WriteString(htmlEscaper.Replace(node.text))
++		}
++		return
++	}
++
++	output.WriteByte('<')
++	output.WriteString(node.tag)
++	attrs := make([]string, 0, len(node.attrs))
++	for key := range node.attrs {
++		attrs = append(attrs, key)
++	}
++	sort.Strings(attrs)
++	for _, key := range attrs {
++		output.WriteByte(' ')
++		output.WriteString(key)
++		output.WriteString(`="`)
++		output.WriteString(htmlEscaper.Replace(node.attrs[key]))
++		output.WriteByte('"')
++	}
++	if isHTMLVoid(node.tag) {
++		output.WriteString("/>")
++		return
++	}
++	output.WriteByte('>')
++
++	raw = isHTMLRaw(node.tag)
++	blockChildren := !compact && !raw && len(node.children) > 0
++	for _, child := range node.children {
++		if child.tag == "" {
++			blockChildren = false
++			break
++		}
++	}
++	for _, child := range node.children {
++		if blockChildren {
++			output.WriteByte('\n')
++			output.WriteString(strings.Repeat(indent, depth+1))
++		}
++		renderHTMLNode(output, child, depth+1, indent, !blockChildren, raw)
++	}
++	if blockChildren {
++		output.WriteByte('\n')
++		output.WriteString(strings.Repeat(indent, depth))
++	}
++
++	output.WriteString("</")
++	output.WriteString(node.tag)
++	output.WriteByte('>')
++}
+diff --git a/parsing/html_test.go b/parsing/html_test.go
+new file mode 100644
+--- /dev/null
++++ b/parsing/html_test.go
+@@ -0,0 +1,184 @@
++package parsing
++
++import (
++	"bytes"
++	"reflect"
++	"testing"
++)
++
++func TestHTMLDocumentNormalization(t *testing.T) {
++	root := parseHTMLDocument(`<!DOCTYPE html><!-- ignored --><P CLASS="a" hidden>Hello &amp; &#65;&#x42;</P><br><img SRC="x">`)
++	got := map[string]any{
++		"head": simpleHTMLValue(root.children[0]),
++		"body": simpleHTMLValue(root.children[1]),
++	}
++	want := map[string]any{
++		"head": "",
++		"body": map[string]any{
++			"p": map[string]any{
++				"-class":  "a",
++				"-hidden": "",
++				"#text":   "Hello & AB",
++			},
++			"br": "",
++			"img": map[string]any{
++				"-src": "x",
++			},
++		},
++	}
++	if !reflect.DeepEqual(got, want) {
++		t.Fatalf("got %#v; want %#v", got, want)
++	}
++}
++
++func TestHTMLImplicitClosures(t *testing.T) {
++	tests := []struct {
++		name  string
++		input string
++		want  any
++	}{
++		{
++			name:  "paragraphs and block elements",
++			input: `<p>one<div>box</div><p>two<p>three`,
++			want: map[string]any{
++				"p":   []any{"one", "two", "three"},
++				"div": "box",
++			},
++		},
++		{
++			name:  "list items",
++			input: `<ul><li>one<li>two</ul>`,
++			want: map[string]any{
++				"ul": map[string]any{"li": []any{"one", "two"}},
++			},
++		},
++		{
++			name:  "nested lists retain their parent item",
++			input: `<ul><li>one<ul><li>nested</ul><li>two</ul>`,
++			want: map[string]any{
++				"ul": map[string]any{
++					"li": []any{
++						map[string]any{
++							"#text": "one",
++							"ul":    map[string]any{"li": "nested"},
++						},
++						"two",
++					},
++				},
++			},
++		},
++		{
++			name:  "definition items",
++			input: `<dl><dt>term<dd>definition<dt>next</dl>`,
++			want: map[string]any{
++				"dl": map[string]any{
++					"dt": []any{"term", "next"},
++					"dd": "definition",
++				},
++			},
++		},
++		{
++			name:  "table cells and rows",
++			input: `<table><tr><td>a<td>b<tr><td>c</table>`,
++			want: map[string]any{
++				"table": map[string]any{
++					"tr": []any{
++						map[string]any{"td": []any{"a", "b"}},
++						map[string]any{"td": "c"},
++					},
++				},
++			},
++		},
++	}
++	for _, test := range tests {
++		t.Run(test.name, func(t *testing.T) {
++			root := parseHTMLDocument(test.input)
++			got := simpleHTMLValue(root.children[1])
++			if !reflect.DeepEqual(got, test.want) {
++				t.Fatalf("got %#v; want %#v", got, test.want)
++			}
++		})
++	}
++}
++
++func TestHTMLStructuredDocument(t *testing.T) {
++	root := parseHTMLDocument(`<HTML LANG="en"><HEAD><title>Title</title></HEAD><BODY><p id="x">Text</p></BODY></HTML>`)
++	got := structuredHTMLValue(root)
++	if got["tag"] != "html" {
++		t.Fatalf("unexpected root tag: %#v", got["tag"])
++	}
++	if !reflect.DeepEqual(got["attrs"], map[string]any{"lang": "en"}) {
++		t.Fatalf("unexpected root attributes: %#v", got["attrs"])
++	}
++	children := got["children"].([]any)
++	if len(children) != 2 {
++		t.Fatalf("expected head and body, got %#v", children)
++	}
++	if children[0].(map[string]any)["tag"] != "head" ||
++		children[1].(map[string]any)["tag"] != "body" {
++		t.Fatalf("unexpected normalized children: %#v", children)
++	}
++}
++
++func TestHTMLRawText(t *testing.T) {
++	const script = "\nif (a < b && c > d) { x = '&amp;'; }\n"
++	root := parseHTMLDocument("<script>" + script + "</SCRIPT>")
++	body := simpleHTMLValue(root.children[1]).(map[string]any)
++	if body["script"] != script {
++		t.Fatalf("raw text changed: got %q; want %q", body["script"], script)
++	}
++
++	nodes, err := htmlNodesFromMap(body)
++	if err != nil {
++		t.Fatal(err)
++	}
++	var output bytes.Buffer
++	renderHTMLNode(&output, nodes[0], 0, "  ", true, false)
++	if want := "<script>" + script + "</script>"; output.String() != want {
++		t.Fatalf("got %q; want %q", output.String(), want)
++	}
++}
++
++func TestHTMLRendering(t *testing.T) {
++	nodes, err := htmlNodesFromMap(map[string]any{
++		"DIV": map[string]any{
++			"-TITLE": `"A" & 'B'`,
++			"#text":  "<hello>",
++			"br":     "",
++		},
++	})
++	if err != nil {
++		t.Fatal(err)
++	}
++	var output bytes.Buffer
++	renderHTMLNode(&output, nodes[0], 0, "  ", true, false)
++	want := `<div title="&quot;A&quot; &amp; &apos;B&apos;">&lt;hello&gt;<br/></div>`
++	if output.String() != want {
++		t.Fatalf("got %q; want %q", output.String(), want)
++	}
++}
++
++func TestHTMLPrettyAndCompactRendering(t *testing.T) {
++	nodes, err := htmlNodesFromMap(map[string]any{
++		"div": map[string]any{
++			"p": []any{"one", "two"},
++		},
++	})
++	if err != nil {
++		t.Fatal(err)
++	}
++	tests := []struct {
++		compact bool
++		want    string
++	}{
++		{compact: true, want: "<div><p>one</p><p>two</p></div>"},
++		{compact: false, want: "<div>\n  <p>one</p>\n  <p>two</p>\n</div>"},
++	}
++	for _, test := range tests {
++		var output bytes.Buffer
++		renderHTMLNode(&output, nodes[0], 0, "  ", test.compact, false)
++		if output.String() != test.want {
++			t.Fatalf("compact=%v: got %q; want %q", test.compact, output.String(), test.want)
++		}
++	}
++}
+diff --git a/parsing/reader.go b/parsing/reader.go
+--- a/parsing/reader.go
++++ b/parsing/reader.go
+@@ -2,7 +2,9 @@
+ 
+ import "github.com/tomwright/dasel/v3/model"
+ 
+-var readers = map[Format]NewReaderFn{}
++var readers = map[Format]NewReaderFn{
++	HTML: newHTMLReader,
++}
+ 
+ type ReaderOptions struct {
+ 	Ext map[string]string
+diff --git a/parsing/writer.go b/parsing/writer.go
+--- a/parsing/writer.go
++++ b/parsing/writer.go
+@@ -7,7 +7,9 @@
+ 	"github.com/tomwright/dasel/v3/model"
+ )
+ 
+-var writers = map[Format]NewWriterFn{}
++var writers = map[Format]NewWriterFn{
++	HTML: newHTMLWriter,
++}
+ 
+ type WriterOptions struct {
+ 	Compact bool

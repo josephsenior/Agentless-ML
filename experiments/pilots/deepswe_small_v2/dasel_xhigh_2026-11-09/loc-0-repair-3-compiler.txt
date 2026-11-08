@@ -1,0 +1,5 @@
+{"ImportPath":"github.com/tomwright/dasel/v3/parsing","Action":"build-output","Output":"# github.com/tomwright/dasel/v3/parsing\n"}
+{"ImportPath":"github.com/tomwright/dasel/v3/parsing","Action":"build-output","Output":"parsing/html.go:17:24: cannot use func(options ReaderOptions) Reader {…} (value of type func(options ReaderOptions) Reader) as NewReaderFn value in assignment\n"}
+{"ImportPath":"github.com/tomwright/dasel/v3/parsing","Action":"build-output","Output":"parsing/html.go:20:24: cannot use func(options WriterOptions) Writer {…} (value of type func(options WriterOptions) Writer) as NewWriterFn value in assignment\n"}
+{"ImportPath":"github.com/tomwright/dasel/v3/parsing","Action":"build-output","Output":"parsing/html.go:50:9: multiple-value factory(DefaultReaderOptions()) (value of type (Reader, error)) in single-value context\n"}
+{"ImportPath":"github.com/tomwright/dasel/v3/parsing","Action":"build-output","Output":"parsing/html.go:533:18: multiple-value factory(jsonOptions) (value of type (Writer, error)) in single-value context\n"}
