@@ -1,7 +1,10 @@
 # Should repair retain interface declarations?
 
-Review date: 9 November 2026. Status: proposal only. The default workflow,
-localization policy, prompt construction and completed results are unchanged.
+Review date: 9 November 2026. Decision: do not adopt this extension in the
+current condition. The user confirmed that the workflow and ten-line context
+window should remain unchanged. Dasel stays included as a failed attempt, with
+the missing-interface context recorded as a workflow limitation. The proposal
+below is retained for research history, not as pending implementation work.
 
 Retaining declarations is a reasonable extension to evaluate, but it is not a
 correction needed to reproduce the pinned Agentless method. Keep the present

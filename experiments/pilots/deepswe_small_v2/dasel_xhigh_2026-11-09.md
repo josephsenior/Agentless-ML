@@ -80,6 +80,18 @@ implementation.
 No model request, Docker execution, patch modification or rescore was needed.
 [Exact prompt checks, hashes and selected context](dasel_xhigh_2026-11-09/prompt-inspection.json).
 
-Next, review whether retaining interface declarations in repair context is a
-method change worth evaluating across tasks. Do not special-case Dasel or
-silently alter this completed result.
+## Decision: preserve the workflow
+
+On 9 November 2026, the user confirmed that the current study should preserve
+the workflow and its ten-line context window. No declaration appendix, larger
+window, extra retrieval call or task-specific fallback will be added.
+
+Dasel remains an unsuccessful attempt in the evaluation. The observed limitation
+is that edit localization can identify where a change belongs while dropping
+declarations needed to implement it. A larger fixed window would improve the
+chance of including a dependency, not guarantee it. This is a useful documented
+failure mode of the fixed workflow, rather than a reason to exclude the task.
+The public compiler errors and all original results remain unchanged.
+
+The [interface-context review](../../../docs/interface-context-review.md) is
+retained as analysis of a possible future variant, outside the current condition.

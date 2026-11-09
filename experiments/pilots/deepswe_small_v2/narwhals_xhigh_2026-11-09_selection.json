@@ -1,0 +1,387 @@
+{
+  "seed": "agentless-fresh-xhigh-2026-11-09:",
+  "known_exposed": [
+    "actionlint-action-pinning-lint",
+    "aiomonitor-task-snapshots-diff",
+    "awilix-async-container-initialization",
+    "dasel-html-document-format",
+    "etree-xml-diff-patch",
+    "fd-deterministic-multi-key-sorting",
+    "gql-incremental-graphql-delivery",
+    "katex-multicolumn-array-spans",
+    "koota-composite-trait-aspects",
+    "meriyah-explicit-resource-declarations",
+    "obsidian-linter-scoped-ignore-markers",
+    "pebble-durability-wait-apis",
+    "pest-character-class-coalescing",
+    "superjson-error-stack-serialization"
+  ],
+  "eligible": [
+    [
+      "1603fcbfbaa3738e6f42f4883b1c8dc054631b9f31eef88c678fba6460a88acd",
+      "narwhals-rolling-window-suite",
+      "python",
+      106.44742509999196,
+      {
+        "passed": 10093,
+        "skipped": 1699
+      }
+    ],
+    [
+      "3b6dcb0a6fab35eb5212a4bb55b38b2f25cb27aeaab9cfd3b83f91b01f90719c",
+      "vulture-persistent-analysis-cache",
+      "python",
+      7.483861599997908,
+      {
+        "passed": 295
+      }
+    ],
+    [
+      "4070e4353c52505440593082108d16c264f35cff14c4b0433ea88a6b7294e341",
+      "geo-shapeindex-serialization",
+      "go",
+      29.1328710999951,
+      {
+        "passed": 600
+      }
+    ],
+    [
+      "4d7a00cefd1980f4de2363cde7e04d08827523dc121d8d443cd8e23c09c69350",
+      "ts-pattern-match-each",
+      "typescript",
+      23.790216900000814,
+      {
+        "passed": 442
+      }
+    ],
+    [
+      "4eab94d99f3b8eaa8d7dc05d3d288f62edaf86152739042143b1c2e7f8a20774",
+      "dynamodb-toolbox-conditional-attribute-requirements",
+      "typescript",
+      58.46198949999234,
+      {
+        "passed": 1267
+      }
+    ],
+    [
+      "510cbc807fe5de03980e019057d6f52d9bb60d913c1e70cd865d728f654f3130",
+      "koota-pair-relation-tracking",
+      "typescript",
+      15.009920199998305,
+      {
+        "passed": 172
+      }
+    ],
+    [
+      "51d05b6f4fca652ab23a507fe9f19e899e36c9e50196ff10722b1c14d2d8dad1",
+      "kysely-window-grouping-helpers",
+      "typescript",
+      39.739766800000325,
+      {
+        "passed": 438
+      }
+    ],
+    [
+      "5330967e7e28645daa576f8a90034788647df94082e8c019490e7e870cbf4188",
+      "mobly-grouped-test-barriers",
+      "python",
+      11.87327829998685,
+      {
+        "passed": 804,
+        "skipped": 2
+      }
+    ],
+    [
+      "551e3e96a20fa3eab581086972775d10b837406394cc5af65892c33d5d603da4",
+      "obsidian-linter-link-format-conversion",
+      "typescript",
+      23.903653999997914,
+      {
+        "passed": 1131
+      }
+    ],
+    [
+      "5e584b41ccbe20c64cfebe7db7e5cf0b7549e6bb75211718926bd9f0b4963e11",
+      "obsidian-linter-auto-table-of-contents",
+      "typescript",
+      28.901164599999902,
+      {
+        "passed": 1131
+      }
+    ],
+    [
+      "5fed638d88a20769dd3aa8c69d8c46e0d9f61e48deb00d3bf416e6bd3b02dd4a",
+      "adaptix-name-mapping-aliases",
+      "python",
+      20.000958199991146,
+      {
+        "passed": 2824,
+        "skipped": 28
+      }
+    ],
+    [
+      "6016df7c1ea429c89a57a7ebe2f7956ebf138ee26e288327468b68d42c19586b",
+      "sql-formatter-bigquery-pipe-formatting",
+      "typescript",
+      27.91488919999938,
+      {
+        "passed": 5709,
+        "skipped": 2
+      }
+    ],
+    [
+      "61b2e5ce767ebef722fb5a718330bed4c820d96ff42bae81968e0a62add59352",
+      "wasmi-trap-coredumps",
+      "rust",
+      108.57731120000244,
+      {
+        "passed": 791
+      }
+    ],
+    [
+      "707a5ae1ec4ca370f6b96dc190984afbd1b5ee5e41bcc2c757b57c3b3bb58877",
+      "bandit-structured-nosec-directives",
+      "python",
+      35.50572939999984,
+      {
+        "passed": 273
+      }
+    ],
+    [
+      "72ee80101829ffeb6f0794d8ccdb3a18fc4fbc5743aad32d1476965116c6ea10",
+      "cliffy-config-file-parsing",
+      "typescript",
+      65.09295750000456,
+      {
+        "passed": 878
+      }
+    ],
+    [
+      "75089d0466a8b367adb83046c82c9fb52133658dfaefff4f155c82e4ae427c68",
+      "testem-per-launcher-reports",
+      "javascript",
+      70.13999999999942,
+      {
+        "passed": 497,
+        "skipped": 3
+      }
+    ],
+    [
+      "75d9413a016972d6d867cc149363c6dd205c8c3c017dacdd7d69a4e7be3b1b33",
+      "optique-conditional-option-dependencies",
+      "typescript",
+      42.64800000000105,
+      {
+        "passed": 3046,
+        "skipped": 10
+      }
+    ],
+    [
+      "76959620fa9a8c9cdd61449a474ef933651f75c183bba8356d3156749b25f9a5",
+      "koota-query-predicates",
+      "typescript",
+      15.706295999996655,
+      {
+        "passed": 172
+      }
+    ],
+    [
+      "7fbb6693efb499b850dd718ccf8a5928f8a551a7328278f08a59208eff2ef7f4",
+      "arktype-json-schema-refs-dependencies",
+      "typescript",
+      52.084351699988474,
+      {
+        "passed": 1678
+      }
+    ],
+    [
+      "84eea6b567dbe45a848357e0fdb716c8929717c6927b1017c584158c778f06a1",
+      "koota-entity-snapshot-rollback",
+      "typescript",
+      13.992386899997655,
+      {
+        "passed": 170
+      }
+    ],
+    [
+      "8665eeb4de3b2bac5f6b0f9d852cfc0eaaa60baad0314532333d59d48c9df391",
+      "igel-persist-feature-schema",
+      "python",
+      7.110038800019538,
+      {
+        "passed": 2
+      }
+    ],
+    [
+      "8c384169467eec10527cb98ca6f84e9afd2f26ac3d7fb09b2bcf109a8ede518b",
+      "tengo-destructuring-bindings",
+      "go",
+      23.533176700000695,
+      {
+        "passed": 301
+      }
+    ],
+    [
+      "961f08184258dc5eda7a3505c7dac9175b6c8478ef30cebeba097525eec15c4f",
+      "updo-policy-alerting",
+      "go",
+      50.62242499999775,
+      {
+        "passed": 276
+      }
+    ],
+    [
+      "a0d194aa83734590c8289279fb9492323e37a46f50522ef7e367cc0a6fc19a66",
+      "scc-bounded-memory-spilling",
+      "go",
+      63.24324669999987,
+      {
+        "passed": 283
+      }
+    ],
+    [
+      "ab62e421641e777c8824ac677b5a1eada5ecd093731af95f8877c74f1a16220c",
+      "scriggo-method-declarations",
+      "go",
+      88.4438768,
+      {
+        "passed": 467,
+        "skipped": 1
+      }
+    ],
+    [
+      "b301ab955c6f4795b7414629fd1b20e88601af868c8612b6ce312c5cb434abc5",
+      "kea-atomic-signal-selectors",
+      "typescript",
+      60.96687269999893,
+      {
+        "passed": 153
+      }
+    ],
+    [
+      "be24ad209a03673512133e2caf23bde3027013c8acb8b8345864f5baa7727d22",
+      "true-myth-iterable-collection-combinators",
+      "typescript",
+      18.672751900005096,
+      {
+        "passed": 561
+      }
+    ],
+    [
+      "be61a385c483c4c410fb47b7675460d167606c633f5006bfa34f32dc1d2c274d",
+      "csstree-shorthand-expansion-compression",
+      "javascript",
+      17.782333499999368,
+      {
+        "passed": 16715,
+        "skipped": 2
+      }
+    ],
+    [
+      "c32efdb55167bde7c09a2115195bbde1ca3cae9fae00056fb61d5889536b7a2f",
+      "valibot-recursive-schema-composition",
+      "typescript",
+      94.86175820000062,
+      {
+        "passed": 4509
+      }
+    ],
+    [
+      "d5b9165727dd8d1b9107007f20373375074d6695499059f498a5d26f7b1091d6",
+      "yjs-map-conflict-detection",
+      "javascript",
+      22.82170690000021,
+      {
+        "passed": 231,
+        "skipped": 6
+      }
+    ],
+    [
+      "d65e49b321d436eef4b65cde7c989de163952ce9f28bda547d11cdddd13cb4cf",
+      "termenv-preserve-ansi-resets",
+      "go",
+      21.402719900001102,
+      {
+        "passed": 87
+      }
+    ],
+    [
+      "d7884d5ba658d40544f5fabb31805ecdd718609003bbf6035a3ca19cd5c3cb2e",
+      "sqlite-utils-safe-import-checkpoints",
+      "python",
+      19.046187300000383,
+      {
+        "passed": 1040,
+        "skipped": 16
+      }
+    ],
+    [
+      "dc746353566d2aaf4dab56896844dcdcead64a1aee93a365634e55bccc17697b",
+      "prometheus-typed-label-sorting",
+      "go",
+      112.38001799999984,
+      {
+        "passed": 3064
+      }
+    ],
+    [
+      "e17f0bdbadf1011dbe907365bf5521c04b4caf9df989b26c71f215ec20f30537",
+      "expr-try-catch-errors",
+      "go",
+      102.13944270000502,
+      {
+        "passed": 66762,
+        "skipped": 1
+      }
+    ],
+    [
+      "e4833fb4a61b128783fc252aac03e0ef4acc67fb30fc2f493cd43068e3c92894",
+      "clack-async-autocomplete-options",
+      "typescript",
+      38.3432341000007,
+      {
+        "passed": 640
+      }
+    ],
+    [
+      "e88ff64e0395f3d76506f949a5eec6574f4a88f3edf25a46e8e7a2f39fd793e6",
+      "tomlkit-toml-table-converters",
+      "python",
+      6.840922099989257,
+      {
+        "passed": 964
+      }
+    ],
+    [
+      "f05440ef3c4ada09cab3b83ea62c578fa2651d54097927bb8575be53299323b7",
+      "tengo-callable-instance-isolation",
+      "go",
+      26.64471819999926,
+      {
+        "passed": 301
+      }
+    ],
+    [
+      "f5c6a9bea512a0ae4547f96b29540bd171bbfdf8eb91ecfe3b9ba945b742e238",
+      "koota-deferred-mutation-buffer",
+      "typescript",
+      17.71883389999857,
+      {
+        "passed": 160
+      }
+    ],
+    [
+      "fd6acbeb0c6a44ac1800482681145591659b6e4b80d4ac337a7eeba687557ebe",
+      "dynamodb-toolbox-lazy-recursive-schemas",
+      "typescript",
+      46.61368150000635,
+      {
+        "passed": 1267
+      }
+    ]
+  ],
+  "selected": "narwhals-rolling-window-suite",
+  "eligibility": "Saved baseline exit 0 with passing cases and duration <=120 seconds; available local pinned image and checkout; no known repair exposure from saved response paths, recorded experiment manifests and historical task list.",
+  "historical_exposure_note": "Aiomonitor development runs are documented in development_run_2026-10-30.md, first_task_checkpoint_2026-10-29.md and once_only_first_task_2026-10-30.md. Prior selection scan missed those deleted/renamed response paths; Aiomonitor was not launched.",
+  "scope": "Next fresh task from the existing deterministic ranking after removing now-completed Dasel and historically exposed Aiomonitor."
+}
