@@ -1,0 +1,201 @@
+{
+  "date": "2026-11-09",
+  "timezone": "Europe/Paris",
+  "scope": "Single fresh Agentless-only development attempt under unchanged workflow",
+  "model": "gpt-6.1-sol",
+  "reasoning": "xhigh",
+  "run": {
+    "run_id": "run-6bb109613ea64ae0b0ce9e3916c23d63",
+    "condition": "agentless-ml-live",
+    "instance_id": "vulture-persistent-analysis-cache",
+    "started_at": "2026-11-09T21:29:59.407276+00:00",
+    "implementation_revision": "a65637a5ac8bed8010f5d97be555ac8e50aeeae9+dirty",
+    "benchmark_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "harness_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "container_digest": "sha256:8834e8bc72c3e99dc09f4ccf205083d02678442feca66b45aea2708c43a2394b",
+    "model_name": "chatgpt-plan/gpt-6.1-sol",
+    "model_calls": 8,
+    "input_tokens": 23091,
+    "output_tokens": 95296,
+    "wall_time_seconds": 788.740043400001,
+    "final_patch_sha256": "edd93f71bf139ceea2456d7b9b99df2d525a5f1028669401cedc292eef3d9da0",
+    "infrastructure_status": "ok"
+  },
+  "fresh_baseline": {
+    "status": "pass",
+    "exit_code": 0,
+    "duration_seconds": 7.036146999998891,
+    "counts": {
+      "passed": 295
+    }
+  },
+  "selection": {
+    "reason": "best_regression_then_normalized_majority",
+    "vote_count": 1,
+    "considered_candidate_ids": [
+      "loc-0-repair-0"
+    ],
+    "selected_candidate_id": "loc-0-repair-0"
+  },
+  "attempts": [
+    {
+      "candidate_id": "loc-0-repair-0",
+      "sample_index": 0,
+      "status": "validated",
+      "message": "",
+      "localization_rank": 0,
+      "public_validation": {
+        "status": "fail",
+        "exit_code": 1,
+        "duration_seconds": 6.105570199993963,
+        "report_counts": {
+          "passed": 304,
+          "failed": 1
+        },
+        "failed_test_ids": [
+          "tests.test_config::test_config_merging"
+        ]
+      }
+    },
+    {
+      "candidate_id": "loc-0-repair-1",
+      "sample_index": 1,
+      "status": "validated",
+      "message": "",
+      "localization_rank": 0,
+      "public_validation": {
+        "status": "fail",
+        "exit_code": 1,
+        "duration_seconds": 6.763336700001673,
+        "report_counts": {
+          "passed": 306,
+          "failed": 2
+        },
+        "failed_test_ids": [
+          "tests.test_config::test_config_merging",
+          "tests.test_script::test_tests"
+        ]
+      }
+    },
+    {
+      "candidate_id": "loc-0-repair-2",
+      "sample_index": 2,
+      "status": "validated",
+      "message": "",
+      "localization_rank": 0,
+      "public_validation": {
+        "status": "fail",
+        "exit_code": 1,
+        "duration_seconds": 6.69367809999676,
+        "report_counts": {
+          "passed": 297,
+          "failed": 1
+        },
+        "failed_test_ids": [
+          "tests.test_config::test_config_merging"
+        ]
+      }
+    },
+    {
+      "candidate_id": "loc-0-repair-3",
+      "sample_index": 3,
+      "status": "validated",
+      "message": "",
+      "localization_rank": 0,
+      "public_validation": {
+        "status": "fail",
+        "exit_code": 1,
+        "duration_seconds": 6.565622399997665,
+        "report_counts": {
+          "passed": 303,
+          "failed": 1
+        },
+        "failed_test_ids": [
+          "tests.test_config::test_config_merging"
+        ]
+      }
+    }
+  ],
+  "result": {
+    "task_id": "vulture-persistent-analysis-cache",
+    "status": "scored",
+    "model_calls": 8,
+    "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-vulture-xhigh-2026-11-09\\vulture-persistent-analysis-cache\\runs\\run-6bb109613ea64ae0b0ce9e3916c23d63",
+    "score": {
+      "task_id": "vulture-persistent-analysis-cache",
+      "status": "unresolved",
+      "reward": 0,
+      "f2p_passed": 24,
+      "f2p_total": 24,
+      "p2p_passed": 294,
+      "p2p_total": 295,
+      "image_id": "sha256:8834e8bc72c3e99dc09f4ccf205083d02678442feca66b45aea2708c43a2394b",
+      "patch_sha256": "edd93f71bf139ceea2456d7b9b99df2d525a5f1028669401cedc292eef3d9da0",
+      "dataset_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+      "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-vulture-xhigh-2026-11-09\\vulture-persistent-analysis-cache\\score\\vulture-persistent-analysis-cache\\agentless-ml-verifier-002fccc789f84287b1da9aa1eca503b1",
+      "message": "",
+      "verifier_exit_code": 0
+    },
+    "budget": {
+      "time_limit_seconds": 7200,
+      "token_limit": 2000000,
+      "used_tokens": 48897,
+      "token_overshoot": 0,
+      "token_accounting": "once_only_context",
+      "content_tokenizer": "o200k_base",
+      "processed_input_tokens": 23091,
+      "processed_output_tokens": 95296,
+      "processed_tokens": 118387,
+      "remaining_seconds": 6408.958528300005
+    },
+    "docker_events": [
+      {
+        "kind": "public_validation",
+        "queued": 35944.8771867,
+        "started": 35944.8771919,
+        "finished": 35951.9169574,
+        "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-vulture-xhigh-2026-11-09\\vulture-persistent-analysis-cache\\runs\\run-6bb109613ea64ae0b0ce9e3916c23d63\\regression-baseline\\0"
+      },
+      {
+        "kind": "public_validation",
+        "queued": 36701.1627238,
+        "started": 36701.1627336,
+        "finished": 36707.2780643,
+        "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-vulture-xhigh-2026-11-09\\vulture-persistent-analysis-cache\\runs\\run-6bb109613ea64ae0b0ce9e3916c23d63\\executions\\loc-0-repair-0"
+      },
+      {
+        "kind": "public_validation",
+        "queued": 36709.287123,
+        "started": 36709.2871293,
+        "finished": 36716.0597239,
+        "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-vulture-xhigh-2026-11-09\\vulture-persistent-analysis-cache\\runs\\run-6bb109613ea64ae0b0ce9e3916c23d63\\executions\\loc-0-repair-1"
+      },
+      {
+        "kind": "public_validation",
+        "queued": 36718.0154925,
+        "started": 36718.0154998,
+        "finished": 36724.7203053,
+        "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-vulture-xhigh-2026-11-09\\vulture-persistent-analysis-cache\\runs\\run-6bb109613ea64ae0b0ce9e3916c23d63\\executions\\loc-0-repair-2"
+      },
+      {
+        "kind": "public_validation",
+        "queued": 36726.5621859,
+        "started": 36726.5621923,
+        "finished": 36733.1355733,
+        "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-vulture-xhigh-2026-11-09\\vulture-persistent-analysis-cache\\runs\\run-6bb109613ea64ae0b0ce9e3916c23d63\\executions\\loc-0-repair-3"
+      },
+      {
+        "kind": "scoring",
+        "started": 36733.287595,
+        "finished": 36742.9941853
+      }
+    ],
+    "docker_queue_wait_seconds": 3.499999002087861e-05,
+    "completed_model_responses": 8
+  },
+  "elapsed_from_baseline_start_through_score_seconds": 798.116998599995,
+  "failed_verifier_test": "[p2p] tests.test_config.test_config_merging",
+  "workflow_changed": false,
+  "manual_candidate_changes": false,
+  "retry_started": false
+}
