@@ -1,0 +1,255 @@
+{
+  "date": "2026-11-09",
+  "timezone": "Europe/Paris",
+  "scope": "Fresh Agentless-only development attempt; unchanged ten-line repair context",
+  "model": "gpt-6.1-sol",
+  "reasoning": "xhigh",
+  "run": {
+    "run_id": "run-89640026b7c749e3bb18d6c5ea0f4ee8",
+    "condition": "agentless-ml-live",
+    "instance_id": "narwhals-rolling-window-suite",
+    "started_at": "2026-11-09T20:56:38.735943+00:00",
+    "implementation_revision": "686d88ecadf612e2b844bfc522a4a1e5271cc749+dirty",
+    "benchmark_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "harness_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "container_digest": "sha256:a94da0d6a13d23612acec72b399ae93baf72b875a354f05d3613ed6b552be2c1",
+    "model_name": "chatgpt-plan/gpt-6.1-sol",
+    "model_calls": 8,
+    "input_tokens": 331885,
+    "output_tokens": 66652,
+    "wall_time_seconds": 1164.5197120000012,
+    "final_patch_sha256": "0ef0d20306173d9d56657070d46f59c6fd2fff3fcd8306892c3900614dafb7fa",
+    "infrastructure_status": "ok"
+  },
+  "selection": {
+    "reason": "best_regression_then_normalized_majority",
+    "vote_count": 1,
+    "considered_candidate_ids": [
+      "loc-0-repair-0",
+      "loc-0-repair-1",
+      "loc-0-repair-2",
+      "loc-0-repair-3"
+    ],
+    "selected_candidate_id": "loc-0-repair-0"
+  },
+  "fresh_baseline": {
+    "status": "pass",
+    "duration_seconds": 113.34879200000432,
+    "counts": {
+      "skipped": 1699,
+      "passed": 10093
+    }
+  },
+  "attempts": [
+    {
+      "candidate_id": "loc-0-repair-0",
+      "sample_index": 0,
+      "status": "validated",
+      "message": "",
+      "localization_rank": 0,
+      "public_validation": {
+        "status": "fail",
+        "exit_code": 1,
+        "duration_seconds": 106.75952709999547,
+        "report_counts": {
+          "skipped": 1699,
+          "passed": 10137,
+          "failed": 16
+        }
+      }
+    },
+    {
+      "candidate_id": "loc-0-repair-1",
+      "sample_index": 1,
+      "status": "validated",
+      "message": "",
+      "localization_rank": 0,
+      "public_validation": {
+        "status": "fail",
+        "exit_code": 1,
+        "duration_seconds": 114.78539900000033,
+        "report_counts": {
+          "skipped": 1699,
+          "passed": 10471,
+          "failed": 180
+        }
+      }
+    },
+    {
+      "candidate_id": "loc-0-repair-2",
+      "sample_index": 2,
+      "status": "validated",
+      "message": "",
+      "localization_rank": 0,
+      "public_validation": {
+        "status": "fail",
+        "exit_code": 1,
+        "duration_seconds": 107.88727839999774,
+        "report_counts": {
+          "skipped": 1699,
+          "passed": 10179,
+          "failed": 17
+        }
+      }
+    },
+    {
+      "candidate_id": "loc-0-repair-3",
+      "sample_index": 3,
+      "status": "validated",
+      "message": "",
+      "localization_rank": 0,
+      "public_validation": {
+        "status": "fail",
+        "exit_code": 1,
+        "duration_seconds": 114.88689030000387,
+        "report_counts": {
+          "skipped": 1699,
+          "passed": 10445,
+          "failed": 130
+        }
+      }
+    }
+  ],
+  "result": {
+    "task_id": "narwhals-rolling-window-suite",
+    "status": "scored",
+    "model_calls": 8,
+    "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-narwhals-xhigh-2026-11-09\\narwhals-rolling-window-suite\\runs\\run-89640026b7c749e3bb18d6c5ea0f4ee8",
+    "score": {
+      "task_id": "narwhals-rolling-window-suite",
+      "status": "unresolved",
+      "reward": 0,
+      "f2p_passed": 91,
+      "f2p_total": 103,
+      "p2p_passed": 10093,
+      "p2p_total": 10093,
+      "image_id": "sha256:a94da0d6a13d23612acec72b399ae93baf72b875a354f05d3613ed6b552be2c1",
+      "patch_sha256": "0ef0d20306173d9d56657070d46f59c6fd2fff3fcd8306892c3900614dafb7fa",
+      "dataset_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+      "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-narwhals-xhigh-2026-11-09\\narwhals-rolling-window-suite\\score\\narwhals-rolling-window-suite\\agentless-ml-verifier-45ed2ff8342b47e89c2e0ff436deb4ea",
+      "message": "",
+      "verifier_exit_code": 0
+    },
+    "budget": {
+      "time_limit_seconds": 7200,
+      "token_limit": 2000000,
+      "used_tokens": 374296,
+      "token_overshoot": 0,
+      "token_accounting": "once_only_context",
+      "content_tokenizer": "o200k_base",
+      "processed_input_tokens": 331885,
+      "processed_output_tokens": 66652,
+      "processed_tokens": 398537,
+      "remaining_seconds": 6036.492997999994
+    },
+    "docker_events": [
+      {
+        "kind": "public_validation",
+        "queued": 33944.6301656,
+        "started": 33944.6301712,
+        "finished": 34058.0601611,
+        "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-narwhals-xhigh-2026-11-09\\narwhals-rolling-window-suite\\runs\\run-89640026b7c749e3bb18d6c5ea0f4ee8\\regression-baseline\\0"
+      },
+      {
+        "kind": "public_validation",
+        "queued": 34653.0519745,
+        "started": 34653.0519815,
+        "finished": 34759.8526363,
+        "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-narwhals-xhigh-2026-11-09\\narwhals-rolling-window-suite\\runs\\run-89640026b7c749e3bb18d6c5ea0f4ee8\\executions\\loc-0-repair-0"
+      },
+      {
+        "kind": "public_validation",
+        "queued": 34763.4587687,
+        "started": 34763.4587746,
+        "finished": 34878.287198,
+        "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-narwhals-xhigh-2026-11-09\\narwhals-rolling-window-suite\\runs\\run-89640026b7c749e3bb18d6c5ea0f4ee8\\executions\\loc-0-repair-1"
+      },
+      {
+        "kind": "public_validation",
+        "queued": 34881.5303796,
+        "started": 34881.5303854,
+        "finished": 34989.4584768,
+        "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-narwhals-xhigh-2026-11-09\\narwhals-rolling-window-suite\\runs\\run-89640026b7c749e3bb18d6c5ea0f4ee8\\executions\\loc-0-repair-2"
+      },
+      {
+        "kind": "public_validation",
+        "queued": 34992.9965572,
+        "started": 34992.9965623,
+        "finished": 35107.9252658,
+        "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-narwhals-xhigh-2026-11-09\\narwhals-rolling-window-suite\\runs\\run-89640026b7c749e3bb18d6c5ea0f4ee8\\executions\\loc-0-repair-3"
+      },
+      {
+        "kind": "scoring",
+        "started": 35108.4079502,
+        "finished": 35222.0486529
+      }
+    ],
+    "docker_queue_wait_seconds": 2.9400005587376654e-05,
+    "completed_model_responses": 8
+  },
+  "issue_failure_summary": [
+    {
+      "name": "[f2p] tests.expr_and_series.rolling_max_test.test_rolling_max_expr_lazy_ungrouped[duckdb]",
+      "status": "failed",
+      "first_message_line": "AttributeError: 'DuckDBExpr' object has no attribute 'rolling_max'. Did you mean: 'rolling_mean'?"
+    },
+    {
+      "name": "[f2p] tests.expr_and_series.rolling_max_test.test_rolling_max_expr_lazy_ungrouped[sqlframe]",
+      "status": "failed",
+      "first_message_line": "AttributeError: 'SparkLikeExpr' object has no attribute 'rolling_max'. Did you mean: 'rolling_mean'?"
+    },
+    {
+      "name": "[f2p] tests.expr_and_series.rolling_max_test.test_rolling_max_series[polars[eager]]",
+      "status": "failed",
+      "first_message_line": "AttributeError: PolarsSeries has not attribute 'rolling_max'.. Did you mean: 'rolling_mean'?"
+    },
+    {
+      "name": "[f2p] tests.expr_and_series.rolling_median_test.test_rolling_median_expr_lazy_ungrouped[duckdb]",
+      "status": "failed",
+      "first_message_line": "AttributeError: 'DuckDBExpr' object has no attribute 'rolling_median'. Did you mean: 'rolling_mean'?"
+    },
+    {
+      "name": "[f2p] tests.expr_and_series.rolling_median_test.test_rolling_median_expr_lazy_ungrouped[sqlframe]",
+      "status": "failed",
+      "first_message_line": "AttributeError: 'SparkLikeExpr' object has no attribute 'rolling_median'. Did you mean: 'rolling_mean'?"
+    },
+    {
+      "name": "[f2p] tests.expr_and_series.rolling_median_test.test_rolling_median_series[polars[eager]]",
+      "status": "failed",
+      "first_message_line": "AttributeError: PolarsSeries has not attribute 'rolling_median'.. Did you mean: 'rolling_mean'?"
+    },
+    {
+      "name": "[f2p] tests.expr_and_series.rolling_min_test.test_rolling_min_expr_lazy_ungrouped[duckdb-expected_a0-3-1-False]",
+      "status": "failed",
+      "first_message_line": "AttributeError: 'DuckDBExpr' object has no attribute 'rolling_min'. Did you mean: 'rolling_mean'?"
+    },
+    {
+      "name": "[f2p] tests.expr_and_series.rolling_min_test.test_rolling_min_expr_lazy_ungrouped[duckdb-expected_a1-3-1-True]",
+      "status": "failed",
+      "first_message_line": "AttributeError: 'DuckDBExpr' object has no attribute 'rolling_min'. Did you mean: 'rolling_mean'?"
+    },
+    {
+      "name": "[f2p] tests.expr_and_series.rolling_min_test.test_rolling_min_expr_lazy_ungrouped[sqlframe-expected_a0-3-1-False]",
+      "status": "failed",
+      "first_message_line": "AttributeError: 'SparkLikeExpr' object has no attribute 'rolling_min'. Did you mean: 'rolling_mean'?"
+    },
+    {
+      "name": "[f2p] tests.expr_and_series.rolling_min_test.test_rolling_min_expr_lazy_ungrouped[sqlframe-expected_a1-3-1-True]",
+      "status": "failed",
+      "first_message_line": "AttributeError: 'SparkLikeExpr' object has no attribute 'rolling_min'. Did you mean: 'rolling_mean'?"
+    },
+    {
+      "name": "[f2p] tests.expr_and_series.rolling_min_test.test_rolling_min_series[polars[eager]]",
+      "status": "failed",
+      "first_message_line": "AttributeError: PolarsSeries has not attribute 'rolling_min'.. Did you mean: 'rolling_mean'?"
+    },
+    {
+      "name": "[f2p] tests.expr_and_series.rolling_quantile_test.test_rolling_quantile_series[polars[eager]]",
+      "status": "failed",
+      "first_message_line": "AttributeError: PolarsSeries has not attribute 'rolling_quantile'."
+    }
+  ],
+  "workflow_changed": false,
+  "manual_candidate_changes": false,
+  "retry_started": false
+}

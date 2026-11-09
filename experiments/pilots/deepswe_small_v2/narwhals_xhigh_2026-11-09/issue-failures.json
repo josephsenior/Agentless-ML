@@ -1,0 +1,65 @@
+{
+  "scope": "Native verifier failure evidence after selection; no diagnosis-driven repair or retry",
+  "failures": [
+    {
+      "name": "[f2p] tests.expr_and_series.rolling_max_test.test_rolling_max_expr_lazy_ungrouped[duckdb]",
+      "status": "failed",
+      "first_message_line": "AttributeError: 'DuckDBExpr' object has no attribute 'rolling_max'. Did you mean: 'rolling_mean'?"
+    },
+    {
+      "name": "[f2p] tests.expr_and_series.rolling_max_test.test_rolling_max_expr_lazy_ungrouped[sqlframe]",
+      "status": "failed",
+      "first_message_line": "AttributeError: 'SparkLikeExpr' object has no attribute 'rolling_max'. Did you mean: 'rolling_mean'?"
+    },
+    {
+      "name": "[f2p] tests.expr_and_series.rolling_max_test.test_rolling_max_series[polars[eager]]",
+      "status": "failed",
+      "first_message_line": "AttributeError: PolarsSeries has not attribute 'rolling_max'.. Did you mean: 'rolling_mean'?"
+    },
+    {
+      "name": "[f2p] tests.expr_and_series.rolling_median_test.test_rolling_median_expr_lazy_ungrouped[duckdb]",
+      "status": "failed",
+      "first_message_line": "AttributeError: 'DuckDBExpr' object has no attribute 'rolling_median'. Did you mean: 'rolling_mean'?"
+    },
+    {
+      "name": "[f2p] tests.expr_and_series.rolling_median_test.test_rolling_median_expr_lazy_ungrouped[sqlframe]",
+      "status": "failed",
+      "first_message_line": "AttributeError: 'SparkLikeExpr' object has no attribute 'rolling_median'. Did you mean: 'rolling_mean'?"
+    },
+    {
+      "name": "[f2p] tests.expr_and_series.rolling_median_test.test_rolling_median_series[polars[eager]]",
+      "status": "failed",
+      "first_message_line": "AttributeError: PolarsSeries has not attribute 'rolling_median'.. Did you mean: 'rolling_mean'?"
+    },
+    {
+      "name": "[f2p] tests.expr_and_series.rolling_min_test.test_rolling_min_expr_lazy_ungrouped[duckdb-expected_a0-3-1-False]",
+      "status": "failed",
+      "first_message_line": "AttributeError: 'DuckDBExpr' object has no attribute 'rolling_min'. Did you mean: 'rolling_mean'?"
+    },
+    {
+      "name": "[f2p] tests.expr_and_series.rolling_min_test.test_rolling_min_expr_lazy_ungrouped[duckdb-expected_a1-3-1-True]",
+      "status": "failed",
+      "first_message_line": "AttributeError: 'DuckDBExpr' object has no attribute 'rolling_min'. Did you mean: 'rolling_mean'?"
+    },
+    {
+      "name": "[f2p] tests.expr_and_series.rolling_min_test.test_rolling_min_expr_lazy_ungrouped[sqlframe-expected_a0-3-1-False]",
+      "status": "failed",
+      "first_message_line": "AttributeError: 'SparkLikeExpr' object has no attribute 'rolling_min'. Did you mean: 'rolling_mean'?"
+    },
+    {
+      "name": "[f2p] tests.expr_and_series.rolling_min_test.test_rolling_min_expr_lazy_ungrouped[sqlframe-expected_a1-3-1-True]",
+      "status": "failed",
+      "first_message_line": "AttributeError: 'SparkLikeExpr' object has no attribute 'rolling_min'. Did you mean: 'rolling_mean'?"
+    },
+    {
+      "name": "[f2p] tests.expr_and_series.rolling_min_test.test_rolling_min_series[polars[eager]]",
+      "status": "failed",
+      "first_message_line": "AttributeError: PolarsSeries has not attribute 'rolling_min'.. Did you mean: 'rolling_mean'?"
+    },
+    {
+      "name": "[f2p] tests.expr_and_series.rolling_quantile_test.test_rolling_quantile_series[polars[eager]]",
+      "status": "failed",
+      "first_message_line": "AttributeError: PolarsSeries has not attribute 'rolling_quantile'."
+    }
+  ]
+}

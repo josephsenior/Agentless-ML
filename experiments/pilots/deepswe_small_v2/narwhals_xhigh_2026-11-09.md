@@ -18,4 +18,33 @@ The exported selected patch is scored separately by the pinned DeepSWE verifier.
 
 [Selection record](narwhals_xhigh_2026-11-09_selection.json).
 Local output: `artifacts/agentless-narwhals-xhigh-2026-11-09`.
-Results will be recorded after this single attempt.
+## Result
+
+The selected sample zero remains unresolved, with 91/103 issue checks and all
+10,093/10,093 regression checks passing. DeepSWE completed normally. This is a
+failed task under binary scoring despite substantial issue-check coverage.
+
+All eight model responses completed and all four repairs applied. Each candidate
+ran public validation; all reports contained failures. Public report counts
+include candidate-added or modified tests and must not be equated to the frozen
+regression inventory. Selection considered all four and chose sample zero under
+the existing regression/voting rule. No generated patch was manually changed.
+
+Provider-reported usage was 398,537 tokens: 331,885 input and 66,652 output,
+including reasoning. The content ledger counted 374,296 tokens. The workflow
+recorded about 19.4 minutes; including the separate verifier, the complete
+attempt took about 21.3 minutes. Neither cap was reached.
+
+The twelve verifier failures are saved with their native first error messages.
+They report missing rolling-method implementations in backend wrappers. This
+records what the verifier observed, without claiming a complete root-cause
+analysis or a framework defect. No follow-up inference or candidate scoring
+was started.
+
+[Result](narwhals_xhigh_2026-11-09/result.json),
+[selection and candidate evidence](narwhals_xhigh_2026-11-09/summary.json),
+[exported patch](narwhals_xhigh_2026-11-09/selected.patch), and
+[native failure summaries](narwhals_xhigh_2026-11-09/issue-failures.json).
+
+Next, inspect the twelve failures against the patch and saved prompts without
+another model call. Keep the context window and completed task result unchanged.

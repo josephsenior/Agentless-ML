@@ -1,0 +1,77 @@
+{
+  "task_id": "narwhals-rolling-window-suite",
+  "status": "scored",
+  "model_calls": 8,
+  "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-narwhals-xhigh-2026-11-09\\narwhals-rolling-window-suite\\runs\\run-89640026b7c749e3bb18d6c5ea0f4ee8",
+  "score": {
+    "task_id": "narwhals-rolling-window-suite",
+    "status": "unresolved",
+    "reward": 0,
+    "f2p_passed": 91,
+    "f2p_total": 103,
+    "p2p_passed": 10093,
+    "p2p_total": 10093,
+    "image_id": "sha256:a94da0d6a13d23612acec72b399ae93baf72b875a354f05d3613ed6b552be2c1",
+    "patch_sha256": "0ef0d20306173d9d56657070d46f59c6fd2fff3fcd8306892c3900614dafb7fa",
+    "dataset_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-narwhals-xhigh-2026-11-09\\narwhals-rolling-window-suite\\score\\narwhals-rolling-window-suite\\agentless-ml-verifier-45ed2ff8342b47e89c2e0ff436deb4ea",
+    "message": "",
+    "verifier_exit_code": 0
+  },
+  "budget": {
+    "time_limit_seconds": 7200,
+    "token_limit": 2000000,
+    "used_tokens": 374296,
+    "token_overshoot": 0,
+    "token_accounting": "once_only_context",
+    "content_tokenizer": "o200k_base",
+    "processed_input_tokens": 331885,
+    "processed_output_tokens": 66652,
+    "processed_tokens": 398537,
+    "remaining_seconds": 6036.492997999994
+  },
+  "docker_events": [
+    {
+      "kind": "public_validation",
+      "queued": 33944.6301656,
+      "started": 33944.6301712,
+      "finished": 34058.0601611,
+      "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-narwhals-xhigh-2026-11-09\\narwhals-rolling-window-suite\\runs\\run-89640026b7c749e3bb18d6c5ea0f4ee8\\regression-baseline\\0"
+    },
+    {
+      "kind": "public_validation",
+      "queued": 34653.0519745,
+      "started": 34653.0519815,
+      "finished": 34759.8526363,
+      "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-narwhals-xhigh-2026-11-09\\narwhals-rolling-window-suite\\runs\\run-89640026b7c749e3bb18d6c5ea0f4ee8\\executions\\loc-0-repair-0"
+    },
+    {
+      "kind": "public_validation",
+      "queued": 34763.4587687,
+      "started": 34763.4587746,
+      "finished": 34878.287198,
+      "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-narwhals-xhigh-2026-11-09\\narwhals-rolling-window-suite\\runs\\run-89640026b7c749e3bb18d6c5ea0f4ee8\\executions\\loc-0-repair-1"
+    },
+    {
+      "kind": "public_validation",
+      "queued": 34881.5303796,
+      "started": 34881.5303854,
+      "finished": 34989.4584768,
+      "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-narwhals-xhigh-2026-11-09\\narwhals-rolling-window-suite\\runs\\run-89640026b7c749e3bb18d6c5ea0f4ee8\\executions\\loc-0-repair-2"
+    },
+    {
+      "kind": "public_validation",
+      "queued": 34992.9965572,
+      "started": 34992.9965623,
+      "finished": 35107.9252658,
+      "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-narwhals-xhigh-2026-11-09\\narwhals-rolling-window-suite\\runs\\run-89640026b7c749e3bb18d6c5ea0f4ee8\\executions\\loc-0-repair-3"
+    },
+    {
+      "kind": "scoring",
+      "started": 35108.4079502,
+      "finished": 35222.0486529
+    }
+  ],
+  "docker_queue_wait_seconds": 2.9400005587376654e-05,
+  "completed_model_responses": 8
+}
