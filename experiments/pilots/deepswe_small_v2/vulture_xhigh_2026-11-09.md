@@ -39,5 +39,57 @@ shortly afterward. Full attempt timing is retained in the summary.
 [exported patch](vulture_xhigh_2026-11-09/selected.patch), and
 [native regression failure](vulture_xhigh_2026-11-09/regression-failure.json).
 
-Next, inspect the configuration-merging failure against the saved patch and
-prompts without another model request. The result and workflow stay unchanged.
+## Regression inspection: added defaults change the exact dictionary
+
+`test_config_merging` passes CLI options and TOML settings to `make_config`, then
+compares the entire result with an exact nine-key dictionary. The native failure
+reports those nine original entries as identical. It fails solely because the
+patch adds three keys:
+
+```python
+"cache": False,
+"cache_clear": False,
+"cache_dir": ".vulture-cache",
+```
+
+The generated patch puts these in `DEFAULTS`. The existing `make_config` loop
+copies defaults into missing keys, including when the caller supplied no cache
+flags. Thus a no-cache configuration acquires three extra entries. The evidence
+does not show CLI values losing precedence over TOML, nor a cache execution error.
+
+The issue expressly requests the three CLI options. The patch implements them
+through the existing default/configuration mechanism, but the old equality test
+still insists on the previous exact result shape. This is a feature-related
+compatibility assertion worth flagging when reviewing benchmark contracts. It
+is not sufficient evidence to declare the benchmark invalid or exclude the task;
+a representation preserving old no-cache output could conceivably satisfy both,
+and no such alternative was evaluated here.
+
+### What the prompts and selection knew
+
+The original `DEFAULTS` dictionary was visible in all repair prompts. The full
+`make_config` merge loop appeared in the earlier edit-localization prompt, but
+was omitted from the narrower repair context. The exact test body and its
+dictionary-equality assertion did not appear in repair. All four patches exposed
+the same configuration-test failure in public validation; sample one also failed
+`tests.test_script::test_tests`.
+
+Crucially, the regression-selection response had excluded
+`tests.test_config::test_config_merging` before repair generation, along with
+three other configuration tests. This was an upfront response using the issue
+and public test names, not a manual exclusion after seeing the failure. The test
+therefore did not count against candidates in workflow selection. DeepSWE's
+independent final verifier still includes it in its 295 p2p checks. Workflow
+exclusions do not change the benchmark's grading requirements.
+
+The accurate finding is: all 24 issue checks passed, while an exact legacy
+configuration-shape assertion prevents a solve under the pinned final scorer.
+There is no established Agentless-ML bug here. We retain the unresolved outcome
+and flag the compatibility question in the evidence. No generated code, test,
+workflow or benchmark rule was changed, and no rerun was performed.
+
+[Prompt checks, exact diff and pre-repair exclusion evidence](vulture_xhigh_2026-11-09/failure-analysis.json).
+
+Next, retain this result and use another fresh task for the next authorized model
+attempt. Any benchmark-contract correction should be discussed separately rather
+than applied to this completed prediction.

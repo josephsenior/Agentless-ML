@@ -1,0 +1,126 @@
+{
+  "date": "2026-11-09",
+  "scope": "Offline comparison of selected patch, saved prompts, pre-repair regression selection and native reports. No model calls, Docker runs, candidate edits or rescoring.",
+  "task_id": "vulture-persistent-analysis-cache",
+  "failure_type": "Exact legacy configuration dictionary shape differs after adding defaults for the requested feature. The nine original key/value entries match.",
+  "extra_defaults": {
+    "cache": false,
+    "cache_clear": false,
+    "cache_dir": ".vulture-cache"
+  },
+  "selected_patch_config_diff": "--- a/vulture/config.py\n+++ b/vulture/config.py\n@@ -24,6 +24,9 @@\n     \"make_whitelist\": False,\n     \"sort_by_size\": False,\n     \"verbose\": False,\n+    \"cache\": False,\n+    \"cache_clear\": False,\n+    \"cache_dir\": \".vulture-cache\",\n }\n \n \n@@ -112,6 +115,24 @@\n         default=missing,\n         help=\"Paths may be Python files or directories. For each directory\"\n         \" Vulture analyzes all contained *.py files.\",\n+    )\n+    parser.add_argument(\n+        \"--cache\",\n+        action=\"store_true\",\n+        default=missing,\n+        help=\"Cache analysis results and reuse unchanged modules.\",\n+    )\n+    parser.add_argument(\n+        \"--cache-clear\",\n+        action=\"store_true\",\n+        default=missing,\n+        help=\"Remove all cached results before running.\",\n+    )\n+    parser.add_argument(\n+        \"--cache-dir\",\n+        metavar=\"PATH\",\n+        default=missing,\n+        help=\"Cache directory (default: .vulture-cache/).\",\n     )\n     parser.add_argument(\n         \"--exclude\",\n",
+  "native_failure": {
+    "name": "[p2p] tests.test_config.test_config_merging",
+    "status": "failed",
+    "message": "AssertionError: assert {'cache': Fal...ct.toml', ...} == {'config': 'p...i_name'], ...}\n  \n  Omitting 9 identical items, use -vv to show\n  Left contains 3 more items:\n  {'cache': False, 'cache_clear': False, 'cache_dir': '.vulture-cache'}\n  Use -v to get more diff\ndef test_config_merging():\n        \"\"\"\n        If we have both CLI args and a ``pyproject.toml`` file, the CLI args should\n        have precedence.\n        \"\"\"\n        toml = get_toml_bytes(\n            dedent(\n                \"\"\"\\\n            [tool.vulture]\n            exclude = [\"toml_exclude\"]\n            ignore_decorators = [\"toml_deco\"]\n            ignore_names = [\"toml_name\"]\n            make_whitelist = false\n            min_confidence = 10\n            sort_by_size = false\n            verbose = false\n            paths = [\"toml_path\"]\n            \"\"\"\n            )\n        )\n        cliargs = [\n            \"--exclude=cli_exclude\",\n            \"--ignore-decorators=cli_deco\",\n            \"--ignore-names=cli_name\",\n            \"--make-whitelist\",\n            \"--min-confidence=20\",\n            \"--sort-by-size\",\n            \"--verbose\",\n            \"cli_path\",\n        ]\n        result = make_config(cliargs, toml)\n        expected = dict(\n            paths=[\"cli_path\"],\n            exclude=[\"cli_exclude\"],\n            ignore_decorators=[\"cli_deco\"],\n            ignore_names=[\"cli_name\"],\n            config=\"pyproject.toml\",\n            make_whitelist=True,\n            min_confidence=20,\n            sort_by_size=True,\n            verbose=True,\n        )\n>       assert result == expected\nE       AssertionError: assert {'cache': Fal...ct.toml', ...} == {'config': 'p...i_name'], ...}\nE         \nE         Omitting 9 identical items, use -vv to show\nE         Left contains 3 more items:\nE         {'cache': False, 'cache_clear': False, 'cache_dir': '.vulture-cache'}\nE         Use -v to get more diff\n\ntests/test_config.py:175: AssertionError"
+  },
+  "pre_repair_regression_selection": {
+    "response": "tests.test_config::test_cli_args\ntests.test_config::test_config_merging\ntests.test_config::test_config_merging_missing\ntests.test_config::test_config_merging_toml_paths_only",
+    "excluded_ids": [
+      "tests.test_config::test_cli_args",
+      "tests.test_config::test_config_merging",
+      "tests.test_config::test_config_merging_missing",
+      "tests.test_config::test_config_merging_toml_paths_only"
+    ],
+    "failed_test_excluded_before_repairs": true,
+    "counted_selected_ids": 291,
+    "explanation": "Public candidate selection uses its frozen exclusions. DeepSWE final grading independently requires its full pinned p2p test list; the workflow exclusion does not alter grading."
+  },
+  "prompt_checks": [
+    {
+      "call": 3,
+      "stage": "symbol-localization",
+      "prompt_sha256": "5381370608154f68333309d524ec32aab0854179ccebfe58d8d9b2712dd9a638",
+      "prompt_characters": 7557,
+      "defaults_definition_present": true,
+      "make_config_definition_present": true,
+      "default_merge_loop_present": false,
+      "legacy_exact_dictionary_assertion_present": false
+    },
+    {
+      "call": 4,
+      "stage": "edit-localization",
+      "prompt_sha256": "d4ae3b452b2af0fb2994715cbf64c17bd855195df7cb6e0553e2408049e68be5",
+      "prompt_characters": 31108,
+      "defaults_definition_present": true,
+      "make_config_definition_present": true,
+      "default_merge_loop_present": true,
+      "legacy_exact_dictionary_assertion_present": false
+    },
+    {
+      "call": 5,
+      "stage": "repair",
+      "prompt_sha256": "6c39414774621e8176e0ba5555be7dcd1ab0fea3af217564091752b4b36ab9cf",
+      "prompt_characters": 10436,
+      "defaults_definition_present": true,
+      "make_config_definition_present": false,
+      "default_merge_loop_present": false,
+      "legacy_exact_dictionary_assertion_present": false
+    },
+    {
+      "call": 6,
+      "stage": "repair",
+      "prompt_sha256": "6c39414774621e8176e0ba5555be7dcd1ab0fea3af217564091752b4b36ab9cf",
+      "prompt_characters": 10436,
+      "defaults_definition_present": true,
+      "make_config_definition_present": false,
+      "default_merge_loop_present": false,
+      "legacy_exact_dictionary_assertion_present": false
+    },
+    {
+      "call": 7,
+      "stage": "repair",
+      "prompt_sha256": "6c39414774621e8176e0ba5555be7dcd1ab0fea3af217564091752b4b36ab9cf",
+      "prompt_characters": 10436,
+      "defaults_definition_present": true,
+      "make_config_definition_present": false,
+      "default_merge_loop_present": false,
+      "legacy_exact_dictionary_assertion_present": false
+    },
+    {
+      "call": 8,
+      "stage": "repair",
+      "prompt_sha256": "6c39414774621e8176e0ba5555be7dcd1ab0fea3af217564091752b4b36ab9cf",
+      "prompt_characters": 10436,
+      "defaults_definition_present": true,
+      "make_config_definition_present": false,
+      "default_merge_loop_present": false,
+      "legacy_exact_dictionary_assertion_present": false
+    }
+  ],
+  "candidate_public_failures": [
+    {
+      "candidate_id": "loc-0-repair-0",
+      "failed_test_ids": [
+        "tests.test_config::test_config_merging"
+      ]
+    },
+    {
+      "candidate_id": "loc-0-repair-1",
+      "failed_test_ids": [
+        "tests.test_config::test_config_merging",
+        "tests.test_script::test_tests"
+      ]
+    },
+    {
+      "candidate_id": "loc-0-repair-2",
+      "failed_test_ids": [
+        "tests.test_config::test_config_merging"
+      ]
+    },
+    {
+      "candidate_id": "loc-0-repair-3",
+      "failed_test_ids": [
+        "tests.test_config::test_config_merging"
+      ]
+    }
+  ],
+  "classification": "Feature-related compatibility assertion, not evidence of broken CLI-over-TOML precedence or cache malfunction. Raises a benchmark regression-contract question; no framework defect established.",
+  "evidence_limits": [
+    "The exact test body and output-shape assertion were not in the repair prompts.",
+    "The full make_config merge loop was present during edit localization but absent from repair; this alone does not establish that extra context would avoid the default-key expansion.",
+    "All 24 issue checks passed, but this does not establish correctness beyond those checks.",
+    "No reference solution was read or modified, and no test expectation was relaxed.",
+    "The official unresolved result remains unchanged; no task exclusion or benchmark correction is introduced."
+  ]
+}
