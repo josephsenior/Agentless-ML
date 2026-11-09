@@ -1,0 +1,237 @@
+{
+  "date": "2026-11-09",
+  "scope": "Offline trace of existing failure reports, selected patch and saved prompts; no model call, patch edit, Docker execution or rescore",
+  "task_id": "narwhals-rolling-window-suite",
+  "groups": {
+    "DuckDB": 4,
+    "SQLFrame/SparkLike": 4,
+    "Polars eager": 4
+  },
+  "file_localization_response": "```\nnarwhals/expr.py\nnarwhals/series.py\nnarwhals/_compliant/expr.py\nnarwhals/_pandas_like/series.py\nnarwhals/_arrow/series.py\n```",
+  "file_limit": 5,
+  "selected_source_paths": [
+    "narwhals/expr.py",
+    "narwhals/series.py",
+    "narwhals/_compliant/expr.py",
+    "narwhals/_pandas_like/series.py",
+    "narwhals/_arrow/series.py"
+  ],
+  "visible_unselected_tree_excerpts": {
+    "_sql/": "        _sql/\n            __init__.py\n            dataframe.py\n            expr.py\n            expr_dt.py\n            expr_str.py\n            group_by.py\n            namespace.py\n            typing.py\n        _translate.py",
+    "_duckdb/": "        _duckdb/\n            __init__.py\n            dataframe.py\n            expr.py\n            expr_dt.py\n            expr_list.py\n            expr_str.py\n            expr_struct.py\n            group_by.py\n            namespace.py",
+    "_spark_like/": "        _spark_like/\n            __init__.py\n            dataframe.py\n            expr.py\n            expr_dt.py\n            expr_list.py\n            expr_str.py\n            expr_struct.py\n            group_by.py\n            namespace.py",
+    "_polars/": "        _polars/\n            __init__.py\n            dataframe.py\n            expr.py\n            group_by.py\n            namespace.py\n            series.py\n            typing.py\n            utils.py\n        _spark_like/"
+  },
+  "missing_backend_source_paths": [
+    "narwhals/_sql/expr.py",
+    "narwhals/_duckdb/expr.py",
+    "narwhals/_spark_like/expr.py",
+    "narwhals/_polars/series.py"
+  ],
+  "prompt_checks": [
+    {
+      "call": 3,
+      "stage": "symbol-localization",
+      "characters": 60989,
+      "sha256": "584cc224a178fe9230d06a5d4df2cca20f3dc83a0131d1c8c30bf228e038bdc6",
+      "omitted_backend_source_headers_present": {
+        "narwhals/_sql/expr.py": false,
+        "narwhals/_duckdb/expr.py": false,
+        "narwhals/_spark_like/expr.py": false,
+        "narwhals/_polars/series.py": false
+      }
+    },
+    {
+      "call": 4,
+      "stage": "edit-localization",
+      "characters": 342274,
+      "sha256": "4bc82390d368b47f7efc5bf1d6dca01b26ff62a85c8f7d3ed775f5e6bcbab982",
+      "omitted_backend_source_headers_present": {
+        "narwhals/_sql/expr.py": false,
+        "narwhals/_duckdb/expr.py": false,
+        "narwhals/_spark_like/expr.py": false,
+        "narwhals/_polars/series.py": false
+      }
+    },
+    {
+      "call": 5,
+      "stage": "repair",
+      "characters": 7874,
+      "sha256": "e92aa762bd6eb98da30a299ea62e18207c8a37f8ccdff09043d0831e99fa7da2",
+      "omitted_backend_source_headers_present": {
+        "narwhals/_sql/expr.py": false,
+        "narwhals/_duckdb/expr.py": false,
+        "narwhals/_spark_like/expr.py": false,
+        "narwhals/_polars/series.py": false
+      }
+    },
+    {
+      "call": 6,
+      "stage": "repair",
+      "characters": 7874,
+      "sha256": "e92aa762bd6eb98da30a299ea62e18207c8a37f8ccdff09043d0831e99fa7da2",
+      "omitted_backend_source_headers_present": {
+        "narwhals/_sql/expr.py": false,
+        "narwhals/_duckdb/expr.py": false,
+        "narwhals/_spark_like/expr.py": false,
+        "narwhals/_polars/series.py": false
+      }
+    },
+    {
+      "call": 7,
+      "stage": "repair",
+      "characters": 7874,
+      "sha256": "e92aa762bd6eb98da30a299ea62e18207c8a37f8ccdff09043d0831e99fa7da2",
+      "omitted_backend_source_headers_present": {
+        "narwhals/_sql/expr.py": false,
+        "narwhals/_duckdb/expr.py": false,
+        "narwhals/_spark_like/expr.py": false,
+        "narwhals/_polars/series.py": false
+      }
+    },
+    {
+      "call": 8,
+      "stage": "repair",
+      "characters": 7874,
+      "sha256": "e92aa762bd6eb98da30a299ea62e18207c8a37f8ccdff09043d0831e99fa7da2",
+      "omitted_backend_source_headers_present": {
+        "narwhals/_sql/expr.py": false,
+        "narwhals/_duckdb/expr.py": false,
+        "narwhals/_spark_like/expr.py": false,
+        "narwhals/_polars/series.py": false
+      }
+    }
+  ],
+  "candidate_patch_paths": [
+    {
+      "candidate_id": "loc-0-repair-0",
+      "changed_paths": [
+        "narwhals/_arrow/series.py",
+        "narwhals/_compliant/expr.py",
+        "narwhals/_pandas_like/series.py",
+        "narwhals/expr.py",
+        "narwhals/series.py",
+        "tests/test_rolling_order_statistics.py"
+      ]
+    },
+    {
+      "candidate_id": "loc-0-repair-1",
+      "changed_paths": [
+        "narwhals/_arrow/series.py",
+        "narwhals/_compliant/expr.py",
+        "narwhals/_pandas_like/series.py",
+        "narwhals/expr.py",
+        "narwhals/series.py",
+        "tests/test_additional_rolling_methods.py"
+      ]
+    },
+    {
+      "candidate_id": "loc-0-repair-2",
+      "changed_paths": [
+        "narwhals/_arrow/series.py",
+        "narwhals/_compliant/expr.py",
+        "narwhals/_pandas_like/series.py",
+        "narwhals/expr.py",
+        "narwhals/series.py",
+        "tests/expr_and_series/rolling_extrema_quantiles_test.py"
+      ]
+    },
+    {
+      "candidate_id": "loc-0-repair-3",
+      "changed_paths": [
+        "narwhals/_arrow/series.py",
+        "narwhals/_compliant/expr.py",
+        "narwhals/_pandas_like/series.py",
+        "narwhals/expr.py",
+        "narwhals/series.py",
+        "tests/rolling_window_extensions_test.py"
+      ]
+    }
+  ],
+  "selected_sample_public_failed_ids": [
+    "tests.test_rolling_order_statistics::test_rolling_order_statistics[rolling_quantile-extra3-trailing3-centered3-True-polars]",
+    "tests.test_rolling_order_statistics::test_rolling_quantile_interpolation[0.25-higher-10-polars]",
+    "tests.test_rolling_order_statistics::test_rolling_order_statistics_defaults_and_even_center[polars]",
+    "tests.test_rolling_order_statistics::test_rolling_order_statistics[rolling_min-extra0-trailing0-centered0-False-polars]",
+    "tests.test_rolling_order_statistics::test_rolling_quantile_interpolation[0.0-linear-0-polars]",
+    "tests.test_rolling_order_statistics::test_rolling_quantile_interpolation[0.25-lower-0-polars]",
+    "tests.test_rolling_order_statistics::test_rolling_order_statistics[rolling_min-extra0-trailing0-centered0-True-polars]",
+    "tests.test_rolling_order_statistics::test_rolling_quantile_interpolation[0.25-nearest-10-polars]",
+    "tests.test_rolling_order_statistics::test_rolling_order_statistics[rolling_median-extra2-trailing2-centered2-False-polars]",
+    "tests.test_rolling_order_statistics::test_rolling_order_statistics[rolling_quantile-extra3-trailing3-centered3-False-polars]",
+    "tests.test_rolling_order_statistics::test_rolling_quantile_interpolation[1.0-linear-30-polars]",
+    "tests.test_rolling_order_statistics::test_rolling_order_statistics[rolling_max-extra1-trailing1-centered1-False-polars]",
+    "tests.test_rolling_order_statistics::test_rolling_order_statistics[rolling_median-extra2-trailing2-centered2-True-polars]",
+    "tests.test_rolling_order_statistics::test_rolling_quantile_interpolation[0.25-midpoint-5-polars]",
+    "tests.test_rolling_order_statistics::test_rolling_quantile_interpolation[0.25-linear-7.5-polars]",
+    "tests.test_rolling_order_statistics::test_rolling_order_statistics[rolling_max-extra1-trailing1-centered1-True-polars]"
+  ],
+  "native_failure_details": [
+    {
+      "name": "[f2p] tests.expr_and_series.rolling_max_test.test_rolling_max_expr_lazy_ungrouped[duckdb]",
+      "status": "failed",
+      "first_message_line": "AttributeError: 'DuckDBExpr' object has no attribute 'rolling_max'. Did you mean: 'rolling_mean'?"
+    },
+    {
+      "name": "[f2p] tests.expr_and_series.rolling_max_test.test_rolling_max_expr_lazy_ungrouped[sqlframe]",
+      "status": "failed",
+      "first_message_line": "AttributeError: 'SparkLikeExpr' object has no attribute 'rolling_max'. Did you mean: 'rolling_mean'?"
+    },
+    {
+      "name": "[f2p] tests.expr_and_series.rolling_max_test.test_rolling_max_series[polars[eager]]",
+      "status": "failed",
+      "first_message_line": "AttributeError: PolarsSeries has not attribute 'rolling_max'.. Did you mean: 'rolling_mean'?"
+    },
+    {
+      "name": "[f2p] tests.expr_and_series.rolling_median_test.test_rolling_median_expr_lazy_ungrouped[duckdb]",
+      "status": "failed",
+      "first_message_line": "AttributeError: 'DuckDBExpr' object has no attribute 'rolling_median'. Did you mean: 'rolling_mean'?"
+    },
+    {
+      "name": "[f2p] tests.expr_and_series.rolling_median_test.test_rolling_median_expr_lazy_ungrouped[sqlframe]",
+      "status": "failed",
+      "first_message_line": "AttributeError: 'SparkLikeExpr' object has no attribute 'rolling_median'. Did you mean: 'rolling_mean'?"
+    },
+    {
+      "name": "[f2p] tests.expr_and_series.rolling_median_test.test_rolling_median_series[polars[eager]]",
+      "status": "failed",
+      "first_message_line": "AttributeError: PolarsSeries has not attribute 'rolling_median'.. Did you mean: 'rolling_mean'?"
+    },
+    {
+      "name": "[f2p] tests.expr_and_series.rolling_min_test.test_rolling_min_expr_lazy_ungrouped[duckdb-expected_a0-3-1-False]",
+      "status": "failed",
+      "first_message_line": "AttributeError: 'DuckDBExpr' object has no attribute 'rolling_min'. Did you mean: 'rolling_mean'?"
+    },
+    {
+      "name": "[f2p] tests.expr_and_series.rolling_min_test.test_rolling_min_expr_lazy_ungrouped[duckdb-expected_a1-3-1-True]",
+      "status": "failed",
+      "first_message_line": "AttributeError: 'DuckDBExpr' object has no attribute 'rolling_min'. Did you mean: 'rolling_mean'?"
+    },
+    {
+      "name": "[f2p] tests.expr_and_series.rolling_min_test.test_rolling_min_expr_lazy_ungrouped[sqlframe-expected_a0-3-1-False]",
+      "status": "failed",
+      "first_message_line": "AttributeError: 'SparkLikeExpr' object has no attribute 'rolling_min'. Did you mean: 'rolling_mean'?"
+    },
+    {
+      "name": "[f2p] tests.expr_and_series.rolling_min_test.test_rolling_min_expr_lazy_ungrouped[sqlframe-expected_a1-3-1-True]",
+      "status": "failed",
+      "first_message_line": "AttributeError: 'SparkLikeExpr' object has no attribute 'rolling_min'. Did you mean: 'rolling_mean'?"
+    },
+    {
+      "name": "[f2p] tests.expr_and_series.rolling_min_test.test_rolling_min_series[polars[eager]]",
+      "status": "failed",
+      "first_message_line": "AttributeError: PolarsSeries has not attribute 'rolling_min'.. Did you mean: 'rolling_mean'?"
+    },
+    {
+      "name": "[f2p] tests.expr_and_series.rolling_quantile_test.test_rolling_quantile_series[polars[eager]]",
+      "status": "failed",
+      "first_message_line": "AttributeError: PolarsSeries has not attribute 'rolling_quantile'."
+    }
+  ],
+  "call_chains": {
+    "DuckDB and SQLFrame": "Public Expr records ORDERABLE_WINDOW method name; evaluate_node uses getattr on DuckDBExpr or SparkLikeExpr, inheriting shared SQLExpr. Missing rolling_min/max/median raises AttributeError before computation.",
+    "Polars eager": "Public Series delegates rolling_* to _compliant_series; PolarsSeries lacks explicit new methods and its __getattr__ restricts inherited attributes, raising AttributeError."
+  },
+  "classification": "Incomplete backend coverage in localization and generated implementation under the five-file selection policy. The initial tree exposed the relevant directories/files. The omitted source was not selected, so no evidence that the framework dropped a correctly selected backend. Enlarging the ten-line window within selected files would not supply these unselected files.",
+  "limits": "Does not establish that the task cannot be solved within the current method or that another file selection would guarantee success. All four samples share one localization, so their omissions are not independent localization trials. The original result remains unresolved."
+}
