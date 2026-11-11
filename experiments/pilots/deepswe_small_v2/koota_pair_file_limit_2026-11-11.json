@@ -1,0 +1,205 @@
+{
+  "runs": [
+    {
+      "plan": {
+        "task_ids": [
+          "koota-pair-relation-tracking"
+        ],
+        "model": "gpt-6.1-sol",
+        "reasoning": "xhigh",
+        "revision": "f00c5164a9ca42293bc53b58b13354a7a9eb8351+dirty",
+        "task_concurrency": 1,
+        "repair_concurrency_per_task": 4,
+        "repair_samples": 4,
+        "edit_samples": 1,
+        "maximum_files": 5,
+        "retain_declarations": true,
+        "docker_concurrency": 1,
+        "once_only_content_tokens_per_task": 2000000,
+        "time_limit_seconds_per_task": 7200,
+        "queue_policy": "Docker queue waiting counts toward the task deadline except initial baseline preparation. Scoring occurs after export.",
+        "scope": "Agentless-only development batch"
+      },
+      "result": {
+        "task_id": "koota-pair-relation-tracking",
+        "status": "failed",
+        "model_calls": 0,
+        "error_type": "WorkflowError",
+        "message": "no repair response produced a patch candidate",
+        "budget": {
+          "time_limit_seconds": 7200,
+          "token_limit": 2000000,
+          "used_tokens": 25476,
+          "token_overshoot": 0,
+          "token_accounting": "once_only_context",
+          "content_tokenizer": "o200k_base",
+          "processed_input_tokens": 34266,
+          "processed_output_tokens": 31263,
+          "processed_tokens": 65529,
+          "remaining_seconds": 6508.285434199999
+        },
+        "docker_events": [
+          {
+            "kind": "public_validation",
+            "queued": 6730.6701509,
+            "started": 6730.6701595,
+            "finished": 6753.9180027,
+            "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-koota-pair-files-5-2026-11-11\\koota-pair-relation-tracking\\runs\\run-2b9b21b56b4742b2853fbccb90f97622\\regression-baseline\\0"
+          }
+        ],
+        "docker_queue_wait_seconds": 8.600000001024455e-06,
+        "completed_model_responses": 8
+      },
+      "run_directory": "artifacts/agentless-koota-pair-files-5-2026-11-11/koota-pair-relation-tracking/runs/run-2b9b21b56b4742b2853fbccb90f97622",
+      "baseline_counts": {
+        "passed": 172
+      },
+      "selected_files": [
+        "packages/core/src/entity/entity.ts",
+        "packages/core/src/query/query.ts",
+        "packages/core/src/query/modifier.ts",
+        "packages/core/src/query/utils/create-query-hash.ts",
+        "packages/core/src/query/query-result.ts"
+      ],
+      "repair_prompt_characters": 21141,
+      "repair_prompt_sha256": "bc5dc37c0caf60a94a83d732bd28dbd5f47e3172b9a07e4ab22925eca0cfef47",
+      "attempts": [
+        {
+          "candidate_id": "loc-0-repair-0",
+          "sample_index": 0,
+          "status": "repair_error",
+          "message": "missing SEARCH/REPLACE edit",
+          "candidate": null,
+          "localization_rank": 0
+        },
+        {
+          "candidate_id": "loc-0-repair-1",
+          "sample_index": 1,
+          "status": "repair_error",
+          "message": "missing SEARCH/REPLACE edit",
+          "candidate": null,
+          "localization_rank": 0
+        },
+        {
+          "candidate_id": "loc-0-repair-2",
+          "sample_index": 2,
+          "status": "repair_error",
+          "message": "missing SEARCH/REPLACE edit",
+          "candidate": null,
+          "localization_rank": 0
+        },
+        {
+          "candidate_id": "loc-0-repair-3",
+          "sample_index": 3,
+          "status": "repair_error",
+          "message": "missing SEARCH/REPLACE edit",
+          "candidate": null,
+          "localization_rank": 0
+        }
+      ]
+    },
+    {
+      "plan": {
+        "task_ids": [
+          "koota-pair-relation-tracking"
+        ],
+        "model": "gpt-6.1-sol",
+        "reasoning": "xhigh",
+        "revision": "f00c5164a9ca42293bc53b58b13354a7a9eb8351+dirty",
+        "task_concurrency": 1,
+        "repair_concurrency_per_task": 4,
+        "repair_samples": 4,
+        "edit_samples": 1,
+        "maximum_files": 10,
+        "retain_declarations": true,
+        "docker_concurrency": 1,
+        "once_only_content_tokens_per_task": 2000000,
+        "time_limit_seconds_per_task": 7200,
+        "queue_policy": "Docker queue waiting counts toward the task deadline except initial baseline preparation. Scoring occurs after export.",
+        "scope": "Agentless-only development batch"
+      },
+      "result": {
+        "task_id": "koota-pair-relation-tracking",
+        "status": "failed",
+        "model_calls": 0,
+        "error_type": "WorkflowError",
+        "message": "no repair response produced a patch candidate",
+        "budget": {
+          "time_limit_seconds": 7200,
+          "token_limit": 2000000,
+          "used_tokens": 34977,
+          "token_overshoot": 0,
+          "token_accounting": "once_only_context",
+          "content_tokenizer": "o200k_base",
+          "processed_input_tokens": 50064,
+          "processed_output_tokens": 55002,
+          "processed_tokens": 105066,
+          "remaining_seconds": 6105.452544600001
+        },
+        "docker_events": [
+          {
+            "kind": "public_validation",
+            "queued": 7449.4688565,
+            "started": 7449.468863,
+            "finished": 7462.9478485,
+            "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-koota-pair-files-10-2026-11-11\\koota-pair-relation-tracking\\runs\\run-16264300128c415182e68a4ff498e6a3\\regression-baseline\\0"
+          }
+        ],
+        "docker_queue_wait_seconds": 6.50000038149301e-06,
+        "completed_model_responses": 8
+      },
+      "run_directory": "artifacts/agentless-koota-pair-files-10-2026-11-11/koota-pair-relation-tracking/runs/run-16264300128c415182e68a4ff498e6a3",
+      "baseline_counts": {
+        "passed": 172
+      },
+      "selected_files": [
+        "packages/core/src/entity/entity.ts",
+        "packages/core/src/query/query.ts",
+        "packages/core/src/query/utils/check-query-tracking-with-relations.ts",
+        "packages/core/src/query/modifiers/added.ts",
+        "packages/core/src/query/modifiers/removed.ts",
+        "packages/core/src/query/modifiers/changed.ts",
+        "packages/core/src/query/utils/create-query-hash.ts",
+        "packages/core/src/query/query-result.ts",
+        "packages/core/src/query/types.ts",
+        "packages/core/src/entity/types.ts"
+      ],
+      "repair_prompt_characters": 33340,
+      "repair_prompt_sha256": "a17ca6ec97b81c5582311e6bfce2aa22863552b7862b934b197425876203784b",
+      "attempts": [
+        {
+          "candidate_id": "loc-0-repair-0",
+          "sample_index": 0,
+          "status": "repair_error",
+          "message": "missing SEARCH/REPLACE edit",
+          "candidate": null,
+          "localization_rank": 0
+        },
+        {
+          "candidate_id": "loc-0-repair-1",
+          "sample_index": 1,
+          "status": "repair_error",
+          "message": "missing SEARCH/REPLACE edit",
+          "candidate": null,
+          "localization_rank": 0
+        },
+        {
+          "candidate_id": "loc-0-repair-2",
+          "sample_index": 2,
+          "status": "repair_error",
+          "message": "missing SEARCH/REPLACE edit",
+          "candidate": null,
+          "localization_rank": 0
+        },
+        {
+          "candidate_id": "loc-0-repair-3",
+          "sample_index": 3,
+          "status": "repair_error",
+          "message": "missing SEARCH/REPLACE edit",
+          "candidate": null,
+          "localization_rank": 0
+        }
+      ]
+    }
+  ]
+}
