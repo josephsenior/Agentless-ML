@@ -20,7 +20,7 @@ Please look through the following GitHub problem description and Repository stru
 
 ###
 
-Please only provide the full path and return at most 5 files.
+Please only provide the full path and return at most {maximum_files} files.
 The returned files should be separated by new lines ordered by most to least important and wrapped with ```
 For example:
 ```
@@ -97,6 +97,7 @@ def render_file_localization_prompt(
     project_tree: str,
     *,
     extension: str | None = ".py",
+    maximum_files: int = 5,
 ) -> str:
     template = FILE_LOCALIZATION_TEMPLATE
     if extension is None:
@@ -109,6 +110,7 @@ def render_file_localization_prompt(
     return template.format(
         problem_statement=problem_statement,
         structure=project_tree.strip(),
+        maximum_files=maximum_files,
     ).strip()
 
 

@@ -19,7 +19,7 @@ We are currently solving the following issue within our repository. Here is the 
 ```
 {content}
 ```
---- END FILE ---
+--- END FILE ---{reference_section}
 
 Please first localize the bug based on the issue statement, and then generate *SEARCH/REPLACE* edits to fix the issue.
 
@@ -78,6 +78,7 @@ def build_repair_prompt(
     *,
     language: str = "python",
     mixed_languages: bool = False,
+    reference_declarations: str = "",
 ) -> str:
     """Build the fixed repair-stage prompt.
 
@@ -103,6 +104,14 @@ def build_repair_prompt(
         file_creation_instruction=FILE_CREATION_INSTRUCTION,
         file_operation_instruction=FILE_OPERATION_INSTRUCTION,
         content=selected_context.rstrip(),
+        reference_section=(
+            "\n\nThe following declarations are reference material. They do not "
+            "grant permission to edit additional files or lines.\n"
+            "--- BEGIN REFERENCE ---\n"
+            f"{reference_declarations}\n"
+            "--- END REFERENCE ---"
+            if reference_declarations else ""
+        ),
         language=adapter.language,
         example_path=example.path,
         example_search=example.search,

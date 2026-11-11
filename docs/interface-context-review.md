@@ -1,5 +1,23 @@
 # Should repair retain interface declarations?
 
+The batch runner now supports `--retain-declarations` and
+`--maximum-files 10` as independent settings. The default remains five files
+with the original repair prompt.
+
+Declaration retention reuses the language resolver to recover symbol spans
+from the earlier localization response. It includes spans of up to 25 lines
+that are missing from the edit excerpts, with a total excerpt budget of 4,000
+characters per repair prompt. The repair prompt labels these spans as reference
+material. Candidate validation still uses the edit locations and their ten-line
+windows. The run plan and controller record both settings.
+
+Python already uses LibCST to resolve globals that its `FileNode` leaves out.
+That lookup happens during symbol resolution. Declaration retention addresses
+what happens after the controller has found those locations and narrows the
+source for repair.
+
+## Original review
+
 Review date: 9 November 2026. Decision: do not adopt this extension in the
 current condition. The user confirmed that the workflow and ten-line context
 window should remain unchanged. Dasel stays included as a failed attempt, with

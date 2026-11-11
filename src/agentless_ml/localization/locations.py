@@ -17,6 +17,7 @@ class ResolvedLocations(Protocol):
     """Structural type returned by language-specific location resolvers."""
 
     is_valid: bool
+    line_intervals: Sequence[tuple[int, int]]
     context_intervals: Sequence[tuple[int, int]]
 
 
@@ -172,6 +173,37 @@ def resolve_locations(
         fine_grained_only=fine_grained_only,
         remove_line_locations=remove_line_locations,
     )
+
+
+def render_reference_declarations(
+    symbol_locations: Mapping[str, Sequence[str]],
+    file_nodes: Mapping[str, FileNode],
+    sources: Mapping[str, str],
+    edit_intervals: Mapping[str, Sequence[tuple[int, int]]],
+) -> str:
+    """Keep compact symbol selections that the fine edit excerpts omit."""
+    max_declaration_lines = 25
+    remaining_characters = 4_000
+    excerpts: list[str] = []
+    for path, locations in symbol_locations.items():
+        source = sources[path]
+        resolved = resolve_locations(
+            locations, file_nodes[path], source,
+            context_window=0, remove_line_locations=True,
+        )
+        source_lines = source.split("\n")
+        for start, end in sorted(set(resolved.line_intervals)):
+            if end - start + 1 > max_declaration_lines or any(
+                first <= start and end <= last
+                for first, last in edit_intervals.get(path, ())
+            ):
+                continue
+            code = "\n".join(source_lines[start - 1:end])
+            excerpt = f"### {path} (lines {start}–{end})\n{code}"
+            if len(excerpt) + 2 <= remaining_characters:
+                excerpts.append(excerpt)
+                remaining_characters -= len(excerpt) + 2
+    return "\n\n".join(excerpts)
 
 
 def _line_wrap_content(

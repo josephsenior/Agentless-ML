@@ -126,7 +126,7 @@ def task(commit, image="python:fixture", digest="sha256:fixture"):
     )
 
 
-def controller(tmp_path, source, runner):
+def controller(tmp_path, source, runner, **options):
     repository, commit = source
     return FixedWorkflowController(
         task=task(commit, runner.image_reference, runner.image_id),
@@ -140,7 +140,48 @@ def controller(tmp_path, source, runner):
         implementation_revision="implementation-sha",
         harness_revision="harness-v1",
         model_name="recorded/test-model",
+        **options,
     )
+
+
+def test_reference_context_can_show_a_sixth_file_without_authorizing_edits(tmp_path, source):
+    repository, _ = source
+    paths = [f"helper_{index}.py" for index in range(1, 11)]
+    for path in paths:
+        (repository / path).write_text("DEFAULT_LIMIT = 10\n", encoding="utf-8")
+    git(repository, "add", ".")
+    git(repository, "commit", "-m", "add helper files")
+    source = repository, git(repository, "rev-parse", "HEAD")
+    bundle = replace(
+        responses(),
+        file_localization="\n".join(["calculator.py", *paths]),
+        symbol_localization=(
+            "```\ncalculator.py\nfunction: add\nhelper_5.py\nvariable: DEFAULT_LIMIT\n```"
+        ),
+        edit_localization="```\ncalculator.py\nline: 2\n```",
+        repairs=(
+            "```python\n### helper_5.py\n<<<<<<< SEARCH\nDEFAULT_LIMIT = 10\n"
+            "=======\nDEFAULT_LIMIT = 20\n>>>>>>> REPLACE\n```",
+            responses().repairs[-1],
+        ),
+    )
+
+    result = controller(
+        tmp_path, source, FakeRunner(), maximum_files=10, retain_declarations=True,
+    ).run(bundle)
+
+    directory = Path(result.artifact_directory)
+    assert "at most 10 files" in (directory / "prompts/file-localization.txt").read_text(
+        encoding="utf-8"
+    )
+    context = json.loads((directory / "selected-context.json").read_bytes())
+    assert context["files"] == ["calculator.py", *paths[:9]]
+    repair = (directory / "prompts/repair.txt").read_text(encoding="utf-8")
+    reference = repair.split("--- BEGIN REFERENCE ---", 1)[1]
+    assert "helper_5.py" in reference and "DEFAULT_LIMIT = 10" in reference
+    assert result.attempts[0].status == "repair_error"
+    assert "no authorized interval" in result.attempts[0].message
+    assert result.prediction.selected_candidate_id == "repair-1"
 
 
 @pytest.mark.parametrize("obsolete_content", [b"old = True\n", b"old = True\r\n"])
