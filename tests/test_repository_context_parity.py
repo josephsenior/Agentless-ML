@@ -53,7 +53,7 @@ def test_file_localization_prompt_matches_published_agentless() -> None:
     fixture = load_fixture()
     capture = fixture["capture"]
     actual = render_file_localization_prompt(
-        capture["problem_statement"], fixture["project_tree"]
+        capture["problem_statement"], fixture["project_tree"], maximum_files=5
     )
     assert actual == fixture["file_localization_prompt"]
 

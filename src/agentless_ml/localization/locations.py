@@ -12,6 +12,8 @@ from agentless_ml.adapters.languages import (  # pyright: ignore[reportMissingTy
 )
 from agentless_ml.schemas import FileNode  # pyright: ignore[reportMissingTypeStubs]
 
+DEFAULT_MAXIMUM_FILES = 10
+
 
 class ResolvedLocations(Protocol):
     """Structural type returned by language-specific location resolvers."""
@@ -75,7 +77,7 @@ def parse_file_locations(
     repository_paths: Sequence[str],
     *,
     repository_name: str | None = None,
-    maximum_files: int = 5,
+    maximum_files: int = DEFAULT_MAXIMUM_FILES,
     extension: str | tuple[str, ...] = ".py",
 ) -> tuple[str, ...]:
     """Return ordered, known paths with the requested language extension.

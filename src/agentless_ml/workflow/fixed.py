@@ -25,7 +25,10 @@ from agentless_ml.localization import (
     render_symbol_localization_prompt,
 )
 from agentless_ml.localization.context import render_project_tree
-from agentless_ml.localization.locations import render_reference_declarations
+from agentless_ml.localization.locations import (
+    DEFAULT_MAXIMUM_FILES,
+    render_reference_declarations,
+)
 from agentless_ml.localization.edit import (
     parse_edit_locations,
     render_edit_localization_prompt,
@@ -178,11 +181,7 @@ class FixedWorkflowController:
         model_name: str,
         regression_tests: tuple[RegressionTest, ...] = (),
         reproduction_spec: ReproductionSpec | None = None,
-        maximum_files: int = 5,
-        retain_declarations: bool = False,
     ):
-        if maximum_files <= 0:
-            raise ValueError("maximum_files must be positive")
         if not public_commands and not regression_tests and reproduction_spec is None:
             raise ValueError("public test schedule must not be empty")
         if len({test.test_id for test in regression_tests}) != len(regression_tests):
@@ -231,8 +230,6 @@ class FixedWorkflowController:
         self.implementation_revision = implementation_revision
         self.harness_revision = harness_revision
         self.model_name = model_name
-        self.maximum_files = maximum_files
-        self.retain_declarations = retain_declarations
 
     def _prepare_reproduction_samples(
         self, samples: tuple[str, ...], directory: Path
@@ -686,8 +683,8 @@ class FixedWorkflowController:
                     "model_name": self.model_name,
                     "model_calls": calls,
                     "repair_concurrency": repair_concurrency,
-                    "maximum_files": self.maximum_files,
-                    "retain_declarations": self.retain_declarations,
+                    "maximum_files": DEFAULT_MAXIMUM_FILES,
+                    "retain_declarations": True,
                     "localization_mode": "edit-samples"
                     if responses.edit_samples
                     else "edit-lines"
@@ -725,7 +722,6 @@ class FixedWorkflowController:
                     self.task.problem_statement,
                     project_tree,
                     extension=None,
-                    maximum_files=self.maximum_files,
                 )
                 if response_provider is not None:
                     responses = replace(
@@ -737,7 +733,6 @@ class FixedWorkflowController:
                     source_paths,
                     repository_name=repository_name,
                     extension=extensions,
-                    maximum_files=self.maximum_files,
                 )
                 if not selected_files:
                     raise WorkflowError(
@@ -799,11 +794,8 @@ class FixedWorkflowController:
                         context,
                         language=languages[0] if languages else self.task.language,
                         mixed_languages=len(languages) > 1,
-                        reference_declarations=(
-                            render_reference_declarations(
-                                symbol_locations, nodes, sources, spans
-                            )
-                            if self.retain_declarations else ""
+                        reference_declarations=render_reference_declarations(
+                            symbol_locations, nodes, sources, spans
                         ),
                     )
 

@@ -34,10 +34,11 @@ has no model client. Recorded execution therefore reports zero model calls and
 zero input/output tokens. It cannot react to validation output or request another
 sample.
 
-The file-localization parser accepts only tracked Python paths at the pinned
-commit and limits output to five files. Symbol locations must resolve to parsed
+The file-localization parser accepts only supported, tracked source paths at the pinned
+commit and limits output to ten files. Symbol locations must resolve to parsed
 program elements or explicit lines. Repair edits can touch only the selected
-context intervals. Invalid repair samples are recorded and skipped. Valid patches
+context intervals. Compact declarations selected earlier can appear in the repair
+prompt as reference material. Invalid repair samples are recorded and skipped. Valid patches
 receive independent Git workspaces and fresh public-test containers before the
 existing selection policy chooses one final patch.
 

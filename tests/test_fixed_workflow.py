@@ -126,7 +126,7 @@ def task(commit, image="python:fixture", digest="sha256:fixture"):
     )
 
 
-def controller(tmp_path, source, runner, **options):
+def controller(tmp_path, source, runner):
     repository, commit = source
     return FixedWorkflowController(
         task=task(commit, runner.image_reference, runner.image_id),
@@ -140,7 +140,6 @@ def controller(tmp_path, source, runner, **options):
         implementation_revision="implementation-sha",
         harness_revision="harness-v1",
         model_name="recorded/test-model",
-        **options,
     )
 
 
@@ -166,9 +165,7 @@ def test_reference_context_can_show_a_sixth_file_without_authorizing_edits(tmp_p
         ),
     )
 
-    result = controller(
-        tmp_path, source, FakeRunner(), maximum_files=10, retain_declarations=True,
-    ).run(bundle)
+    result = controller(tmp_path, source, FakeRunner()).run(bundle)
 
     directory = Path(result.artifact_directory)
     assert "at most 10 files" in (directory / "prompts/file-localization.txt").read_text(

@@ -1,8 +1,7 @@
 # Should repair retain interface declarations?
 
-The batch runner now supports `--retain-declarations` and
-`--maximum-files 10` as independent settings. The default remains five files
-with the original repair prompt.
+The workflow now selects up to ten files and retains compact declarations in
+repair prompts by default.
 
 Declaration retention reuses the language resolver to recover symbol spans
 from the earlier localization response. It includes spans of up to 25 lines

@@ -10,9 +10,10 @@ could return up to five files in the first run and ten in the second.
 | 5 | 5 | 172/172 | None | 65,529 | 11.5 minutes |
 | 10 | 10 | 172/172 | None | 105,066 | 18.2 minutes |
 
-Each run completed eight model calls. All eight repair responses across the
-two runs contained prose and no applicable edit blocks. Final scoring requires
-an exported prediction, so neither run has a verifier score. The launcher
+Each run completed eight model calls. Every repair prompt requested
+SEARCH/REPLACE blocks, and the eight repair responses contained zero such
+blocks. The parser reported a missing edit for each response, before patch
+application or candidate tests. Neither run has a verifier score. The launcher
 reports the completed response count separately from its zero-initialized
 model-call field on runs that end before export.
 

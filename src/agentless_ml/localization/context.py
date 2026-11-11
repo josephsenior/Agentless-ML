@@ -7,6 +7,8 @@ from pathlib import PurePosixPath
 
 from agentless_ml.adapters.languages import LanguageAdapter, PythonAdapter
 
+from .locations import DEFAULT_MAXIMUM_FILES
+
 FILE_LOCALIZATION_TEMPLATE = """
 Please look through the following GitHub problem description and Repository structure and provide a list of files that one would need to edit to fix the problem.
 
@@ -97,7 +99,7 @@ def render_file_localization_prompt(
     project_tree: str,
     *,
     extension: str | None = ".py",
-    maximum_files: int = 5,
+    maximum_files: int = DEFAULT_MAXIMUM_FILES,
 ) -> str:
     template = FILE_LOCALIZATION_TEMPLATE
     if extension is None:

@@ -13,6 +13,7 @@ from pathlib import Path
 from deepswe_environments import runtime_runner
 from run_shared_deepswe_workflow import resolve, _revision
 from agentless_ml.attempt_budget import AttemptBudget
+from agentless_ml.localization.locations import DEFAULT_MAXIMUM_FILES
 from agentless_ml.shared_task import load_shared_task
 from agentless_ml.validation import RegressionTest
 from agentless_ml.workflow import FixedWorkflowController
@@ -31,11 +32,7 @@ def main():
     parser.add_argument("--model", default="gpt-6.1-sol")
     parser.add_argument("--reasoning", default="xhigh",
                         choices=("low", "medium", "high", "xhigh"))
-    parser.add_argument("--maximum-files", type=int, default=5)
-    parser.add_argument("--retain-declarations", action="store_true")
     args = parser.parse_args()
-    if args.maximum_files <= 0:
-        parser.error("--maximum-files must be positive")
     if len(set(args.tasks)) != len(args.tasks):
         parser.error("task IDs must be unique")
     args.output.mkdir(parents=True, exist_ok=False)
@@ -56,8 +53,8 @@ def main():
         "task_ids": args.tasks, "model": args.model, "reasoning": args.reasoning,
         "revision": _revision(), "task_concurrency": len(args.tasks),
         "repair_concurrency_per_task": 4, "repair_samples": 4, "edit_samples": 1,
-        "maximum_files": args.maximum_files,
-        "retain_declarations": args.retain_declarations,
+        "maximum_files": DEFAULT_MAXIMUM_FILES,
+        "retain_declarations": True,
         "docker_concurrency": 1, "once_only_content_tokens_per_task": 2000000,
         "time_limit_seconds_per_task": 7200,
         "queue_policy": "Docker queue waiting counts toward the task deadline except initial baseline preparation. Scoring occurs after export.",
@@ -115,8 +112,6 @@ def main():
                 regression_tests=(RegressionTest("suite", command),),
                 implementation_revision=_revision(), harness_revision=task.benchmark_revision,
                 model_name="chatgpt-plan/" + args.model,
-                maximum_files=args.maximum_files,
-                retain_declarations=args.retain_declarations,
             )
             provider = SubscriptionResponses(
                 args.grinta_root, model=args.model, reasoning=args.reasoning
