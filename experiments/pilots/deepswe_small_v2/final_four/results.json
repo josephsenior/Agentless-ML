@@ -1,0 +1,537 @@
+{
+  "batches": [
+    {
+      "plan": {
+        "task_ids": [
+          "kysely-window-grouping-helpers",
+          "mobly-grouped-test-barriers"
+        ],
+        "model": "gpt-6.1-sol",
+        "reasoning": "xhigh",
+        "revision": "95e146a5022b4659eb08d4aa1b36d4537e963656+dirty",
+        "task_concurrency": 2,
+        "repair_concurrency_per_task": 4,
+        "repair_samples": 4,
+        "edit_samples": 1,
+        "maximum_files": 10,
+        "retain_declarations": true,
+        "docker_concurrency": 1,
+        "once_only_content_tokens_per_task": 2000000,
+        "time_limit_seconds_per_task": 7200,
+        "queue_policy": "Docker queue waiting counts toward the task deadline except initial baseline preparation. Scoring occurs after export.",
+        "scope": "Agentless-only development batch"
+      },
+      "tasks": [
+        {
+          "result": {
+            "task_id": "kysely-window-grouping-helpers",
+            "status": "failed",
+            "model_calls": 0,
+            "error_type": "WorkflowError",
+            "message": "no repair response produced a patch candidate",
+            "budget": {
+              "time_limit_seconds": 7200,
+              "token_limit": 2000000,
+              "used_tokens": 214664,
+              "token_overshoot": 0,
+              "token_accounting": "once_only_context",
+              "content_tokenizer": "o200k_base",
+              "processed_input_tokens": 163889,
+              "processed_output_tokens": 89144,
+              "processed_tokens": 253033,
+              "remaining_seconds": 6452.877793900001
+            },
+            "docker_events": [
+              {
+                "kind": "public_validation",
+                "queued": 15776.3621918,
+                "started": 15786.6487582,
+                "finished": 15846.8325623,
+                "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-final-four-batch-one\\kysely-window-grouping-helpers\\runs\\run-395a60da516d498cb338ccfe6fff1a94\\regression-baseline\\0"
+              }
+            ],
+            "docker_queue_wait_seconds": 10.286566400000083,
+            "completed_model_responses": 8
+          },
+          "baseline_counts": {
+            "passed": 438
+          },
+          "candidate_attempts": [
+            {
+              "candidate_id": "loc-0-repair-0",
+              "sample_index": 0,
+              "status": "repair_error",
+              "message": "SEARCH content is outside authorized intervals in src/query-builder/function-module.ts",
+              "localization_rank": 0,
+              "changed_files": []
+            },
+            {
+              "candidate_id": "loc-0-repair-1",
+              "sample_index": 1,
+              "status": "repair_error",
+              "message": "SEARCH content is outside authorized intervals in src/query-builder/function-module.ts",
+              "localization_rank": 0,
+              "changed_files": []
+            },
+            {
+              "candidate_id": "loc-0-repair-2",
+              "sample_index": 2,
+              "status": "repair_error",
+              "message": "SEARCH content is outside authorized intervals in src/query-builder/function-module.ts",
+              "localization_rank": 0,
+              "changed_files": []
+            },
+            {
+              "candidate_id": "loc-0-repair-3",
+              "sample_index": 3,
+              "status": "repair_error",
+              "message": "edited file is not visible: src/operation-node/operation-node.ts",
+              "localization_rank": 0,
+              "changed_files": []
+            }
+          ]
+        },
+        {
+          "result": {
+            "task_id": "mobly-grouped-test-barriers",
+            "status": "scored",
+            "model_calls": 8,
+            "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-final-four-batch-one\\mobly-grouped-test-barriers\\runs\\run-a3a0ffd4be0a45b8970f312ca5f56fef",
+            "score": {
+              "task_id": "mobly-grouped-test-barriers",
+              "status": "resolved",
+              "reward": 1,
+              "f2p_passed": 79,
+              "f2p_total": 79,
+              "p2p_passed": 808,
+              "p2p_total": 808,
+              "image_id": "sha256:e7f48723e4bf9244cbe5206fdcb204456383c31f43c5a16da98efadda057998f",
+              "patch_sha256": "d7d98c1bc189b787c88d396a06d82f05acea8bcac4fd601f39a6c991f8168f7e",
+              "dataset_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+              "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-final-four-batch-one\\mobly-grouped-test-barriers\\score\\mobly-grouped-test-barriers\\agentless-ml-verifier-f6b4ca117f2749648767a63ed94225ea",
+              "message": "",
+              "verifier_exit_code": 0
+            },
+            "budget": {
+              "time_limit_seconds": 7200,
+              "token_limit": 2000000,
+              "used_tokens": 56187,
+              "token_overshoot": 0,
+              "token_accounting": "once_only_context",
+              "content_tokenizer": "o200k_base",
+              "processed_input_tokens": 47704,
+              "processed_output_tokens": 76816,
+              "processed_tokens": 124520,
+              "remaining_seconds": 6294.797025099999
+            },
+            "docker_events": [
+              {
+                "kind": "public_validation",
+                "queued": 15775.2501241,
+                "started": 15775.2501312,
+                "finished": 15786.6455972,
+                "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-final-four-batch-one\\mobly-grouped-test-barriers\\runs\\run-a3a0ffd4be0a45b8970f312ca5f56fef\\regression-baseline\\0"
+              },
+              {
+                "kind": "public_validation",
+                "queued": 16638.0001141,
+                "started": 16638.0001184,
+                "finished": 16646.5334702,
+                "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-final-four-batch-one\\mobly-grouped-test-barriers\\runs\\run-a3a0ffd4be0a45b8970f312ca5f56fef\\executions\\loc-0-repair-0"
+              },
+              {
+                "kind": "public_validation",
+                "queued": 16648.5640736,
+                "started": 16648.5640794,
+                "finished": 16656.4152123,
+                "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-final-four-batch-one\\mobly-grouped-test-barriers\\runs\\run-a3a0ffd4be0a45b8970f312ca5f56fef\\executions\\loc-0-repair-1"
+              },
+              {
+                "kind": "public_validation",
+                "queued": 16658.2747643,
+                "started": 16658.2747705,
+                "finished": 16667.1146277,
+                "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-final-four-batch-one\\mobly-grouped-test-barriers\\runs\\run-a3a0ffd4be0a45b8970f312ca5f56fef\\executions\\loc-0-repair-2"
+              },
+              {
+                "kind": "public_validation",
+                "queued": 16669.299975,
+                "started": 16669.2999855,
+                "finished": 16678.8986976,
+                "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-final-four-batch-one\\mobly-grouped-test-barriers\\runs\\run-a3a0ffd4be0a45b8970f312ca5f56fef\\executions\\loc-0-repair-3"
+              },
+              {
+                "kind": "scoring",
+                "started": 16679.0323585,
+                "finished": 16692.0089315
+              }
+            ],
+            "docker_queue_wait_seconds": 3.389999983482994e-05,
+            "completed_model_responses": 8
+          },
+          "baseline_counts": {
+            "passed": 804,
+            "skipped": 2
+          },
+          "candidate_attempts": [
+            {
+              "candidate_id": "loc-0-repair-0",
+              "sample_index": 0,
+              "status": "validated",
+              "message": "",
+              "localization_rank": 0,
+              "changed_files": [
+                "mobly/base_test.py",
+                "mobly/expects.py"
+              ]
+            },
+            {
+              "candidate_id": "loc-0-repair-1",
+              "sample_index": 1,
+              "status": "validated",
+              "message": "",
+              "localization_rank": 0,
+              "changed_files": [
+                "mobly/base_test.py",
+                "mobly/expects.py"
+              ]
+            },
+            {
+              "candidate_id": "loc-0-repair-2",
+              "sample_index": 2,
+              "status": "validated",
+              "message": "",
+              "localization_rank": 0,
+              "changed_files": [
+                "mobly/base_test.py",
+                "mobly/expects.py"
+              ]
+            },
+            {
+              "candidate_id": "loc-0-repair-3",
+              "sample_index": 3,
+              "status": "validated",
+              "message": "",
+              "localization_rank": 0,
+              "changed_files": [
+                "mobly/base_test.py",
+                "mobly/expects.py"
+              ]
+            }
+          ],
+          "selection": {
+            "reason": "best_regression_then_normalized_majority",
+            "vote_count": 1,
+            "considered_candidate_ids": [
+              "loc-0-repair-0",
+              "loc-0-repair-1"
+            ],
+            "selected_candidate_id": "loc-0-repair-0"
+          }
+        }
+      ]
+    },
+    {
+      "plan": {
+        "task_ids": [
+          "obsidian-linter-link-format-conversion",
+          "obsidian-linter-auto-table-of-contents"
+        ],
+        "model": "gpt-6.1-sol",
+        "reasoning": "xhigh",
+        "revision": "95e146a5022b4659eb08d4aa1b36d4537e963656+dirty",
+        "task_concurrency": 2,
+        "repair_concurrency_per_task": 4,
+        "repair_samples": 4,
+        "edit_samples": 1,
+        "maximum_files": 10,
+        "retain_declarations": true,
+        "docker_concurrency": 1,
+        "once_only_content_tokens_per_task": 2000000,
+        "time_limit_seconds_per_task": 7200,
+        "queue_policy": "Docker queue waiting counts toward the task deadline except initial baseline preparation. Scoring occurs after export.",
+        "scope": "Agentless-only development batch"
+      },
+      "tasks": [
+        {
+          "result": {
+            "task_id": "obsidian-linter-link-format-conversion",
+            "status": "scored",
+            "model_calls": 8,
+            "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-final-four-batch-two\\obsidian-linter-link-format-conversion\\runs\\run-2083b596a228489886cd145010810e83",
+            "score": {
+              "task_id": "obsidian-linter-link-format-conversion",
+              "status": "unresolved",
+              "reward": 0,
+              "f2p_passed": 0,
+              "f2p_total": 60,
+              "p2p_passed": 1131,
+              "p2p_total": 1131,
+              "image_id": "sha256:50faff6fce0e47f4edbf547c2c8f4667cdb73a80ebf0a080928a2362d4f08c55",
+              "patch_sha256": "2142617ef64c7f5676e0ca24ca0ffb1205448d4954661e247a5310d2cd40fd79",
+              "dataset_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+              "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-final-four-batch-two\\obsidian-linter-link-format-conversion\\score\\obsidian-linter-link-format-conversion\\agentless-ml-verifier-7531c4387eb645b1be2d9426cb7a02d2",
+              "message": "",
+              "verifier_exit_code": 0
+            },
+            "budget": {
+              "time_limit_seconds": 7200,
+              "token_limit": 2000000,
+              "used_tokens": 93088,
+              "token_overshoot": 0,
+              "token_accounting": "once_only_context",
+              "content_tokenizer": "o200k_base",
+              "processed_input_tokens": 75675,
+              "processed_output_tokens": 96660,
+              "processed_tokens": 172335,
+              "remaining_seconds": 5951.871328399997
+            },
+            "docker_events": [
+              {
+                "kind": "public_validation",
+                "queued": 16697.5101042,
+                "started": 16738.709343,
+                "finished": 16771.5714975,
+                "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-final-four-batch-two\\obsidian-linter-link-format-conversion\\runs\\run-2083b596a228489886cd145010810e83\\regression-baseline\\0"
+              },
+              {
+                "kind": "public_validation",
+                "queued": 17853.0322755,
+                "started": 17853.0322799,
+                "finished": 17885.391295,
+                "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-final-four-batch-two\\obsidian-linter-link-format-conversion\\runs\\run-2083b596a228489886cd145010810e83\\executions\\loc-0-repair-0"
+              },
+              {
+                "kind": "public_validation",
+                "queued": 17887.3811127,
+                "started": 17887.3811171,
+                "finished": 17917.4934117,
+                "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-final-four-batch-two\\obsidian-linter-link-format-conversion\\runs\\run-2083b596a228489886cd145010810e83\\executions\\loc-0-repair-1"
+              },
+              {
+                "kind": "public_validation",
+                "queued": 17919.3949573,
+                "started": 17919.3949625,
+                "finished": 17952.1193208,
+                "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-final-four-batch-two\\obsidian-linter-link-format-conversion\\runs\\run-2083b596a228489886cd145010810e83\\executions\\loc-0-repair-2"
+              },
+              {
+                "kind": "public_validation",
+                "queued": 17953.9659977,
+                "started": 17953.9660021,
+                "finished": 17984.6593998,
+                "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-final-four-batch-two\\obsidian-linter-link-format-conversion\\runs\\run-2083b596a228489886cd145010810e83\\executions\\loc-0-repair-3"
+              },
+              {
+                "kind": "scoring",
+                "started": 17984.8534594,
+                "finished": 18019.8474189
+              }
+            ],
+            "docker_queue_wait_seconds": 41.1992571999981,
+            "completed_model_responses": 8
+          },
+          "baseline_counts": {
+            "passed": 1131
+          },
+          "candidate_attempts": [
+            {
+              "candidate_id": "loc-0-repair-0",
+              "sample_index": 0,
+              "status": "validated",
+              "message": "",
+              "localization_rank": 0,
+              "changed_files": [
+                "src/lang/locale/en.ts",
+                "src/rules/link-style.ts"
+              ]
+            },
+            {
+              "candidate_id": "loc-0-repair-1",
+              "sample_index": 1,
+              "status": "validated",
+              "message": "",
+              "localization_rank": 0,
+              "changed_files": [
+                "src/lang/locale/en.ts",
+                "src/rules/link-style.ts"
+              ]
+            },
+            {
+              "candidate_id": "loc-0-repair-2",
+              "sample_index": 2,
+              "status": "validated",
+              "message": "",
+              "localization_rank": 0,
+              "changed_files": [
+                "src/lang/locale/en.ts"
+              ]
+            },
+            {
+              "candidate_id": "loc-0-repair-3",
+              "sample_index": 3,
+              "status": "validated",
+              "message": "",
+              "localization_rank": 0,
+              "changed_files": [
+                "src/lang/locale/en.ts",
+                "src/rules/link-style.ts"
+              ]
+            }
+          ],
+          "selection": {
+            "reason": "best_regression_then_normalized_majority",
+            "vote_count": 1,
+            "considered_candidate_ids": [
+              "loc-0-repair-2"
+            ],
+            "selected_candidate_id": "loc-0-repair-2"
+          }
+        },
+        {
+          "result": {
+            "task_id": "obsidian-linter-auto-table-of-contents",
+            "status": "scored",
+            "model_calls": 8,
+            "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-final-four-batch-two\\obsidian-linter-auto-table-of-contents\\runs\\run-412dd863c01344148fe1652c47d2338b",
+            "score": {
+              "task_id": "obsidian-linter-auto-table-of-contents",
+              "status": "unresolved",
+              "reward": 0,
+              "f2p_passed": 0,
+              "f2p_total": 41,
+              "p2p_passed": 582,
+              "p2p_total": 1131,
+              "image_id": "sha256:56d3ffcde2ca373ffa0107f830b243d66191020f7021806acc8d609148518092",
+              "patch_sha256": "56fc45528799156c1a0c1f61ca29d58b4a1e94724c552944e7f21cdfb9a136c2",
+              "dataset_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+              "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-final-four-batch-two\\obsidian-linter-auto-table-of-contents\\score\\obsidian-linter-auto-table-of-contents\\agentless-ml-verifier-b5a0760cc1c9497cbe476425161c1b90",
+              "message": "",
+              "verifier_exit_code": 0
+            },
+            "budget": {
+              "time_limit_seconds": 7200,
+              "token_limit": 2000000,
+              "used_tokens": 95240,
+              "token_overshoot": 0,
+              "token_accounting": "once_only_context",
+              "content_tokenizer": "o200k_base",
+              "processed_input_tokens": 71158,
+              "processed_output_tokens": 90578,
+              "processed_tokens": 161736,
+              "remaining_seconds": 6339.275789800002
+            },
+            "docker_events": [
+              {
+                "kind": "public_validation",
+                "queued": 16697.5084175,
+                "started": 16697.5084242,
+                "finished": 16738.7066923,
+                "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-final-four-batch-two\\obsidian-linter-auto-table-of-contents\\runs\\run-412dd863c01344148fe1652c47d2338b\\regression-baseline\\0"
+              },
+              {
+                "kind": "public_validation",
+                "queued": 17438.871817,
+                "started": 17438.8718256,
+                "finished": 17468.5804842,
+                "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-final-four-batch-two\\obsidian-linter-auto-table-of-contents\\runs\\run-412dd863c01344148fe1652c47d2338b\\executions\\loc-0-repair-0"
+              },
+              {
+                "kind": "public_validation",
+                "queued": 17470.8887369,
+                "started": 17470.8887452,
+                "finished": 17499.2845166,
+                "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-final-four-batch-two\\obsidian-linter-auto-table-of-contents\\runs\\run-412dd863c01344148fe1652c47d2338b\\executions\\loc-0-repair-1"
+              },
+              {
+                "kind": "public_validation",
+                "queued": 17501.4984097,
+                "started": 17501.4984182,
+                "finished": 17530.5671094,
+                "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-final-four-batch-two\\obsidian-linter-auto-table-of-contents\\runs\\run-412dd863c01344148fe1652c47d2338b\\executions\\loc-0-repair-2"
+              },
+              {
+                "kind": "public_validation",
+                "queued": 17532.6659998,
+                "started": 17532.666008,
+                "finished": 17561.5678975,
+                "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-final-four-batch-two\\obsidian-linter-auto-table-of-contents\\runs\\run-412dd863c01344148fe1652c47d2338b\\executions\\loc-0-repair-3"
+              },
+              {
+                "kind": "scoring",
+                "started": 17561.9541926,
+                "finished": 17599.5715627
+              }
+            ],
+            "docker_queue_wait_seconds": 4.030000127386302e-05,
+            "completed_model_responses": 8
+          },
+          "baseline_counts": {
+            "passed": 1131
+          },
+          "candidate_attempts": [
+            {
+              "candidate_id": "loc-0-repair-0",
+              "sample_index": 0,
+              "status": "validated",
+              "message": "",
+              "localization_rank": 0,
+              "changed_files": [
+                "src/lang/locale/en.ts",
+                "src/rules/auto-toc.ts"
+              ]
+            },
+            {
+              "candidate_id": "loc-0-repair-1",
+              "sample_index": 1,
+              "status": "validated",
+              "message": "",
+              "localization_rank": 0,
+              "changed_files": [
+                "src/lang/locale/en.ts",
+                "src/rules/auto-toc.ts"
+              ]
+            },
+            {
+              "candidate_id": "loc-0-repair-2",
+              "sample_index": 2,
+              "status": "validated",
+              "message": "",
+              "localization_rank": 0,
+              "changed_files": [
+                "__tests__/rules/auto-toc.test.ts",
+                "src/lang/locale/en.ts",
+                "src/rules/auto-toc.ts"
+              ]
+            },
+            {
+              "candidate_id": "loc-0-repair-3",
+              "sample_index": 3,
+              "status": "validated",
+              "message": "",
+              "localization_rank": 0,
+              "changed_files": [
+                "__tests__/rules/auto-toc.test.ts",
+                "src/lang/locale/en.ts",
+                "src/rules/auto-toc.ts"
+              ]
+            }
+          ],
+          "selection": {
+            "reason": "best_regression_then_normalized_majority",
+            "vote_count": 1,
+            "considered_candidate_ids": [
+              "loc-0-repair-0",
+              "loc-0-repair-1",
+              "loc-0-repair-2",
+              "loc-0-repair-3"
+            ],
+            "selected_candidate_id": "loc-0-repair-0"
+          }
+        }
+      ]
+    }
+  ],
+  "pilot_distinct_tasks": 20,
+  "pilot_resolved": 5
+}
