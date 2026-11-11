@@ -90,6 +90,16 @@ workflow or benchmark rule was changed, and no rerun was performed.
 
 [Prompt checks, exact diff and pre-repair exclusion evidence](vulture_xhigh_2026-11-09/failure-analysis.json).
 
-Next, retain this result and use another fresh task for the next authorized model
-attempt. Any benchmark-contract correction should be discussed separately rather
-than applied to this completed prediction.
+## Reference patch check on 11 November 2026
+
+The pinned DeepSWE reference patch passed `test_config_merging` in the same
+verifier and image used for the Agentless prediction. The native report records
+the named check as passed. The reference passed all 24 issue checks and all
+295 regression checks, earning a reward of 1. This confirms that the cache
+feature and the existing configuration check can both pass under this verifier.
+
+The Agentless prediction remains unresolved with 24/24 issue checks and
+294/295 regression checks. Keep the pinned benchmark for this comparison.
+
+Reference patch SHA-256: `77c66982cfd975463308c104d07eef99543c5868337ca193ff556e2c15ecc940`.
+Local verifier evidence: `artifacts/vulture-reference-2026-11-11/vulture-persistent-analysis-cache/agentless-ml-verifier-ca0c9551fe5f4db096e9daffa1fdb380`.
