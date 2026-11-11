@@ -1,0 +1,112 @@
+{
+  "result": {
+    "task_id": "dynamodb-toolbox-conditional-attribute-requirements",
+    "status": "failed",
+    "model_calls": 0,
+    "error_type": "WorkflowError",
+    "message": "no repair response produced a patch candidate",
+    "budget": {
+      "time_limit_seconds": 7200,
+      "token_limit": 2000000,
+      "used_tokens": 44998,
+      "token_overshoot": 0,
+      "token_accounting": "once_only_context",
+      "content_tokenizer": "o200k_base",
+      "processed_input_tokens": 46476,
+      "processed_output_tokens": 32632,
+      "processed_tokens": 79108,
+      "remaining_seconds": 6685.4939883
+    },
+    "docker_events": [
+      {
+        "kind": "public_validation",
+        "queued": 4006.7684086,
+        "started": 4006.7684188,
+        "finished": 4077.8882512,
+        "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-dynamodb-toolbox-xhigh-2026-11-11\\dynamodb-toolbox-conditional-attribute-requirements\\runs\\run-d3c5d24df6b44135997693d1f380e899\\regression-baseline\\0"
+      }
+    ],
+    "docker_queue_wait_seconds": 1.0199999906035373e-05,
+    "completed_model_responses": 8
+  },
+  "baseline_counts": {
+    "passed": 1267
+  },
+  "verified_response_count": 8,
+  "prediction_exported": false,
+  "verifier_score": null,
+  "attempts": [
+    {
+      "candidate_id": "loc-0-repair-0",
+      "sample_index": 0,
+      "status": "repair_error",
+      "message": "missing SEARCH/REPLACE edit",
+      "candidate": null,
+      "localization_rank": 0
+    },
+    {
+      "candidate_id": "loc-0-repair-1",
+      "sample_index": 1,
+      "status": "repair_error",
+      "message": "missing SEARCH/REPLACE edit",
+      "candidate": null,
+      "localization_rank": 0
+    },
+    {
+      "candidate_id": "loc-0-repair-2",
+      "sample_index": 2,
+      "status": "repair_error",
+      "message": "missing SEARCH/REPLACE edit",
+      "candidate": null,
+      "localization_rank": 0
+    },
+    {
+      "candidate_id": "loc-0-repair-3",
+      "sample_index": 3,
+      "status": "repair_error",
+      "message": "missing SEARCH/REPLACE edit",
+      "candidate": null,
+      "localization_rank": 0
+    }
+  ],
+  "repair_responses": [
+    {
+      "call": 5,
+      "characters": 2391,
+      "sha256": "9f440b00d1b0e27a6455044b42d204f5b662b56345fe193096718b52de899752"
+    },
+    {
+      "call": 6,
+      "characters": 2526,
+      "sha256": "fa2c04ef4a0642ce4ea87bb324c7cf733311eb2964e41c4a9b97912d938f8497"
+    },
+    {
+      "call": 7,
+      "characters": 2003,
+      "sha256": "68049276fff66d177e9b31d98c92effedee8fe425ba10b055e73ed83671740ca"
+    },
+    {
+      "call": 8,
+      "characters": 1893,
+      "sha256": "3eb31f708a0f50efdda7e719adaa57d714e97afd058fd911b8ff61b25876de81"
+    }
+  ],
+  "file_selection": "```\nsrc/schema/types/schemaProps.ts\nsrc/schema/actions/parse/item.ts\nsrc/schema/actions/parse/map.ts\nsrc/entity/actions/update/updateItemParams/updateItemParams.ts\nsrc/entity/actions/updateAttributes/updateAttributesParams/updateAttributesParams.ts\n```",
+  "task_choice": {
+    "seed": "agentless-fresh-xhigh-2026-11-09:",
+    "ranked_entry": [
+      "4eab94d99f3b8eaa8d7dc05d3d288f62edaf86152739042143b1c2e7f8a20774",
+      "dynamodb-toolbox-conditional-attribute-requirements",
+      "typescript",
+      58.46198949999234,
+      {
+        "passed": 1267
+      }
+    ],
+    "prior_completed_tasks": [
+      "geo-shapeindex-serialization",
+      "ts-pattern-match-each",
+      "vulture-persistent-analysis-cache"
+    ]
+  }
+}
