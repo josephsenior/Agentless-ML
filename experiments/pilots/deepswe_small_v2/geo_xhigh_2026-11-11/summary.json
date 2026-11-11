@@ -1,0 +1,152 @@
+{
+  "result": {
+    "task_id": "geo-shapeindex-serialization",
+    "status": "scored",
+    "model_calls": 8,
+    "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-geo-xhigh-2026-11-11\\geo-shapeindex-serialization\\runs\\run-97303339f1d449f8a5fcfe2458dc202d",
+    "score": {
+      "task_id": "geo-shapeindex-serialization",
+      "status": "unresolved",
+      "reward": 0,
+      "f2p_passed": 0,
+      "f2p_total": 24,
+      "p2p_passed": 532,
+      "p2p_total": 599,
+      "image_id": "sha256:4600e819ba93437df00f1d1ddb07597818bf53e0a3153bd689093e946ccb52d7",
+      "patch_sha256": "2b1d587242a6e9109f920dbf1a96261ceebf868c310065c093987be617c4495e",
+      "dataset_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+      "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-geo-xhigh-2026-11-11\\geo-shapeindex-serialization\\score\\geo-shapeindex-serialization\\agentless-ml-verifier-9d4f96564e35403e96a3522d9dac46a5",
+      "message": "",
+      "verifier_exit_code": 0
+    },
+    "budget": {
+      "time_limit_seconds": 7200,
+      "token_limit": 2000000,
+      "used_tokens": 62685,
+      "token_overshoot": 0,
+      "token_accounting": "once_only_context",
+      "content_tokenizer": "o200k_base",
+      "processed_input_tokens": 34860,
+      "processed_output_tokens": 98108,
+      "processed_tokens": 132968,
+      "remaining_seconds": 6036.59839
+    },
+    "docker_events": [
+      {
+        "kind": "public_validation",
+        "queued": 1431.4974573,
+        "started": 1431.4974672,
+        "finished": 1459.5764734,
+        "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-geo-xhigh-2026-11-11\\geo-shapeindex-serialization\\runs\\run-97303339f1d449f8a5fcfe2458dc202d\\regression-baseline\\0"
+      },
+      {
+        "kind": "public_validation",
+        "queued": 2528.9124291,
+        "started": 2528.9124366,
+        "finished": 2544.5086969,
+        "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-geo-xhigh-2026-11-11\\geo-shapeindex-serialization\\runs\\run-97303339f1d449f8a5fcfe2458dc202d\\executions\\loc-0-repair-0"
+      },
+      {
+        "kind": "public_validation",
+        "queued": 2545.5752357,
+        "started": 2545.5752428,
+        "finished": 2559.8439081,
+        "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-geo-xhigh-2026-11-11\\geo-shapeindex-serialization\\runs\\run-97303339f1d449f8a5fcfe2458dc202d\\executions\\loc-0-repair-1"
+      },
+      {
+        "kind": "public_validation",
+        "queued": 2560.9216887,
+        "started": 2560.9216947,
+        "finished": 2583.6537712,
+        "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-geo-xhigh-2026-11-11\\geo-shapeindex-serialization\\runs\\run-97303339f1d449f8a5fcfe2458dc202d\\executions\\loc-0-repair-2"
+      },
+      {
+        "kind": "public_validation",
+        "queued": 2584.6459562,
+        "started": 2584.6459649,
+        "finished": 2599.3839049,
+        "artifact_root": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-geo-xhigh-2026-11-11\\geo-shapeindex-serialization\\runs\\run-97303339f1d449f8a5fcfe2458dc202d\\executions\\loc-0-repair-3"
+      },
+      {
+        "kind": "scoring",
+        "started": 2599.5720225,
+        "finished": 2623.1062124
+      }
+    ],
+    "docker_queue_wait_seconds": 3.92000004012516e-05,
+    "completed_model_responses": 8
+  },
+  "run": {
+    "run_id": "run-97303339f1d449f8a5fcfe2458dc202d",
+    "condition": "agentless-ml-live",
+    "instance_id": "geo-shapeindex-serialization",
+    "started_at": "2026-11-11T12:44:37.801193+00:00",
+    "implementation_revision": "62f6fa7175f6a62ae593211a0b41c67f2f54107d+dirty",
+    "benchmark_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "harness_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "container_digest": "sha256:4600e819ba93437df00f1d1ddb07597818bf53e0a3153bd689093e946ccb52d7",
+    "model_name": "chatgpt-plan/gpt-6.1-sol",
+    "model_calls": 8,
+    "input_tokens": 34860,
+    "output_tokens": 98108,
+    "wall_time_seconds": 1168.4933866,
+    "final_patch_sha256": "2b1d587242a6e9109f920dbf1a96261ceebf868c310065c093987be617c4495e",
+    "infrastructure_status": "ok"
+  },
+  "selection": {
+    "reason": "best_regression_then_normalized_majority",
+    "vote_count": 1,
+    "considered_candidate_ids": [
+      "loc-0-repair-2"
+    ],
+    "selected_candidate_id": "loc-0-repair-2"
+  },
+  "attempts": [
+    {
+      "candidate_id": "loc-0-repair-0",
+      "sample_index": 0,
+      "status": "validated",
+      "message": "",
+      "localization_rank": 0
+    },
+    {
+      "candidate_id": "loc-0-repair-1",
+      "sample_index": 1,
+      "status": "validated",
+      "message": "",
+      "localization_rank": 0
+    },
+    {
+      "candidate_id": "loc-0-repair-2",
+      "sample_index": 2,
+      "status": "validated",
+      "message": "",
+      "localization_rank": 0
+    },
+    {
+      "candidate_id": "loc-0-repair-3",
+      "sample_index": 3,
+      "status": "validated",
+      "message": "",
+      "localization_rank": 0
+    }
+  ],
+  "baseline_counts": {
+    "passed": 600
+  },
+  "elapsed_seconds": 1191.6087551,
+  "failed_checks_missing_from_report": 89,
+  "task_choice": {
+    "seed": "agentless-fresh-xhigh-2026-11-09:",
+    "ranked_entry": [
+      "4070e4353c52505440593082108d16c264f35cff14c4b0433ea88a6b7294e341",
+      "geo-shapeindex-serialization",
+      "go",
+      29.1328710999951,
+      {
+        "passed": 600
+      }
+    ],
+    "prior_completed_task": "vulture-persistent-analysis-cache"
+  }
+}
