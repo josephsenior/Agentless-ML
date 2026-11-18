@@ -1,0 +1,56 @@
+{
+  "date": "2026-11-18",
+  "provider": "chatgpt-plan",
+  "model": "gpt-6.2-sol",
+  "reasoning": "xhigh",
+  "task_concurrency": 3,
+  "repair_samples_per_task": 4,
+  "edit_samples_per_task": 1,
+  "maximum_files": 10,
+  "retain_declarations": true,
+  "token_limit_per_task": 2000000,
+  "time_limit_seconds_per_task": 7200,
+  "dataset_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+  "tasks": [
+    {
+      "task_id": "etree-xml-diff-patch",
+      "status": "resolved",
+      "f2p_passed": 52,
+      "f2p_total": 52,
+      "p2p_passed": 15,
+      "p2p_total": 15,
+      "used_context_tokens": 86934,
+      "completed_model_responses": 8,
+      "image_id": "sha256:e057fb0080708ee7a527b9c2d1d55351f602126d35eecb595d506b1aa52581d3",
+      "patch_sha256": "9eba18e2f0ffea7e21ec1e9a0133a6ad65e507e51e39e617098923076f7abd9c",
+      "gpt61_previous": { "status": "resolved", "f2p_passed": 52, "f2p_total": 52, "p2p_passed": 15, "p2p_total": 15, "used_context_tokens": 90090 }
+    },
+    {
+      "task_id": "mobly-grouped-test-barriers",
+      "status": "unresolved",
+      "f2p_passed": 36,
+      "f2p_total": 79,
+      "p2p_passed": 808,
+      "p2p_total": 808,
+      "used_context_tokens": 79510,
+      "completed_model_responses": 8,
+      "image_id": "sha256:e7f48723e4bf9244cbe5206fdcb204456383c31f43c5a16da98efadda057998f",
+      "patch_sha256": "37518710fd5cde77c53b5eb453eb37588a07f65be4affcc2c9045badecf8c3ae",
+      "gpt61_previous": { "status": "resolved", "f2p_passed": 79, "f2p_total": 79, "p2p_passed": 808, "p2p_total": 808, "used_context_tokens": 56187 }
+    },
+    {
+      "task_id": "obsidian-linter-scoped-ignore-markers",
+      "status": "unresolved",
+      "f2p_passed": 33,
+      "f2p_total": 33,
+      "p2p_passed": 1131,
+      "p2p_total": 1133,
+      "used_context_tokens": 106684,
+      "completed_model_responses": 8,
+      "image_id": "sha256:5522ad4d38ef3cd0163dfd1f584dcafd197b914ddf56816d0a88941067657d67",
+      "patch_sha256": "d616a7d5b6c17e77ed1b39d2bad78fdf934dd0fb6959c10b9f16b2521a77fb18",
+      "gpt61_previous": { "status": "resolved", "f2p_passed": 33, "f2p_total": 33, "p2p_passed": 1133, "p2p_total": 1133, "used_context_tokens": 87143 }
+    }
+  ],
+  "full_artifacts": "artifacts/agentless-three-remain-sol62-2026-11-18/"
+}
