@@ -1,0 +1,141 @@
+{
+  "model": "gpt-6.2-sol",
+  "reasoning": "xhigh",
+  "provider": "chatgpt-plan",
+  "configuration": {
+    "task_concurrency": 2,
+    "repair_samples": 4,
+    "maximum_files": 10,
+    "retain_declarations": true,
+    "once_only_content_tokens_per_task": 2000000,
+    "time_limit_seconds_per_task": 7200
+  },
+  "local_artifacts": "artifacts/agentless-vulture-koota-pair-sol62-2026-11-18",
+  "interpretation": "Compared with earlier GPT-6.1 runs using different file-selection settings.",
+  "tasks": [
+    {
+      "task_id": "vulture-persistent-analysis-cache",
+      "prior_record": "experiments/pilots/deepswe_small_v2/vulture_xhigh_2026-11-09/result.json",
+      "prior_gpt_6_1_run": {
+        "status": "scored",
+        "processed_tokens": 118387,
+        "score": {
+          "status": "unresolved",
+          "reward": 0,
+          "f2p_passed": 24,
+          "f2p_total": 24,
+          "p2p_passed": 294,
+          "p2p_total": 295,
+          "image_id": "sha256:8834e8bc72c3e99dc09f4ccf205083d02678442feca66b45aea2708c43a2394b",
+          "patch_sha256": "edd93f71bf139ceea2456d7b9b99df2d525a5f1028669401cedc292eef3d9da0"
+        }
+      },
+      "current": {
+        "status": "scored",
+        "score": {
+          "status": "unresolved",
+          "reward": 0,
+          "f2p_passed": 24,
+          "f2p_total": 24,
+          "p2p_passed": 290,
+          "p2p_total": 295,
+          "image_id": "sha256:8834e8bc72c3e99dc09f4ccf205083d02678442feca66b45aea2708c43a2394b",
+          "patch_sha256": "ab37ddb8c3fb7343ef7e8db928d8028691ce2124cf103b0c12d96526c22641fe"
+        },
+        "model_calls": 8,
+        "budget": {
+          "time_limit_seconds": 7200,
+          "token_limit": 2000000,
+          "used_tokens": 44600,
+          "token_overshoot": 0,
+          "token_accounting": "once_only_context",
+          "content_tokenizer": "o200k_base",
+          "processed_input_tokens": 26863,
+          "processed_output_tokens": 65013,
+          "processed_tokens": 91876,
+          "remaining_seconds": 6632.185528499991
+        },
+        "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-vulture-koota-pair-sol62-2026-11-18\\vulture-persistent-analysis-cache\\runs\\run-829b5b27397a4503928d2b327b7d0c09"
+      },
+      "candidate_attempts": [
+        {
+          "candidate_id": "loc-0-repair-0",
+          "status": "validated",
+          "message": ""
+        },
+        {
+          "candidate_id": "loc-0-repair-1",
+          "status": "validated",
+          "message": ""
+        },
+        {
+          "candidate_id": "loc-0-repair-2",
+          "status": "validated",
+          "message": ""
+        },
+        {
+          "candidate_id": "loc-0-repair-3",
+          "status": "validated",
+          "message": ""
+        }
+      ]
+    },
+    {
+      "task_id": "koota-pair-relation-tracking",
+      "prior_record": "artifacts/agentless-koota-pair-files-10-2026-11-11/koota-pair-relation-tracking/result.json",
+      "prior_gpt_6_1_run": {
+        "status": "failed",
+        "processed_tokens": 105066
+      },
+      "current": {
+        "status": "scored",
+        "score": {
+          "status": "unresolved",
+          "reward": 0,
+          "f2p_passed": 34,
+          "f2p_total": 38,
+          "p2p_passed": 172,
+          "p2p_total": 172,
+          "image_id": "sha256:7a3afca50b7b8a2181ec2706f235ea85eebaa731500e9137c434a4190567ac27",
+          "patch_sha256": "e1d5ecaf626fb02aaa326b9e8182c17fc0d1a5c640eab15b87b8ca4482916e00"
+        },
+        "model_calls": 8,
+        "budget": {
+          "time_limit_seconds": 7200,
+          "token_limit": 2000000,
+          "used_tokens": 100590,
+          "token_overshoot": 0,
+          "token_accounting": "once_only_context",
+          "content_tokenizer": "o200k_base",
+          "processed_input_tokens": 78173,
+          "processed_output_tokens": 108680,
+          "processed_tokens": 186853,
+          "remaining_seconds": 6293.28374649999
+        },
+        "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-vulture-koota-pair-sol62-2026-11-18\\koota-pair-relation-tracking\\runs\\run-a643ac025972497fb535d8d68749a18d"
+      },
+      "candidate_attempts": [
+        {
+          "candidate_id": "loc-0-repair-0",
+          "status": "validated",
+          "message": ""
+        },
+        {
+          "candidate_id": "loc-0-repair-1",
+          "status": "validated",
+          "message": ""
+        },
+        {
+          "candidate_id": "loc-0-repair-2",
+          "status": "validated",
+          "message": ""
+        },
+        {
+          "candidate_id": "loc-0-repair-3",
+          "status": "repair_error",
+          "message": "SEARCH content is outside authorized intervals in packages/core/src/query/query.ts"
+        }
+      ]
+    }
+  ]
+}
