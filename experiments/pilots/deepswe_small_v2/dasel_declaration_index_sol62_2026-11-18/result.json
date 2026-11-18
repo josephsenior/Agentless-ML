@@ -1,0 +1,192 @@
+{
+  "task_id": "dasel-html-document-format",
+  "configuration": {
+    "task_ids": [
+      "dasel-html-document-format"
+    ],
+    "model": "gpt-6.2-sol",
+    "reasoning": "xhigh",
+    "revision": "1c51cfc19e8a5bf92ee72acae10329da3d1f80a3+dirty",
+    "task_concurrency": 1,
+    "repair_concurrency_per_task": 4,
+    "repair_samples": 4,
+    "edit_samples": 1,
+    "maximum_files": 10,
+    "retain_declarations": true,
+    "docker_concurrency": 1,
+    "once_only_content_tokens_per_task": 2000000,
+    "time_limit_seconds_per_task": 7200,
+    "queue_policy": "Docker queue waiting counts toward the task deadline except initial baseline preparation. Scoring occurs after export.",
+    "scope": "Agentless-only development batch"
+  },
+  "raw_artifacts": "artifacts/agentless-dasel-declaration-index-sol62-2026-11-18",
+  "run_id": "run-5324c8faf3984486ad5d8e946b2ceeda",
+  "index": {
+    "policy": "declaration-index-v1",
+    "base_commit": "0dd6132e0c58edbd9b1a5f7ffd00dfab1e6085ad",
+    "base_tree": "b5cd4e3faf543810e600280f78ea3861def16e7d",
+    "files": 116,
+    "declarations": 639,
+    "index_sha256": "f5042ad2ef5aabf89a1c38dd0447c7319455d04fe6564e5aa9d6d8129feab564",
+    "token_encoding": "o200k_base",
+    "index_tokens": 7801,
+    "file_prompt_tokens": 8837,
+    "diagnostics": [],
+    "dependency_map": false,
+    "truncated": false
+  },
+  "comparison": {
+    "prior_record": "experiments/pilots/deepswe_small_v2/dasel_xhigh_2026-11-09/result.json",
+    "prior_record_sha256": "f84bc028cf843ea2934c4af8a2587e2953025b51e5a642ab058b1fa724af92e7",
+    "prior_score": {
+      "task_id": "dasel-html-document-format",
+      "status": "unresolved",
+      "reward": 0,
+      "f2p_passed": 0,
+      "f2p_total": 146,
+      "p2p_passed": 406,
+      "p2p_total": 1012,
+      "image_id": "sha256:0529d5659b2d11ee76e3ba13a877043b3e43bcf123f36a840f9cf5b5ade09b78",
+      "patch_sha256": "dab6a181cd2567a4488c76a9110c7482d98149fa384339f171fc6c2ccf508b34",
+      "dataset_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+      "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-dasel-xhigh-2026-11-09\\dasel-html-document-format\\score\\dasel-html-document-format\\agentless-ml-verifier-843f63dc0b8d4c74b5372ef937e741d9",
+      "message": "",
+      "verifier_exit_code": 0
+    },
+    "prior_processed_tokens": 89201,
+    "prior_wall_time_seconds": 695.7099664999987,
+    "same_prompts_by_stage": {
+      "regression-selection": false,
+      "file-localization": false,
+      "symbol-localization": false,
+      "edit-localization": false,
+      "repair": false
+    },
+    "current_source_hashes": {
+      "src/agentless_ml/workflow/fixed.py": "f7f47d9aff7a2f34be3fcf3a36b7a6d18402c9732d6bff99d8e5d8f9298850c9",
+      "src/agentless_ml/localization/source_index.py": "57d31b4dc5f3b2a88bc1ebbbc8c33d1cecb08ea5ae8b7b576cb82dbd46f3f9de",
+      "src/agentless_ml/workflow/subscription.py": "74c35c271d3795ca47433b9e3f4ff99e188219969e1a7a5e9b23898379570f97"
+    },
+    "prior_configuration": {
+      "task_ids": [
+        "dasel-html-document-format"
+      ],
+      "model": "gpt-6.1-sol",
+      "reasoning": "xhigh",
+      "revision": "a384060a4942f3c8b2aa53e47084a509e6038360+dirty",
+      "task_concurrency": 1,
+      "repair_concurrency_per_task": 4,
+      "repair_samples": 4,
+      "edit_samples": 1,
+      "docker_concurrency": 1,
+      "once_only_content_tokens_per_task": 2000000,
+      "time_limit_seconds_per_task": 7200,
+      "queue_policy": "Docker queue waiting counts toward the task deadline except initial baseline preparation. Scoring occurs after export.",
+      "scope": "Agentless-only development batch"
+    },
+    "limitation": "Repeat changes model and localization/context defaults. It does not isolate a model effect."
+  },
+  "public_baseline": {
+    "passed": 1012
+  },
+  "public_tests_counted": 1012,
+  "model_calls": [
+    {
+      "number": 1,
+      "stage": "regression-selection",
+      "completed": true,
+      "input_tokens": 23197,
+      "output_tokens": 72,
+      "model": "gpt-6.2-sol",
+      "response_sha256": "39f14fc13a9bfc1c240bec8cceef45e6b3ebdc8b7e7ea2b834134d1b0128c862"
+    },
+    {
+      "number": 2,
+      "stage": "file-localization",
+      "completed": true,
+      "input_tokens": 8843,
+      "output_tokens": 1015,
+      "model": "gpt-6.2-sol",
+      "response_sha256": "970699cbe8532784039e005ebcea2ab8594df4c3ccd39544a3dc04b69e37e6f8"
+    },
+    {
+      "number": 3,
+      "stage": "symbol-localization",
+      "completed": true,
+      "input_tokens": 622,
+      "output_tokens": 295,
+      "model": "gpt-6.2-sol",
+      "response_sha256": "24477135c30136d0336c7e30d9e5c9ef06d3ba20ee995e1dac769a411e3a5849"
+    },
+    {
+      "number": 4,
+      "stage": "edit-localization",
+      "completed": true,
+      "input_tokens": 620,
+      "output_tokens": 157,
+      "model": "gpt-6.2-sol",
+      "response_sha256": "9957d4989473ef8a8a653513ac469e4fc9f12b602cc00fd22a107c7f3076a837"
+    },
+    {
+      "number": 5,
+      "stage": "repair",
+      "completed": true,
+      "input_tokens": 954,
+      "output_tokens": 6528,
+      "model": "gpt-6.2-sol",
+      "response_sha256": "0b1c06c6f6ddf536cdeb18fb494b3f7e0fcfeb4e1af7c6bb0c293fd7e7b40a8f"
+    },
+    {
+      "number": 6,
+      "stage": "repair",
+      "completed": true,
+      "input_tokens": 954,
+      "output_tokens": 1496,
+      "model": "gpt-6.2-sol",
+      "response_sha256": "f0a2c63c9f0c2f8dc4545b7bfb732e7789a9df37af98b0bc5c2eba4e7503dc0d"
+    },
+    {
+      "number": 7,
+      "stage": "repair",
+      "completed": false,
+      "error": {
+        "type": "RuntimeError",
+        "message": "Subscription response failed; check Grinta sign-in and plan allowance"
+      }
+    },
+    {
+      "number": 8,
+      "stage": "repair",
+      "completed": false,
+      "error": {
+        "type": "RuntimeError",
+        "message": "Subscription response failed; check Grinta sign-in and plan allowance"
+      }
+    }
+  ],
+  "candidate_validation": [],
+  "status": "failed",
+  "budget": {
+    "time_limit_seconds": 7200,
+    "token_limit": 2000000,
+    "used_tokens": 36260,
+    "token_overshoot": 0,
+    "token_accounting": "once_only_context",
+    "content_tokenizer": "o200k_base",
+    "processed_input_tokens": 35190,
+    "processed_output_tokens": 9563,
+    "processed_tokens": 44753,
+    "remaining_seconds": 6883.134810199997
+  },
+  "score": null,
+  "error_type": "RuntimeError",
+  "message": "Subscription response failed; check Grinta sign-in and plan allowance",
+  "candidate_validation_started": false,
+  "prediction_exported": false,
+  "selection_observation": "Only cmd/dasel/main.go selected. Both completed repair responses proposed importing parsing/html and requested additional parser context if the package did not exist.",
+  "missing_provider_usage": "Two repair requests did not return completed usage.",
+  "selected_files": [
+    "cmd/dasel/main.go"
+  ],
+  "html_package_exists_at_base": false
+}
