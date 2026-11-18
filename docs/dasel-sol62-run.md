@@ -1,5 +1,25 @@
 # Dasel with GPT-6.2 Sol at xhigh
 
+## Completed repeat
+
+The second GPT-6.2 Sol attempt completed with **0/146 issue checks** and
+**1,012/1,012 verifier regression checks**. It used 58,608 processed tokens
+and took 10m 3s before scoring. All eight model requests completed.
+
+File localization again selected only `cmd/dasel/main.go`. Three repair
+samples added a CLI import for the missing `parsing/html` package. The fourth
+also added an implementation, but it called `daseljson.Read` and
+`daseljson.Write`, which do not exist in the pinned API. All four public test
+commands exited with a build error. Each still reported passes for all 1,012
+tracked test IDs from packages that could run. Selection tied the candidates
+on those IDs and picked the import-only patch with three normalized votes.
+The verifier scored that patch. The fourth candidate received no verifier score.
+
+[Completed run record](../experiments/pilots/deepswe_small_v2/dasel_declaration_index_sol62_retry_2026-11-18/result.json) ·
+[Selected patch](../experiments/pilots/deepswe_small_v2/dasel_declaration_index_sol62_retry_2026-11-18/selected.patch)
+
+## First attempt, interrupted during repair
+
 The Dasel HTML-format rerun stopped before candidate validation. Two of four
 repair requests returned the provider adapter's generic subscription error.
 The retained error does not identify the underlying cause. The other two
