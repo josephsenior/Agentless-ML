@@ -1,0 +1,377 @@
+{
+  "task_id": "awilix-async-container-initialization",
+  "configuration": {
+    "task_ids": [
+      "awilix-async-container-initialization"
+    ],
+    "model": "gpt-6.2-sol",
+    "reasoning": "xhigh",
+    "revision": "2341d31de9de1a09cf988ef5b8a8347b46268b65+dirty",
+    "task_concurrency": 1,
+    "repair_concurrency_per_task": 4,
+    "repair_samples": 4,
+    "edit_samples": 1,
+    "maximum_files": 10,
+    "retain_declarations": true,
+    "docker_concurrency": 1,
+    "once_only_content_tokens_per_task": 2000000,
+    "time_limit_seconds_per_task": 7200,
+    "queue_policy": "Docker queue waiting counts toward the task deadline except initial baseline preparation. Scoring occurs after export.",
+    "scope": "Agentless-only development batch"
+  },
+  "raw_artifacts": "artifacts/agentless-awilix-declaration-index-sol62-2026-11-18",
+  "run_id": "run-8829b0597a634c48b3b7b6e1d75512e1",
+  "index": {
+    "policy": "declaration-index-v1",
+    "base_commit": "82ac179c1de4c216c4e333093044fac643303f0c",
+    "base_tree": "c0dec04b08ec9dbd53a2a15ca493f0fda9b89b2e",
+    "files": 28,
+    "declarations": 224,
+    "index_sha256": "baa672241fa0e37126ff1d219469f0e74bf547ce2911d3d75ca396b89e2c7f70",
+    "token_encoding": "o200k_base",
+    "index_tokens": 2678,
+    "file_prompt_tokens": 3375,
+    "diagnostics": [],
+    "dependency_map": false,
+    "truncated": false
+  },
+  "comparison": {
+    "prior_record": "experiments/pilots/deepswe_small_v2/awilix_declaration_index_2026-11-18/result.json",
+    "prior_record_sha256": "25218fd9da711a6ccfe163f52bbd7cbed13e92bf3df0180af121487b73c447d8",
+    "prior_score": {
+      "task_id": "awilix-async-container-initialization",
+      "status": "unresolved",
+      "reward": 0,
+      "f2p_passed": 23,
+      "f2p_total": 24,
+      "p2p_passed": 162,
+      "p2p_total": 162,
+      "image_id": "sha256:748294a8ece567691f0a628d03c3531024d9f5e1acd13d5c6dd1ecba490831e6",
+      "patch_sha256": "0b39b225b2311fecde31802e1d410c0244d0a3a81c497a4d4d1af9c8954ce9c1",
+      "dataset_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+      "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-awilix-declaration-index-2026-11-18\\awilix-async-container-initialization\\score\\awilix-async-container-initialization\\agentless-ml-verifier-d4afde6fe392494cbc8f1aa67ba79c62",
+      "message": "",
+      "verifier_exit_code": 0
+    },
+    "prior_processed_tokens": 125520,
+    "prior_wall_time_seconds": 774.8206714999978,
+    "same_prompts_by_stage": {
+      "regression-selection": true,
+      "file-localization": true,
+      "symbol-localization": true,
+      "edit-localization": false,
+      "repair": false
+    },
+    "matched_source_hashes": {
+      "src/agentless_ml/workflow/fixed.py": "f7f47d9aff7a2f34be3fcf3a36b7a6d18402c9732d6bff99d8e5d8f9298850c9",
+      "src/agentless_ml/localization/source_index.py": "57d31b4dc5f3b2a88bc1ebbbc8c33d1cecb08ea5ae8b7b576cb82dbd46f3f9de",
+      "src/agentless_ml/workflow/subscription.py": "74c35c271d3795ca47433b9e3f4ff99e188219969e1a7a5e9b23898379570f97"
+    }
+  },
+  "public_baseline": {
+    "passed": 158
+  },
+  "public_tests_counted": 158,
+  "model_calls": [
+    {
+      "number": 1,
+      "stage": "regression-selection",
+      "completed": true,
+      "input_tokens": 3782,
+      "output_tokens": 106,
+      "model": "gpt-6.2-sol",
+      "response_sha256": "7251d14009922046604b9ce525d76b7559ebe9fc9f18c36b0a9892d886fd28d6"
+    },
+    {
+      "number": 2,
+      "stage": "file-localization",
+      "completed": true,
+      "input_tokens": 3381,
+      "output_tokens": 73,
+      "model": "gpt-6.2-sol",
+      "response_sha256": "34b9b62b7de5580d62ec4f5858340fcf478986c48ba068f564d78edc94a50c9b"
+    },
+    {
+      "number": 3,
+      "stage": "symbol-localization",
+      "completed": true,
+      "input_tokens": 4894,
+      "output_tokens": 2094,
+      "model": "gpt-6.2-sol",
+      "response_sha256": "f187ea92e3b8292c16296f1d1244c55671321dec6d64bdd261835b1993fa8c33"
+    },
+    {
+      "number": 4,
+      "stage": "edit-localization",
+      "completed": true,
+      "input_tokens": 10319,
+      "output_tokens": 1502,
+      "model": "gpt-6.2-sol",
+      "response_sha256": "46f40fbf1661ca68d62a825c701d60812d64b826bf691fbdce11fbd5668cb5d7"
+    },
+    {
+      "number": 5,
+      "stage": "repair",
+      "completed": true,
+      "input_tokens": 4479,
+      "output_tokens": 10376,
+      "model": "gpt-6.2-sol",
+      "response_sha256": "995dcab43bb26d36b1c91ec177a485734db4d105d753a336966c8654cafe4c52"
+    },
+    {
+      "number": 6,
+      "stage": "repair",
+      "completed": true,
+      "input_tokens": 4479,
+      "output_tokens": 16487,
+      "model": "gpt-6.2-sol",
+      "response_sha256": "23c73b7b42ebcdc64eb7911bbb6ca36b7bb3409ad751dc6d9a698264e3f57410"
+    },
+    {
+      "number": 7,
+      "stage": "repair",
+      "completed": true,
+      "input_tokens": 4479,
+      "output_tokens": 13211,
+      "model": "gpt-6.2-sol",
+      "response_sha256": "fd5aa2c70def4e1078a51622d84c7991a8b29ddf3478b70f68201912af805313"
+    },
+    {
+      "number": 8,
+      "stage": "repair",
+      "completed": true,
+      "input_tokens": 4479,
+      "output_tokens": 16342,
+      "model": "gpt-6.2-sol",
+      "response_sha256": "66037d9808d68d4ab7d5c53a2f7d3f1c46540ac79a12745a6ea06ca088766552"
+    }
+  ],
+  "candidate_validation": [
+    {
+      "candidate": "loc-0-repair-0",
+      "status": "pass",
+      "counts": {
+        "passed": 158
+      },
+      "nonpassing_counted_ids": []
+    },
+    {
+      "candidate": "loc-0-repair-1",
+      "status": "pass",
+      "counts": {
+        "passed": 158
+      },
+      "nonpassing_counted_ids": []
+    },
+    {
+      "candidate": "loc-0-repair-2",
+      "status": "pass",
+      "counts": {
+        "passed": 158
+      },
+      "nonpassing_counted_ids": []
+    },
+    {
+      "candidate": "loc-0-repair-3",
+      "status": "fail",
+      "counts": {
+        "passed": 49
+      },
+      "nonpassing_counted_ids": [
+        "awilix.test.ts > awilix::awilix exists",
+        "awilix.test.ts > awilix::awilix has a createContainer function",
+        "awilix.test.ts > awilix::awilix has a listModules function",
+        "awilix.test.ts > awilix::awilix has an AwilixResolutionError function",
+        "awilix.test.ts > awilix::awilix has the asValue, asClass, asFunction and aliasTo functions",
+        "container.disposing.test.ts > disposing container::disposing container calls the disposers in the correct order",
+        "container.disposing.test.ts > disposing container::disposing container when the scope is disposed directly, disposes scoped instances but does not dispose the root singletons",
+        "container.test.ts > container > explicitly trying to fuck shit up::container explicitly trying to fuck shit up should default to PROXY injection mode when unknown",
+        "container.test.ts > container > explicitly trying to fuck shit up::container explicitly trying to fuck shit up should prevent you from fucking shit up",
+        "container.test.ts > container > has::container has returns false if the registration does not exist",
+        "container.test.ts > container > has::container has returns true if the registration does exist",
+        "container.test.ts > container > loadModules::container loadModules returns a Promise of the container if used with esModules true",
+        "container.test.ts > container > loadModules::container loadModules returns the container",
+        "container.test.ts > container > register::container register supports classes",
+        "container.test.ts > container > register::container register supports multiple registrations in a single call",
+        "container.test.ts > container > resolve::container resolve behaves properly when the cradle is returned from an async function",
+        "container.test.ts > container > resolve::container resolve caches singletons regardless of scope",
+        "container.test.ts > container > resolve::container resolve cannot find a scope-registered value when resolved from root",
+        "container.test.ts > container > resolve::container resolve does not screw up the resolution stack when called twice",
+        "container.test.ts > container > resolve::container resolve does not use parents cache when scoped",
+        "container.test.ts > container > resolve::container resolve resolves dependencies in scope",
+        "container.test.ts > container > resolve::container resolve resolves the dependency graph and supports all resolvers",
+        "container.test.ts > container > resolve::container resolve resolves transients regardless of scope",
+        "container.test.ts > container > resolve::container resolve supports default parameters in CLASSIC mode",
+        "container.test.ts > container > resolve::container resolve supports nested scopes",
+        "container.test.ts > container > resolve::container resolve supports overwriting values in a scope",
+        "container.test.ts > container > resolve::container resolve supports scoped lifetime",
+        "container.test.ts > container > resolve::container resolve supports singleton lifetime",
+        "container.test.ts > container > resolve::container resolve supports the readme example of scopes",
+        "container.test.ts > container > resolve::container resolve supports transient lifetime",
+        "container.test.ts > container > resolve::container resolve throws an AwilixResolutionError that supports symbols",
+        "container.test.ts > container > resolve::container resolve throws an AwilixResolutionError that supports symbols on multiple levels",
+        "container.test.ts > container > resolve::container resolve throws an AwilixResolutionError when the lifetime is unknown",
+        "container.test.ts > container > resolve::container resolve throws an AwilixResolutionError when there are cyclic dependencies",
+        "container.test.ts > container > resolve::container resolve throws an AwilixResolutionError when there are unregistered dependencies",
+        "container.test.ts > container > resolve::container resolve throws an AwilixResolutionError with a resolution path when resolving an unregistered dependency",
+        "container.test.ts > container > resolving reserved names::container resolving reserved names returns the createContainer function for constructor",
+        "container.test.ts > container > setting a property on the cradle::container setting a property on the cradle should fail",
+        "container.test.ts > container > strict mode > lifetime mismatch check::container strict mode lifetime mismatch check allows aliasTo to be used when strict is set",
+        "container.test.ts > container > strict mode > lifetime mismatch check::container strict mode lifetime mismatch check allows for asValue() to be used when strict is set",
+        "container.test.ts > container > strict mode > lifetime mismatch check::container strict mode lifetime mismatch check allows longer lifetime modules to depend on shorter lifetime dependencies by default",
+        "container.test.ts > container > strict mode > lifetime mismatch check::container strict mode lifetime mismatch check detects when an aliasTo resolution violates lifetime constraints",
+        "container.test.ts > container > strict mode > lifetime mismatch check::container strict mode lifetime mismatch check does not throw an error when an injector proxy is used and strict is set",
+        "container.test.ts > container > strict mode > lifetime mismatch check::container strict mode lifetime mismatch check throws an AwilixResolutionError when longer lifetime modules depend on shorter lifetime dependencies and strict is set",
+        "container.test.ts > container > strict mode > singleton registration on scope check::container strict mode singleton registration on scope check detects and errors when a singleton is registered on a scope",
+        "container.test.ts > container > strict mode > singleton resolution using only root container::container strict mode singleton resolution using only root container preserves the resolution stack when resolving a singleton using a parent container, from a scope",
+        "container.test.ts > container > strict mode > singleton resolution using only root container::container strict mode singleton resolution using only root container resolves singletons using root container only, even if called from scope",
+        "container.test.ts > container > using Array.from on the cradle::container using Array.from on the cradle should return an Array with registration names",
+        "container.test.ts > container > using Array.from on the cradle::container using Array.from on the cradle should return injector keys as well",
+        "container.test.ts > container > using util.inspect on the container::container using util.inspect on the container should return a summary",
+        "container.test.ts > container > using util.inspect on the cradle::container using util.inspect on the cradle should return the preconfigured string",
+        "container.test.ts > container::container lets me register something and resolve it",
+        "container.test.ts > container::container lets me register something and resolve it via classic injection mode",
+        "container.test.ts > createContainer::createContainer returns an object",
+        "container.test.ts > memoizing registrations > build::memoizing registrations build returns resolved value when passed a class",
+        "container.test.ts > memoizing registrations > build::memoizing registrations build returns resolved value when passed a function",
+        "container.test.ts > memoizing registrations > build::memoizing registrations build returns resolved value when passed a resolver",
+        "container.test.ts > memoizing registrations > build::memoizing registrations build throws when the target is falsy",
+        "container.test.ts > memoizing registrations > build::memoizing registrations build uses containers injection mode by default",
+        "container.test.ts > memoizing registrations > well-known names and symbols::memoizing registrations well-known names and symbols JSON.stringify() should return [object AwilixContainerCradle]",
+        "container.test.ts > memoizing registrations > well-known names and symbols::memoizing registrations well-known names and symbols Symbol.toStringTag",
+        "container.test.ts > memoizing registrations > well-known names and symbols::memoizing registrations well-known names and symbols should have toJSON() return [object AwilixContainerCradle]",
+        "container.test.ts > memoizing registrations::memoizing registrations should not cause issues",
+        "container.test.ts > registering and resolving symbols::registering and resolving symbols works",
+        "container.test.ts > setting a name on the registration options::setting a name on the registration options should not work",
+        "container.test.ts > spreading the cradle::spreading the cradle does not throw",
+        "container.test.ts > using Object.getOwnPropertyDescriptor with container cradle::using Object.getOwnPropertyDescriptor with container cradle returns expected values",
+        "container.test.ts > using Object.getOwnPropertyDescriptor with injector proxy::using Object.getOwnPropertyDescriptor with injector proxy returns expected values",
+        "container.test.ts > using Object.keys() on the cradle::using Object.keys() on the cradle should return injector keys",
+        "container.test.ts > using Object.keys() on the cradle::using Object.keys() on the cradle should return the registration keys",
+        "inheritance.test.js::parses parent classes if there are no declared parameters",
+        "integration.test.ts > integration tests::integration tests bootstraps everything so the answer can be resolved",
+        "integration.test.ts > integration tests::integration tests registered all services as scoped",
+        "load-modules.test.ts > loadModules > inline config via REGISTRATION symbol::loadModules inline config via REGISTRATION symbol allows setting a name to register as",
+        "load-modules.test.ts > loadModules > inline config via REGISTRATION symbol::loadModules inline config via REGISTRATION symbol uses the inline config over anything else",
+        "load-modules.test.ts > loadModules::loadModules defaults to transient lifetime if option is unreadable",
+        "load-modules.test.ts > loadModules::loadModules does not register non-default modules without a RESOLVER token",
+        "load-modules.test.ts > loadModules::loadModules does nothing with the name if the string formatName does not match a formatter",
+        "load-modules.test.ts > loadModules::loadModules registers loaded modules async when using native modules",
+        "load-modules.test.ts > loadModules::loadModules registers loaded modules with the container using the name of the file",
+        "load-modules.test.ts > loadModules::loadModules registers multiple loaded modules from one file with the container",
+        "load-modules.test.ts > loadModules::loadModules registers non-default export modules containing RESOLVER token with the container",
+        "load-modules.test.ts > loadModules::loadModules registers only the last module with a certain name with the container",
+        "load-modules.test.ts > loadModules::loadModules supports array opts syntax with object",
+        "load-modules.test.ts > loadModules::loadModules supports array opts syntax with string (lifetime)",
+        "load-modules.test.ts > loadModules::loadModules supports passing in a default injectionMode",
+        "load-modules.test.ts > loadModules::loadModules supports passing in a register function",
+        "load-modules.test.ts > loadModules::loadModules uses built-in formatter when given a formatName as a string",
+        "load-modules.test.ts > loadModules::loadModules uses the function passed in as formatName",
+        "local-injections.test.ts > local injections::local injections invokes the injector and provides the result to the constructor",
+        "local-injections.test.ts > local injections::local injections supported by registerClass",
+        "local-injections.test.ts > local injections::local injections supported by registerFunction",
+        "resolvers.test.ts > registrations > aliasTo::registrations aliasTo returns the string aliased dependency",
+        "resolvers.test.ts > registrations > aliasTo::registrations aliasTo returns the symbol aliased dependency",
+        "resolvers.test.ts > registrations > asClass and asFunction fluid interface::registrations asClass and asFunction fluid interface supports all lifetimes and returns the object itself",
+        "resolvers.test.ts > registrations > asClass and asFunction fluid interface::registrations asClass and asFunction fluid interface supports inject()",
+        "resolvers.test.ts > registrations > asClass::registrations asClass creates a registration with a resolve method",
+        "resolvers.test.ts > registrations > asClass::registrations asClass resolves dependencies manually",
+        "resolvers.test.ts > registrations > asClass::registrations asClass resolves multiple dependencies manually",
+        "resolvers.test.ts > registrations > asClass::registrations asClass resolves single dependency as cradle",
+        "resolvers.test.ts > registrations > asClass::registrations asClass resolves the class by newing it up",
+        "resolvers.test.ts > registrations > asClass::registrations asClass throws an Error when given null",
+        "resolvers.test.ts > registrations > asFunction::registrations asFunction creates a registration with a resolve method",
+        "resolvers.test.ts > registrations > asFunction::registrations asFunction defaults to transient",
+        "resolvers.test.ts > registrations > asFunction::registrations asFunction manually resolves function dependencies",
+        "resolvers.test.ts > registrations > asFunction::registrations asFunction manually resolves multiple function dependencies",
+        "resolvers.test.ts > registrations > asFunction::registrations asFunction supports arrow functions",
+        "resolvers.test.ts > registrations > asFunction::registrations asFunction throws AwilixTypeError when given null",
+        "resolvers.test.ts > registrations > asValue::registrations asValue creates a registration with a resolve method"
+      ]
+    }
+  ],
+  "status": "scored",
+  "budget": {
+    "time_limit_seconds": 7200,
+    "token_limit": 2000000,
+    "used_tokens": 52483,
+    "token_overshoot": 0,
+    "token_accounting": "once_only_context",
+    "content_tokenizer": "o200k_base",
+    "processed_input_tokens": 40292,
+    "processed_output_tokens": 60191,
+    "processed_tokens": 100483,
+    "remaining_seconds": 6332.941940899997
+  },
+  "score": {
+    "task_id": "awilix-async-container-initialization",
+    "status": "resolved",
+    "reward": 1,
+    "f2p_passed": 24,
+    "f2p_total": 24,
+    "p2p_passed": 162,
+    "p2p_total": 162,
+    "image_id": "sha256:748294a8ece567691f0a628d03c3531024d9f5e1acd13d5c6dd1ecba490831e6",
+    "patch_sha256": "af6103528b43d08782a5f030623aa50a2d1ea70d8db54794ef14c841390cc8cd",
+    "dataset_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-awilix-declaration-index-sol62-2026-11-18\\awilix-async-container-initialization\\score\\awilix-async-container-initialization\\agentless-ml-verifier-dcf5cd2fa96145eeb37b4af5f17b4df2",
+    "message": "",
+    "verifier_exit_code": 0
+  },
+  "selected_files": [
+    "src/container.ts",
+    "src/resolvers.ts",
+    "src/errors.ts",
+    "src/awilix.ts"
+  ],
+  "repair_attempts": [
+    {
+      "candidate_id": "loc-0-repair-0",
+      "status": "validated",
+      "message": ""
+    },
+    {
+      "candidate_id": "loc-0-repair-1",
+      "status": "validated",
+      "message": ""
+    },
+    {
+      "candidate_id": "loc-0-repair-2",
+      "status": "validated",
+      "message": ""
+    },
+    {
+      "candidate_id": "loc-0-repair-3",
+      "status": "validated",
+      "message": ""
+    }
+  ],
+  "run": {
+    "run_id": "run-8829b0597a634c48b3b7b6e1d75512e1",
+    "condition": "agentless-ml-live",
+    "instance_id": "awilix-async-container-initialization",
+    "started_at": "2026-11-18T11:06:18.456553+00:00",
+    "implementation_revision": "2341d31de9de1a09cf988ef5b8a8347b46268b65+dirty",
+    "benchmark_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "harness_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "container_digest": "sha256:748294a8ece567691f0a628d03c3531024d9f5e1acd13d5c6dd1ecba490831e6",
+    "model_name": "chatgpt-plan/gpt-6.2-sol",
+    "model_calls": 8,
+    "input_tokens": 40292,
+    "output_tokens": 60191,
+    "wall_time_seconds": 854.7496928999972,
+    "final_patch_sha256": "af6103528b43d08782a5f030623aa50a2d1ea70d8db54794ef14c841390cc8cd",
+    "infrastructure_status": "ok"
+  },
+  "selection": {
+    "reason": "best_regression_then_normalized_majority",
+    "vote_count": 1,
+    "considered_candidate_ids": [
+      "loc-0-repair-0",
+      "loc-0-repair-1",
+      "loc-0-repair-2"
+    ],
+    "selected_candidate_id": "loc-0-repair-0"
+  },
+  "failed_verifier_checks": []
+}

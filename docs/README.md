@@ -53,6 +53,8 @@ The [GPT-6.2 Sol repeat](clack-sol62-comparison.md) resolved Clack at the same
 xhigh reasoning setting, with 82/82 issue checks and 643/643 verifier regressions.
 The [Awilix follow-up](awilix-declaration-index-run.md) keeps the same settings
 and records an unresolved 23/24 result, with a scope-isolation mismatch.
+The [GPT-6.2 Sol repeat](awilix-sol62-comparison.md) passed that scope check and
+resolved Awilix with 24/24 issue checks and 162/162 verifier regressions.
 The [HTTPX attempt](httpx-declaration-index-interruption.md) records a host sleep
 interruption before validation; it has no benchmark score.
 The [GPT-6.2 Sol HTTPX run](httpx-sol62-run.md) completed at xhigh and resolved
