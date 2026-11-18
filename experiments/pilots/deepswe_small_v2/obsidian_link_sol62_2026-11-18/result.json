@@ -1,0 +1,64 @@
+{
+  "task_id": "obsidian-linter-link-format-conversion",
+  "model": "gpt-6.2-sol",
+  "reasoning": "xhigh",
+  "provider": "chatgpt-plan",
+  "prior_record": "experiments/pilots/deepswe_small_v2/final_four/results.json",
+  "prior_gpt_6_1_score": {
+    "status": "unresolved",
+    "reward": 0,
+    "f2p_passed": 0,
+    "f2p_total": 60,
+    "p2p_passed": 1131,
+    "p2p_total": 1131,
+    "image_id": "sha256:50faff6fce0e47f4edbf547c2c8f4667cdb73a80ebf0a080928a2362d4f08c55",
+    "patch_sha256": "2142617ef64c7f5676e0ca24ca0ffb1205448d4954661e247a5310d2cd40fd79"
+  },
+  "current_score": {
+    "status": "unresolved",
+    "reward": 0,
+    "f2p_passed": 0,
+    "f2p_total": 60,
+    "p2p_passed": 582,
+    "p2p_total": 1131,
+    "image_id": "sha256:50faff6fce0e47f4edbf547c2c8f4667cdb73a80ebf0a080928a2362d4f08c55",
+    "patch_sha256": "6f5dafe2e8b759192ff9d8568fab56e4885171fee6e8a88862fb56101dcfaf3a"
+  },
+  "model_calls": 8,
+  "budget": {
+    "time_limit_seconds": 7200,
+    "token_limit": 2000000,
+    "used_tokens": 108055,
+    "token_overshoot": 0,
+    "token_accounting": "once_only_context",
+    "content_tokenizer": "o200k_base",
+    "processed_input_tokens": 93706,
+    "processed_output_tokens": 69791,
+    "processed_tokens": 163497,
+    "remaining_seconds": 6541.776502099994
+  },
+  "candidate_attempts": [
+    {
+      "candidate_id": "loc-0-repair-0",
+      "status": "validated",
+      "message": ""
+    },
+    {
+      "candidate_id": "loc-0-repair-1",
+      "status": "validated",
+      "message": ""
+    },
+    {
+      "candidate_id": "loc-0-repair-2",
+      "status": "validated",
+      "message": ""
+    },
+    {
+      "candidate_id": "loc-0-repair-3",
+      "status": "validated",
+      "message": ""
+    }
+  ],
+  "local_artifacts": "artifacts/agentless-obsidian-link-sol62-2026-11-18",
+  "interpretation": "The earlier run used a different file-selection configuration, so this does not isolate the model change."
+}
