@@ -189,7 +189,7 @@ def main(argv=None):
             try:
                 live_provider = BedrockResponses(
                     model=args.model or "gpt-6.2-sol", reasoning=args.reasoning or "xhigh",
-                    region=args.bedrock_region,
+                    region=args.bedrock_region, env_file=ROOT / ".env",
                 )
             except ValueError as exc:
                 parser.error(str(exc))

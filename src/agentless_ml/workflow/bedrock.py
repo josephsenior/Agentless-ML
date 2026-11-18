@@ -14,14 +14,20 @@ class BedrockResponseError(RuntimeError):
 class BedrockResponses:
     provider_name = "bedrock"
 
-    def __init__(self, *, model="gpt-6.2-sol", reasoning="xhigh", region="eu-west-3"):
+    def __init__(self, *, model="gpt-6.2-sol", reasoning="xhigh", region="eu-west-3", env_file=None):
         if not re.fullmatch(r"[a-z]{2}(?:-[a-z]+)+-\d+", region):
             raise ValueError("Expected an AWS region such as eu-west-3")
         if not re.fullmatch(r"gpt-[a-z0-9.-]+", model):
             raise ValueError("Expected an OpenAI model name such as gpt-6.2-sol")
         self._api_key = os.environ.get("AWS_BEARER_TOKEN_BEDROCK", "").strip()
+        if not self._api_key and env_file is not None and env_file.is_file():
+            for line in env_file.read_text(encoding="utf-8-sig").splitlines():
+                name, separator, value = line.partition("=")
+                if separator and name.strip() == "AWS_BEARER_TOKEN_BEDROCK":
+                    self._api_key = value.strip()
+                    break
         if not self._api_key:
-            raise ValueError("Set AWS_BEARER_TOKEN_BEDROCK to your Bedrock API key")
+            raise ValueError("Set AWS_BEARER_TOKEN_BEDROCK in the repository .env or your environment")
         self.region = region
         self.model = model
         self.reasoning = reasoning

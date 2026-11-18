@@ -8,6 +8,22 @@ import pytest
 from agentless_ml.workflow.bedrock import BedrockResponseError, BedrockResponses
 
 
+def test_bedrock_loads_only_its_key_from_dotenv(monkeypatch, tmp_path):
+    monkeypatch.delenv("AWS_BEARER_TOKEN_BEDROCK", raising=False)
+    env_file = tmp_path / ".env"
+    env_file.write_text("# Keys\nUNRELATED=ignore\nAWS_BEARER_TOKEN_BEDROCK=local-key==\n")
+    provider = BedrockResponses(env_file=env_file)
+    with patch("urllib.request.urlopen", side_effect=OSError) as send:
+        with pytest.raises(BedrockResponseError):
+            provider.complete("Repair this")
+    assert send.call_args.args[0].get_header("Authorization") == "Bearer local-key=="
+    monkeypatch.setenv("AWS_BEARER_TOKEN_BEDROCK", "env-key")
+    with patch("urllib.request.urlopen", side_effect=OSError) as send:
+        with pytest.raises(BedrockResponseError):
+            BedrockResponses(env_file=env_file).complete("Repair this")
+    assert send.call_args.args[0].get_header("Authorization") == "Bearer env-key"
+
+
 def test_bedrock_profiles_and_returns_empty_regression_response(monkeypatch):
     monkeypatch.setenv("AWS_BEARER_TOKEN_BEDROCK", "test-secret")
     provider = BedrockResponses()

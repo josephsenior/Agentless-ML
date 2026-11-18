@@ -46,7 +46,10 @@ def main():
         else:
             if args.grinta_root is not None:
                 parser.error("--grinta-root requires --provider chatgpt-plan")
-            provider = BedrockResponses(model=args.model, reasoning=args.reasoning, region=args.bedrock_region)
+            provider = BedrockResponses(
+                model=args.model, reasoning=args.reasoning, region=args.bedrock_region,
+                env_file=ROOT / ".env",
+            )
     except ValueError as exc:
         parser.error(str(exc))
     args.output.mkdir(parents=True, exist_ok=False)
