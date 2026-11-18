@@ -1,0 +1,145 @@
+{
+  "model": "gpt-6.2-sol",
+  "reasoning": "xhigh",
+  "provider": "chatgpt-plan",
+  "configuration": {
+    "task_concurrency": 2,
+    "repair_samples": 4,
+    "maximum_files": 10,
+    "retain_declarations": true,
+    "once_only_content_tokens_per_task": 2000000,
+    "time_limit_seconds_per_task": 7200
+  },
+  "local_artifacts": "artifacts/agentless-katex-koota-sol62-2026-11-18",
+  "interpretation": "Compared with earlier GPT-6.1 runs under a workflow that had different declaration-index and file-selection settings.",
+  "tasks": [
+    {
+      "task_id": "katex-multicolumn-array-spans",
+      "prior_record": "experiments/pilots/deepswe_small_v2/katex_sol_xhigh_2026-11-07.json",
+      "prior_gpt_6_1_sol_xhigh": {
+        "status": "unresolved",
+        "reward": 0,
+        "f2p_passed": 84,
+        "f2p_total": 94,
+        "p2p_passed": 599,
+        "p2p_total": 599,
+        "image_id": "sha256:459b6d4c5f8d45218b25d0837a88d91052d0fb066c21b8bc2939290c4876b3ae",
+        "patch_sha256": "538996708b15bd2de8e02d021fce33a50aa5cecb03cb648358c094865724d683"
+      },
+      "prior_processed_tokens": 187003,
+      "current": {
+        "status": "scored",
+        "score": {
+          "status": "unresolved",
+          "reward": 0,
+          "f2p_passed": 0,
+          "f2p_total": 94,
+          "p2p_passed": 0,
+          "p2p_total": 599,
+          "image_id": "sha256:459b6d4c5f8d45218b25d0837a88d91052d0fb066c21b8bc2939290c4876b3ae",
+          "patch_sha256": "661a69d21851d4d18ef95dd5e5761013f721fbc046de145da6f4188d695001ff"
+        },
+        "model_calls": 8,
+        "budget": {
+          "time_limit_seconds": 7200,
+          "token_limit": 2000000,
+          "used_tokens": 106545,
+          "token_overshoot": 0,
+          "token_accounting": "once_only_context",
+          "content_tokenizer": "o200k_base",
+          "processed_input_tokens": 94006,
+          "processed_output_tokens": 77931,
+          "processed_tokens": 171937,
+          "remaining_seconds": 6529.878695899999
+        },
+        "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-katex-koota-sol62-2026-11-18\\katex-multicolumn-array-spans\\runs\\run-d79f4f037f644168bac1e99a983f1a7a"
+      },
+      "candidate_attempts": [
+        {
+          "candidate_id": "loc-0-repair-0",
+          "status": "repair_error",
+          "message": "SEARCH content is outside authorized intervals in src/environments/array.ts"
+        },
+        {
+          "candidate_id": "loc-0-repair-1",
+          "status": "validated",
+          "message": ""
+        },
+        {
+          "candidate_id": "loc-0-repair-2",
+          "status": "repair_error",
+          "message": "SEARCH content is outside authorized intervals in src/environments/array.ts"
+        },
+        {
+          "candidate_id": "loc-0-repair-3",
+          "status": "repair_error",
+          "message": "SEARCH content is outside authorized intervals in src/environments/array.ts"
+        }
+      ]
+    },
+    {
+      "task_id": "koota-composite-trait-aspects",
+      "prior_record": "experiments/pilots/deepswe_small_v2/koota_after_overload_fix_2026-11-08.json",
+      "prior_gpt_6_1_sol_xhigh": {
+        "status": "unresolved",
+        "reward": 0,
+        "f2p_passed": 5,
+        "f2p_total": 51,
+        "p2p_passed": 172,
+        "p2p_total": 172,
+        "image_id": "sha256:7a3afca50b7b8a2181ec2706f235ea85eebaa731500e9137c434a4190567ac27",
+        "patch_sha256": "547635b8be84652a9983597bba4d0a834446be1ee8b048384ce8b5252dcb09bd"
+      },
+      "prior_processed_tokens": 137860,
+      "current": {
+        "status": "scored",
+        "score": {
+          "status": "unresolved",
+          "reward": 0,
+          "f2p_passed": 35,
+          "f2p_total": 51,
+          "p2p_passed": 172,
+          "p2p_total": 172,
+          "image_id": "sha256:7a3afca50b7b8a2181ec2706f235ea85eebaa731500e9137c434a4190567ac27",
+          "patch_sha256": "b25a0183f2f75a820271cd5b8ea0e2495cf3761e9ce0887a2fe172eed20e4e60"
+        },
+        "model_calls": 8,
+        "budget": {
+          "time_limit_seconds": 7200,
+          "token_limit": 2000000,
+          "used_tokens": 86222,
+          "token_overshoot": 0,
+          "token_accounting": "once_only_context",
+          "content_tokenizer": "o200k_base",
+          "processed_input_tokens": 80847,
+          "processed_output_tokens": 92166,
+          "processed_tokens": 173013,
+          "remaining_seconds": 6333.6777839999995
+        },
+        "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-katex-koota-sol62-2026-11-18\\koota-composite-trait-aspects\\runs\\run-ebc24ce346594722af963d8b14a11141"
+      },
+      "candidate_attempts": [
+        {
+          "candidate_id": "loc-0-repair-0",
+          "status": "validated",
+          "message": ""
+        },
+        {
+          "candidate_id": "loc-0-repair-1",
+          "status": "validated",
+          "message": ""
+        },
+        {
+          "candidate_id": "loc-0-repair-2",
+          "status": "validated",
+          "message": ""
+        },
+        {
+          "candidate_id": "loc-0-repair-3",
+          "status": "validated",
+          "message": ""
+        }
+      ]
+    }
+  ]
+}
