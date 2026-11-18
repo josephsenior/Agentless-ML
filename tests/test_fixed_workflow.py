@@ -143,6 +143,45 @@ def controller(tmp_path, source, runner):
     )
 
 
+def test_file_localization_sees_pinned_declarations_without_expanding_edit_access(tmp_path, source):
+    import hashlib
+    import tiktoken
+
+    repository, _ = source
+    (repository / "helper.ts").write_text(
+        "Number.prototype.changed = function () { return 'BODY_ONLY'; };\n", encoding="utf-8"
+    )
+    (repository / "settings.py").write_text("GLOBAL_SETTING = 42\n", encoding="utf-8")
+    (repository / "test_hidden.py").write_text("SECRET_TEST_NAME = 1\n", encoding="utf-8")
+    (repository / "broken.py").write_text("def invalid(:\n", encoding="utf-8")
+    (repository / "binary.py").write_bytes(b"\xff\xfe")
+    git(repository, "add", ".")
+    git(repository, "commit", "-m", "declaration visibility fixture")
+    commit = git(repository, "rev-parse", "HEAD")
+    (repository / "helper.ts").write_text("export const DIRTY_NAME = 0;\n", encoding="utf-8")
+    result = controller(tmp_path, (repository, commit), FakeRunner()).run(responses())
+    directory = Path(result.artifact_directory)
+    text = (directory / "file-localization-index.txt").read_text(encoding="utf-8")
+    prompt = (directory / "prompts/file-localization.txt").read_text(encoding="utf-8")
+    assert "Number.prototype.changed" in text and "GLOBAL_SETTING" in text
+    assert "BODY_ONLY" not in text and "DIRTY_NAME" not in text
+    assert "SECRET_TEST_NAME" not in text and "test_hidden.py" not in text
+    assert "parse-error" in text and "binary.py: encoding-error" in text
+    assert text in prompt and "at most 10 files" in prompt
+    metadata = json.loads((directory / "file-localization-index.json").read_text())
+    assert {item["kind"] for item in metadata["diagnostics"]} == {"parse-error", "encoding-error"}
+    assert metadata["base_commit"] == commit and metadata["dependency_map"] is False
+    assert metadata["truncated"] is False
+    assert metadata["index_sha256"] == hashlib.sha256(text.encode()).hexdigest()
+    assert metadata["index_sha256"] == hashlib.sha256(
+        (directory / "file-localization-index.txt").read_bytes()
+    ).hexdigest()
+    assert metadata["index_tokens"] == len(tiktoken.get_encoding("o200k_base").encode(text))
+    assert result.selected_files == ("calculator.py",)
+    assert "helper.ts" not in result.prediction.model_patch
+    assert json.loads((directory / "controller.json").read_text())["file_localization_context"] == "declaration-index-v1"
+
+
 def test_reference_context_can_show_a_sixth_file_without_authorizing_edits(tmp_path, source):
     repository, _ = source
     paths = [f"helper_{index}.py" for index in range(1, 11)]

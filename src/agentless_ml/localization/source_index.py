@@ -1,4 +1,4 @@
-"""Offline source-discovery prototype; deliberately not wired into the controller.
+"""Declaration visibility for localization, plus offline import-map diagnostics.
 
 The index lists declarations recognized by the existing language adapters,
 supplemented by Python module assignments. Dependencies are *file imports*, not
@@ -79,14 +79,24 @@ class SourceIndex:
 
     def render(self, paths: Sequence[str] | None = None) -> str:
         """All indexed names and source spans, without bodies or truncation."""
+        return self._render(paths, import_notice=True)
+
+    def render_declarations(self) -> str:
+        """Declaration-only view used by the fixed controller."""
+        return self._render(None, import_notice=False)
+
+    def _render(self, paths, *, import_notice):
         selected = None if paths is None else set(paths)
         known = {file.path for file in self.files}
         if selected is not None and selected - known:
             raise ValueError("render paths absent from source index")
         lines = [
             "Repository declaration index (names and spans, not function bodies).",
-            "Import links are syntactic file dependencies, not a complete call graph.",
         ]
+        if import_notice:
+            lines.append("Import links are syntactic file dependencies, not a complete call graph.")
+        else:
+            lines.append("Names and line ranges are for discovery; later localization determines editable regions.")
         for file in self.files:
             if selected is not None and file.path not in selected:
                 continue
@@ -146,6 +156,15 @@ def build_source_index(
     supplied path. Parse failures keep their file entry with an explicit warning.
     ``metadata`` currently supplies pinned go.mod files for module resolution.
     """
+    return _build_index(sources, metadata=metadata, include_imports=True)
+
+
+def build_declaration_index(sources: Mapping[str, str]) -> SourceIndex:
+    """The production declaration index; never construct or expand import links."""
+    return _build_index(sources, metadata=None, include_imports=False)
+
+
+def _build_index(sources, *, metadata, include_imports):
     files = []
     diagnostics = []
     accepted = {}
@@ -169,13 +188,16 @@ def build_source_index(
                 file = FileNode(path, file.language, file.line_count, tuple(sorted(
                     symbols, key=lambda item: (item.start_line, item.end_line, item.qualified_name)
                 )))
-            elif isinstance(adapter, TreeSitterLanguage):
+            elif include_imports and isinstance(adapter, TreeSitterLanguage):
                 _, data, root = parse(adapter.spec, path, source)
                 syntax_trees[path] = (data, root)
             files.append(file)
         except (ValueError, SyntaxError) as exc:
             files.append(FileNode(path, adapter.language, len(source.splitlines())))
             diagnostics.append(IndexDiagnostic(path, "parse-error", str(exc)))
+
+    if not include_imports:
+        return SourceIndex(tuple(files), (), tuple(diagnostics))
 
     python_modules: dict[str, set[str]] = {}
     go_packages: dict[str, list[str]] = {}

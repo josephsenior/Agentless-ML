@@ -12,6 +12,25 @@ from agentless_ml.adapters.languages import get_language_adapter
 from agentless_ml.localization.source_index import build_source_index, walk_symbols
 
 
+def test_declaration_only_index_does_not_build_an_import_graph(monkeypatch):
+    from agentless_ml.localization import source_index
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("declaration indexing must not analyze imports")
+
+    monkeypatch.setattr(source_index, "_python_links", forbidden)
+    monkeypatch.setattr(source_index, "_javascript_links", forbidden)
+    index = source_index.build_declaration_index({
+        "a.py": "import other\nSETTING = 1\ndef api(): pass\n",
+        "b.ts": "import './a';\nexport const value = 1;\n",
+        "lib.rs": "pub fn rust_api() {}\n",
+    })
+    assert index.links == () and index.diagnostics == ()
+    text = index.render_declarations()
+    assert "SETTING" in text and "rust_api" in text and "value" in text
+    assert "Import links" not in text and "unsupported-import-analysis" not in text
+
+
 def declarations(index, path):
     return {symbol.qualified_name: symbol for file in index.files if file.path == path
             for symbol in walk_symbols(file.symbols)}

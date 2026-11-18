@@ -12,6 +12,11 @@ file localization, symbol localization, focused repair context, multiple repair
 samples, isolated patch application, public Docker tests, deterministic selection,
 and prediction/run export.
 
+File localization includes the pinned repository's declaration names and line
+ranges by default. The [declaration-index guide](declaration-index.md) describes
+the source policy, token accounting and saved diagnostics. Import maps and extra
+inspection phases are not enabled.
+
 The same controller now supports Go, JavaScript, TypeScript and Rust. They are
 language descriptions read by one structure engine
 ([ADR 0003](adr/0003-language-engine.md)); the controller obtains every language,
@@ -29,10 +34,14 @@ documents the format, artifacts and strict failure policy.
 
 The input is `RecordedStageResponses`. It contains one file-localization response,
 one symbol-localization response, and an ordered collection of repair responses.
-The controller renders and saves the prompts that would have produced them, but
-has no model client. Recorded execution therefore reports zero model calls and
+The controller renders and saves the prompts that would have produced them.
+Recorded execution therefore reports zero model calls and
 zero input/output tokens. It cannot react to validation output or request another
 sample.
+
+Live execution uses the same stages through a supplied response provider; it
+does not add a tool-use loop. Recorded tests can exercise that boundary with a
+fake provider, without spending model allowance.
 
 The file-localization parser accepts only supported, tracked source paths at the pinned
 commit and limits output to ten files. Symbol locations must resolve to parsed
@@ -52,6 +61,7 @@ resolved immutable image ID when `TaskSpec.container_digest` is present.
 Every run receives a unique directory containing:
 
 - all three rendered prompts and the exact recorded responses;
+- the declaration index and its pinned-source, token-count and coverage record;
 - selected files, parsed locations, authorized intervals, and repair context;
 - accepted and rejected candidate attempts;
 - per-command Docker evidence nested under the candidate ID;
@@ -62,7 +72,7 @@ If the run stops before prediction export, `failure.json` records the exception
 type and message. Such a run has no final prediction. The current format uses
 plain JSON and is an internal prototype rather than a versioned interchange format.
 
-This boundary does not load a benchmark dataset, contact a model provider, or run
+Recorded execution does not load a benchmark dataset, contact a model provider, or run
 a hidden verifier. It proves that recorded stage outputs can traverse the complete
 fixed controller without gaining access to repository tools or test feedback.
 

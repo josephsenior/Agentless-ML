@@ -1,0 +1,79 @@
+{
+  "policy": "declaration-index-v1",
+  "live_model_calls": 0,
+  "scope": "source visibility only; no model or verifier runs",
+  "artifacts": "artifacts/declaration-index-default-2026-11-18",
+  "tasks": [
+    {
+      "task": "koota-pair-relation-tracking",
+      "base_commit": "9c434858b2b522002f8c5eb4a554fa8836a7cf3c",
+      "base_tree": "451f347893536dd295c4f49a3b9079042bb5002d",
+      "index_sha256": "1fbbfe8cc1813fb88149d3f5c5bcf02fd3f2db0e39b3823cfb2b48c31eb5f885",
+      "index_tokens": 14248,
+      "files": 325,
+      "checks": [
+        {
+          "path": "packages/core/src/entity/entity-methods-patch.ts",
+          "name": "Number.prototype.changed",
+          "visible": true
+        },
+        {
+          "path": "packages/core/src/trait/trait.ts",
+          "name": "addTrait",
+          "visible": true
+        }
+      ]
+    },
+    {
+      "task": "dasel-html-document-format",
+      "base_commit": "0dd6132e0c58edbd9b1a5f7ffd00dfab1e6085ad",
+      "base_tree": "b5cd4e3faf543810e600280f78ea3861def16e7d",
+      "index_sha256": "f5042ad2ef5aabf89a1c38dd0447c7319455d04fe6564e5aa9d6d8129feab564",
+      "index_tokens": 7801,
+      "files": 116,
+      "checks": [
+        {
+          "path": "parsing/reader.go",
+          "name": "NewReaderFn",
+          "visible": true
+        },
+        {
+          "path": "parsing/writer.go",
+          "name": "NewWriterFn",
+          "visible": true
+        }
+      ]
+    },
+    {
+      "task": "narwhals-rolling-window-suite",
+      "base_commit": "061c97f8a01bf9e721835978b039303c5051501c",
+      "base_tree": "10009f27d085ba6613f9d1dcf5c10590c5d5ddbd",
+      "index_sha256": "c52248cdcc2c06a5ddd2f07738d6a0ccfe3fcafae2d4073148ac93216cfdb10a",
+      "index_tokens": 58305,
+      "files": 201,
+      "checks": [
+        {
+          "path": "narwhals/_sql/expr.py",
+          "name": "SQLExpr.rolling_sum",
+          "visible": true
+        },
+        {
+          "path": "narwhals/_polars/series.py",
+          "name": "PolarsSeries.rolling_mean",
+          "visible": true
+        }
+      ]
+    }
+  ],
+  "validation": [
+    {
+      "scope": "controller and language workflows",
+      "passed": 76,
+      "optional_skips": 5
+    },
+    {
+      "scope": "structure, prompts, budget boundary and focused integration",
+      "passed": 125
+    }
+  ]
+}

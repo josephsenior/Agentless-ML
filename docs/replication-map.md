@@ -35,6 +35,16 @@ and [run_tests.py](https://github.com/OpenAutoCoder/Agentless/blob/b150f28465a77
 
 ## Reasons and trade-offs
 
+### Declaration index before file selection
+
+File localization now receives recognized declaration names and line ranges
+alongside the repository tree, under policy `declaration-index-v1`. This is an
+explicit context extension to the pinned method. It does not add an import map,
+model phase or edit permission. See the [implementation note](declaration-index.md)
+and [113-task token census](source-context-census.md). Controller tests verify
+pinned mixed-language visibility, coverage warnings and pre-request budget
+checking; no new live-model result is claimed for this change.
+
 ### Separate implementation and reference
 
 A pinned, unchanged reference lets us distinguish upstream behavior from our

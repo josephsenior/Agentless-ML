@@ -1,5 +1,9 @@
 # Choosing source context before spending model allowance
 
+**Current implementation:** the [declaration-only index](declaration-index.md)
+is now enabled for file localization. This census remains an offline measurement;
+the map and extra-inspection scenarios below are not enabled.
+
 This offline census measures the 113 pinned DeepSWE tasks. It does not call a
 model, run tests in their repositories or change the live workflow. See the
 [per-task table](../experiments/deepswe/source-token-census-2026-11-18/report.md)

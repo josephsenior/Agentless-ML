@@ -1,5 +1,9 @@
 # Can a repository index prevent missing source?
 
+**Current implementation:** the [declaration-only index](declaration-index.md)
+is now the controller default. Import expansion remains offline. The measurements
+and recommendations below describe the earlier prototype checkpoint.
+
 The offline prototype exposes the declarations we checked in Koota, Dasel and
 Narwhals. It does not establish that the model will select the right files or
 solve those tasks. No model calls or benchmark tests were made for this check,

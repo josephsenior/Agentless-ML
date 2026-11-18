@@ -7,6 +7,10 @@ The workflow localizes the relevant code, generates several repair candidates,
 checks them and selects one final patch. The controller decides the stages;
 the model does not choose tools or enter an interactive repair loop.
 
+File localization includes a [declaration index](docs/declaration-index.md):
+source-file names plus recognized functions, classes, types and variables with
+line ranges. Import maps and additional inspection phases remain disabled.
+
 ![Agentless-ML architecture: benchmark inputs and recorded responses enter a fixed localization, repair, public-validation and selection workflow; shared language structure and Docker execution support it, while held-out scoring stays separate.](docs/images/architecture.svg)
 
 Public tests can inform selection. Hidden benchmark verification runs only

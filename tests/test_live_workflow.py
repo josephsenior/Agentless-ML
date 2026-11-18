@@ -10,6 +10,22 @@ from test_fixed_workflow import source as source_fixture
 source = source_fixture
 
 
+def test_declaration_prompt_is_budget_checked_before_provider_call(tmp_path, source):
+    from agentless_ml.attempt_budget import AttemptBudget, BudgetExceeded
+
+    class Provider:
+        def complete(self, prompt, **kwargs):
+            pytest.fail("an over-budget prompt must not reach the model")
+
+    with pytest.raises(BudgetExceeded):
+        controller(tmp_path, source, FakeRunner()).run_live(
+            Provider(), budget=AttemptBudget(tokens=1, accounting="once_only_context")
+        )
+    directory = next((tmp_path / "runs").iterdir())
+    assert (directory / "file-localization-index.json").exists()
+    assert not (directory / "prediction.json").exists()
+
+
 def test_live_workflow_reports_content_and_processed_usage_separately(tmp_path, source):
     from agentless_ml.attempt_budget import AttemptBudget
 
@@ -112,6 +128,8 @@ def test_fixed_stages_request_responses_then_validate_and_export(tmp_path, sourc
     assert result.run.model_calls == 4
     assert result.run.input_tokens == 40 and result.run.output_tokens == 20
     assert len(provider.prompts) == 4
+    assert "### Repository Declaration Index ###" in provider.prompts[0]
+    assert "function add" in provider.prompts[0]
     assert "return a + b" in result.prediction.model_patch
     assert result.run.condition == "agentless-ml-live"
     saved = json.loads((Path(result.artifact_directory) / "responses.json").read_text())

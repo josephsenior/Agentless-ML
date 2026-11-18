@@ -15,6 +15,8 @@ from enum import Enum
 from pathlib import Path
 from typing import Any
 
+import tiktoken
+
 from agentless_ml.adapters.languages import source_adapter
 from agentless_ml.localization import (
     construct_selected_context,
@@ -25,6 +27,7 @@ from agentless_ml.localization import (
     render_symbol_localization_prompt,
 )
 from agentless_ml.localization.context import render_project_tree
+from agentless_ml.localization.source_index import build_declaration_index, walk_symbols
 from agentless_ml.localization.locations import (
     DEFAULT_MAXIMUM_FILES,
     render_reference_declarations,
@@ -685,6 +688,7 @@ class FixedWorkflowController:
                     "repair_concurrency": repair_concurrency,
                     "maximum_files": DEFAULT_MAXIMUM_FILES,
                     "retain_declarations": True,
+                    "file_localization_context": "declaration-index-v1",
                     "localization_mode": "edit-samples"
                     if responses.edit_samples
                     else "edit-lines"
@@ -698,7 +702,7 @@ class FixedWorkflowController:
                 repository_name = Path(self.provider.source_repository).name
                 file_adapters = {
                     path: adapter
-                    for path in sorted(self.provider.paths)
+                    for path in sorted(self.provider.file_modes)
                     if (adapter := source_adapter(path)) is not None
                 }
                 source_paths = tuple(file_adapters)
@@ -718,11 +722,47 @@ class FixedWorkflowController:
                     tuple(f"{repository_name}/{path}" for path in source_paths),
                     file_adapters=file_adapters,
                 )
+                index_sources = {}
+                read_errors = []
+                for path, adapter in file_adapters.items():
+                    if adapter.is_test_path(path):
+                        continue
+                    try:
+                        index_sources[path] = (visible_workspace.path / path).read_bytes().decode("utf-8-sig")
+                    except UnicodeDecodeError as exc:
+                        read_errors.append({"path": path, "kind": "encoding-error", "detail": str(exc)})
+                declaration_index = build_declaration_index(index_sources)
+                index_text = declaration_index.render_declarations()
+                for error in read_errors:
+                    index_text += f"\n! {error['path']}: encoding-error: declarations unavailable\n"
+                file_structure = project_tree + "\n### Repository Declaration Index ###\n" + index_text
                 file_prompt = render_file_localization_prompt(
                     self.task.problem_statement,
-                    project_tree,
+                    file_structure,
                     extension=None,
                 )
+                encoding = tiktoken.get_encoding("o200k_base")
+                (directory / "file-localization-index.txt").write_text(
+                    index_text, encoding="utf-8", newline="\n"
+                )
+                _write_json(directory / "file-localization-index.json", {
+                    "policy": "declaration-index-v1",
+                    "base_commit": self.task.base_commit,
+                    "base_tree": self.provider.base_tree,
+                    "files": len(declaration_index.files),
+                    "declarations": sum(
+                        1 for file in declaration_index.files for _ in walk_symbols(file.symbols)
+                    ),
+                    "index_sha256": hashlib.sha256(index_text.encode("utf-8")).hexdigest(),
+                    "token_encoding": "o200k_base",
+                    "index_tokens": len(encoding.encode(index_text, disallowed_special=())),
+                    "file_prompt_tokens": len(encoding.encode(file_prompt, disallowed_special=())),
+                    "diagnostics": [asdict(item) for item in declaration_index.diagnostics] + read_errors,
+                    "dependency_map": False,
+                    "truncated": False,
+                })
+                # Do not retain every source body/signature during repair sampling.
+                del index_sources, declaration_index
                 if response_provider is not None:
                     responses = replace(
                         responses,
