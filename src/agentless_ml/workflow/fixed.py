@@ -345,7 +345,7 @@ class FixedWorkflowController:
         responses = RecordedStageResponses(
             file_localization="pending",
             symbol_localization="pending",
-            source="chatgpt-plan/live",
+            source=getattr(provider, "provider_name", "provider") + "/live",
             edit_samples=tuple(
                 RecordedEditSample("pending", ("pending",) * repair_samples)
                 for _ in range(edit_samples)

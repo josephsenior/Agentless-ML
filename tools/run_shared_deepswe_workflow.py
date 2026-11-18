@@ -1,6 +1,6 @@
 """Consume a shared DeepSWE record for preflight or a recorded Agentless run.
 
-Live subscription mode is explicit. Each run establishes a fresh public baseline; it
+Live inference is explicit. Each run establishes a fresh public baseline; it
 does not silently reuse historical reports with a different command.
 """
 
@@ -138,11 +138,14 @@ def main(argv=None):
         type=Path,
         help="Recorded response directory, never a model provider",
     )
-    parser.add_argument("--live-subscription", action="store_true")
+    live = parser.add_mutually_exclusive_group()
+    live.add_argument("--live", action="store_true", help="Use Amazon Bedrock")
+    live.add_argument("--live-subscription", action="store_true", help="Use ChatGPT plan allowance")
+    parser.add_argument("--bedrock-region", default="eu-west-3")
     parser.add_argument("--grinta-root", type=Path)
-    parser.add_argument("--model", default="gpt-6.1-sol")
+    parser.add_argument("--model")
     parser.add_argument(
-        "--reasoning", default="medium", choices=["low", "medium", "high", "xhigh"]
+        "--reasoning", choices=["low", "medium", "high", "xhigh"]
     )
     parser.add_argument("--repair-samples", type=int)
     parser.add_argument("--edit-samples", type=int, default=1)
@@ -167,20 +170,33 @@ def main(argv=None):
     if args.inspect_start:
         print(json.dumps(manifest, indent=2, sort_keys=True))
         return 0
-    if args.live_subscription:
-        if args.experiment or not args.grinta_root or not args.repair_samples:
-            parser.error(
-                "live mode requires --grinta-root and positive --repair-samples, without --experiment"
-            )
-        from agentless_ml.workflow.subscription import SubscriptionResponses
+    if args.live or args.live_subscription:
+        if args.experiment or not args.repair_samples or args.repair_samples < 1:
+            parser.error("Live mode requires positive --repair-samples and no --experiment")
+        if args.live_subscription:
+            if args.grinta_root is None:
+                parser.error("--live-subscription requires --grinta-root")
+            from agentless_ml.workflow.subscription import SubscriptionResponses
 
-        live_provider = SubscriptionResponses(
-            args.grinta_root, model=args.model, reasoning=args.reasoning
-        )
+            live_provider = SubscriptionResponses(
+                args.grinta_root, model=args.model or "gpt-6.1-sol", reasoning=args.reasoning or "medium"
+            )
+        else:
+            if args.grinta_root is not None:
+                parser.error("--grinta-root requires --live-subscription")
+            from agentless_ml.workflow.bedrock import BedrockResponses
+
+            try:
+                live_provider = BedrockResponses(
+                    model=args.model or "gpt-6.2-sol", reasoning=args.reasoning or "xhigh",
+                    region=args.bedrock_region,
+                )
+            except ValueError as exc:
+                parser.error(str(exc))
     else:
         live_provider = None
         if args.experiment is None:
-            parser.error("--experiment or --live-subscription is required")
+            parser.error("--experiment, --live, or --live-subscription is required")
         experiment = json.loads((args.experiment / "experiment.json").read_bytes())
         if experiment["task_id"] != published.instance_id:
             raise ValueError("recorded responses belong to another task")
@@ -230,7 +246,7 @@ def main(argv=None):
         regression_tests=(RegressionTest("suite", command),),
         implementation_revision=_revision(),
         harness_revision=task.benchmark_revision,
-        model_name=("chatgpt-plan/" + args.model)
+        model_name=(live_provider.provider_name + "/" + live_provider.model)
         if live_provider
         else "recorded/manual-v1",
     )
@@ -239,9 +255,9 @@ def main(argv=None):
         from agentless_ml.attempt_budget import AttemptBudget
 
         if (
-            not live_provider
-            or args.model != "gpt-6.1-sol"
-            or args.reasoning != "medium"
+            not args.live_subscription
+            or live_provider.model != "gpt-6.1-sol"
+            or live_provider.reasoning != "medium"
             or args.edit_samples != 1
             or args.repair_samples != 4
         ):

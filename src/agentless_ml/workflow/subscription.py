@@ -37,6 +37,8 @@ with client.responses.create(model=request['model'],input=[{'role':'user','conte
 
 
 class SubscriptionResponses:
+    provider_name = "chatgpt-plan"
+
     @property
     def settings(self):
         return {

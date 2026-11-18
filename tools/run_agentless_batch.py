@@ -17,6 +17,7 @@ from agentless_ml.localization.locations import DEFAULT_MAXIMUM_FILES
 from agentless_ml.shared_task import load_shared_task
 from agentless_ml.validation import RegressionTest
 from agentless_ml.workflow import FixedWorkflowController
+from agentless_ml.workflow.bedrock import BedrockResponses
 from agentless_ml.workflow.subscription import SubscriptionResponses
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -27,14 +28,27 @@ def main():
     parser.add_argument("--tasks", nargs="+", required=True)
     parser.add_argument("--records-root", type=Path, required=True)
     parser.add_argument("--repositories", type=Path, required=True)
-    parser.add_argument("--grinta-root", type=Path, required=True)
+    parser.add_argument("--provider", choices=("bedrock", "chatgpt-plan"), default="bedrock")
+    parser.add_argument("--bedrock-region", default="eu-west-3")
+    parser.add_argument("--grinta-root", type=Path, help="Required for --provider chatgpt-plan")
     parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--model", default="gpt-6.1-sol")
+    parser.add_argument("--model", default="gpt-6.2-sol")
     parser.add_argument("--reasoning", default="xhigh",
                         choices=("low", "medium", "high", "xhigh"))
     args = parser.parse_args()
     if len(set(args.tasks)) != len(args.tasks):
         parser.error("task IDs must be unique")
+    try:
+        if args.provider == "chatgpt-plan":
+            if args.grinta_root is None:
+                parser.error("--provider chatgpt-plan requires --grinta-root")
+            provider = SubscriptionResponses(args.grinta_root, model=args.model, reasoning=args.reasoning)
+        else:
+            if args.grinta_root is not None:
+                parser.error("--grinta-root requires --provider chatgpt-plan")
+            provider = BedrockResponses(model=args.model, reasoning=args.reasoning, region=args.bedrock_region)
+    except ValueError as exc:
+        parser.error(str(exc))
     args.output.mkdir(parents=True, exist_ok=False)
     prepared = {}
     for task_id in args.tasks:
@@ -51,6 +65,7 @@ def main():
 
     plan = {
         "task_ids": args.tasks, "model": args.model, "reasoning": args.reasoning,
+        "provider": provider.provider_name, "provider_settings": provider.settings,
         "revision": _revision(), "task_concurrency": len(args.tasks),
         "repair_concurrency_per_task": 4, "repair_samples": 4, "edit_samples": 1,
         "maximum_files": DEFAULT_MAXIMUM_FILES,
@@ -111,10 +126,7 @@ def main():
                 artifact_root=directory / "runs", runner=runner, public_commands=(),
                 regression_tests=(RegressionTest("suite", command),),
                 implementation_revision=_revision(), harness_revision=task.benchmark_revision,
-                model_name="chatgpt-plan/" + args.model,
-            )
-            provider = SubscriptionResponses(
-                args.grinta_root, model=args.model, reasoning=args.reasoning
+                model_name=provider.provider_name + "/" + args.model,
             )
             print(f"{task_id}: starting baseline and fixed workflow", flush=True)
             output = workflow.run_live(

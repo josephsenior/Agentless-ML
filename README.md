@@ -15,7 +15,8 @@ line ranges. Import maps and additional inspection phases remain disabled.
 
 Public tests can inform selection. Hidden benchmark verification runs only
 after the final patch is exported, with no feedback into repair. The fixed stages
-support saved responses or a live ChatGPT-plan provider. Development runs remain
+support saved responses or live model requests through Amazon Bedrock by default.
+Development runs remain
 separate from a frozen benchmark experiment.
 
 [Documentation](docs/README.md) · [Method and differences](docs/replication-map.md) ·
@@ -34,7 +35,7 @@ Workflow status updated **18 November 2026**; baseline counts last updated 17 Oc
 | Core workflow | Hierarchical localization, multi-file edits including creation, deletion and renaming, reproduction and regression checks, deterministic selection and prediction export. |
 | DeepSWE | All 113 tasks have registered usable public baselines. Numba uses its verified two-worker, three-hour public-validation profile; four other tasks use registered supplemented images. |
 | SWE-bench Pro V2 | All 642 task descriptions load. Recorded workflows cover selected Python, Go, JavaScript and TypeScript tasks; workspace checks cover selected tasks from nine repositories. Broad full-suite readiness is incomplete. |
-| Model execution | Recorded or live fixed stages, including the ChatGPT-plan connection and configured attempt-budget accounting. |
+| Model execution | Recorded or live fixed stages with configured attempt budgets. [Amazon Bedrock setup](docs/live-bedrock.md). |
 | Research experiments | The protocol is a draft. The eligible task set, model settings, matched Grinta condition and scoring route still need to be fixed before reporting results. |
 
 These are implementation and environment-readiness counts, not solved-task
