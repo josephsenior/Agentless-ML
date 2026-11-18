@@ -14,9 +14,9 @@ line ranges. Import maps and additional inspection phases remain disabled.
 ![Agentless-ML architecture: benchmark inputs and recorded responses enter a fixed localization, repair, public-validation and selection workflow; shared language structure and Docker execution support it, while held-out scoring stays separate.](docs/images/architecture.svg)
 
 Public tests can inform selection. Hidden benchmark verification runs only
-after the final patch is exported, with no feedback into repair. Recorded stage
-responses work today; live model execution remains deferred while the shared
-comparison setup and model access are settled.
+after the final patch is exported, with no feedback into repair. The fixed stages
+support saved responses or a live ChatGPT-plan provider. Development runs remain
+separate from a frozen benchmark experiment.
 
 [Documentation](docs/README.md) · [Method and differences](docs/replication-map.md) ·
 [Commands](tools/README.md) · [Experiment configuration](docs/experimental-configuration.md)
@@ -27,14 +27,14 @@ The core workflow is implemented and has end-to-end coverage with saved
 responses across all five languages. These runs check the implementation;
 they are not live-model benchmark results.
 
-As of **24 October 2026** (baseline counts last updated 17 October):
+Workflow status updated **18 November 2026**; baseline counts last updated 17 October:
 
 | Area | What is established |
 | --- | --- |
 | Core workflow | Hierarchical localization, multi-file edits including creation, deletion and renaming, reproduction and regression checks, deterministic selection and prediction export. |
 | DeepSWE | All 113 tasks have registered usable public baselines. Numba uses its verified two-worker, three-hour public-validation profile; four other tasks use registered supplemented images. |
 | SWE-bench Pro V2 | All 642 task descriptions load. Recorded workflows cover selected Python, Go, JavaScript and TypeScript tasks; workspace checks cover selected tasks from nine repositories. Broad full-suite readiness is incomplete. |
-| Model execution | The controller currently consumes recorded responses. Live integration and complete model-budget enforcement remain to be implemented. |
+| Model execution | Recorded or live fixed stages, including the ChatGPT-plan connection and configured attempt-budget accounting. |
 | Research experiments | The protocol is a draft. The eligible task set, model settings, matched Grinta condition and scoring route still need to be fixed before reporting results. |
 
 These are implementation and environment-readiness counts, not solved-task

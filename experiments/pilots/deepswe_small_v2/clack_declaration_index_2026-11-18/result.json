@@ -1,0 +1,247 @@
+{
+  "task_id": "clack-async-autocomplete-options",
+  "kind": "single-fresh-task-development-run",
+  "configuration": {
+    "task_ids": [
+      "clack-async-autocomplete-options"
+    ],
+    "model": "gpt-6.1-sol",
+    "reasoning": "xhigh",
+    "revision": "eb7c671991e014b3516b59177f06b6b4c2146a4a+dirty",
+    "task_concurrency": 1,
+    "repair_concurrency_per_task": 4,
+    "repair_samples": 4,
+    "edit_samples": 1,
+    "maximum_files": 10,
+    "retain_declarations": true,
+    "docker_concurrency": 1,
+    "once_only_content_tokens_per_task": 2000000,
+    "time_limit_seconds_per_task": 7200,
+    "queue_policy": "Docker queue waiting counts toward the task deadline except initial baseline preparation. Scoring occurs after export.",
+    "scope": "Agentless-only development batch"
+  },
+  "implementation": {
+    "commit": "eb7c671991e014b3516b59177f06b6b4c2146a4a",
+    "policy": "declaration-index-v1",
+    "verified_sources": [
+      {
+        "path": "src/agentless_ml/workflow/fixed.py",
+        "sha256": "f7f47d9aff7a2f34be3fcf3a36b7a6d18402c9732d6bff99d8e5d8f9298850c9",
+        "matches_committed_source": true
+      },
+      {
+        "path": "src/agentless_ml/localization/source_index.py",
+        "sha256": "57d31b4dc5f3b2a88bc1ebbbc8c33d1cecb08ea5ae8b7b576cb82dbd46f3f9de",
+        "matches_committed_source": true
+      },
+      {
+        "path": "src/agentless_ml/workflow/subscription.py",
+        "sha256": "74c35c271d3795ca47433b9e3f4ff99e188219969e1a7a5e9b23898379570f97",
+        "matches_committed_source": true
+      }
+    ]
+  },
+  "raw_artifacts": "artifacts/agentless-clack-declaration-index-2026-11-18",
+  "index": {
+    "policy": "declaration-index-v1",
+    "base_commit": "8a96e2dcd7f821d1250b58cf71c327679f94de25",
+    "base_tree": "d9f29d8bb28122a58e3869b98b53432decff02f8",
+    "files": 59,
+    "declarations": 516,
+    "index_sha256": "2575951ec9d9303f13acfea0c39a1fad39194aedada6e62bfc38df4456208407",
+    "token_encoding": "o200k_base",
+    "index_tokens": 6141,
+    "file_prompt_tokens": 7149,
+    "diagnostics": [],
+    "dependency_map": false,
+    "truncated": false
+  },
+  "selected_files": [
+    "packages/core/src/prompts/autocomplete.ts",
+    "packages/prompts/src/autocomplete.ts"
+  ],
+  "public_source_expectations": {
+    "recorded_at": "2026-11-18T02:19:25.641105+00:00",
+    "basis": "public issue and pinned source only; not sent as extra hints to the model",
+    "expected_files": [
+      "packages/core/src/prompts/autocomplete.ts",
+      "packages/prompts/src/autocomplete.ts"
+    ],
+    "reason": "The public issue names AutocompletePrompt and the autocomplete/autocompleteMultiselect wrappers; their definitions are in these two source files. Other files may legitimately be needed.",
+    "comparison_limit": "A fresh task can assess localization coverage and solve outcome; it does not isolate a causal improvement over the old prompt."
+  },
+  "symbol_locations": {
+    "packages/core/src/prompts/autocomplete.ts": [
+      "type: AutocompleteOptions\nclass: AutocompletePrompt"
+    ],
+    "packages/prompts/src/autocomplete.ts": [
+      "type: AutocompleteSharedOptions\nfunction: autocomplete\nfunction: autocompleteMultiselect"
+    ]
+  },
+  "public_baseline": {
+    "status": "pass",
+    "tests": 640,
+    "excluded_by_model": 0,
+    "counted_ids": 640
+  },
+  "candidate_public_validations": [
+    {
+      "candidate": "loc-0-repair-0",
+      "status": "pass",
+      "test_count": 640,
+      "passed": 640,
+      "duration_seconds": 19.415648000001966
+    },
+    {
+      "candidate": "loc-0-repair-1",
+      "status": "pass",
+      "test_count": 640,
+      "passed": 640,
+      "duration_seconds": 19.818964199999755
+    },
+    {
+      "candidate": "loc-0-repair-2",
+      "status": "pass",
+      "test_count": 640,
+      "passed": 640,
+      "duration_seconds": 18.45288900000014
+    },
+    {
+      "candidate": "loc-0-repair-3",
+      "status": "pass",
+      "test_count": 640,
+      "passed": 640,
+      "duration_seconds": 17.9713989999982
+    }
+  ],
+  "selection": {
+    "reason": "best_regression_then_normalized_majority",
+    "vote_count": 1,
+    "considered_candidate_ids": [
+      "loc-0-repair-0",
+      "loc-0-repair-1",
+      "loc-0-repair-2",
+      "loc-0-repair-3"
+    ],
+    "selected_candidate_id": "loc-0-repair-0"
+  },
+  "score": {
+    "task_id": "clack-async-autocomplete-options",
+    "status": "unresolved",
+    "reward": 0,
+    "f2p_passed": 81,
+    "f2p_total": 82,
+    "p2p_passed": 643,
+    "p2p_total": 643,
+    "image_id": "sha256:32a72ef7d4a9d3ae8937aef9c42e18166284c817c8edf137d66772e4f34abf74",
+    "patch_sha256": "3272c7158c866c6683241ddb6db3b91c73f57a824b49e8f8771e3ad171f93bdd",
+    "dataset_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-clack-declaration-index-2026-11-18\\clack-async-autocomplete-options\\score\\clack-async-autocomplete-options\\agentless-ml-verifier-88385cbf3aa04a2099bb1f795c0147cb",
+    "message": "",
+    "verifier_exit_code": 0
+  },
+  "run": {
+    "run_id": "run-ea64f15d3ad0482b889b88c5c9e4785c",
+    "condition": "agentless-ml-live",
+    "instance_id": "clack-async-autocomplete-options",
+    "started_at": "2026-11-18T02:17:59.886037+00:00",
+    "implementation_revision": "eb7c671991e014b3516b59177f06b6b4c2146a4a+dirty",
+    "benchmark_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "harness_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "container_digest": "sha256:32a72ef7d4a9d3ae8937aef9c42e18166284c817c8edf137d66772e4f34abf74",
+    "model_name": "chatgpt-plan/gpt-6.1-sol",
+    "model_calls": 8,
+    "input_tokens": 43279,
+    "output_tokens": 72082,
+    "wall_time_seconds": 748.4590637000001,
+    "final_patch_sha256": "3272c7158c866c6683241ddb6db3b91c73f57a824b49e8f8771e3ad171f93bdd",
+    "infrastructure_status": "ok"
+  },
+  "budget": {
+    "time_limit_seconds": 7200,
+    "token_limit": 2000000,
+    "used_tokens": 61735,
+    "token_overshoot": 0,
+    "token_accounting": "once_only_context",
+    "content_tokenizer": "o200k_base",
+    "processed_input_tokens": 43279,
+    "processed_output_tokens": 72082,
+    "processed_tokens": 115361,
+    "remaining_seconds": 6453.666634500001
+  },
+  "model_calls": [
+    {
+      "number": 1,
+      "stage": "regression-selection",
+      "input_tokens": 15360,
+      "output_tokens": 189,
+      "reasoning_tokens": 183,
+      "response_sha256": "e877aac407bf78946c3d7e1164e6788d0c00128bb73899df7c8f7f5ea9d17b4e"
+    },
+    {
+      "number": 2,
+      "stage": "file-localization",
+      "input_tokens": 7155,
+      "output_tokens": 219,
+      "reasoning_tokens": 193,
+      "response_sha256": "a4202aacf4e33382541fd12b44de0a3745b099a97ac079d9ca33af49d4ce5c10"
+    },
+    {
+      "number": 3,
+      "stage": "symbol-localization",
+      "input_tokens": 1826,
+      "output_tokens": 461,
+      "reasoning_tokens": 406,
+      "response_sha256": "94aa9201dac11450c7b06736cc7b89dd6cd72a86f4bb4bc67cee78e8a9f76a2b"
+    },
+    {
+      "number": 4,
+      "stage": "edit-localization",
+      "input_tokens": 6138,
+      "output_tokens": 1713,
+      "reasoning_tokens": 1552,
+      "response_sha256": "54458a548777443a378b519255f154f365be39b6c0cef1bcc882d77edd7c1384"
+    },
+    {
+      "number": 5,
+      "stage": "repair",
+      "input_tokens": 3200,
+      "output_tokens": 13785,
+      "reasoning_tokens": 9322,
+      "response_sha256": "77c987e4878a21903200205eb93a5c0604b07979001167e3a96b2b8f34c827ee"
+    },
+    {
+      "number": 6,
+      "stage": "repair",
+      "input_tokens": 3200,
+      "output_tokens": 19193,
+      "reasoning_tokens": 14715,
+      "response_sha256": "b5671a4f899be10206a4a68a3361bf6c213dab1f2c321a133da3a45e2ec7f49e"
+    },
+    {
+      "number": 7,
+      "stage": "repair",
+      "input_tokens": 3200,
+      "output_tokens": 17631,
+      "reasoning_tokens": 12948,
+      "response_sha256": "fbbb479098e1d8ccab3a35f42b2c89559749b671ca7a0493c3977d7831347e53"
+    },
+    {
+      "number": 8,
+      "stage": "repair",
+      "input_tokens": 3200,
+      "output_tokens": 18891,
+      "reasoning_tokens": 13974,
+      "response_sha256": "5ccde95ee77937816bc58b6d4870d219a9d0bdac0862ecfd08d50acc8d10306f"
+    }
+  ],
+  "failed_verifier_checks": [
+    {
+      "name": "[f2p] test/prompts/async-autocomplete.test.ts: AutocompletePrompt - AbortController > previous AbortController is aborted when new fetch starts",
+      "status": "failed",
+      "message": "expected false to be true // Object.is equality"
+    }
+  ],
+  "interpretation": "Both expected implementation/wrapper files were selected; all four candidates passed the public suite. The selected patch failed one issue check. A single fresh task does not isolate a causal improvement from the index. No model rerun or post-score patch modification.",
+  "candidate_selection_used_verifier_feedback": false
+}

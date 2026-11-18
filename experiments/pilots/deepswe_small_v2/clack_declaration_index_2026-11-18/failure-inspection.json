@@ -1,0 +1,14 @@
+{
+  "timing": "post-selection and post-scoring; not fed back into this run",
+  "failed_check": {
+    "name": "[f2p] test/prompts/async-autocomplete.test.ts: AutocompletePrompt - AbortController > previous AbortController is aborted when new fetch starts",
+    "status": "failed",
+    "message": "expected false to be true // Object.is equality"
+  },
+  "public_requirement": "Starting a new fetch must abort the previous signal.",
+  "observed_patch_behavior": "#afterMinimumDuration.finish applies a completed result, sets loading=false and sets #controller=undefined without aborting it. A later #queueFetch calls #invalidateRequest, but the completed controller reference has already been discarded, so its signal remains unaborted.",
+  "test_behavior": "The verifier retains each received signal and expects all but the last to be aborted after successive searches. Its fetch waits 50ms and the test waits for settlement before issuing later inputs.",
+  "classification": "Generated-patch lifecycle logic fails the stated signal contract. File localization included both expected source files. No framework defect established by this failure.",
+  "no_alternate_candidates_scored": true,
+  "patch_unchanged_after_scoring": true
+}

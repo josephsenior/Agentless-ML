@@ -2,8 +2,9 @@
 
 File localization now receives the repository tree **and a declaration index**
 by default. This is a context extension to the Agentless method, adopted on
-18 November 2026 after the [offline census](source-context-census.md). It has
-not yet been evaluated with new live model runs.
+18 November 2026 after the [offline census](source-context-census.md). The
+[first fresh live check](clack-declaration-index-run.md) selected both expected
+Clack files; its patch passed 81/82 issue checks and remains unresolved.
 
 For example, a file can now appear with:
 
