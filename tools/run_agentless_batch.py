@@ -28,7 +28,8 @@ def main():
     parser.add_argument("--tasks", nargs="+", required=True)
     parser.add_argument("--records-root", type=Path, required=True)
     parser.add_argument("--repositories", type=Path, required=True)
-    parser.add_argument("--provider", choices=("bedrock", "chatgpt-plan"), default="bedrock")
+    parser.add_argument("--provider", choices=("chatgpt-plan", "bedrock"), default="chatgpt-plan",
+                        help="Model provider (default: chatgpt-plan)")
     parser.add_argument("--bedrock-region", default="eu-west-3")
     parser.add_argument("--grinta-root", type=Path, help="Required for --provider chatgpt-plan")
     parser.add_argument("--output", type=Path, required=True)

@@ -35,7 +35,7 @@ Workflow status updated **18 November 2026**; baseline counts last updated 17 Oc
 | Core workflow | Hierarchical localization, multi-file edits including creation, deletion and renaming, reproduction and regression checks, deterministic selection and prediction export. |
 | DeepSWE | All 113 tasks have registered usable public baselines. Numba uses its verified two-worker, three-hour public-validation profile; four other tasks use registered supplemented images. |
 | SWE-bench Pro V2 | All 642 task descriptions load. Recorded workflows cover selected Python, Go, JavaScript and TypeScript tasks; workspace checks cover selected tasks from nine repositories. Broad full-suite readiness is incomplete. |
-| Model execution | Recorded or live fixed stages with configured attempt budgets. [Amazon Bedrock setup](docs/live-bedrock.md). |
+| Model execution | Recorded or live fixed stages with configured attempt budgets. [ChatGPT subscription setup](docs/live-subscription.md). |
 | Research experiments | The protocol is a draft. The eligible task set, model settings, matched Grinta condition and scoring route still need to be fixed before reporting results. |
 
 These are implementation and environment-readiness counts, not solved-task

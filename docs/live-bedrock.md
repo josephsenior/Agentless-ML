@@ -1,6 +1,6 @@
 # Live benchmarks on Amazon Bedrock
 
-The Agentless batch launcher defaults to Amazon Bedrock in Paris (`eu-west-3`),
+Select Amazon Bedrock explicitly to run in Paris (`eu-west-3`),
 with `gpt-6.2-sol` at `xhigh`. It sends the fixed stage prompts through the
 Responses API using the `global.openai.gpt-6.2-sol` inference profile. AWS bills
 these requests to the account associated with the Bedrock API key. The global
@@ -20,17 +20,16 @@ Bedrock. For example:
 
 ```powershell
 .venv/Scripts/python.exe tools/run_agentless_batch.py `
+  --provider bedrock `
   --tasks <task-id> `
   --records-root artifacts/shared-deepswe-final-2026-10-24 `
   --repositories ../benchmarks/deepswe/repos `
   --output artifacts/<new-run-directory>
 ```
 
-The shared-task launcher also uses Bedrock with `--live`. Recorded runs still
-use `--experiment`. For a deliberate subscription run, use `--provider
-chatgpt-plan --grinta-root <path>` with the batch launcher or `--live-subscription
---grinta-root <path>` with the shared-task launcher. Those flags are documented
-in the [subscription guide](live-subscription.md).
+The shared-task launcher uses Bedrock with `--live-bedrock`. Recorded runs use
+`--experiment`. For the default live provider, see the
+[ChatGPT subscription guide](live-subscription.md).
 
 For a small paid connection check before running a whole task, use the same
 terminal and print only the model identifier and token counts:

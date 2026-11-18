@@ -139,8 +139,9 @@ def main(argv=None):
         help="Recorded response directory, never a model provider",
     )
     live = parser.add_mutually_exclusive_group()
-    live.add_argument("--live", action="store_true", help="Use Amazon Bedrock")
-    live.add_argument("--live-subscription", action="store_true", help="Use ChatGPT plan allowance")
+    live.add_argument("--live", "--live-subscription", dest="live_subscription",
+                      action="store_true", help="Use ChatGPT plan allowance")
+    live.add_argument("--live-bedrock", action="store_true", help="Use Amazon Bedrock")
     parser.add_argument("--bedrock-region", default="eu-west-3")
     parser.add_argument("--grinta-root", type=Path)
     parser.add_argument("--model")
@@ -170,12 +171,12 @@ def main(argv=None):
     if args.inspect_start:
         print(json.dumps(manifest, indent=2, sort_keys=True))
         return 0
-    if args.live or args.live_subscription:
+    if args.live_subscription or args.live_bedrock:
         if args.experiment or not args.repair_samples or args.repair_samples < 1:
             parser.error("Live mode requires positive --repair-samples and no --experiment")
         if args.live_subscription:
             if args.grinta_root is None:
-                parser.error("--live-subscription requires --grinta-root")
+                parser.error("ChatGPT plan runs require --grinta-root")
             from agentless_ml.workflow.subscription import SubscriptionResponses
 
             live_provider = SubscriptionResponses(
@@ -183,7 +184,7 @@ def main(argv=None):
             )
         else:
             if args.grinta_root is not None:
-                parser.error("--grinta-root requires --live-subscription")
+                parser.error("--grinta-root is only used for ChatGPT plan runs")
             from agentless_ml.workflow.bedrock import BedrockResponses
 
             try:
@@ -196,7 +197,7 @@ def main(argv=None):
     else:
         live_provider = None
         if args.experiment is None:
-            parser.error("--experiment, --live, or --live-subscription is required")
+            parser.error("--experiment, --live, or --live-bedrock is required")
         experiment = json.loads((args.experiment / "experiment.json").read_bytes())
         if experiment["task_id"] != published.instance_id:
             raise ValueError("recorded responses belong to another task")

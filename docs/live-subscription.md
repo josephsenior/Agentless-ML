@@ -11,7 +11,12 @@ stay inside the Grinta worker process and OS credential store. They are not
 copied into candidate containers or Agentless artifacts. Renewal uses the same
 Grinta authorization module. There is no API-key or Codex-backend fallback.
 
-## Run explicitly
+## Run live
+
+The batch launcher uses the ChatGPT subscription by default. Pass
+`--grinta-root <path>` to point it at your authorized Grinta checkout. Amazon
+Bedrock requires `--provider bedrock` for batch runs or `--live-bedrock` for a
+shared task.
 
 First complete Grinta's `chatgpt_plan_auth login`. Then, from Agentless-ML's
 Python environment, use the existing shared-task launcher:
@@ -22,7 +27,7 @@ python tools/run_shared_deepswe_workflow.py `
   --source-repository <pinned-repository> `
   --workspace-root <new-workspace-directory> `
   --artifact-root <new-artifact-directory> `
-  --live-subscription `
+  --live `
   --grinta-root C:/Users/GIGABYTE/Desktop/Grinta `
   --model gpt-6.1-sol --reasoning medium `
   --edit-samples 1 --repair-samples 1
