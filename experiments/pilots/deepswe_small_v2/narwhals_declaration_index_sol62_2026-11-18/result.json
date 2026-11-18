@@ -1,0 +1,323 @@
+{
+  "task_id": "narwhals-rolling-window-suite",
+  "configuration": {
+    "task_ids": [
+      "narwhals-rolling-window-suite"
+    ],
+    "model": "gpt-6.2-sol",
+    "reasoning": "xhigh",
+    "revision": "2d4672199f29a1deb989cfcc4c0360cecf932415+dirty",
+    "task_concurrency": 1,
+    "repair_concurrency_per_task": 4,
+    "repair_samples": 4,
+    "edit_samples": 1,
+    "maximum_files": 10,
+    "retain_declarations": true,
+    "docker_concurrency": 1,
+    "once_only_content_tokens_per_task": 2000000,
+    "time_limit_seconds_per_task": 7200,
+    "queue_policy": "Docker queue waiting counts toward the task deadline except initial baseline preparation. Scoring occurs after export.",
+    "scope": "Agentless-only development batch"
+  },
+  "raw_artifacts": "artifacts/agentless-narwhals-declaration-index-sol62-2026-11-18",
+  "run_id": "run-edacd947b9b34ab98f0fe38d0926df0d",
+  "index": {
+    "policy": "declaration-index-v1",
+    "base_commit": "061c97f8a01bf9e721835978b039303c5051501c",
+    "base_tree": "10009f27d085ba6613f9d1dcf5c10590c5d5ddbd",
+    "files": 201,
+    "declarations": 4698,
+    "index_sha256": "c52248cdcc2c06a5ddd2f07738d6a0ccfe3fcafae2d4073148ac93216cfdb10a",
+    "token_encoding": "o200k_base",
+    "index_tokens": 58305,
+    "file_prompt_tokens": 59947,
+    "diagnostics": [],
+    "dependency_map": false,
+    "truncated": false
+  },
+  "comparison": {
+    "prior_record": "experiments/pilots/deepswe_small_v2/narwhals_xhigh_2026-11-09/result.json",
+    "prior_record_sha256": "d73eccbf6024807180e6237a69e8eb9a9748e27eb8c68cfd16a5544b1dcd8944",
+    "prior_score": {
+      "task_id": "narwhals-rolling-window-suite",
+      "status": "unresolved",
+      "reward": 0,
+      "f2p_passed": 91,
+      "f2p_total": 103,
+      "p2p_passed": 10093,
+      "p2p_total": 10093,
+      "image_id": "sha256:a94da0d6a13d23612acec72b399ae93baf72b875a354f05d3613ed6b552be2c1",
+      "patch_sha256": "0ef0d20306173d9d56657070d46f59c6fd2fff3fcd8306892c3900614dafb7fa",
+      "dataset_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+      "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-narwhals-xhigh-2026-11-09\\narwhals-rolling-window-suite\\score\\narwhals-rolling-window-suite\\agentless-ml-verifier-45ed2ff8342b47e89c2e0ff436deb4ea",
+      "message": "",
+      "verifier_exit_code": 0
+    },
+    "prior_processed_tokens": 398537,
+    "prior_wall_time_seconds": 1164.5197120000012,
+    "same_prompts_by_stage": {
+      "regression-selection": false,
+      "file-localization": false,
+      "symbol-localization": false,
+      "edit-localization": false,
+      "repair": false
+    },
+    "current_source_hashes": {
+      "src/agentless_ml/workflow/fixed.py": "f7f47d9aff7a2f34be3fcf3a36b7a6d18402c9732d6bff99d8e5d8f9298850c9",
+      "src/agentless_ml/localization/source_index.py": "57d31b4dc5f3b2a88bc1ebbbc8c33d1cecb08ea5ae8b7b576cb82dbd46f3f9de",
+      "src/agentless_ml/workflow/subscription.py": "74c35c271d3795ca47433b9e3f4ff99e188219969e1a7a5e9b23898379570f97"
+    },
+    "prior_configuration": {
+      "task_ids": [
+        "narwhals-rolling-window-suite"
+      ],
+      "model": "gpt-6.1-sol",
+      "reasoning": "xhigh",
+      "revision": "686d88ecadf612e2b844bfc522a4a1e5271cc749+dirty",
+      "task_concurrency": 1,
+      "repair_concurrency_per_task": 4,
+      "repair_samples": 4,
+      "edit_samples": 1,
+      "docker_concurrency": 1,
+      "once_only_content_tokens_per_task": 2000000,
+      "time_limit_seconds_per_task": 7200,
+      "queue_policy": "Docker queue waiting counts toward the task deadline except initial baseline preparation. Scoring occurs after export.",
+      "scope": "Agentless-only development batch"
+    },
+    "limitation": "Repeat changes model and localization/context defaults. It does not isolate a model effect."
+  },
+  "public_baseline": {
+    "skipped": 1699,
+    "passed": 10093
+  },
+  "public_tests_counted": 10093,
+  "model_calls": [
+    {
+      "number": 1,
+      "stage": "regression-selection",
+      "completed": true,
+      "input_tokens": 214095,
+      "output_tokens": 306,
+      "model": "gpt-6.2-sol",
+      "response_sha256": "a767c0fd7ff7bcab022a39e9341a2727d5d1c306e876973856a851c44970ee67"
+    },
+    {
+      "number": 2,
+      "stage": "file-localization",
+      "completed": true,
+      "input_tokens": 59953,
+      "output_tokens": 1019,
+      "model": "gpt-6.2-sol",
+      "response_sha256": "16d248496661ab393e7cde30f1ef41936dc462cd89e884ee8a621e1dce6259c9"
+    },
+    {
+      "number": 3,
+      "stage": "symbol-localization",
+      "completed": true,
+      "input_tokens": 26695,
+      "output_tokens": 1566,
+      "model": "gpt-6.2-sol",
+      "response_sha256": "c15d3364236da4c68b74d2cc4e3be9e5b261af3f82ae664dc05444113c6540d9"
+    },
+    {
+      "number": 4,
+      "stage": "edit-localization",
+      "completed": true,
+      "input_tokens": 121829,
+      "output_tokens": 1326,
+      "model": "gpt-6.2-sol",
+      "response_sha256": "e1a50d5ac6d7a5e6e11ec9b4c0b527e92d7d83c0d03c6a05bd80bb96bc844c6a"
+    },
+    {
+      "number": 5,
+      "stage": "repair",
+      "completed": true,
+      "input_tokens": 3804,
+      "output_tokens": 12416,
+      "model": "gpt-6.2-sol",
+      "response_sha256": "829b1e2b862203a51832e25d08b6727c8e0f3e6972f67a869a0a4f51fc7f762f"
+    },
+    {
+      "number": 6,
+      "stage": "repair",
+      "completed": true,
+      "input_tokens": 3804,
+      "output_tokens": 13162,
+      "model": "gpt-6.2-sol",
+      "response_sha256": "34cef3044a8c2c86fcb1df2c954f4057eebd21061afa0238323aa6ae67527642"
+    },
+    {
+      "number": 7,
+      "stage": "repair",
+      "completed": true,
+      "input_tokens": 3804,
+      "output_tokens": 12533,
+      "model": "gpt-6.2-sol",
+      "response_sha256": "872908c75d6cb51f5727dc0f8fe904fbf4dc8b368b1f2a869480e7ca1e2d6dfa"
+    },
+    {
+      "number": 8,
+      "stage": "repair",
+      "completed": true,
+      "input_tokens": 3804,
+      "output_tokens": 13151,
+      "model": "gpt-6.2-sol",
+      "response_sha256": "9b24bd44387cec4a21adb127657cada7c4ae032c1f863783ef44cd394f432d13"
+    }
+  ],
+  "candidate_validation": [
+    {
+      "candidate": "loc-0-repair-0",
+      "status": "pass",
+      "counts": {
+        "skipped": 1699,
+        "passed": 10093
+      },
+      "nonpassing_counted_ids": []
+    },
+    {
+      "candidate": "loc-0-repair-1",
+      "status": "pass",
+      "counts": {
+        "skipped": 1699,
+        "passed": 10093
+      },
+      "nonpassing_counted_ids": []
+    },
+    {
+      "candidate": "loc-0-repair-2",
+      "status": "pass",
+      "counts": {
+        "skipped": 1699,
+        "passed": 10093
+      },
+      "nonpassing_counted_ids": []
+    },
+    {
+      "candidate": "loc-0-repair-3",
+      "status": "pass",
+      "counts": {
+        "skipped": 1699,
+        "passed": 10093
+      },
+      "nonpassing_counted_ids": []
+    }
+  ],
+  "status": "scored",
+  "budget": {
+    "time_limit_seconds": 7200,
+    "token_limit": 2000000,
+    "used_tokens": 483644,
+    "token_overshoot": 0,
+    "token_accounting": "once_only_context",
+    "content_tokenizer": "o200k_base",
+    "processed_input_tokens": 437788,
+    "processed_output_tokens": 55479,
+    "processed_tokens": 493267,
+    "remaining_seconds": 6084.5725561
+  },
+  "score": {
+    "task_id": "narwhals-rolling-window-suite",
+    "status": "resolved",
+    "reward": 1,
+    "f2p_passed": 103,
+    "f2p_total": 103,
+    "p2p_passed": 10093,
+    "p2p_total": 10093,
+    "image_id": "sha256:a94da0d6a13d23612acec72b399ae93baf72b875a354f05d3613ed6b552be2c1",
+    "patch_sha256": "8e7198d8fd16e7cacd1d5d6e0b9bbf73489011166e8975ceb7168992d6deaf75",
+    "dataset_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-narwhals-declaration-index-sol62-2026-11-18\\narwhals-rolling-window-suite\\score\\narwhals-rolling-window-suite\\agentless-ml-verifier-d8fc4921d642446693b9fbfd24b9a858",
+    "message": "",
+    "verifier_exit_code": 0
+  },
+  "selected_files": [
+    "narwhals/expr.py",
+    "narwhals/series.py",
+    "narwhals/_compliant/expr.py",
+    "narwhals/_pandas_like/series.py",
+    "narwhals/_arrow/series.py",
+    "narwhals/_polars/expr.py",
+    "narwhals/_polars/series.py",
+    "narwhals/_dask/expr.py",
+    "narwhals/_sql/expr.py",
+    "narwhals/_compliant/column.py"
+  ],
+  "completed_repairs": [
+    {
+      "call": 5,
+      "search_blocks": 12,
+      "response_characters": 25389
+    },
+    {
+      "call": 6,
+      "search_blocks": 13,
+      "response_characters": 23598
+    },
+    {
+      "call": 7,
+      "search_blocks": 13,
+      "response_characters": 23243
+    },
+    {
+      "call": 8,
+      "search_blocks": 12,
+      "response_characters": 26204
+    }
+  ],
+  "prediction_exported": true,
+  "candidate_validation_started": true,
+  "host_sleep_prevention": "Temporary Windows system keep-awake request.",
+  "repair_attempts": [
+    {
+      "candidate_id": "loc-0-repair-0",
+      "status": "validated",
+      "message": ""
+    },
+    {
+      "candidate_id": "loc-0-repair-1",
+      "status": "validated",
+      "message": ""
+    },
+    {
+      "candidate_id": "loc-0-repair-2",
+      "status": "validated",
+      "message": ""
+    },
+    {
+      "candidate_id": "loc-0-repair-3",
+      "status": "validated",
+      "message": ""
+    }
+  ],
+  "run": {
+    "run_id": "run-edacd947b9b34ab98f0fe38d0926df0d",
+    "condition": "agentless-ml-live",
+    "instance_id": "narwhals-rolling-window-suite",
+    "started_at": "2026-11-18T11:48:15.212621+00:00",
+    "implementation_revision": "2d4672199f29a1deb989cfcc4c0360cecf932415+dirty",
+    "benchmark_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "harness_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "container_digest": "sha256:a94da0d6a13d23612acec72b399ae93baf72b875a354f05d3613ed6b552be2c1",
+    "model_name": "chatgpt-plan/gpt-6.2-sol",
+    "model_calls": 8,
+    "input_tokens": 437788,
+    "output_tokens": 55479,
+    "wall_time_seconds": 1116.8349501999983,
+    "final_patch_sha256": "8e7198d8fd16e7cacd1d5d6e0b9bbf73489011166e8975ceb7168992d6deaf75",
+    "infrastructure_status": "ok"
+  },
+  "selection": {
+    "reason": "best_regression_then_normalized_majority",
+    "vote_count": 1,
+    "considered_candidate_ids": [
+      "loc-0-repair-0",
+      "loc-0-repair-1",
+      "loc-0-repair-2",
+      "loc-0-repair-3"
+    ],
+    "selected_candidate_id": "loc-0-repair-0"
+  },
+  "failed_verifier_check_count": 0,
+  "failed_verifier_checks_sample": []
+}
