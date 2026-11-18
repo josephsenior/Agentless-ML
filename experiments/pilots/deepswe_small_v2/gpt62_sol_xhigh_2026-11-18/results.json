@@ -1,0 +1,43 @@
+{
+  "date": "2026-11-18",
+  "provider": "chatgpt-plan",
+  "model": "gpt-6.2-sol",
+  "reasoning": "xhigh",
+  "task_concurrency": 2,
+  "repair_samples_per_task": 4,
+  "edit_samples_per_task": 1,
+  "maximum_files": 10,
+  "retain_declarations": true,
+  "token_limit_per_task": 2000000,
+  "time_limit_seconds_per_task": 7200,
+  "tasks": [
+    {
+      "task_id": "obsidian-linter-auto-table-of-contents",
+      "status": "unresolved",
+      "f2p_passed": 0,
+      "f2p_total": 41,
+      "p2p_passed": 1131,
+      "p2p_total": 1131,
+      "used_context_tokens": 104100,
+      "completed_model_responses": 8,
+      "image_id": "sha256:56d3ffcde2ca373ffa0107f830b243d66191020f7021806acc8d609148518092",
+      "patch_sha256": "a70660d4c57ea75e452729026382b3b94c4ccd5d969ec45a74291551c394c888",
+      "previous_gpt61_score": { "f2p_passed": 0, "f2p_total": 41, "p2p_passed": 582, "p2p_total": 1131, "used_context_tokens": 95240 }
+    },
+    {
+      "task_id": "gql-incremental-graphql-delivery",
+      "status": "unresolved",
+      "f2p_passed": 14,
+      "f2p_total": 17,
+      "p2p_passed": 810,
+      "p2p_total": 811,
+      "used_context_tokens": 101727,
+      "completed_model_responses": 8,
+      "image_id": "sha256:ed624caaa47e2992730a75099e3da71aee7cbdaf33efbaef93ee0ef320f3394f",
+      "patch_sha256": "8bae015b0e2e8934d2a4560e8c5999f4f1d52730c40927e9604e4ab089ffb1ec",
+      "previous_gpt61_score": { "f2p_passed": 14, "f2p_total": 17, "p2p_passed": 810, "p2p_total": 811, "used_context_tokens": 108061 }
+    }
+  ],
+  "dataset_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+  "full_artifacts": "artifacts/agentless-obsidian-gql-sol62-2026-11-18/"
+}
