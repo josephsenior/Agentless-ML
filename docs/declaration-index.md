@@ -8,6 +8,9 @@ Clack files; its patch passed 81/82 issue checks and remains unresolved.
 The [second fresh check](awilix-declaration-index-run.md) selected Awilix's
 container, resolver, error and export modules; its selected patch passed 23/24
 issue checks and also remains unresolved. Neither trial has a paired control.
+The [fresh Python HTTPX attempt](httpx-declaration-index-interruption.md) selected
+the relevant source modules but was interrupted by host sleep before validation.
+It has no benchmark score.
 
 For example, a file can now appear with:
 

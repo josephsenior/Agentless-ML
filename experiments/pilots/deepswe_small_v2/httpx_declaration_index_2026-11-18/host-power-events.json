@@ -1,0 +1,12 @@
+{
+  "provider": "Microsoft-Windows-Power-Troubleshooter",
+  "record_id": 320777,
+  "recorded_utc": "2026-11-18T10:17:40.3672246Z",
+  "data": {
+    "SleepTime": "2026-11-18T03:19:07.9631398Z",
+    "TargetState": "4",
+    "WakeTime": "2026-11-18T10:17:38.4776000Z",
+    "EffectiveState": "4"
+  },
+  "event_id": 1
+}

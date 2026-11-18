@@ -51,6 +51,8 @@ Clack's correct file selection, four public-suite passes and final unresolved
 result (81/82 issue checks), including the single generated-patch defect.
 The [Awilix follow-up](awilix-declaration-index-run.md) keeps the same settings
 and records an unresolved 23/24 result, with a scope-isolation mismatch.
+The [HTTPX attempt](httpx-declaration-index-interruption.md) records a host sleep
+interruption before validation; it has no benchmark score.
 
 The [history guide](history/README.md) groups previous environment and test-runner
 investigations. Their old readiness counts and next-step statements describe

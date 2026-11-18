@@ -1,0 +1,226 @@
+{
+  "task_id": "httpx-deterministic-cookie-store",
+  "kind": "host-interrupted-development-attempt",
+  "status": "incomplete",
+  "benchmark_score": null,
+  "prediction_exported": false,
+  "candidate_validation_started": false,
+  "verifier_started": false,
+  "raw_launcher_status": "failed",
+  "raw_launcher_error_type": "TimeoutExpired",
+  "attempted_model_calls": 8,
+  "completed_model_responses": 6,
+  "timed_out_model_calls": [
+    6,
+    8
+  ],
+  "raw_launcher_model_calls": 0,
+  "counter_note": "Launcher model_calls is populated after successful export; request ledger and workflow failure.json establish eight attempted calls, with six completed responses.",
+  "configuration": {
+    "task_ids": [
+      "httpx-deterministic-cookie-store"
+    ],
+    "model": "gpt-6.1-sol",
+    "reasoning": "xhigh",
+    "revision": "44f80099f8edcd1a7ba01792e11646ec3ef7b636+dirty",
+    "task_concurrency": 1,
+    "repair_concurrency_per_task": 4,
+    "repair_samples": 4,
+    "edit_samples": 1,
+    "maximum_files": 10,
+    "retain_declarations": true,
+    "docker_concurrency": 1,
+    "once_only_content_tokens_per_task": 2000000,
+    "time_limit_seconds_per_task": 7200,
+    "queue_policy": "Docker queue waiting counts toward the task deadline except initial baseline preparation. Scoring occurs after export.",
+    "scope": "Agentless-only development batch"
+  },
+  "implementation": {
+    "commit": "44f80099f8edcd1a7ba01792e11646ec3ef7b636",
+    "policy": "declaration-index-v1",
+    "verified_sources": [
+      {
+        "path": "src/agentless_ml/workflow/fixed.py",
+        "sha256": "f7f47d9aff7a2f34be3fcf3a36b7a6d18402c9732d6bff99d8e5d8f9298850c9",
+        "matches_committed_source": true
+      },
+      {
+        "path": "src/agentless_ml/localization/source_index.py",
+        "sha256": "57d31b4dc5f3b2a88bc1ebbbc8c33d1cecb08ea5ae8b7b576cb82dbd46f3f9de",
+        "matches_committed_source": true
+      },
+      {
+        "path": "src/agentless_ml/workflow/subscription.py",
+        "sha256": "74c35c271d3795ca47433b9e3f4ff99e188219969e1a7a5e9b23898379570f97",
+        "matches_committed_source": true
+      }
+    ]
+  },
+  "index": {
+    "policy": "declaration-index-v1",
+    "base_commit": "b5addb64f0161ff6bfe94c124ef76f6a1fba5254",
+    "base_tree": "31ba94512339180efacceacc0646b56ee15eba63",
+    "files": 23,
+    "declarations": 608,
+    "index_sha256": "f183f633785ea3db3216fcf8425fc2729862a6d9d270aabf2d8a775e982acb23",
+    "token_encoding": "o200k_base",
+    "index_tokens": 6704,
+    "file_prompt_tokens": 7649,
+    "diagnostics": [],
+    "dependency_map": false,
+    "truncated": false
+  },
+  "selected_files": [
+    "httpx/_models.py",
+    "httpx/_client.py",
+    "httpx/_types.py",
+    "httpx/__init__.py"
+  ],
+  "public_source_expectations": {
+    "recorded_at": "2026-11-18T03:10:15.566725+00:00",
+    "basis": "public task description and public source API; not supplied as additional model hints",
+    "source_anchors": [
+      "httpx/_models.py",
+      "httpx/_client.py",
+      "httpx/__init__.py"
+    ],
+    "optional_source_area": "httpx/_types.py contains CookieTypes; required changes depend on chosen inheritance/integration.",
+    "interpretation": "Existing Cookies and request/response handling, client cookie merging, and public exports are direct source anchors. A valid implementation can also add a file or use another structure.",
+    "comparison_limit": "A single fresh task cannot establish a causal localization improvement over the previous prompt."
+  },
+  "public_baseline": {
+    "raw_status": "fail",
+    "case_counts": {
+      "passed": 1413,
+      "skipped": 1,
+      "failed": 4
+    },
+    "preexisting_failed_test_ids": [
+      "tests.client.test_proxies::test_async_proxy_close[asyncio]",
+      "tests.client.test_proxies::test_async_proxy_close[trio]",
+      "tests.client.test_proxies::test_sync_proxy_close",
+      "tests.test_timeouts::test_write_timeout[trio]"
+    ],
+    "passing_ids_frozen": 1413,
+    "excluded_by_model": 0,
+    "counted_ids": 1413
+  },
+  "budget": {
+    "time_limit_seconds": 7200,
+    "token_limit": 2000000,
+    "used_tokens": 79735,
+    "token_overshoot": 0,
+    "token_accounting": "once_only_context",
+    "content_tokenizer": "o200k_base",
+    "processed_input_tokens": 66053,
+    "processed_output_tokens": 38093,
+    "processed_tokens": 104146,
+    "remaining_seconds": 0
+  },
+  "completed_response_processed_tokens": 104146,
+  "usage_caveat": "Usage for timed-out requests 6 and 8 is unknown; completed-response totals are not complete provider consumption.",
+  "model_calls": [
+    {
+      "number": 1,
+      "stage": "regression-selection",
+      "request_sha256": "8bf759f5e67b77b6706773cce54b2c033d4bf17d9322c9225040ff8e51ebce53",
+      "completed": true,
+      "input_tokens": 21584,
+      "output_tokens": 104,
+      "reasoning_tokens": 98,
+      "response_sha256": "d1fea42727dbc41917919001e0f9508b167a9ff33c7c5b5ed67dcfa9c4508c6d",
+      "response_characters": 0
+    },
+    {
+      "number": 2,
+      "stage": "file-localization",
+      "request_sha256": "9368728ac3eae88297243956039eb810dd7951ed42dcf643b19edd8e384d4aae",
+      "completed": true,
+      "input_tokens": 7655,
+      "output_tokens": 188,
+      "reasoning_tokens": 154,
+      "response_sha256": "7eb754b1fa17a43aaff1a6a8eb5241891598a4f8c0fc261c7aaf8af30b94bdda",
+      "response_characters": 75
+    },
+    {
+      "number": 3,
+      "stage": "symbol-localization",
+      "request_sha256": "af77ef2a07280a41781e9bb56b78def2c02bb048a6d9947ce8bb80a1ee9e4684",
+      "completed": true,
+      "input_tokens": 8810,
+      "output_tokens": 2815,
+      "reasoning_tokens": 2726,
+      "response_sha256": "975c6477b324a57eae76cd2178286437f59f71adaef907632d7b4dbb4568819a",
+      "response_characters": 302
+    },
+    {
+      "number": 4,
+      "stage": "edit-localization",
+      "request_sha256": "e1464748410cc86081a49964b4281f1d68cf203ba827924aae80a8330c189189",
+      "completed": true,
+      "input_tokens": 22442,
+      "output_tokens": 2160,
+      "reasoning_tokens": 2070,
+      "response_sha256": "68a0ced4f6dd36a50f40f632b1be1232c97da65bace541033ed860a97d5c2c30",
+      "response_characters": 183
+    },
+    {
+      "number": 5,
+      "stage": "repair",
+      "request_sha256": "98baf155370566c335857842bc66909fb7c8524778a5326fbd3199b369a08612",
+      "completed": true,
+      "input_tokens": 2781,
+      "output_tokens": 16235,
+      "reasoning_tokens": 11878,
+      "response_sha256": "b11638e30f1be618cf5af6b609ae8a4f46c4cf495e39f3cf52b9dd50435a9fd6",
+      "response_characters": 21313
+    },
+    {
+      "number": 6,
+      "stage": "repair",
+      "request_sha256": "98baf155370566c335857842bc66909fb7c8524778a5326fbd3199b369a08612",
+      "completed": false,
+      "error_type": "TimeoutExpired",
+      "error_summary": "Subscription worker exceeded the remaining task deadline; no completed response/usage was retained."
+    },
+    {
+      "number": 7,
+      "stage": "repair",
+      "request_sha256": "98baf155370566c335857842bc66909fb7c8524778a5326fbd3199b369a08612",
+      "completed": true,
+      "input_tokens": 2781,
+      "output_tokens": 16591,
+      "reasoning_tokens": 12388,
+      "response_sha256": "d8ef115553708a9c2de7047229420f22ea4ef21069f70fdd01d2d4875aa7f478",
+      "response_characters": 20659
+    },
+    {
+      "number": 8,
+      "stage": "repair",
+      "request_sha256": "98baf155370566c335857842bc66909fb7c8524778a5326fbd3199b369a08612",
+      "completed": false,
+      "error_type": "TimeoutExpired",
+      "error_summary": "Subscription worker exceeded the remaining task deadline; no completed response/usage was retained."
+    }
+  ],
+  "host_power_event": {
+    "provider": "Microsoft-Windows-Power-Troubleshooter",
+    "record_id": 320777,
+    "recorded_utc": "2026-11-18T10:17:40.3672246Z",
+    "data": {
+      "SleepTime": "2026-11-18T03:19:07.9631398Z",
+      "TargetState": "4",
+      "WakeTime": "2026-11-18T10:17:38.4776000Z",
+      "EffectiveState": "4"
+    },
+    "event_id": 1
+  },
+  "interruption": "Windows sleep/low-power interval overlaps two unfinished subscription requests. They timed out when execution resumed after the attempt deadline. No evidence establishes a model repair failure or provider-side root cause independent of the host interruption.",
+  "raw_artifacts": "artifacts/agentless-httpx-declaration-index-2026-11-18",
+  "model_retry": false,
+  "partial_response_validation": false,
+  "prior_trials_unchanged": [
+    "clack_declaration_index_2026-11-18",
+    "awilix_declaration_index_2026-11-18"
+  ]
+}
