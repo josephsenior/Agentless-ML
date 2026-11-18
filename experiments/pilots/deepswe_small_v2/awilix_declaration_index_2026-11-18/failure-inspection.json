@@ -1,0 +1,25 @@
+{
+  "timing": "post-selection and post-scoring; not used as feedback for this attempt",
+  "failed_check": {
+    "name": "[f2p] Async Initialization Feature Edge cases and integration allows scope.initialize() without calling parent.initialize() first",
+    "status": "failed",
+    "message": "Error: expect(received).toEqual(expected) // deep equality\n\n- Expected  - 0\n+ Received  + 1\n\n  Array [\n+   \"parentSingleton\",\n    \"scoped\",\n  ]"
+  },
+  "public_scope_requirement": "Scoped containers can be initialized independently; parent singletons are not reinitialized.",
+  "verifier_behavior": "Create an uninitialized parent singleton, create a child with a scoped initializer, then call scope.initialize(). Expect only the scoped initializer to run; initialize the parent afterward.",
+  "selected_patch_behavior": "buildInitializationLevels visits Reflect.ownKeys(container.registrations), including inherited parent registrations. Its getInitializedEntry guard skips a parent singleton only after that singleton has initialized. A pending parent singleton is therefore included in the child initialization levels.",
+  "prompt_visibility": {
+    "repair_shows_registration_getter": true,
+    "repair_shows_rollup_helper_definition": false,
+    "edit_localization_shows_rollup_helper_definition": true
+  },
+  "classification": "The generated initialization logic does not implement the verifier scope-isolation rule. Relevant files were selected; no framework defect is established. Repair context is still bounded, so this is not a controlled attribution to reasoning versus context.",
+  "unselected_public_failure": {
+    "candidate": "loc-0-repair-1",
+    "code": "TS2345",
+    "description": "The generated resolver types required builder methods on a resolver input object before createBuildResolver had added them. Eight suites failed to run; 49 cases in the remaining suites passed. This candidate was excluded by public validation."
+  },
+  "alternate_candidates_scored": false,
+  "patch_changed_after_scoring": false,
+  "model_retry": false
+}

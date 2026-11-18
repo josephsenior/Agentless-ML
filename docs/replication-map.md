@@ -43,7 +43,9 @@ explicit context extension to the pinned method. It does not add an import map,
 model phase or edit permission. See the [implementation note](declaration-index.md)
 and [113-task token census](source-context-census.md). Controller tests verify
 pinned mixed-language visibility, coverage warnings and pre-request budget
-checking; no new live-model result is claimed for this change.
+checking. Fresh development runs selected relevant files for
+[Clack](clack-declaration-index-run.md) and [Awilix](awilix-declaration-index-run.md),
+but both remain unresolved. No paired control establishes a performance gain.
 
 ### Separate implementation and reference
 

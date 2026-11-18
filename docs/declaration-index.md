@@ -5,6 +5,9 @@ by default. This is a context extension to the Agentless method, adopted on
 18 November 2026 after the [offline census](source-context-census.md). The
 [first fresh live check](clack-declaration-index-run.md) selected both expected
 Clack files; its patch passed 81/82 issue checks and remains unresolved.
+The [second fresh check](awilix-declaration-index-run.md) selected Awilix's
+container, resolver, error and export modules; its selected patch passed 23/24
+issue checks and also remains unresolved. Neither trial has a paired control.
 
 For example, a file can now appear with:
 

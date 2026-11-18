@@ -1,0 +1,267 @@
+{
+  "task_id": "awilix-async-container-initialization",
+  "kind": "single-fresh-task-development-run",
+  "configuration": {
+    "task_ids": [
+      "awilix-async-container-initialization"
+    ],
+    "model": "gpt-6.1-sol",
+    "reasoning": "xhigh",
+    "revision": "e6062ecb5844fe4da97940235954c84b9c5d19fe+dirty",
+    "task_concurrency": 1,
+    "repair_concurrency_per_task": 4,
+    "repair_samples": 4,
+    "edit_samples": 1,
+    "maximum_files": 10,
+    "retain_declarations": true,
+    "docker_concurrency": 1,
+    "once_only_content_tokens_per_task": 2000000,
+    "time_limit_seconds_per_task": 7200,
+    "queue_policy": "Docker queue waiting counts toward the task deadline except initial baseline preparation. Scoring occurs after export.",
+    "scope": "Agentless-only development batch"
+  },
+  "implementation": {
+    "commit": "e6062ecb5844fe4da97940235954c84b9c5d19fe",
+    "policy": "declaration-index-v1",
+    "verified_sources": [
+      {
+        "path": "src/agentless_ml/workflow/fixed.py",
+        "sha256": "f7f47d9aff7a2f34be3fcf3a36b7a6d18402c9732d6bff99d8e5d8f9298850c9",
+        "matches_committed_source": true
+      },
+      {
+        "path": "src/agentless_ml/localization/source_index.py",
+        "sha256": "57d31b4dc5f3b2a88bc1ebbbc8c33d1cecb08ea5ae8b7b576cb82dbd46f3f9de",
+        "matches_committed_source": true
+      },
+      {
+        "path": "src/agentless_ml/workflow/subscription.py",
+        "sha256": "74c35c271d3795ca47433b9e3f4ff99e188219969e1a7a5e9b23898379570f97",
+        "matches_committed_source": true
+      }
+    ]
+  },
+  "raw_artifacts": "artifacts/agentless-awilix-declaration-index-2026-11-18",
+  "index": {
+    "policy": "declaration-index-v1",
+    "base_commit": "82ac179c1de4c216c4e333093044fac643303f0c",
+    "base_tree": "c0dec04b08ec9dbd53a2a15ca493f0fda9b89b2e",
+    "files": 28,
+    "declarations": 224,
+    "index_sha256": "baa672241fa0e37126ff1d219469f0e74bf547ce2911d3d75ca396b89e2c7f70",
+    "token_encoding": "o200k_base",
+    "index_tokens": 2678,
+    "file_prompt_tokens": 3375,
+    "diagnostics": [],
+    "dependency_map": false,
+    "truncated": false
+  },
+  "selected_files": [
+    "src/container.ts",
+    "src/resolvers.ts",
+    "src/errors.ts",
+    "src/awilix.ts"
+  ],
+  "public_source_expectations": {
+    "recorded_at": "2026-11-18T02:44:18.016469+00:00",
+    "basis": "public task description and public source API declarations; not supplied as extra model hints",
+    "source_anchors": [
+      "src/container.ts",
+      "src/resolvers.ts",
+      "src/errors.ts"
+    ],
+    "interpretation": "Container lifecycle, resolver builder API and error definitions are direct public-source anchors. Valid implementations may add files or place new exports elsewhere. These are inspection anchors, not an oracle of the uniquely correct edit set.",
+    "comparison_limit": "A single fresh task cannot establish a causal localization improvement over the previous prompt."
+  },
+  "symbol_locations": {
+    "src/container.ts": [
+      "type: AwilixContainer\ntype: CacheEntry\nfunction: createContainer\nfunction: createContainerInternal"
+    ],
+    "src/resolvers.ts": [
+      "type: Resolver\ntype: ResolverOptions\ntype: BuildResolver\ntype: BuildResolverOptions\ntype: DisposableResolver\nfunction: asFunction\nfunction: asClass\nfunction: createBuildResolver\nfunction: createDisposableResolver\nfunction: updateResolver\nfunction: generateResolve\nfunction: parseDependencies"
+    ],
+    "src/errors.ts": [
+      "class: ExtendableError\nclass: AwilixError\nclass: AwilixResolutionError"
+    ],
+    "src/awilix.ts": [
+      "line: 1\nline: 12\nline: 26"
+    ]
+  },
+  "public_baseline": {
+    "status": "pass",
+    "tests": 158,
+    "excluded_by_model": 0,
+    "counted_ids": 158
+  },
+  "candidate_public_validations": [
+    {
+      "candidate": "loc-0-repair-0",
+      "status": "pass",
+      "exit_code": 0,
+      "test_count": 158,
+      "case_status_counts": {
+        "passed": 158
+      },
+      "duration_seconds": 5.566587799999979
+    },
+    {
+      "candidate": "loc-0-repair-1",
+      "status": "fail",
+      "exit_code": 1,
+      "test_count": 49,
+      "case_status_counts": {
+        "passed": 49
+      },
+      "duration_seconds": 5.790101799997501
+    },
+    {
+      "candidate": "loc-0-repair-2",
+      "status": "pass",
+      "exit_code": 0,
+      "test_count": 158,
+      "case_status_counts": {
+        "passed": 158
+      },
+      "duration_seconds": 5.454753800000617
+    },
+    {
+      "candidate": "loc-0-repair-3",
+      "status": "pass",
+      "exit_code": 0,
+      "test_count": 158,
+      "case_status_counts": {
+        "passed": 158
+      },
+      "duration_seconds": 5.515159799997491
+    }
+  ],
+  "selection": {
+    "reason": "best_regression_then_normalized_majority",
+    "vote_count": 1,
+    "considered_candidate_ids": [
+      "loc-0-repair-0",
+      "loc-0-repair-2",
+      "loc-0-repair-3"
+    ],
+    "selected_candidate_id": "loc-0-repair-0"
+  },
+  "score": {
+    "task_id": "awilix-async-container-initialization",
+    "status": "unresolved",
+    "reward": 0,
+    "f2p_passed": 23,
+    "f2p_total": 24,
+    "p2p_passed": 162,
+    "p2p_total": 162,
+    "image_id": "sha256:748294a8ece567691f0a628d03c3531024d9f5e1acd13d5c6dd1ecba490831e6",
+    "patch_sha256": "0b39b225b2311fecde31802e1d410c0244d0a3a81c497a4d4d1af9c8954ce9c1",
+    "dataset_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-awilix-declaration-index-2026-11-18\\awilix-async-container-initialization\\score\\awilix-async-container-initialization\\agentless-ml-verifier-d4afde6fe392494cbc8f1aa67ba79c62",
+    "message": "",
+    "verifier_exit_code": 0
+  },
+  "run": {
+    "run_id": "run-0527b5a0dab04ee498c49d0d11b89060",
+    "condition": "agentless-ml-live",
+    "instance_id": "awilix-async-container-initialization",
+    "started_at": "2026-11-18T02:43:35.443251+00:00",
+    "implementation_revision": "e6062ecb5844fe4da97940235954c84b9c5d19fe+dirty",
+    "benchmark_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "harness_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "container_digest": "sha256:748294a8ece567691f0a628d03c3531024d9f5e1acd13d5c6dd1ecba490831e6",
+    "model_name": "chatgpt-plan/gpt-6.1-sol",
+    "model_calls": 8,
+    "input_tokens": 38291,
+    "output_tokens": 87229,
+    "wall_time_seconds": 774.8206714999978,
+    "final_patch_sha256": "0b39b225b2311fecde31802e1d410c0244d0a3a81c497a4d4d1af9c8954ce9c1",
+    "infrastructure_status": "ok"
+  },
+  "budget": {
+    "time_limit_seconds": 7200,
+    "token_limit": 2000000,
+    "used_tokens": 52535,
+    "token_overshoot": 0,
+    "token_accounting": "once_only_context",
+    "content_tokenizer": "o200k_base",
+    "processed_input_tokens": 38291,
+    "processed_output_tokens": 87229,
+    "processed_tokens": 125520,
+    "remaining_seconds": 6415.129121900001
+  },
+  "model_calls": [
+    {
+      "number": 1,
+      "stage": "regression-selection",
+      "input_tokens": 3782,
+      "output_tokens": 355,
+      "reasoning_tokens": 349,
+      "response_sha256": "67457b8dfc4479ba24da0df8395c2614fecbc047c7afa9b18465ec027a892980"
+    },
+    {
+      "number": 2,
+      "stage": "file-localization",
+      "input_tokens": 3381,
+      "output_tokens": 229,
+      "reasoning_tokens": 200,
+      "response_sha256": "0932d9708f98362a2724f006b3a37ff57d39beca0c17783674dd7f63d85e4dc8"
+    },
+    {
+      "number": 3,
+      "stage": "symbol-localization",
+      "input_tokens": 4894,
+      "output_tokens": 2600,
+      "reasoning_tokens": 2450,
+      "response_sha256": "ed8c432888fef9e0d2962fd10d6890fbcf4ca551440bd385e2e828ea2374f274"
+    },
+    {
+      "number": 4,
+      "stage": "edit-localization",
+      "input_tokens": 10194,
+      "output_tokens": 3238,
+      "reasoning_tokens": 3104,
+      "response_sha256": "11b4bd7540ebde0dc6c9fec971a4e9845cf9d1b490df100fbccd300a5353e035"
+    },
+    {
+      "number": 5,
+      "stage": "repair",
+      "input_tokens": 4010,
+      "output_tokens": 19778,
+      "reasoning_tokens": 15067,
+      "response_sha256": "5bc1c1b93fd5354945a6194af174571f024fe441401040aa1b17fa5b8726632b"
+    },
+    {
+      "number": 6,
+      "stage": "repair",
+      "input_tokens": 4010,
+      "output_tokens": 20672,
+      "reasoning_tokens": 15914,
+      "response_sha256": "d1cc4560e177f3e168b3afbee40ec119e44e26f236bdd54a275ba40fe8cf61b1"
+    },
+    {
+      "number": 7,
+      "stage": "repair",
+      "input_tokens": 4010,
+      "output_tokens": 20487,
+      "reasoning_tokens": 16056,
+      "response_sha256": "708ee550a6e4833eec7421fd5b4fb25d96a6665c6e47608f5a4eb80a2246038f"
+    },
+    {
+      "number": 8,
+      "stage": "repair",
+      "input_tokens": 4010,
+      "output_tokens": 19870,
+      "reasoning_tokens": 14502,
+      "response_sha256": "40663db8a255e64c6d29c2c01fd75896161b3172910f4af90dca5d4eb9e32548"
+    }
+  ],
+  "failed_verifier_checks": [
+    {
+      "name": "[f2p] Async Initialization Feature Edge cases and integration allows scope.initialize() without calling parent.initialize() first",
+      "status": "failed",
+      "message": "Error: expect(received).toEqual(expected) // deep equality\n\n- Expected  - 0\n+ Received  + 1\n\n  Array [\n+   \"parentSingleton\",\n    \"scoped\",\n  ]"
+    }
+  ],
+  "interpretation": "Container, resolver, error and export modules were selected. Three candidates completed all public tests; one had TS2345 errors that prevented eight suites from running. Selected patch missed one scope-isolation check. No paired control or causal localization claim. Clack remains unresolved.",
+  "candidate_selection_used_verifier_feedback": false
+}

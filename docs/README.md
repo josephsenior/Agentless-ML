@@ -49,6 +49,8 @@ result and registered profile, see the [Numba readiness record](history/deepswe-
 The [first fresh declaration-index run](clack-declaration-index-run.md) records
 Clack's correct file selection, four public-suite passes and final unresolved
 result (81/82 issue checks), including the single generated-patch defect.
+The [Awilix follow-up](awilix-declaration-index-run.md) keeps the same settings
+and records an unresolved 23/24 result, with a scope-isolation mismatch.
 
 The [history guide](history/README.md) groups previous environment and test-runner
 investigations. Their old readiness counts and next-step statements describe
