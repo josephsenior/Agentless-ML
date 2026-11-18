@@ -12,6 +12,7 @@ and their original outcomes live in [history](history/README.md).
 | How do the stages connect? | [Fixed workflow](fixed-workflow.md) |
 | How are locations and repairs represented? | [Edit localization](edit-localization.md), [repair and selection](repair-selection.md) |
 | Can an index expose source missed during localization? | [Offline source-index prototype and its limits](source-index-prototype.md) |
+| How much context would this cost across DeepSWE? | [113-task source-context census](source-context-census.md) |
 | How are candidate checkouts isolated? | [Workspaces](workspaces.md), [Linux snapshots](git-aware-linux-snapshots-2026-10-04.md) |
 | Which tests can affect selection? | [Public validation](public-validation.md), [regression selection](regression-selection.md), [reproduction tests](reproduction-tests.md) |
 | What can access the network? | [Network policy](network-policy.md) |

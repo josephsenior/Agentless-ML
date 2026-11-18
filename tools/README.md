@@ -82,6 +82,10 @@ public issue text and saved file choices. It makes no model calls and does not
 change the benchmark controller. See the
 [three-repository results and limits](../docs/source-index-prototype.md).
 
+[`survey_source_index_tokens.py`](survey_source_index_tokens.py) extends that
+measurement to all 113 pinned DeepSWE tasks, including import-map and fixed
+inspection payload scenarios. See the [census guide](../docs/source-context-census.md).
+
 The Numba, Wazero, Pebble, KGateway, Pwntools, Testem and NodeBB diagnostic
 families are retained for their tests and historical evidence. They are not
 additional Agentless stages. Read the matching

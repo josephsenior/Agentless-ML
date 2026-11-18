@@ -1,0 +1,131 @@
+{
+  "measured": 113,
+  "blocked": 0,
+  "tree_only_prompt_tokens": {
+    "min": 577,
+    "median": 1341,
+    "p90_nearest_rank": 4579,
+    "max": 14862,
+    "over_threshold": {
+      "32000": 0,
+      "64000": 0,
+      "128000": 0,
+      "200000": 0,
+      "272000": 0
+    }
+  },
+  "index_prompt_tokens": {
+    "min": 2187,
+    "median": 16689,
+    "p90_nearest_rank": 121066,
+    "max": 439004,
+    "over_threshold": {
+      "32000": 37,
+      "64000": 21,
+      "128000": 10,
+      "200000": 2,
+      "272000": 1
+    }
+  },
+  "index_plus_complete_map_prompt_tokens": {
+    "min": 2538,
+    "median": 26541,
+    "p90_nearest_rank": 191671,
+    "max": 1387424,
+    "over_threshold": {
+      "32000": 45,
+      "64000": 29,
+      "128000": 18,
+      "200000": 11,
+      "272000": 5
+    }
+  },
+  "index_plus_bounded_map_prompt_tokens": {
+    "min": 2549,
+    "median": 22919,
+    "p90_nearest_rank": 129029,
+    "max": 446952,
+    "over_threshold": {
+      "32000": 43,
+      "64000": 24,
+      "128000": 12,
+      "200000": 2,
+      "272000": 2
+    }
+  },
+  "inspection_skeleton_tokens_sum_largest_10": {
+    "min": 1706,
+    "median": 26820,
+    "p90_nearest_rank": 104464,
+    "max": 2262932,
+    "over_threshold": {
+      "32000": 52,
+      "64000": 31,
+      "128000": 9,
+      "200000": 4,
+      "272000": 4
+    }
+  },
+  "tasks_with_unreadable_blobs": [
+    "bandit-incremental-cache-control",
+    "bandit-interprocedural-taint-checks",
+    "bandit-structured-nosec-directives"
+  ],
+  "tasks_with_parse_errors": [
+    "arcane-drift-detection-baselines",
+    "arktype-json-schema-refs-dependencies",
+    "bandit-incremental-cache-control",
+    "bandit-interprocedural-taint-checks",
+    "bandit-structured-nosec-directives",
+    "boa-hierarchical-evaluation-cancellation",
+    "cliffy-config-file-parsing",
+    "csstree-shorthand-expansion-compression",
+    "drizzle-orm-window-function-builders",
+    "dynamodb-toolbox-conditional-attribute-requirements",
+    "dynamodb-toolbox-lazy-recursive-schemas",
+    "effect-sse-httpapi-streaming",
+    "eicrud-keyset-pagination-cursor",
+    "katex-multicolumn-array-spans",
+    "kea-atomic-signal-selectors",
+    "kgateway-consistent-hash-policy",
+    "kysely-window-grouping-helpers",
+    "meriyah-explicit-resource-declarations",
+    "numba-stencil-boundary-modes",
+    "ofetch-per-origin-circuit-breaker",
+    "opa-rego-rule-profiling",
+    "opa-template-string-reconstruction",
+    "oxvg-structural-selector-preservation",
+    "prometheus-transactional-reload-status",
+    "prometheus-typed-label-sorting",
+    "quill-shared-toolbar-focus",
+    "scc-bounded-memory-spilling",
+    "valibot-recursive-schema-composition",
+    "vitest-duration-sharding",
+    "wasmi-trap-coredumps"
+  ],
+  "tasks_with_skeleton_errors": [
+    "arcane-drift-detection-baselines",
+    "arktype-json-schema-refs-dependencies",
+    "boa-hierarchical-evaluation-cancellation",
+    "cliffy-config-file-parsing",
+    "drizzle-orm-window-function-builders",
+    "dynamodb-toolbox-conditional-attribute-requirements",
+    "dynamodb-toolbox-lazy-recursive-schemas",
+    "effect-sse-httpapi-streaming",
+    "eicrud-keyset-pagination-cursor",
+    "kea-atomic-signal-selectors",
+    "kgateway-consistent-hash-policy",
+    "kysely-window-grouping-helpers",
+    "meriyah-explicit-resource-declarations",
+    "ofetch-per-origin-circuit-breaker",
+    "opa-rego-rule-profiling",
+    "opa-template-string-reconstruction",
+    "oxvg-structural-selector-preservation",
+    "prometheus-transactional-reload-status",
+    "prometheus-typed-label-sorting",
+    "quill-shared-toolbar-focus",
+    "valibot-recursive-schema-composition",
+    "vitest-duration-sharding",
+    "wasmi-trap-coredumps"
+  ]
+}

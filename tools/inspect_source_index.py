@@ -30,7 +30,10 @@ from agentless_ml.localization.source_index import (
 from agentless_ml.workspace.local_git import _git, _require_git
 
 
-def read_pinned_sources(repository: Path, commit: str):
+def read_pinned_sources(
+    repository: Path, commit: str, *, source_policy_only: bool = False,
+    allow_unreadable: bool = False,
+):
     """Read regular source blobs at a full commit ID, ignoring working-tree edits.
 
     Gitlinks and symlinks are reported, never followed. Reading by blob ID also
@@ -44,6 +47,8 @@ def read_pinned_sources(repository: Path, commit: str):
                   for extension in get_language_adapter(language).extensions}
     blobs = []
     omitted = []
+    policy_excluded = []
+    unreadable = []
     tracked = 0
     for record in listing.split(b"\0"):
         if not record:
@@ -55,6 +60,11 @@ def read_pinned_sources(repository: Path, commit: str):
         if mode not in {"100644", "100755"} or kind != "blob":
             omitted.append({"path": path, "mode": mode, "kind": kind})
         elif PurePosixPath(path).suffix in extensions or PurePosixPath(path).name == "go.mod":
+            if source_policy_only and PurePosixPath(path).name != "go.mod":
+                adapter = source_adapter(path)
+                if adapter is None or adapter.is_test_path(path):
+                    policy_excluded.append(path)
+                    continue
             blobs.append((path, oid))
     result = _git(repository, "cat-file", "--batch", timeout=60,
                   data="".join(oid + "\n" for _, oid in blobs).encode("ascii"))
@@ -74,15 +84,27 @@ def read_pinned_sources(repository: Path, commit: str):
             raise ValueError("invalid Git blob framing")
         offset += 1
         # Invalid source encoding is a visible blocker, never silently skipped.
-        source = raw.decode("utf-8-sig")
+        try:
+            source = raw.decode("utf-8-sig")
+        except UnicodeDecodeError as exc:
+            if not allow_unreadable:
+                raise ValueError(f"non-UTF-8 source: {path}: {exc}") from exc
+            unreadable.append({"path": path, "blob": oid, "error": str(exc)})
+            blob_ids[path] = oid
+            continue
         destination = metadata if PurePosixPath(path).name == "go.mod" else sources
         destination[path] = source
         blob_ids[path] = oid
-    return sources, metadata, {
+    provenance = {
         "base_commit": commit, "base_tree": tree, "tracked_entries": tracked,
         "read_blobs": len(blobs), "nonregular_entries_not_followed": omitted,
         "blob_manifest_sha256": hashlib.sha256(json.dumps(blob_ids, sort_keys=True).encode()).hexdigest(),
     }
+    if source_policy_only:
+        provenance["source_policy_excluded"] = policy_excluded
+    if allow_unreadable:
+        provenance["unreadable_source_files"] = unreadable
+    return sources, metadata, provenance
 
 
 def write_json(path: Path, value) -> None:
