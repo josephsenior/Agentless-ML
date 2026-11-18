@@ -1,0 +1,145 @@
+{
+  "task_id": "geo-shapeindex-serialization",
+  "configuration": {
+    "task_ids": [
+      "geo-shapeindex-serialization"
+    ],
+    "model": "gpt-6.2-sol",
+    "reasoning": "xhigh",
+    "provider": "chatgpt-plan",
+    "provider_settings": {
+      "model": "gpt-6.2-sol",
+      "reasoning": "xhigh",
+      "authentication": "chatgpt-plan",
+      "profile": "default",
+      "timeout_seconds": 120
+    },
+    "revision": "9b20fb5eadb38a8d2b7c65faa36e6e1b7d308a39+dirty",
+    "task_concurrency": 1,
+    "repair_concurrency_per_task": 4,
+    "repair_samples": 4,
+    "edit_samples": 1,
+    "maximum_files": 10,
+    "retain_declarations": true,
+    "docker_concurrency": 1,
+    "once_only_content_tokens_per_task": 2000000,
+    "time_limit_seconds_per_task": 7200,
+    "queue_policy": "Docker queue waiting counts toward the task deadline except initial baseline preparation. Scoring occurs after export.",
+    "scope": "Agentless-only development batch"
+  },
+  "raw_artifacts": "artifacts/agentless-geo-sol62-2026-11-18",
+  "run_id": "run-c0a64b1d2a724377b3e8d4d9dfba0e6f",
+  "comparison": {
+    "prior_record": "experiments/pilots/deepswe_small_v2/geo_xhigh_2026-11-11/summary.json",
+    "prior_model": "gpt-6.1-sol",
+    "reasoning": "xhigh",
+    "prior_score": {
+      "status": "unresolved",
+      "reward": 0,
+      "f2p_passed": 0,
+      "f2p_total": 24,
+      "p2p_passed": 532,
+      "p2p_total": 599,
+      "patch_sha256": "2b1d587242a6e9109f920dbf1a96261ceebf868c310065c093987be617c4495e",
+      "image_id": "sha256:4600e819ba93437df00f1d1ddb07597818bf53e0a3153bd689093e946ccb52d7",
+      "dataset_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea"
+    },
+    "prior_processed_tokens": 132968,
+    "interpretation": "The current run includes the declaration index, ten-file limit, and declaration retention. This compares the two runs as configured."
+  },
+  "score": {
+    "status": "unresolved",
+    "reward": 0,
+    "f2p_passed": 22,
+    "f2p_total": 24,
+    "p2p_passed": 599,
+    "p2p_total": 599,
+    "patch_sha256": "aec55e6550174fa67a4d7a86acdfb580379c235c7bd027e7caa866c0baa8c3b5",
+    "image_id": "sha256:4600e819ba93437df00f1d1ddb07597818bf53e0a3153bd689093e946ccb52d7",
+    "dataset_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea"
+  },
+  "verifier_failed_cases": [
+    {
+      "suite": null,
+      "name": "[f2p] github.com/golang/geo/s2.TestShapeIndexEncodeDecode",
+      "status": "failed"
+    },
+    {
+      "suite": null,
+      "name": "[f2p] github.com/golang/geo/s2.TestShapeIndexEncodeDecode/SpatialStructure",
+      "status": "failed"
+    }
+  ],
+  "selection": {
+    "reason": "best_regression_then_normalized_majority",
+    "vote_count": 1,
+    "considered_candidate_ids": [
+      "loc-0-repair-0",
+      "loc-0-repair-1",
+      "loc-0-repair-2"
+    ],
+    "selected_candidate_id": "loc-0-repair-0"
+  },
+  "candidate_attempts": [
+    {
+      "candidate_id": "loc-0-repair-0",
+      "status": "validated",
+      "message": "",
+      "public_validation": [
+        {
+          "status": "fail",
+          "test_counts": {
+            "passed": 601,
+            "failed": 1
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "loc-0-repair-1",
+      "status": "validated",
+      "message": "",
+      "public_validation": [
+        {
+          "status": "pass",
+          "test_counts": {
+            "passed": 602
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "loc-0-repair-2",
+      "status": "validated",
+      "message": "",
+      "public_validation": [
+        {
+          "status": "pass",
+          "test_counts": {
+            "passed": 602
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "loc-0-repair-3",
+      "status": "repair_error",
+      "message": "SEARCH content is outside authorized intervals in s2/loop.go",
+      "public_validation": []
+    }
+  ],
+  "model_calls": 8,
+  "budget": {
+    "time_limit_seconds": 7200,
+    "token_limit": 2000000,
+    "used_tokens": 113234,
+    "token_overshoot": 0,
+    "token_accounting": "once_only_context",
+    "content_tokenizer": "o200k_base",
+    "processed_input_tokens": 96600,
+    "processed_output_tokens": 64258,
+    "processed_tokens": 160858,
+    "remaining_seconds": 6481.430202400006
+  },
+  "seconds_from_baseline_start_to_scoring_end": 755.05
+}
