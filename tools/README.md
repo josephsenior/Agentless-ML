@@ -76,6 +76,12 @@ Regenerating fixtures is a maintenance operation, not part of ordinary setup.
 
 ## Diagnostic helpers
 
+[`inspect_source_index.py`](inspect_source_index.py) measures a proposed
+repository declaration index and static import expansion on pinned source,
+public issue text and saved file choices. It makes no model calls and does not
+change the benchmark controller. See the
+[three-repository results and limits](../docs/source-index-prototype.md).
+
 The Numba, Wazero, Pebble, KGateway, Pwntools, Testem and NodeBB diagnostic
 families are retained for their tests and historical evidence. They are not
 additional Agentless stages. Read the matching
