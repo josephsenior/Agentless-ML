@@ -55,6 +55,8 @@ The [Awilix follow-up](awilix-declaration-index-run.md) keeps the same settings
 and records an unresolved 23/24 result, with a scope-isolation mismatch.
 The [HTTPX attempt](httpx-declaration-index-interruption.md) records a host sleep
 interruption before validation; it has no benchmark score.
+The [GPT-6.2 Sol HTTPX run](httpx-sol62-run.md) completed at xhigh and resolved
+the task with 115/115 issue checks and 1,281/1,281 verifier regression checks.
 
 The [history guide](history/README.md) groups previous environment and test-runner
 investigations. Their old readiness counts and next-step statements describe

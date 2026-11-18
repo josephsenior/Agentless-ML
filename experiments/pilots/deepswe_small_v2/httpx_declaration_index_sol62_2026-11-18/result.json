@@ -1,0 +1,275 @@
+{
+  "task_id": "httpx-deterministic-cookie-store",
+  "configuration": {
+    "task_ids": [
+      "httpx-deterministic-cookie-store"
+    ],
+    "model": "gpt-6.2-sol",
+    "reasoning": "xhigh",
+    "revision": "58f34a0d12910cfe511ea30c66f1ffbb482ab7bc+dirty",
+    "task_concurrency": 1,
+    "repair_concurrency_per_task": 4,
+    "repair_samples": 4,
+    "edit_samples": 1,
+    "maximum_files": 10,
+    "retain_declarations": true,
+    "docker_concurrency": 1,
+    "once_only_content_tokens_per_task": 2000000,
+    "time_limit_seconds_per_task": 7200,
+    "queue_policy": "Docker queue waiting counts toward the task deadline except initial baseline preparation. Scoring occurs after export.",
+    "scope": "Agentless-only development batch"
+  },
+  "raw_artifacts": "artifacts/agentless-httpx-declaration-index-sol62-2026-11-18",
+  "run_id": "run-8785310dc1884b5284dd1001d3a2a53c",
+  "index": {
+    "policy": "declaration-index-v1",
+    "base_commit": "b5addb64f0161ff6bfe94c124ef76f6a1fba5254",
+    "base_tree": "31ba94512339180efacceacc0646b56ee15eba63",
+    "files": 23,
+    "declarations": 608,
+    "index_sha256": "f183f633785ea3db3216fcf8425fc2729862a6d9d270aabf2d8a775e982acb23",
+    "token_encoding": "o200k_base",
+    "index_tokens": 6704,
+    "file_prompt_tokens": 7649,
+    "diagnostics": [],
+    "dependency_map": false,
+    "truncated": false
+  },
+  "prior_attempt": {
+    "record": "experiments/pilots/deepswe_small_v2/httpx_declaration_index_2026-11-18/result.json",
+    "status": "incomplete",
+    "benchmark_score": null
+  },
+  "public_baseline": {
+    "status": "fail",
+    "counts": {
+      "passed": 1413,
+      "skipped": 1,
+      "failed": 4
+    },
+    "failed_ids": [
+      "tests.client.test_proxies::test_async_proxy_close[asyncio]",
+      "tests.client.test_proxies::test_async_proxy_close[trio]",
+      "tests.client.test_proxies::test_sync_proxy_close",
+      "tests.test_timeouts::test_write_timeout[trio]"
+    ],
+    "selected_ids": 1413,
+    "excluded_ids": 0
+  },
+  "candidate_validation": [
+    {
+      "nonpassing_counted_ids": [],
+      "candidate": "loc-0-repair-1",
+      "status": "fail",
+      "counts": {
+        "passed": 1413,
+        "skipped": 1,
+        "failed": 4
+      },
+      "duration_seconds": 19.82500780000555,
+      "failed_ids": [
+        "tests.client.test_proxies::test_async_proxy_close[asyncio]",
+        "tests.client.test_proxies::test_async_proxy_close[trio]",
+        "tests.client.test_proxies::test_sync_proxy_close",
+        "tests.test_timeouts::test_write_timeout[trio]"
+      ]
+    },
+    {
+      "nonpassing_counted_ids": [],
+      "candidate": "loc-0-repair-2",
+      "status": "fail",
+      "counts": {
+        "passed": 1413,
+        "skipped": 1,
+        "failed": 4
+      },
+      "duration_seconds": 19.842014399997424,
+      "failed_ids": [
+        "tests.client.test_proxies::test_async_proxy_close[asyncio]",
+        "tests.client.test_proxies::test_async_proxy_close[trio]",
+        "tests.client.test_proxies::test_sync_proxy_close",
+        "tests.test_timeouts::test_write_timeout[trio]"
+      ]
+    },
+    {
+      "nonpassing_counted_ids": [],
+      "candidate": "loc-0-repair-3",
+      "status": "fail",
+      "counts": {
+        "passed": 1413,
+        "skipped": 1,
+        "failed": 4
+      },
+      "duration_seconds": 20.037450199997693,
+      "failed_ids": [
+        "tests.client.test_proxies::test_async_proxy_close[asyncio]",
+        "tests.client.test_proxies::test_async_proxy_close[trio]",
+        "tests.client.test_proxies::test_sync_proxy_close",
+        "tests.test_timeouts::test_write_timeout[trio]"
+      ]
+    }
+  ],
+  "model_calls": [
+    {
+      "number": 1,
+      "stage": "regression-selection",
+      "completed": true,
+      "model": "gpt-6.2-sol",
+      "input_tokens": 21584,
+      "output_tokens": 113,
+      "response_sha256": "4335750cca418922cc0b810983cd8497c719fcb5c49073c75270d28e021c5f66"
+    },
+    {
+      "number": 2,
+      "stage": "file-localization",
+      "completed": true,
+      "model": "gpt-6.2-sol",
+      "input_tokens": 7655,
+      "output_tokens": 251,
+      "response_sha256": "ada503d0f92c85e3a06f10b2e87c5ed24b4328f06169e31003e66b0fdca98355"
+    },
+    {
+      "number": 3,
+      "stage": "symbol-localization",
+      "completed": true,
+      "model": "gpt-6.2-sol",
+      "input_tokens": 8810,
+      "output_tokens": 2395,
+      "response_sha256": "bc5d1cfb3a002231367c21f6710cc4404c1886f471acb173ed37b76ce5eb7695"
+    },
+    {
+      "number": 4,
+      "stage": "edit-localization",
+      "completed": true,
+      "model": "gpt-6.2-sol",
+      "input_tokens": 22091,
+      "output_tokens": 1288,
+      "response_sha256": "bebf95cf3dd5ec57ed2e80f77bdbc7f5bc089c12299f13677e4de567b6ead4c7"
+    },
+    {
+      "number": 5,
+      "stage": "repair",
+      "completed": true,
+      "model": "gpt-6.2-sol",
+      "input_tokens": 3348,
+      "output_tokens": 13277,
+      "response_sha256": "520346aeb46b45821672992b13ed86efb89ed0d9fcc49e76bcdeee9c3b556f31"
+    },
+    {
+      "number": 6,
+      "stage": "repair",
+      "completed": true,
+      "model": "gpt-6.2-sol",
+      "input_tokens": 3348,
+      "output_tokens": 15611,
+      "response_sha256": "9e483a44bca3d3d6b04d7a4ff8b2e8eff5aea3933567b32f382b6206e68fb8e0"
+    },
+    {
+      "number": 7,
+      "stage": "repair",
+      "completed": true,
+      "model": "gpt-6.2-sol",
+      "input_tokens": 3348,
+      "output_tokens": 13123,
+      "response_sha256": "4e4998520cdc90325ce41877368a5830cdb0748b0c3976561dd688c3adcb2994"
+    },
+    {
+      "number": 8,
+      "stage": "repair",
+      "completed": true,
+      "model": "gpt-6.2-sol",
+      "input_tokens": 3348,
+      "output_tokens": 13433,
+      "response_sha256": "c9ba07092a8e88dc94d1c89a527bd2677c90151ee4801a1b528b4f015af271e1"
+    }
+  ],
+  "budget": {
+    "time_limit_seconds": 7200,
+    "token_limit": 2000000,
+    "used_tokens": 89580,
+    "token_overshoot": 0,
+    "token_accounting": "once_only_context",
+    "content_tokenizer": "o200k_base",
+    "processed_input_tokens": 73532,
+    "processed_output_tokens": 59491,
+    "processed_tokens": 133023,
+    "remaining_seconds": 6493.392103500002
+  },
+  "status": "scored",
+  "score": {
+    "task_id": "httpx-deterministic-cookie-store",
+    "status": "resolved",
+    "reward": 1,
+    "f2p_passed": 115,
+    "f2p_total": 115,
+    "p2p_passed": 1281,
+    "p2p_total": 1281,
+    "image_id": "sha256:47d0af14d988caa7d22b14312be2c3ee4e9ac799a5679bd83d19f298d346749d",
+    "patch_sha256": "8f624d89191b75ff810f060fd9c15d86e6618afea248eab92032fa686a58a3b2",
+    "dataset_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-httpx-declaration-index-sol62-2026-11-18\\httpx-deterministic-cookie-store\\score\\httpx-deterministic-cookie-store\\agentless-ml-verifier-91532270f0794d598f4b5d6757e7e025",
+    "message": "",
+    "verifier_exit_code": 0
+  },
+  "selected_files": [
+    "httpx/_models.py",
+    "httpx/_client.py",
+    "httpx/_types.py",
+    "httpx/__init__.py"
+  ],
+  "failed_verifier_checks": [],
+  "run": {
+    "run_id": "run-8785310dc1884b5284dd1001d3a2a53c",
+    "condition": "agentless-ml-live",
+    "instance_id": "httpx-deterministic-cookie-store",
+    "started_at": "2026-11-18T10:51:04.313608+00:00",
+    "implementation_revision": "58f34a0d12910cfe511ea30c66f1ffbb482ab7bc+dirty",
+    "benchmark_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "harness_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "container_digest": "sha256:47d0af14d988caa7d22b14312be2c3ee4e9ac799a5679bd83d19f298d346749d",
+    "model_name": "chatgpt-plan/gpt-6.2-sol",
+    "model_calls": 8,
+    "input_tokens": 73532,
+    "output_tokens": 59491,
+    "wall_time_seconds": 710.3820959000004,
+    "final_patch_sha256": "8f624d89191b75ff810f060fd9c15d86e6618afea248eab92032fa686a58a3b2",
+    "infrastructure_status": "ok"
+  },
+  "selection": {
+    "reason": "best_regression_then_normalized_majority",
+    "vote_count": 1,
+    "considered_candidate_ids": [
+      "loc-0-repair-1",
+      "loc-0-repair-2",
+      "loc-0-repair-3"
+    ],
+    "selected_candidate_id": "loc-0-repair-1"
+  },
+  "repair_attempts": [
+    {
+      "candidate_id": "loc-0-repair-0",
+      "sample_index": 0,
+      "status": "repair_error",
+      "message": "SEARCH content is outside authorized intervals in httpx/_client.py"
+    },
+    {
+      "candidate_id": "loc-0-repair-1",
+      "sample_index": 1,
+      "status": "validated",
+      "message": ""
+    },
+    {
+      "candidate_id": "loc-0-repair-2",
+      "sample_index": 2,
+      "status": "validated",
+      "message": ""
+    },
+    {
+      "candidate_id": "loc-0-repair-3",
+      "sample_index": 3,
+      "status": "validated",
+      "message": ""
+    }
+  ],
+  "host_sleep_prevention": "Temporary Windows system keep-awake request released after scoring."
+}
