@@ -1,0 +1,260 @@
+{
+  "task_id": "clack-async-autocomplete-options",
+  "kind": "same-task-model-comparison",
+  "configuration": {
+    "task_ids": [
+      "clack-async-autocomplete-options"
+    ],
+    "model": "gpt-6.2-sol",
+    "reasoning": "xhigh",
+    "revision": "4b1e5152b0e6c79889617ebcefd2594b4b0a7528+dirty",
+    "task_concurrency": 1,
+    "repair_concurrency_per_task": 4,
+    "repair_samples": 4,
+    "edit_samples": 1,
+    "maximum_files": 10,
+    "retain_declarations": true,
+    "docker_concurrency": 1,
+    "once_only_content_tokens_per_task": 2000000,
+    "time_limit_seconds_per_task": 7200,
+    "queue_policy": "Docker queue waiting counts toward the task deadline except initial baseline preparation. Scoring occurs after export.",
+    "scope": "Agentless-only development batch"
+  },
+  "comparison": {
+    "plan_differences": {
+      "model": [
+        "gpt-6.1-sol",
+        "gpt-6.2-sol"
+      ],
+      "revision": [
+        "eb7c671991e014b3516b59177f06b6b4c2146a4a+dirty",
+        "4b1e5152b0e6c79889617ebcefd2594b4b0a7528+dirty"
+      ]
+    },
+    "matching_source_hashes": [
+      {
+        "path": "src/agentless_ml/workflow/fixed.py",
+        "sha256": "f7f47d9aff7a2f34be3fcf3a36b7a6d18402c9732d6bff99d8e5d8f9298850c9"
+      },
+      {
+        "path": "src/agentless_ml/localization/source_index.py",
+        "sha256": "57d31b4dc5f3b2a88bc1ebbbc8c33d1cecb08ea5ae8b7b576cb82dbd46f3f9de"
+      },
+      {
+        "path": "src/agentless_ml/workflow/subscription.py",
+        "sha256": "74c35c271d3795ca47433b9e3f4ff99e188219969e1a7a5e9b23898379570f97"
+      }
+    ],
+    "matched_prompts": {
+      "regression-selection": true,
+      "file-localization": true,
+      "symbol-localization": true,
+      "edit-localization": true,
+      "repair": false
+    },
+    "keep_awake": "temporary Windows system request",
+    "prior_model": "gpt-6.1-sol",
+    "prior_run_id": "run-ea64f15d3ad0482b889b88c5c9e4785c",
+    "prior_record_sha256": "9522e8d2b15b57af3704d88d5c0b6b3e4e8af72a653c52eac6e4e7f6b69eadae",
+    "prior_result": {
+      "status": "unresolved",
+      "reward": 0,
+      "f2p_passed": 81,
+      "f2p_total": 82,
+      "p2p_passed": 643,
+      "p2p_total": 643
+    },
+    "prior_processed_tokens": 115361,
+    "prior_wall_time_seconds": 748.4590637000001,
+    "scope": "One repeat on a previously scored task with the same reasoning setting and workflow. The prior failure was not supplied to the model."
+  },
+  "raw_artifacts": "artifacts/agentless-clack-declaration-index-sol62-2026-11-18",
+  "run_id": "run-9fd95c28c142493d93a7cd50f62bcfe0",
+  "index": {
+    "policy": "declaration-index-v1",
+    "base_commit": "8a96e2dcd7f821d1250b58cf71c327679f94de25",
+    "base_tree": "d9f29d8bb28122a58e3869b98b53432decff02f8",
+    "files": 59,
+    "declarations": 516,
+    "index_sha256": "2575951ec9d9303f13acfea0c39a1fad39194aedada6e62bfc38df4456208407",
+    "token_encoding": "o200k_base",
+    "index_tokens": 6141,
+    "file_prompt_tokens": 7149,
+    "diagnostics": [],
+    "dependency_map": false,
+    "truncated": false
+  },
+  "selected_files": [
+    "packages/core/src/prompts/autocomplete.ts",
+    "packages/prompts/src/autocomplete.ts"
+  ],
+  "public_baseline": {
+    "status": "pass",
+    "case_status_counts": {
+      "passed": 640
+    },
+    "counted_ids": 640,
+    "excluded_ids": 0
+  },
+  "candidate_public_validations": [
+    {
+      "candidate": "loc-0-repair-0",
+      "status": "pass",
+      "case_status_counts": {
+        "passed": 640
+      }
+    },
+    {
+      "candidate": "loc-0-repair-1",
+      "status": "pass",
+      "case_status_counts": {
+        "passed": 640
+      }
+    },
+    {
+      "candidate": "loc-0-repair-2",
+      "status": "pass",
+      "case_status_counts": {
+        "passed": 640
+      }
+    },
+    {
+      "candidate": "loc-0-repair-3",
+      "status": "pass",
+      "case_status_counts": {
+        "passed": 640
+      }
+    }
+  ],
+  "model_calls": [
+    {
+      "number": 1,
+      "stage": "regression-selection",
+      "completed": true,
+      "model": "gpt-6.2-sol",
+      "input_tokens": 15360,
+      "output_tokens": 102,
+      "response_sha256": "b09e032df2990b6416ca11ba85529eb139b1d81c93f869d3a1eb7e476a6c40dd"
+    },
+    {
+      "number": 2,
+      "stage": "file-localization",
+      "completed": true,
+      "model": "gpt-6.2-sol",
+      "input_tokens": 7155,
+      "output_tokens": 363,
+      "response_sha256": "7fa813ba878ec438dbc3ac906367c7c078f85359e082c18aa89a8350bcace84f"
+    },
+    {
+      "number": 3,
+      "stage": "symbol-localization",
+      "completed": true,
+      "model": "gpt-6.2-sol",
+      "input_tokens": 1826,
+      "output_tokens": 426,
+      "response_sha256": "f82080221d3306df2b840e7e2e5ba06aca09c1b4be7cecd325f035a33b8234fe"
+    },
+    {
+      "number": 4,
+      "stage": "edit-localization",
+      "completed": true,
+      "model": "gpt-6.2-sol",
+      "input_tokens": 6138,
+      "output_tokens": 867,
+      "response_sha256": "f369172426d9135254d295449f5a0a9dd8e5a50579ea4df765f4b022ad70c9b9"
+    },
+    {
+      "number": 5,
+      "stage": "repair",
+      "completed": true,
+      "model": "gpt-6.2-sol",
+      "input_tokens": 3250,
+      "output_tokens": 15496,
+      "response_sha256": "ea1a216f83ec0a83111d2e61b3fa103b50049eb5f3ca0669031dd1b14d222931"
+    },
+    {
+      "number": 6,
+      "stage": "repair",
+      "completed": true,
+      "model": "gpt-6.2-sol",
+      "input_tokens": 3250,
+      "output_tokens": 12384,
+      "response_sha256": "a3dd489b1f71e1e70a300a91ef2c89f859c954d7904f841de8311c8dfcd82250"
+    },
+    {
+      "number": 7,
+      "stage": "repair",
+      "completed": true,
+      "model": "gpt-6.2-sol",
+      "input_tokens": 3250,
+      "output_tokens": 16784,
+      "response_sha256": "5a6679bbfaa1b64da76768dd190858514687442a8c72400a4a295e22083088ff"
+    },
+    {
+      "number": 8,
+      "stage": "repair",
+      "completed": true,
+      "model": "gpt-6.2-sol",
+      "input_tokens": 3250,
+      "output_tokens": 17026,
+      "response_sha256": "513cc492524189d6ca54a281f52b7dc706aab5b1ce9b3fae10867043463dd530"
+    }
+  ],
+  "budget": {
+    "time_limit_seconds": 7200,
+    "token_limit": 2000000,
+    "used_tokens": 61118,
+    "token_overshoot": 0,
+    "token_accounting": "once_only_context",
+    "content_tokenizer": "o200k_base",
+    "processed_input_tokens": 43479,
+    "processed_output_tokens": 63448,
+    "processed_tokens": 106927,
+    "remaining_seconds": 6443.537086000004
+  },
+  "status": "scored",
+  "score": {
+    "task_id": "clack-async-autocomplete-options",
+    "status": "resolved",
+    "reward": 1,
+    "f2p_passed": 82,
+    "f2p_total": 82,
+    "p2p_passed": 643,
+    "p2p_total": 643,
+    "image_id": "sha256:32a72ef7d4a9d3ae8937aef9c42e18166284c817c8edf137d66772e4f34abf74",
+    "patch_sha256": "dbccb4e0a8ce28a868d04f34792231b7b8d66e48473be8bd157ace148ded00c6",
+    "dataset_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "artifact_directory": "C:\\Users\\GIGABYTE\\Desktop\\Agentless-ML\\agentless-ml\\artifacts\\agentless-clack-declaration-index-sol62-2026-11-18\\clack-async-autocomplete-options\\score\\clack-async-autocomplete-options\\agentless-ml-verifier-cf8d49b70f5d4ca98c1672de395c8cd0",
+    "message": "",
+    "verifier_exit_code": 0
+  },
+  "failed_verifier_checks": [],
+  "run": {
+    "run_id": "run-9fd95c28c142493d93a7cd50f62bcfe0",
+    "condition": "agentless-ml-live",
+    "instance_id": "clack-async-autocomplete-options",
+    "started_at": "2026-11-18T10:30:14.954481+00:00",
+    "implementation_revision": "4b1e5152b0e6c79889617ebcefd2594b4b0a7528+dirty",
+    "benchmark_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "harness_revision": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "container_digest": "sha256:32a72ef7d4a9d3ae8937aef9c42e18166284c817c8edf137d66772e4f34abf74",
+    "model_name": "chatgpt-plan/gpt-6.2-sol",
+    "model_calls": 8,
+    "input_tokens": 43479,
+    "output_tokens": 63448,
+    "wall_time_seconds": 758.3240617000047,
+    "final_patch_sha256": "dbccb4e0a8ce28a868d04f34792231b7b8d66e48473be8bd157ace148ded00c6",
+    "infrastructure_status": "ok"
+  },
+  "selection": {
+    "reason": "best_regression_then_normalized_majority",
+    "vote_count": 1,
+    "considered_candidate_ids": [
+      "loc-0-repair-0",
+      "loc-0-repair-1",
+      "loc-0-repair-2",
+      "loc-0-repair-3"
+    ],
+    "selected_candidate_id": "loc-0-repair-0"
+  }
+}
