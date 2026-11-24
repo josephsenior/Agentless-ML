@@ -5,3 +5,5 @@ The public baseline passed on both launches. Grinta used GPT-6 Astra at xhigh wi
 The first launch received five responses and stopped on HTTP 524. The streaming launch received 11 responses and recorded 263,178 processed tokens. The twelfth request failed to deliver a complete response for about ten minutes, so the operator stopped the run. Neither launch exported a patch. DeepSWE has no Astra score for this task.
 
 Local evidence and relay sources are under `artifacts/grinta-ts-pattern-spook-astra-2026-11-24/`. The two launches are in `attempt/` and `streaming-attempt/`.
+
+A fresh streaming retry with the same settings passed the public baseline and received an error event from SpookAPI on its first model request. The relay reported the event without retaining the provider's detailed error. The runner exited on its own after about 35 seconds of inference time, with zero completed responses and no patch to score. Evidence is under `streaming-retry/`.
