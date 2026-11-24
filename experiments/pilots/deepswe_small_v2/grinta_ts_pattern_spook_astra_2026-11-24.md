@@ -9,3 +9,5 @@ Local evidence and relay sources are under `artifacts/grinta-ts-pattern-spook-as
 A fresh streaming retry with the same settings passed the public baseline and received an error event from SpookAPI on its first model request. The relay reported the event without retaining the provider's detailed error. The runner exited on its own after about 35 seconds of inference time, with zero completed responses and no patch to score. Evidence is under `streaming-retry/`.
 
 The local streaming relay now records the HTTP status and any provider error code, type, and message in `agent.log` and the run result. It redacts the API key and authorization values and caps the saved message length. This change applies to future requests. The details of the earlier error were not retained.
+
+The retry under `error-logging-retry/` passed the public baseline and completed two model responses, with 30,569 processed tokens. Spook returned HTTP 429 on the third request with code `upstream_http_429` and message `Upstream rate limited the request`. The runner exited on its own without exporting a patch. The provider error does not specify the scope or duration of the rate limit.
