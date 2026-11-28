@@ -7,3 +7,9 @@ Grinta finished after 37 completed model replies and exported a patch. Host acco
 The pinned DeepSWE verifier scored the patch unresolved, with 0/24 issue tests and 49/162 regression tests passing. The build failed because the patch gave `initializer` incompatible types across resolver interfaces and marked a member `override` that the base error class did not declare. The earlier [Grinta Sol xhigh run](grinta_awilix_sol62_2026-11-20.md) passed 24/24 issue tests and 162/162 regressions with a different provider and prompt revision.
 
 Local evidence is under `artifacts/grinta-awilix-spook-astra-ultra-2026-11-25/`. Verifier corpus revision `0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea`. Patch SHA-256 `1ab0e27e78565cf6ef2f32706160dd910cbc1d2bc2229e1f7e0fdd1e6ef2fb0d`.
+
+## November 28 rerun
+
+The rerun used the revised read_file description and recovery messages from local Grinta commit 1dfc03fbe. The same tool validation and task limits applied. The saved trajectory had zero missing-bound errors, compared with nine in the first attempt. Grinta performed 27 file reads and 11 terminal actions, and continued after three provider errors.
+
+The submitted patch passed 23/24 issue tests and 162/162 regressions. The score was unresolved because a resolution call after failed initialization returned without throwing. Grinta received 60 complete model replies and recorded 4,958,890 processed tokens in about 43 minutes. Local evidence is under artifacts/grinta-awilix-spook-astra-ultra-2026-11-28-read-file/.
